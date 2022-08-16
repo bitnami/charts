@@ -72,7 +72,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/cassandra
-  tag: 4.0.4-debian-11-r10
+  tag: 4.0.5-debian-11-r8
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -541,7 +541,7 @@ persistence:
   storageClass: ""
   ## @param persistence.commitStorageClass PVC Storage Class for Cassandra Commit Log volume
   ## Storage class to use with CASSANDRA_COMMITLOG_DIR to reduce the concurrence for writing data and commit logs
-  ## ref: https://github.com/bitnami/bitnami-docker-cassandra
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/cassandra
   ## If set to "-", commitStorageClass: "", which disables dynamic provisioning
   ## If undefined (the default) or set to null, no storageClassName spec is
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
@@ -588,7 +588,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r10
+    tag: 11-debian-11-r23
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -655,7 +655,7 @@ metrics:
     registry: docker.io
     pullPolicy: IfNotPresent
     repository: bitnami/cassandra-exporter
-    tag: 2.3.8-debian-11-r10
+    tag: 2.3.8-debian-11-r26
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

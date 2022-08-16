@@ -1,0 +1,57 @@
+# This workflow is built to manage the triage support by using GH issues.
+name: '[Support] Organize triage'
+on:
+  issues:
+    types:
+      - reopened
+      - opened
+  pull_request_target:
+    types:
+      - reopened
+      - opened
+permissions:
+  repository-projects: write
+  issues: write
+
+# To fix the concurrency when for example more than one label is added
+concurrency:
+  group: ${{ github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  # For any opened or reopened issue, should be sent into Triage
+  send_to_board:
+    if: ${{ github.actor != 'bitnami-bot' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repo checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+      - name: Load .env file
+        uses: xom9ikk/dotenv@v1.0.2
+        with:
+          path: .github/workflows/
+      - name: Assign to a person to work on it
+        uses: pozil/auto-assign-issue@v1.9.0
+        with:
+          numOfAssignee: 1
+          removePreviousAssignees: false
+          teams: ${{ env.TRIAGE_TEAM_NAME }}
+          repo-token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
+      - name: Send to the board
+        uses: peter-evans/create-or-update-project-card@v2
+        with:
+          project-name: Support
+          # If the author comes from Bitnami, send it to Bitnami. Otherwise, all to Triage
+          column-name: ${{ (contains(fromJson(env.BITNAMI_TEAM), github.actor)) && 'From Bitnami' || 'Triage' }}
+          token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
+          issue-number: ${{ github.event_name != 'issues' && github.event.number || github.event.issue.number }}
+      - name: Triage labeling
+        # Only if moved into Solved
+        uses: andymckay/labeler@1.0.4
+        with:
+          repo-token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
+          add-labels: ${{ (!contains(fromJson(env.BITNAMI_TEAM), github.actor)) && 'triage' || 'bitnami' }}
+          # For reopened issues
+          remove-labels: "solved"

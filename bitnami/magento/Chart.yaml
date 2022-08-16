@@ -1,7 +1,7 @@
 annotations:
   category: E-Commerce
 apiVersion: v2
-appVersion: 2.4.4
+appVersion: 2.4.5
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
@@ -33,6 +33,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: magento
 sources:
-  - https://github.com/bitnami/bitnami-docker-magento
+  - https://github.com/bitnami/containers/tree/main/bitnami/magento
   - https://magento.com/
-version: 21.0.2
+version: 21.0.8

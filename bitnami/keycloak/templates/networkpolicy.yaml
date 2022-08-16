@@ -3,7 +3,7 @@ kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
   name: {{ template "keycloak.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: keycloak
     {{- if .Values.commonLabels }}
@@ -20,9 +20,6 @@ spec:
         - port: {{ .Values.containerPorts.http }}
         {{- if .Values.auth.tls.enabled }}
         - port: {{ .Values.containerPorts.https }}
-        {{- end }}
-        {{- if .Values.metrics.enabled }}
-        - port: {{ .Values.containerPorts.management }}
         {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:

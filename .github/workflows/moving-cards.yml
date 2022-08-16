@@ -1,0 +1,75 @@
+# This workflow is built to manage the triage support by using GH issues.
+name: '[Support] Cards movements'
+on:
+  project_card:
+    types:
+      - moved
+
+permissions:
+  repository-projects: read
+  issues: write
+
+# To fix the concurrency when for example more than one label is added
+concurrency:
+  group: ${{ github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  label-card:
+    if: ${{ github.actor != 'bitnami-bot' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repo checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+      - name: Load .env file
+        uses: xom9ikk/dotenv@v1.0.2
+        with:
+          path: .github/workflows/
+      # Now handling the needed labeling
+      - name: On hold labeling
+        # Only if moved into on hold
+        if: ${{ github.event.project_card.column_id == env.ON_HOLD_COLUMN_ID  }}
+        uses: andymckay/labeler@1.0.4
+        with:
+          repo-token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
+          add-labels: "on-hold"
+          remove-labels: "triage"
+      - name: In progress labeling
+        # Only if moved into In progress
+        if: ${{ github.event.project_card.column_id == env.IN_PROGRESS_COLUMN_ID  }}
+        uses: andymckay/labeler@1.0.4
+        with:
+          repo-token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
+          add-labels: "in-progress"
+          remove-labels: "on-hold, triage"
+      - name: Solved labeling
+        # Only if moved into Solved
+        if: ${{ github.event.project_card.column_id == env.SOLVED_COLUMN_ID  }}
+        uses: andymckay/labeler@1.0.4
+        with:
+          repo-token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
+          add-labels: "solved"
+          remove-labels: "in-progress, on-hold, triage"
+  assign-assignee-if-needed:
+    if: ${{ github.actor != 'bitnami-bot' && (!contains(github.event.issue.labels.*.name, 'auto-merge')) }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repo checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+      - name: Load .env file
+        uses: xom9ikk/dotenv@v1.0.2
+        with:
+          path: .github/workflows/
+      - name: Assign to a person to work on it
+        # Only if moved into In progress FROM Triage
+        if: ${{ github.event.project_card.column_id == env.IN_PROGRESS_COLUMN_ID && github.event.changes != null && github.event.changes.column_id && github.event.changes.column_id.from == env.TRIAGE_COLUMN_ID }}
+        uses: pozil/auto-assign-issue@v1.9.0
+        with:
+          numOfAssignee: 1
+          removePreviousAssignees: true
+          teams: ${{ env.SUPPORT_TEAM_NAME }}
+          repo-token: "${{ secrets.BITNAMI_BOT_TOKEN }}"

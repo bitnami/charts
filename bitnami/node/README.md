@@ -17,7 +17,7 @@ $ helm install my-release bitnami/node
 
 ## Introduction
 
-This chart bootstraps a [Node](https://github.com/bitnami/bitnami-docker-node) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Node](https://github.com/bitnami/containers/tree/main/bitnami/node) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It clones and deploys a Node.js application from a Git repository. Optionally, you can set up an Ingress resource to access your application and provision an external database using the Kubernetes service catalog and the Open Service Broker for Azure.
 
@@ -108,7 +108,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
 | `image.registry`                              | NodeJS image registry                                                                                                    | `docker.io`             |
 | `image.repository`                            | NodeJS image repository                                                                                                  | `bitnami/node`          |
-| `image.tag`                                   | NodeJS image tag (immutable tags are recommended)                                                                        | `16.15.0-debian-10-r26` |
+| `image.tag`                                   | NodeJS image tag (immutable tags are recommended)                                                                        | `16.16.0-debian-11-r14` |
 | `image.pullPolicy`                            | NodeJS image pull policy                                                                                                 | `IfNotPresent`          |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                         | `[]`                    |
 | `image.debug`                                 | Set to true if you would like to see extra information on logs                                                           | `false`                 |
@@ -181,7 +181,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------ | -------------------------------------------------------------- | -------------------------------------------- |
 | `git.image.registry`           | Git image registry                                             | `docker.io`                                  |
 | `git.image.repository`         | Git image repository                                           | `bitnami/git`                                |
-| `git.image.tag`                | Git image tag (immutable tags are recommended)                 | `2.36.1-debian-10-r15`                       |
+| `git.image.tag`                | Git image tag (immutable tags are recommended)                 | `2.37.1-debian-11-r8`                        |
 | `git.image.pullPolicy`         | Git image pull policy                                          | `IfNotPresent`                               |
 | `git.image.pullSecrets`        | Specify docker-registry secret names as an array               | `[]`                                         |
 | `git.image.debug`              | Set to true if you would like to see extra information on logs | `false`                                      |
@@ -198,7 +198,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory  | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                             | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                           | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended) | `10-debian-10-r434`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended) | `11-debian-11-r22`      |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                          | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                             | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                       | `{}`                    |
@@ -251,7 +251,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 
-The above parameters map to the env variables defined in [bitnami/node](https://github.com/bitnami/bitnami-docker-node). For more information please refer to the [bitnami/node](https://github.com/bitnami/bitnami-docker-node) image documentation.
+The above parameters map to the env variables defined in [bitnami/node](https://github.com/bitnami/containers/tree/main/bitnami/node). For more information please refer to the [bitnami/node](https://github.com/bitnami/containers/tree/main/bitnami/node) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -384,7 +384,7 @@ Deploying the helm chart enabling the Azure external database makes the followin
 
 ## Persistence
 
-The [Bitnami Node](https://github.com/bitnami/bitnami-docker-node) image stores the Node application and configurations at the `/app`  path of the container.
+The [Bitnami Node](https://github.com/bitnami/containers/tree/main/bitnami/node) image stores the Node application and configurations at the `/app`  path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
@@ -403,6 +403,10 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 19.0.0
+
+This major updates the MongoDB&reg; subchart to its newest major, [13.0.0](https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-1300). No major issues are expected during the upgrade.
 
 ### To 18.0.0
 
@@ -471,7 +475,7 @@ Backwards compatibility is not guaranteed since breaking changes were included i
 
 ### To 7.0.0
 
-This release includes security contexts, so the containers in the chart are run as non-root. More information in [this link](https://github.com/bitnami/bitnami-docker-node#484-r1-6112-r1-7101-r1-and-830-r1).
+This release includes security contexts, so the containers in the chart are run as non-root. More information in [this link](https://github.com/bitnami/containers/tree/main/bitnami/node#484-r1-6112-r1-7101-r1-and-830-r1).
 
 ### To 6.0.0
 

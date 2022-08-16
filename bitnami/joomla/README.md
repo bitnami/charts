@@ -17,7 +17,7 @@ $ helm install my-release bitnami/joomla
 
 ## Introduction
 
-This chart bootstraps a [Joomla!](https://github.com/bitnami/bitnami-docker-joomla) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Joomla!](https://github.com/bitnami/containers/tree/main/bitnami/joomla) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the Joomla! application.
 
@@ -252,7 +252,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                 | `{}`    |
 
 
-The above parameters map to the env variables defined in [bitnami/joomla](https://github.com/bitnami/bitnami-docker-joomla). For more information please refer to the [bitnami/joomla](https://github.com/bitnami/bitnami-docker-joomla) image documentation.
+The above parameters map to the env variables defined in [bitnami/joomla](https://github.com/bitnami/containers/tree/main/bitnami/joomla). For more information please refer to the [bitnami/joomla](https://github.com/bitnami/containers/tree/main/bitnami/joomla) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -338,7 +338,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ## Persistence
 
-The [Bitnami Joomla!](https://github.com/bitnami/bitnami-docker-joomla) image stores the Joomla! data and configurations at the `/bitnami/joomla` and `/bitnami/apache` paths of the container.
+The [Bitnami Joomla!](https://github.com/bitnami/containers/tree/main/bitnami/joomla) image stores the Joomla! data and configurations at the `/bitnami/joomla` and `/bitnami/apache` paths of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, vpshere, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
@@ -447,7 +447,7 @@ mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
 
 ### To 8.0.0
 
-The [Bitnami Joomla!](https://github.com/bitnami/bitnami-docker-joomla) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. You can revert this behavior by setting the parameters `containerSecurityContext.runAsUser` to `root`.
+The [Bitnami Joomla!](https://github.com/bitnami/containers/tree/main/bitnami/joomla) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. You can revert this behavior by setting the parameters `containerSecurityContext.runAsUser` to `root`.
 
 Consequences:
 

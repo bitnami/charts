@@ -85,13 +85,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.replicaCount`                                | Number of Controller replicas                                                                        | `1`                    |
 | `controller.image.registry`                              | Controller image registry                                                                            | `docker.io`            |
 | `controller.image.repository`                            | Controller image repository                                                                          | `bitnami/cert-manager` |
-| `controller.image.tag`                                   | Controller image tag (immutable tags are recommended)                                                | `1.8.2-debian-11-r0`   |
+| `controller.image.tag`                                   | Controller image tag (immutable tags are recommended)                                                | `1.9.0-debian-11-r1`   |
 | `controller.image.pullPolicy`                            | Controller image pull policy                                                                         | `IfNotPresent`         |
 | `controller.image.pullSecrets`                           | Controller image pull secrets                                                                        | `[]`                   |
 | `controller.image.debug`                                 | Controller image debug mode                                                                          | `false`                |
 | `controller.acmesolver.image.registry`                   | Controller image registry                                                                            | `docker.io`            |
 | `controller.acmesolver.image.repository`                 | Controller image repository                                                                          | `bitnami/acmesolver`   |
-| `controller.acmesolver.image.tag`                        | Controller image tag (immutable tags are recommended)                                                | `1.8.1-debian-11-r2`   |
+| `controller.acmesolver.image.tag`                        | Controller image tag (immutable tags are recommended)                                                | `1.9.0-debian-11-r0`   |
 | `controller.acmesolver.image.pullPolicy`                 | Controller image pull policy                                                                         | `IfNotPresent`         |
 | `controller.acmesolver.image.pullSecrets`                | Controller image pull secrets                                                                        | `[]`                   |
 | `controller.acmesolver.image.debug`                      | Controller image debug mode                                                                          | `false`                |
@@ -146,7 +146,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `webhook.replicaCount`                                | Number of Webhook replicas                                                                        | `1`                            |
 | `webhook.image.registry`                              | Webhook image registry                                                                            | `docker.io`                    |
 | `webhook.image.repository`                            | Webhook image repository                                                                          | `bitnami/cert-manager-webhook` |
-| `webhook.image.tag`                                   | Webhook image tag (immutable tags are recommended)                                                | `1.8.1-debian-11-r2`           |
+| `webhook.image.tag`                                   | Webhook image tag (immutable tags are recommended)                                                | `1.9.0-debian-11-r0`           |
 | `webhook.image.pullPolicy`                            | Webhook image pull policy                                                                         | `IfNotPresent`                 |
 | `webhook.image.pullSecrets`                           | Webhook image pull secrets                                                                        | `[]`                           |
 | `webhook.image.debug`                                 | Webhook image debug mode                                                                          | `false`                        |
@@ -217,7 +217,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cainjector.replicaCount`                                | Number of CAInjector replicas                                                                        | `1`                  |
 | `cainjector.image.registry`                              | CAInjector image registry                                                                            | `docker.io`          |
 | `cainjector.image.repository`                            | CAInjector image repository                                                                          | `bitnami/cainjector` |
-| `cainjector.image.tag`                                   | CAInjector image tag (immutable tags are recommended)                                                | `1.8.1-debian-11-r2` |
+| `cainjector.image.tag`                                   | CAInjector image tag (immutable tags are recommended)                                                | `1.9.0-debian-11-r0` |
 | `cainjector.image.pullPolicy`                            | CAInjector image pull policy                                                                         | `IfNotPresent`       |
 | `cainjector.image.pullSecrets`                           | CAInjector image pull secrets                                                                        | `[]`                 |
 | `cainjector.image.debug`                                 | CAInjector image debug mode                                                                          | `false`              |

@@ -6,7 +6,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 {{- define "postgresql.primary.fullname" -}}
 {{- if eq .Values.architecture "replication" }}
-    {{- printf "%s-primary" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+    {{- printf "%s-%s" (include "common.names.fullname" .) .Values.primary.name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
     {{- include "common.names.fullname" . -}}
 {{- end -}}
@@ -17,7 +17,7 @@ Create a default fully qualified app name for PostgreSQL read-only replicas obje
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "postgresql.readReplica.fullname" -}}
-{{- printf "%s-read" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) .Values.readReplicas.name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -214,10 +214,27 @@ Get the PostgreSQL primary extended configuration ConfigMap name.
 {{- end -}}
 
 {{/*
+Get the PostgreSQL read replica extended configuration ConfigMap name.
+*/}}
+{{- define "postgresql.readReplicas.extendedConfigmapName" -}}
+    {{- printf "%s-extended-configuration" (include "postgresql.readReplica.fullname" .) -}}
+{{- end -}}
+
+{{/*
 Return true if a configmap object should be created for PostgreSQL primary with the extended configuration
 */}}
 {{- define "postgresql.primary.createExtendedConfigmap" -}}
 {{- if and .Values.primary.extendedConfiguration (not .Values.primary.existingExtendedConfigmap) }}
+    {{- true -}}
+{{- else -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a configmap object should be created for PostgreSQL read replica with the extended configuration
+*/}}
+{{- define "postgresql.readReplicas.createExtendedConfigmap" -}}
+{{- if .Values.readReplicas.extendedConfiguration }}
     {{- true -}}
 {{- else -}}
 {{- end -}}

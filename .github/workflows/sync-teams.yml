@@ -1,0 +1,39 @@
+name: '[Support] Synchronize team members in the .env file'
+on:
+  schedule:
+    # Daily
+    - cron: '0 5 * * *'
+permissions:
+  repository-projects: write
+
+jobs:
+  sync-support-teams:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repo checkout
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.BITNAMI_BOT_TOKEN }}
+          fetch-depth: 1
+      - name: Load .env file
+        uses: xom9ikk/dotenv@v1.0.2
+        with:
+          path: .github/workflows/
+      - name: Updating members of the Bitnami team
+        run: |
+          TEAM_MEMBERS=$(curl --request GET \
+          --url https://api.github.com/orgs/bitnami/teams/developers/members?per_page=100 \
+          --header 'authorization: Bearer ${{ secrets.BITNAMI_BOT_TOKEN }}' \
+          --header 'content-type: application/json' \
+          | jq 'sort_by(.login)|map(.login)|join(",")')
+          TEAM_MEMBERS='['${TEAM_MEMBERS//','/'","'}']'
+          if [ $TEAM_MEMBERS != $BITNAMI_TEAM ]; then
+            echo "Replacing $BITNAMI_TEAM for $TEAM_MEMBERS"
+            sed -i "s|BITNAMI_TEAM=.*$|BITNAMI_TEAM='${TEAM_MEMBERS}'|g" .github/workflows/.env
+            git config user.name "bitnami-bot"
+            git config user.email "bitnami-bot@vmware.com"
+            git commit -s -m"[bitnami-bot] Updating Bitnami team members" .github/workflows/.env 
+            git push
+          else
+            echo "BITNAMI_TEAM is updated and nothing should be done"
+          fi
