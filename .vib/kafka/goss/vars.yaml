@@ -1,0 +1,6 @@
+logsDirs: /opt/bitnami/kafka/logs
+superUsers: User:admin
+containerPorts:
+  client: 9092
+  internal: 9093
+  external: 9094
