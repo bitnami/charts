@@ -1,6 +1,6 @@
 file:
   /var/run/secrets/kubernetes.io/serviceaccount:
-    exists: true
+    exists: {{ .Vars.serviceAccount.create }}
     filetype: directory
     mode: "3777"
     owner: root

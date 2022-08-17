@@ -4,3 +4,5 @@ containerPorts:
   client: 9092
   internal: 9093
   external: 9094
+serviceAccount:
+  create: true
