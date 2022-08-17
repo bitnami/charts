@@ -8,7 +8,7 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
     app.kubernetes.io/component: grafana
-  {{- if or (and .Values.metrics.enabled .Values.metrics.service.annotations) .Values.service.annotations }}
+  {{- if or (and .Values.metrics.enabled .Values.metrics.service.annotations) .Values.service.annotations .Values.commonAnnotations }}
   annotations:
   {{- if and .Values.metrics.enabled .Values.metrics.service.annotations }}
     {{- include "common.tplvalues.render" (dict "value" .Values.metrics.service.annotations "context" $) | nindent 4 }}
