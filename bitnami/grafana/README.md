@@ -164,7 +164,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
 | `image.registry`                   | Grafana image registry                                                                                                                               | `docker.io`                       |
 | `image.repository`                 | Grafana image repository                                                                                                                             | `bitnami/grafana`                 |
-| `image.tag`                        | Grafana image tag (immutable tags are recommended)                                                                                                   | `9.0.6-debian-11-r5`              |
+| `image.tag`                        | Grafana image tag (immutable tags are recommended)                                                                                                   | `9.0.7-debian-11-r0`              |
 | `image.pullPolicy`                 | Grafana image pull policy                                                                                                                            | `IfNotPresent`                    |
 | `image.pullSecrets`                | Grafana image pull secrets                                                                                                                           | `[]`                              |
 | `admin.user`                       | Grafana admin username                                                                                                                               | `admin`                           |
@@ -208,7 +208,8 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `dashboardsProvider.enabled`       | Enable the use of a Grafana dashboard provider                                                                                                       | `false`                           |
 | `dashboardsProvider.configMapName` | Name of a ConfigMap containing a custom dashboard provider                                                                                           | `""`                              |
 | `dashboardsConfigMaps`             | Array with the names of a series of ConfigMaps containing dashboards files                                                                           | `[]`                              |
-| `datasources.secretName`           | Secret name containing custom datasource files                                                                                                       | `""`                              |
+| `datasources.secretName`           | The name of an externally-managed secret containing custom datasource files.                                                                         | `""`                              |
+| `datasources.secretDefinition`     | The contents of a secret defining a custom datasource file. Only used if datasources.secretName is empty or not defined.                             | `{}`                              |
 | `notifiers.configMapName`          | Name of a ConfigMap containing Grafana notifiers configuration                                                                                       | `""`                              |
 
 
@@ -366,7 +367,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `imageRenderer.enabled`                                  | Enable using a remote rendering service to render PNG images                                                                              | `false`                          |
 | `imageRenderer.image.registry`                           | Grafana Image Renderer image registry                                                                                                     | `docker.io`                      |
 | `imageRenderer.image.repository`                         | Grafana Image Renderer image repository                                                                                                   | `bitnami/grafana-image-renderer` |
-| `imageRenderer.image.tag`                                | Grafana Image Renderer image tag (immutable tags are recommended)                                                                         | `3.5.0-debian-11-r9`             |
+| `imageRenderer.image.tag`                                | Grafana Image Renderer image tag (immutable tags are recommended)                                                                         | `3.5.0-debian-11-r10`            |
 | `imageRenderer.image.pullPolicy`                         | Grafana Image Renderer image pull policy                                                                                                  | `IfNotPresent`                   |
 | `imageRenderer.image.pullSecrets`                        | Grafana image Renderer pull secrets                                                                                                       | `[]`                             |
 | `imageRenderer.replicaCount`                             | Number of Grafana Image Renderer Pod replicas                                                                                             | `1`                              |
@@ -440,7 +441,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r23`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r24`      |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |

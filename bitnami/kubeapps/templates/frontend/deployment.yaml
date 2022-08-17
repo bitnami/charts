@@ -236,6 +236,10 @@ spec:
           {{- else }}
           command:
             - pinniped-proxy
+            {{- if .Values.pinnipedProxy.tls.existingSecret }}
+            - --proxy-tls-cert=/etc/pinniped-tls/tls.crt
+            - --proxy-tls-cert-key=/etc/pinniped-tls/tls.key
+            {{- end }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
@@ -274,9 +278,15 @@ spec:
           {{- if .Values.pinnipedProxy.resources }}
           resources: {{- toYaml .Values.pinnipedProxy.resources | nindent 12 }}
           {{- end }}
-          {{- if .Values.pinnipedProxy.extraVolumeMounts }}
-          volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.pinnipedProxy.extraVolumeMounts "context" $) | nindent 12 }}
-          {{- end }}
+          volumeMounts:
+            {{- if .Values.pinnipedProxy.tls.existingSecret }}
+            - name: pinniped-tls-secret
+              mountPath: "/etc/pinniped-tls"
+              readOnly: true
+            {{- end }}
+            {{- if .Values.pinnipedProxy.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.pinnipedProxy.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         {{- end }}
         {{- if .Values.frontend.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.frontend.sidecars "context" $) | nindent 8 }}
@@ -285,6 +295,11 @@ spec:
         - name: vhost
           configMap:
             name: {{ template "kubeapps.frontend-config.fullname" . }}
+        {{- if .Values.pinnipedProxy.tls.existingSecret }}
+        - name: pinniped-tls-secret
+          secret:
+            secretName: {{ .Values.pinnipedProxy.tls.existingSecret }}
+        {{- end }}
         {{- if .Values.frontend.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.frontend.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
