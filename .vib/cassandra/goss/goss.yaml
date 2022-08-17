@@ -2,26 +2,30 @@ file:
   {{ .Vars.persistence.mountPath }}:
     exists: true
     filetype: directory
-    mode: "0777"
+    mode: "2775"
     owner: root
-    group: root
   /opt/bitnami/cassandra/conf/cassandra.yaml:
     exists: true
     filetype: file
     mode: "0644"
-    owner: 1001
     group: root
     contains:
       - /num_tokens.*{{ .Vars.cluster.numTokens }}/
   /var/run/secrets/kubernetes.io/serviceaccount:
-    mode: "3777"
+    exists: {{ .Vars.serviceAccount.create }}
     filetype: directory
-    exists: true
+    mode: "3777"
 command:
+  {{- $user := .Vars.dbUser.user }}
+  {{- $password := .Vars.dbUser.password }}
+  {{- $nodes := .Vars.cluster.seedCount }}
+  {{- $port := .Vars.containerPorts.cql }}
+  {{- $keyspace := printf "test_%s" (randAlpha 5) }}
   manage-keyspace:
-    exec: "cqlsh -u {{ .Vars.dbUser.user }} -p {{ .Vars.dbUser.password }} -e 'CREATE KEYSPACE test_one WITH REPLICATION = { $$class$$: $$SimpleStrategy$$, $$replication_factor$$ : 3 }; DROP KEYSPACE test_one;' cassandra {{ .Vars.containerPorts.cql }}"
+    exec: "cqlsh -u {{ $user }} -p {{ $password }} -e 'CREATE KEYSPACE {{ $keyspace }} WITH REPLICATION = { $$class$$: $$SimpleStrategy$$, $$replication_factor$$ : 3 };' cassandra-0.cassandra-headless {{ $port }}{{ range $e, $i := until $nodes }} && cqlsh -u {{ $user }} -p {{ $password }} -e 'USE {{ $keyspace }};' cassandra-{{ $i }}.cassandra-headless{{ end }}"
     exit-status: 0
+    timeout: 20000
   cluster-size:
-    exec: if [ "$(nodetool status | grep {{ .Vars.cluster.numTokens }} | wc -l)" -ne {{ .Vars.cluster.seedCount }} ]; then exit 1; fi
+    exec: if [ "$(nodetool status | grep {{ .Vars.cluster.numTokens }} | wc -l)" -ne {{ $nodes }} ]; then exit 1; fi
     exit-status: 0
     timeout: 20000

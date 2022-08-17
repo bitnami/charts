@@ -6,5 +6,7 @@ persistence:
 containerPorts:
   cql: 9042
 cluster:
-  seedCount: 3
+  seedCount: 2
   numTokens: 256
+serviceAccount:
+  create: true
