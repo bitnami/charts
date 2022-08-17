@@ -1,0 +1,3 @@
+service:
+  ports:
+    memcached: 80

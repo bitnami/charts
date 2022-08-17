@@ -1,0 +1,20 @@
+file:
+  /tmp:
+    mode: "2777"
+    filetype: directory
+    exists: true
+command:
+  {{- $key := printf "key_%s" (randAlpha 5) }}
+  {{- $value := printf "value_%s" (randAlpha 5) }}
+  {{- $port := .Vars.service.ports.memcached }}
+  manage-key:
+    exec: printf "set {{ $key }} 0 300 11\r\n{{ $value }}\r\nquit\n" | nc memcached {{ $port }} && printf "get {{ $key }}\r\nquit\n" | nc memcached {{ $port }}
+    exit-status: 0
+    stdout:
+    - STORED
+    - {{ $value }}
+  flush-cache:
+    exec: printf "flush_all\r\nquit\n" | nc memcached {{ $port }}
+    exit-status: 0
+    stdout:
+    - OK
