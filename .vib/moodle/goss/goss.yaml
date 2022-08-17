@@ -1,0 +1,12 @@
+file:
+  /bitnami/moodledata:
+    exists: true
+    filetype: directory
+    mode: "2775"
+  /bitnami/moodle/config.php:
+    exists: true
+    filetype: file
+    contains:
+      - /\$CFG.*{{ .Vars.mariadb.auth.database }}/
+      - /\$CFG.*{{ .Vars.mariadb.auth.username }}/
+

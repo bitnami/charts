@@ -1,0 +1,4 @@
+mariadb:
+  auth:
+    database: bitnami_moodle
+    username: bn_moodle

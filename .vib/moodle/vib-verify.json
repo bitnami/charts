@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/moodle"
         },
-        "runtime_parameters": "Im1vb2RsZVBhc3N3b3JkIjogImJpdG5hbWkxIgoibW9vZGxlVXNlcm5hbWUiOiAidXNlciIKInNlcnZpY2UiOgogICJwb3J0IjogODAKICAidHlwZSI6ICJMb2FkQmFsYW5jZXIi",
+        "runtime_parameters": "bW9vZGxlVXNlck5hbWU6IHVzZXIKbW9vZGxlUGFzc3dvcmQ6IENvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNApzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgaHR0cDogODAKbWFyaWFkYjoKICBhdXRoOgogICAgZGF0YWJhc2U6IGJpdG5hbWlfbW9vZGxlCiAgICB1c2VybmFtZTogYm5fbW9vZGxlCg==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -36,6 +36,32 @@
           "params": {
             "endpoint": "lb-moodle-http",
             "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/moodle/goss"
+            },
+            "remote": {
+              "workload": "deploy-moodle"
+            },
+            "vars_file": "vars.yaml"
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/moodle/cypress"
+            },
+            "endpoint": "lb-moodle-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "username": "user",
+              "password": "ComplicatedPassword123!4"
+            }
           }
         }
       ]
