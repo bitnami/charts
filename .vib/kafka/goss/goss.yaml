@@ -1,8 +1,19 @@
-command:
-  create-kafka-topic:
-    exec: kafka-topics.sh --create --topic quickstart-events$RANDOM --bootstrap-server kafka:{{ .Vars.containerPorts.client }}
-    exit-status: 0
-    timeout: 20000
+file:
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    exists: true
+    filetype: directory
+    mode: "3777"
+    owner: root
+  /bitnami/kafka:
+    exists: true
+    filetype: directory
+    mode: "2775"
+    owner: root
+  /opt/bitnami/kafka/logs:
+    exists: true
+    filetype: directory
+    mode: "2777"
+    owner: root
   /opt/bitnami/kafka/config/server.properties:
     exists: true
     filetype: file
@@ -10,25 +21,11 @@ command:
     owner: root
     group: root
     contains:
-    - log.dirs={{ .Vars.logsDirs }}
+    - /log.dirs={{ .Vars.logsDirs }}/
     - super.users={{ .Vars.superUsers }}
     - listeners=INTERNAL://:{{ .Vars.containerPorts.internal }},CLIENT://:{{ .Vars.containerPorts.client }},EXTERNAL://:{{ .Vars.containerPorts.external }}
-file:
-  /var/run/secrets/kubernetes.io/serviceaccount:
-    exists: true
-    filetype: directory
-    mode: "3777"
-    owner: root
-    group: 1001
-  /bitnami/kafka:
-    exists: true
-    filetype: directory
-    mode: "2777"
-    owner: root
-    group: root
-  /opt/bitnami/kafka/logs:
-    exists: true
-    filetype: directory
-    mode: "2777"
-    owner: root
-    group: 1001
+command:
+  create-kafka-topic:
+    exec: kafka-topics.sh --create --topic quickstart-events{{randAlpha 5}} --bootstrap-server kafka:{{ .Vars.containerPorts.client }}
+    exit-status: 0
+    timeout: 20000
