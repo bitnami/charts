@@ -70,6 +70,7 @@ data:
       "kubeappsCluster": {{ include "kubeapps.kubeappsCluster" . | quote }},
       "kubeappsNamespace": {{ .Release.Namespace | quote }},
       "globalReposNamespace": {{ include "kubeapps.globalReposNamespace" . | quote }},
+      "carvelGlobalNamespace": "kapp-controller-packaging-global",
       "appVersion": {{ printf "v%s" .Chart.AppVersion | quote }},
       "authProxyEnabled": {{ .Values.authProxy.enabled }},
       "oauthLoginURI": {{ .Values.authProxy.oauthLoginURI | quote }},
@@ -80,5 +81,6 @@ data:
       "theme": {{ .Values.dashboard.defaultTheme | quote }},
       "remoteComponentsUrl": {{ .Values.dashboard.remoteComponentsUrl | quote }},
       "customAppViews": {{ .Values.dashboard.customAppViews | toJson }},
-      "skipAvailablePackageDetails": {{ .Values.dashboard.skipAvailablePackageDetails }}
+      "skipAvailablePackageDetails": {{ .Values.dashboard.skipAvailablePackageDetails }},
+      "createNamespaceLabels": {{ .Values.dashboard.createNamespaceLabels | toJson }}
     }

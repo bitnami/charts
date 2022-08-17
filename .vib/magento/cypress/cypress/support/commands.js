@@ -28,7 +28,7 @@ Cypress.Commands.add(
     cy.visit('/admin');
     cy.get('#username').type(username);
     cy.get('#login').type(password);
-    cy.get('.action-login').click();
+    cy.contains('Sign in').click();
     cy.contains('.page-title', 'Dashboard');
   }
 );
