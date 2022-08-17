@@ -15,6 +15,52 @@
           "action_id": "helm-lint"
         }
       ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/schema-registry"
+        },
+        "runtime_parameters": "c2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGh0dHA6IDgwCmF2cm9Db21wYXRpYmlsaXR5TGV2ZWw6IGJhY2t3YXJkCgo=",
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "health-check",
+          "params": {
+            "endpoint": "lb-schema-registry-http",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/schema-registry/goss"
+            },
+            "remote": {
+              "workload": "sts-schema-registry"
+            },
+            "vars_file": "vars.yaml"
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/schema-registry/cypress"
+            },
+            "endpoint": "lb-schema-registry-http",
+            "app_protocol": "HTTP"
+          }
+        }
+      ]
     }
   }
 }
