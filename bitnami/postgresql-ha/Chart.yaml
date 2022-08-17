@@ -27,4 +27,4 @@ name: postgresql-ha
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/postgresql
   - https://www.postgresql.org/
-version: 9.3.4
+version: 9.3.5
