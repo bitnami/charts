@@ -42,9 +42,11 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/schema-registry/**'
       - 'bitnami/sealed-secrets/**'
       - 'bitnami/solr/**'
+      - 'bitnami/spark/**'
       - 'bitnami/spring-cloud-dataflow/**'
       - 'bitnami/suitecrm/**'
       - 'bitnami/wordpress/**'
+      - 'bitnami/zookeeper/**'
       - '!**.md'
 env:
   CSP_API_URL: https://console.cloud.vmware.com

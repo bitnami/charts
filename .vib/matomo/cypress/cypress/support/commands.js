@@ -1,4 +1,4 @@
-const COMMAND_DELAY = 500;
+const COMMAND_DELAY = 2000;
 const BASE_URL = 'http://bitnami-matomo.my';
 
 for (const command of ['click']) {
@@ -20,7 +20,6 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
 Cypress.Commands.add(
   'login',
   (username = Cypress.env('username'), password = Cypress.env('password')) => {
-    cy.clearCookies();
     cy.visit('/');
     cy.get('#login_form_login').type(username);
     cy.get('#login_form_password').type(password);
