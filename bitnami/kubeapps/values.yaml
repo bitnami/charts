@@ -402,7 +402,8 @@ frontend:
   ## @param frontend.nodeSelector Node labels for pod assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
-  nodeSelector: {}
+  nodeSelector:
+    kubernetes.io/arch: amd64
   ## @param frontend.tolerations Tolerations for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
@@ -750,7 +751,8 @@ dashboard:
   ## @param dashboard.nodeSelector Node labels for pod assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
-  nodeSelector: {}
+  nodeSelector:
+    kubernetes.io/arch: amd64
   ## @param dashboard.tolerations Tolerations for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
@@ -1057,7 +1059,8 @@ apprepository:
   ## @param apprepository.nodeSelector Node labels for pod assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
-  nodeSelector: {}
+  nodeSelector:
+    kubernetes.io/arch: amd64
   ## @param apprepository.tolerations Tolerations for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
@@ -1343,7 +1346,8 @@ kubeops:
   ## @param kubeops.nodeSelector Node labels for pod assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
-  nodeSelector: {}
+  nodeSelector:
+    kubernetes.io/arch: amd64
   ## @param kubeops.tolerations Tolerations for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
@@ -2039,7 +2043,8 @@ kubeappsapis:
   ## @param kubeappsapis.nodeSelector Node labels for pod assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
-  nodeSelector: {}
+  nodeSelector:
+    kubernetes.io/arch: amd64
   ## @param kubeappsapis.tolerations Tolerations for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
