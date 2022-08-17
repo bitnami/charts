@@ -391,7 +391,7 @@ statefulset.zones=2
 statefulset.drivesPerNode=2
 ```
 
-> Note: The total number of drives should be multiple of 4 to guarantee erasure coding. Please set a combination of nodes, and drives per node that match this condition.
+> Note: The total number of drives should be greater than 4 to guarantee erasure coding. Please set a combination of nodes, and drives per node that match this condition.
 
 ### Prometheus exporter
 
