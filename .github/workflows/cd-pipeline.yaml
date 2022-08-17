@@ -17,6 +17,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/haproxy-intel/**'
       - 'bitnami/harbor/**'
       - 'bitnami/jenkins/**'
+      - 'bitnami/joomla/**'
       - 'bitnami/kafka/**'
       - 'bitnami/keycloak/**'
       - 'bitnami/kibana/**'
