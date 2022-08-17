@@ -172,10 +172,8 @@ spec:
               mountPath: /opt/bitnami/grafana/conf/grafana.ini
               subPath: grafana.ini
             {{- end }}
-            {{- if .Values.persistence.enabled }}
             - name: data
               mountPath: /opt/bitnami/grafana/data
-            {{- end }}
             {{- if .Values.dashboardsProvider.enabled }}
             - name: dashboards-provider
               mountPath: /opt/bitnami/grafana/conf/provisioning/dashboards
@@ -271,10 +269,12 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.grafana.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        {{- if .Values.persistence.enabled }}
         - name: data
+        {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
             claimName: {{ .Values.persistence.existingClaim | default (include "common.names.fullname" .) }}
+        {{- else }}
+          emptyDir: {}
         {{- end }}
         {{- if .Values.ldap.enabled }}
         - name: ldap
