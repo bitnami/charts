@@ -1,0 +1,4 @@
+health,user=bitnami glucose=1 1660694480000000000
+health,user=bitnami glucose=0.7 1660694480000000000
+health,user=bitnami glucose=1.95 1660694480000000000
+health,user=bitnami glucose=2.43 1660694480000000000

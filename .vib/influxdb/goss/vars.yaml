@@ -1,0 +1,14 @@
+auth:
+  admin:
+    token: "4dm1nT0k3n"
+  user:
+    username: "testUser"
+    org: "testOrganization"
+    bucket: "testBucket"
+influxdb:
+  service:
+    ports:
+      http: 80
+serviceAccount:
+  create: true
+  automountServiceAccountToken: true

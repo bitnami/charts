@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/influxdb"
         },
-        "runtime_parameters": "ImF1dGgiOgogICJhZG1pbiI6CiAgICAicGFzc3dvcmQiOiAiYWRtaW5wYXNzd29yZCIKICAgICJ0b2tlbiI6ICJhZG1pbnBhc3N3b3JkIgogICAgInVzZXJuYW1lIjogImFkbWluIgogICJjcmVhdGVVc2VyVG9rZW4iOiB0cnVlCiAgInJlYWRVc2VyIjoKICAgICJwYXNzd29yZCI6ICJyZWFkLXBhc3N3b3JkIgogICAgInVzZXJuYW1lIjogInJlYWQtdXNlciIKICAidXNlciI6CiAgICAiYnVja2V0IjogImJpdG5hbWlfdGVzdF9idWNrZXQiCiAgICAicGFzc3dvcmQiOiAicGFzc3dvcmQiCiAgICAidXNlcm5hbWUiOiAidXNlciIKICAid3JpdGVVc2VyIjoKICAgICJwYXNzd29yZCI6ICJ3cml0ZS1wYXNzd29yZCIKICAgICJ1c2VybmFtZSI6ICJ3cml0ZS11c2VyIgoiaW5mbHV4ZGIiOgogICJzZXJ2aWNlIjoKICAgICJwb3J0cyI6CiAgICAgICJodHRwIjogODAKICAgICJ0eXBlIjogIkxvYWRCYWxhbmNlciIKICAidXBkYXRlU3RyYXRlZ3kiOgogICAgInR5cGUiOiAiUmVjcmVhdGUi",
+        "runtime_parameters": "YXV0aDoKICBlbmFibGVkOiB0cnVlCiAgYWRtaW46CiAgICB1c2VybmFtZTogImFkbWluIgogICAgcGFzc3dvcmQ6ICJSb290UDRzc3cwcmQiCiAgICB0b2tlbjogIjRkbTFuVDBrM24iCiAgY3JlYXRlVXNlclRva2VuOiB0cnVlCiAgdXNlcjoKICAgIHVzZXJuYW1lOiAidGVzdFVzZXIiCiAgICBwYXNzd29yZDogIkNvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNCIKICAgIG9yZzogInRlc3RPcmdhbml6YXRpb24iCiAgICBidWNrZXQ6ICJ0ZXN0QnVja2V0IgppbmZsdXhkYjoKICBzZXJ2aWNlOgogICAgdHlwZTogTG9hZEJhbGFuY2VyCiAgICBwb3J0czoKICAgICAgaHR0cDogODAKICAgICAgcnBjOiA4MDg4CnNlcnZpY2VBY2NvdW50OgogIGNyZWF0ZTogdHJ1ZQogIGF1dG9tb3VudFNlcnZpY2VBY2NvdW50VG9rZW46IHRydWUK",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -36,6 +36,33 @@
           "params": {
             "endpoint": "lb-influxdb-http",
             "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/influxdb/goss"
+            },
+            "remote": {
+              "workload": "deploy-influxdb"
+            },
+            "vars_file": "vars.yaml"
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/influxdb/cypress"
+            },
+            "endpoint": "lb-influxdb-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "username": "admin",
+              "password": "RootP4ssw0rd",
+              "bucket": "testBucket"
+            }
           }
         }
       ]
