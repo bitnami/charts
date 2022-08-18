@@ -13,7 +13,7 @@ Return the proper image name
      {{- $registryName = .global.imageRegistry -}}
     {{- end -}}
 {{- end -}}
-{{- if $digtest }}
+{{- if $digest }}
     {{- printf "%s/%s@%s" $registryName $repositoryName $digest -}}
 {{- else -}}
     {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
