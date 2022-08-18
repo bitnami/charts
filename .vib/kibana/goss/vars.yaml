@@ -1,0 +1,4 @@
+extraConfiguration:
+  csp_strict: false
+serviceAccount:
+  create: true
