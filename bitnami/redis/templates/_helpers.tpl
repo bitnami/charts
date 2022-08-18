@@ -282,7 +282,7 @@ redis: tls.enabled
 
 {{/* Compile all annotations utilized for external-dns */}}
 {{- define "redis.externalDNS.annotations" -}}
-{{- if .Values.useExternalDNS.enabled }}
+{{- if and .Values.useExternalDNS.enabled .Values.useExternalDNS.annotationKey }}
 {{ .Values.useExternalDNS.annotationKey }}hostname: {{ include "redis.externalDNS.suffix" . }}
 {{- range $key, $val := .Values.useExternalDNS.additionalAnnotations }}
 {{ $.Values.useExternalDNS.annotationKey }}{{ $key }}: {{ $val | quote }}

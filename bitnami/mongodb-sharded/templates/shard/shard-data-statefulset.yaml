@@ -401,7 +401,7 @@ spec:
     - metadata:
         name: datadir
         {{- if or $.Values.shardsvr.persistence.annotations $.Values.commonAnnotations $.Values.shardsvr.persistence.resourcePolicy }}
-        {{- if or .Values.commonAnnotations .Values.configsvr.persistence.annotations .Values.configsvr.persistence.resourcePolicy }}
+        {{- if or $.Values.commonAnnotations $.Values.shardsvr.persistence.annotations $.Values.shardsvr.persistence.resourcePolicy }}
         annotations:
           {{- if $.Values.commonAnnotations }}
           {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 10 }}

@@ -82,14 +82,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### WildFly Image parameters
 
-| Name                | Description                                        | Value                 |
-| ------------------- | -------------------------------------------------- | --------------------- |
-| `image.registry`    | WildFly image registry                             | `docker.io`           |
-| `image.repository`  | WildFly image repository                           | `bitnami/wildfly`     |
-| `image.tag`         | WildFly image tag (immutable tags are recommended) | `26.1.1-debian-11-r0` |
-| `image.pullPolicy`  | WildFly image pull policy                          | `IfNotPresent`        |
-| `image.pullSecrets` | WildFly image pull secrets                         | `[]`                  |
-| `image.debug`       | Enable image debug mode                            | `false`               |
+| Name                | Description                                        | Value                  |
+| ------------------- | -------------------------------------------------- | ---------------------- |
+| `image.registry`    | WildFly image registry                             | `docker.io`            |
+| `image.repository`  | WildFly image repository                           | `bitnami/wildfly`      |
+| `image.tag`         | WildFly image tag (immutable tags are recommended) | `26.1.1-debian-11-r26` |
+| `image.pullPolicy`  | WildFly image pull policy                          | `IfNotPresent`         |
+| `image.pullSecrets` | WildFly image pull secrets                         | `[]`                   |
+| `image.debug`       | Enable image debug mode                            | `false`                |
 
 
 ### WildFly Configuration parameters
@@ -116,6 +116,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hostAliases`                           | WildFly pod host aliases                                                                  | `[]`            |
 | `extraVolumes`                          | Optionally specify extra list of additional volumes for WildFly pods                      | `[]`            |
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for WildFly container(s)         | `[]`            |
+| `serviceAccountName`                    | Name of existing ServiceAccount to be connected                                           | `""`            |
 | `sidecars`                              | Add additional sidecar containers to the WildFly pod                                      | `[]`            |
 | `initContainers`                        | Add additional init containers to the WildFly pods                                        | `[]`            |
 | `podLabels`                             | Extra labels for WildFly pods                                                             | `{}`            |
@@ -218,7 +219,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r0`       |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r23`      |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
