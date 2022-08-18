@@ -84,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | -------------------------------------------------- | ---------------------- |
 | `image.registry`    | Jenkins image registry                             | `docker.io`            |
 | `image.repository`  | Jenkins image repository                           | `bitnami/jenkins`      |
-| `image.tag`         | Jenkins image tag (immutable tags are recommended) | `2.346.3-debian-11-r0` |
+| `image.tag`         | Jenkins image tag (immutable tags are recommended) | `2.346.3-debian-11-r1` |
 | `image.pullPolicy`  | Jenkins image pull policy                          | `IfNotPresent`         |
 | `image.pullSecrets` | Jenkins image pull secrets                         | `[]`                   |
 | `image.debug`       | Enable image debug mode                            | `false`                |
