@@ -7,16 +7,20 @@ Return the proper image name
 {{- $registryName := .imageRoot.registry -}}
 {{- $repositoryName := .imageRoot.repository -}}
 {{- $tag := .imageRoot.tag | toString -}}
-{{- $digest := .imageRoot.digest | toString -}}
+{{- $separator := ":" -}}
 {{- if .global }}
     {{- if .global.imageRegistry }}
      {{- $registryName = .global.imageRegistry -}}
     {{- end -}}
 {{- end -}}
-{{- if $digest }}
-    {{- printf "%s/%s@%s" $registryName $repositoryName $digest -}}
+{{- if .imageRoot.digest -}}
+    {{- $separator = "@" -}}
+    {{- $tag = .imageRoot.digest | toString -}}
+{{- end -}}
+{{- if $registryName }}
+    {{- printf "%s/%s%s%s" $registryName $repositoryName $separator $tag -}}
 {{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+    {{- printf "%s%s%s" $repositoryName $separator $tag -}}
 {{- end -}}
 {{- end -}}
 
