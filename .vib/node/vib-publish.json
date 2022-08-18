@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/node"
         },
-        "runtime_parameters": "Im1vbmdvZGIiOgogICJhdXRoIjoKICAgICJyb290UGFzc3dvcmQiOiAiQU9pWTlOZjEiCiJzZXJ2aWNlIjoKICAicG9ydHMiOgogICAgImh0dHAiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciIK",
+        "runtime_parameters": "Z2l0OgogIGdldEFwcEZyb21FeHRlcm5hbFJlcG9zaXRvcnk6IHRydWUKICByZXBvc2l0b3J5OiAiaHR0cHM6Ly9naXRodWIuY29tL2JpdG5hbWkvc2FtcGxlLW1lYW4uZ2l0IgogIHJldmlzaW9uOiAibWFzdGVyIgpzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgaHR0cDogODAK",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
           "size": {
@@ -34,6 +34,27 @@
         {
           "action_id": "health-check",
           "params": {
+            "endpoint": "lb-node-http",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/node/goss"
+            },
+            "remote": {
+              "workload": "deploy-node"
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/node/cypress"
+            },
             "endpoint": "lb-node-http",
             "app_protocol": "HTTP"
           }
