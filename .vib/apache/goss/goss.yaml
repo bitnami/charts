@@ -1,14 +1,18 @@
+http:
+  {{ $securePort := .Vars.containerPorts.https }}
+  {{ range .Vars.hostAliases }}
+  https://{{ .ip }}:{{ $securePort }}:
+    status: 200
+    allow-insecure: true
+  {{ end }}
 file:
-  /opt/bitnami/apache:
-    exists: true
-    filetype: directory
-    mode: "0775"
   /etc/hosts:
     exists: true
     filetype: file
     contains:
-      - /^{{ index .Vars.hostAliases 0 "ip" }}.*{{ index .Vars.hostAliases 0 "hostnames" 0 }}$/
-  /app:
-    exists: true
-    filetype: directory
-    mode: "0755"
+    {{ range .Vars.hostAliases }}
+    {{ $ip := .ip }}
+    {{ range $host := .hostnames }}
+      - /^{{ $ip }}.*{{$host}}$/
+    {{ end }}
+    {{ end }}
