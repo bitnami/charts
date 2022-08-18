@@ -24,7 +24,7 @@ spec:
               {{ template "common.names.fullname" . }}-client: "true"
       {{- end }}
     - ports:
-        - port: {{ .Values.service.ports.client }}
+        - port: {{ .Values.service.ports.cluster }}
     - ports:
         - port: {{ .Values.service.ports.monitoring }}
 {{- end }}
