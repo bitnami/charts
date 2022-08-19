@@ -701,7 +701,7 @@ kibana:
         # Instruct kibana to connect to elastic over https
         enabled: true
         # Bit of a catch 22, as you will need to know the name upfront of your release
-        existingSecret: RELEASENAME-elasticsearch-coordinating-only-crt
+        existingSecret: RELEASENAME-elasticsearch-coordinating-crt # or just 'elasticsearch-coordinating-crt' if the release name happens to be 'elasticsearch'
         # As the certs are auto-generated, they are pemCerts so set to true
         usePemCerts: true
 ```

@@ -86,7 +86,7 @@ $ helm delete --purge my-release
 | ------------------------------- | -------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                | HashiCorp Consul image registry                                                              | `docker.io`           |
 | `image.repository`              | HashiCorp Consul image repository                                                            | `bitnami/consul`      |
-| `image.tag`                     | HashiCorp Consul image tag (immutable tags are recommended)                                  | `1.13.0-debian-11-r1` |
+| `image.tag`                     | HashiCorp Consul image tag (immutable tags are recommended)                                  | `1.13.1-debian-11-r1` |
 | `image.pullPolicy`              | HashiCorp Consul image pull policy                                                           | `IfNotPresent`        |
 | `image.pullSecrets`             | HashiCorp Consul image pull secrets                                                          | `[]`                  |
 | `image.debug`                   | Enable image debug mode                                                                      | `false`               |
@@ -236,7 +236,7 @@ $ helm delete --purge my-release
 | `metrics.enabled`                               | Start a side-car prometheus exporter                                                                                        | `false`                   |
 | `metrics.image.registry`                        | HashiCorp Consul Prometheus Exporter image registry                                                                         | `docker.io`               |
 | `metrics.image.repository`                      | HashiCorp Consul Prometheus Exporter image repository                                                                       | `bitnami/consul-exporter` |
-| `metrics.image.tag`                             | HashiCorp Consul Prometheus Exporter image tag (immutable tags are recommended)                                             | `0.8.0-debian-11-r26`     |
+| `metrics.image.tag`                             | HashiCorp Consul Prometheus Exporter image tag (immutable tags are recommended)                                             | `0.8.0-debian-11-r27`     |
 | `metrics.image.pullPolicy`                      | HashiCorp Consul Prometheus Exporter image pull policy                                                                      | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                     | HashiCorp Consul Prometheus Exporter image pull secrets                                                                     | `[]`                      |
 | `metrics.containerSecurityContext.enabled`      | HashiCorp Consul Prometheus Exporter securityContext                                                                        | `true`                    |

@@ -235,12 +235,24 @@ dashboardsProvider:
 ##     fileName: myotherdashboard.json
 ##
 dashboardsConfigMaps: []
-## Create datasources from a custom secret
-## The secret must contain the files
-## @param datasources.secretName Secret name containing custom datasource files
+## Import datasources from an externally-managed secret, or a secret definition set via Helm values.
 ##
 datasources:
+  ## @param datasources.secretName The name of an externally-managed secret containing custom datasource files.
+  ##
   secretName: ""
+  ## @param datasources.secretDefinition The contents of a secret defining a custom datasource file. Only used if datasources.secretName is empty or not defined.
+  ## Example:
+  ## secretDefinition:
+  ##   apiVersion: 1
+  ##   datasources:
+  ##   - name: Prometheus
+  ##     type: prometheus
+  ##     url: http://prometheus-prometheus-server
+  ##     access: proxy
+  ##     isDefault: true
+  ##
+  secretDefinition: {}
 
 ## Create notifiers from a configMap
 ## The notifiersName must contain the files

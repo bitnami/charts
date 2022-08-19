@@ -514,17 +514,18 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 
 ### Database Parameters
 
-| Name                                     | Description                                                                  | Value    |
-| ---------------------------------------- | ---------------------------------------------------------------------------- | -------- |
-| `postgresql.enabled`                     | Deploy a PostgreSQL server to satisfy the applications database requirements | `true`   |
-| `postgresql.auth.postgresPassword`       | Password for 'postgres' user                                                 | `""`     |
-| `postgresql.auth.database`               | Name for a custom database to create                                         | `assets` |
-| `postgresql.auth.existingSecret`         | Name of existing secret to use for PostgreSQL credentials                    | `""`     |
-| `postgresql.primary.persistence.enabled` | Enable PostgreSQL Primary data persistence using PVC                         | `false`  |
-| `postgresql.securityContext.enabled`     | Enabled PostgreSQL replicas pods' Security Context                           | `false`  |
-| `postgresql.resources.limits`            | The resources limits for the PostreSQL container                             | `{}`     |
-| `postgresql.resources.requests.cpu`      | The requested CPU for the PostreSQL container                                | `250m`   |
-| `postgresql.resources.requests.memory`   | The requested memory for the PostreSQL container                             | `256Mi`  |
+| Name                                     | Description                                                                  | Value        |
+| ---------------------------------------- | ---------------------------------------------------------------------------- | ------------ |
+| `postgresql.enabled`                     | Deploy a PostgreSQL server to satisfy the applications database requirements | `true`       |
+| `postgresql.auth.postgresPassword`       | Password for 'postgres' user                                                 | `""`         |
+| `postgresql.auth.database`               | Name for a custom database to create                                         | `assets`     |
+| `postgresql.auth.existingSecret`         | Name of existing secret to use for PostgreSQL credentials                    | `""`         |
+| `postgresql.primary.persistence.enabled` | Enable PostgreSQL Primary data persistence using PVC                         | `false`      |
+| `postgresql.architecture`                | PostgreSQL architecture (`standalone` or `replication`)                      | `standalone` |
+| `postgresql.securityContext.enabled`     | Enabled PostgreSQL replicas pods' Security Context                           | `false`      |
+| `postgresql.resources.limits`            | The resources limits for the PostreSQL container                             | `{}`         |
+| `postgresql.resources.requests.cpu`      | The requested CPU for the PostreSQL container                                | `250m`       |
+| `postgresql.resources.requests.memory`   | The requested memory for the PostreSQL container                             | `256Mi`      |
 
 
 ### kubeappsapis parameters
@@ -617,16 +618,19 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 
 ### Redis&reg; chart configuration
 
-| Name                            | Description                                                      | Value                                                    |
-| ------------------------------- | ---------------------------------------------------------------- | -------------------------------------------------------- |
-| `redis.auth.enabled`            | Enable password authentication                                   | `true`                                                   |
-| `redis.auth.password`           | Redis&reg; password                                              | `""`                                                     |
-| `redis.auth.existingSecret`     | The name of an existing secret with Redis&reg; credentials       | `""`                                                     |
-| `redis.master.extraFlags`       | Array with additional command line flags for Redis&reg; master   | `["--maxmemory 200mb","--maxmemory-policy allkeys-lru"]` |
-| `redis.master.disableCommands`  | Array with commands to deactivate on Redis&trade                 | `[]`                                                     |
-| `redis.replica.replicaCount`    | Number of Redis&reg; replicas to deploy                          | `1`                                                      |
-| `redis.replica.extraFlags`      | Array with additional command line flags for Redis&reg; replicas | `["--maxmemory 200mb","--maxmemory-policy allkeys-lru"]` |
-| `redis.replica.disableCommands` | Array with commands to deactivate on Redis&trade                 | `[]`                                                     |
+| Name                                | Description                                                      | Value                                                    |
+| ----------------------------------- | ---------------------------------------------------------------- | -------------------------------------------------------- |
+| `redis.auth.enabled`                | Enable password authentication                                   | `true`                                                   |
+| `redis.auth.password`               | Redis&reg; password                                              | `""`                                                     |
+| `redis.auth.existingSecret`         | The name of an existing secret with Redis&reg; credentials       | `""`                                                     |
+| `redis.architecture`                | Redis(R) architecture (`standalone` or `replication`)            | `standalone`                                             |
+| `redis.master.extraFlags`           | Array with additional command line flags for Redis&reg; master   | `["--maxmemory 200mb","--maxmemory-policy allkeys-lru"]` |
+| `redis.master.disableCommands`      | Array with commands to deactivate on Redis&reg;                  | `[]`                                                     |
+| `redis.master.persistence.enabled`  | Enable Redis&reg; master data persistence using PVC              | `false`                                                  |
+| `redis.replica.replicaCount`        | Number of Redis&reg; replicas to deploy                          | `1`                                                      |
+| `redis.replica.extraFlags`          | Array with additional command line flags for Redis&reg; replicas | `["--maxmemory 200mb","--maxmemory-policy allkeys-lru"]` |
+| `redis.replica.disableCommands`     | Array with commands to deactivate on Redis&reg;                  | `[]`                                                     |
+| `redis.replica.persistence.enabled` | Enable Redis&reg; replica data persistence using PVC             | `false`                                                  |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
