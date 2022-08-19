@@ -1,12 +1,13 @@
 dbUser:
-  user: cassandra
+  user: test_cassandra
   password: "ComplicatedPassword123!4"
 persistence:
   mountPath: /bitnami/cassandra
 containerPorts:
   cql: 9042
+replicaCount: 2
 cluster:
-  seedCount: 2
   numTokens: 256
 serviceAccount:
   create: true
+  automountServiceAccountToken: true

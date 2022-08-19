@@ -12,17 +12,17 @@ file:
     contains:
       - /num_tokens.*{{ .Vars.cluster.numTokens }}/
   /var/run/secrets/kubernetes.io/serviceaccount:
-    exists: {{ .Vars.serviceAccount.create }}
+    exists: {{ and .Vars.serviceAccount.create .Vars.serviceAccount.automountServiceAccountToken }}
     filetype: directory
     mode: "3777"
 command:
   {{- $user := .Vars.dbUser.user }}
   {{- $password := .Vars.dbUser.password }}
-  {{- $nodes := .Vars.cluster.seedCount }}
   {{- $port := .Vars.containerPorts.cql }}
+  {{- $nodes := .Vars.replicaCount }}
   {{- $keyspace := printf "test_%s" (randAlpha 5) }}
   manage-keyspace:
-    exec: "cqlsh -u {{ $user }} -p {{ $password }} -e 'CREATE KEYSPACE {{ $keyspace }} WITH REPLICATION = { $$class$$: $$SimpleStrategy$$, $$replication_factor$$ : 3 };' cassandra-0.cassandra-headless {{ $port }}{{ range $e, $i := until $nodes }} && cqlsh -u {{ $user }} -p {{ $password }} -e 'USE {{ $keyspace }};' cassandra-{{ $i }}.cassandra-headless{{ end }}"
+    exec: "cqlsh -u {{ $user }} -p {{ $password }} -e 'CREATE KEYSPACE {{ $keyspace }} WITH REPLICATION = { $$class$$: $$SimpleStrategy$$, $$replication_factor$$ : {{ $nodes }} };' cassandra-0.cassandra-headless {{ $port }}{{ range $e, $i := until $nodes }} && cqlsh -u {{ $user }} -p {{ $password }} -e 'USE {{ $keyspace }};' cassandra-{{ $i }}.cassandra-headless {{ $port }}{{ end }}"
     exit-status: 0
     timeout: 20000
   cluster-size:
