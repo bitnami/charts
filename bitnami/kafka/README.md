@@ -611,7 +611,7 @@ metrics.kafka.extraFlags={tls.insecure-skip-tls-verify: ""}
 
 In order to access Kafka Brokers from outside the cluster, an additional listener and advertised listener must be configured. Additionally, a specific service per kafka pod will be created.
 
-There are three ways of configuring external access. Using LoadBalancer services, using NodePort services or using ClusterIP.
+There are three ways of configuring external access. Using LoadBalancer services, using NodePort services or using ClusterIP services.
 
 #### Using LoadBalancer services
 
@@ -673,7 +673,7 @@ Note: You need to know in advance the node ports that will be exposed so each Ka
 
 The pod will try to get the external ip of the node using `curl -s https://ipinfo.io/ip` unless `externalAccess.service.domain` or `externalAccess.service.useHostIPs` is provided.
 
-#### Using ClusterIP
+#### Using ClusterIP services
 
 Note: This option requires that an ingress is deployed within your cluster
 
