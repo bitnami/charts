@@ -9,7 +9,7 @@
     "data": {
       "type": "dashboard",
       "attributes": {
-        "name": "Health Tracker a89lm",
+        "name": "Health Tracker",
         "description": ""
       },
       "relationships": {
@@ -57,7 +57,7 @@
             "shape": "chronograf-v2",
             "queries": [
               {
-                "text": "from(bucket: \"testBucket\")\n  |> range(start: time(v: \"2022-08-16T22:00:00.000Z\"), stop: time(v: \"2022-08-17T21:00:00.929Z\"))\n  |> filter(fn: (r) => r[\"_measurement\"] == \"health\")\n  |> filter(fn: (r) => r[\"_field\"] == \"glucose\")\n  |> aggregateWindow(every: v.windowPeriod, fn: max, createEmpty: false)\n  |> yield(name: \"max\")",
+                "text": "from(bucket: \"primary\")\n  |> range(start: time(v: \"2022-08-16T22:00:00.000Z\"), stop: time(v: \"2022-08-17T21:00:00.929Z\"))\n  |> filter(fn: (r) => r[\"_measurement\"] == \"health\")\n  |> filter(fn: (r) => r[\"_field\"] == \"glucose\")\n  |> aggregateWindow(every: v.windowPeriod, fn: max, createEmpty: false)\n  |> yield(name: \"max\")",
                 "editMode": "advanced",
                 "name": "",
                 "builderConfig": {

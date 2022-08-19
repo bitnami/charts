@@ -3,6 +3,8 @@
   "env": {
     "username": "admin",
     "password": "RootP4ssw0rd",
-    "bucket": "testBucket"
-  }
+    "bucket": "primary",
+    "org": "primary"
+  },
+  "defaultCommandTimeout": 30000
 }

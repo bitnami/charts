@@ -1,8 +1,9 @@
 /// <reference types="cypress" />
-import { random } from '../support/utils';
+import { random, selectOrg } from '../support/utils';
 
 it('can create a new bucket', () => {
   cy.login();
+  selectOrg();
   cy.visitInOrg('/load-data/buckets');
   cy.get('[data-testid="Create Bucket"]').click();
   cy.fixture('buckets').then((buckets) => {
@@ -17,6 +18,7 @@ it('can create a new bucket', () => {
 it('allows to import and visualize new data to DB', () => {
   const MAX_SAMPLE_VALUE = '2.43';
   cy.login();
+  selectOrg();
 
   // Import sample data into the DB
   cy.visitInOrg('/load-data/sources');
