@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/opencart"
         },
-        "runtime_parameters": "c2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czogCiAgICBodHRwOiA4MApvcGVuY2FydEhvc3Q6IHZtd2FyZS1vcGVuY2FydC5teQpvcGVuY2FydFVzZXJuYW1lOiB1c2VyCm9wZW5jYXJ0UGFzc3dvcmQ6IENvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNApzbXRwSG9zdDogc210cHRlc3Rob3N0CnNtdHBVc2VyOiBzbXRwVXNlcgpzbXRwUGFzc3dvcmQ6IHNtdHBDb21wbGljYXRlZFBhc3N3b3JkMTIzITQKc210cFBvcnQ6IDk0MjEK",
+        "runtime_parameters": "c2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czogCiAgICBodHRwOiA4MAogICAgaHR0cHM6IDQ0MwpvcGVuY2FydEhvc3Q6IHZtd2FyZS1vcGVuY2FydC5teQpvcGVuY2FydFVzZXJuYW1lOiB1c2VyCm9wZW5jYXJ0UGFzc3dvcmQ6IENvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNAo=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -44,6 +44,7 @@
             "resources": {
               "path": "/.vib/opencart/goss"
             },
+            "vars_file": "vars.yaml",
             "remote": {
               "workload": "deploy-opencart"
             }
