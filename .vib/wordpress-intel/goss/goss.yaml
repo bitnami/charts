@@ -1,0 +1,16 @@
+file:
+  /bitnami/wordpress:
+    exists: true
+    filetype: directory
+    mode: "2775"
+    owner: root
+command:
+  wp-db-create-user:
+    exec: wp option list --search="admin_email"
+    exit-status: 0
+    stdout:
+      - {{ .Vars.wordpressEmail }}
+http:
+  https://wordpress-intel:{{ .Vars.service.ports.https }}:
+    status: 200
+    allow-insecure: true

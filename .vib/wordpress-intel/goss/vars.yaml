@@ -1,0 +1,4 @@
+wordpressEmail: test_user_email@email.com
+service:
+  ports:
+    https: 443
