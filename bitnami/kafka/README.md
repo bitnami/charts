@@ -257,7 +257,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalAccess.autoDiscovery.image.pullSecrets`  | Init container auto-discovery image pull secrets                                                  | `[]`                   |
 | `externalAccess.autoDiscovery.resources.limits`   | The resources limits for the auto-discovery init container                                        | `{}`                   |
 | `externalAccess.autoDiscovery.resources.requests` | The requested resources for the auto-discovery init container                                     | `{}`                   |
-| `externalAccess.service.type`                     | Kubernetes Service type for external access. It can be NodePort or LoadBalancer                   | `LoadBalancer`         |
+| `externalAccess.service.type`                     | Kubernetes Service type for external access. It can be NodePort, LoadBalancer or ClusterIP        | `LoadBalancer`         |
 | `externalAccess.service.ports.external`           | Kafka port used for external access when service type is LoadBalancer                             | `9094`                 |
 | `externalAccess.service.loadBalancerIPs`          | Array of load balancer IPs for each Kafka broker. Length must be the same as replicaCount         | `[]`                   |
 | `externalAccess.service.loadBalancerNames`        | Array of load balancer Names for each Kafka broker. Length must be the same as replicaCount       | `[]`                   |
@@ -611,7 +611,7 @@ metrics.kafka.extraFlags={tls.insecure-skip-tls-verify: ""}
 
 In order to access Kafka Brokers from outside the cluster, an additional listener and advertised listener must be configured. Additionally, a specific service per kafka pod will be created.
 
-There are two ways of configuring external access. Using LoadBalancer services or using NodePort services.
+There are three ways of configuring external access. Using LoadBalancer services, using NodePort services or using ClusterIP.
 
 #### Using LoadBalancer services
 
@@ -672,6 +672,26 @@ externalAccess.service.nodePorts[1]='node-port-2'
 Note: You need to know in advance the node ports that will be exposed so each Kafka broker advertised listener is configured with it.
 
 The pod will try to get the external ip of the node using `curl -s https://ipinfo.io/ip` unless `externalAccess.service.domain` or `externalAccess.service.useHostIPs` is provided.
+
+#### Using ClusterIP
+
+Note: This option requires that an ingress is deployed within your cluster
+
+```console
+externalAccess.enabled=true
+externalAccess.service.type=ClusterIP
+externalAccess.service.ports.external=9094
+externalAccess.service.domain='ingress-ip'
+```
+
+Note: the deployed ingress must contain the following block:
+
+```console
+tcp:
+  9094: "{{ .Release.Namespace }}/{{ include "kafka.fullname" . }}-0-external:9094"
+  9095: "{{ .Release.Namespace }}/{{ include "kafka.fullname" . }}-1-external:9094"
+  9096: "{{ .Release.Namespace }}/{{ include "kafka.fullname" . }}-2-external:9094"
+```
 
 #### Name resolution with External-DNS
 
