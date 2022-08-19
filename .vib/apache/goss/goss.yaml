@@ -1,10 +1,7 @@
 http:
-  {{ $securePort := .Vars.containerPorts.https }}
-  {{ range .Vars.hostAliases }}
-  https://{{ .ip }}:{{ $securePort }}:
+  https://apache:{{ .Vars.service.ports.https }}:
     status: 200
     allow-insecure: true
-  {{ end }}
 file:
   /etc/hosts:
     exists: true
@@ -13,6 +10,6 @@ file:
     {{ range .Vars.hostAliases }}
     {{ $ip := .ip }}
     {{ range $host := .hostnames }}
-      - /^{{ $ip }}.*{{$host}}$/
+      - /{{ $ip }}.*{{$host}}/
     {{ end }}
     {{ end }}
