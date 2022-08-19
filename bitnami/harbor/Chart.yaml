@@ -34,4 +34,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/harbor-registry
   - https://github.com/bitnami/containers/tree/main/bitnami/harbor-registryctl
   - https://goharbor.io/
-version: 15.0.5
+version: 15.1.0
