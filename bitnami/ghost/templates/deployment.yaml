@@ -154,10 +154,12 @@ spec:
               value: {{ .Values.ghostBlogTitle | quote }}
             - name: GHOST_ENABLE_HTTPS
               value: {{ ternary "yes" "no" .Values.ghostEnableHttps | quote }}
-            - name: GHOST_EXTERNAL_HTTP_PORT_NUMBER
-              value: {{ coalesce .Values.service.ports.http .Values.service.port| quote }}
-            - name: GHOST_EXTERNAL_HTTPS_PORT_NUMBER
-              value: {{ coalesce .Values.service.ports.https .Values.service.httpsPort| quote }}
+            {{- if eq ( toString ( .Values.service.type )) "LoadBalancer" }}
+              - name: GHOST_EXTERNAL_HTTP_PORT_NUMBER
+                value: {{ coalesce .Values.service.ports.http .Values.service.port| quote }}
+              - name: GHOST_EXTERNAL_HTTPS_PORT_NUMBER
+                value: {{ coalesce .Values.service.ports.https .Values.service.httpsPort| quote }}
+            {{- end}}
             - name: GHOST_SKIP_BOOTSTRAP
               value: {{ ternary "yes" "no" .Values.ghostSkipInstall  | quote }}
             {{- if .Values.smtpHost }}
