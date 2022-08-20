@@ -83,7 +83,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`              | Cassandra image registry                                                                                               | `docker.io`          |
 | `image.repository`            | Cassandra image repository                                                                                             | `bitnami/cassandra`  |
-| `image.tag`                   | Cassandra image tag (immutable tags are recommended)                                                                   | `4.0.5-debian-11-r0` |
+| `image.tag`                   | Cassandra image tag (immutable tags are recommended)                                                                   | `4.0.5-debian-11-r8` |
+| `image.digest`                | Cassandra image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                 |
 | `image.pullPolicy`            | image pull policy                                                                                                      | `IfNotPresent`       |
 | `image.pullSecrets`           | Cassandra image pull secrets                                                                                           | `[]`                 |
 | `image.debug`                 | Enable image debug mode                                                                                                | `false`              |
@@ -227,44 +228,46 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Volume Permissions parameters
 
-| Name                                          | Description                                                                     | Value                   |
-| --------------------------------------------- | ------------------------------------------------------------------------------- | ----------------------- |
-| `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume | `false`                 |
-| `volumePermissions.image.registry`            | Init container volume                                                           | `docker.io`             |
-| `volumePermissions.image.repository`          | Init container volume                                                           | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume                                                           | `11-debian-11-r16`      |
-| `volumePermissions.image.pullPolicy`          | Init container volume                                                           | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                | `[]`                    |
-| `volumePermissions.resources.limits`          | The resources limits for the container                                          | `{}`                    |
-| `volumePermissions.resources.requests`        | The requested resources for the container                                       | `{}`                    |
-| `volumePermissions.securityContext.runAsUser` | User ID for the init container                                                  | `0`                     |
+| Name                                          | Description                                                                                                           | Value                   |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume                                       | `false`                 |
+| `volumePermissions.image.registry`            | Init container volume image registry                                                                                  | `docker.io`             |
+| `volumePermissions.image.repository`          | Init container volume image repository                                                                                | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`                 | Init container volume image tag (immutable tags are recommended)                                                      | `11-debian-11-r23`      |
+| `volumePermissions.image.digest`              | Init container volume image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `volumePermissions.image.pullPolicy`          | Init container volume pull policy                                                                                     | `IfNotPresent`          |
+| `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                      | `[]`                    |
+| `volumePermissions.resources.limits`          | The resources limits for the container                                                                                | `{}`                    |
+| `volumePermissions.resources.requests`        | The requested resources for the container                                                                             | `{}`                    |
+| `volumePermissions.securityContext.runAsUser` | User ID for the init container                                                                                        | `0`                     |
 
 
 ### Metrics parameters
 
-| Name                                       | Description                                                                                            | Value                        |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ---------------------------- |
-| `metrics.enabled`                          | Start a side-car prometheus exporter                                                                   | `false`                      |
-| `metrics.image.registry`                   | Cassandra exporter image registry                                                                      | `docker.io`                  |
-| `metrics.image.repository`                 | Cassandra exporter image name                                                                          | `bitnami/cassandra-exporter` |
-| `metrics.image.tag`                        | Cassandra exporter image tag                                                                           | `2.3.8-debian-11-r16`        |
-| `metrics.image.pullPolicy`                 | image pull policy                                                                                      | `IfNotPresent`               |
-| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                       | `[]`                         |
-| `metrics.resources.limits`                 | The resources limits for the container                                                                 | `{}`                         |
-| `metrics.resources.requests`               | The requested resources for the container                                                              | `{}`                         |
-| `metrics.podAnnotations`                   | Metrics exporter pod Annotation and Labels                                                             | `{}`                         |
-| `metrics.serviceMonitor.enabled`           | If `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false`                      |
-| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                               | `monitoring`                 |
-| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                           | `""`                         |
-| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                | `""`                         |
-| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                    | `{}`                         |
-| `metrics.serviceMonitor.metricRelabelings` | Specify Metric Relabelings to add to the scrape endpoint                                               | `[]`                         |
-| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                                     | `[]`                         |
-| `metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                                               | `false`                      |
-| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.                      | `""`                         |
-| `metrics.serviceMonitor.labels`            | Used to pass Labels that are required by the installed Prometheus Operator                             | `{}`                         |
-| `metrics.containerPorts.http`              | HTTP Port on the Host and Container                                                                    | `8080`                       |
-| `metrics.containerPorts.jmx`               | JMX Port on the Host and Container                                                                     | `5555`                       |
+| Name                                       | Description                                                                                                        | Value                        |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | ---------------------------- |
+| `metrics.enabled`                          | Start a side-car prometheus exporter                                                                               | `false`                      |
+| `metrics.image.registry`                   | Cassandra exporter image registry                                                                                  | `docker.io`                  |
+| `metrics.image.repository`                 | Cassandra exporter image name                                                                                      | `bitnami/cassandra-exporter` |
+| `metrics.image.tag`                        | Cassandra exporter image tag                                                                                       | `2.3.8-debian-11-r26`        |
+| `metrics.image.digest`                     | Cassandra exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
+| `metrics.image.pullPolicy`                 | image pull policy                                                                                                  | `IfNotPresent`               |
+| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                   | `[]`                         |
+| `metrics.resources.limits`                 | The resources limits for the container                                                                             | `{}`                         |
+| `metrics.resources.requests`               | The requested resources for the container                                                                          | `{}`                         |
+| `metrics.podAnnotations`                   | Metrics exporter pod Annotation and Labels                                                                         | `{}`                         |
+| `metrics.serviceMonitor.enabled`           | If `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)             | `false`                      |
+| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                                           | `monitoring`                 |
+| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                                       | `""`                         |
+| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                            | `""`                         |
+| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                                | `{}`                         |
+| `metrics.serviceMonitor.metricRelabelings` | Specify Metric Relabelings to add to the scrape endpoint                                                           | `[]`                         |
+| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                                                 | `[]`                         |
+| `metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                                                           | `false`                      |
+| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.                                  | `""`                         |
+| `metrics.serviceMonitor.labels`            | Used to pass Labels that are required by the installed Prometheus Operator                                         | `{}`                         |
+| `metrics.containerPorts.http`              | HTTP Port on the Host and Container                                                                                | `8080`                       |
+| `metrics.containerPorts.jmx`               | JMX Port on the Host and Container                                                                                 | `5555`                       |
 
 
 ### TLS/SSL parameters
