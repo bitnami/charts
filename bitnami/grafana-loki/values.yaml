@@ -65,7 +65,7 @@ loki:
   ## @param loki.image.registry Grafana Loki image registry
   ## @param loki.image.repository Grafana Loki image repository
   ## @param loki.image.tag Grafana Loki image tag (immutable tags are recommended)
-## @param loki.image.digest Grafana Loki image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param loki.image.digest Grafana Loki image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param loki.image.pullPolicy Grafana Loki image pull policy
   ## @param loki.image.pullSecrets Grafana Loki image pull secrets
   ##
