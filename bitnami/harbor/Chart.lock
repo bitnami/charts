@@ -1,12 +1,12 @@
 dependencies:
 - name: redis
   repository: https://charts.bitnami.com/bitnami
-  version: 17.0.8
+  version: 17.0.11
 - name: postgresql
   repository: https://charts.bitnami.com/bitnami
-  version: 11.6.25
+  version: 11.7.4
 - name: common
   repository: https://charts.bitnami.com/bitnami
-  version: 1.16.1
-digest: sha256:e592937596c37e23b29c59f94aff2dbcc95d5bea181d088f3454954a441c9e29
-generated: "2022-08-09T05:29:00.427755752Z"
+  version: 2.0.0
+digest: sha256:69304b8b09d9246daaa84db705caeef65765f37e92c7a42daa915a760bb004cc
+generated: "2022-08-20T10:57:56.368386956Z"
