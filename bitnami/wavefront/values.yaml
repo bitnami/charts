@@ -209,7 +209,6 @@ collector:
   ##
   apiServerMetrics: false
   ## @param collector.tags Map of tags to apply to all metrics collected by the collector
-## @param petete.digest Petete image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## Sample tags to include (env, region)
   ## tags:
   ##   env: production
@@ -222,7 +221,6 @@ collector:
   ## Filters to apply towards all metrics collected by the collector
   ## @param collector.filters.metricDenyList [array] Optimized metrics collection to omit peripheral metrics.
   ## @param collector.filters.tagExclude [array] Filter out generated labels
-## @param petete.digest Petete image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## e.g:
   ##   filters:
   ##     tagWhilelistSets:
