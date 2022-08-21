@@ -7,7 +7,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
-    version: 1.x.x
+    version: 2.x.x
   - condition: kafka.enabled
     name: kafka
     repository: https://charts.bitnami.com/bitnami
@@ -28,4 +28,4 @@ maintainers:
 name: schema-registry
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/schema-registry
-version: 5.0.0
+version: 5.1.0
