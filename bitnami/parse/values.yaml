@@ -403,7 +403,7 @@ dashboard:
   ## @param dashboard.image.registry Dashboard image registry
   ## @param dashboard.image.repository Dashboard image repository
   ## @param dashboard.image.tag Dashboard image tag (immutable tags are recommended)
-  ## @param dashboard.digest Dashboard image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param dashboard.image.digest Dashboard image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param dashboard.image.pullPolicy image pull policy
   ## @param dashboard.image.pullSecrets Specify docker-registry secret names as an array
   ## @param dashboard.image.debug Enable Parse Dashboard image debug mode
