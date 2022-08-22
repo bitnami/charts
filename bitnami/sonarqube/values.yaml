@@ -174,7 +174,7 @@ ldap:
     ## @param ldap.user.request LDAP user request.
     ##
     request: (&(objectClass=inetOrgPerson)(uid={login}))
-    ## @param ldap.user.realName Attribute in LDAP defining the user’s real name.
+    ## @param ldap.user.realNameAttribute in LDAP defining the user’s real name.
     ##
     realNameAttribute: cn
     ## @param ldap.user.emailAttribute Attribute in LDAP defining the user’s email.
