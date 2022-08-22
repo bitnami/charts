@@ -5,7 +5,9 @@ appVersion: 14.5.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
-    version: 1.x.x
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: PostgreSQL (Postgres) is an open source object-relational database known for reliability and data integrity. ACID-compliant, it supports foreign keys, joins, views, triggers and stored procedures.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/postgresql
@@ -26,4 +28,4 @@ name: postgresql
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/postgresql
   - https://www.postgresql.org/
-version: 11.7.6
+version: 11.8.0
