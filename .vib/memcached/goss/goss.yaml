@@ -11,10 +11,10 @@ command:
     exec: printf "set {{ $key }} 0 300 11\r\n{{ $value }}\r\nquit\n" | nc memcached {{ $port }} && printf "get {{ $key }}\r\nquit\n" | nc memcached {{ $port }}
     exit-status: 0
     stdout:
-    - STORED
     - {{ $value }}
-  flush-cache:
-    exec: printf "flush_all\r\nquit\n" | nc memcached {{ $port }}
+  check-user-info:
+    exec: id
     exit-status: 0
     stdout:
-    - OK
+    - uid={{ .Vars.containerSecurityContext.runAsUser }}
+    - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/

@@ -1,3 +1,7 @@
 service:
   ports:
     memcached: 80
+podSecurityContext:
+  fsGroup: 0
+containerSecurityContext:
+  runAsUser: 0
