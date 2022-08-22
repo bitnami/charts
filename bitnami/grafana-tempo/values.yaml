@@ -1824,7 +1824,7 @@ queryFrontend:
     ## @param queryFrontend.query.image.registry Grafana Tempo Query image registry
     ## @param queryFrontend.query.image.repository Grafana Tempo Query image repository
     ## @param queryFrontend.query.image.tag Grafana Tempo Query image tag (immutable tags are recommended)
-    ## @param queryFrontend.query.digest Grafana Tempo Query image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+    ## @param queryFrontend.query.image.digest Grafana Tempo Query image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param queryFrontend.query.image.pullPolicy Grafana Tempo Query image pull policy
     ## @param queryFrontend.query.image.pullSecrets Grafana Tempo Query image pull secrets
     ##
