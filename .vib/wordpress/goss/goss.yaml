@@ -2,14 +2,30 @@ file:
   /bitnami/wordpress:
     exists: true
     filetype: directory
-    mode: "2775"
+    mode: '2775'
     owner: root
+  /etc/hosts:
+    exists: true
+    filetype: file
+    contains:
+    {{ range .Vars.hostAliases }}
+    {{ $ip := .ip }}
+    {{ range $host := .hostnames }}
+      - /{{ $ip }}.*{{$host}}/
+    {{ end }}
+    {{ end }}
 command:
   wp-db-create-user:
     exec: wp option list --search="admin_email"
     exit-status: 0
     stdout:
       - {{ .Vars.wordpressEmail }}
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+      - uid={{ .Vars.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
 http:
   https://wordpress:{{ .Vars.service.ports.https }}:
     status: 200
