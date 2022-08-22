@@ -712,7 +712,6 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
   ## @param volumePermissions.image.repository Init container volume-permissions image repository
   ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
@@ -760,7 +759,7 @@ nginx:
   ## @param nginx.image.registry NGINX image registry
   ## @param nginx.image.repository NGINX image repository
   ## @param nginx.image.tag NGINX image tag (immutable tags are recommended)
-  ## @param nginx.digest NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param nginx.image.digest NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param nginx.image.pullPolicy NGINX image pull policy
   ## @param nginx.image.pullSecrets NGINX image pull secrets
   ## @param nginx.image.debug Enable NGINX image debug mode
@@ -2021,7 +2020,7 @@ registry:
     ## @param registry.server.image.registry Harbor Registry image registry
     ## @param registry.server.image.repository Harbor Registry image repository
     ## @param registry.server.image.tag Harbor Registry image tag (immutable tags are recommended)
-    ## @param registry.server.digest Harbor Registry image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+    ## @param registry.server.image.digest Harbor Registry image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param registry.server.image.pullPolicy Harbor Registry image pull policy
     ## @param registry.server.image.pullSecrets Harbor Registry image pull secrets
     ## @param registry.server.image.debug Enable Harbor Registry image debug mode
@@ -2168,7 +2167,7 @@ registry:
     ## @param registry.controller.image.registry Harbor Registryctl image registry
     ## @param registry.controller.image.repository Harbor Registryctl image repository
     ## @param registry.controller.image.tag Harbor Registryctl image tag (immutable tags are recommended)
-    ## @param registry.controller.digest Harbor Registryctl image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+    ## @param registry.controller.image.digest Harbor Registryctl image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param registry.controller.image.pullPolicy Harbor Registryctl image pull policy
     ## @param registry.controller.image.pullSecrets Harbor Registryctl image pull secrets
     ## @param registry.controller.image.debug Enable Harbor Registryctl image debug mode
@@ -2635,7 +2634,7 @@ notary:
     ## @param notary.server.image.registry Harbor Notary Server image registry
     ## @param notary.server.image.repository Harbor Notary Server image repository
     ## @param notary.server.image.tag Harbor Notary Server image tag (immutable tags are recommended)
-    ## @param notary.server.digest Notary Server image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+    ## @param notary.server.image.digest Notary Server image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param notary.server.image.pullPolicy Harbor Notary Server image pull policy
     ## @param notary.server.image.pullSecrets Harbor Notary Server image pull secrets
     ## @param notary.server.image.debug Enable Harbor Notary Server image debug mode
@@ -2872,7 +2871,7 @@ notary:
     ## @param notary.signer.image.registry Harbor Notary Signer image registry
     ## @param notary.signer.image.repository Harbor Notary Signer image repository
     ## @param notary.signer.image.tag Harbor Notary Signer image tag (immutable tags are recommended)
-    ## @param notary.signer.digest Harbor Notary Signer image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+    ## @param notary.signer.image.digest Harbor Notary Signer image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param notary.signer.image.pullPolicy Harbor Notary Signer image pull policy
     ## @param notary.signer.image.pullSecrets Harbor Notary Signer image pull secrets
     ## @param notary.signer.image.debug Enable Harbor Notary Signer image debug mode
