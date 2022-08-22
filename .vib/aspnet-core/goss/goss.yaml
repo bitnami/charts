@@ -6,10 +6,6 @@ file:
     owner: root
     group: root
   /var/run/secrets/kubernetes.io/serviceaccount:
-    exists: true
+    exists: {{ and .Vars.serviceAccount.create .Vars.serviceAccount.automountServiceAccountToken }}
     filetype: directory
     mode: "1777"
-command:
-  dotnet-cli:
-    exec: dotnet --info
-    exit-status: 0
