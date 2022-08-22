@@ -88,7 +88,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                                     | MongoDB(&reg;) Sharded image registry                                                                                                                     | `docker.io`               |
 | `image.repository`                                   | MongoDB(&reg;) Sharded Image name                                                                                                                         | `bitnami/mongodb-sharded` |
-| `image.tag`                                          | MongoDB(&reg;) Sharded image tag (immutable tags are recommended)                                                                                         | `5.0.9-debian-10-r0`      |
+| `image.tag`                                          | MongoDB(&reg;) Sharded image tag (immutable tags are recommended)                                                                                         | `6.0.1-debian-11-r1`      |
+| `image.digest`                                       | MongoDB(&reg;) Sharded image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                    | `""`                      |
 | `image.pullPolicy`                                   | MongoDB(&reg;) Sharded image pull policy                                                                                                                  | `IfNotPresent`            |
 | `image.pullSecrets`                                  | Specify docker-registry secret names as an array                                                                                                          | `[]`                      |
 | `image.debug`                                        | Specify if debug logs should be enabled                                                                                                                   | `false`                   |
@@ -125,7 +126,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                          | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                   |
 | `volumePermissions.image.registry`                   | Init container volume-permissions image registry                                                                                                          | `docker.io`               |
 | `volumePermissions.image.repository`                 | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell`   |
-| `volumePermissions.image.tag`                        | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r435`       |
+| `volumePermissions.image.tag`                        | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r27`        |
+| `volumePermissions.image.digest`                     | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                      |
 | `volumePermissions.image.pullPolicy`                 | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`            |
 | `volumePermissions.image.pullSecrets`                | Init container volume-permissions image pull secrets                                                                                                      | `[]`                      |
 | `volumePermissions.resources`                        | Init container resource requests/limit                                                                                                                    | `{}`                      |
@@ -471,49 +473,50 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                                                      | Description                                                                        | Value                      |
-| --------------------------------------------------------- | ---------------------------------------------------------------------------------- | -------------------------- |
-| `metrics.enabled`                                         | Start a side-car prometheus exporter                                               | `false`                    |
-| `metrics.image.registry`                                  | MongoDB&reg; exporter image registry                                               | `docker.io`                |
-| `metrics.image.repository`                                | MongoDB&reg; exporter image name                                                   | `bitnami/mongodb-exporter` |
-| `metrics.image.tag`                                       | MongoDB&reg; exporter image tag                                                    | `0.32.0-debian-10-r28`     |
-| `metrics.image.pullPolicy`                                | MongoDB&reg; exporter image pull policy                                            | `Always`                   |
-| `metrics.image.pullSecrets`                               | MongoDB&reg; exporter image pull secrets                                           | `[]`                       |
-| `metrics.useTLS`                                          | Whether to connect to MongoDB&reg; with TLS                                        | `false`                    |
-| `metrics.extraArgs`                                       | String with extra arguments to the metrics exporter                                | `""`                       |
-| `metrics.resources`                                       | Metrics exporter resource requests and limits                                      | `{}`                       |
-| `metrics.containerSecurityContext.enabled`                | Enabled containers' Security Context                                               | `true`                     |
-| `metrics.containerSecurityContext.runAsUser`              | Set containers' Security Context runAsUser                                         | `1001`                     |
-| `metrics.containerSecurityContext.runAsNonRoot`           | Set containers' Security Context runAsNonRoot                                      | `true`                     |
-| `metrics.containerSecurityContext.readOnlyRootFilesystem` | Set containers' Security Context runAsNonRoot                                      | `false`                    |
-| `metrics.livenessProbe.enabled`                           | Enable livenessProbe                                                               | `false`                    |
-| `metrics.livenessProbe.initialDelaySeconds`               | Initial delay seconds for livenessProbe                                            | `15`                       |
-| `metrics.livenessProbe.periodSeconds`                     | Period seconds for livenessProbe                                                   | `5`                        |
-| `metrics.livenessProbe.timeoutSeconds`                    | Timeout seconds for livenessProbe                                                  | `5`                        |
-| `metrics.livenessProbe.failureThreshold`                  | Failure threshold for livenessProbe                                                | `3`                        |
-| `metrics.livenessProbe.successThreshold`                  | Success threshold for livenessProbe                                                | `1`                        |
-| `metrics.readinessProbe.enabled`                          | Enable readinessProbe                                                              | `false`                    |
-| `metrics.readinessProbe.initialDelaySeconds`              | Initial delay seconds for readinessProbe                                           | `5`                        |
-| `metrics.readinessProbe.periodSeconds`                    | Period seconds for readinessProbe                                                  | `5`                        |
-| `metrics.readinessProbe.timeoutSeconds`                   | Timeout seconds for readinessProbe                                                 | `1`                        |
-| `metrics.readinessProbe.failureThreshold`                 | Failure threshold for readinessProbe                                               | `3`                        |
-| `metrics.readinessProbe.successThreshold`                 | Success threshold for readinessProbe                                               | `1`                        |
-| `metrics.startupProbe.enabled`                            | Enable startupProbe                                                                | `false`                    |
-| `metrics.startupProbe.initialDelaySeconds`                | Initial delay seconds for startupProbe                                             | `0`                        |
-| `metrics.startupProbe.periodSeconds`                      | Period seconds for startupProbe                                                    | `5`                        |
-| `metrics.startupProbe.timeoutSeconds`                     | Timeout seconds for startupProbe                                                   | `2`                        |
-| `metrics.startupProbe.failureThreshold`                   | Failure threshold for startupProbe                                                 | `15`                       |
-| `metrics.startupProbe.successThreshold`                   | Success threshold for startupProbe                                                 | `1`                        |
-| `metrics.customLivenessProbe`                             | Custom livenessProbe that overrides the default one                                | `{}`                       |
-| `metrics.customReadinessProbe`                            | Custom readinessProbe that overrides the default one                               | `{}`                       |
-| `metrics.customStartupProbe`                              | Custom startupProbe that overrides the default one                                 | `{}`                       |
-| `metrics.containerPorts.metrics`                          | Port of the Prometheus metrics container                                           | `9216`                     |
-| `metrics.podAnnotations`                                  | Metrics exporter pod Annotation                                                    | `{}`                       |
-| `metrics.podMonitor.enabled`                              | Create PodMonitor Resource for scraping metrics using PrometheusOperator           | `false`                    |
-| `metrics.podMonitor.namespace`                            | Namespace where podmonitor resource should be created                              | `monitoring`               |
-| `metrics.podMonitor.interval`                             | Specify the interval at which metrics should be scraped                            | `30s`                      |
-| `metrics.podMonitor.scrapeTimeout`                        | Specify the timeout after which the scrape is ended                                | `""`                       |
-| `metrics.podMonitor.additionalLabels`                     | Additional labels that can be used so PodMonitors will be discovered by Prometheus | `{}`                       |
+| Name                                                      | Description                                                                                                           | Value                      |
+| --------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `metrics.enabled`                                         | Start a side-car prometheus exporter                                                                                  | `false`                    |
+| `metrics.image.registry`                                  | MongoDB&reg; exporter image registry                                                                                  | `docker.io`                |
+| `metrics.image.repository`                                | MongoDB&reg; exporter image name                                                                                      | `bitnami/mongodb-exporter` |
+| `metrics.image.tag`                                       | MongoDB&reg; exporter image tag                                                                                       | `0.34.0-debian-11-r5`      |
+| `metrics.image.digest`                                    | MongoDB&reg; exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `metrics.image.pullPolicy`                                | MongoDB&reg; exporter image pull policy                                                                               | `Always`                   |
+| `metrics.image.pullSecrets`                               | MongoDB&reg; exporter image pull secrets                                                                              | `[]`                       |
+| `metrics.useTLS`                                          | Whether to connect to MongoDB&reg; with TLS                                                                           | `false`                    |
+| `metrics.extraArgs`                                       | String with extra arguments to the metrics exporter                                                                   | `""`                       |
+| `metrics.resources`                                       | Metrics exporter resource requests and limits                                                                         | `{}`                       |
+| `metrics.containerSecurityContext.enabled`                | Enabled containers' Security Context                                                                                  | `true`                     |
+| `metrics.containerSecurityContext.runAsUser`              | Set containers' Security Context runAsUser                                                                            | `1001`                     |
+| `metrics.containerSecurityContext.runAsNonRoot`           | Set containers' Security Context runAsNonRoot                                                                         | `true`                     |
+| `metrics.containerSecurityContext.readOnlyRootFilesystem` | Set containers' Security Context runAsNonRoot                                                                         | `false`                    |
+| `metrics.livenessProbe.enabled`                           | Enable livenessProbe                                                                                                  | `false`                    |
+| `metrics.livenessProbe.initialDelaySeconds`               | Initial delay seconds for livenessProbe                                                                               | `15`                       |
+| `metrics.livenessProbe.periodSeconds`                     | Period seconds for livenessProbe                                                                                      | `5`                        |
+| `metrics.livenessProbe.timeoutSeconds`                    | Timeout seconds for livenessProbe                                                                                     | `5`                        |
+| `metrics.livenessProbe.failureThreshold`                  | Failure threshold for livenessProbe                                                                                   | `3`                        |
+| `metrics.livenessProbe.successThreshold`                  | Success threshold for livenessProbe                                                                                   | `1`                        |
+| `metrics.readinessProbe.enabled`                          | Enable readinessProbe                                                                                                 | `false`                    |
+| `metrics.readinessProbe.initialDelaySeconds`              | Initial delay seconds for readinessProbe                                                                              | `5`                        |
+| `metrics.readinessProbe.periodSeconds`                    | Period seconds for readinessProbe                                                                                     | `5`                        |
+| `metrics.readinessProbe.timeoutSeconds`                   | Timeout seconds for readinessProbe                                                                                    | `1`                        |
+| `metrics.readinessProbe.failureThreshold`                 | Failure threshold for readinessProbe                                                                                  | `3`                        |
+| `metrics.readinessProbe.successThreshold`                 | Success threshold for readinessProbe                                                                                  | `1`                        |
+| `metrics.startupProbe.enabled`                            | Enable startupProbe                                                                                                   | `false`                    |
+| `metrics.startupProbe.initialDelaySeconds`                | Initial delay seconds for startupProbe                                                                                | `0`                        |
+| `metrics.startupProbe.periodSeconds`                      | Period seconds for startupProbe                                                                                       | `5`                        |
+| `metrics.startupProbe.timeoutSeconds`                     | Timeout seconds for startupProbe                                                                                      | `2`                        |
+| `metrics.startupProbe.failureThreshold`                   | Failure threshold for startupProbe                                                                                    | `15`                       |
+| `metrics.startupProbe.successThreshold`                   | Success threshold for startupProbe                                                                                    | `1`                        |
+| `metrics.customLivenessProbe`                             | Custom livenessProbe that overrides the default one                                                                   | `{}`                       |
+| `metrics.customReadinessProbe`                            | Custom readinessProbe that overrides the default one                                                                  | `{}`                       |
+| `metrics.customStartupProbe`                              | Custom startupProbe that overrides the default one                                                                    | `{}`                       |
+| `metrics.containerPorts.metrics`                          | Port of the Prometheus metrics container                                                                              | `9216`                     |
+| `metrics.podAnnotations`                                  | Metrics exporter pod Annotation                                                                                       | `{}`                       |
+| `metrics.podMonitor.enabled`                              | Create PodMonitor Resource for scraping metrics using PrometheusOperator                                              | `false`                    |
+| `metrics.podMonitor.namespace`                            | Namespace where podmonitor resource should be created                                                                 | `monitoring`               |
+| `metrics.podMonitor.interval`                             | Specify the interval at which metrics should be scraped                                                               | `30s`                      |
+| `metrics.podMonitor.scrapeTimeout`                        | Specify the timeout after which the scrape is ended                                                                   | `""`                       |
+| `metrics.podMonitor.additionalLabels`                     | Additional labels that can be used so PodMonitors will be discovered by Prometheus                                    | `{}`                       |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
