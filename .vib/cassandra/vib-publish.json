@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/cassandra"
         },
-        "runtime_parameters": "ZGJVc2VyOgogIHVzZXI6IHRlc3RfY2Fzc2FuZHJhCiAgcGFzc3dvcmQ6ICJDb21wbGljYXRlZFBhc3N3b3JkMTIzITQiCnJlcGxpY2FDb3VudDogMgpjbHVzdGVyOgogIHNlZWRDb3VudDogMgogIG51bVRva2VuczogMjU2CmNvbnRhaW5lclBvcnRzOgogIGNxbDogOTA0MgpwZXJzaXN0ZW5jZToKICBtb3VudFBhdGg6IC9iaXRuYW1pL2Nhc3NhbmRyYQpzZXJ2aWNlOgogIHBvcnRzOgogICAgY3FsOiA4MAogIHR5cGU6IExvYWRCYWxhbmNlcgpzZXJ2aWNlQWNjb3VudDoKICBjcmVhdGU6IHRydWUKICBhdXRvbW91bnRTZXJ2aWNlQWNjb3VudFRva2VuOiB0cnVl",
+        "runtime_parameters": "ZGJVc2VyOgogIHVzZXI6IHRlc3RfY2Fzc2FuZHJhCiAgcGFzc3dvcmQ6ICJDb21wbGljYXRlZFBhc3N3b3JkMTIzITQiCnJlcGxpY2FDb3VudDogMgpjbHVzdGVyOgogIHNlZWRDb3VudDogMgogIG51bVRva2VuczogMjU2CmNvbnRhaW5lclBvcnRzOgogIGludHJhOiA3MDAxCiAgdGxzOiA3MDAyCiAgam14OiA3MTk4CiAgY3FsOiA5MDQzCnBlcnNpc3RlbmNlOgogIG1vdW50UGF0aDogL2JpdG5hbWkvdGVzdF9jYXNzYW5kcmEKc2VydmljZToKICBwb3J0czoKICAgIGNxbDogODAKICB0eXBlOiBMb2FkQmFsYW5jZXIKc2VydmljZUFjY291bnQ6CiAgY3JlYXRlOiB0cnVlCiAgYXV0b21vdW50U2VydmljZUFjY291bnRUb2tlbjogdHJ1ZQpwb2RTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIGZzR3JvdXA6IDEwMDIKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBydW5Bc1VzZXI6IDEwMDIKICBydW5Bc05vblJvb3Q6IHRydWU=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
