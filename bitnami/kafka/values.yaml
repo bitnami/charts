@@ -1391,6 +1391,9 @@ metrics:
     ## NOTE: This will override metrics.jmx.config
     ##
     existingConfigmap: ""
+    ## @param metrics.jmx.extrarules  Add extra rules to JMX exporter configuration
+    ##
+    extrarules: ""
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
