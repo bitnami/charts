@@ -58,12 +58,14 @@ image:
   ## @param image.registry Container image registry
   ## @param image.repository Container image name
   ## @param image.tag Container image tag
+  ## @param image.digest Container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param image.pullPolicy Container image pull policy
   ## @param image.pullSecrets Specify docker-registry secret names as an array
   ##
   registry: docker.io
   repository: bitnami/kubernetes-event-exporter
   tag: 0.11.0-debian-11-r24
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
