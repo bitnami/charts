@@ -11,7 +11,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
-    version: 1.x.x
+    version: 2.x.x
 description: Elasticsearch is a distributed search and analytics engine. It is used for web search, log monitoring, and real-time analytics. Ideal for Big Data applications.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch
@@ -25,4 +25,4 @@ name: elasticsearch
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/elasticsearch
   - https://www.elastic.co/products/elasticsearch
-version: 19.1.11
+version: 19.2.0

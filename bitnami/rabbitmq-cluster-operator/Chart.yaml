@@ -7,7 +7,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
-    version: 1.x.x
+    version: 2.x.x
 description: The RabbitMQ Cluster Kubernetes Operator automates provisioning, management, and operations of RabbitMQ clusters running on Kubernetes.
 engine: gotpl
 home: https://github.com/rabbitmq/cluster-operator
@@ -26,4 +26,4 @@ name: rabbitmq-cluster-operator
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq-cluster-operator
   - https://github.com/rabbitmq/cluster-operator
-version: 2.6.12
+version: 2.7.0
