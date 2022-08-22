@@ -78,29 +78,30 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### JasperReports parameters
 
-| Name                    | Description                                                            | Value                   |
-| ----------------------- | ---------------------------------------------------------------------- | ----------------------- |
-| `image.registry`        | JasperReports image registry                                           | `docker.io`             |
-| `image.repository`      | JasperReports image repository                                         | `bitnami/jasperreports` |
-| `image.tag`             | JasperReports image tag (immutable tags are recommended)               | `8.0.0-debian-10-r33`   |
-| `image.pullPolicy`      | JasperReports image pull policy                                        | `IfNotPresent`          |
-| `image.pullSecrets`     | Specify docker-registry secret names as an array                       | `[]`                    |
-| `jasperreportsUsername` | JasperReports user                                                     | `jasperadmin`           |
-| `jasperreportsPassword` | JasperReports password                                                 | `""`                    |
-| `jasperreportsEmail`    | JasperReports user email                                               | `user@example.com`      |
-| `allowEmptyPassword`    | Set to `yes` to allow the container to be started with blank passwords | `no`                    |
-| `smtpHost`              | SMTP host                                                              | `""`                    |
-| `smtpPort`              | SMTP port                                                              | `""`                    |
-| `smtpEmail`             | SMTP email                                                             | `""`                    |
-| `smtpUser`              | SMTP user                                                              | `""`                    |
-| `smtpPassword`          | SMTP password                                                          | `""`                    |
-| `smtpProtocol`          | SMTP protocol [`ssl`, `none`]                                          | `""`                    |
-| `command`               | Override default container command (useful when using custom images)   | `[]`                    |
-| `args`                  | Override default container args (useful when using custom images)      | `[]`                    |
-| `extraEnvVars`          | Extra environment variables to be set on Jasperreports container       | `[]`                    |
-| `extraEnvVarsCM`        | Name of existing ConfigMap containing extra env vars                   | `""`                    |
-| `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                      | `""`                    |
-| `updateStrategy.type`   | StrategyType                                                           | `RollingUpdate`         |
+| Name                    | Description                                                                                                   | Value                   |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `image.registry`        | JasperReports image registry                                                                                  | `docker.io`             |
+| `image.repository`      | JasperReports image repository                                                                                | `bitnami/jasperreports` |
+| `image.tag`             | JasperReports image tag (immutable tags are recommended)                                                      | `8.0.2-debian-11-r25`   |
+| `image.digest`          | JasperReports image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `image.pullPolicy`      | JasperReports image pull policy                                                                               | `IfNotPresent`          |
+| `image.pullSecrets`     | Specify docker-registry secret names as an array                                                              | `[]`                    |
+| `jasperreportsUsername` | JasperReports user                                                                                            | `jasperadmin`           |
+| `jasperreportsPassword` | JasperReports password                                                                                        | `""`                    |
+| `jasperreportsEmail`    | JasperReports user email                                                                                      | `user@example.com`      |
+| `allowEmptyPassword`    | Set to `yes` to allow the container to be started with blank passwords                                        | `no`                    |
+| `smtpHost`              | SMTP host                                                                                                     | `""`                    |
+| `smtpPort`              | SMTP port                                                                                                     | `""`                    |
+| `smtpEmail`             | SMTP email                                                                                                    | `""`                    |
+| `smtpUser`              | SMTP user                                                                                                     | `""`                    |
+| `smtpPassword`          | SMTP password                                                                                                 | `""`                    |
+| `smtpProtocol`          | SMTP protocol [`ssl`, `none`]                                                                                 | `""`                    |
+| `command`               | Override default container command (useful when using custom images)                                          | `[]`                    |
+| `args`                  | Override default container args (useful when using custom images)                                             | `[]`                    |
+| `extraEnvVars`          | Extra environment variables to be set on Jasperreports container                                              | `[]`                    |
+| `extraEnvVarsCM`        | Name of existing ConfigMap containing extra env vars                                                          | `""`                    |
+| `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                                                             | `""`                    |
+| `updateStrategy.type`   | StrategyType                                                                                                  | `RollingUpdate`         |
 
 
 ### Jasperreports deployment parameters
