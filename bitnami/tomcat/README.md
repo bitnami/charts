@@ -250,7 +250,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.rules`                      | Create specified [Rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/)         | `[]`                                                                                                                                                                                                                |
 
 
-
 The above parameters map to the env variables defined in [bitnami/tomcat](https://github.com/bitnami/containers/tree/main/bitnami/tomcat). For more information please refer to the [bitnami/tomcat](https://github.com/bitnami/containers/tree/main/bitnami/tomcat) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
