@@ -5,4 +5,8 @@ containerPorts:
   internal: 9093
   external: 9094
 serviceAccount:
-  create: true
+  automountServiceAccountToken: true
+podSecurityContext:
+  fsGroup: 1002
+containerSecurityContext:
+  runAsUser: 1002
