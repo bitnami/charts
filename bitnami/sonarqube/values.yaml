@@ -131,11 +131,11 @@ extraProperties: []
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/sonarqube#connect-sonarqube-container-to-an-existing-database
 ##
 sonarqubeSkipInstall: false
-## @param sonar.security.realm Set this to LDAP authenticate first against the external sytem. If the external system is not
+## @param sonarSecurityRealm Set this to LDAP authenticate first against the external sytem. If the external system is not
 ## reachable or if the user is not defined in the external system, authentication will be performed against SonarQube's internal database.
 ##
 sonarSecurityRealm: ""
-## @param sonar.authenticator.downcase Set to true when connecting to a LDAP server using a case-insensitive setup.
+## @param sonarAuthenticatorDowncase Set to true when connecting to a LDAP server using a case-insensitive setup.
 ##
 sonarAuthenticatorDowncase: ""
 ## Ldap configuration for Sonarqube
@@ -165,32 +165,25 @@ ldap:
   ## @param ldap.followReferrals Follow referrals or not
   ##
   followReferrals: true
-  ## @param ldap.user User Mapping
+  ## User Mapping
+  ## @param ldap.user.baseDn Distinguished Name (DN) of the root node in LDAP from which to search for users.
+  ## @param ldap.user.request LDAP user request.
+  ## @param ldap.user.realNameAttribute in LDAP defining the user’s real name.
+  ## @param ldap.user.emailAttribute Attribute in LDAP defining the user’s email.
   ##
   user:
-    ## @param ldap.user.baseDn Distinguished Name (DN) of the root node in LDAP from which to search for users.
-    ##
     baseDn: ""
-    ## @param ldap.user.request LDAP user request.
-    ##
     request: (&(objectClass=inetOrgPerson)(uid={login}))
-    ## @param ldap.user.realNameAttribute in LDAP defining the user’s real name.
-    ##
     realNameAttribute: cn
-    ## @param ldap.user.emailAttribute Attribute in LDAP defining the user’s email.
-    ##
     emailAttribute: mail
-  ## @param ldap.group Group Mapping
+  ## Group Mapping
+  ## @param ldap.group.baseDn Distinguished Name (DN) of the root node in LDAP from which to search for groups.
+  ## @param ldap.group.request LDAP group request.
+  ## @param ldap.group.idAttribute Attribute in LDAP defining the group’s real name.
   ##
   group:
-    ## @param ldap.group.baseDn Distinguished Name (DN) of the root node in LDAP from which to search for groups.
-    ##
     baseDn: ""
-    ## @param ldap.group.request LDAP group request.
-    ##
     request: (&(objectClass=groupOfUniqueNames)(uniqueMember={dn}))
-    ## @param ldap.group.idAttribute Attribute in LDAP defining the group’s real name.
-    ##
     idAttribute: cn
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/sonarqube/#smtp-configuration
