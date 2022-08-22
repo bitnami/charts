@@ -208,7 +208,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                             | `Cluster`                |
 | `service.extraPorts`               | Extra ports to expose in the service (normally used with the `sidecar` value)                                                    | `[]`                     |
 | `service.annotations`              | Annotations for MinIO&reg; service                                                                                               | `{}`                     |
-| `ingress.enabled`                  | Enable ingress controller resource                                                                                               | `false`                  |
+| `ingress.enabled`                  | Enable ingress controller resource for MinIO Console                                                                             | `false`                  |
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `ingress.hostname`                 | Default host for the ingress resource                                                                                            | `minio.local`            |
@@ -223,7 +223,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
-| `apiIngress.enabled`               | Enable ingress controller resource                                                                                               | `false`                  |
+| `apiIngress.enabled`               | Enable ingress controller resource for MinIO API                                                                                 | `false`                  |
 | `apiIngress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
 | `apiIngress.ingressClassName`      | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `apiIngress.hostname`              | Default host for the ingress resource                                                                                            | `minio.local`            |

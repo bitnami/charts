@@ -641,7 +641,7 @@ service:
 ## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
-  ## @param ingress.enabled Enable ingress controller resource
+  ## @param ingress.enabled Enable ingress controller resource for MinIO Console
   ##
   enabled: false
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
@@ -750,7 +750,7 @@ ingress:
 ## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
 apiIngress:
-  ## @param apiIngress.enabled Enable ingress controller resource
+  ## @param apiIngress.enabled Enable ingress controller resource for MinIO API
   ##
   enabled: false
   ## @param apiIngress.apiVersion Force Ingress API version (automatically detected if not set)
