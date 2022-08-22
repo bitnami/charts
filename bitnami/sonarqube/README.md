@@ -92,28 +92,45 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### SonarQube Configuration parameters
 
-| Name                   | Description                                                                        | Value              |
-| ---------------------- | ---------------------------------------------------------------------------------- | ------------------ |
-| `sonarqubeUsername`    | SonarQube username                                                                 | `user`             |
-| `sonarqubePassword`    | SonarQube user password                                                            | `""`               |
-| `existingSecret`       | Name of existing secret containing SonarQube credentials                           | `""`               |
-| `sonarqubeEmail`       | SonarQube user email                                                               | `user@example.com` |
-| `minHeapSize`          | Minimum heap size for SonarQube                                                    | `1024m`            |
-| `maxHeapSize`          | Maximum heap size for SonarQube                                                    | `2048m`            |
-| `startTimeout`         | Timeout for the application to start in seconds                                    | `150`              |
-| `extraProperties`      | List of extra properties to be set in the sonar.properties file (key=value format) | `[]`               |
-| `sonarqubeSkipInstall` | Skip wizard installation                                                           | `false`            |
-| `smtpHost`             | SMTP server host                                                                   | `""`               |
-| `smtpPort`             | SMTP server port                                                                   | `""`               |
-| `smtpUser`             | SMTP username                                                                      | `""`               |
-| `smtpPassword`         | SMTP user password                                                                 | `""`               |
-| `smtpProtocol`         | SMTP protocol                                                                      | `""`               |
-| `smtpExistingSecret`   | The name of an existing secret with SMTP credentials                               | `""`               |
-| `command`              | Override default container command (useful when using custom images)               | `[]`               |
-| `args`                 | Override default container args (useful when using custom images)                  | `[]`               |
-| `extraEnvVars`         | Array with extra environment variables to add to SonarQube nodes                   | `[]`               |
-| `extraEnvVarsCM`       | Name of existing ConfigMap containing extra env vars for SonarQube nodes           | `""`               |
-| `extraEnvVarsSecret`   | Name of existing Secret containing extra env vars for SonarQube nodes              | `""`               |
+| Name                          | Description                                                                                                                                                               | Value                                                    |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| `sonarqubeUsername`           | SonarQube username                                                                                                                                                        | `user`                                                   |
+| `sonarqubePassword`           | SonarQube user password                                                                                                                                                   | `""`                                                     |
+| `existingSecret`              | Name of existing secret containing SonarQube credentials                                                                                                                  | `""`                                                     |
+| `sonarqubeEmail`              | SonarQube user email                                                                                                                                                      | `user@example.com`                                       |
+| `minHeapSize`                 | Minimum heap size for SonarQube                                                                                                                                           | `1024m`                                                  |
+| `maxHeapSize`                 | Maximum heap size for SonarQube                                                                                                                                           | `2048m`                                                  |
+| `startTimeout`                | Timeout for the application to start in seconds                                                                                                                           | `150`                                                    |
+| `extraProperties`             | List of extra properties to be set in the sonar.properties file (key=value format)                                                                                        | `[]`                                                     |
+| `sonarqubeSkipInstall`        | Skip wizard installation                                                                                                                                                  | `false`                                                  |
+| `sonarSecurityRealm`          | Set this to LDAP authenticate first against the external sytem. If the external system is not                                                                             | `""`                                                     |
+| `sonarAuthenticatorDowncase`  | Set to true when connecting to a LDAP server using a case-insensitive setup.                                                                                              | `""`                                                     |
+| `ldap.url`                    | URL of the LDAP server. If you are using ldaps, you should install the server certificate into the Java truststore                                                        | `""`                                                     |
+| `ldap.bindDn`                 | The username of an LDAP user to connect (or bind) with. Leave this blank for anonymous access to the LDAP directory.                                                      | `""`                                                     |
+| `ldap.bindPassword`           | The password of the user to connect with. Leave this blank for anonymous access to the LDAP directory.                                                                    | `""`                                                     |
+| `ldap.authentication`         | Possible values: simple, CRAM-MD5, DIGEST-MD5, GSSAPI. See the tutorial on authentication mechanisms (http://java.sun.com/products/jndi/tutorial/ldap/security/auth.html) | `simple`                                                 |
+| `ldap.realm`                  | See Digest-MD5 Authentication, CRAM-MD5 Authentication (http://java.sun.com/products/jndi/tutorial/ldap/security/digest.html)                                             | `""`                                                     |
+| `ldap.contextFactoryClass`    | Context factory class.                                                                                                                                                    | `com.sun.jndi.ldap.LdapCtxFactory`                       |
+| `ldap.StartTLS`               | Enable use of StartTLS                                                                                                                                                    | `false`                                                  |
+| `ldap.followReferrals`        | Follow referrals or not                                                                                                                                                   | `true`                                                   |
+| `ldap.user.baseDn`            | Distinguished Name (DN) of the root node in LDAP from which to search for users.                                                                                          | `""`                                                     |
+| `ldap.user.request`           | LDAP user request.                                                                                                                                                        | `(&(objectClass=inetOrgPerson)(uid={login}))`            |
+| `ldap.user.realNameAttribute` | in LDAP defining the user’s real name.                                                                                                                                    | `cn`                                                     |
+| `ldap.user.emailAttribute`    | Attribute in LDAP defining the user’s email.                                                                                                                              | `mail`                                                   |
+| `ldap.group.baseDn`           | Distinguished Name (DN) of the root node in LDAP from which to search for groups.                                                                                         | `""`                                                     |
+| `ldap.group.request`          | LDAP group request.                                                                                                                                                       | `(&(objectClass=groupOfUniqueNames)(uniqueMember={dn}))` |
+| `ldap.group.idAttribute`      | Attribute in LDAP defining the group’s real name.                                                                                                                         | `cn`                                                     |
+| `smtpHost`                    | SMTP server host                                                                                                                                                          | `""`                                                     |
+| `smtpPort`                    | SMTP server port                                                                                                                                                          | `""`                                                     |
+| `smtpUser`                    | SMTP username                                                                                                                                                             | `""`                                                     |
+| `smtpPassword`                | SMTP user password                                                                                                                                                        | `""`                                                     |
+| `smtpProtocol`                | SMTP protocol                                                                                                                                                             | `""`                                                     |
+| `smtpExistingSecret`          | The name of an existing secret with SMTP credentials                                                                                                                      | `""`                                                     |
+| `command`                     | Override default container command (useful when using custom images)                                                                                                      | `[]`                                                     |
+| `args`                        | Override default container args (useful when using custom images)                                                                                                         | `[]`                                                     |
+| `extraEnvVars`                | Array with extra environment variables to add to SonarQube nodes                                                                                                          | `[]`                                                     |
+| `extraEnvVarsCM`              | Name of existing ConfigMap containing extra env vars for SonarQube nodes                                                                                                  | `""`                                                     |
+| `extraEnvVarsSecret`          | Name of existing Secret containing extra env vars for SonarQube nodes                                                                                                     | `""`                                                     |
 
 
 ### SonarQube deployment parameters
