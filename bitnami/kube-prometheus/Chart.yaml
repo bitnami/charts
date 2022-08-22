@@ -15,7 +15,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
-    version: 1.x.x
+    version: 2.x.x
 description: Prometheus Operator provides easy monitoring definitions for Kubernetes services and deployment and management of Prometheus instances.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus
@@ -35,4 +35,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/prometheus
   - https://github.com/bitnami/containers/tree/main/bitnami/alertmanager
   - https://github.com/prometheus-operator/kube-prometheus
-version: 8.0.16
+version: 8.1.0
