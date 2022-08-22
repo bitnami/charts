@@ -65,21 +65,22 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                | Description                                         | Value               |
-| ------------------- | --------------------------------------------------- | ------------------- |
-| `kubeVersion`       | Override Kubernetes version                         | `""`                |
-| `nameOverride`      | String to partially override common.names.name      | `""`                |
-| `fullnameOverride`  | String to fully override common.names.fullname      | `""`                |
-| `namespaceOverride` | String to fully override common.names.namespace     | `""`                |
-| `commonLabels`      | Labels to add to all deployed objects               | `{}`                |
-| `commonAnnotations` | Annotations to add to all deployed objects          | `{}`                |
-| `clusterDomain`     | Kubernetes cluster domain name                      | `cluster.local`     |
-| `extraDeploy`       | Array of extra objects to deploy with the release   | `[]`                |
-| `image.registry`    | Pinniped image registry                             | `docker.io`         |
-| `image.repository`  | Pinniped image repository                           | `bitnami/pinniped`  |
-| `image.tag`         | Pinniped image tag (immutable tags are recommended) | `0.18.0-scratch-r7` |
-| `image.pullPolicy`  | Pinniped image pull policy                          | `IfNotPresent`      |
-| `image.pullSecrets` | Pinniped image pull secrets                         | `[]`                |
+| Name                | Description                                                                                              | Value               |
+| ------------------- | -------------------------------------------------------------------------------------------------------- | ------------------- |
+| `kubeVersion`       | Override Kubernetes version                                                                              | `""`                |
+| `nameOverride`      | String to partially override common.names.name                                                           | `""`                |
+| `fullnameOverride`  | String to fully override common.names.fullname                                                           | `""`                |
+| `namespaceOverride` | String to fully override common.names.namespace                                                          | `""`                |
+| `commonLabels`      | Labels to add to all deployed objects                                                                    | `{}`                |
+| `commonAnnotations` | Annotations to add to all deployed objects                                                               | `{}`                |
+| `clusterDomain`     | Kubernetes cluster domain name                                                                           | `cluster.local`     |
+| `extraDeploy`       | Array of extra objects to deploy with the release                                                        | `[]`                |
+| `image.registry`    | Pinniped image registry                                                                                  | `docker.io`         |
+| `image.repository`  | Pinniped image repository                                                                                | `bitnami/pinniped`  |
+| `image.tag`         | Pinniped image tag (immutable tags are recommended)                                                      | `0.18.0-scratch-r8` |
+| `image.digest`      | Pinniped image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                |
+| `image.pullPolicy`  | Pinniped image pull policy                                                                               | `IfNotPresent`      |
+| `image.pullSecrets` | Pinniped image pull secrets                                                                              | `[]`                |
 
 
 ### Concierge Parameters
