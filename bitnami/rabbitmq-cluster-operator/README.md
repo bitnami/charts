@@ -463,7 +463,11 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 By design, the `helm upgrade` command will not upgrade the `CustomResourceDefinition` objects, as stated in their [official documentation](https://helm.sh/docs/chart_best_practices/custom_resource_definitions/#some-caveats-and-explanations). This is done to avoid the potential risks of upgrading CRD objects, such as data loss.
 
-In order to upgrade the CRD objects, perform the following steps (replace the VERSION placeholder):
+In order to upgrade the CRD objects, perform the following steps:
+
+- Perform a backup of your running RabbitMQ instances following the [official documentation](https://www.rabbitmq.com/backup.html).
+
+- Execute the following commands (replace the VERSION placeholder):
 
 ```console
 helm fetch bitnami/rabbitmq-cluster-operator --version VERSION
