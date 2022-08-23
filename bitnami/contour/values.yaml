@@ -449,6 +449,18 @@ contour:
   ##
   rootNamespaces: ""
 
+  ## PodDisruptionBudget for contour deployment
+  ## Contour deployment Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ## @param contour.pdb.create Enable Pod Disruption Budget configuration
+  ## @param contour.pdb.minAvailable Minimum number/percentage of Contour pods that should remain scheduled
+  ## @param contour.pdb.maxUnavailable Maximum number/percentage of Contour pods that should remain scheduled
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+
 ## @section Envoy parameters
 ##
 
@@ -865,6 +877,18 @@ envoy:
   ## @param envoy.extraEnvVarsSecret Secret containing extra env vars to be added to all Envoy containers
   ##
   extraEnvVarsSecret: ""
+
+  ## PodDisruptionBudget for envoy when deployed in "deployment" mode, this doesn't do anything in "daemonset" mode
+  ## Envoy deployment Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ## @param envoy.pdb.create Enable Pod Disruption Budget configuration
+  ## @param envoy.pdb.minAvailable Minimum number/percentage of Envoy pods that should remain scheduled
+  ## @param envoy.pdb.maxUnavailable Maximum number/percentage of Envoy pods that should remain scheduled
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
 
 ## @section Default backend parameters
 ##

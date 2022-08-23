@@ -184,6 +184,9 @@ $ helm uninstall my-release
 | `contour.debug`                                               | Enable Contour debug log level                                                                                                     | `false`               |
 | `contour.kubernetesDebug`                                     | Contour kubernetes debug log level, Default 0, minimum 0, maximum 9.                                                               | `0`                   |
 | `contour.rootNamespaces`                                      | Restrict Contour to searching these namespaces for root ingress routes.                                                            | `""`                  |
+| `contour.pdb.create`                                          | Enable Pod Disruption Budget configuration                                                                                         | `false`               |
+| `contour.pdb.minAvailable`                                    | Minimum number/percentage of Contour pods that should remain scheduled                                                             | `1`                   |
+| `contour.pdb.maxUnavailable`                                  | Maximum number/percentage of Contour pods that should remain scheduled                                                             | `""`                  |
 
 
 ### Envoy parameters
@@ -298,6 +301,9 @@ $ helm uninstall my-release
 | `envoy.extraEnvVars`                                | Array containing extra env vars to be added to all Envoy containers                                                   | `[]`                  |
 | `envoy.extraEnvVarsCM`                              | ConfigMap containing extra env vars to be added to all Envoy containers                                               | `""`                  |
 | `envoy.extraEnvVarsSecret`                          | Secret containing extra env vars to be added to all Envoy containers                                                  | `""`                  |
+| `envoy.pdb.create`                                  | Enable Pod Disruption Budget configuration                                                                            | `false`               |
+| `envoy.pdb.minAvailable`                            | Minimum number/percentage of Envoy pods that should remain scheduled                                                  | `1`                   |
+| `envoy.pdb.maxUnavailable`                          | Maximum number/percentage of Envoy pods that should remain scheduled                                                  | `""`                  |
 
 
 ### Default backend parameters
