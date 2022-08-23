@@ -33,4 +33,4 @@ name: ghost
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/ghost
   - https://www.ghost.org/
-version: 19.1.0
+version: 19.1.1
