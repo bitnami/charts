@@ -68,6 +68,7 @@ diagnosticMode:
 ## @param image.registry MongoDB(&reg;) Sharded image registry
 ## @param image.repository MongoDB(&reg;) Sharded Image name
 ## @param image.tag MongoDB(&reg;) Sharded image tag (immutable tags are recommended)
+## @param image.digest MongoDB(&reg;) Sharded image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy MongoDB(&reg;) Sharded image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
 ## @param image.debug Specify if debug logs should be enabled
@@ -75,7 +76,8 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mongodb-sharded
-  tag: 6.0.0-debian-11-r0
+  tag: 6.0.1-debian-11-r1
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -236,13 +238,15 @@ volumePermissions:
   ## @param volumePermissions.image.registry Init container volume-permissions image registry
   ## @param volumePermissions.image.repository Init container volume-permissions image name
   ## @param volumePermissions.image.tag Init container volume-permissions image tag
+  ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r22
+    tag: 11-debian-11-r27
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1531,13 +1535,15 @@ metrics:
   ## @param metrics.image.registry MongoDB&reg; exporter image registry
   ## @param metrics.image.repository MongoDB&reg; exporter image name
   ## @param metrics.image.tag MongoDB&reg; exporter image tag
+  ## @param metrics.image.digest MongoDB&reg; exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy MongoDB&reg; exporter image pull policy
   ## @param metrics.image.pullSecrets MongoDB&reg; exporter image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.33.0-debian-11-r10
+    tag: 0.34.0-debian-11-r5
+    digest: ""
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
