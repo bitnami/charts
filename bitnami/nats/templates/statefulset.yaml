@@ -15,7 +15,7 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
-  serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) }}
+  serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   {{- if .Values.updateStrategy }}
   updateStrategy: {{- include "common.tplvalues.render" (dict "value" .Values.updateStrategy "context" $ ) | nindent 4 }}
   {{- end }}

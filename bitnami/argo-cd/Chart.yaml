@@ -11,7 +11,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
-    version: 1.x.x
+    version: 2.x.x
 description: Argo CD is a continuous delivery tool for Kubernetes based on GitOps.
 engine: gotpl
 home: https://argoproj.github.io/argo-cd/
@@ -30,4 +30,4 @@ sources:
   - https://github.com/argoproj/argo-cd/
   - https://github.com/bitnami/containers/tree/main/bitnami/dex
   - https://github.com/dexidp/dex
-version: 4.0.6
+version: 4.1.1

@@ -86,6 +86,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.registry`           | MariaDB image registry                                                                                                                                                                                                                                                        | `docker.io`           |
 | `image.repository`         | MariaDB image repository                                                                                                                                                                                                                                                      | `bitnami/mariadb`     |
 | `image.tag`                | MariaDB image tag (immutable tags are recommended)                                                                                                                                                                                                                            | `10.6.9-debian-11-r0` |
+| `image.digest`             | MariaDB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                                                       | `""`                  |
 | `image.pullPolicy`         | MariaDB image pull policy                                                                                                                                                                                                                                                     | `IfNotPresent`        |
 | `image.pullSecrets`        | Specify docker-registry secret names as an array                                                                                                                                                                                                                              | `[]`                  |
 | `image.debug`              | Specify if debug logs should be enabled                                                                                                                                                                                                                                       | `false`               |
@@ -295,16 +296,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Volume Permissions parameters
 
-| Name                                   | Description                                                                                                          | Value                   |
-| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
-| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                     | `docker.io`             |
-| `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                         | `11-debian-11-r26`      |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]`                    |
-| `volumePermissions.resources.limits`   | Init container volume-permissions resource limits                                                                    | `{}`                    |
-| `volumePermissions.resources.requests` | Init container volume-permissions resource requests                                                                  | `{}`                    |
+| Name                                   | Description                                                                                                                       | Value                   |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                 |
+| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
+| `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r26`      |
+| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
+| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
+| `volumePermissions.resources.limits`   | Init container volume-permissions resource limits                                                                                 | `{}`                    |
+| `volumePermissions.resources.requests` | Init container volume-permissions resource requests                                                                               | `{}`                    |
 
 
 ### Metrics parameters
@@ -315,6 +317,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.image.registry`                     | Exporter image registry                                                                                                                   | `docker.io`               |
 | `metrics.image.repository`                   | Exporter image repository                                                                                                                 | `bitnami/mysqld-exporter` |
 | `metrics.image.tag`                          | Exporter image tag (immutable tags are recommended)                                                                                       | `0.14.0-debian-11-r26`    |
+| `metrics.image.digest`                       | Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                  | `""`                      |
 | `metrics.image.pullPolicy`                   | Exporter image pull policy                                                                                                                | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                          | `[]`                      |
 | `metrics.annotations`                        | Annotations for the Exporter pod                                                                                                          | `{}`                      |
