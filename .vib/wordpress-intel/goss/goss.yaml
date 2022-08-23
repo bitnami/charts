@@ -5,7 +5,7 @@ file:
     mode: '2775'
     owner: root
 command:
-  wp-db-create-user:
+  wp-option-list:
     exec: wp option list --search="admin_email"
     exit-status: 0
     stdout:
@@ -16,7 +16,3 @@ command:
     stdout:
       - uid={{ .Vars.containerSecurityContext.runAsUser }}
       - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
-http:
-  https://wordpress-intel:{{ .Vars.service.ports.https }}:
-    status: 200
-    allow-insecure: true
