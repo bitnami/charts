@@ -7,7 +7,7 @@ Apache Kafka is a distributed streaming platform designed to build real-time pip
 [Overview of Apache Kafka](http://kafka.apache.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -101,7 +101,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `logRetentionCheckIntervalMs`                     | The interval at which log segments are checked to see if they can be deleted                                                                                                        | `300000`                            |
 | `logRetentionHours`                               | The minimum age of a log file to be eligible for deletion due to age                                                                                                                | `168`                               |
 | `logSegmentBytes`                                 | The maximum size of a log segment file. When this size is reached a new log segment will be created                                                                                 | `_1073741824`                       |
-| `logsDirs`                                        | A comma separated list of directories under which to store log files                                                                                                                | `/opt/bitnami/kafka/logs`           |
+| `logsDirs`                                        | A comma separated list of directories in which kafka's log data is kept                                                                                                             | `/bitnami/kafka/data`               |
 | `maxMessageBytes`                                 | The largest record batch size allowed by Kafka                                                                                                                                      | `_1000012`                          |
 | `defaultReplicationFactor`                        | Default replication factors for automatically created topics                                                                                                                        | `1`                                 |
 | `offsetsTopicReplicationFactor`                   | The replication factor for the offsets topic                                                                                                                                        | `1`                                 |
