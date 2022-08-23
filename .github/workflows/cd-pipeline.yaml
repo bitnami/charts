@@ -17,6 +17,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/grafana/**'
       - 'bitnami/haproxy-intel/**'
       - 'bitnami/harbor/**'
+      - 'bitnami/influxdb/**'
       - 'bitnami/jenkins/**'
       - 'bitnami/joomla/**'
       - 'bitnami/kafka/**'
