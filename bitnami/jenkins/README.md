@@ -7,7 +7,7 @@ Jenkins is an open source Continuous Integration and Continuous Delivery (CI/CD)
 [Overview of Jenkins](http://jenkins-ci.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -80,14 +80,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Jenkins Image parameters
 
-| Name                | Description                                        | Value                  |
-| ------------------- | -------------------------------------------------- | ---------------------- |
-| `image.registry`    | Jenkins image registry                             | `docker.io`            |
-| `image.repository`  | Jenkins image repository                           | `bitnami/jenkins`      |
-| `image.tag`         | Jenkins image tag (immutable tags are recommended) | `2.346.2-debian-11-r4` |
-| `image.pullPolicy`  | Jenkins image pull policy                          | `IfNotPresent`         |
-| `image.pullSecrets` | Jenkins image pull secrets                         | `[]`                   |
-| `image.debug`       | Enable image debug mode                            | `false`                |
+| Name                | Description                                                                                             | Value                  |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `image.registry`    | Jenkins image registry                                                                                  | `docker.io`            |
+| `image.repository`  | Jenkins image repository                                                                                | `bitnami/jenkins`      |
+| `image.tag`         | Jenkins image tag (immutable tags are recommended)                                                      | `2.346.3-debian-11-r1` |
+| `image.digest`      | Jenkins image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `image.pullPolicy`  | Jenkins image pull policy                                                                               | `IfNotPresent`         |
+| `image.pullSecrets` | Jenkins image pull secrets                                                                              | `[]`                   |
+| `image.debug`       | Enable image debug mode                                                                                 | `false`                |
 
 
 ### Jenkins Configuration parameters
@@ -199,24 +200,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence Parameters
 
-| Name                                          | Description                                                                                     | Value                   |
-| --------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------- |
-| `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                               | `true`                  |
-| `persistence.storageClass`                    | Persistent Volume storage class                                                                 | `""`                    |
-| `persistence.existingClaim`                   | Use a existing PVC which must be created manually before bound                                  | `""`                    |
-| `persistence.annotations`                     | Additional custom annotations for the PVC                                                       | `{}`                    |
-| `persistence.accessModes`                     | Persistent Volume access modes                                                                  | `[]`                    |
-| `persistence.size`                            | Persistent Volume size                                                                          | `8Gi`                   |
-| `persistence.selector`                        | Selector to match an existing Persistent Volume for Ingester's data PVC                         | `{}`                    |
-| `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
-| `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
-| `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r17`      |
-| `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
-| `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
-| `volumePermissions.resources.requests`        | The requested resources for the init container                                                  | `{}`                    |
-| `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
+| Name                                          | Description                                                                                                   | Value                   |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                                             | `true`                  |
+| `persistence.storageClass`                    | Persistent Volume storage class                                                                               | `""`                    |
+| `persistence.existingClaim`                   | Use a existing PVC which must be created manually before bound                                                | `""`                    |
+| `persistence.annotations`                     | Additional custom annotations for the PVC                                                                     | `{}`                    |
+| `persistence.accessModes`                     | Persistent Volume access modes                                                                                | `[]`                    |
+| `persistence.size`                            | Persistent Volume size                                                                                        | `8Gi`                   |
+| `persistence.selector`                        | Selector to match an existing Persistent Volume for Ingester's data PVC                                       | `{}`                    |
+| `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
+| `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                                  | `docker.io`             |
+| `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r26`      |
+| `volumePermissions.image.digest`              | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
+| `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                              | `[]`                    |
+| `volumePermissions.resources.limits`          | The resources limits for the init container                                                                   | `{}`                    |
+| `volumePermissions.resources.requests`        | The requested resources for the init container                                                                | `{}`                    |
+| `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                               | `0`                     |
 
 
 The above parameters map to the env variables defined in [bitnami/jenkins](https://github.com/bitnami/containers/tree/main/bitnami/jenkins). For more information please refer to the [bitnami/jenkins](https://github.com/bitnami/containers/tree/main/bitnami/jenkins) image documentation.

@@ -20,7 +20,6 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
 Cypress.Commands.add(
   'login',
   (username = Cypress.env('username'), password = Cypress.env('password')) => {
-    cy.clearCookies();
     cy.visit('/');
     cy.get('#login_form_login').type(username);
     cy.get('#login_form_password').type(password);

@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                                | Schema Registry image registry                                                                              | `docker.io`               |
 | `image.repository`                              | Schema Registry image repository                                                                            | `bitnami/schema-registry` |
-| `image.tag`                                     | Schema Registry image tag (immutable tags are recommended)                                                  | `7.1.3-debian-11-r11`     |
+| `image.tag`                                     | Schema Registry image tag (immutable tags are recommended)                                                  | `7.2.1-debian-11-r0`      |
 | `image.pullPolicy`                              | Schema Registry image pull policy                                                                           | `IfNotPresent`            |
 | `image.pullSecrets`                             | Schema Registry image pull secrets                                                                          | `[]`                      |
 | `image.debug`                                   | Enable image debug mode                                                                                     | `false`                   |
