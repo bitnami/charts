@@ -1,3 +1,6 @@
+service:
+  ports:
+    https: 444
 mariadb:
   auth:
     database: bitnami_moodle

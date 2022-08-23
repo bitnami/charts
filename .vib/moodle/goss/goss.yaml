@@ -3,10 +3,7 @@ file:
     exists: true
     filetype: directory
     mode: "2775"
-  /bitnami/moodle/config.php:
-    exists: true
-    filetype: file
-    contains:
-      - /\$CFG.*{{ .Vars.mariadb.auth.database }}/
-      - /\$CFG.*{{ .Vars.mariadb.auth.username }}/
-
+http:
+  https://moodle:{{ .Vars.service.ports.https }}:
+    status: 200
+    allow-insecure: true
