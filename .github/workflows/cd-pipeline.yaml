@@ -26,6 +26,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/mariadb/**'
       - 'bitnami/matomo/**'
       - 'bitnami/mediawiki/**'
+      - 'bitnami/memcached/**'
       - 'bitnami/minio/**'
       - 'bitnami/mongodb/**'
       - 'bitnami/mysql/**'
