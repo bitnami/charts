@@ -5,7 +5,7 @@ file:
     mode: "2775"
     owner: root
   /var/run/secrets/kubernetes.io/serviceaccount:
-    exists: {{ and .Vars.serviceAccount.create .Vars.serviceAccount.automountServiceAccountToken }}
+    exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
     filetype: directory
     mode: "3777"
 command:

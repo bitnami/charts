@@ -14,5 +14,4 @@ influxdb:
   podSecurityContext:
     fsGroup: 1002
 serviceAccount:
-  create: true
   automountServiceAccountToken: true
