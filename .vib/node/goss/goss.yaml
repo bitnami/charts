@@ -1,0 +1,10 @@
+file:
+  /app:
+    exists: true
+    filetype: directory
+    mode: "2777"
+    owner: root
+command:
+  node-cli:
+    exec: node -e 'console.log("bitnami")'
+    exit-status: 0

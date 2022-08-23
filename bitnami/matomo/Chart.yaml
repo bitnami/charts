@@ -11,7 +11,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
-    version: 1.x.x
+    version: 2.x.x
 description: Matomo, formerly known as Piwik, is a real time web analytics program. It provides detailed reports on website visitors.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/matomo
@@ -30,4 +30,4 @@ name: matomo
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/matomo
   - https://www.matomo.org/
-version: 0.1.4
+version: 0.2.0

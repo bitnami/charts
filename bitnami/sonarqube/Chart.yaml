@@ -11,7 +11,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
-    version: 1.x.x
+    version: 2.x.x
 description: SonarQube is an open source quality management platform that analyzes and measures code's technical quality. It enables developers to detect code issues, vulnerabilities, and bugs in early stages.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/sonarqube
@@ -28,4 +28,4 @@ name: sonarqube
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/sonarqube
   - https://github.com/SonarSource/sonarqube
-version: 1.4.9
+version: 1.5.1

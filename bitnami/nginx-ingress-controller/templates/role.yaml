@@ -97,7 +97,7 @@ rules:
   - apiGroups:
     - coordination.k8s.io
     resourceNames:
-      - ingress-controller-leader
+      - {{ .Values.electionID }}
     resources:
       - leases
     verbs:
