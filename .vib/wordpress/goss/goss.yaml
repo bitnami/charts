@@ -26,7 +26,3 @@ command:
     stdout:
       - uid={{ .Vars.containerSecurityContext.runAsUser }}
       - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
-http:
-  https://wordpress:{{ .Vars.service.ports.https }}:
-    status: 200
-    allow-insecure: true
