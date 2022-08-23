@@ -419,7 +419,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityPolicy.enabled`                   | Enable PodSecurityPolicy's RBAC rules                                                                                                       | `false` |
 | `rbac.create`                                 | Specifies whether RBAC resources should be created                                                                                          | `false` |
 | `rbac.rules`                                  | Custom RBAC rules to set                                                                                                                    | `[]`    |
-| `serviceAccount.create`                       | Specifies whether a shared ServiceAccount should be created for master and replicas                                                         | `true`  |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                                        | `true`  |
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                                                      | `""`    |
 | `serviceAccount.automountServiceAccountToken` | Whether to auto mount the service account token                                                                                             | `true`  |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                                        | `{}`    |
