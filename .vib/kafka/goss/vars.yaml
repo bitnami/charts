@@ -1,9 +1,11 @@
-logsDirs: /opt/bitnami/kafka/logs
-superUsers: User:admin
+superUsers: User:admin,User:test_user
 containerPorts:
   client: 9092
   internal: 9093
   external: 9094
+service:
+  ports:
+    client: 9092
 serviceAccount:
   automountServiceAccountToken: true
 podSecurityContext:
