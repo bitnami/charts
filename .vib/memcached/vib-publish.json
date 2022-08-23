@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/memcached"
         },
-        "runtime_parameters": "c2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIG1lbWNhY2hlZDogODAKY29tbWFuZDogWyIvYmluL3NoIiwgIi1jIl0KYXJnczogWyJhcHQtZ2V0IHVwZGF0ZSAmJiBhcHQtZ2V0IGluc3RhbGwgLXkgbmV0Y2F0ICYmIC9vcHQvYml0bmFtaS9zY3JpcHRzL21lbWNhY2hlZC9lbnRyeXBvaW50LnNoIC9vcHQvYml0bmFtaS9zY3JpcHRzL21lbWNhY2hlZC9ydW4uc2giXQpwb2RTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIGZzR3JvdXA6IDAKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBydW5Bc1VzZXI6IDAKICBydW5Bc05vblJvb3Q6IGZhbHNlCmNvbnRhaW5lclBvcnRzOgogIG1lbWNhY2hlZDogMTEyMTE=",
+        "runtime_parameters": "c2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIG1lbWNhY2hlZDogODAKcG9kU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBmc0dyb3VwOiAxMDAyCmNvbnRhaW5lclNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgcnVuQXNVc2VyOiAxMDAyCmNvbnRhaW5lclBvcnRzOgogIG1lbWNhY2hlZDogMTEyMTE=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
           "size": {

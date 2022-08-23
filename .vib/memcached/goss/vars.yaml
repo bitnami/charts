@@ -1,7 +1,7 @@
 service:
   ports:
-    memcached: 80
+    memcached: "80"
 podSecurityContext:
-  fsGroup: 0
+  fsGroup: 1002
 containerSecurityContext:
-  runAsUser: 0
+  runAsUser: 1002
