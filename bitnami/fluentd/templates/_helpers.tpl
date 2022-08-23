@@ -7,7 +7,8 @@ Return the proper Fluentd image name
 {{- $registryName := default .Values.image.registry .Values.forwarder.image.registry -}}
 {{- $repositoryName := default .Values.image.repository .Values.forwarder.image.repository -}}
 {{- $tag := default .Values.image.tag .Values.forwarder.image.tag -}}
-{{- $imageRoot := dict "registry" $registryName "repository" $repositoryName "tag" $tag -}}
+{{- $digest := default .Values.image.tag .Values.forwarder.image.digest -}}
+{{- $imageRoot := dict "registry" $registryName "repository" $repositoryName "tag" $tag "digest" $digest -}}
 {{ include "common.images.image" (dict "imageRoot" $imageRoot "global" .Values.global) }}
 {{- end -}}
 
@@ -15,7 +16,8 @@ Return the proper Fluentd image name
 {{- $registryName := default .Values.image.registry .Values.aggregator.image.registry -}}
 {{- $repositoryName := default .Values.image.repository .Values.aggregator.image.repository -}}
 {{- $tag := default .Values.image.tag .Values.aggregator.image.tag -}}
-{{- $imageRoot := dict "registry" $registryName "repository" $repositoryName "tag" $tag -}}
+{{- $digest := default .Values.image.tag .Values.aggregator.image.digest -}}
+{{- $imageRoot := dict "registry" $registryName "repository" $repositoryName "tag" $tag "digest" $digest -}}
 {{ include "common.images.image" (dict "imageRoot" $imageRoot "global" .Values.global) }}
 {{- end -}}
 
