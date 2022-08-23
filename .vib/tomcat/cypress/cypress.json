@@ -2,7 +2,7 @@
   "baseUrl": "http://localhost",
   "defaultCommandTimeout": 30000,
   "env": {
-    "username": "user",
+    "username": "tomcatUser",
     "password": "ComplicatedPassword123!4"
   }
 }

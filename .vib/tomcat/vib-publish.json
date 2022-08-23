@@ -59,7 +59,7 @@
             "endpoint": "lb-tomcat-http",
             "app_protocol": "HTTP",
             "env": {
-              "username": "user",
+              "username": "tomcatUser",
               "password": "ComplicatedPassword123!4"
             }
           }
