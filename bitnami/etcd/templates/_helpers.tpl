@@ -192,3 +192,14 @@ etcd: disasterRecovery
     Please enable persistence (--set persistence.enabled=true)
 {{- end -}}
 {{- end -}}
+
+{{- define "etcd.token.jwtToken" -}}
+{{- if (include "etcd.token.createSecret" .) -}}
+{{- $jwtToken := lookup "v1" "Secret" .Release.Namespace (printf "%s-jwt-token" (include "common.names.fullname" .)) -}}
+{{- if $jwtToken -}}
+{{ index $jwtToken "data" "jwt-token.pem" | b64dec }}
+{{- else -}}
+{{ genPrivateKey "rsa" }}
+{{- end -}}
+{{- end -}}
+{{- end -}}
