@@ -12,7 +12,7 @@ file:
     contains:
       - /num_tokens.*{{ .Vars.cluster.numTokens }}/
   /var/run/secrets/kubernetes.io/serviceaccount:
-    exists: {{ and .Vars.serviceAccount.automountServiceAccountToken }}
+    exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
     filetype: directory
     mode: "3777"
 command:
