@@ -48,6 +48,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/spark/**'
       - 'bitnami/spring-cloud-dataflow/**'
       - 'bitnami/suitecrm/**'
+      - 'bitnami/wildfly/**'
       - 'bitnami/wordpress/**'
       - 'bitnami/zookeeper/**'
       - '!**.md'

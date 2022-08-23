@@ -82,7 +82,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `server.image.registry`                                  | server image registry                                                                                               | `docker.io`                 |
 | `server.image.repository`                                | server image repository                                                                                             | `bitnami/argo-workflow-cli` |
-| `server.image.tag`                                       | server image tag (immutable tags are recommended)                                                                   | `3.3.8-scratch-r1`          |
+| `server.image.tag`                                       | server image tag (immutable tags are recommended)                                                                   | `3.3.9-scratch-r0`          |
+| `server.image.digest`                                    | server image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                        |
 | `server.image.pullPolicy`                                | server image pull policy                                                                                            | `Always`                    |
 | `server.image.pullSecrets`                               | server image pull secrets                                                                                           | `[]`                        |
 | `server.enabled`                                         | Enable server deployment                                                                                            | `true`                      |
@@ -185,7 +186,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `controller.image.registry`                                  | controller image registry                                                                                                     | `docker.io`                        |
 | `controller.image.repository`                                | controller image repository                                                                                                   | `bitnami/argo-workflow-controller` |
-| `controller.image.tag`                                       | controller image tag (immutable tags are recommended)                                                                         | `3.3.8-scratch-r1`                 |
+| `controller.image.tag`                                       | controller image tag (immutable tags are recommended)                                                                         | `3.3.8-scratch-r5`                 |
+| `controller.image.digest`                                    | controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                    | `""`                               |
 | `controller.image.pullPolicy`                                | controller image pull policy                                                                                                  | `IfNotPresent`                     |
 | `controller.image.pullSecrets`                               | controller image pull secrets                                                                                                 | `[]`                               |
 | `controller.replicaCount`                                    | Number of controller replicas to deploy                                                                                       | `1`                                |
@@ -287,19 +289,20 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Executor configuration section
 
-| Name                                                       | Description                                                   | Value                        |
-| ---------------------------------------------------------- | ------------------------------------------------------------- | ---------------------------- |
-| `executor.image.registry`                                  | executor image registry                                       | `docker.io`                  |
-| `executor.image.repository`                                | executor image repository                                     | `bitnami/argo-workflow-exec` |
-| `executor.image.tag`                                       | executor image tag (immutable tags are recommended)           | `3.3.8-debian-11-r1`         |
-| `executor.image.pullPolicy`                                | executor image pull policy                                    | `Always`                     |
-| `executor.image.pullSecrets`                               | executor image pull secrets                                   | `[]`                         |
-| `executor.resources.limits`                                | The resources limits for the init container                   | `{}`                         |
-| `executor.resources.requests`                              | The requested resources for the init container                | `{}`                         |
-| `executor.extraEnvVars`                                    | Array with extra environment variables to add to server nodes | `[]`                         |
-| `executor.containerSecurityContext.enabled`                | Enabled executor pods' Security Context                       | `true`                       |
-| `executor.containerSecurityContext.fsGroup`                | Set executor pod's Security Context fsGroup                   | `1001`                       |
-| `executor.containerSecurityContext.readOnlyRootFilesystem` | Set read only root file system pod's Security Context         | `true`                       |
+| Name                                                       | Description                                                                                              | Value                        |
+| ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| `executor.image.registry`                                  | executor image registry                                                                                  | `docker.io`                  |
+| `executor.image.repository`                                | executor image repository                                                                                | `bitnami/argo-workflow-exec` |
+| `executor.image.tag`                                       | executor image tag (immutable tags are recommended)                                                      | `3.3.8-debian-11-r18`        |
+| `executor.image.digest`                                    | executor image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
+| `executor.image.pullPolicy`                                | executor image pull policy                                                                               | `Always`                     |
+| `executor.image.pullSecrets`                               | executor image pull secrets                                                                              | `[]`                         |
+| `executor.resources.limits`                                | The resources limits for the init container                                                              | `{}`                         |
+| `executor.resources.requests`                              | The requested resources for the init container                                                           | `{}`                         |
+| `executor.extraEnvVars`                                    | Array with extra environment variables to add to server nodes                                            | `[]`                         |
+| `executor.containerSecurityContext.enabled`                | Enabled executor pods' Security Context                                                                  | `true`                       |
+| `executor.containerSecurityContext.fsGroup`                | Set executor pod's Security Context fsGroup                                                              | `1001`                       |
+| `executor.containerSecurityContext.readOnlyRootFilesystem` | Set read only root file system pod's Security Context                                                    | `true`                       |
 
 
 ### Traffic Exposure Parameters
