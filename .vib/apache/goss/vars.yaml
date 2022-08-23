@@ -1,7 +1,6 @@
 service:
   ports:
-    http: 80
-    https: 443
+    https: 444
 hostAliases:
   - ip: 127.0.0.1
     hostnames:
