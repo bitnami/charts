@@ -4,12 +4,12 @@ file:
     filetype: directory
     mode: "3777"
     owner: root
-  /bitnami/kafka:
+  {{ .Vars.persistence.mountPath }}:
     exists: true
     filetype: directory
     mode: "2775"
     owner: root
-  /opt/bitnami/kafka/logs:
+  {{ .Vars.logPersistence.mountPath }}:
     exists: true
     filetype: directory
     mode: "2777"
