@@ -65,19 +65,20 @@ diagnosticMode:
 ## @param image.registry etcd image registry
 ## @param image.repository etcd image name
 ## @param image.tag etcd image tag
-## @param image.pullPolicy etcd image pull policy
-## @param image.pullSecrets [array] etcd image pull secrets
-## @param image.debug Enable image debug mode
+## @param image.digest etcd image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ##
 image:
   registry: docker.io
   repository: bitnami/etcd
   tag: 3.5.4-debian-11-r22
+  digest: ""
+  ## @param image.pullPolicy etcd image pull policy
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
+  ## @param image.pullSecrets [array] etcd image pull secrets
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -86,6 +87,7 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
+  ## @param image.debug Enable image debug mode
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
@@ -589,14 +591,17 @@ volumePermissions:
   ## @param volumePermissions.image.registry Init container volume-permissions image registry
   ## @param volumePermissions.image.repository Init container volume-permissions image name
   ## @param volumePermissions.image.tag Init container volume-permissions image tag
-  ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
-  ## @param volumePermissions.image.pullSecrets [array] Specify docker-registry secret names as an array
+  ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
     tag: 11-debian-11-r21
+    digest: ""
+    ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
+    ##
     pullPolicy: IfNotPresent
+    ## @param volumePermissions.image.pullSecrets [array] Specify docker-registry secret names as an array
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

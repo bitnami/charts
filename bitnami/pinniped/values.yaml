@@ -50,13 +50,15 @@ extraDeploy: []
 ## @param image.registry Pinniped image registry
 ## @param image.repository Pinniped image repository
 ## @param image.tag Pinniped image tag (immutable tags are recommended)
+## @param image.digest Pinniped image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Pinniped image pull policy
 ## @param image.pullSecrets Pinniped image pull secrets
 ##
 image:
   registry: docker.io
   repository: bitnami/pinniped
-  tag: 0.18.0-scratch-r7
+  tag: 0.18.0-scratch-r8
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

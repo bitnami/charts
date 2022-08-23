@@ -22,9 +22,9 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/pinniped"
         },
-        "runtime_parameters": "InN1cGVydmlzb3IiOgogICJzZXJ2aWNlIjoKICAgICJwb3J0cyI6CiAgICAgICJodHRwcyI6IDQ0MwogICAgInR5cGUiOiAiTG9hZEJhbGFuY2VyIgo=",
+        "runtime_parameters": "Y29uY2llcmdlOgogIGNyZWRlbnRpYWxJc3N1ZXJDb25maWc6IHwKICAgIGltcGVyc29uYXRpb25Qcm94eToKICAgICAgbW9kZTogYXV0bwogICAgICBzZXJ2aWNlOgogICAgICAgIHR5cGU6IENsdXN0ZXJJUAogICAgICAgIGFubm90YXRpb25zOgogICAgICAgICAgc2VydmljZS5iZXRhLmt1YmVybmV0ZXMuaW8vYXdzLWxvYWQtYmFsYW5jZXItY29ubmVjdGlvbi1pZGxlLXRpbWVvdXQ6ICI0MDAwIgpzdXBlcnZpc29yOgogIHNlcnZpY2U6CiAgICBwb3J0czoKICAgICAgaHR0cHM6IDQ0MwogICAgdHlwZTogTG9hZEJhbGFuY2VyCg==",
         "target_platform": {
-          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
           "size": {
             "name": "S4"
           }
