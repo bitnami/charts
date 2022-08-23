@@ -31,4 +31,4 @@ name: drupal
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/drupal
   - https://www.drupal.org/
-version: 12.4.0
+version: 12.4.1
