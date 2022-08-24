@@ -16,6 +16,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/ghost/**'
       - 'bitnami/grafana-loki/**'
       - 'bitnami/grafana/**'
+      - 'bitnami/haproxy/**'
       - 'bitnami/haproxy-intel/**'
       - 'bitnami/harbor/**'
       - 'bitnami/influxdb/**'
