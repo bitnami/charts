@@ -55,6 +55,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/tomcat/**'
       - 'bitnami/wildfly/**'
       - 'bitnami/wordpress/**'
+      - 'bitnami/wordpress-intel/**'
       - 'bitnami/zookeeper/**'
       - '!**.md'
 env:
