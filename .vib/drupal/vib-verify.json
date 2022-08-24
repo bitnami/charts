@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/drupal"
         },
-        "runtime_parameters": "ImRydXBhbFBhc3N3b3JkIjogIlMzOUJLV2pTa2gi",
+        "runtime_parameters": "ZHJ1cGFsVXNlcm5hbWU6IHRlc3RfdXNlcgpkcnVwYWxQYXNzd29yZDogQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0CmNvbnRhaW5lclBvcnRzOgogIGh0dHA6IDgwODEKICBodHRwczogODQ0NApzZXJ2aWNlOgogIHBvcnRzOgogICAgaHR0cHM6IDQ0NApwb2RTZWN1cml0eUNvbnRleHQ6CiAgZnNHcm91cDogMTAwMgpjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgcnVuQXNVc2VyOiAxMDAyCmhvc3RBbGlhc2VzOgogIC0gaXA6IDEyNy4wLjAuMQogICAgaG9zdG5hbWVzOgogICAgICAtIHN0YXR1cy50ZXN0aG9zdA==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -36,6 +36,32 @@
           "params": {
             "endpoint": "lb-drupal-http",
             "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/drupal/goss"
+            },
+            "remote": {
+              "workload": "deploy-drupal"
+            },
+            "vars_file": "vars.yaml"
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/drupal/cypress"
+            },
+            "endpoint": "lb-drupal-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "username": "test_user",
+              "password": "ComplicatedPassword123!4"
+            }
           }
         }
       ]

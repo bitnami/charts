@@ -10,6 +10,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/consul/**'
       - 'bitnami/discourse/**'
       - 'bitnami/dokuwiki/**'
+      - 'bitnami/drupal/**'
       - 'bitnami/elasticsearch/**'
       - 'bitnami/external-dns/**'
       - 'bitnami/fluentd/**'
