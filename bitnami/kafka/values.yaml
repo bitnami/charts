@@ -831,6 +831,9 @@ externalAccess:
     ## If not specified, the container will try to get the kubernetes node external IP
     ##
     domain: ""
+    ## @param externalAccess.service.labels Service labels for external access
+    ##
+    labels: {}
     ## @param externalAccess.service.annotations Service annotations for external access
     ##
     annotations: {}
