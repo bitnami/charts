@@ -17,7 +17,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
-    version: 1.x.x
+    version: 2.x.x
 description: Magento is a powerful open source e-commerce platform. With easy customizations and rich features, it allows retailers to grow their online businesses in a cost-effective way.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/magento
@@ -35,4 +35,4 @@ name: magento
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/magento
   - https://magento.com/
-version: 21.0.8
+version: 21.1.2
