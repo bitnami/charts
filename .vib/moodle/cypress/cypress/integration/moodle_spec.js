@@ -9,7 +9,7 @@ it('allows adding a new course with image', () => {
     cy.get('#id_shortname').type(`${courses.newCourse.shortName}.${random}`);
   });
   cy.get('.fp-btn-add').click();
-  cy.contains('a', 'Upload a file').click();
+  cy.contains('Upload a file').click();
   cy.get('input[type="file"]').selectFile(
     'cypress/fixtures/images/test_image.jpeg',
     {
