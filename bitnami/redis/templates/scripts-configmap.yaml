@@ -127,7 +127,7 @@ data:
         else
             # Case 2: No active sentinel and in previous sentinel.conf we were not master --> REPLICA
             info "Configuring the node as replica"
-            export REDIS_REPLICATION_MODE="slave"
+            export REDIS_REPLICATION_MODE="replica"
             REDIS_MASTER_HOST=${master_in_persisted_conf}
             REDIS_MASTER_PORT_NUMBER=${master_port_in_persisted_conf}
         fi
@@ -145,7 +145,7 @@ data:
         else
             # Case 4: Active sentinel and master is not this node --> REPLICA
             info "Configuring the node as replica"
-            export REDIS_REPLICATION_MODE="slave"
+            export REDIS_REPLICATION_MODE="replica"
 
             {{- if and .Values.sentinel.automateClusterRecovery (le (int .Values.sentinel.downAfterMilliseconds) 2000) }}
             retry_count=1
@@ -172,11 +172,11 @@ data:
       REDIS_MASTER_PORT_NUMBER="${REDIS_EXTERNAL_MASTER_PORT}"
     fi
 
-    if [[ ! -f /opt/bitnami/redis/etc/replica.conf ]];then
+    if [[ -f /opt/bitnami/redis/mounted-etc/replica.conf ]];then
         cp /opt/bitnami/redis/mounted-etc/replica.conf /opt/bitnami/redis/etc/replica.conf
     fi
 
-    if [[ ! -f /opt/bitnami/redis/etc/redis.conf ]];then
+    if [[ -f /opt/bitnami/redis/mounted-etc/redis.conf ]];then
         cp /opt/bitnami/redis/mounted-etc/redis.conf /opt/bitnami/redis/etc/redis.conf
     fi
 
@@ -199,7 +199,7 @@ data:
     ARGS=("--port" "${REDIS_PORT}")
     {{- end }}
 
-    if [[ "$REDIS_REPLICATION_MODE" = "slave" ]]; then
+    if [[ "$REDIS_REPLICATION_MODE" = "slave" ]] || [[ "$REDIS_REPLICATION_MODE" = "replica" ]]; then
         ARGS+=("--replicaof" "${REDIS_MASTER_HOST}" "${REDIS_MASTER_PORT_NUMBER}")
     fi
 
@@ -325,7 +325,7 @@ data:
         REDIS_MASTER_HOST=$(get_full_hostname "$HOSTNAME")
         REDIS_MASTER_PORT_NUMBER="$REDISPORT"
     else
-        export REDIS_REPLICATION_MODE="slave"
+        export REDIS_REPLICATION_MODE="replica"
 
         # Fetches current master's host and port
         REDIS_SENTINEL_INFO=($(get_sentinel_master_info))
@@ -491,10 +491,10 @@ data:
     useradd redis
     chown -R redis {{ .Values.master.persistence.path }}
     {{- end }}
-    if [[ ! -f /opt/bitnami/redis/etc/master.conf ]];then
+    if [[ -f /opt/bitnami/redis/mounted-etc/master.conf ]];then
         cp /opt/bitnami/redis/mounted-etc/master.conf /opt/bitnami/redis/etc/master.conf
     fi
-    if [[ ! -f /opt/bitnami/redis/etc/redis.conf ]];then
+    if [[ -f /opt/bitnami/redis/mounted-etc/redis.conf ]];then
         cp /opt/bitnami/redis/mounted-etc/redis.conf /opt/bitnami/redis/etc/redis.conf
     fi
     {{- if .Values.tls.enabled }}
@@ -576,10 +576,10 @@ data:
     useradd redis
     chown -R redis {{ .Values.replica.persistence.path }}
     {{- end }}
-    if [[ ! -f /opt/bitnami/redis/etc/replica.conf ]];then
+    if [[ -f /opt/bitnami/redis/mounted-etc/replica.conf ]];then
         cp /opt/bitnami/redis/mounted-etc/replica.conf /opt/bitnami/redis/etc/replica.conf
     fi
-    if [[ ! -f /opt/bitnami/redis/etc/redis.conf ]];then
+    if [[ -f /opt/bitnami/redis/mounted-etc/redis.conf ]];then
         cp /opt/bitnami/redis/mounted-etc/redis.conf /opt/bitnami/redis/etc/redis.conf
     fi
 

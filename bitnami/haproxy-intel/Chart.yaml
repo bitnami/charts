@@ -26,4 +26,4 @@ name: haproxy-intel
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/haproxy-intel
   - https://github.com/haproxytech/haproxy
-version: 0.2.2
+version: 0.2.4

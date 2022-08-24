@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/wordpress"
         },
-        "runtime_parameters": "d29yZHByZXNzVXNlcm5hbWU6IHRlc3RfdXNlcgp3b3JkcHJlc3NQYXNzd29yZDogQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0CndvcmRwcmVzc0VtYWlsOiB0ZXN0X3VzZXJfZW1haWxAZW1haWwuY29tCndvcmRwcmVzc0ZpcnN0TmFtZTogVGVzdE5hbWUKd29yZHByZXNzTGFzdE5hbWU6IFRlc3RMYXN0TmFtZQpzbXRwSG9zdDogbWFpbC5zZXJ2ZXIuY29tCnNtdHBQb3J0OiAxMjAKc210cFVzZXI6IHRlc3RfbWFpbF91c2VyCnNtdHBQYXNzd29yZDogdGVzdF9tYWlsX3Bhc3N3b3JkCm1hcmlhZGI6CiAgYXV0aDoKICAgIGRhdGFiYXNlOiB0ZXN0X3dvcmRwcmVzc19kYXRhYmFzZQogICAgdXNlcm5hbWU6IHRlc3Rfd29yZHByZXNzX3VzZXJuYW1lCiAgICBwYXNzd29yZDogdGVzdF93b3JkcHJlc3NfcGFzc3dvcmQKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBydW5Bc1VzZXI6IDEwMDIKICBydW5Bc05vblJvb3Q6IHRydWUKd29yZHByZXNzVGFibGVQcmVmaXg6IHdvcmRwcmVzc18K",
+        "runtime_parameters": "d29yZHByZXNzVXNlcm5hbWU6IHRlc3RfdXNlcgp3b3JkcHJlc3NQYXNzd29yZDogQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0CndvcmRwcmVzc0VtYWlsOiB0ZXN0X3VzZXJfZW1haWxAZW1haWwuY29tCm1hcmlhZGI6CiAgYXV0aDoKICAgIGRhdGFiYXNlOiB0ZXN0X3dvcmRwcmVzc19kYXRhYmFzZQogICAgdXNlcm5hbWU6IHRlc3Rfd29yZHByZXNzX3VzZXJuYW1lCiAgICBwYXNzd29yZDogdGVzdF93b3JkcHJlc3NfcGFzc3dvcmQKcG9kU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBmc0dyb3VwOiAxMDAyCmNvbnRhaW5lclNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgcnVuQXNVc2VyOiAxMDAyCndvcmRwcmVzc1RhYmxlUHJlZml4OiB3b3JkcHJlc3NfCnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCiAgcG9ydHM6CiAgICBodHRwOiA4MAogICAgaHR0cHM6IDQ0Mwpjb250YWluZXJQb3J0czoKICBodHRwOiA4MDgxCiAgaHR0cHM6IDg0NDQKaG9zdEFsaWFzZXM6CiAgLSBpcDogMTI3LjAuMC4xCiAgICBob3N0bmFtZXM6CiAgICAgIC0gc3RhdHVzLmxvY2FsaG9zdA==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -47,6 +47,7 @@
             "remote": {
               "workload": "deploy-wordpress"
             },
+            "vars_file": "vars.yaml",
             "wait": {
               "file": "goss-wait.yaml"
             }

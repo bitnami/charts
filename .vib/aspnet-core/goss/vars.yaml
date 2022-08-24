@@ -1,0 +1,3 @@
+serviceAccount:
+  create: true
+  automountServiceAccountToken: true

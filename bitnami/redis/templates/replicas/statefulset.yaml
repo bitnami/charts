@@ -124,7 +124,7 @@ spec:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: REDIS_REPLICATION_MODE
-              value: slave
+              value: replica
             - name: REDIS_MASTER_HOST
             {{- if and (eq (int64 .Values.master.count) 1) (ne .Values.master.kind "Deployment") }}
               value: {{ template "common.names.fullname" . }}-master-0.{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}

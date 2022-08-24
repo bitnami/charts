@@ -1,27 +1,36 @@
-command:
-  create-kafka-topic:
-    exec: kafka-topics.sh --create --topic quickstart-events$RANDOM --bootstrap-server localhost:9092
-    exit-status: 0
-    stderr: [ ]
-    stdout: 
-      - Created topic quickstart-events
-    timeout: 20000
-  list-kafka-topics:
-    exec: kafka-topics.sh --bootstrap-server localhost:9092 --list
-    exit-status: 0
-    stderr: [ ]
-    timeout: 20000
-  user-id-test:
-    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
-    exit-status: 0
-    stdout: []
-    stderr: []
 file:
   /var/run/secrets/kubernetes.io/serviceaccount:
+    exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
+    filetype: directory
     mode: "3777"
-    filetype: directory
+    owner: root
+  {{ .Vars.persistence.mountPath }}:
     exists: true
-  /opt/bitnami/kafka/logs:
+    filetype: directory
+    mode: "2775"
+    owner: root
+  {{ .Vars.logPersistence.mountPath }}:
+    exists: true
+    filetype: directory
     mode: "2777"
-    filetype: directory
+    owner: root
+  /opt/bitnami/kafka/config/server.properties:
     exists: true
+    filetype: file
+    mode: "0664"
+    owner: root
+    group: root
+    contains:
+    - super.users={{ .Vars.superUsers }}
+    - listeners=INTERNAL://:{{ .Vars.containerPorts.internal }},CLIENT://:{{ .Vars.containerPorts.client }},EXTERNAL://:{{ .Vars.containerPorts.external }}
+command:
+  create-kafka-topic:
+    exec: kafka-topics.sh --create --topic quickstart-events{{randAlpha 5}} --bootstrap-server kafka:{{ .Vars.service.ports.client }}
+    exit-status: 0
+    timeout: 20000
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+    - uid={{ .Vars.containerSecurityContext.runAsUser }}
+    - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/

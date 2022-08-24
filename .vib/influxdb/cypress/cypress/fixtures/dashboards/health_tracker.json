@@ -1,0 +1,156 @@
+{
+  "meta": {
+    "version": "1",
+    "type": "dashboard",
+    "name": "Health Tracker-Template",
+    "description": "template created from dashboard: Health Tracker"
+  },
+  "content": {
+    "data": {
+      "type": "dashboard",
+      "attributes": {
+        "name": "Health Tracker",
+        "description": ""
+      },
+      "relationships": {
+        "label": {
+          "data": []
+        },
+        "cell": {
+          "data": [
+            {
+              "type": "cell",
+              "id": "09d6ec9702a4c000"
+            }
+          ]
+        },
+        "variable": {
+          "data": []
+        }
+      }
+    },
+    "included": [
+      {
+        "id": "09d6ec9702a4c000",
+        "type": "cell",
+        "attributes": {
+          "x": 0,
+          "y": 0,
+          "w": 4,
+          "h": 4
+        },
+        "relationships": {
+          "view": {
+            "data": {
+              "type": "view",
+              "id": "09d6ec9702a4c000"
+            }
+          }
+        }
+      },
+      {
+        "type": "view",
+        "id": "09d6ec9702a4c000",
+        "attributes": {
+          "name": "Glucose Levels",
+          "properties": {
+            "shape": "chronograf-v2",
+            "queries": [
+              {
+                "text": "from(bucket: \"primary\")\n  |> range(start: time(v: \"2022-08-16T22:00:00.000Z\"), stop: time(v: \"2022-08-17T21:00:00.929Z\"))\n  |> filter(fn: (r) => r[\"_measurement\"] == \"health\")\n  |> filter(fn: (r) => r[\"_field\"] == \"glucose\")\n  |> aggregateWindow(every: v.windowPeriod, fn: max, createEmpty: false)\n  |> yield(name: \"max\")",
+                "editMode": "advanced",
+                "name": "",
+                "builderConfig": {
+                  "buckets": [],
+                  "tags": [
+                    {
+                      "key": "_measurement",
+                      "values": [],
+                      "aggregateFunctionType": "filter"
+                    }
+                  ],
+                  "functions": [
+                    {
+                      "name": "max"
+                    }
+                  ],
+                  "aggregateWindow": {
+                    "period": "auto",
+                    "fillValues": false
+                  }
+                }
+              }
+            ],
+            "axes": {
+              "x": {
+                "bounds": [
+                  "",
+                  ""
+                ],
+                "label": "",
+                "prefix": "",
+                "suffix": "",
+                "base": "10",
+                "scale": "linear"
+              },
+              "y": {
+                "bounds": [
+                  "",
+                  ""
+                ],
+                "label": "",
+                "prefix": "",
+                "suffix": "",
+                "base": "10",
+                "scale": "linear"
+              }
+            },
+            "type": "line-plus-single-stat",
+            "staticLegend": {
+              "colorizeRows": true,
+              "opacity": 1,
+              "orientationThreshold": 100000000,
+              "widthRatio": 1
+            },
+            "colors": [
+              {
+                "id": "base",
+                "type": "text",
+                "hex": "#00C9FF",
+                "name": "laser",
+                "value": 0
+              }
+            ],
+            "prefix": "",
+            "suffix": "",
+            "decimalPlaces": {
+              "isEnforced": true,
+              "digits": 2
+            },
+            "note": "",
+            "showNoteWhenEmpty": false,
+            "xColumn": "_time",
+            "generateXAxisTicks": [],
+            "xTotalTicks": 0,
+            "xTickStart": 0,
+            "xTickStep": 0,
+            "yColumn": "_value",
+            "generateYAxisTicks": [],
+            "yTotalTicks": 0,
+            "yTickStart": 0,
+            "yTickStep": 0,
+            "shadeBelow": false,
+            "position": "overlaid",
+            "timeFormat": "",
+            "hoverDimension": "auto",
+            "legendColorizeRows": true,
+            "legendHide": false,
+            "legendOpacity": 1,
+            "legendOrientationThreshold": 100000000
+          }
+        }
+      }
+    ]
+  },
+  "labels": []
+}
