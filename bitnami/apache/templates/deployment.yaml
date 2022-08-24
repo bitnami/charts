@@ -149,9 +149,11 @@ spec:
               containerPort: {{ .Values.containerPorts.https }}
           {{- if .Values.startupProbe.enabled }}
           startupProbe:
-            httpGet:
-              path: {{ .Values.startupProbe.path }}
-              port: {{ .Values.startupProbe.port }}
+            exec:
+              command:
+                - test
+                - -f
+                - /tmp/bitnami-setup-done
             initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.startupProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}

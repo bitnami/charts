@@ -52,7 +52,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/apache
-  tag: 2.4.54-debian-11-r23
+  tag: 2.4.55-debian-11-r23
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -224,9 +224,18 @@ command: []
 ## @param args Override default container args (useful when using custom images)
 ##
 args: []
-## @param lifecycleHooks for the Apache server container(s) to automate configuration before or after startup
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/
+## ref: https://httpd.apache.org/docs/2.4/en/stopping.html#gracefulstop
+## @param lifecycleHooks.preStop.exec.command Override default apache preStop command
 ##
-lifecycleHooks: {}
+lifecycleHooks:
+  preStop:
+    exec:
+      command:
+        - kill
+        - -s
+        - SIGWINCH
+        - "1"
 ## Apache pods' resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -251,22 +260,18 @@ resources:
 ## Configure extra options for Apache server containers' liveness, readiness and startup probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
 ## @param startupProbe.enabled Enable startupProbe
-## @param startupProbe.path Path to access on the HTTP server
-## @param startupProbe.port Port for startupProbe
 ## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
 ## @param startupProbe.periodSeconds Period seconds for startupProbe
 ## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
-## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe (allow failureThreshold * periodSeconds seconds to complete the setup)
 ## @param startupProbe.successThreshold Success threshold for startupProbe
 ##
 startupProbe:
-  enabled: false
-  path: "/"
-  port: http
-  initialDelaySeconds: 180
-  periodSeconds: 20
-  timeoutSeconds: 5
-  failureThreshold: 6
+  enabled: true
+  initialDelaySeconds: 0
+  periodSeconds: 1
+  timeoutSeconds: 1
+  failureThreshold: 30
   successThreshold: 1
 ## @param livenessProbe.enabled Enable liveness probe
 ## @param livenessProbe.path Path to access on the HTTP server
@@ -281,7 +286,7 @@ livenessProbe:
   enabled: true
   path: "/"
   port: http
-  initialDelaySeconds: 180
+  initialDelaySeconds: 0
   periodSeconds: 20
   timeoutSeconds: 5
   failureThreshold: 6
@@ -299,7 +304,7 @@ readinessProbe:
   enabled: true
   path: "/"
   port: http
-  initialDelaySeconds: 30
+  initialDelaySeconds: 0
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 6
