@@ -13,3 +13,10 @@ file:
       - /{{ $ip }}.*{{$host}}/
     {{ end }}
     {{ end }}
+command:
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+      - uid={{ .Vars.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
