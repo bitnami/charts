@@ -1,12 +1,6 @@
 service:
   ports:
     https: 444
-check-user-info:
-  exec: id
-  exit-status: 0
-  stdout:
-    - uid={{ .Vars.containerSecurityContext.runAsUser }}
-    - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
 podSecurityContext:
   fsGroup: 1002
 containerSecurityContext:

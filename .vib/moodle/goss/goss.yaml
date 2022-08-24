@@ -7,3 +7,9 @@ http:
   https://moodle:{{ .Vars.service.ports.https }}:
     status: 200
     allow-insecure: true
+check-user-info:
+  exec: id
+  exit-status: 0
+  stdout:
+    - uid={{ .Vars.containerSecurityContext.runAsUser }}
+    - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
