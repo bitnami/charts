@@ -325,7 +325,7 @@ data:
         REDIS_MASTER_HOST=$(get_full_hostname "$HOSTNAME")
         REDIS_MASTER_PORT_NUMBER="$REDISPORT"
     else
-        export REDIS_REPLICATION_MODE="slave"
+        export REDIS_REPLICATION_MODE="replica"
 
         # Fetches current master's host and port
         REDIS_SENTINEL_INFO=($(get_sentinel_master_info))
