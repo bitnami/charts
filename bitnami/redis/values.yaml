@@ -968,7 +968,7 @@ sentinel:
   ## @param sentinel.failoverTimeout Timeout for performing a election failover
   ##
   downAfterMilliseconds: 60000
-  failoverTimeout: 18000
+  failoverTimeout: 180000
   ## @param sentinel.parallelSyncs Number of replicas that can be reconfigured in parallel to use the new master after a failover
   ##
   parallelSyncs: 1
