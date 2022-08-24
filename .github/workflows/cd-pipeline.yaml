@@ -5,6 +5,7 @@ on: # rebuild any PRs and main branch changes
       - master
     paths:
       - 'bitnami/airflow/**'
+      - 'bitnami/cassandra/**'
       - 'bitnami/consul/**'
       - 'bitnami/discourse/**'
       - 'bitnami/dokuwiki/**'
@@ -16,6 +17,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/grafana/**'
       - 'bitnami/haproxy-intel/**'
       - 'bitnami/harbor/**'
+      - 'bitnami/influxdb/**'
       - 'bitnami/jenkins/**'
       - 'bitnami/joomla/**'
       - 'bitnami/kafka/**'
@@ -25,6 +27,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/mariadb/**'
       - 'bitnami/matomo/**'
       - 'bitnami/mediawiki/**'
+      - 'bitnami/memcached/**'
       - 'bitnami/minio/**'
       - 'bitnami/mongodb/**'
       - 'bitnami/mysql/**'
@@ -48,6 +51,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/spark/**'
       - 'bitnami/spring-cloud-dataflow/**'
       - 'bitnami/suitecrm/**'
+      - 'bitnami/tomcat/**'
       - 'bitnami/wildfly/**'
       - 'bitnami/wordpress/**'
       - 'bitnami/zookeeper/**'

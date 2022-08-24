@@ -25,4 +25,4 @@ name: nginx
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/nginx
   - https://www.nginx.org
-version: 13.2.0
+version: 13.2.1

@@ -17,7 +17,6 @@ for (const command of ['click', 'type']) {
 Cypress.Commands.add(
   'login',
   (username = Cypress.env('username'), password = Cypress.env('password')) => {
-    cy.clearCookies();
     cy.visit('/wp-login.php');
     cy.get('#user_login').type(username);
     cy.get('#user_pass').type(password);
