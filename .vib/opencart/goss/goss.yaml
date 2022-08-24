@@ -1,27 +1,32 @@
+http:
+  https://opencart:{{ .Vars.service.ports.https }}:
+    status: 200
+    allow-insecure: true
 command:
-  user-id-test:
-    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
+  check-user-info:
+    exec: id
     exit-status: 0
-    stdout: []
-    stderr: []
+    stdout:
+      - uid={{ .Vars.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
 file:
-  /opt/bitnami/apache/conf/extra/httpd-manual.conf:
-    mode: "0664"
+  /bitnami/opencart:
+    exists: true
+    filetype: directory
+    mode: "2775"
+    owner: root
+  /bitnami/opencart_storage:
+    exists: true
+    filetype: directory
+    mode: "2775"
+    owner: root
+  /etc/hosts:
+    exists: true
     filetype: file
-    exists: true
-  /opt/bitnami/opencart/config.php:
-    mode: "0777"
-    filetype: symlink
-    exists: true
     contains:
-      - vmware-opencart
-      - mysqli
-      - 3306
-  /opt/bitnami/opencart/system/config:
-    mode: "0775"
-    filetype: directory
-    exists: true
-  /opt/bitnami/mysql:
-    mode: "0755"
-    filetype: directory
-    exists: true
+    {{ range .Vars.hostAliases }}
+    {{ $ip := .ip }}
+    {{ range $host := .hostnames }}
+      - /{{ $ip }}.*{{$host}}/
+    {{ end }}
+    {{ end }}
