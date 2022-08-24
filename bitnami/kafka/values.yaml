@@ -159,9 +159,9 @@ logRetentionHours: 168
 ## @param logSegmentBytes The maximum size of a log segment file. When this size is reached a new log segment will be created
 ##
 logSegmentBytes: _1073741824
-## @param logsDirs A comma separated list of directories under which to store log files
-##
-logsDirs: /opt/bitnami/kafka/logs
+## @param logsDirs A comma separated list of directories in which kafka's log data is kept
+## ref: https://kafka.apache.org/documentation/#brokerconfigs_log.dirs
+logsDirs: /bitnami/kafka/data
 ## @param maxMessageBytes The largest record batch size allowed by Kafka
 ##
 maxMessageBytes: _1000012

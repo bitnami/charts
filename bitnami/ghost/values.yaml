@@ -47,6 +47,7 @@ extraDeploy: []
 ## @param image.registry Ghost image registry
 ## @param image.repository Ghost image repository
 ## @param image.tag Ghost image tag (immutable tags are recommended)
+## @param image.digest Ghost image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Ghost image pull policy
 ## @param image.pullSecrets Ghost image pull secrets
 ## @param image.debug Enable image debug mode
@@ -55,6 +56,7 @@ image:
   registry: docker.io
   repository: bitnami/ghost
   tag: 5.7.1-debian-11-r2
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -558,6 +560,7 @@ volumePermissions:
   ## @param volumePermissions.image.registry Bitnami Shell image registry
   ## @param volumePermissions.image.repository Bitnami Shell image repository
   ## @param volumePermissions.image.tag Bitnami Shell image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.digest Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Bitnami Shell image pull policy
   ## @param volumePermissions.image.pullSecrets Bitnami Shell image pull secrets
   ##
@@ -565,6 +568,7 @@ volumePermissions:
     registry: docker.io
     repository: bitnami/bitnami-shell
     tag: 11-debian-11-r22
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

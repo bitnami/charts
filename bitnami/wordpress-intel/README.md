@@ -89,14 +89,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### WordPress Image parameters
 
-| Name                | Description                                          | Value                     |
-| ------------------- | ---------------------------------------------------- | ------------------------- |
-| `image.registry`    | WordPress image registry                             | `docker.io`               |
-| `image.repository`  | WordPress image repository                           | `bitnami/wordpress-intel` |
-| `image.tag`         | WordPress image tag (immutable tags are recommended) | `6.0.0-debian-11-r4`      |
-| `image.pullPolicy`  | WordPress image pull policy                          | `IfNotPresent`            |
-| `image.pullSecrets` | WordPress image pull secrets                         | `[]`                      |
-| `image.debug`       | Enable image debug mode                              | `false`                   |
+| Name                | Description                                                                                               | Value                     |
+| ------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `image.registry`    | WordPress image registry                                                                                  | `docker.io`               |
+| `image.repository`  | WordPress image repository                                                                                | `bitnami/wordpress-intel` |
+| `image.tag`         | WordPress image tag (immutable tags are recommended)                                                      | `6.0.1-debian-11-r17`     |
+| `image.digest`      | WordPress image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
+| `image.pullPolicy`  | WordPress image pull policy                                                                               | `IfNotPresent`            |
+| `image.pullSecrets` | WordPress image pull secrets                                                                              | `[]`                      |
+| `image.debug`       | Enable image debug mode                                                                                   | `false`                   |
 
 
 ### WordPress Configuration parameters
@@ -228,25 +229,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence Parameters
 
-| Name                                          | Description                                                                                     | Value                   |
-| --------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------- |
-| `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                               | `true`                  |
-| `persistence.storageClass`                    | Persistent Volume storage class                                                                 | `""`                    |
-| `persistence.accessModes`                     | Persistent Volume access modes                                                                  | `[]`                    |
-| `persistence.accessMode`                      | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)               | `ReadWriteOnce`         |
-| `persistence.size`                            | Persistent Volume size                                                                          | `10Gi`                  |
-| `persistence.dataSource`                      | Custom PVC data source                                                                          | `{}`                    |
-| `persistence.existingClaim`                   | The name of an existing PVC to use for persistence                                              | `""`                    |
-| `persistence.annotations`                     | Persistent Volume Claim annotations                                                             | `{}`                    |
-| `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
-| `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
-| `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r6`       |
-| `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
-| `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
-| `volumePermissions.resources.requests`        | The requested resources for the init container                                                  | `{}`                    |
-| `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
+| Name                                          | Description                                                                                                   | Value                   |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                                             | `true`                  |
+| `persistence.storageClass`                    | Persistent Volume storage class                                                                               | `""`                    |
+| `persistence.accessModes`                     | Persistent Volume access modes                                                                                | `[]`                    |
+| `persistence.accessMode`                      | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)                             | `ReadWriteOnce`         |
+| `persistence.size`                            | Persistent Volume size                                                                                        | `10Gi`                  |
+| `persistence.dataSource`                      | Custom PVC data source                                                                                        | `{}`                    |
+| `persistence.existingClaim`                   | The name of an existing PVC to use for persistence                                                            | `""`                    |
+| `persistence.annotations`                     | Persistent Volume Claim annotations                                                                           | `{}`                    |
+| `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
+| `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                                  | `docker.io`             |
+| `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r26`      |
+| `volumePermissions.image.digest`              | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
+| `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                              | `[]`                    |
+| `volumePermissions.resources.limits`          | The resources limits for the init container                                                                   | `{}`                    |
+| `volumePermissions.resources.requests`        | The requested resources for the init container                                                                | `{}`                    |
+| `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                               | `0`                     |
 
 
 ### Other Parameters
@@ -265,26 +267,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics Parameters
 
-| Name                                      | Description                                                                  | Value                    |
-| ----------------------------------------- | ---------------------------------------------------------------------------- | ------------------------ |
-| `metrics.enabled`                         | Start a sidecar prometheus exporter to expose metrics                        | `false`                  |
-| `metrics.port`                            | NGINX Container Status Port scraped by Prometheus Exporter                   | `""`                     |
-| `metrics.image.registry`                  | NGINX Prometheus exporter image registry                                     | `docker.io`              |
-| `metrics.image.repository`                | NGINX Prometheus exporter image repository                                   | `bitnami/nginx-exporter` |
-| `metrics.image.tag`                       | NGINX Prometheus exporter image tag (immutable tags are recommended)         | `0.10.0-debian-11-r7`    |
-| `metrics.image.pullPolicy`                | NGINX Prometheus exporter image pull policy                                  | `IfNotPresent`           |
-| `metrics.image.pullSecrets`               | Specify docker-registry secret names as an array                             | `[]`                     |
-| `metrics.resources.limits`                | The resources limits for the Prometheus exporter container                   | `{}`                     |
-| `metrics.resources.requests`              | The requested resources for the Prometheus exporter container                | `{}`                     |
-| `metrics.service.port`                    | Metrics service port                                                         | `9113`                   |
-| `metrics.service.annotations`             | Additional custom annotations for Metrics service                            | `{}`                     |
-| `metrics.serviceMonitor.enabled`          | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator | `false`                  |
-| `metrics.serviceMonitor.namespace`        | The namespace in which the ServiceMonitor will be created                    | `""`                     |
-| `metrics.serviceMonitor.interval`         | The interval at which metrics should be scraped                              | `30s`                    |
-| `metrics.serviceMonitor.scrapeTimeout`    | The timeout after which the scrape is ended                                  | `""`                     |
-| `metrics.serviceMonitor.relabellings`     | Metrics relabellings to add to the scrape endpoint                           | `[]`                     |
-| `metrics.serviceMonitor.honorLabels`      | Labels to honor to add to the scrape endpoint                                | `false`                  |
-| `metrics.serviceMonitor.additionalLabels` | Additional custom labels for the ServiceMonitor                              | `{}`                     |
+| Name                                      | Description                                                                                                               | Value                    |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `metrics.enabled`                         | Start a sidecar prometheus exporter to expose metrics                                                                     | `false`                  |
+| `metrics.port`                            | NGINX Container Status Port scraped by Prometheus Exporter                                                                | `""`                     |
+| `metrics.image.registry`                  | NGINX Prometheus exporter image registry                                                                                  | `docker.io`              |
+| `metrics.image.repository`                | NGINX Prometheus exporter image repository                                                                                | `bitnami/nginx-exporter` |
+| `metrics.image.tag`                       | NGINX Prometheus exporter image tag (immutable tags are recommended)                                                      | `0.10.0-debian-11-r26`   |
+| `metrics.image.digest`                    | NGINX Prometheus exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
+| `metrics.image.pullPolicy`                | NGINX Prometheus exporter image pull policy                                                                               | `IfNotPresent`           |
+| `metrics.image.pullSecrets`               | Specify docker-registry secret names as an array                                                                          | `[]`                     |
+| `metrics.resources.limits`                | The resources limits for the Prometheus exporter container                                                                | `{}`                     |
+| `metrics.resources.requests`              | The requested resources for the Prometheus exporter container                                                             | `{}`                     |
+| `metrics.service.port`                    | Metrics service port                                                                                                      | `9113`                   |
+| `metrics.service.annotations`             | Additional custom annotations for Metrics service                                                                         | `{}`                     |
+| `metrics.serviceMonitor.enabled`          | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                              | `false`                  |
+| `metrics.serviceMonitor.namespace`        | The namespace in which the ServiceMonitor will be created                                                                 | `""`                     |
+| `metrics.serviceMonitor.interval`         | The interval at which metrics should be scraped                                                                           | `30s`                    |
+| `metrics.serviceMonitor.scrapeTimeout`    | The timeout after which the scrape is ended                                                                               | `""`                     |
+| `metrics.serviceMonitor.relabellings`     | Metrics relabellings to add to the scrape endpoint                                                                        | `[]`                     |
+| `metrics.serviceMonitor.honorLabels`      | Labels to honor to add to the scrape endpoint                                                                             | `false`                  |
+| `metrics.serviceMonitor.additionalLabels` | Additional custom labels for the ServiceMonitor                                                                           | `{}`                     |
 
 
 ### NetworkPolicy parameters
