@@ -1,9 +1,8 @@
 http:
-  https://nginx-intel:444:
+  https://nginx-intel:{{ .Vars.service.ports.https }}:
     status: 200
     allow-insecure: true
-    body:
-      - Welcome to nginx
+file:
   /opt/bitnami/nginx/conf/nginx.conf:
     exists: true
     filetype: file
@@ -11,29 +10,11 @@ http:
     owner: root
     group: root
     contains:
-      - /listen\s+8080/
-  /opt/bitnami/nginx/html/index.html:
-    exists: true
-    filetype: file
-    mode: "0644"
-    owner: root
-    group: root
+      - /listen.*{{ .Vars.containerPorts.http }}/
 command:
-  user-id-test:
-    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
+  check-user-info:
+    exec: id
     exit-status: 0
-    stdout: []
-    stderr: []
-  nginx-config-files:
-    exec: nginx -t
-    exit-status: 0
-    stdout: []
-    stderr:
-      - "nginx.conf syntax is ok"
-      - "nginx.conf test is successful"
-  nginx-reload:
-    exec: nginx -s reload
-    exit-status: 0
-    stdout: []
-    stderr:
-      - "signal process started"
+    stdout:
+      - uid={{ .Vars.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
