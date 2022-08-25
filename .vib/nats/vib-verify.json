@@ -37,6 +37,18 @@
             "endpoint": "lb-nats-tcp-monitoring",
             "app_protocol": "HTTP"
           }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/nats/goss"
+            },
+            "remote": {
+              "workload": "sts-nats"
+            },
+            "vars_file": "vars.yaml"
+          }
         }
       ]
     }

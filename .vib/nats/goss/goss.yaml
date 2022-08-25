@@ -1,0 +1,24 @@
+file:
+  /bitnami/nats/conf/{{ .Vars.natsFilename }}.conf:
+    mode: "0644"
+    filetype: file
+    exists: true
+    owner: root
+    group: root
+command:
+  {{- $subject := printf "subj_%s" (randAlpha 5) }}
+  {{- $msg := printf "msg_%s" (randAlpha 5) }}
+  {{- $auth := printf "--user=%s --password=%s" .Vars.auth.user .Vars.auth.password }}
+  {{- $client_endpoint := printf "-s nats://nats:%s" .Vars.service.ports.client }}
+  manage-key:
+    exec: ( USER=1001 nats $auth $client_endpoint sub $subject; ) & sleep 1 && USER=1001 nats $auth $client_endpoint pub $subject $msg
+    exit-status: 0
+    stdout:
+    - /Received on.*$subject/
+    - $msg
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+    - uid={{ .Vars.containerSecurityContext.runAsUser }}
+    - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
