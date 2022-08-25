@@ -20,7 +20,7 @@ it('allows to import accounts and list them', () => {
   cy.get('#importnow').click();
   cy.contains('Exit').click({ force: true });
   cy.get('.list').within(() => {
-    cy.contains(`${random}`);
+    cy.contains(`Test Account ${random}`);
   });
 });
 
