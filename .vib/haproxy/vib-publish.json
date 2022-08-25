@@ -22,6 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/haproxy"
         },
+        "runtime_parameters": "Y29uZmlndXJhdGlvbjogfAogIGdsb2JhbAogICAgbG9nIHN0ZG91dCBmb3JtYXQgcmF3IGxvY2FsMAogICAgbWF4Y29ubiAxMDI0CiAgZGVmYXVsdHMKICAgIGxvZyBnbG9iYWwKICAgIHRpbWVvdXQgY2xpZW50IDYwcwogICAgdGltZW91dCBjb25uZWN0IDYwcwogICAgdGltZW91dCBzZXJ2ZXIgNjBzCiAgZnJvbnRlbmQgZmVfbWFpbgogICAgYmluZCA6ODA4MQogICAgZGVmYXVsdF9iYWNrZW5kIGJlX21haW4KICBiYWNrZW5kIGJlX21haW4KICAgIHNlcnZlciB3ZWIxIDEyNy4wLjAuMTo4MDgwIGNoZWNrCmNvbnRhaW5lclBvcnRzOgogIC0gbmFtZTogaHR0cAogICAgY29udGFpbmVyUG9ydDogODA4MQpwb2RTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIGZzR3JvdXA6IDEwMDIKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBydW5Bc1VzZXI6IDEwMDIKc2VydmljZUFjY291bnQ6CiAgY3JlYXRlOiB0cnVlCiAgYXV0b21vdW50U2VydmljZUFjY291bnRUb2tlbjogdHJ1ZQpzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgLSBuYW1lOiBodHRwCiAgICAgIHByb3RvY29sOiBUQ1AKICAgICAgcG9ydDogODAKICAgICAgdGFyZ2V0UG9ydDogaHR0cApzaWRlY2FyczoKICAtIG5hbWU6IG5naW54CiAgICBpbWFnZTogZG9ja2VyLmlvL2JpdG5hbWkvbmdpbng6MS4yMi4wLWRlYmlhbi0xMS1yMzAKICAgIGltYWdlUHVsbFBvbGljeTogQWx3YXlzCiAgICBwb3J0czoKICAgICAgLSBuYW1lOiB3ZWIKICAgICAgICBjb250YWluZXJQb3J0OiA4MDgwCg==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -34,6 +35,28 @@
           "action_id": "health-check",
           "params": {
             "endpoint": "lb-haproxy-http"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/haproxy/goss"
+            },
+            "remote": {
+              "workload": "deploy-haproxy"
+            },
+            "vars_file": "vars.yaml"
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/haproxy/cypress"
+            },
+            "endpoint": "lb-haproxy-http",
+            "app_protocol": "HTTP"
           }
         }
       ]

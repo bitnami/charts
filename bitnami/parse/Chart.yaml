@@ -30,4 +30,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/parse
   - https://github.com/bitnami/containers/tree/main/bitnami/parse-dashboard
   - https://parse.com/
-version: 19.1.1
+version: 19.1.2

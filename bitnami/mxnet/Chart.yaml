@@ -24,4 +24,4 @@ name: mxnet
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/mxnet
   - https://mxnet.apache.org/
-version: 3.1.0
+version: 3.1.1

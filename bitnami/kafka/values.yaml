@@ -831,6 +831,9 @@ externalAccess:
     ## If not specified, the container will try to get the kubernetes node external IP
     ##
     domain: ""
+    ## @param externalAccess.service.labels Service labels for external access
+    ##
+    labels: {}
     ## @param externalAccess.service.annotations Service annotations for external access
     ##
     annotations: {}
@@ -1391,6 +1394,14 @@ metrics:
     ## NOTE: This will override metrics.jmx.config
     ##
     existingConfigmap: ""
+    ## @param metrics.jmx.extraRules  Add extra rules to JMX exporter configuration
+    ## e.g:
+    ## extraRules: |-
+    ##  - pattern: kafka.server<type=socket-server-metrics, listener=(.+), networkProcessor=(.+)><>(connection-count)
+    ##    name: kafka_server_socket_server_metrics_$3
+    ##    labels:
+    ##      listener: $1
+    extraRules: ""
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
