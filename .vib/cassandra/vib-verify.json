@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/cassandra"
         },
-        "runtime_parameters": "ImRiVXNlciI6CiAgInBhc3N3b3JkIjogIjBQVzFmbFlMIgogICJ1c2VyIjogImNhc3NhbmRyYSIKInNlcnZpY2UiOgogICJwb3J0cyI6CiAgICAiY3FsIjogODAKICAidHlwZSI6ICJMb2FkQmFsYW5jZXIi",
+        "runtime_parameters": "ZGJVc2VyOgogIHVzZXI6IHRlc3RfY2Fzc2FuZHJhCiAgcGFzc3dvcmQ6ICJDb21wbGljYXRlZFBhc3N3b3JkMTIzITQiCnJlcGxpY2FDb3VudDogMgpjbHVzdGVyOgogIHNlZWRDb3VudDogMgogIG51bVRva2VuczogMjU2CmNvbnRhaW5lclBvcnRzOgogIGludHJhOiA3MDAxCiAgdGxzOiA3MDAyCiAgam14OiA3MTk4CiAgY3FsOiA5MDQzCnBlcnNpc3RlbmNlOgogIG1vdW50UGF0aDogL2JpdG5hbWkvY2Fzc2FuZHJhCnNlcnZpY2U6CiAgcG9ydHM6CiAgICBjcWw6IDgwCiAgdHlwZTogTG9hZEJhbGFuY2VyCnNlcnZpY2VBY2NvdW50OgogIGNyZWF0ZTogdHJ1ZQogIGF1dG9tb3VudFNlcnZpY2VBY2NvdW50VG9rZW46IHRydWUKcG9kU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBmc0dyb3VwOiAxMDAyCmNvbnRhaW5lclNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgcnVuQXNVc2VyOiAxMDAy",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -35,6 +35,18 @@
           "action_id": "health-check",
           "params": {
             "endpoint": "lb-cassandra-cql"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/cassandra/goss"
+            },
+            "vars_file": "vars.yaml",
+            "remote": {
+              "workload": "sts-cassandra"
+            }
           }
         }
       ]
