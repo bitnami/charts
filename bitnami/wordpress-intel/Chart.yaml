@@ -15,7 +15,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
-    version: 1.x.x
+    version: 2.x.x
 description: WordPress for Intel is the most popular blogging application combined with cryptography acceleration for 3rd gen Xeon Scalable Processors (Ice Lake) to get a breakthrough performance improvement.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/wordpress-intel
@@ -35,4 +35,4 @@ name: wordpress-intel
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/wordpress-intel
   - https://wordpress.org/
-version: 2.0.19
+version: 2.1.3

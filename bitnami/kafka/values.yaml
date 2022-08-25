@@ -61,6 +61,7 @@ diagnosticMode:
 ## @param image.registry Kafka image registry
 ## @param image.repository Kafka image repository
 ## @param image.tag Kafka image tag (immutable tags are recommended)
+## @param image.digest Kafka image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Kafka image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
 ## @param image.debug Specify if debug values should be set
@@ -69,6 +70,7 @@ image:
   registry: docker.io
   repository: bitnami/kafka
   tag: 3.2.1-debian-11-r4
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -157,9 +159,9 @@ logRetentionHours: 168
 ## @param logSegmentBytes The maximum size of a log segment file. When this size is reached a new log segment will be created
 ##
 logSegmentBytes: _1073741824
-## @param logsDirs A comma separated list of directories under which to store log files
-##
-logsDirs: /opt/bitnami/kafka/logs
+## @param logsDirs A comma separated list of directories in which kafka's log data is kept
+## ref: https://kafka.apache.org/documentation/#brokerconfigs_log.dirs
+logsDirs: /bitnami/kafka/data
 ## @param maxMessageBytes The largest record batch size allowed by Kafka
 ##
 maxMessageBytes: _1000012
@@ -744,6 +746,7 @@ externalAccess:
     ## @param externalAccess.autoDiscovery.image.registry Init container auto-discovery image registry
     ## @param externalAccess.autoDiscovery.image.repository Init container auto-discovery image repository
     ## @param externalAccess.autoDiscovery.image.tag Init container auto-discovery image tag (immutable tags are recommended)
+    ## @param externalAccess.autoDiscovery.image.digest Petete image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param externalAccess.autoDiscovery.image.pullPolicy Init container auto-discovery image pull policy
     ## @param externalAccess.autoDiscovery.image.pullSecrets Init container auto-discovery image pull secrets
     ##
@@ -751,6 +754,7 @@ externalAccess:
       registry: docker.io
       repository: bitnami/kubectl
       tag: 1.24.3-debian-11-r10
+      digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -827,6 +831,9 @@ externalAccess:
     ## If not specified, the container will try to get the kubernetes node external IP
     ##
     domain: ""
+    ## @param externalAccess.service.labels Service labels for external access
+    ##
+    labels: {}
     ## @param externalAccess.service.annotations Service annotations for external access
     ##
     annotations: {}
@@ -971,6 +978,7 @@ volumePermissions:
   ## @param volumePermissions.image.registry Init container volume-permissions image registry
   ## @param volumePermissions.image.repository Init container volume-permissions image repository
   ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
   ##
@@ -978,6 +986,7 @@ volumePermissions:
     registry: docker.io
     repository: bitnami/bitnami-shell
     tag: 11-debian-11-r23
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1049,6 +1058,7 @@ metrics:
     ## @param metrics.kafka.image.registry Kafka exporter image registry
     ## @param metrics.kafka.image.repository Kafka exporter image repository
     ## @param metrics.kafka.image.tag Kafka exporter image tag (immutable tags are recommended)
+    ## @param metrics.kafka.image.digest Kafka exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param metrics.kafka.image.pullPolicy Kafka exporter image pull policy
     ## @param metrics.kafka.image.pullSecrets Specify docker-registry secret names as an array
     ##
@@ -1056,6 +1066,7 @@ metrics:
       registry: docker.io
       repository: bitnami/kafka-exporter
       tag: 1.4.2-debian-11-r25
+      digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1283,6 +1294,7 @@ metrics:
     ## @param metrics.jmx.image.registry JMX exporter image registry
     ## @param metrics.jmx.image.repository JMX exporter image repository
     ## @param metrics.jmx.image.tag JMX exporter image tag (immutable tags are recommended)
+    ## @param metrics.jmx.image.digest JMX exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param metrics.jmx.image.pullPolicy JMX exporter image pull policy
     ## @param metrics.jmx.image.pullSecrets Specify docker-registry secret names as an array
     ##
@@ -1290,6 +1302,7 @@ metrics:
       registry: docker.io
       repository: bitnami/jmx-exporter
       tag: 0.17.0-debian-11-r24
+      digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1381,6 +1394,14 @@ metrics:
     ## NOTE: This will override metrics.jmx.config
     ##
     existingConfigmap: ""
+    ## @param metrics.jmx.extraRules  Add extra rules to JMX exporter configuration
+    ## e.g:
+    ## extraRules: |-
+    ##  - pattern: kafka.server<type=socket-server-metrics, listener=(.+), networkProcessor=(.+)><>(connection-count)
+    ##    name: kafka_server_socket_server_metrics_$3
+    ##    labels:
+    ##      listener: $1
+    extraRules: ""
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:

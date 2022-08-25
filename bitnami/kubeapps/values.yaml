@@ -197,6 +197,7 @@ frontend:
   ## @param frontend.image.registry NGINX image registry
   ## @param frontend.image.repository NGINX image repository
   ## @param frontend.image.tag NGINX image tag (immutable tags are recommended)
+  ## @param frontend.image.digest NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param frontend.image.pullPolicy NGINX image pull policy
   ## @param frontend.image.pullSecrets NGINX image pull secrets
   ## @param frontend.image.debug Enable image debug mode
@@ -204,7 +205,8 @@ frontend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.23.1-debian-11-r7
+    tag: 1.23.1-debian-11-r12
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -513,6 +515,7 @@ dashboard:
   ## @param dashboard.image.registry Dashboard image registry
   ## @param dashboard.image.repository Dashboard image repository
   ## @param dashboard.image.tag Dashboard image tag (immutable tags are recommended)
+  ## @param dashboard.image.digest Dashboard image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param dashboard.image.pullPolicy Dashboard image pull policy
   ## @param dashboard.image.pullSecrets Dashboard image pull secrets
   ## @param dashboard.image.debug Enable image debug mode
@@ -520,7 +523,8 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 2.4.6-debian-11-r16
+    tag: 2.5.0-debian-11-r3
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -819,13 +823,15 @@ apprepository:
   ## @param apprepository.image.registry Kubeapps AppRepository Controller image registry
   ## @param apprepository.image.repository Kubeapps AppRepository Controller image repository
   ## @param apprepository.image.tag Kubeapps AppRepository Controller image tag (immutable tags are recommended)
+  ## @param apprepository.image.digest Kubeapps AppRepository Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param apprepository.image.pullPolicy Kubeapps AppRepository Controller image pull policy
   ## @param apprepository.image.pullSecrets Kubeapps AppRepository Controller image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 2.4.6-scratch-r4
+    tag: 2.5.0-scratch-r0
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -844,13 +850,15 @@ apprepository:
   ## @param apprepository.syncImage.registry Kubeapps Asset Syncer image registry
   ## @param apprepository.syncImage.repository Kubeapps Asset Syncer image repository
   ## @param apprepository.syncImage.tag Kubeapps Asset Syncer image tag (immutable tags are recommended)
+  ## @param apprepository.syncImage.digest Kubeapps Asset Syncer image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param apprepository.syncImage.pullPolicy Kubeapps Asset Syncer image pull policy
   ## @param apprepository.syncImage.pullSecrets Kubeapps Asset Syncer image pull secrets
   ##
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-asset-syncer
-    tag: 2.4.6-scratch-r4
+    tag: 2.5.0-scratch-r0
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1126,13 +1134,15 @@ kubeops:
   ## @param kubeops.image.registry Kubeops image registry
   ## @param kubeops.image.repository Kubeops image repository
   ## @param kubeops.image.tag Kubeops image tag (immutable tags are recommended)
+  ## @param kubeops.image.digest Kubeops image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param kubeops.image.pullPolicy Kubeops image pull policy
   ## @param kubeops.image.pullSecrets Kubeops image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/kubeapps-kubeops
-    tag: 2.4.6-scratch-r4
+    tag: 2.5.0-scratch-r0
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1422,13 +1432,15 @@ authProxy:
   ## @param authProxy.image.registry OAuth2 Proxy image registry
   ## @param authProxy.image.repository OAuth2 Proxy image repository
   ## @param authProxy.image.tag OAuth2 Proxy image tag (immutable tags are recommended)
+  ## @param authProxy.image.digest OAuth2 Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param authProxy.image.pullPolicy OAuth2 Proxy image pull policy
   ## @param authProxy.image.pullSecrets OAuth2 Proxy image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/oauth2-proxy
-    tag: 7.3.0-debian-11-r22
+    tag: 7.3.0-debian-11-r27
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1554,13 +1566,15 @@ pinnipedProxy:
   ## @param pinnipedProxy.image.registry Pinniped Proxy image registry
   ## @param pinnipedProxy.image.repository Pinniped Proxy image repository
   ## @param pinnipedProxy.image.tag Pinniped Proxy image tag (immutable tags are recommended)
+  ## @param pinnipedProxy.image.digest Pinniped Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param pinnipedProxy.image.pullPolicy Pinniped Proxy image pull policy
   ## @param pinnipedProxy.image.pullSecrets Pinniped Proxy image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/kubeapps-pinniped-proxy
-    tag: 2.4.6-debian-11-r16
+    tag: 2.5.0-debian-11-r2
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1719,13 +1733,15 @@ rbac:
 ## @param testImage.registry NGINX image registry
 ## @param testImage.repository NGINX image repository
 ## @param testImage.tag NGINX image tag (immutable tags are recommended)
+## @param testImage.digest NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param testImage.pullPolicy NGINX image pull policy
 ## @param testImage.pullSecrets NGINX image pull secrets
 ##
 testImage:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.23.1-debian-11-r7
+  tag: 1.23.1-debian-11-r12
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1832,13 +1848,15 @@ kubeappsapis:
   ## @param kubeappsapis.image.registry Kubeapps-APIs image registry
   ## @param kubeappsapis.image.repository Kubeapps-APIs image repository
   ## @param kubeappsapis.image.tag Kubeapps-APIs image tag (immutable tags are recommended)
+  ## @param kubeappsapis.image.digest Kubeapps-APIs image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param kubeappsapis.image.pullPolicy Kubeapps-APIs image pull policy
   ## @param kubeappsapis.image.pullSecrets Kubeapps-APIs image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apis
-    tag: 2.4.6-debian-11-r18
+    tag: 2.5.0-debian-11-r2
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

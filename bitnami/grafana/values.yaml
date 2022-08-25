@@ -47,13 +47,15 @@ commonAnnotations: {}
 ## @param image.registry Grafana image registry
 ## @param image.repository Grafana image repository
 ## @param image.tag Grafana image tag (immutable tags are recommended)
+## @param image.digest Grafana image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Grafana image pull policy
 ## @param image.pullSecrets Grafana image pull secrets
 ##
 image:
   registry: docker.io
   repository: bitnami/grafana
-  tag: 9.0.7-debian-11-r0
+  tag: 9.1.1-debian-11-r0
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -819,13 +821,15 @@ imageRenderer:
   ## @param imageRenderer.image.registry Grafana Image Renderer image registry
   ## @param imageRenderer.image.repository Grafana Image Renderer image repository
   ## @param imageRenderer.image.tag Grafana Image Renderer image tag (immutable tags are recommended)
+  ## @param imageRenderer.image.digest Grafana Image Renderer image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param imageRenderer.image.pullPolicy Grafana Image Renderer image pull policy
   ## @param imageRenderer.image.pullSecrets Grafana image Renderer pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/grafana-image-renderer
-    tag: 3.5.0-debian-11-r10
+    tag: 3.5.0-debian-11-r15
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1156,13 +1160,15 @@ volumePermissions:
   ## @param volumePermissions.image.registry Bitnami Shell image registry
   ## @param volumePermissions.image.repository Bitnami Shell image repository
   ## @param volumePermissions.image.tag Bitnami Shell image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.digest Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Bitnami Shell image pull policy
   ## @param volumePermissions.image.pullSecrets Bitnami Shell image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r24
+    tag: 11-debian-11-r28
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

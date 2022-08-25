@@ -6,17 +6,18 @@ Return the proper image name
 {{- define "common.images.image" -}}
 {{- $registryName := .imageRoot.registry -}}
 {{- $repositoryName := .imageRoot.repository -}}
-{{- $tag := .imageRoot.tag | toString -}}
+{{- $separator := ":" -}}
+{{- $termination := .imageRoot.tag | toString -}}
 {{- if .global }}
     {{- if .global.imageRegistry }}
      {{- $registryName = .global.imageRegistry -}}
     {{- end -}}
 {{- end -}}
-{{- if $registryName }}
-{{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- else -}}
-{{- printf "%s:%s" $repositoryName $tag -}}
+{{- if .imageRoot.digest }}
+    {{- $separator = "@" -}}
+    {{- $termination = .imageRoot.digest | toString -}}
 {{- end -}}
+{{- printf "%s/%s%s%s" $registryName $repositoryName $separator $termination -}}
 {{- end -}}
 
 {{/*

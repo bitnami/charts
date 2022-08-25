@@ -85,7 +85,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                 | Keycloak image registry                                                                                                      | `docker.io`            |
 | `image.repository`               | Keycloak image repository                                                                                                    | `bitnami/keycloak`     |
-| `image.tag`                      | Keycloak image tag (immutable tags are recommended)                                                                          | `18.0.2-debian-11-r19` |
+| `image.tag`                      | Keycloak image tag (immutable tags are recommended)                                                                          | `18.0.2-debian-11-r25` |
+| `image.digest`                   | Keycloak image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                     | `""`                   |
 | `image.pullPolicy`               | Keycloak image pull policy                                                                                                   | `IfNotPresent`         |
 | `image.pullSecrets`              | Specify docker-registry secret names as an array                                                                             | `[]`                   |
 | `image.debug`                    | Specify if debug logs should be enabled                                                                                      | `false`                |
@@ -262,35 +263,36 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### keycloak-config-cli parameters
 
-| Name                                                      | Description                                                                                     | Value                         |
-| --------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------------- |
-| `keycloakConfigCli.enabled`                               | Whether to enable keycloak-config-cli job                                                       | `false`                       |
-| `keycloakConfigCli.image.registry`                        | keycloak-config-cli container image registry                                                    | `docker.io`                   |
-| `keycloakConfigCli.image.repository`                      | keycloak-config-cli container image repository                                                  | `bitnami/keycloak-config-cli` |
-| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                         | `5.3.1-debian-11-r1`          |
-| `keycloakConfigCli.image.pullPolicy`                      | keycloak-config-cli container image pull policy                                                 | `IfNotPresent`                |
-| `keycloakConfigCli.image.pullSecrets`                     | keycloak-config-cli container image pull secrets                                                | `[]`                          |
-| `keycloakConfigCli.annotations`                           | Annotations for keycloak-config-cli job                                                         | `{}`                          |
-| `keycloakConfigCli.command`                               | Command for running the container (set to default if not set). Use array form                   | `[]`                          |
-| `keycloakConfigCli.args`                                  | Args for running the container (set to default if not set). Use array form                      | `[]`                          |
-| `keycloakConfigCli.hostAliases`                           | Job pod host aliases                                                                            | `[]`                          |
-| `keycloakConfigCli.resources.limits`                      | The resources limits for the keycloak-config-cli container                                      | `{}`                          |
-| `keycloakConfigCli.resources.requests`                    | The requested resources for the keycloak-config-cli container                                   | `{}`                          |
-| `keycloakConfigCli.containerSecurityContext.enabled`      | Enabled keycloak-config-cli containers' Security Context                                        | `true`                        |
-| `keycloakConfigCli.containerSecurityContext.runAsUser`    | Set keycloak-config-cli container's Security Context runAsUser                                  | `1001`                        |
-| `keycloakConfigCli.containerSecurityContext.runAsNonRoot` | Set keycloak-config-cli container's Security Context runAsNonRoot                               | `true`                        |
-| `keycloakConfigCli.podSecurityContext.enabled`            | Enabled keycloak-config-cli pods' Security Context                                              | `true`                        |
-| `keycloakConfigCli.podSecurityContext.fsGroup`            | Set keycloak-config-cli pod's Security Context fsGroup                                          | `1001`                        |
-| `keycloakConfigCli.backoffLimit`                          | Number of retries before considering a Job as failed                                            | `1`                           |
-| `keycloakConfigCli.podLabels`                             | Pod extra labels                                                                                | `{}`                          |
-| `keycloakConfigCli.podAnnotations`                        | Annotations for job pod                                                                         | `{}`                          |
-| `keycloakConfigCli.extraEnvVars`                          | Additional environment variables to set                                                         | `[]`                          |
-| `keycloakConfigCli.extraEnvVarsCM`                        | ConfigMap with extra environment variables                                                      | `""`                          |
-| `keycloakConfigCli.extraEnvVarsSecret`                    | Secret with extra environment variables                                                         | `""`                          |
-| `keycloakConfigCli.extraVolumes`                          | Extra volumes to add to the job                                                                 | `[]`                          |
-| `keycloakConfigCli.extraVolumeMounts`                     | Extra volume mounts to add to the container                                                     | `[]`                          |
-| `keycloakConfigCli.configuration`                         | keycloak-config-cli realms configuration                                                        | `{}`                          |
-| `keycloakConfigCli.existingConfigmap`                     | ConfigMap with keycloak-config-cli configuration. This will override `keycloakConfigCli.config` | `""`                          |
+| Name                                                      | Description                                                                                                                   | Value                         |
+| --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| `keycloakConfigCli.enabled`                               | Whether to enable keycloak-config-cli job                                                                                     | `false`                       |
+| `keycloakConfigCli.image.registry`                        | keycloak-config-cli container image registry                                                                                  | `docker.io`                   |
+| `keycloakConfigCli.image.repository`                      | keycloak-config-cli container image repository                                                                                | `bitnami/keycloak-config-cli` |
+| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                                                       | `5.3.1-debian-11-r7`          |
+| `keycloakConfigCli.image.digest`                          | keycloak-config-cli container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                          |
+| `keycloakConfigCli.image.pullPolicy`                      | keycloak-config-cli container image pull policy                                                                               | `IfNotPresent`                |
+| `keycloakConfigCli.image.pullSecrets`                     | keycloak-config-cli container image pull secrets                                                                              | `[]`                          |
+| `keycloakConfigCli.annotations`                           | Annotations for keycloak-config-cli job                                                                                       | `{}`                          |
+| `keycloakConfigCli.command`                               | Command for running the container (set to default if not set). Use array form                                                 | `[]`                          |
+| `keycloakConfigCli.args`                                  | Args for running the container (set to default if not set). Use array form                                                    | `[]`                          |
+| `keycloakConfigCli.hostAliases`                           | Job pod host aliases                                                                                                          | `[]`                          |
+| `keycloakConfigCli.resources.limits`                      | The resources limits for the keycloak-config-cli container                                                                    | `{}`                          |
+| `keycloakConfigCli.resources.requests`                    | The requested resources for the keycloak-config-cli container                                                                 | `{}`                          |
+| `keycloakConfigCli.containerSecurityContext.enabled`      | Enabled keycloak-config-cli containers' Security Context                                                                      | `true`                        |
+| `keycloakConfigCli.containerSecurityContext.runAsUser`    | Set keycloak-config-cli container's Security Context runAsUser                                                                | `1001`                        |
+| `keycloakConfigCli.containerSecurityContext.runAsNonRoot` | Set keycloak-config-cli container's Security Context runAsNonRoot                                                             | `true`                        |
+| `keycloakConfigCli.podSecurityContext.enabled`            | Enabled keycloak-config-cli pods' Security Context                                                                            | `true`                        |
+| `keycloakConfigCli.podSecurityContext.fsGroup`            | Set keycloak-config-cli pod's Security Context fsGroup                                                                        | `1001`                        |
+| `keycloakConfigCli.backoffLimit`                          | Number of retries before considering a Job as failed                                                                          | `1`                           |
+| `keycloakConfigCli.podLabels`                             | Pod extra labels                                                                                                              | `{}`                          |
+| `keycloakConfigCli.podAnnotations`                        | Annotations for job pod                                                                                                       | `{}`                          |
+| `keycloakConfigCli.extraEnvVars`                          | Additional environment variables to set                                                                                       | `[]`                          |
+| `keycloakConfigCli.extraEnvVarsCM`                        | ConfigMap with extra environment variables                                                                                    | `""`                          |
+| `keycloakConfigCli.extraEnvVarsSecret`                    | Secret with extra environment variables                                                                                       | `""`                          |
+| `keycloakConfigCli.extraVolumes`                          | Extra volumes to add to the job                                                                                               | `[]`                          |
+| `keycloakConfigCli.extraVolumeMounts`                     | Extra volume mounts to add to the container                                                                                   | `[]`                          |
+| `keycloakConfigCli.configuration`                         | keycloak-config-cli realms configuration                                                                                      | `{}`                          |
+| `keycloakConfigCli.existingConfigmap`                     | ConfigMap with keycloak-config-cli configuration. This will override `keycloakConfigCli.config`                               | `""`                          |
 
 
 ### Database parameters

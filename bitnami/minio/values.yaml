@@ -47,6 +47,7 @@ extraDeploy: []
 ## @param image.registry MinIO&reg; image registry
 ## @param image.repository MinIO&reg; image repository
 ## @param image.tag MinIO&reg; image tag (immutable tags are recommended)
+## @param image.digest MinIO&reg; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
 ## @param image.debug Specify if debug logs should be enabled
@@ -54,7 +55,8 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2022.8.13-debian-11-r0
+  tag: 2022.8.22-debian-11-r0
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -76,11 +78,13 @@ image:
 ## @param clientImage.registry MinIO&reg; Client image registry
 ## @param clientImage.repository MinIO&reg; Client image repository
 ## @param clientImage.tag MinIO&reg; Client image tag (immutable tags are recommended)
+## @param clientImage.digest MinIO&reg; Client image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ##
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2022.8.11-debian-11-r1
+  tag: 2022.8.11-debian-11-r3
+  digest: ""
 ## @param mode MinIO&reg; server mode (`standalone` or `distributed`)
 ## ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
 ##
@@ -637,7 +641,7 @@ service:
 ## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
-  ## @param ingress.enabled Enable ingress controller resource
+  ## @param ingress.enabled Enable ingress controller resource for MinIO Console
   ##
   enabled: false
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
@@ -746,7 +750,7 @@ ingress:
 ## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
 apiIngress:
-  ## @param apiIngress.enabled Enable ingress controller resource
+  ## @param apiIngress.enabled Enable ingress controller resource for MinIO API
   ##
   enabled: false
   ## @param apiIngress.apiVersion Force Ingress API version (automatically detected if not set)
@@ -914,13 +918,15 @@ volumePermissions:
   ## @param volumePermissions.image.registry Init container volume-permissions image registry
   ## @param volumePermissions.image.repository Init container volume-permissions image repository
   ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r26
+    tag: 11-debian-11-r28
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1035,7 +1041,7 @@ metrics:
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ##
     selector: {}
-    
+
   ## Prometheus Operator PrometheusRule configuration
   ##
   prometheusRule:

@@ -37,7 +37,8 @@ jobs:
         with:
           numOfAssignee: 1
           removePreviousAssignees: false
-          teams: ${{ env.TRIAGE_TEAM_NAME }}
+          # If it's an internal issue, assign directly to the support team. Otherwise, to the triage one.
+          teams: ${{ (contains(fromJson(env.BITNAMI_TEAM), github.actor)) && env.SUPPORT_TEAM_NAME || env.TRIAGE_TEAM_NAME }}
           repo-token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
       - name: Send to the board
         uses: peter-evans/create-or-update-project-card@v2
