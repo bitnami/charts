@@ -11,6 +11,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/discourse/**'
       - 'bitnami/dokuwiki/**'
       - 'bitnami/elasticsearch/**'
+      - 'bitnami/etcd/**'
       - 'bitnami/external-dns/**'
       - 'bitnami/fluentd/**'
       - 'bitnami/ghost/**'
