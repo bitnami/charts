@@ -354,7 +354,7 @@ spec:
       volumes:
         - name: scripts
           configMap:
-            name: {{ printf "%s-scripts" (include "common.names.fullname" .) }}
+            name: {{ printf "%s-scripts" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
             defaultMode: 0755
         {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
         - name: data

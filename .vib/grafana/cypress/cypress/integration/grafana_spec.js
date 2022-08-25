@@ -49,6 +49,9 @@ it('checks if it is possible to upload a dashboard as JSON file', () => {
       .type(`${dashboard.newDashboard.uploadedTitle} ${random}`);
     cy.get('[data-testid*="data-testid-import-dashboard-submit"]').click();
     cy.visit('dashboards');
+    cy.get(
+      'input[aria-label*="View as list"]'
+    ).click({ force: true });
     cy.contains('div', `${dashboard.newDashboard.uploadedTitle} ${random}`);
   });
 });

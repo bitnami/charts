@@ -30,4 +30,4 @@ name: concourse
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/concourse
   - https://github.com/concourse/concourse
-version: 1.4.0
+version: 1.4.1

@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
   send_to_solved:
-    if: ${{ github.actor != 'bitnami-bot' }}
+    if: ${{ github.actor != 'bitnami-bot' || (github.actor == 'bitnami-bot' && github.event.issue && (!contains(github.event.issue.labels.*.name, 'stale'))) }}
     runs-on: ubuntu-latest
     steps:
       - name: Repo checkout

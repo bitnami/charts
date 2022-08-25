@@ -44,4 +44,4 @@ name: grafana-loki
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/grafana-loki
   - https://github.com/grafana/loki/
-version: 2.3.1
+version: 2.3.2
