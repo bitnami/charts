@@ -27,6 +27,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/mediawiki/**'
       - 'bitnami/minio/**'
       - 'bitnami/mongodb/**'
+      - 'bitnami/moodle/**'
       - 'bitnami/mysql/**'
       - 'bitnami/nginx/**'
       - 'bitnami/node/**'
