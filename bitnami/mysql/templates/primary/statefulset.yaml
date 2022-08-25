@@ -235,7 +235,7 @@ spec:
               mountPath: /bitnami/mysql
             {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
             - name: custom-init-scripts
-              mountPath: /docker-entrypoint-initdb.d
+              mountPath: /docker-entrypoint-startdb.d
             {{- end }}
             {{- if or .Values.primary.configuration .Values.primary.existingConfigmap }}
             - name: config
