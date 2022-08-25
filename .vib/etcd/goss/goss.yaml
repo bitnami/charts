@@ -1,7 +1,6 @@
 http:
-  http://etcd:{{ .Vars.service.ports.peer }}:
-    status: 404
-    allow-insecure: true
+  http://etcd:{{ .Vars.service.ports.peer }}/version:
+    status: 200
 file:
   /bitnami/etcd:
     exists: true
@@ -9,7 +8,7 @@ file:
     mode: "2775"
 command:
   {{- $auth := printf "--user=root --password=%s" .Vars.auth.rbac.rootPassword }}
-  {{- $svc_endpoint := printf "--endpoints=etcd:%s" .Vars.service.ports.client }}
+  {{- $svc_endpoint := printf "--endpoints=etcd:%d" .Vars.service.ports.client }}
   cluster-members:
     exec: etcdctl {{ $auth }} {{ $svc_endpoint }} member list
     exit-status: 0
