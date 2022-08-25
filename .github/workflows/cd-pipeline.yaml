@@ -5,6 +5,7 @@ on: # rebuild any PRs and main branch changes
       - master
     paths:
       - 'bitnami/airflow/**'
+      - 'bitnami/apache/**'
       - 'bitnami/aspnet-core/**'
       - 'bitnami/cassandra/**'
       - 'bitnami/consul/**'
