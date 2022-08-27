@@ -147,7 +147,7 @@ forwarder:
   hostNetwork: false
   ## @param forwarder.dnsPolicy Pod-specific DNS policy
   ##
-  dnsPolicy: Default
+  dnsPolicy: ""
   ## @param forwarder.terminationGracePeriodSeconds Duration in seconds the pod needs to terminate gracefully
   ## https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
   ##

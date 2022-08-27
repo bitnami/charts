@@ -71,7 +71,9 @@ spec:
       {{- end }}
       terminationGracePeriodSeconds: {{ .Values.forwarder.terminationGracePeriodSeconds }}
       hostNetwork: {{ .Values.forwarder.hostNetwork }}
+      {{- if .Values.forwarder.dnsPolicy }}
       dnsPolicy: {{ .Values.forwarder.dnsPolicy }}
+      {{- end }}
       containers:
         - name: fluentd
           image: {{ include "fluentd.forwarder.image" . }}
