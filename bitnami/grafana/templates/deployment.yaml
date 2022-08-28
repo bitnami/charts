@@ -189,7 +189,7 @@ spec:
             {{- end }}
               subPath: {{ .fileName }}
             {{- end }}
-            {{- if .Values.datasources.secretName }}
+            {{- if or (.Values.datasources.secretName) (.Values.datasources.secretDefinition) }}
             - name: datasources
               mountPath: /opt/bitnami/grafana/conf/provisioning/datasources
             {{- end }}
@@ -307,6 +307,10 @@ spec:
         - name: datasources
           secret:
             secretName: {{ .Values.datasources.secretName }}
+        {{- else if .Values.datasources.secretDefinition }}
+        - name: datasources
+          secret:
+            secretName: {{ include "common.names.fullname" . }}-datasources
         {{- end }}
         {{- if .Values.notifiers.configMapName }}
         - name: notifiers

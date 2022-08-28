@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/kafka"
         },
-        "runtime_parameters": "ImV4dGVybmFsQWNjZXNzIjoKICAiYXV0b0Rpc2NvdmVyeSI6CiAgICAiZW5hYmxlZCI6IHRydWUKICAiZW5hYmxlZCI6IHRydWUKICAic2VydmljZSI6CiAgICAicG9ydHMiOgogICAgICAiZXh0ZXJuYWwiOiA4MAogICAgInR5cGUiOiAiTG9hZEJhbGFuY2VyIgoicmJhYyI6CiAgImNyZWF0ZSI6IHRydWU=",
+        "runtime_parameters": "ZXh0ZXJuYWxBY2Nlc3M6CiAgZW5hYmxlZDogdHJ1ZQogIGF1dG9EaXNjb3Zlcnk6CiAgICBlbmFibGVkOiB0cnVlCiAgc2VydmljZToKICAgIHBvcnRzOgogICAgICBjbGllbnQ6IDkwOTIKICAgICAgaW50ZXJuYWw6IDkwOTMKICAgICAgZXh0ZXJuYWw6IDgwCiAgICB0eXBlOiBMb2FkQmFsYW5jZXIKcmJhYzoKICBjcmVhdGU6IHRydWUKc3VwZXJVc2VyczogVXNlcjphZG1pbixVc2VyOnRlc3RfdXNlcgpjb250YWluZXJQb3J0czoKICBjbGllbnQ6IDkwOTIKICBpbnRlcm5hbDogOTA5MwogIGV4dGVybmFsOiA5MDk0CmxvZ1BlcnNpc3RlbmNlOgogIG1vdW50UGF0aDogL29wdC9iaXRuYW1pL2thZmthL2xvZ3MKcGVyc2lzdGVuY2U6CiAgbW91bnRQYXRoOiAvYml0bmFtaS9rYWZrYQpzZXJ2aWNlQWNjb3VudDoKICBjcmVhdGU6IHRydWUKICBhdXRvbW91bnRTZXJ2aWNlQWNjb3VudFRva2VuOiB0cnVlCnBvZFNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgZnNHcm91cDogMTAwMgpjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIHJ1bkFzVXNlcjogMTAwMg==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -45,7 +45,8 @@
             },
             "remote": {
               "workload": "sts-kafka"
-            }
+            },
+            "vars_file": "vars.yaml"
           }
         }
       ]

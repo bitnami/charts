@@ -62,6 +62,7 @@ diagnosticMode:
 ## @param image.registry Kibana image registry
 ## @param image.repository Kibana image repository
 ## @param image.tag Kibana image tag (immutable tags are recommended)
+## @param image.digest Kibana image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Kibana image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
 ## @param image.debug Enable %%MAIN_CONTAINER%% image debug mode
@@ -70,6 +71,7 @@ image:
   registry: docker.io
   repository: bitnami/kibana
   tag: 8.3.3-debian-11-r5
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -183,6 +185,7 @@ volumePermissions:
   ## @param volumePermissions.image.registry Init container volume-permissions image registry
   ## @param volumePermissions.image.repository Init container volume-permissions image name
   ## @param volumePermissions.image.tag Init container volume-permissions image tag
+  ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
   ##
@@ -190,6 +193,7 @@ volumePermissions:
     registry: docker.io
     repository: bitnami/bitnami-shell
     tag: 11-debian-11-r23
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

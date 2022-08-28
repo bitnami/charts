@@ -1,27 +1,12 @@
 file:
- /opt/bitnami/keycloak/conf:
-   exists: true
-   filetype: directory
-   mode: "0775"
-   owner: keycloak
-/opt/bitnami/keycloak/lib/quarkus/build-system.properties:
-  exists: true
-  filetype: file
-  mode: "0644"
-  owner: keycloak
-/opt/bitnami/scripts/keycloak-env.sh:
-   exists: true
-   filetype: file
-   mode: "0664"
-   owner: root
-command:
-  user-id-test:
-    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
-    exit-status: 0
-    stdout: []
-    stderr: []
-  java-test:
-    exec: java -version
-    exit-status: 0
-    stdout:
-    stderr: []
+  /opt/bitnami/keycloak/conf/keycloak.conf:
+    exists: true
+    filetype: file
+    mode: "0664"
+    contains:
+    - /http-port.*{{ .Vars.containerPorts.http }}/
+    - /log-console-output.*{{ .Vars.logging.output }}/
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    mode: "3777"
+    filetype: directory
+    exists: true

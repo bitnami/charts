@@ -61,6 +61,7 @@ diagnosticMode:
 ## @param image.registry Magento image registry
 ## @param image.repository Magento image repository
 ## @param image.tag Magento image tag (immutable tags are recommended)
+## @param image.digest Magento image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Magento image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
 ## @param image.debug Specify if debug logs should be enabled
@@ -68,7 +69,8 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/magento
-  tag: 2.4.4-debian-11-r24
+  tag: 2.4.5-debian-11-r0
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -484,11 +486,13 @@ mariadb:
   ## @param mariadb.image.registry MariaDB image registry
   ## @param mariadb.image.repository MariaDB image repository
   ## @param mariadb.image.tag MariaDB image tag (immutable tags are recommended)
+  ## @param mariadb.image.digest MariaDB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:
     registry: docker.io
     repository: bitnami/mariadb
-    tag: 10.4.25-debian-11-r24
+    tag: 10.4.25-debian-11-r26
+    digest: ""
   ## @param mariadb.architecture MariaDB architecture. Allowed values: `standalone` or `replication`
   ##
   architecture: standalone
@@ -576,11 +580,13 @@ elasticsearch:
   ## @param elasticsearch.image.registry Elasticsearch image registry
   ## @param elasticsearch.image.repository Elasticsearch image repository
   ## @param elasticsearch.image.tag Elasticsearch image tag (immutable tags are recommended)
+  ## @param elasticsearch.image.digest Elasticsearch image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:
     registry: docker.io
     repository: bitnami/elasticsearch
-    tag: 7.17.5-debian-11-r13
+    tag: 7.17.5-debian-11-r15
+    digest: ""
   ## @param elasticsearch.sysctlImage.enabled Enable kernel settings modifier image for Elasticsearch
   ##
   sysctlImage:
@@ -682,13 +688,15 @@ volumePermissions:
   ## @param volumePermissions.image.registry Init container volume-permissions image registry
   ## @param volumePermissions.image.repository Init container volume-permissions image repository
   ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r22
+    tag: 11-debian-11-r23
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -881,13 +889,15 @@ metrics:
   ## @param metrics.image.registry Apache exporter image registry
   ## @param metrics.image.repository Apache exporter image repository
   ## @param metrics.image.tag Apache exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.digest Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy Image pull policy
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.11.0-debian-11-r25
+    tag: 0.11.0-debian-11-r28
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -979,13 +989,15 @@ certificates:
   ## @param certificates.image.registry Container sidecar registry
   ## @param certificates.image.repository Container sidecar image
   ## @param certificates.image.tag Container sidecar image tag (immutable tags are recommended)
+  ## @param certificates.image.digest Container sidecar image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param certificates.image.pullPolicy Container sidecar image pull policy
   ## @param certificates.image.pullSecrets Container sidecar image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r22
+    tag: 11-debian-11-r23
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

@@ -219,7 +219,7 @@ ingress:
   ## - host: example.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: example-svc
   ##           port:
@@ -235,13 +235,15 @@ ingress:
 ## @param image.registry OAuth2 Proxy image registry
 ## @param image.repository OAuth2 Proxy image repository
 ## @param image.tag OAuth2 Proxy image tag (immutable tags are recommended)
+## @param image.digest OAuth2 Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy OAuth2 Proxy image pull policy
 ## @param image.pullSecrets OAuth2 Proxy image pull secrets
 ##
 image:
   registry: docker.io
   repository: bitnami/oauth2-proxy
-  tag: 7.3.0-debian-11-r22
+  tag: 7.3.0-debian-11-r23
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -571,6 +573,24 @@ sidecars: []
 ##    command: ['sh', '-c', 'echo "hello world"']
 ##
 initContainers: []
+## @param dnsPolicy Pod DNS policy. Valid values are 'ClusterFirstWithHostNet', 'ClusterFirst', 'Default' or 'None'.
+## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
+##
+dnsPolicy: ""
+## @param dnsConfig Pod DNS configuration.
+## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-dns-config
+## e.g:
+## dnsConfig:
+##   nameservers:
+##   - 8.8.8.8
+##   - 8.8.4.4
+##   options:
+##   - name: ndots
+##     value: "2"
+##   searches:
+##   - example.com
+##
+dnsConfig: {}
 
 ## ServiceAccount configuration
 ##

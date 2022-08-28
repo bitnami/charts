@@ -82,33 +82,34 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common Grafana Tempo Parameters
 
-| Name                                   | Description                                                    | Value                         |
-| -------------------------------------- | -------------------------------------------------------------- | ----------------------------- |
-| `tempo.image.registry`                 | Grafana Tempo image registry                                   | `docker.io`                   |
-| `tempo.image.repository`               | Grafana Tempo image repository                                 | `bitnami/grafana-tempo`       |
-| `tempo.image.tag`                      | Grafana Tempo image tag (immutable tags are recommended)       | `1.4.1-debian-11-r0`          |
-| `tempo.image.pullPolicy`               | Grafana Tempo image pull policy                                | `IfNotPresent`                |
-| `tempo.image.pullSecrets`              | Grafana Tempo image pull secrets                               | `[]`                          |
-| `tempo.memBallastSizeMbs`              | Tempo components memory ballast size in MB                     | `1024`                        |
-| `tempo.dataDir`                        | Tempo components data directory                                | `/bitnami/grafana-tempo/data` |
-| `tempo.traces.jaeger.grpc`             | Enable Tempo to ingest Jaeger GRPC traces                      | `true`                        |
-| `tempo.traces.jaeger.thriftBinary`     | Enable Tempo to ingest Jaeger Thrift Binary traces             | `false`                       |
-| `tempo.traces.jaeger.thriftCompact`    | Enable Tempo to ingest Jaeger Thrift Compact traces            | `false`                       |
-| `tempo.traces.jaeger.thriftHttp`       | Enable Tempo to ingest Jaeger Thrift HTTP traces               | `true`                        |
-| `tempo.traces.otlp.http`               | Enable Tempo to ingest Open Telemetry HTTP traces              | `false`                       |
-| `tempo.traces.otlp.grpc`               | Enable Tempo to ingest Open Telemetry GRPC traces              | `false`                       |
-| `tempo.traces.opencensus`              | Enable Tempo to ingest Open Census traces                      | `false`                       |
-| `tempo.traces.zipkin`                  | Enable Tempo to ingest Zipkin traces                           | `false`                       |
-| `tempo.search.enabled`                 | Enable Tempo search                                            | `false`                       |
-| `tempo.configuration`                  | Tempo components configuration                                 | `""`                          |
-| `tempo.existingConfigmap`              | Name of a ConfigMap with the Tempo configuration               | `""`                          |
-| `tempo.overridesConfiguration`         | Tempo components overrides configuration settings              | `""`                          |
-| `tempo.existingOverridesConfigmap`     | Name of a ConfigMap with the tempo overrides configuration     | `""`                          |
-| `tempo.containerPorts.web`             | Tempo components web container port                            | `3100`                        |
-| `tempo.containerPorts.grpc`            | Tempo components GRPC container port                           | `9095`                        |
-| `tempo.containerPorts.gossipRing`      | Tempo components Gossip Ring container port                    | `7946`                        |
-| `tempo.gossipRing.service.ports.http`  | Gossip Ring HTTP headless service port                         | `7946`                        |
-| `tempo.gossipRing.service.annotations` | Additional custom annotations for Gossip Ring headless service | `{}`                          |
+| Name                                   | Description                                                                                                   | Value                         |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| `tempo.image.registry`                 | Grafana Tempo image registry                                                                                  | `docker.io`                   |
+| `tempo.image.repository`               | Grafana Tempo image repository                                                                                | `bitnami/grafana-tempo`       |
+| `tempo.image.tag`                      | Grafana Tempo image tag (immutable tags are recommended)                                                      | `1.5.0-debian-11-r0`          |
+| `tempo.image.digest`                   | Grafana Tempo image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                          |
+| `tempo.image.pullPolicy`               | Grafana Tempo image pull policy                                                                               | `IfNotPresent`                |
+| `tempo.image.pullSecrets`              | Grafana Tempo image pull secrets                                                                              | `[]`                          |
+| `tempo.memBallastSizeMbs`              | Tempo components memory ballast size in MB                                                                    | `1024`                        |
+| `tempo.dataDir`                        | Tempo components data directory                                                                               | `/bitnami/grafana-tempo/data` |
+| `tempo.traces.jaeger.grpc`             | Enable Tempo to ingest Jaeger GRPC traces                                                                     | `true`                        |
+| `tempo.traces.jaeger.thriftBinary`     | Enable Tempo to ingest Jaeger Thrift Binary traces                                                            | `false`                       |
+| `tempo.traces.jaeger.thriftCompact`    | Enable Tempo to ingest Jaeger Thrift Compact traces                                                           | `false`                       |
+| `tempo.traces.jaeger.thriftHttp`       | Enable Tempo to ingest Jaeger Thrift HTTP traces                                                              | `true`                        |
+| `tempo.traces.otlp.http`               | Enable Tempo to ingest Open Telemetry HTTP traces                                                             | `false`                       |
+| `tempo.traces.otlp.grpc`               | Enable Tempo to ingest Open Telemetry GRPC traces                                                             | `false`                       |
+| `tempo.traces.opencensus`              | Enable Tempo to ingest Open Census traces                                                                     | `false`                       |
+| `tempo.traces.zipkin`                  | Enable Tempo to ingest Zipkin traces                                                                          | `false`                       |
+| `tempo.search.enabled`                 | Enable Tempo search                                                                                           | `false`                       |
+| `tempo.configuration`                  | Tempo components configuration                                                                                | `""`                          |
+| `tempo.existingConfigmap`              | Name of a ConfigMap with the Tempo configuration                                                              | `""`                          |
+| `tempo.overridesConfiguration`         | Tempo components overrides configuration settings                                                             | `""`                          |
+| `tempo.existingOverridesConfigmap`     | Name of a ConfigMap with the tempo overrides configuration                                                    | `""`                          |
+| `tempo.containerPorts.web`             | Tempo components web container port                                                                           | `3100`                        |
+| `tempo.containerPorts.grpc`            | Tempo components GRPC container port                                                                          | `9095`                        |
+| `tempo.containerPorts.gossipRing`      | Tempo components Gossip Ring container port                                                                   | `7946`                        |
+| `tempo.gossipRing.service.ports.http`  | Gossip Ring HTTP headless service port                                                                        | `7946`                        |
+| `tempo.gossipRing.service.annotations` | Additional custom annotations for Gossip Ring headless service                                                | `{}`                          |
 
 
 ### Compactor Deployment Parameters
@@ -527,105 +528,106 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Query Frontend Deployment Parameters
 
-| Name                                                        | Description                                                                                             | Value                         |
-| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ----------------------------- |
-| `queryFrontend.extraEnvVars`                                | Array with extra environment variables to add to queryFrontend nodes                                    | `[]`                          |
-| `queryFrontend.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars for queryFrontend nodes                            | `""`                          |
-| `queryFrontend.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars for queryFrontend nodes                               | `""`                          |
-| `queryFrontend.command`                                     | Override default container command (useful when using custom images)                                    | `[]`                          |
-| `queryFrontend.args`                                        | Override default container args (useful when using custom images)                                       | `[]`                          |
-| `queryFrontend.replicaCount`                                | Number of queryFrontend replicas to deploy                                                              | `1`                           |
-| `queryFrontend.livenessProbe.enabled`                       | Enable livenessProbe on queryFrontend nodes                                                             | `true`                        |
-| `queryFrontend.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                                 | `10`                          |
-| `queryFrontend.livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                                        | `10`                          |
-| `queryFrontend.livenessProbe.timeoutSeconds`                | Timeout seconds for livenessProbe                                                                       | `1`                           |
-| `queryFrontend.livenessProbe.failureThreshold`              | Failure threshold for livenessProbe                                                                     | `3`                           |
-| `queryFrontend.livenessProbe.successThreshold`              | Success threshold for livenessProbe                                                                     | `1`                           |
-| `queryFrontend.readinessProbe.enabled`                      | Enable readinessProbe on queryFrontend nodes                                                            | `true`                        |
-| `queryFrontend.readinessProbe.initialDelaySeconds`          | Initial delay seconds for readinessProbe                                                                | `10`                          |
-| `queryFrontend.readinessProbe.periodSeconds`                | Period seconds for readinessProbe                                                                       | `10`                          |
-| `queryFrontend.readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                                      | `1`                           |
-| `queryFrontend.readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                                    | `3`                           |
-| `queryFrontend.readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                                    | `1`                           |
-| `queryFrontend.startupProbe.enabled`                        | Enable startupProbe on queryFrontend containers                                                         | `false`                       |
-| `queryFrontend.startupProbe.initialDelaySeconds`            | Initial delay seconds for startupProbe                                                                  | `30`                          |
-| `queryFrontend.startupProbe.periodSeconds`                  | Period seconds for startupProbe                                                                         | `10`                          |
-| `queryFrontend.startupProbe.timeoutSeconds`                 | Timeout seconds for startupProbe                                                                        | `1`                           |
-| `queryFrontend.startupProbe.failureThreshold`               | Failure threshold for startupProbe                                                                      | `15`                          |
-| `queryFrontend.startupProbe.successThreshold`               | Success threshold for startupProbe                                                                      | `1`                           |
-| `queryFrontend.customLivenessProbe`                         | Custom livenessProbe that overrides the default one                                                     | `{}`                          |
-| `queryFrontend.customReadinessProbe`                        | Custom readinessProbe that overrides the default one                                                    | `{}`                          |
-| `queryFrontend.customStartupProbe`                          | Custom startupProbe that overrides the default one                                                      | `{}`                          |
-| `queryFrontend.resources.limits`                            | The resources limits for the queryFrontend containers                                                   | `{}`                          |
-| `queryFrontend.resources.requests`                          | The requested resources for the queryFrontend containers                                                | `{}`                          |
-| `queryFrontend.podSecurityContext.enabled`                  | Enabled queryFrontend pods' Security Context                                                            | `true`                        |
-| `queryFrontend.podSecurityContext.fsGroup`                  | Set queryFrontend pod's Security Context fsGroup                                                        | `1001`                        |
-| `queryFrontend.containerSecurityContext.enabled`            | Enabled queryFrontend containers' Security Context                                                      | `true`                        |
-| `queryFrontend.containerSecurityContext.runAsUser`          | Set queryFrontend containers' Security Context runAsUser                                                | `1001`                        |
-| `queryFrontend.containerSecurityContext.runAsNonRoot`       | Set queryFrontend containers' Security Context runAsNonRoot                                             | `true`                        |
-| `queryFrontend.lifecycleHooks`                              | for the queryFrontend container(s) to automate configuration before or after startup                    | `{}`                          |
-| `queryFrontend.hostAliases`                                 | queryFrontend pods host aliases                                                                         | `[]`                          |
-| `queryFrontend.podLabels`                                   | Extra labels for queryFrontend pods                                                                     | `{}`                          |
-| `queryFrontend.podAnnotations`                              | Annotations for queryFrontend pods                                                                      | `{}`                          |
-| `queryFrontend.podAffinityPreset`                           | Pod affinity preset. Ignored if `queryFrontend.affinity` is set. Allowed values: `soft` or `hard`       | `""`                          |
-| `queryFrontend.podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `queryFrontend.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                        |
-| `queryFrontend.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `queryFrontend.affinity` is set. Allowed values: `soft` or `hard` | `""`                          |
-| `queryFrontend.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `queryFrontend.affinity` is set                                     | `""`                          |
-| `queryFrontend.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `queryFrontend.affinity` is set                                  | `[]`                          |
-| `queryFrontend.affinity`                                    | Affinity for queryFrontend pods assignment                                                              | `{}`                          |
-| `queryFrontend.nodeSelector`                                | Node labels for queryFrontend pods assignment                                                           | `{}`                          |
-| `queryFrontend.tolerations`                                 | Tolerations for queryFrontend pods assignment                                                           | `[]`                          |
-| `queryFrontend.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains         | `[]`                          |
-| `queryFrontend.priorityClassName`                           | queryFrontend pods' priorityClassName                                                                   | `""`                          |
-| `queryFrontend.schedulerName`                               | Kubernetes pod scheduler registry                                                                       | `""`                          |
-| `queryFrontend.updateStrategy.type`                         | queryFrontend statefulset strategy type                                                                 | `RollingUpdate`               |
-| `queryFrontend.updateStrategy.rollingUpdate`                | queryFrontend statefulset rolling update configuration parameters                                       | `{}`                          |
-| `queryFrontend.extraVolumes`                                | Optionally specify extra list of additional volumes for the queryFrontend pod(s)                        | `[]`                          |
-| `queryFrontend.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for the queryFrontend container(s)             | `[]`                          |
-| `queryFrontend.sidecars`                                    | Add additional sidecar containers to the queryFrontend pod(s)                                           | `[]`                          |
-| `queryFrontend.initContainers`                              | Add additional init containers to the queryFrontend pod(s)                                              | `[]`                          |
-| `queryFrontend.query.image.registry`                        | Grafana Tempo Query image registry                                                                      | `docker.io`                   |
-| `queryFrontend.query.image.repository`                      | Grafana Tempo Query image repository                                                                    | `bitnami/grafana-tempo-query` |
-| `queryFrontend.query.image.tag`                             | Grafana Tempo Query image tag (immutable tags are recommended)                                          | `1.4.1-debian-11-r0`          |
-| `queryFrontend.query.image.pullPolicy`                      | Grafana Tempo Query image pull policy                                                                   | `IfNotPresent`                |
-| `queryFrontend.query.image.pullSecrets`                     | Grafana Tempo Query image pull secrets                                                                  | `[]`                          |
-| `queryFrontend.query.configuration`                         | Query sidecar configuration                                                                             | `""`                          |
-| `queryFrontend.query.containerPorts.jaegerMetrics`          | queryFrontend query sidecar Jaeger metrics container port                                               | `16687`                       |
-| `queryFrontend.query.containerPorts.jaegerUI`               | queryFrontend query sidecar Jaeger UI container port                                                    | `16686`                       |
-| `queryFrontend.query.existingConfigmap`                     | Name of a configmap with the query configuration                                                        | `""`                          |
-| `queryFrontend.query.extraEnvVars`                          | Array with extra environment variables to add to queryFrontend nodes                                    | `[]`                          |
-| `queryFrontend.query.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for queryFrontend nodes                            | `""`                          |
-| `queryFrontend.query.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for queryFrontend nodes                               | `""`                          |
-| `queryFrontend.query.command`                               | Override default container command (useful when using custom images)                                    | `[]`                          |
-| `queryFrontend.query.args`                                  | Override default container args (useful when using custom images)                                       | `[]`                          |
-| `queryFrontend.query.livenessProbe.enabled`                 | Enable livenessProbe on Query sidecar nodes                                                             | `true`                        |
-| `queryFrontend.query.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                 | `10`                          |
-| `queryFrontend.query.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                        | `10`                          |
-| `queryFrontend.query.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                       | `1`                           |
-| `queryFrontend.query.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                     | `3`                           |
-| `queryFrontend.query.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                     | `1`                           |
-| `queryFrontend.query.readinessProbe.enabled`                | Enable readinessProbe on Query sidecar nodes                                                            | `true`                        |
-| `queryFrontend.query.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                | `10`                          |
-| `queryFrontend.query.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                       | `10`                          |
-| `queryFrontend.query.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                      | `1`                           |
-| `queryFrontend.query.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                    | `3`                           |
-| `queryFrontend.query.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                    | `1`                           |
-| `queryFrontend.query.startupProbe.enabled`                  | Enable startupProbe on Query sidecar containers                                                         | `false`                       |
-| `queryFrontend.query.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                  | `30`                          |
-| `queryFrontend.query.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                         | `10`                          |
-| `queryFrontend.query.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                        | `1`                           |
-| `queryFrontend.query.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                      | `15`                          |
-| `queryFrontend.query.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                      | `1`                           |
-| `queryFrontend.query.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                     | `{}`                          |
-| `queryFrontend.query.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                    | `{}`                          |
-| `queryFrontend.query.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                      | `{}`                          |
-| `queryFrontend.query.lifecycleHooks`                        | for the query sidecar container(s) to automate configuration before or after startup                    | `{}`                          |
-| `queryFrontend.query.containerSecurityContext.enabled`      | Enabled queryFrontend query sidecar containers' Security Context                                        | `true`                        |
-| `queryFrontend.query.containerSecurityContext.runAsUser`    | Set queryFrontend query sidecar containers' Security Context runAsUser                                  | `1001`                        |
-| `queryFrontend.query.containerSecurityContext.runAsNonRoot` | Set queryFrontend query sidecar containers' Security Context runAsNonRoot                               | `true`                        |
-| `queryFrontend.query.resources.limits`                      | The resources limits for the query sidecar containers                                                   | `{}`                          |
-| `queryFrontend.query.resources.requests`                    | The requested resources for the query sidecar containers                                                | `{}`                          |
-| `queryFrontend.query.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the queryFrontend container(s)             | `[]`                          |
+| Name                                                        | Description                                                                                                         | Value                         |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| `queryFrontend.extraEnvVars`                                | Array with extra environment variables to add to queryFrontend nodes                                                | `[]`                          |
+| `queryFrontend.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars for queryFrontend nodes                                        | `""`                          |
+| `queryFrontend.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars for queryFrontend nodes                                           | `""`                          |
+| `queryFrontend.command`                                     | Override default container command (useful when using custom images)                                                | `[]`                          |
+| `queryFrontend.args`                                        | Override default container args (useful when using custom images)                                                   | `[]`                          |
+| `queryFrontend.replicaCount`                                | Number of queryFrontend replicas to deploy                                                                          | `1`                           |
+| `queryFrontend.livenessProbe.enabled`                       | Enable livenessProbe on queryFrontend nodes                                                                         | `true`                        |
+| `queryFrontend.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                                             | `10`                          |
+| `queryFrontend.livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                                                    | `10`                          |
+| `queryFrontend.livenessProbe.timeoutSeconds`                | Timeout seconds for livenessProbe                                                                                   | `1`                           |
+| `queryFrontend.livenessProbe.failureThreshold`              | Failure threshold for livenessProbe                                                                                 | `3`                           |
+| `queryFrontend.livenessProbe.successThreshold`              | Success threshold for livenessProbe                                                                                 | `1`                           |
+| `queryFrontend.readinessProbe.enabled`                      | Enable readinessProbe on queryFrontend nodes                                                                        | `true`                        |
+| `queryFrontend.readinessProbe.initialDelaySeconds`          | Initial delay seconds for readinessProbe                                                                            | `10`                          |
+| `queryFrontend.readinessProbe.periodSeconds`                | Period seconds for readinessProbe                                                                                   | `10`                          |
+| `queryFrontend.readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                                                  | `1`                           |
+| `queryFrontend.readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                                                | `3`                           |
+| `queryFrontend.readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                                                | `1`                           |
+| `queryFrontend.startupProbe.enabled`                        | Enable startupProbe on queryFrontend containers                                                                     | `false`                       |
+| `queryFrontend.startupProbe.initialDelaySeconds`            | Initial delay seconds for startupProbe                                                                              | `30`                          |
+| `queryFrontend.startupProbe.periodSeconds`                  | Period seconds for startupProbe                                                                                     | `10`                          |
+| `queryFrontend.startupProbe.timeoutSeconds`                 | Timeout seconds for startupProbe                                                                                    | `1`                           |
+| `queryFrontend.startupProbe.failureThreshold`               | Failure threshold for startupProbe                                                                                  | `15`                          |
+| `queryFrontend.startupProbe.successThreshold`               | Success threshold for startupProbe                                                                                  | `1`                           |
+| `queryFrontend.customLivenessProbe`                         | Custom livenessProbe that overrides the default one                                                                 | `{}`                          |
+| `queryFrontend.customReadinessProbe`                        | Custom readinessProbe that overrides the default one                                                                | `{}`                          |
+| `queryFrontend.customStartupProbe`                          | Custom startupProbe that overrides the default one                                                                  | `{}`                          |
+| `queryFrontend.resources.limits`                            | The resources limits for the queryFrontend containers                                                               | `{}`                          |
+| `queryFrontend.resources.requests`                          | The requested resources for the queryFrontend containers                                                            | `{}`                          |
+| `queryFrontend.podSecurityContext.enabled`                  | Enabled queryFrontend pods' Security Context                                                                        | `true`                        |
+| `queryFrontend.podSecurityContext.fsGroup`                  | Set queryFrontend pod's Security Context fsGroup                                                                    | `1001`                        |
+| `queryFrontend.containerSecurityContext.enabled`            | Enabled queryFrontend containers' Security Context                                                                  | `true`                        |
+| `queryFrontend.containerSecurityContext.runAsUser`          | Set queryFrontend containers' Security Context runAsUser                                                            | `1001`                        |
+| `queryFrontend.containerSecurityContext.runAsNonRoot`       | Set queryFrontend containers' Security Context runAsNonRoot                                                         | `true`                        |
+| `queryFrontend.lifecycleHooks`                              | for the queryFrontend container(s) to automate configuration before or after startup                                | `{}`                          |
+| `queryFrontend.hostAliases`                                 | queryFrontend pods host aliases                                                                                     | `[]`                          |
+| `queryFrontend.podLabels`                                   | Extra labels for queryFrontend pods                                                                                 | `{}`                          |
+| `queryFrontend.podAnnotations`                              | Annotations for queryFrontend pods                                                                                  | `{}`                          |
+| `queryFrontend.podAffinityPreset`                           | Pod affinity preset. Ignored if `queryFrontend.affinity` is set. Allowed values: `soft` or `hard`                   | `""`                          |
+| `queryFrontend.podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `queryFrontend.affinity` is set. Allowed values: `soft` or `hard`              | `soft`                        |
+| `queryFrontend.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `queryFrontend.affinity` is set. Allowed values: `soft` or `hard`             | `""`                          |
+| `queryFrontend.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `queryFrontend.affinity` is set                                                 | `""`                          |
+| `queryFrontend.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `queryFrontend.affinity` is set                                              | `[]`                          |
+| `queryFrontend.affinity`                                    | Affinity for queryFrontend pods assignment                                                                          | `{}`                          |
+| `queryFrontend.nodeSelector`                                | Node labels for queryFrontend pods assignment                                                                       | `{}`                          |
+| `queryFrontend.tolerations`                                 | Tolerations for queryFrontend pods assignment                                                                       | `[]`                          |
+| `queryFrontend.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains                     | `[]`                          |
+| `queryFrontend.priorityClassName`                           | queryFrontend pods' priorityClassName                                                                               | `""`                          |
+| `queryFrontend.schedulerName`                               | Kubernetes pod scheduler registry                                                                                   | `""`                          |
+| `queryFrontend.updateStrategy.type`                         | queryFrontend statefulset strategy type                                                                             | `RollingUpdate`               |
+| `queryFrontend.updateStrategy.rollingUpdate`                | queryFrontend statefulset rolling update configuration parameters                                                   | `{}`                          |
+| `queryFrontend.extraVolumes`                                | Optionally specify extra list of additional volumes for the queryFrontend pod(s)                                    | `[]`                          |
+| `queryFrontend.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for the queryFrontend container(s)                         | `[]`                          |
+| `queryFrontend.sidecars`                                    | Add additional sidecar containers to the queryFrontend pod(s)                                                       | `[]`                          |
+| `queryFrontend.initContainers`                              | Add additional init containers to the queryFrontend pod(s)                                                          | `[]`                          |
+| `queryFrontend.query.image.registry`                        | Grafana Tempo Query image registry                                                                                  | `docker.io`                   |
+| `queryFrontend.query.image.repository`                      | Grafana Tempo Query image repository                                                                                | `bitnami/grafana-tempo-query` |
+| `queryFrontend.query.image.tag`                             | Grafana Tempo Query image tag (immutable tags are recommended)                                                      | `1.4.1-debian-11-r28`         |
+| `queryFrontend.query.image.digest`                          | Grafana Tempo Query image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                          |
+| `queryFrontend.query.image.pullPolicy`                      | Grafana Tempo Query image pull policy                                                                               | `IfNotPresent`                |
+| `queryFrontend.query.image.pullSecrets`                     | Grafana Tempo Query image pull secrets                                                                              | `[]`                          |
+| `queryFrontend.query.configuration`                         | Query sidecar configuration                                                                                         | `""`                          |
+| `queryFrontend.query.containerPorts.jaegerMetrics`          | queryFrontend query sidecar Jaeger metrics container port                                                           | `16687`                       |
+| `queryFrontend.query.containerPorts.jaegerUI`               | queryFrontend query sidecar Jaeger UI container port                                                                | `16686`                       |
+| `queryFrontend.query.existingConfigmap`                     | Name of a configmap with the query configuration                                                                    | `""`                          |
+| `queryFrontend.query.extraEnvVars`                          | Array with extra environment variables to add to queryFrontend nodes                                                | `[]`                          |
+| `queryFrontend.query.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for queryFrontend nodes                                        | `""`                          |
+| `queryFrontend.query.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for queryFrontend nodes                                           | `""`                          |
+| `queryFrontend.query.command`                               | Override default container command (useful when using custom images)                                                | `[]`                          |
+| `queryFrontend.query.args`                                  | Override default container args (useful when using custom images)                                                   | `[]`                          |
+| `queryFrontend.query.livenessProbe.enabled`                 | Enable livenessProbe on Query sidecar nodes                                                                         | `true`                        |
+| `queryFrontend.query.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                             | `10`                          |
+| `queryFrontend.query.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                    | `10`                          |
+| `queryFrontend.query.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                   | `1`                           |
+| `queryFrontend.query.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                 | `3`                           |
+| `queryFrontend.query.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                 | `1`                           |
+| `queryFrontend.query.readinessProbe.enabled`                | Enable readinessProbe on Query sidecar nodes                                                                        | `true`                        |
+| `queryFrontend.query.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                            | `10`                          |
+| `queryFrontend.query.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                   | `10`                          |
+| `queryFrontend.query.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                  | `1`                           |
+| `queryFrontend.query.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                | `3`                           |
+| `queryFrontend.query.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                                | `1`                           |
+| `queryFrontend.query.startupProbe.enabled`                  | Enable startupProbe on Query sidecar containers                                                                     | `false`                       |
+| `queryFrontend.query.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                              | `30`                          |
+| `queryFrontend.query.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                     | `10`                          |
+| `queryFrontend.query.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                    | `1`                           |
+| `queryFrontend.query.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                  | `15`                          |
+| `queryFrontend.query.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                  | `1`                           |
+| `queryFrontend.query.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                                 | `{}`                          |
+| `queryFrontend.query.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                                | `{}`                          |
+| `queryFrontend.query.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                                  | `{}`                          |
+| `queryFrontend.query.lifecycleHooks`                        | for the query sidecar container(s) to automate configuration before or after startup                                | `{}`                          |
+| `queryFrontend.query.containerSecurityContext.enabled`      | Enabled queryFrontend query sidecar containers' Security Context                                                    | `true`                        |
+| `queryFrontend.query.containerSecurityContext.runAsUser`    | Set queryFrontend query sidecar containers' Security Context runAsUser                                              | `1001`                        |
+| `queryFrontend.query.containerSecurityContext.runAsNonRoot` | Set queryFrontend query sidecar containers' Security Context runAsNonRoot                                           | `true`                        |
+| `queryFrontend.query.resources.limits`                      | The resources limits for the query sidecar containers                                                               | `{}`                          |
+| `queryFrontend.query.resources.requests`                    | The requested resources for the query sidecar containers                                                            | `{}`                          |
+| `queryFrontend.query.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the queryFrontend container(s)                         | `[]`                          |
 
 
 ### Query Frontend Traffic Exposure Parameters
@@ -649,70 +651,71 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Vulture Deployment Parameters
 
-| Name                                            | Description                                                                                       | Value                           |
-| ----------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------- |
-| `vulture.enabled`                               | Enable vulture deployment                                                                         | `true`                          |
-| `vulture.image.registry`                        | Grafana Vulture image registry                                                                    | `docker.io`                     |
-| `vulture.image.repository`                      | Grafana Vulture image repository                                                                  | `bitnami/grafana-tempo-vulture` |
-| `vulture.image.tag`                             | Grafana Vulture image tag (immutable tags are recommended)                                        | `1.4.1-debian-11-r0`            |
-| `vulture.image.pullPolicy`                      | Grafana Vulture image pull policy                                                                 | `IfNotPresent`                  |
-| `vulture.image.pullSecrets`                     | Grafana Vulture image pull secrets                                                                | `[]`                            |
-| `vulture.extraEnvVars`                          | Array with extra environment variables to add to vulture nodes                                    | `[]`                            |
-| `vulture.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for vulture nodes                            | `""`                            |
-| `vulture.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for vulture nodes                               | `""`                            |
-| `vulture.command`                               | Override default container command (useful when using custom images)                              | `[]`                            |
-| `vulture.args`                                  | Override default container args (useful when using custom images)                                 | `[]`                            |
-| `vulture.replicaCount`                          | Number of Vulture replicas to deploy                                                              | `1`                             |
-| `vulture.livenessProbe.enabled`                 | Enable livenessProbe on Vulture nodes                                                             | `true`                          |
-| `vulture.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                           | `10`                            |
-| `vulture.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                  | `10`                            |
-| `vulture.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                 | `1`                             |
-| `vulture.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                               | `3`                             |
-| `vulture.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                               | `1`                             |
-| `vulture.readinessProbe.enabled`                | Enable readinessProbe on Vulture nodes                                                            | `true`                          |
-| `vulture.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                          | `10`                            |
-| `vulture.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                 | `10`                            |
-| `vulture.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                | `1`                             |
-| `vulture.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                              | `3`                             |
-| `vulture.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                              | `1`                             |
-| `vulture.startupProbe.enabled`                  | Enable startupProbe on Vulture containers                                                         | `false`                         |
-| `vulture.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                            | `30`                            |
-| `vulture.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                   | `10`                            |
-| `vulture.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                  | `1`                             |
-| `vulture.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                | `15`                            |
-| `vulture.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                | `1`                             |
-| `vulture.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                               | `{}`                            |
-| `vulture.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                              | `{}`                            |
-| `vulture.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                | `{}`                            |
-| `vulture.resources.limits`                      | The resources limits for the Vulture containers                                                   | `{}`                            |
-| `vulture.resources.requests`                    | The requested resources for the Vulture containers                                                | `{}`                            |
-| `vulture.podSecurityContext.enabled`            | Enabled Vulture pods' Security Context                                                            | `true`                          |
-| `vulture.podSecurityContext.fsGroup`            | Set Vulture pod's Security Context fsGroup                                                        | `1001`                          |
-| `vulture.containerSecurityContext.enabled`      | Enabled Vulture containers' Security Context                                                      | `true`                          |
-| `vulture.containerSecurityContext.runAsUser`    | Set Vulture containers' Security Context runAsUser                                                | `1001`                          |
-| `vulture.containerSecurityContext.runAsNonRoot` | Set Vulture containers' Security Context runAsNonRoot                                             | `true`                          |
-| `vulture.lifecycleHooks`                        | for the vulture container(s) to automate configuration before or after startup                    | `{}`                            |
-| `vulture.hostAliases`                           | vulture pods host aliases                                                                         | `[]`                            |
-| `vulture.podLabels`                             | Extra labels for vulture pods                                                                     | `{}`                            |
-| `vulture.podAnnotations`                        | Annotations for vulture pods                                                                      | `{}`                            |
-| `vulture.podAffinityPreset`                     | Pod affinity preset. Ignored if `vulture.affinity` is set. Allowed values: `soft` or `hard`       | `""`                            |
-| `vulture.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `vulture.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                          |
-| `vulture.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `vulture.affinity` is set. Allowed values: `soft` or `hard` | `""`                            |
-| `vulture.nodeAffinityPreset.key`                | Node label key to match. Ignored if `vulture.affinity` is set                                     | `""`                            |
-| `vulture.nodeAffinityPreset.values`             | Node label values to match. Ignored if `vulture.affinity` is set                                  | `[]`                            |
-| `vulture.containerPorts.http`                   | Vulture components HTTP container port                                                            | `8080`                          |
-| `vulture.affinity`                              | Affinity for Vulture pods assignment                                                              | `{}`                            |
-| `vulture.nodeSelector`                          | Node labels for Vulture pods assignment                                                           | `{}`                            |
-| `vulture.tolerations`                           | Tolerations for Vulture pods assignment                                                           | `[]`                            |
-| `vulture.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains   | `[]`                            |
-| `vulture.priorityClassName`                     | Vulture pods' priorityClassName                                                                   | `""`                            |
-| `vulture.schedulerName`                         | Kubernetes pod scheduler registry                                                                 | `""`                            |
-| `vulture.updateStrategy.type`                   | Vulture statefulset strategy type                                                                 | `RollingUpdate`                 |
-| `vulture.updateStrategy.rollingUpdate`          | Vulture statefulset rolling update configuration parameters                                       | `{}`                            |
-| `vulture.extraVolumes`                          | Optionally specify extra list of additional volumes for the Vulture pod(s)                        | `[]`                            |
-| `vulture.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Vulture container(s)             | `[]`                            |
-| `vulture.sidecars`                              | Add additional sidecar containers to the Vulture pod(s)                                           | `[]`                            |
-| `vulture.initContainers`                        | Add additional init containers to the Vulture pod(s)                                              | `[]`                            |
+| Name                                            | Description                                                                                                     | Value                           |
+| ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| `vulture.enabled`                               | Enable vulture deployment                                                                                       | `true`                          |
+| `vulture.image.registry`                        | Grafana Vulture image registry                                                                                  | `docker.io`                     |
+| `vulture.image.repository`                      | Grafana Vulture image repository                                                                                | `bitnami/grafana-tempo-vulture` |
+| `vulture.image.tag`                             | Grafana Vulture image tag (immutable tags are recommended)                                                      | `1.4.1-debian-11-r27`           |
+| `vulture.image.digest`                          | Grafana Vulture image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                            |
+| `vulture.image.pullPolicy`                      | Grafana Vulture image pull policy                                                                               | `IfNotPresent`                  |
+| `vulture.image.pullSecrets`                     | Grafana Vulture image pull secrets                                                                              | `[]`                            |
+| `vulture.extraEnvVars`                          | Array with extra environment variables to add to vulture nodes                                                  | `[]`                            |
+| `vulture.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for vulture nodes                                          | `""`                            |
+| `vulture.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for vulture nodes                                             | `""`                            |
+| `vulture.command`                               | Override default container command (useful when using custom images)                                            | `[]`                            |
+| `vulture.args`                                  | Override default container args (useful when using custom images)                                               | `[]`                            |
+| `vulture.replicaCount`                          | Number of Vulture replicas to deploy                                                                            | `1`                             |
+| `vulture.livenessProbe.enabled`                 | Enable livenessProbe on Vulture nodes                                                                           | `true`                          |
+| `vulture.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                         | `10`                            |
+| `vulture.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                | `10`                            |
+| `vulture.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                               | `1`                             |
+| `vulture.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                             | `3`                             |
+| `vulture.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                             | `1`                             |
+| `vulture.readinessProbe.enabled`                | Enable readinessProbe on Vulture nodes                                                                          | `true`                          |
+| `vulture.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                        | `10`                            |
+| `vulture.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                               | `10`                            |
+| `vulture.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                              | `1`                             |
+| `vulture.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                            | `3`                             |
+| `vulture.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                            | `1`                             |
+| `vulture.startupProbe.enabled`                  | Enable startupProbe on Vulture containers                                                                       | `false`                         |
+| `vulture.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                          | `30`                            |
+| `vulture.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                 | `10`                            |
+| `vulture.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                | `1`                             |
+| `vulture.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                              | `15`                            |
+| `vulture.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                              | `1`                             |
+| `vulture.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                             | `{}`                            |
+| `vulture.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                            | `{}`                            |
+| `vulture.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                              | `{}`                            |
+| `vulture.resources.limits`                      | The resources limits for the Vulture containers                                                                 | `{}`                            |
+| `vulture.resources.requests`                    | The requested resources for the Vulture containers                                                              | `{}`                            |
+| `vulture.podSecurityContext.enabled`            | Enabled Vulture pods' Security Context                                                                          | `true`                          |
+| `vulture.podSecurityContext.fsGroup`            | Set Vulture pod's Security Context fsGroup                                                                      | `1001`                          |
+| `vulture.containerSecurityContext.enabled`      | Enabled Vulture containers' Security Context                                                                    | `true`                          |
+| `vulture.containerSecurityContext.runAsUser`    | Set Vulture containers' Security Context runAsUser                                                              | `1001`                          |
+| `vulture.containerSecurityContext.runAsNonRoot` | Set Vulture containers' Security Context runAsNonRoot                                                           | `true`                          |
+| `vulture.lifecycleHooks`                        | for the vulture container(s) to automate configuration before or after startup                                  | `{}`                            |
+| `vulture.hostAliases`                           | vulture pods host aliases                                                                                       | `[]`                            |
+| `vulture.podLabels`                             | Extra labels for vulture pods                                                                                   | `{}`                            |
+| `vulture.podAnnotations`                        | Annotations for vulture pods                                                                                    | `{}`                            |
+| `vulture.podAffinityPreset`                     | Pod affinity preset. Ignored if `vulture.affinity` is set. Allowed values: `soft` or `hard`                     | `""`                            |
+| `vulture.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `vulture.affinity` is set. Allowed values: `soft` or `hard`                | `soft`                          |
+| `vulture.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `vulture.affinity` is set. Allowed values: `soft` or `hard`               | `""`                            |
+| `vulture.nodeAffinityPreset.key`                | Node label key to match. Ignored if `vulture.affinity` is set                                                   | `""`                            |
+| `vulture.nodeAffinityPreset.values`             | Node label values to match. Ignored if `vulture.affinity` is set                                                | `[]`                            |
+| `vulture.containerPorts.http`                   | Vulture components HTTP container port                                                                          | `8080`                          |
+| `vulture.affinity`                              | Affinity for Vulture pods assignment                                                                            | `{}`                            |
+| `vulture.nodeSelector`                          | Node labels for Vulture pods assignment                                                                         | `{}`                            |
+| `vulture.tolerations`                           | Tolerations for Vulture pods assignment                                                                         | `[]`                            |
+| `vulture.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains                 | `[]`                            |
+| `vulture.priorityClassName`                     | Vulture pods' priorityClassName                                                                                 | `""`                            |
+| `vulture.schedulerName`                         | Kubernetes pod scheduler registry                                                                               | `""`                            |
+| `vulture.updateStrategy.type`                   | Vulture statefulset strategy type                                                                               | `RollingUpdate`                 |
+| `vulture.updateStrategy.rollingUpdate`          | Vulture statefulset rolling update configuration parameters                                                     | `{}`                            |
+| `vulture.extraVolumes`                          | Optionally specify extra list of additional volumes for the Vulture pod(s)                                      | `[]`                            |
+| `vulture.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Vulture container(s)                           | `[]`                            |
+| `vulture.sidecars`                              | Add additional sidecar containers to the Vulture pod(s)                                                         | `[]`                            |
+| `vulture.initContainers`                        | Add additional init containers to the Vulture pod(s)                                                            | `[]`                            |
 
 
 ### Vulture Traffic Exposure Parameters
@@ -734,17 +737,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Init Container Parameters
 
-| Name                                                   | Description                                                                                     | Value                   |
-| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | ----------------------- |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
-| `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
-| `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r0`       |
-| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
-| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
-| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
-| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
+| Name                                                   | Description                                                                                                   | Value                   |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
+| `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
+| `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r26`      |
+| `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
+| `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
+| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                                   | `{}`                    |
+| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                                | `{}`                    |
+| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                               | `0`                     |
 
 
 ### Other Parameters

@@ -1,0 +1,18 @@
+superUsers: User:admin,User:test_user
+containerPorts:
+  client: 9092
+  internal: 9093
+  external: 9094
+service:
+  ports:
+    client: 9092
+logPersistence:
+  mountPath: /opt/bitnami/kafka/logs
+persistence:
+  mountPath: /bitnami/kafka
+serviceAccount:
+  automountServiceAccountToken: true
+podSecurityContext:
+  fsGroup: 1002
+containerSecurityContext:
+  runAsUser: 1002

@@ -1,9 +1,7 @@
 {
   "env": {
-    "username": "user",
-    "password": "ComplicatedPassword123!4",
-    "smtpHost": "smtptesthost",
-    "smtpUser": "smtpUser"
+    "username": "opencartUser",
+    "password": "ComplicatedPassword123!4"
   },
   "hosts": {
     "vmware-opencart.my": "{{ TARGET_IP }}"

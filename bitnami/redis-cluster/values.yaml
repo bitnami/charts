@@ -62,6 +62,7 @@ diagnosticMode:
 ## @param image.registry Redis&reg; cluster image registry
 ## @param image.repository Redis&reg; cluster image repository
 ## @param image.tag Redis&reg; cluster image tag (immutable tags are recommended)
+## @param image.digest Redis&reg; cluster image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Redis&reg; cluster image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
 ## @param image.debug Enable image debug mode
@@ -72,7 +73,8 @@ image:
   ## Bitnami Redis&reg; image tag
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/redis#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 7.0.4-debian-11-r2
+  tag: 7.0.4-debian-11-r4
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -328,13 +330,15 @@ volumePermissions:
   ## @param volumePermissions.image.registry Init container volume-permissions image registry
   ## @param volumePermissions.image.repository Init container volume-permissions image repository
   ## @param volumePermissions.image.tag Init container volume-permissions image tag
+  ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r22
+    tag: 11-debian-11-r23
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -788,13 +792,15 @@ metrics:
   ## @param metrics.image.registry Redis&reg; exporter image registry
   ## @param metrics.image.repository Redis&reg; exporter image name
   ## @param metrics.image.tag Redis&reg; exporter image tag
+  ## @param metrics.image.digest Redis&reg; exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy Redis&reg; exporter image pull policy
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.43.0-debian-11-r17
+    tag: 1.43.0-debian-11-r19
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -949,12 +955,14 @@ sysctlImage:
   ## @param sysctlImage.registry sysctlImage Init container registry
   ## @param sysctlImage.repository sysctlImage Init container repository
   ## @param sysctlImage.tag sysctlImage Init container tag
+  ## @param sysctlImage.digest sysctlImage Init container digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param sysctlImage.pullPolicy sysctlImage Init container pull policy
   ## @param sysctlImage.pullSecrets Specify docker-registry secret names as an array
   ##
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: 11-debian-11-r22
+  tag: 11-debian-11-r23
+  digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.

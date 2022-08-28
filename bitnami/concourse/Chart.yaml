@@ -11,7 +11,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
-    version: 1.x.x
+    version: 2.x.x
 description: Concourse is an automation system written in Go. It is most commonly used for CI/CD, and is built to scale to any kind of automation pipeline, from simple to complex.
 engine: gotpl
 home: https://github.com/concourse/concourse
@@ -30,4 +30,4 @@ name: concourse
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/concourse
   - https://github.com/concourse/concourse
-version: 1.3.12
+version: 1.4.1
