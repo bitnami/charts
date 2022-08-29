@@ -1,5 +1,3 @@
-drupalUsername: test_user
-drupalPassword: ComplicatedPassword123!4
 service:
   ports:
     https: 444
@@ -11,6 +9,3 @@ hostAliases:
   - ip: 127.0.0.1
     hostnames:
       - status.testhost
-containerPorts:
-  http: 8081
-  https: 8444
