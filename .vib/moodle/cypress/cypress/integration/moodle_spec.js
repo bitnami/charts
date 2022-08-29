@@ -16,8 +16,8 @@ it('allows adding a new course with image', () => {
       force: true,
     }
   );
-  cy.contains('button', 'Upload this file').click();
-  cy.contains('input', 'Save and display').click();
+  cy.contains('Upload this file').click();
+  cy.contains('Save and display').click();
   cy.visit('/my/courses.php');
   cy.fixture('courses').then((courses) => {
     cy.contains(`${courses.newCourse.fullName}.${random}`);
