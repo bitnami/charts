@@ -353,6 +353,14 @@ configuration:
 ##
 containerPort: 4180
 
+## @param extraContainerPorts Array of additional container ports for the OAuth2 Proxy container
+## e.g:
+## extraContainerPorts:
+##   - name: metrics
+##     containerPort: 9100
+##
+extraContainerPorts: []
+
 ## @param replicaCount Number of OAuth2 Proxy replicas to deploy
 ##
 replicaCount: 1
