@@ -10,6 +10,10 @@ command:
       - uid={{ .Vars.containerSecurityContext.runAsUser }}
       - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
 file:
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
+    filetype: directory
+    mode: "3777"
   /etc/hosts:
     exists: true
     filetype: file
