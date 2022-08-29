@@ -187,7 +187,7 @@ spec:
             - name: ELASTICSEARCH_FS_SNAPSHOT_REPO_PATH
               value: {{ .Values.snapshotRepoPath | quote }}
             {{- end }}
-            {{- if .Values.data.heapSize }}
+            {{- if .Values.master.heapSize }}
             - name: ELASTICSEARCH_HEAP_SIZE
               value: {{ .Values.master.heapSize | quote }}
             {{- end }}
@@ -202,9 +202,9 @@ spec:
             {{- end }}
           {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret .Values.master.extraEnvVarsCM .Values.master.extraEnvVarsSecret }}
           envFrom:
-            {{- if .Values.master.extraEnvVarsCM }}
+            {{- if .Values.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ include "common.tplvalues.render" ( dict "value" .Values.master.extraEnvVarsCM "context" $ ) }}
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.extraEnvVarsCM "context" $ ) }}
             {{- end }}
             {{- if .Values.master.extraEnvVarsCM }}
             - configMapRef:
@@ -214,9 +214,9 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" ( dict "value" .Values.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
-            {{- if .Values.extraEnvVarsSecret }}
+            {{- if .Values.master.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ include "common.tplvalues.render" ( dict "value" .Values.extraEnvVarsSecret "context" $ ) }}
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.master.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
           {{- end }}
           ports:

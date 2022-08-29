@@ -205,15 +205,15 @@ minio: mode
 {{- end -}}
 
 {{/*
-Validate values of MinIO&reg; - total number of drives should be multiple of 4
+Validate values of MinIO&reg; - total number of drives should be greater than 4
 */}}
 {{- define "minio.validateValues.totalDrives" -}}
 {{- $replicaCount := int .Values.statefulset.replicaCount }}
 {{- $drivesPerNode := int .Values.statefulset.drivesPerNode }}
 {{- $totalDrives := mul $replicaCount $drivesPerNode }}
-{{- if and (eq .Values.mode "distributed") (or (not (eq (mod $totalDrives 4) 0)) (lt $totalDrives 4)) -}}
+{{- if and (eq .Values.mode "distributed") (lt $totalDrives 4) -}}
 minio: total drives
-    The total number of drives should be multiple of 4 to guarantee erasure coding!
+    The total number of drives should be greater than 4 to guarantee erasure coding!
     Please set a combination of nodes, and drives per node that match this condition.
     For instance (--set statefulset.replicaCount=2 --set statefulset.drivesPerNode=2)
 {{- end -}}

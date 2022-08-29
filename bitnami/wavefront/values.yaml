@@ -124,16 +124,18 @@ collector:
   ## @param collector.enabled Setup and enable the Wavefront collector to gather metrics
   ##
   enabled: true
-  ## @param collector.image.registry Wavefront collector Image registry
-  ## @param collector.image.repository Wavefront collector Image repository
-  ## @param collector.image.tag Wavefront collector Image tag (immutable tags are recommended)
-  ## @param collector.image.pullPolicy Image pull policy
+  ## @param collector.image.registry Wavefront collector image registry
+  ## @param collector.image.repository Wavefront collector image repository
+  ## @param collector.image.tag Wavefront collector image tag (immutable tags are recommended)
+  ## @param collector.image.digest Wavefront collector image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param collector.image.pullPolicy image pull policy
   ## @param collector.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/wavefront-kubernetes-collector
-    tag: 1.11.0-scratch-r3
+    tag: 1.11.0-scratch-r10
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -323,10 +325,13 @@ collector:
     ##       password = "PASSWORD"
     ##
     config: []
-  ## @param collector.controlplane.enabled Enable metrics for control plane dashboard (default false)
+  ## @param collector.controlplane.enabled Enable metrics for control plane dashboard
+  ## @param collector.controlplane.collection.interval The collection interval for the control plane
   ##
   controlplane:
-    enabled: false
+    enabled: true
+    collection:
+      interval: 120s
   ## @param collector.existingConfigmap Name of existing ConfigMap with collector configuration
   ##
   existingConfigmap: ""
@@ -520,13 +525,15 @@ proxy:
   ## @param proxy.image.registry Wavefront proxy image registry
   ## @param proxy.image.repository Wavefront proxy image repository
   ## @param proxy.image.tag Wavefront proxy image tag (immutable tags are recommended)
+  ## @param proxy.image.digest Wavefront proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param proxy.image.pullPolicy Wavefront proxy image pull policy
   ## @param proxy.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/wavefront-proxy
-    tag: 11.3.0-debian-11-r1
+    tag: 11.3.0-debian-11-r15
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

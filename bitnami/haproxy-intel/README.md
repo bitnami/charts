@@ -65,13 +65,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### HAProxy chart parameters
 
-| Name                        | Description                                        | Value                   |
-| --------------------------- | -------------------------------------------------- | ----------------------- |
-| `haproxy.image.registry`    | HAProxy image registry                             | `docker.io`             |
-| `haproxy.image.repository`  | HAProxy image repository                           | `bitnami/haproxy-intel` |
-| `haproxy.image.tag`         | HAProxy image tag (immutable tags are recommended) | `2.6.1-debian-11-r2`    |
-| `haproxy.image.pullPolicy`  | HAProxy image pull policy                          | `IfNotPresent`          |
-| `haproxy.image.pullSecrets` | HAProxy image pull secrets                         | `[]`                    |
+| Name                        | Description                                                                                             | Value                   |
+| --------------------------- | ------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `haproxy.image.registry`    | HAProxy image registry                                                                                  | `docker.io`             |
+| `haproxy.image.repository`  | HAProxy image repository                                                                                | `bitnami/haproxy-intel` |
+| `haproxy.image.tag`         | HAProxy image tag (immutable tags are recommended)                                                      | `2.6.4-debian-11-r0`    |
+| `haproxy.image.digest`      | HAProxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `haproxy.image.pullPolicy`  | HAProxy image pull policy                                                                               | `IfNotPresent`          |
+| `haproxy.image.pullSecrets` | HAProxy image pull secrets                                                                              | `[]`                    |
 
 
 HAProxy is installed as a subchart, meaning that the whole list of parameters is defined in [bitnami/haproxy](https://github.com/bitnami/charts/tree/master/bitnami/haproxy). Please, note that parameters from the subchart should be prefixed with `haproxy.` in this chart.
@@ -86,7 +87,7 @@ helm install my-release \
 
 The above command sets the HAProxy service type as LoadBalancer.
 
-You can use the `configuration` or `existingConfigmap` parameters to set your own configuration file. You can read more about configuration in the [container's readme](https://github.com/bitnami/bitnami-docker-haproxy-intel#configuration).
+You can use the `configuration` or `existingConfigmap` parameters to set your own configuration file. You can read more about configuration in the [container's readme](https://github.com/bitnami/containers/tree/main/bitnami/haproxy-intel#configuration).
 
 > NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
 

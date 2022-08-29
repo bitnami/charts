@@ -44,6 +44,7 @@ extraDeploy: []
 ## @param image.registry Moodle image registry
 ## @param image.repository Moodle image repository
 ## @param image.tag Moodle image tag (immutable tags are recommended)
+## @param image.digest Moodle image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Moodle image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
 ## @param image.debug Specify if debug logs should be enabled
@@ -51,7 +52,8 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/moodle
-  tag: 4.0.2-debian-11-r0
+  tag: 4.0.3-debian-11-r0
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -72,28 +74,28 @@ image:
 ##
 replicaCount: 1
 ## @param moodleSkipInstall Skip Moodle&trade; installation wizard. Useful for migrations and restoring from SQL dump
-## ref: https://github.com/bitnami/bitnami-docker-moodle#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/moodle#configuration
 ##
 moodleSkipInstall: false
 ## @param moodleSiteName Site name
-## ref: https://github.com/bitnami/bitnami-docker-moodle#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/moodle#configuration
 ##
 moodleSiteName: ""
 ## @param moodleUsername User of the application
-## ref: https://github.com/bitnami/bitnami-docker-moodle#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/moodle#configuration
 ##
 moodleUsername: user
 ## @param moodlePassword Application password
 ## Defaults to a random 10-character alphanumeric string if not set
-## ref: https://github.com/bitnami/bitnami-docker-moodle#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/moodle#configuration
 ##
 moodlePassword: ""
 ## @param moodleEmail Admin email
-## ref: https://github.com/bitnami/bitnami-docker-moodle#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/moodle#configuration
 ##
 moodleEmail: user@example.com
 ## @param allowEmptyPassword Allow DB blank passwords
-## ref: https://github.com/bitnami/bitnami-docker-moodle#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/moodle#environment-variables
 ##
 allowEmptyPassword: true
 ## @param command Override default container command (useful when using custom images)
@@ -157,7 +159,7 @@ topologySpreadConstraints: []
 ##
 existingSecret: ""
 ## SMTP mail delivery configuration
-## ref: https://github.com/bitnami/bitnami-docker-moodle/#smtp-configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/moodle/#smtp-configuration
 ## @param smtpHost SMTP host
 ## @param smtpPort SMTP port
 ## @param smtpUser SMTP user
@@ -528,7 +530,7 @@ ingress:
   ## - host: example.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: example-svc
   ##           port:
@@ -553,15 +555,15 @@ mariadb:
   ##
   auth:
     ## @param mariadb.auth.rootPassword Password for the MariaDB `root` user
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
+    ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb#setting-the-root-password-on-first-run
     ##
     rootPassword: ""
     ## @param mariadb.auth.database Database name to create
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
+    ## ref: https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-on-first-run
     ##
     database: bitnami_moodle
     ## @param mariadb.auth.username Database user to create
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+    ## ref: https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-user-on-first-run
     ##
     username: bn_moodle
     ## @param mariadb.auth.password Password for the database
@@ -633,13 +635,15 @@ volumePermissions:
   ## @param volumePermissions.image.registry Init container volume-permissions image registry
   ## @param volumePermissions.image.repository Init container volume-permissions image repository
   ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r14
+    tag: 11-debian-11-r27
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -677,13 +681,15 @@ metrics:
   ## @param metrics.image.registry Apache exporter image registry
   ## @param metrics.image.repository Apache exporter image repository
   ## @param metrics.image.tag Apache exporter image tag (immutable tags are recommended)
-  ## @param metrics.image.pullPolicy Image pull policy
+  ## @param metrics.image.digest Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param metrics.image.pullPolicy Apache exporter image pull policy
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.11.0-debian-11-r14
+    tag: 0.11.0-debian-11-r32
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -792,13 +798,15 @@ certificates:
   ## @param certificates.image.registry Container sidecar registry
   ## @param certificates.image.repository Container sidecar image repository
   ## @param certificates.image.tag Container sidecar image tag (immutable tags are recommended)
+  ## @param certificates.image.digest Container sidecar image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param certificates.image.pullPolicy Container sidecar image pull policy
   ## @param certificates.image.pullSecrets Container sidecar image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r14
+    tag: 11-debian-11-r27
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

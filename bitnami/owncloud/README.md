@@ -17,7 +17,7 @@ $ helm install my-release bitnami/owncloud
 
 ## Introduction
 
-This chart bootstraps an [ownCloud](https://github.com/bitnami/bitnami-docker-owncloud) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps an [ownCloud](https://github.com/bitnami/containers/tree/main/bitnami/owncloud) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the ownCloud application.
 
@@ -79,7 +79,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ----------------------- |
 | `image.registry`                        | ownCloud image registry                                                                                      | `docker.io`             |
 | `image.repository`                      | ownCloud image repository                                                                                    | `bitnami/owncloud`      |
-| `image.tag`                             | ownCloud Image tag (immutable tags are recommended)                                                          | `10.10.0-debian-11-r13` |
+| `image.tag`                             | ownCloud Image tag (immutable tags are recommended)                                                          | `10.10.0-debian-11-r25` |
+| `image.digest`                          | ownCloud image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag     | `""`                    |
 | `image.pullPolicy`                      | ownCloud image pull policy                                                                                   | `IfNotPresent`          |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                             | `[]`                    |
 | `image.debug`                           | Specify if debug logs should be enabled                                                                      | `false`                 |
@@ -202,7 +203,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                                        | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `11-debian-11-r13`      |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `11-debian-11-r23`      |
+| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                    |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
@@ -243,47 +245,49 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                                       | Description                                                          | Value                     |
-| ------------------------------------------ | -------------------------------------------------------------------- | ------------------------- |
-| `metrics.enabled`                          | Start a side-car prometheus exporter                                 | `false`                   |
-| `metrics.image.registry`                   | Apache exporter image registry                                       | `docker.io`               |
-| `metrics.image.repository`                 | Apache exporter image repository                                     | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)           | `0.11.0-debian-11-r13`    |
-| `metrics.image.pullPolicy`                 | Image pull policy                                                    | `IfNotPresent`            |
-| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                     | `[]`                      |
-| `metrics.resources`                        | Metrics exporter resource requests and limits                        | `{}`                      |
-| `metrics.service.type`                     |                                                                      | `ClusterIP`               |
-| `metrics.service.port`                     | Service Metrics port                                                 | `9117`                    |
-| `metrics.service.annotations`              | Annotations for the Prometheus exporter service                      | `{}`                      |
-| `metrics.service.clusterIP`                | Metrics service Cluster IP                                           | `""`                      |
-| `metrics.service.loadBalancerIP`           | Metrics service Load Balancer IP                                     | `""`                      |
-| `metrics.service.loadBalancerSourceRanges` | Metrics service Load Balancer sources                                | `[]`                      |
-| `metrics.service.externalTrafficPolicy`    | Metrics service external traffic policy                              | `Cluster`                 |
-| `metrics.service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP" | `None`                    |
-| `metrics.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                          | `{}`                      |
+| Name                                       | Description                                                                                                     | Value                     |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `metrics.enabled`                          | Start a side-car prometheus exporter                                                                            | `false`                   |
+| `metrics.image.registry`                   | Apache exporter image registry                                                                                  | `docker.io`               |
+| `metrics.image.repository`                 | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
+| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                                                      | `0.11.0-debian-11-r27`    |
+| `metrics.image.digest`                     | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
+| `metrics.image.pullPolicy`                 | Image pull policy                                                                                               | `IfNotPresent`            |
+| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                | `[]`                      |
+| `metrics.resources`                        | Metrics exporter resource requests and limits                                                                   | `{}`                      |
+| `metrics.service.type`                     |                                                                                                                 | `ClusterIP`               |
+| `metrics.service.port`                     | Service Metrics port                                                                                            | `9117`                    |
+| `metrics.service.annotations`              | Annotations for the Prometheus exporter service                                                                 | `{}`                      |
+| `metrics.service.clusterIP`                | Metrics service Cluster IP                                                                                      | `""`                      |
+| `metrics.service.loadBalancerIP`           | Metrics service Load Balancer IP                                                                                | `""`                      |
+| `metrics.service.loadBalancerSourceRanges` | Metrics service Load Balancer sources                                                                           | `[]`                      |
+| `metrics.service.externalTrafficPolicy`    | Metrics service external traffic policy                                                                         | `Cluster`                 |
+| `metrics.service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                            | `None`                    |
+| `metrics.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                     | `{}`                      |
 
 
 ### Certificate injection parameters
 
-| Name                                                 | Description                                                          | Value                                    |
-| ---------------------------------------------------- | -------------------------------------------------------------------- | ---------------------------------------- |
-| `certificates.customCertificate.certificateSecret`   | Secret containing the certificate and key to add                     | `""`                                     |
-| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                  | `""`                                     |
-| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                  | `""`                                     |
-| `certificates.customCertificate.certificateLocation` | Location in the container to store the certificate                   | `/etc/ssl/certs/ssl-cert-snakeoil.pem`   |
-| `certificates.customCertificate.keyLocation`         | Location in the container to store the private key                   | `/etc/ssl/private/ssl-cert-snakeoil.key` |
-| `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain             | `/etc/ssl/certs/mychain.pem`             |
-| `certificates.customCAs`                             | Defines a list of secrets to import into the container trust store   | `[]`                                     |
-| `certificates.command`                               | Override default container command (useful when using custom images) | `[]`                                     |
-| `certificates.args`                                  | Override default container args (useful when using custom images)    | `[]`                                     |
-| `certificates.extraEnvVars`                          | Container sidecar extra environment variables                        | `[]`                                     |
-| `certificates.extraEnvVarsCM`                        | ConfigMap with extra environment variables                           | `""`                                     |
-| `certificates.extraEnvVarsSecret`                    | Secret with extra environment variables                              | `""`                                     |
-| `certificates.image.registry`                        | Container sidecar registry                                           | `docker.io`                              |
-| `certificates.image.repository`                      | Container sidecar image repository                                   | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)         | `11-debian-11-r13`                       |
-| `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                  | `IfNotPresent`                           |
-| `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `[]`                                     |
+| Name                                                 | Description                                                                                                       | Value                                    |
+| ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| `certificates.customCertificate.certificateSecret`   | Secret containing the certificate and key to add                                                                  | `""`                                     |
+| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                                                               | `""`                                     |
+| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                                                               | `""`                                     |
+| `certificates.customCertificate.certificateLocation` | Location in the container to store the certificate                                                                | `/etc/ssl/certs/ssl-cert-snakeoil.pem`   |
+| `certificates.customCertificate.keyLocation`         | Location in the container to store the private key                                                                | `/etc/ssl/private/ssl-cert-snakeoil.key` |
+| `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain                                                          | `/etc/ssl/certs/mychain.pem`             |
+| `certificates.customCAs`                             | Defines a list of secrets to import into the container trust store                                                | `[]`                                     |
+| `certificates.command`                               | Override default container command (useful when using custom images)                                              | `[]`                                     |
+| `certificates.args`                                  | Override default container args (useful when using custom images)                                                 | `[]`                                     |
+| `certificates.extraEnvVars`                          | Container sidecar extra environment variables                                                                     | `[]`                                     |
+| `certificates.extraEnvVarsCM`                        | ConfigMap with extra environment variables                                                                        | `""`                                     |
+| `certificates.extraEnvVarsSecret`                    | Secret with extra environment variables                                                                           | `""`                                     |
+| `certificates.image.registry`                        | Container sidecar registry                                                                                        | `docker.io`                              |
+| `certificates.image.repository`                      | Container sidecar image repository                                                                                | `bitnami/bitnami-shell`                  |
+| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)                                                      | `11-debian-11-r23`                       |
+| `certificates.image.digest`                          | Container sidecar image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
+| `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                               | `IfNotPresent`                           |
+| `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                              | `[]`                                     |
 
 
 ### NetworkPolicy parameters
@@ -307,7 +311,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                   | `{}`    |
 
 
-The above parameters map to the env variables defined in [bitnami/owncloud](https://github.com/bitnami/bitnami-docker-owncloud). For more information please refer to the [bitnami/owncloud](https://github.com/bitnami/bitnami-docker-owncloud) image documentation.
+The above parameters map to the env variables defined in [bitnami/owncloud](https://github.com/bitnami/containers/tree/main/bitnami/owncloud). For more information please refer to the [bitnami/owncloud](https://github.com/bitnami/containers/tree/main/bitnami/owncloud) image documentation.
 
 > **Note**:
 >
@@ -377,7 +381,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ## Persistence
 
-The [Bitnami ownCloud](https://github.com/bitnami/bitnami-docker-owncloud) image stores the ownCloud data and configurations at the `/bitnami/owncloud` path of the container.
+The [Bitnami ownCloud](https://github.com/bitnami/containers/tree/main/bitnami/owncloud) image stores the ownCloud data and configurations at the `/bitnami/owncloud` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
@@ -467,7 +471,7 @@ This upgrade adapts the chart to the latest Bitnami good practices. Check the Pa
 
 **2. Migration of the ownCloud image to non-root**
 
-The [Bitnami ownCloud](https://github.com/bitnami/bitnami-docker-owncloud) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. Consequences:
+The [Bitnami ownCloud](https://github.com/bitnami/containers/tree/main/bitnami/owncloud) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. Consequences:
 
 - The HTTP/HTTPS ports exposed by the container are now `8080/8443` instead of `80/443`.
 - Backwards compatibility is not guaranteed. Uninstall & install the chart again to obtain the latest version.

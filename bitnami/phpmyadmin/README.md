@@ -17,7 +17,7 @@ $ helm install my-release bitnami/phpmyadmin
 
 ## Introduction
 
-This chart bootstraps a [phpMyAdmin](https://github.com/bitnami/bitnami-docker-phpmyadmin) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [phpMyAdmin](https://github.com/bitnami/containers/tree/main/bitnami/phpmyadmin) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 As a portable web application written primarily in PHP, phpMyAdmin has become one of the most popular MySQL administration tools, especially for web hosting services.
 
@@ -75,20 +75,21 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### phpMyAdmin parameters
 
-| Name                 | Description                                                                       | Value                 |
-| -------------------- | --------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`     | phpMyAdmin image registry                                                         | `docker.io`           |
-| `image.repository`   | phpMyAdmin image repository                                                       | `bitnami/phpmyadmin`  |
-| `image.tag`          | phpMyAdmin image tag (immutable tags are recommended)                             | `5.2.0-debian-11-r14` |
-| `image.pullPolicy`   | Image pull policy                                                                 | `IfNotPresent`        |
-| `image.pullSecrets`  | Specify docker-registry secret names as an array                                  | `[]`                  |
-| `image.debug`        | Enable phpmyadmin image debug mode                                                | `false`               |
-| `command`            | Override default container command (useful when using custom images)              | `[]`                  |
-| `args`               | Override default container args (useful when using custom images)                 | `[]`                  |
-| `lifecycleHooks`     | for the phpmyadmin container(s) to automate configuration before or after startup | `{}`                  |
-| `extraEnvVars`       | Extra environment variables to be set on PhpMyAdmin container                     | `[]`                  |
-| `extraEnvVarsCM`     | Name of a existing ConfigMap containing extra env vars                            | `""`                  |
-| `extraEnvVarsSecret` | Name of a existing Secret containing extra env vars                               | `""`                  |
+| Name                 | Description                                                                                                | Value                 |
+| -------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------- |
+| `image.registry`     | phpMyAdmin image registry                                                                                  | `docker.io`           |
+| `image.repository`   | phpMyAdmin image repository                                                                                | `bitnami/phpmyadmin`  |
+| `image.tag`          | phpMyAdmin image tag (immutable tags are recommended)                                                      | `5.2.0-debian-11-r26` |
+| `image.digest`       | phpMyAdmin image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
+| `image.pullPolicy`   | Image pull policy                                                                                          | `IfNotPresent`        |
+| `image.pullSecrets`  | Specify docker-registry secret names as an array                                                           | `[]`                  |
+| `image.debug`        | Enable phpmyadmin image debug mode                                                                         | `false`               |
+| `command`            | Override default container command (useful when using custom images)                                       | `[]`                  |
+| `args`               | Override default container args (useful when using custom images)                                          | `[]`                  |
+| `lifecycleHooks`     | for the phpmyadmin container(s) to automate configuration before or after startup                          | `{}`                  |
+| `extraEnvVars`       | Extra environment variables to be set on PhpMyAdmin container                                              | `[]`                  |
+| `extraEnvVarsCM`     | Name of a existing ConfigMap containing extra env vars                                                     | `""`                  |
+| `extraEnvVarsSecret` | Name of a existing Secret containing extra env vars                                                        | `""`                  |
 
 
 ### phpMyAdmin deployment parameters
@@ -205,34 +206,35 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                                       | Description                                                                       | Value                     |
-| ------------------------------------------ | --------------------------------------------------------------------------------- | ------------------------- |
-| `metrics.enabled`                          | Start a side-car prometheus exporter                                              | `false`                   |
-| `metrics.image.registry`                   | Apache exporter image registry                                                    | `docker.io`               |
-| `metrics.image.repository`                 | Apache exporter image repository                                                  | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                        | `0.11.0-debian-11-r14`    |
-| `metrics.image.pullPolicy`                 | Image pull policy                                                                 | `IfNotPresent`            |
-| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                  | `[]`                      |
-| `metrics.resources`                        | Metrics exporter resource requests and limits                                     | `{}`                      |
-| `metrics.service.type`                     | Prometheus metrics service type                                                   | `ClusterIP`               |
-| `metrics.service.port`                     | Prometheus metrics service port                                                   | `9117`                    |
-| `metrics.service.annotations`              | Annotations for Prometheus metrics service                                        | `{}`                      |
-| `metrics.service.clusterIP`                | phpmyadmin service Cluster IP                                                     | `""`                      |
-| `metrics.service.loadBalancerIP`           | Load Balancer IP if the Prometheus metrics server type is `LoadBalancer`          | `""`                      |
-| `metrics.service.loadBalancerSourceRanges` | phpmyadmin service Load Balancer sources                                          | `[]`                      |
-| `metrics.service.externalTrafficPolicy`    | phpmyadmin service external traffic policy                                        | `Cluster`                 |
-| `metrics.service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"              | `None`                    |
-| `metrics.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                       | `{}`                      |
-| `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator      | `false`                   |
-| `metrics.serviceMonitor.namespace`         | Specify the namespace in which the serviceMonitor resource will be created        | `""`                      |
-| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus. | `""`                      |
-| `metrics.serviceMonitor.interval`          | Specify the interval at which metrics should be scraped                           | `30s`                     |
-| `metrics.serviceMonitor.scrapeTimeout`     | Specify the timeout after which the scrape is ended                               | `""`                      |
-| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                | `[]`                      |
-| `metrics.serviceMonitor.metricRelabelings` | Specify Metric Relabelings to add to the scrape endpoint                          | `[]`                      |
-| `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                               | `{}`                      |
-| `metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                          | `false`                   |
-| `metrics.serviceMonitor.selector`          | ServiceMonitor selector labels                                                    | `{}`                      |
+| Name                                       | Description                                                                                                     | Value                     |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `metrics.enabled`                          | Start a side-car prometheus exporter                                                                            | `false`                   |
+| `metrics.image.registry`                   | Apache exporter image registry                                                                                  | `docker.io`               |
+| `metrics.image.repository`                 | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
+| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                                                      | `0.11.0-debian-11-r28`    |
+| `metrics.image.digest`                     | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
+| `metrics.image.pullPolicy`                 | Image pull policy                                                                                               | `IfNotPresent`            |
+| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                | `[]`                      |
+| `metrics.resources`                        | Metrics exporter resource requests and limits                                                                   | `{}`                      |
+| `metrics.service.type`                     | Prometheus metrics service type                                                                                 | `ClusterIP`               |
+| `metrics.service.port`                     | Prometheus metrics service port                                                                                 | `9117`                    |
+| `metrics.service.annotations`              | Annotations for Prometheus metrics service                                                                      | `{}`                      |
+| `metrics.service.clusterIP`                | phpmyadmin service Cluster IP                                                                                   | `""`                      |
+| `metrics.service.loadBalancerIP`           | Load Balancer IP if the Prometheus metrics server type is `LoadBalancer`                                        | `""`                      |
+| `metrics.service.loadBalancerSourceRanges` | phpmyadmin service Load Balancer sources                                                                        | `[]`                      |
+| `metrics.service.externalTrafficPolicy`    | phpmyadmin service external traffic policy                                                                      | `Cluster`                 |
+| `metrics.service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                            | `None`                    |
+| `metrics.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                     | `{}`                      |
+| `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                    | `false`                   |
+| `metrics.serviceMonitor.namespace`         | Specify the namespace in which the serviceMonitor resource will be created                                      | `""`                      |
+| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.                               | `""`                      |
+| `metrics.serviceMonitor.interval`          | Specify the interval at which metrics should be scraped                                                         | `30s`                     |
+| `metrics.serviceMonitor.scrapeTimeout`     | Specify the timeout after which the scrape is ended                                                             | `""`                      |
+| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                                              | `[]`                      |
+| `metrics.serviceMonitor.metricRelabelings` | Specify Metric Relabelings to add to the scrape endpoint                                                        | `[]`                      |
+| `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                                             | `{}`                      |
+| `metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                                                        | `false`                   |
+| `metrics.serviceMonitor.selector`          | ServiceMonitor selector labels                                                                                  | `{}`                      |
 
 
 ### NetworkPolicy parameters
@@ -256,7 +258,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                     | `{}`    |
 
 
-For more information please refer to the [bitnami/phpmyadmin](https://github.com/bitnami/bitnami-docker-Phpmyadmin) image documentation.
+For more information please refer to the [bitnami/phpmyadmin](https://github.com/bitnami/containers/tree/main/bitnami/phpmyadmin) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -496,7 +498,7 @@ mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
 
 ### To 6.0.0
 
-The [Bitnami phpMyAdmin](https://github.com/bitnami/bitnami-docker-phpmyadmin) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. You can revert this behavior by setting the parameters `containerSecurityContext.runAsUser` to `root`.
+The [Bitnami phpMyAdmin](https://github.com/bitnami/containers/tree/main/bitnami/phpmyadmin) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. You can revert this behavior by setting the parameters `containerSecurityContext.runAsUser` to `root`.
 Chart labels and Ingress configuration were also adapted to follow the Helm charts best practices.
 
 Consequences:

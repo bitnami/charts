@@ -94,4 +94,19 @@ rules:
     verbs: ['use']
     resourceNames: [{{ template "common.names.fullname" . }}]
   {{- end }}
+  - apiGroups:
+    - coordination.k8s.io
+    resourceNames:
+      - {{ .Values.electionID }}
+    resources:
+      - leases
+    verbs:
+      - get
+      - update
+  - apiGroups:
+    - coordination.k8s.io
+    resources:
+      - leases
+    verbs:
+      - create
 {{- end -}}

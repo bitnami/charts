@@ -69,6 +69,7 @@ diagnosticMode:
 ## @param image.registry MariaDB Galera image registry
 ## @param image.repository MariaDB Galera image repository
 ## @param image.tag MariaDB Galera image tag (immutable tags are recommended)
+## @param image.digest MariaDB Galera image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy MariaDB Galera image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
 ## @param image.debug Specify if debug logs should be enabled
@@ -76,7 +77,8 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mariadb-galera
-  tag: 10.6.8-debian-11-r9
+  tag: 10.6.9-debian-11-r1
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -238,7 +240,7 @@ rootUser:
   user: root
   ## @param rootUser.password Password for the admin user. Ignored if existing secret is provided.
   ## Password is ignored if existingSecret is specified.
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb-galera#setting-the-root-password-on-first-run
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb-galera#setting-the-root-password-on-first-run
   ##
   password: ""
   ## @param rootUser.forcePassword Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
@@ -264,14 +266,14 @@ customPasswordFiles: {}
 ##
 db:
   ## @param db.user Username of new user to create
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb-galera#creating-a-database-user-on-first-run
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb-galera#creating-a-database-user-on-first-run
   ##
   user: ""
   ## @param db.password Password for the new user. Ignored if existing secret is provided.
   ##
   password: ""
   ## @param db.name Name for new database to create
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb-galera#creating-a-database-on-first-run
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb-galera#creating-a-database-on-first-run
   ##
   name: my_database
   ## @param db.forcePassword Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
@@ -285,7 +287,7 @@ galera:
   ##
   name: galera
   ## Bootstraping options
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb-galera#bootstraping
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb-galera#bootstraping
   ##
   bootstrap:
     ## @param galera.bootstrap.forceBootstrap Option to force the boostraping from the indicated node in `galera.bootstarp.bootstrapFromNode`
@@ -302,7 +304,7 @@ galera:
   ##
   mariabackup:
     ## @param galera.mariabackup.user MariaBackup username
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb-galera#setting-up-a-multi-master-cluster
+    ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb-galera#setting-up-a-multi-master-cluster
     ##
     user: mariabackup
     ## @param galera.mariabackup.password MariaBackup password. Password is ignored if existingSecret is specified.
@@ -786,13 +788,15 @@ metrics:
   ## @param metrics.image.registry MariaDB Prometheus exporter image registry
   ## @param metrics.image.repository MariaDB Prometheus exporter image repository
   ## @param metrics.image.tag MariaDB Prometheus exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.digest MariaDB Prometheus exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy MariaDB Prometheus exporter image pull policy
   ## @param metrics.image.pullSecrets MariaDB Prometheus exporter image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.14.0-debian-11-r10
+    tag: 0.14.0-debian-11-r27
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

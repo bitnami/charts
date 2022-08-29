@@ -154,7 +154,7 @@ spec:
               containerPort: 8080
             {{- if or .Values.service.ports.https .Values.service.httpsPort }}
             - name: https
-              containerPort: 443
+              containerPort: 8443
             {{ end }}
           {{- if .Values.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.startupProbe "enabled") "context" $) | nindent 12 }}

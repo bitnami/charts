@@ -15,6 +15,14 @@ $ helm install my-release bitnami/<chart>
 
 ![Installing a chart](demo.gif)
 
+## Vulnerabilities scanner
+
+Each Helm chart contains one or more containers. Those containers use images provided by Bitnami through its test & release pipeline and whose source code can be found at [bitnami/containers](https://github.com/bitnami/containers).
+
+As part of the container releases, the images are scanned for vulnerabilities, [here](https://github.com/bitnami/containers#vulnerability-scan-in-bitnami-container-images) you can find more info about this topic.
+
+Since the container image is an immutable artifact that is already analyzed, as part of the Helm chart release process we are not looking for vulnerabilities in the containers but running different verification to ensure the Helm charts work as expected, see the testing strategy defined at [_TESTING.md_](https://github.com/bitnami/charts/blob/master/TESTING.md).
+
 ## Before you begin
 
 ### Prerequisites
@@ -50,7 +58,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 ```
 
 > **_NOTE:_** It is important to note that the above mentioned repo is truncated so it only contains entries for the releases produced in the last 6 months. In case you need a full index, you can use it from the [archive-full-index branch](https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami/index.yaml) in the bitnami/charts Github repository.
-> 
+>
 > This full index is updated every time the [truncated index file](https://raw.githubusercontent.com/bitnami/charts/index/bitnami/index.yaml) is updated. Take into account that this full index is under the [Github's rate limits](https://docs.github.com/en/developers/apps/building-github-apps/rate-limits-for-github-apps).
 >
 > You can find more information in the [Bitnami index FAQ](https://github.com/bitnami/charts/issues/10833) pinned issue.

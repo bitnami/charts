@@ -2,20 +2,6 @@
 import { random } from '../support/utils';
 import body from '../fixtures/documents.json';
 
-const NODE_NUMBER = Cypress.env('nodeNumber');
-
-it('can get cluster info', () => {
-  cy.request({
-    method: 'GET',
-    url: '/',
-    form: true,
-  }).then((response) => {
-    expect(response.status).to.eq(200);
-    expect(response.body.cluster_name).to.contain('elastic');
-    expect(response.body.tagline).to.contain('You Know, for Search');
-  });
-});
-
 it('can check cluster health', () => {
   cy.request({
     method: 'GET',
@@ -24,18 +10,7 @@ it('can check cluster health', () => {
   }).then((response) => {
     expect(response.status).to.eq(200);
     expect(response.body.status).to.contain('green');
-    expect(response.body.number_of_nodes).to.eq(NODE_NUMBER);
-  });
-});
-
-it('can get nodes stats', () => {
-  cy.request({
-    method: 'GET',
-    url: '/_nodes/stats',
-    form: true,
-  }).then((response) => {
-    expect(response.status).to.eq(200);
-    expect(response.body._nodes.successful).to.eq(NODE_NUMBER);
+    expect(response.body.number_of_nodes).to.eq(Cypress.env('nodeNumber'));
   });
 });
 

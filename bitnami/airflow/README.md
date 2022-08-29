@@ -7,7 +7,7 @@ Apache Airflow is a tool to express and execute workflows as directed acyclic gr
 [Overview of Apache Airflow](https://airflow.apache.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -16,7 +16,7 @@ $ helm install my-release bitnami/airflow
 
 ## Introduction
 
-This chart bootstraps an [Apache Airflow](https://github.com/bitnami/bitnami-docker-airflow) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps an [Apache Airflow](https://github.com/bitnami/containers/tree/main/bitnami/airflow) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -91,7 +91,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dags.existingConfigmap` | Name of an existing ConfigMap with all the DAGs files you want to load in Airflow                                                                                         | `""`                    |
 | `dags.image.registry`    | Init container load-dags image registry                                                                                                                                   | `docker.io`             |
 | `dags.image.repository`  | Init container load-dags image repository                                                                                                                                 | `bitnami/bitnami-shell` |
-| `dags.image.tag`         | Init container load-dags image tag (immutable tags are recommended)                                                                                                       | `11-debian-11-r13`      |
+| `dags.image.tag`         | Init container load-dags image tag (immutable tags are recommended)                                                                                                       | `11-debian-11-r28`      |
+| `dags.image.digest`      | Init container load-dags image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                  | `""`                    |
 | `dags.image.pullPolicy`  | Init container load-dags image pull policy                                                                                                                                | `IfNotPresent`          |
 | `dags.image.pullSecrets` | Init container load-dags image pull secrets                                                                                                                               | `[]`                    |
 | `extraEnvVars`           | Add extra environment variables for all the Airflow pods                                                                                                                  | `[]`                    |
@@ -110,7 +111,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------- |
 | `web.image.registry`                        | Airflow image registry                                                                                                   | `docker.io`          |
 | `web.image.repository`                      | Airflow image repository                                                                                                 | `bitnami/airflow`    |
-| `web.image.tag`                             | Airflow image tag (immutable tags are recommended)                                                                       | `2.3.3-debian-11-r0` |
+| `web.image.tag`                             | Airflow image tag (immutable tags are recommended)                                                                       | `2.3.4-debian-11-r1` |
+| `web.image.digest`                          | Airflow image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                  | `""`                 |
 | `web.image.pullPolicy`                      | Airflow image pull policy                                                                                                | `IfNotPresent`       |
 | `web.image.pullSecrets`                     | Airflow image pull secrets                                                                                               | `[]`                 |
 | `web.image.debug`                           | Enable image debug mode                                                                                                  | `false`              |
@@ -185,7 +187,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------------- |
 | `scheduler.image.registry`                        | Airflow Scheduler image registry                                                                                         | `docker.io`                 |
 | `scheduler.image.repository`                      | Airflow Scheduler image repository                                                                                       | `bitnami/airflow-scheduler` |
-| `scheduler.image.tag`                             | Airflow Scheduler image tag (immutable tags are recommended)                                                             | `2.3.3-debian-11-r0`        |
+| `scheduler.image.tag`                             | Airflow Scheduler image tag (immutable tags are recommended)                                                             | `2.3.4-debian-11-r0`        |
+| `scheduler.image.digest`                          | Airflow Schefuler image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag        | `""`                        |
 | `scheduler.image.pullPolicy`                      | Airflow Scheduler image pull policy                                                                                      | `IfNotPresent`              |
 | `scheduler.image.pullSecrets`                     | Airflow Scheduler image pull secrets                                                                                     | `[]`                        |
 | `scheduler.image.debug`                           | Enable image debug mode                                                                                                  | `false`                     |
@@ -239,7 +242,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
 | `worker.image.registry`                        | Airflow Worker image registry                                                                                            | `docker.io`              |
 | `worker.image.repository`                      | Airflow Worker image repository                                                                                          | `bitnami/airflow-worker` |
-| `worker.image.tag`                             | Airflow Worker image tag (immutable tags are recommended)                                                                | `2.3.3-debian-11-r0`     |
+| `worker.image.tag`                             | Airflow Worker image tag (immutable tags are recommended)                                                                | `2.3.4-debian-11-r0`     |
+| `worker.image.digest`                          | Airflow Worker image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag           | `""`                     |
 | `worker.image.pullPolicy`                      | Airflow Worker image pull policy                                                                                         | `IfNotPresent`           |
 | `worker.image.pullSecrets`                     | Airflow Worker image pull secrets                                                                                        | `[]`                     |
 | `worker.image.debug`                           | Enable image debug mode                                                                                                  | `false`                  |
@@ -315,32 +319,33 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Airflow git sync parameters
 
-| Name                           | Description                                                                            | Value                 |
-| ------------------------------ | -------------------------------------------------------------------------------------- | --------------------- |
-| `git.image.registry`           | Git image registry                                                                     | `docker.io`           |
-| `git.image.repository`         | Git image repository                                                                   | `bitnami/git`         |
-| `git.image.tag`                | Git image tag (immutable tags are recommended)                                         | `2.37.0-debian-11-r4` |
-| `git.image.pullPolicy`         | Git image pull policy                                                                  | `IfNotPresent`        |
-| `git.image.pullSecrets`        | Git image pull secrets                                                                 | `[]`                  |
-| `git.dags.enabled`             | Enable in order to download DAG files from git repositories.                           | `false`               |
-| `git.dags.repositories`        | Array of repositories from which to download DAG files                                 | `[]`                  |
-| `git.plugins.enabled`          | Enable in order to download Plugins files from git repositories.                       | `false`               |
-| `git.plugins.repositories`     | Array of repositories from which to download DAG files                                 | `[]`                  |
-| `git.clone.command`            | Override cmd                                                                           | `[]`                  |
-| `git.clone.args`               | Override args                                                                          | `[]`                  |
-| `git.clone.extraVolumeMounts`  | Add extra volume mounts                                                                | `[]`                  |
-| `git.clone.extraEnvVars`       | Add extra environment variables                                                        | `[]`                  |
-| `git.clone.extraEnvVarsCM`     | ConfigMap with extra environment variables                                             | `""`                  |
-| `git.clone.extraEnvVarsSecret` | Secret with extra environment variables                                                | `""`                  |
-| `git.clone.resources`          | Clone init container resource requests and limits                                      | `{}`                  |
-| `git.sync.interval`            | Interval in seconds to pull the git repository containing the plugins and/or DAG files | `60`                  |
-| `git.sync.command`             | Override cmd                                                                           | `[]`                  |
-| `git.sync.args`                | Override args                                                                          | `[]`                  |
-| `git.sync.extraVolumeMounts`   | Add extra volume mounts                                                                | `[]`                  |
-| `git.sync.extraEnvVars`        | Add extra environment variables                                                        | `[]`                  |
-| `git.sync.extraEnvVarsCM`      | ConfigMap with extra environment variables                                             | `""`                  |
-| `git.sync.extraEnvVarsSecret`  | Secret with extra environment variables                                                | `""`                  |
-| `git.sync.resources`           | Sync sidecar container resource requests and limits                                    | `{}`                  |
+| Name                           | Description                                                                                         | Value                 |
+| ------------------------------ | --------------------------------------------------------------------------------------------------- | --------------------- |
+| `git.image.registry`           | Git image registry                                                                                  | `docker.io`           |
+| `git.image.repository`         | Git image repository                                                                                | `bitnami/git`         |
+| `git.image.tag`                | Git image tag (immutable tags are recommended)                                                      | `2.37.2-debian-11-r4` |
+| `git.image.digest`             | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
+| `git.image.pullPolicy`         | Git image pull policy                                                                               | `IfNotPresent`        |
+| `git.image.pullSecrets`        | Git image pull secrets                                                                              | `[]`                  |
+| `git.dags.enabled`             | Enable in order to download DAG files from git repositories.                                        | `false`               |
+| `git.dags.repositories`        | Array of repositories from which to download DAG files                                              | `[]`                  |
+| `git.plugins.enabled`          | Enable in order to download Plugins files from git repositories.                                    | `false`               |
+| `git.plugins.repositories`     | Array of repositories from which to download DAG files                                              | `[]`                  |
+| `git.clone.command`            | Override cmd                                                                                        | `[]`                  |
+| `git.clone.args`               | Override args                                                                                       | `[]`                  |
+| `git.clone.extraVolumeMounts`  | Add extra volume mounts                                                                             | `[]`                  |
+| `git.clone.extraEnvVars`       | Add extra environment variables                                                                     | `[]`                  |
+| `git.clone.extraEnvVarsCM`     | ConfigMap with extra environment variables                                                          | `""`                  |
+| `git.clone.extraEnvVarsSecret` | Secret with extra environment variables                                                             | `""`                  |
+| `git.clone.resources`          | Clone init container resource requests and limits                                                   | `{}`                  |
+| `git.sync.interval`            | Interval in seconds to pull the git repository containing the plugins and/or DAG files              | `60`                  |
+| `git.sync.command`             | Override cmd                                                                                        | `[]`                  |
+| `git.sync.args`                | Override args                                                                                       | `[]`                  |
+| `git.sync.extraVolumeMounts`   | Add extra volume mounts                                                                             | `[]`                  |
+| `git.sync.extraEnvVars`        | Add extra environment variables                                                                     | `[]`                  |
+| `git.sync.extraEnvVarsCM`      | ConfigMap with extra environment variables                                                          | `""`                  |
+| `git.sync.extraEnvVarsSecret`  | Secret with extra environment variables                                                             | `""`                  |
+| `git.sync.resources`           | Sync sidecar container resource requests and limits                                                 | `{}`                  |
 
 
 ### Airflow ldap parameters
@@ -409,52 +414,53 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Airflow metrics parameters
 
-| Name                                            | Description                                                                                         | Value                        |
-| ----------------------------------------------- | --------------------------------------------------------------------------------------------------- | ---------------------------- |
-| `metrics.enabled`                               | Whether or not to create a standalone Airflow exporter to expose Airflow metrics                    | `false`                      |
-| `metrics.image.registry`                        | Airflow exporter image registry                                                                     | `docker.io`                  |
-| `metrics.image.repository`                      | Airflow exporter image repository                                                                   | `bitnami/airflow-exporter`   |
-| `metrics.image.tag`                             | Airflow exporter image tag (immutable tags are recommended)                                         | `0.20220314.0-debian-11-r13` |
-| `metrics.image.pullPolicy`                      | Airflow exporter image pull policy                                                                  | `IfNotPresent`               |
-| `metrics.image.pullSecrets`                     | Airflow exporter image pull secrets                                                                 | `[]`                         |
-| `metrics.extraEnvVars`                          | Array with extra environment variables to add Airflow exporter pods                                 | `[]`                         |
-| `metrics.extraEnvVarsCM`                        | ConfigMap containing extra environment variables for Airflow exporter pods                          | `""`                         |
-| `metrics.extraEnvVarsSecret`                    | Secret containing extra environment variables (in case of sensitive data) for Airflow exporter pods | `""`                         |
-| `metrics.containerPorts.http`                   | Airflow exporter metrics container port                                                             | `9112`                       |
-| `metrics.resources.limits`                      | The resources limits for the container                                                              | `{}`                         |
-| `metrics.resources.requests`                    | The requested resources for the container                                                           | `{}`                         |
-| `metrics.podSecurityContext.enabled`            | Enable security context for the pods                                                                | `true`                       |
-| `metrics.podSecurityContext.fsGroup`            | Set Airflow exporter pod's Security Context fsGroup                                                 | `1001`                       |
-| `metrics.containerSecurityContext.enabled`      | Enable Airflow exporter containers' Security Context                                                | `true`                       |
-| `metrics.containerSecurityContext.runAsUser`    | Set Airflow exporter containers' Security Context runAsUser                                         | `1001`                       |
-| `metrics.containerSecurityContext.runAsNonRoot` | Set Airflow exporter containers' Security Context runAsNonRoot                                      | `true`                       |
-| `metrics.lifecycleHooks`                        | for the Airflow exporter container(s) to automate configuration before or after startup             | `{}`                         |
-| `metrics.hostAliases`                           | Airflow exporter pods host aliases                                                                  | `[]`                         |
-| `metrics.podLabels`                             | Extra labels for Airflow exporter pods                                                              | `{}`                         |
-| `metrics.podAnnotations`                        | Extra annotations for Airflow exporter pods                                                         | `{}`                         |
-| `metrics.podAffinityPreset`                     | Pod affinity preset. Ignored if `metrics.affinity` is set. Allowed values: `soft` or `hard`         | `""`                         |
-| `metrics.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `metrics.affinity` is set. Allowed values: `soft` or `hard`    | `soft`                       |
-| `metrics.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `metrics.affinity` is set. Allowed values: `soft` or `hard`   | `""`                         |
-| `metrics.nodeAffinityPreset.key`                | Node label key to match Ignored if `metrics.affinity` is set.                                       | `""`                         |
-| `metrics.nodeAffinityPreset.values`             | Node label values to match. Ignored if `metrics.affinity` is set.                                   | `[]`                         |
-| `metrics.affinity`                              | Affinity for pod assignment                                                                         | `{}`                         |
-| `metrics.nodeSelector`                          | Node labels for pod assignment                                                                      | `{}`                         |
-| `metrics.tolerations`                           | Tolerations for pod assignment                                                                      | `[]`                         |
-| `metrics.schedulerName`                         | Name of the k8s scheduler (other than default) for Airflow exporter                                 | `""`                         |
-| `metrics.service.ports.http`                    | Airflow exporter metrics service port                                                               | `9112`                       |
-| `metrics.service.clusterIP`                     | Static clusterIP or None for headless services                                                      | `""`                         |
-| `metrics.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                    | `None`                       |
-| `metrics.service.annotations`                   | Annotations for the Airflow exporter service                                                        | `{}`                         |
-| `metrics.serviceMonitor.enabled`                | if `true`, creates a Prometheus Operator ServiceMonitor (requires `metrics.enabled` to be `true`)   | `false`                      |
-| `metrics.serviceMonitor.namespace`              | Namespace in which Prometheus is running                                                            | `""`                         |
-| `metrics.serviceMonitor.interval`               | Interval at which metrics should be scraped                                                         | `""`                         |
-| `metrics.serviceMonitor.scrapeTimeout`          | Timeout after which the scrape is ended                                                             | `""`                         |
-| `metrics.serviceMonitor.labels`                 | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus               | `{}`                         |
-| `metrics.serviceMonitor.selector`               | Prometheus instance selector labels                                                                 | `{}`                         |
-| `metrics.serviceMonitor.relabelings`            | RelabelConfigs to apply to samples before scraping                                                  | `[]`                         |
-| `metrics.serviceMonitor.metricRelabelings`      | MetricRelabelConfigs to apply to samples before ingestion                                           | `[]`                         |
-| `metrics.serviceMonitor.honorLabels`            | Specify honorLabels parameter to add the scrape endpoint                                            | `false`                      |
-| `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in prometheus.                   | `""`                         |
+| Name                                            | Description                                                                                                      | Value                        |
+| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| `metrics.enabled`                               | Whether or not to create a standalone Airflow exporter to expose Airflow metrics                                 | `false`                      |
+| `metrics.image.registry`                        | Airflow exporter image registry                                                                                  | `docker.io`                  |
+| `metrics.image.repository`                      | Airflow exporter image repository                                                                                | `bitnami/airflow-exporter`   |
+| `metrics.image.tag`                             | Airflow exporter image tag (immutable tags are recommended)                                                      | `0.20220314.0-debian-11-r31` |
+| `metrics.image.digest`                          | Airflow exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
+| `metrics.image.pullPolicy`                      | Airflow exporter image pull policy                                                                               | `IfNotPresent`               |
+| `metrics.image.pullSecrets`                     | Airflow exporter image pull secrets                                                                              | `[]`                         |
+| `metrics.extraEnvVars`                          | Array with extra environment variables to add Airflow exporter pods                                              | `[]`                         |
+| `metrics.extraEnvVarsCM`                        | ConfigMap containing extra environment variables for Airflow exporter pods                                       | `""`                         |
+| `metrics.extraEnvVarsSecret`                    | Secret containing extra environment variables (in case of sensitive data) for Airflow exporter pods              | `""`                         |
+| `metrics.containerPorts.http`                   | Airflow exporter metrics container port                                                                          | `9112`                       |
+| `metrics.resources.limits`                      | The resources limits for the container                                                                           | `{}`                         |
+| `metrics.resources.requests`                    | The requested resources for the container                                                                        | `{}`                         |
+| `metrics.podSecurityContext.enabled`            | Enable security context for the pods                                                                             | `true`                       |
+| `metrics.podSecurityContext.fsGroup`            | Set Airflow exporter pod's Security Context fsGroup                                                              | `1001`                       |
+| `metrics.containerSecurityContext.enabled`      | Enable Airflow exporter containers' Security Context                                                             | `true`                       |
+| `metrics.containerSecurityContext.runAsUser`    | Set Airflow exporter containers' Security Context runAsUser                                                      | `1001`                       |
+| `metrics.containerSecurityContext.runAsNonRoot` | Set Airflow exporter containers' Security Context runAsNonRoot                                                   | `true`                       |
+| `metrics.lifecycleHooks`                        | for the Airflow exporter container(s) to automate configuration before or after startup                          | `{}`                         |
+| `metrics.hostAliases`                           | Airflow exporter pods host aliases                                                                               | `[]`                         |
+| `metrics.podLabels`                             | Extra labels for Airflow exporter pods                                                                           | `{}`                         |
+| `metrics.podAnnotations`                        | Extra annotations for Airflow exporter pods                                                                      | `{}`                         |
+| `metrics.podAffinityPreset`                     | Pod affinity preset. Ignored if `metrics.affinity` is set. Allowed values: `soft` or `hard`                      | `""`                         |
+| `metrics.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `metrics.affinity` is set. Allowed values: `soft` or `hard`                 | `soft`                       |
+| `metrics.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `metrics.affinity` is set. Allowed values: `soft` or `hard`                | `""`                         |
+| `metrics.nodeAffinityPreset.key`                | Node label key to match Ignored if `metrics.affinity` is set.                                                    | `""`                         |
+| `metrics.nodeAffinityPreset.values`             | Node label values to match. Ignored if `metrics.affinity` is set.                                                | `[]`                         |
+| `metrics.affinity`                              | Affinity for pod assignment                                                                                      | `{}`                         |
+| `metrics.nodeSelector`                          | Node labels for pod assignment                                                                                   | `{}`                         |
+| `metrics.tolerations`                           | Tolerations for pod assignment                                                                                   | `[]`                         |
+| `metrics.schedulerName`                         | Name of the k8s scheduler (other than default) for Airflow exporter                                              | `""`                         |
+| `metrics.service.ports.http`                    | Airflow exporter metrics service port                                                                            | `9112`                       |
+| `metrics.service.clusterIP`                     | Static clusterIP or None for headless services                                                                   | `""`                         |
+| `metrics.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                 | `None`                       |
+| `metrics.service.annotations`                   | Annotations for the Airflow exporter service                                                                     | `{}`                         |
+| `metrics.serviceMonitor.enabled`                | if `true`, creates a Prometheus Operator ServiceMonitor (requires `metrics.enabled` to be `true`)                | `false`                      |
+| `metrics.serviceMonitor.namespace`              | Namespace in which Prometheus is running                                                                         | `""`                         |
+| `metrics.serviceMonitor.interval`               | Interval at which metrics should be scraped                                                                      | `""`                         |
+| `metrics.serviceMonitor.scrapeTimeout`          | Timeout after which the scrape is ended                                                                          | `""`                         |
+| `metrics.serviceMonitor.labels`                 | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                            | `{}`                         |
+| `metrics.serviceMonitor.selector`               | Prometheus instance selector labels                                                                              | `{}`                         |
+| `metrics.serviceMonitor.relabelings`            | RelabelConfigs to apply to samples before scraping                                                               | `[]`                         |
+| `metrics.serviceMonitor.metricRelabelings`      | MetricRelabelConfigs to apply to samples before ingestion                                                        | `[]`                         |
+| `metrics.serviceMonitor.honorLabels`            | Specify honorLabels parameter to add the scrape endpoint                                                         | `false`                      |
+| `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in prometheus.                                | `""`                         |
 
 
 ### Airflow database parameters
@@ -611,7 +617,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ### Install extra python packages
 
-This chart allows you to mount volumes using `extraVolumes` and `extraVolumeMounts` in all 3 airflow components (web, scheduler, worker). Mounting a requirements.txt using these options to `/bitnami/python/requirements.txt` will execute `pip install -r /bitnami/python/requirements.txt` on container start. [Reference](https://github.com/bitnami/bitnami-docker-airflow/blob/cafc8eab1efddb5efda5a00cc861ef10f35f1d49/1/debian-10/rootfs/run.sh#L14)
+This chart allows you to mount volumes using `extraVolumes` and `extraVolumeMounts` in all 3 airflow components (web, scheduler, worker). Mounting a requirements.txt using these options to `/bitnami/python/requirements.txt` will execute `pip install -r /bitnami/python/requirements.txt` on container start.
 
 ### Enabling network policies
 

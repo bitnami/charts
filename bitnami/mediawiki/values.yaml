@@ -47,6 +47,7 @@ extraDeploy: []
 ## @param image.registry MediaWiki image registry
 ## @param image.repository MediaWiki image repository
 ## @param image.tag MediaWiki image tag (immutable tags are recommended)
+## @param image.digest MediaWiki image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
 ## @param image.debug Enable MediaWiki image debug mode
@@ -54,7 +55,8 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/mediawiki
-  tag: 1.38.2-debian-11-r2
+  tag: 1.38.2-debian-11-r15
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -81,12 +83,12 @@ hostAliases:
     hostnames:
       - "status.localhost"
 ## @param mediawikiUser User of the application
-## ref: https://github.com/bitnami/bitnami-docker-mediawiki#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/mediawiki#environment-variables
 ##
 mediawikiUser: user
 ## @param mediawikiPassword Application password
 ## Defaults to a random 10-character alphanumeric string if not set
-## ref: https://github.com/bitnami/bitnami-docker-mediawiki#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/mediawiki#environment-variables
 ##
 mediawikiPassword: ""
 ## @param mediawikiSecret Existing `Secret` containing the password for the `mediawikiUser` user; must contain the key `mediawiki-password` and optional key `smtp-password`
@@ -94,23 +96,23 @@ mediawikiPassword: ""
 ##
 mediawikiSecret: ""
 ## @param mediawikiEmail Admin email
-## ref: https://github.com/bitnami/bitnami-docker-mediawiki#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/mediawiki#environment-variables
 ##
 mediawikiEmail: user@example.com
 ## @param mediawikiName Name for the wiki
-## ref: https://github.com/bitnami/bitnami-docker-mediawiki#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/mediawiki#environment-variables
 ##
 mediawikiName: My Wiki
 ## @param mediawikiHost Mediawiki host to create application URLs
-## ref: https://github.com/bitnami/bitnami-docker-mediawiki#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/mediawiki#configuration
 ##
 mediawikiHost: ""
 ## @param allowEmptyPassword Allow DB blank passwords
-## ref: https://github.com/bitnami/bitnami-docker-mediawiki#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/mediawiki#environment-variables
 ##
 allowEmptyPassword: "yes"
 ## SMTP mail delivery configuration
-## ref: https://github.com/bitnami/bitnami-docker-mediawiki#smtp-configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/mediawiki#smtp-configuration
 ## @param smtpHost SMTP host
 ## @param smtpPort SMTP port
 ## @param smtpHostID SMTP host ID
@@ -550,7 +552,7 @@ ingress:
   ## - host: example.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: example-svc
   ##           port:
@@ -575,15 +577,15 @@ mariadb:
   ##
   auth:
     ## @param mariadb.auth.rootPassword Password for the MariaDB `root` user
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
+    ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb#setting-the-root-password-on-first-run
     ##
     rootPassword: ""
     ## @param mariadb.auth.database Database name to create
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
+    ## ref: https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-on-first-run
     ##
     database: bitnami_mediawiki
     ## @param mariadb.auth.username Database user to create
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+    ## ref: https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-user-on-first-run
     ##
     username: bn_mediawiki
     ## @param mariadb.auth.password Password for the database
@@ -653,13 +655,15 @@ metrics:
   ## @param metrics.image.registry Apache exporter image registry
   ## @param metrics.image.repository Apache exporter image repository
   ## @param metrics.image.tag Apache exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.digest Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy Image pull policy
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.11.0-debian-11-r13
+    tag: 0.11.0-debian-11-r27
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

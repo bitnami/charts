@@ -82,12 +82,18 @@ data:
         {{- end }}
       {{- end }}
 
+      {{- if .Values.collector.controlplane.enabled }}
+      kubernetes_control_plane_source:
+        collection:
+{{ tpl (toYaml .Values.collector.controlplane.collection) . | indent 10 }}
+      {{ end }}
+
       {{- if .Values.collector.hostOSMetrics }}
       telegraf_sources:
         - plugins: []
       {{- end }}
 
-      {{- if or .Values.collector.apiServerMetrics .Values.collector.controlplane.enabled }}
+      {{- if or .Values.collector.apiServerMetrics }}
       # Kubernetes API Server
       prometheus_sources:
         - url: https://kubernetes.default.svc.cluster.local:443/metrics
@@ -103,15 +109,6 @@ data:
               - 'kube.apiserver.apiserver.*'
               - 'kube.apiserver.etcd.*'
               - 'kube.apiserver.process.*'
-              {{- end }}
-              {{- if .Values.collector.controlplane.enabled }}
-              - 'kube.apiserver.etcd.request.duration.seconds.bucket'
-              - 'kube.apiserver.etcd.object.counts.gauge'
-              - 'kube.apiserver.etcd.db.total.size.in.bytes.gauge'
-              - 'kube.apiserver.apiserver.request.duration.seconds.bucket'
-              - 'kube.apiserver.apiserver.request.total.counter'
-              - 'kube.apiserver.workqueue.adds.total.counter'
-              - 'kube.apiserver.workqueue.queue.duration.seconds.bucket'
               {{- end }}
       {{- end }}
 
@@ -178,10 +175,6 @@ data:
               - 'kube.coredns.coredns.dns.response.rcode.count.total.counter'
               - 'kube.coredns.coredns.dns.response.size.bytes'
               - 'kube.coredns.process.*'
-              {{- if .Values.collector.controlplane.enabled }}
-              - 'kube.coredns.coredns.dns.request.duration.seconds.bucket'
-              - 'kube.coredns.coredns.dns.responses.total.counter'
-              {{- end }}
 
       {{- if .Values.collector.discovery.config }}
       # user supplied discovery config

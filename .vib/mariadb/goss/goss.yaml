@@ -1,13 +1,5 @@
-port:
-  tcp6:3306:
-    listening: true
-    ip:
-    - '::'
-process:
-  mysqld:
-    running: true
-file:   
-  {{ printf "/bitnami/mariadb/data/%s" .Env.MARIADB_DATABASE }}:
+file:
+  /bitnami/mariadb/data/{{ .Vars.auth.database }}:
     mode: "2700"
     filetype: directory
     exists: true
@@ -20,15 +12,14 @@ file:
       "socket=/opt/bitnami/mariadb/tmp/mysql.sock"]
     exists: true
 command:
-  user-id-test:
-    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
-    exit-status: 0
-    stdout: []
-    stderr: []
-  create-table-test:
-    exec: mariadb -h localhost -u root -p"$MARIADB_ROOT_PASSWORD" "$MARIADB_DATABASE" -e 'DROP TABLE IF EXISTS TEST; create table TEST( test_id int auto_increment, test_value int, primary key(test_id)); INSERT INTO TEST (TEST_VALUE) VALUES (1989);SELECT * FROM TEST'
+  create-table-root-test:
+    exec: mariadb -h mariadb-primary -u root -P {{ .Vars.primary.service.ports.mysql }} -p'{{ .Vars.auth.rootPassword }}' {{ .Vars.auth.database }} -e 'DROP TABLE IF EXISTS TEST; create table TEST(test_id int auto_increment, test_value int, primary key(test_id)); INSERT INTO TEST (TEST_VALUE) VALUES (1989);SELECT * FROM TEST'
     exit-status: 0
     stdout:
     - 1989
-    stderr: []
+  replication-test:
+    exec: mariadb -h mariadb-primary -u {{ .Vars.auth.username }} -P {{ .Vars.primary.service.ports.mysql }} -p'{{ .Vars.auth.password }}' {{ .Vars.auth.database }} -e 'DROP TABLE IF EXISTS TEST_REP; create table TEST_REP(test_id int auto_increment, test_value varchar(4), primary key(test_id)); INSERT INTO TEST_REP (TEST_VALUE) VALUES (2022)' && sleep 2 && mariadb -h mariadb-secondary -u {{ .Vars.auth.username }} -P {{ .Vars.secondary.service.ports.mysql }} -p'{{ .Vars.auth.password }}' {{ .Vars.auth.database }} -e 'SELECT * FROM TEST_REP'
+    exit-status: 0
+    stdout:
+    - 2022
     timeout: 9000

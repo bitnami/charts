@@ -1,4 +1,4 @@
-const COMMAND_DELAY = 500;
+const COMMAND_DELAY = 2000;
 
 for (const command of ['click']) {
   Cypress.Commands.overwrite(command, (originalFn, ...args) => {
@@ -16,9 +16,8 @@ Cypress.Commands.add(
   'login',
   (username = Cypress.env('username'), password = Cypress.env('password')) => {
     cy.visit('login?do=login&sectok=');
-    cy.get('#login');
-    cy.get('input[name="u"]').type(username);
-    cy.get('input[name="p"]').type(password);
+    cy.get('[name="u"]').type(username);
+    cy.get('[name="p"]').type(password);
     cy.contains('button', 'Log In').click();
   }
 );

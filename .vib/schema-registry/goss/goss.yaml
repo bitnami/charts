@@ -1,0 +1,12 @@
+file:
+  /opt/bitnami/schema-registry/etc/schema-registry/schema-registry.properties:
+    mode: "0664"
+    filetype: file
+    exists: true
+    contains:
+      - "listeners = {{ .Vars.listeners }}"
+      - "avro.compatibility.level = {{ .Vars.avroCompatibilityLevel }}"
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    mode: "3777"
+    filetype: directory
+    exists: true

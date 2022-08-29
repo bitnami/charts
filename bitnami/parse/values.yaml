@@ -68,6 +68,7 @@ server:
   ## @param server.image.registry Parse image registry
   ## @param server.image.repository Parse image repository
   ## @param server.image.tag Parse image tag (immutable tags are recommended)
+  ## @param server.image.digest Parse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param server.image.pullPolicy Image pull policy
   ## @param server.image.pullSecrets Specify docker-registry secret names as an array
   ## @param server.image.debug Enable image debug mode
@@ -75,7 +76,8 @@ server:
   image:
     registry: docker.io
     repository: bitnami/parse
-    tag: 5.2.4-debian-11-r2
+    tag: 5.2.4-debian-11-r14
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -132,20 +134,20 @@ server:
   ##
   args: []
   ## @param server.containerPorts.http Parse server port
-  ## ref: https://github.com/bitnami/bitnami-docker-parse#configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/parse#configuration
   ##
   containerPorts:
     http: 1337
   ## @param server.mountPath Parse server API mount path
-  ## ref: https://github.com/bitnami/bitnami-docker-parse#configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/parse#configuration
   ##
   mountPath: /parse
   ## @param server.appId Parse server App ID
-  ## ref: https://github.com/bitnami/bitnami-docker-parse#configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/parse#configuration
   ##
   appId: myappID
   ## @param server.masterKey Parse server Master Key
-  ## ref: https://github.com/bitnami/bitnami-docker-parse#configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/parse#configuration
   ##
   masterKey: ""
   ## @param server.extraEnvVars An array to add extra env vars
@@ -190,7 +192,7 @@ server:
   initContainers: []
 
   ## @param server.enableCloudCode Enable Parse Cloud Code
-  ## ref: https://github.com/bitnami/bitnami-docker-parse#how-to-deploy-your-cloud-functions-with-parse-cloud-code
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/parse#how-to-deploy-your-cloud-functions-with-parse-cloud-code
   ##
   enableCloudCode: false
   ## @param server.cloudCodeScripts Cloud Code scripts
@@ -401,14 +403,16 @@ dashboard:
   ## @param dashboard.image.registry Dashboard image registry
   ## @param dashboard.image.repository Dashboard image repository
   ## @param dashboard.image.tag Dashboard image tag (immutable tags are recommended)
-  ## @param dashboard.image.pullPolicy Image pull policy
+  ## @param dashboard.image.digest Dashboard image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param dashboard.image.pullPolicy image pull policy
   ## @param dashboard.image.pullSecrets Specify docker-registry secret names as an array
   ## @param dashboard.image.debug Enable Parse Dashboard image debug mode
   ##
   image:
     registry: docker.io
     repository: bitnami/parse-dashboard
-    tag: 3.3.0-debian-11-r11
+    tag: 3.3.0-debian-11-r24
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -464,16 +468,16 @@ dashboard:
   ##
   args: []
   ## @param dashboard.username Parse Dashboard application username
-  ## ref: https://github.com/bitnami/bitnami-docker-parse-dashboard#configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/parse-dashboard#configuration
   ##
   username: user
   ## @param dashboard.password Parse Dashboard application password
   ## Defaults to a random 10-character alphanumeric string if not set
-  ## ref: https://github.com/bitnami/bitnami-docker-parse-dashboard#configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/parse-dashboard#configuration
   ##
   password: ""
   ## @param dashboard.appName Parse Dashboard application name
-  ## ref: https://github.com/bitnami/bitnami-docker-parse-dashboard#configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/parse-dashboard#configuration
   ##
   appName: MyDashboard
   ## @param dashboard.resources Parse Dashboard pods' resource requests and limits
@@ -890,13 +894,15 @@ volumePermissions:
   ## @param volumePermissions.image.registry Init container volume-permissions image registry
   ## @param volumePermissions.image.repository Init container volume-permissions image name
   ## @param volumePermissions.image.tag Init container volume-permissions image tag
+  ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r12
+    tag: 11-debian-11-r23
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -948,7 +954,7 @@ mongodb:
     ##
     enabled: true
     ## @param mongodb.auth.rootPassword MongoDB&reg; admin password
-    ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
+    ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#setting-the-root-password-on-first-run
     ##
     rootPassword: ""
     ## @param mongodb.auth.username MongoDB&reg; user

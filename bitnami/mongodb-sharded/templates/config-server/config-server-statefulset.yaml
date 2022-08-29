@@ -88,7 +88,7 @@ spec:
             - -ec
             - |
               mkdir -p {{ .Values.configsvr.persistence.mountPath }}{{- if .Values.configsvr.persistence.subPath }}/{{ .Values.configsvr.persistence.subPath }}{{- end }}
-              chmod 700 {{ .Values.configsvr.persistence.mountPath }}
+              chown {{ .Values.configsvr.containerSecurityContext.runAsUser }}:{{ .Values.configsvr.podSecurityContext.fsGroup }} {{ .Values.configsvr.persistence.mountPath }}{{- if .Values.configsvr.persistence.subPath }}/{{ .Values.configsvr.persistence.subPath }}{{- end }}
               find {{ .Values.configsvr.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.configsvr.containerSecurityContext.runAsUser }}:{{ .Values.configsvr.podSecurityContext.fsGroup }}
           securityContext:
             runAsUser: 0

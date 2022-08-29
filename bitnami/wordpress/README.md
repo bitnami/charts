@@ -17,7 +17,7 @@ $ helm install my-release bitnami/wordpress
 
 ## Introduction
 
-This chart bootstraps a [WordPress](https://github.com/bitnami/bitnami-docker-wordpress) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [WordPress](https://github.com/bitnami/containers/tree/main/bitnami/wordpress) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the WordPress application, and the [Bitnami Memcached chart](https://github.com/bitnami/charts/tree/master/bitnami/memcached) that can be used to cache database queries.
 
@@ -81,14 +81,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### WordPress Image parameters
 
-| Name                | Description                                          | Value                |
-| ------------------- | ---------------------------------------------------- | -------------------- |
-| `image.registry`    | WordPress image registry                             | `docker.io`          |
-| `image.repository`  | WordPress image repository                           | `bitnami/wordpress`  |
-| `image.tag`         | WordPress image tag (immutable tags are recommended) | `6.0.1-debian-11-r3` |
-| `image.pullPolicy`  | WordPress image pull policy                          | `IfNotPresent`       |
-| `image.pullSecrets` | WordPress image pull secrets                         | `[]`                 |
-| `image.debug`       | Specify if debug values should be set                | `false`              |
+| Name                | Description                                                                                               | Value                 |
+| ------------------- | --------------------------------------------------------------------------------------------------------- | --------------------- |
+| `image.registry`    | WordPress image registry                                                                                  | `docker.io`           |
+| `image.repository`  | WordPress image repository                                                                                | `bitnami/wordpress`   |
+| `image.tag`         | WordPress image tag (immutable tags are recommended)                                                      | `6.0.1-debian-11-r20` |
+| `image.digest`      | WordPress image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
+| `image.pullPolicy`  | WordPress image pull policy                                                                               | `IfNotPresent`        |
+| `image.pullSecrets` | WordPress image pull secrets                                                                              | `[]`                  |
+| `image.debug`       | Specify if debug values should be set                                                                     | `false`               |
 
 
 ### WordPress Configuration parameters
@@ -237,26 +238,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence Parameters
 
-| Name                                                   | Description                                                                                     | Value                   |
-| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | ----------------------- |
-| `persistence.enabled`                                  | Enable persistence using Persistent Volume Claims                                               | `true`                  |
-| `persistence.storageClass`                             | Persistent Volume storage class                                                                 | `""`                    |
-| `persistence.accessModes`                              | Persistent Volume access modes                                                                  | `[]`                    |
-| `persistence.accessMode`                               | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)               | `ReadWriteOnce`         |
-| `persistence.size`                                     | Persistent Volume size                                                                          | `10Gi`                  |
-| `persistence.dataSource`                               | Custom PVC data source                                                                          | `{}`                    |
-| `persistence.existingClaim`                            | The name of an existing PVC to use for persistence                                              | `""`                    |
-| `persistence.selector`                                 | Selector to match an existing Persistent Volume for WordPress data PVC                          | `{}`                    |
-| `persistence.annotations`                              | Persistent Volume Claim annotations                                                             | `{}`                    |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
-| `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
-| `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r16`      |
-| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
-| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
-| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
-| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                  | `0`                     |
+| Name                                                   | Description                                                                                                   | Value                   |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `persistence.enabled`                                  | Enable persistence using Persistent Volume Claims                                                             | `true`                  |
+| `persistence.storageClass`                             | Persistent Volume storage class                                                                               | `""`                    |
+| `persistence.accessModes`                              | Persistent Volume access modes                                                                                | `[]`                    |
+| `persistence.accessMode`                               | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)                             | `ReadWriteOnce`         |
+| `persistence.size`                                     | Persistent Volume size                                                                                        | `10Gi`                  |
+| `persistence.dataSource`                               | Custom PVC data source                                                                                        | `{}`                    |
+| `persistence.existingClaim`                            | The name of an existing PVC to use for persistence                                                            | `""`                    |
+| `persistence.selector`                                 | Selector to match an existing Persistent Volume for WordPress data PVC                                        | `{}`                    |
+| `persistence.annotations`                              | Persistent Volume Claim annotations                                                                           | `{}`                    |
+| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
+| `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
+| `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r28`      |
+| `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
+| `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
+| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                                   | `{}`                    |
+| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                                | `{}`                    |
+| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                | `0`                     |
 
 
 ### Other Parameters
@@ -279,50 +281,51 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics Parameters
 
-| Name                                         | Description                                                                           | Value                     |
-| -------------------------------------------- | ------------------------------------------------------------------------------------- | ------------------------- |
-| `metrics.enabled`                            | Start a sidecar prometheus exporter to expose metrics                                 | `false`                   |
-| `metrics.image.registry`                     | Apache exporter image registry                                                        | `docker.io`               |
-| `metrics.image.repository`                   | Apache exporter image repository                                                      | `bitnami/apache-exporter` |
-| `metrics.image.tag`                          | Apache exporter image tag (immutable tags are recommended)                            | `0.11.0-debian-11-r16`    |
-| `metrics.image.pullPolicy`                   | Apache exporter image pull policy                                                     | `IfNotPresent`            |
-| `metrics.image.pullSecrets`                  | Apache exporter image pull secrets                                                    | `[]`                      |
-| `metrics.containerPorts.metrics`             | Prometheus exporter container port                                                    | `9117`                    |
-| `metrics.livenessProbe.enabled`              | Enable livenessProbe on Prometheus exporter containers                                | `true`                    |
-| `metrics.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                               | `15`                      |
-| `metrics.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                      | `10`                      |
-| `metrics.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                     | `5`                       |
-| `metrics.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                   | `3`                       |
-| `metrics.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                   | `1`                       |
-| `metrics.readinessProbe.enabled`             | Enable readinessProbe on Prometheus exporter containers                               | `true`                    |
-| `metrics.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                              | `5`                       |
-| `metrics.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                     | `10`                      |
-| `metrics.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                    | `3`                       |
-| `metrics.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                  | `3`                       |
-| `metrics.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                  | `1`                       |
-| `metrics.startupProbe.enabled`               | Enable startupProbe on Prometheus exporter containers                                 | `false`                   |
-| `metrics.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                | `10`                      |
-| `metrics.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                       | `10`                      |
-| `metrics.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                      | `1`                       |
-| `metrics.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                    | `15`                      |
-| `metrics.startupProbe.successThreshold`      | Success threshold for startupProbe                                                    | `1`                       |
-| `metrics.customLivenessProbe`                | Custom livenessProbe that overrides the default one                                   | `{}`                      |
-| `metrics.customReadinessProbe`               | Custom readinessProbe that overrides the default one                                  | `{}`                      |
-| `metrics.customStartupProbe`                 | Custom startupProbe that overrides the default one                                    | `{}`                      |
-| `metrics.resources.limits`                   | The resources limits for the Prometheus exporter container                            | `{}`                      |
-| `metrics.resources.requests`                 | The requested resources for the Prometheus exporter container                         | `{}`                      |
-| `metrics.service.ports.metrics`              | Prometheus metrics service port                                                       | `9150`                    |
-| `metrics.service.annotations`                | Additional custom annotations for Metrics service                                     | `{}`                      |
-| `metrics.serviceMonitor.enabled`             | Create ServiceMonitor Resource for scraping metrics using Prometheus Operator         | `false`                   |
-| `metrics.serviceMonitor.namespace`           | Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)         | `""`                      |
-| `metrics.serviceMonitor.interval`            | Interval at which metrics should be scraped.                                          | `""`                      |
-| `metrics.serviceMonitor.scrapeTimeout`       | Timeout after which the scrape is ended                                               | `""`                      |
-| `metrics.serviceMonitor.labels`              | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus | `{}`                      |
-| `metrics.serviceMonitor.selector`            | Prometheus instance selector labels                                                   | `{}`                      |
-| `metrics.serviceMonitor.relabelings`         | RelabelConfigs to apply to samples before scraping                                    | `[]`                      |
-| `metrics.serviceMonitor.metricRelabelings`   | MetricRelabelConfigs to apply to samples before ingestion                             | `[]`                      |
-| `metrics.serviceMonitor.honorLabels`         | Specify honorLabels parameter to add the scrape endpoint                              | `false`                   |
-| `metrics.serviceMonitor.jobLabel`            | The name of the label on the target service to use as the job name in prometheus.     | `""`                      |
+| Name                                         | Description                                                                                                     | Value                     |
+| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `metrics.enabled`                            | Start a sidecar prometheus exporter to expose metrics                                                           | `false`                   |
+| `metrics.image.registry`                     | Apache exporter image registry                                                                                  | `docker.io`               |
+| `metrics.image.repository`                   | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
+| `metrics.image.tag`                          | Apache exporter image tag (immutable tags are recommended)                                                      | `0.11.0-debian-11-r33`    |
+| `metrics.image.digest`                       | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
+| `metrics.image.pullPolicy`                   | Apache exporter image pull policy                                                                               | `IfNotPresent`            |
+| `metrics.image.pullSecrets`                  | Apache exporter image pull secrets                                                                              | `[]`                      |
+| `metrics.containerPorts.metrics`             | Prometheus exporter container port                                                                              | `9117`                    |
+| `metrics.livenessProbe.enabled`              | Enable livenessProbe on Prometheus exporter containers                                                          | `true`                    |
+| `metrics.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                         | `15`                      |
+| `metrics.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                | `10`                      |
+| `metrics.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                               | `5`                       |
+| `metrics.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                             | `3`                       |
+| `metrics.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                             | `1`                       |
+| `metrics.readinessProbe.enabled`             | Enable readinessProbe on Prometheus exporter containers                                                         | `true`                    |
+| `metrics.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                        | `5`                       |
+| `metrics.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                               | `10`                      |
+| `metrics.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                              | `3`                       |
+| `metrics.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                            | `3`                       |
+| `metrics.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                            | `1`                       |
+| `metrics.startupProbe.enabled`               | Enable startupProbe on Prometheus exporter containers                                                           | `false`                   |
+| `metrics.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                          | `10`                      |
+| `metrics.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                 | `10`                      |
+| `metrics.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                | `1`                       |
+| `metrics.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                              | `15`                      |
+| `metrics.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                              | `1`                       |
+| `metrics.customLivenessProbe`                | Custom livenessProbe that overrides the default one                                                             | `{}`                      |
+| `metrics.customReadinessProbe`               | Custom readinessProbe that overrides the default one                                                            | `{}`                      |
+| `metrics.customStartupProbe`                 | Custom startupProbe that overrides the default one                                                              | `{}`                      |
+| `metrics.resources.limits`                   | The resources limits for the Prometheus exporter container                                                      | `{}`                      |
+| `metrics.resources.requests`                 | The requested resources for the Prometheus exporter container                                                   | `{}`                      |
+| `metrics.service.ports.metrics`              | Prometheus metrics service port                                                                                 | `9150`                    |
+| `metrics.service.annotations`                | Additional custom annotations for Metrics service                                                               | `{}`                      |
+| `metrics.serviceMonitor.enabled`             | Create ServiceMonitor Resource for scraping metrics using Prometheus Operator                                   | `false`                   |
+| `metrics.serviceMonitor.namespace`           | Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)                                   | `""`                      |
+| `metrics.serviceMonitor.interval`            | Interval at which metrics should be scraped.                                                                    | `""`                      |
+| `metrics.serviceMonitor.scrapeTimeout`       | Timeout after which the scrape is ended                                                                         | `""`                      |
+| `metrics.serviceMonitor.labels`              | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                           | `{}`                      |
+| `metrics.serviceMonitor.selector`            | Prometheus instance selector labels                                                                             | `{}`                      |
+| `metrics.serviceMonitor.relabelings`         | RelabelConfigs to apply to samples before scraping                                                              | `[]`                      |
+| `metrics.serviceMonitor.metricRelabelings`   | MetricRelabelConfigs to apply to samples before ingestion                                                       | `[]`                      |
+| `metrics.serviceMonitor.honorLabels`         | Specify honorLabels parameter to add the scrape endpoint                                                        | `false`                   |
+| `metrics.serviceMonitor.jobLabel`            | The name of the label on the target service to use as the job name in prometheus.                               | `""`                      |
 
 
 ### NetworkPolicy parameters
@@ -375,7 +378,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalCache.port`                       | External cache server port                                                        | `11211`             |
 
 
-The above parameters map to the env variables defined in [bitnami/wordpress](https://github.com/bitnami/bitnami-docker-wordpress). For more information please refer to the [bitnami/wordpress](https://github.com/bitnami/bitnami-docker-wordpress) image documentation.
+The above parameters map to the env variables defined in [bitnami/wordpress](https://github.com/bitnami/containers/tree/main/bitnami/wordpress). For more information please refer to the [bitnami/wordpress](https://github.com/bitnami/containers/tree/main/bitnami/wordpress) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -469,7 +472,7 @@ By default, the container image includes all the default `.htaccess` files in Wo
 
 ## Persistence
 
-The [Bitnami WordPress](https://github.com/bitnami/bitnami-docker-wordpress) image stores the WordPress data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
+The [Bitnami WordPress](https://github.com/bitnami/containers/tree/main/bitnami/wordpress) image stores the WordPress data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
 
 If you encounter errors when working with persistent volumes, refer to our [troubleshooting guide for persistent volumes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/troubleshooting-persistence-volumes/).
 
@@ -508,7 +511,7 @@ Removed support for limiting auto-updates to WordPress core via the `wordpressAu
 
 ### 11.0.0
 
-The [Bitnami WordPress](https://github.com/bitnami/bitnami-docker-wordpress) image was refactored and now the source code is published in GitHub in the [`rootfs`](https://github.com/bitnami/bitnami-docker-wordpress/tree/master/5/debian-10/rootfs) folder of the container image.
+The [Bitnami WordPress](https://github.com/bitnami/containers/tree/main/bitnami/wordpress) image was refactored and now the source code is published in GitHub in the `rootfs` folder of the container image.
 
 In addition, several new features have been implemented:
 
@@ -542,7 +545,7 @@ Site backups can be easily performed using tools such as [VaultPress](https://va
 
 ### To 11.0.0
 
-The [Bitnami WordPress](https://github.com/bitnami/bitnami-docker-wordpress) image was refactored and now the source code is published in GitHub in the [`rootfs`](https://github.com/bitnami/bitnami-docker-wordpress/tree/master/5/debian-10/rootfs) folder of the container image.
+The [Bitnami WordPress](https://github.com/bitnami/containers/tree/main/bitnami/wordpress) image was refactored and now the source code is published in GitHub in the `rootfs` folder of the container image.
 
 Compatibility is not guaranteed due to the amount of involved changes, however no breaking changes are expected.
 
@@ -594,7 +597,7 @@ mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
 
 ### To 9.0.0
 
-The [Bitnami WordPress](https://github.com/bitnami/bitnami-docker-wordpress) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. You can revert this behavior by setting the parameters `securityContext.runAsUser`, and `securityContext.fsGroup` to `0`.
+The [Bitnami WordPress](https://github.com/bitnami/containers/tree/main/bitnami/wordpress) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. You can revert this behavior by setting the parameters `securityContext.runAsUser`, and `securityContext.fsGroup` to `0`.
 Chart labels and Ingress configuration were also adapted to follow the Helm charts best practices.
 
 Consequences:

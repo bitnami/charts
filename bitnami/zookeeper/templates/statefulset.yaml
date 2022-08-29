@@ -309,7 +309,7 @@ spec:
             - name: ZOO_TLS_QUORUM_ENABLE
               value: {{ .Values.tls.quorum.enabled | quote }}
             - name: ZOO_TLS_QUORUM_CLIENT_AUTH
-              value: {{ .Values.tls.auth.quorum | quote }}
+              value: {{ .Values.tls.quorum.auth | quote }}
             - name: ZOO_TLS_QUORUM_KEYSTORE_FILE
               value: {{ .Values.tls.quorum.keystorePath | quote }}
             - name: ZOO_TLS_QUORUM_TRUSTSTORE_FILE

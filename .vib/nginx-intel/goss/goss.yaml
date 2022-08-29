@@ -1,0 +1,20 @@
+http:
+  https://nginx-intel:{{ .Vars.service.ports.https }}:
+    status: 200
+    allow-insecure: true
+file:
+  /opt/bitnami/nginx/conf/nginx.conf:
+    exists: true
+    filetype: file
+    mode: "0664"
+    owner: root
+    group: root
+    contains:
+      - /listen.*{{ .Vars.containerPorts.http }}/
+command:
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+      - uid={{ .Vars.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/

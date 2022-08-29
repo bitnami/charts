@@ -96,7 +96,8 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `postgresql.image.registry`                                  | PostgreSQL with Repmgr image registry                                                                                                                                                                         | `docker.io`                 |
 | `postgresql.image.repository`                                | PostgreSQL with Repmgr image repository                                                                                                                                                                       | `bitnami/postgresql-repmgr` |
-| `postgresql.image.tag`                                       | PostgreSQL with Repmgr image tag                                                                                                                                                                              | `14.4.0-debian-11-r3`       |
+| `postgresql.image.tag`                                       | PostgreSQL with Repmgr image tag                                                                                                                                                                              | `14.5.0-debian-11-r6`       |
+| `postgresql.image.digest`                                    | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                    | `""`                        |
 | `postgresql.image.pullPolicy`                                | PostgreSQL with Repmgr image pull policy                                                                                                                                                                      | `IfNotPresent`              |
 | `postgresql.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                                                                                                              | `[]`                        |
 | `postgresql.image.debug`                                     | Specify if debug logs should be enabled                                                                                                                                                                       | `false`                     |
@@ -226,7 +227,8 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
 | `pgpool.image.registry`                                  | Pgpool image registry                                                                                                                    | `docker.io`          |
 | `pgpool.image.repository`                                | Pgpool image repository                                                                                                                  | `bitnami/pgpool`     |
-| `pgpool.image.tag`                                       | Pgpool image tag                                                                                                                         | `4.3.2-debian-11-r9` |
+| `pgpool.image.tag`                                       | Pgpool image tag                                                                                                                         | `4.3.3-debian-11-r1` |
+| `pgpool.image.digest`                                    | Pgpool image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                   | `""`                 |
 | `pgpool.image.pullPolicy`                                | Pgpool image pull policy                                                                                                                 | `IfNotPresent`       |
 | `pgpool.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                                         | `[]`                 |
 | `pgpool.image.debug`                                     | Specify if debug logs should be enabled                                                                                                  | `false`              |
@@ -367,7 +369,8 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `metrics.enabled`                            | Enable PostgreSQL Prometheus exporter                                                                                                                     | `false`                     |
 | `metrics.image.registry`                     | PostgreSQL Prometheus exporter image registry                                                                                                             | `docker.io`                 |
 | `metrics.image.repository`                   | PostgreSQL Prometheus exporter image repository                                                                                                           | `bitnami/postgres-exporter` |
-| `metrics.image.tag`                          | PostgreSQL Prometheus exporter image tag                                                                                                                  | `0.10.1-debian-11-r8`       |
+| `metrics.image.tag`                          | PostgreSQL Prometheus exporter image tag                                                                                                                  | `0.11.1-debian-11-r0`       |
+| `metrics.image.digest`                       | PostgreSQL Prometheus exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                            | `""`                        |
 | `metrics.image.pullPolicy`                   | PostgreSQL Prometheus exporter image pull policy                                                                                                          | `IfNotPresent`              |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                                          | `[]`                        |
 | `metrics.image.debug`                        | Specify if debug logs should be enabled                                                                                                                   | `false`                     |
@@ -424,17 +427,18 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 
 ### Volume permissions parameters
 
-| Name                                             | Description                                         | Value                   |
-| ------------------------------------------------ | --------------------------------------------------- | ----------------------- |
-| `volumePermissions.enabled`                      | Enable init container to adapt volume permissions   | `false`                 |
-| `volumePermissions.image.registry`               | Init container volume-permissions image registry    | `docker.io`             |
-| `volumePermissions.image.repository`             | Init container volume-permissions image repository  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                    | Init container volume-permissions image tag         | `11-debian-11-r8`       |
-| `volumePermissions.image.pullPolicy`             | Init container volume-permissions image pull policy | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`            | Specify docker-registry secret names as an array    | `[]`                    |
-| `volumePermissions.podSecurityContext.runAsUser` | Init container volume-permissions User ID           | `0`                     |
-| `volumePermissions.resources.limits`             | The resources limits for the container              | `{}`                    |
-| `volumePermissions.resources.requests`           | The requested resources for the container           | `{}`                    |
+| Name                                             | Description                                                                                                                       | Value                   |
+| ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `volumePermissions.enabled`                      | Enable init container to adapt volume permissions                                                                                 | `false`                 |
+| `volumePermissions.image.registry`               | Init container volume-permissions image registry                                                                                  | `docker.io`             |
+| `volumePermissions.image.repository`             | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`                    | Init container volume-permissions image tag                                                                                       | `11-debian-11-r27`      |
+| `volumePermissions.image.digest`                 | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `volumePermissions.image.pullPolicy`             | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
+| `volumePermissions.image.pullSecrets`            | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
+| `volumePermissions.podSecurityContext.runAsUser` | Init container volume-permissions User ID                                                                                         | `0`                     |
+| `volumePermissions.resources.limits`             | The resources limits for the container                                                                                            | `{}`                    |
+| `volumePermissions.resources.requests`           | The requested resources for the container                                                                                         | `{}`                    |
 
 
 ### Persistence parameters
@@ -448,6 +452,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `persistence.accessModes`   | List of access modes of data volume                                                     | `["ReadWriteOnce"]`   |
 | `persistence.size`          | Persistent Volume Claim size                                                            | `8Gi`                 |
 | `persistence.annotations`   | Persistent Volume Claim annotations                                                     | `{}`                  |
+| `persistence.labels`        | Persistent Volume Claim labels                                                          | `{}`                  |
 | `persistence.selector`      | Selector to match an existing Persistent Volume (this value is evaluated as a template) | `{}`                  |
 
 
@@ -589,7 +594,7 @@ In addition to this option, you can also set an external ConfigMap with all the 
 
 ### Initialize a fresh instance
 
-The [Bitnami PostgreSQL with Repmgr](https://github.com/bitnami/bitnami-docker-postgresql-repmgr) image allows you to use your custom scripts to initialize a fresh instance. You can specify custom scripts using the `initdbScripts` parameter as dict so they can be consumed as a ConfigMap.
+The [Bitnami PostgreSQL with Repmgr](https://github.com/bitnami/containers/tree/main/bitnami/postgresql-repmgr) image allows you to use your custom scripts to initialize a fresh instance. You can specify custom scripts using the `initdbScripts` parameter as dict so they can be consumed as a ConfigMap.
 
 In addition to this option, you can also set an external ConfigMap with all the initialization scripts. This is done by setting the `initdbScriptsCM` parameter. Note that this will override the two previous options. If your initialization scripts contain sensitive information such as credentials or passwords, you can use the `initdbScriptsSecret` parameter.
 
@@ -597,7 +602,7 @@ The above parameters (`initdbScripts`, `initdbScriptsCM`, and `initdbScriptsSecr
 
 The allowed extensions are `.sh`, `.sql` and `.sql.gz` in the **postgresql** container while only `.sh` in the case of the **pgpool** one.
 
-+info: https://github.com/bitnami/bitnami-docker-postgresql#initializing-a-new-instance and https://github.com/bitnami/bitnami-docker-pgpool#initializing-with-custom-scripts
++info: https://github.com/bitnami/containers/tree/main/bitnami/postgresql#initializing-a-new-instance and https://github.com/bitnami/containers/tree/main/bitnami/pgpool#initializing-with-custom-scripts
 
 ### Use of global variables
 
@@ -826,7 +831,7 @@ $ helm upgrade my-release --version 3.0.0 bitnami/postgresql-ha \
 
 ### To 2.0.0
 
-The [Bitnami Pgpool](https://github.com/bitnami/bitnami-docker-pgpool) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Pgpool daemon was started as the `pgpool` user. From now on, both the container and the Pgpool daemon run as user `1001`. You can revert this behavior by setting the parameters `pgpool.containerSecurityContext.runAsUser`, and `pgpool.securityContext.fsGroup` to `0`.
+The [Bitnami Pgpool](https://github.com/bitnami/containers/tree/main/bitnami/pgpool) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Pgpool daemon was started as the `pgpool` user. From now on, both the container and the Pgpool daemon run as user `1001`. You can revert this behavior by setting the parameters `pgpool.containerSecurityContext.runAsUser`, and `pgpool.securityContext.fsGroup` to `0`.
 
 Consequences:
 

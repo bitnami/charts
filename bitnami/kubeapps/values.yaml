@@ -197,6 +197,7 @@ frontend:
   ## @param frontend.image.registry NGINX image registry
   ## @param frontend.image.repository NGINX image repository
   ## @param frontend.image.tag NGINX image tag (immutable tags are recommended)
+  ## @param frontend.image.digest NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param frontend.image.pullPolicy NGINX image pull policy
   ## @param frontend.image.pullSecrets NGINX image pull secrets
   ## @param frontend.image.debug Enable image debug mode
@@ -204,7 +205,8 @@ frontend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.21.6-debian-11-r10
+    tag: 1.23.1-debian-11-r12
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -513,6 +515,7 @@ dashboard:
   ## @param dashboard.image.registry Dashboard image registry
   ## @param dashboard.image.repository Dashboard image repository
   ## @param dashboard.image.tag Dashboard image tag (immutable tags are recommended)
+  ## @param dashboard.image.digest Dashboard image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param dashboard.image.pullPolicy Dashboard image pull policy
   ## @param dashboard.image.pullSecrets Dashboard image pull secrets
   ## @param dashboard.image.debug Enable image debug mode
@@ -520,7 +523,8 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 2.4.6-debian-11-r1
+    tag: 2.5.0-debian-11-r3
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -579,6 +583,11 @@ dashboard:
   defaultTheme: ""
   ## @param dashboard.replicaCount Number of Dashboard replicas to deploy
   ##
+  ## @param dashboard.createNamespaceLabels Labels added to newly created namespaces
+  ## e.g:
+  # createNamespaceLabels:
+  #   "managed-by": "kubeapps"
+  createNamespaceLabels: {}
   replicaCount: 2
   ## @param dashboard.updateStrategy.type Dashboard deployment strategy type.
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
@@ -814,13 +823,15 @@ apprepository:
   ## @param apprepository.image.registry Kubeapps AppRepository Controller image registry
   ## @param apprepository.image.repository Kubeapps AppRepository Controller image repository
   ## @param apprepository.image.tag Kubeapps AppRepository Controller image tag (immutable tags are recommended)
+  ## @param apprepository.image.digest Kubeapps AppRepository Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param apprepository.image.pullPolicy Kubeapps AppRepository Controller image pull policy
   ## @param apprepository.image.pullSecrets Kubeapps AppRepository Controller image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 2.4.6-scratch-r1
+    tag: 2.5.0-scratch-r0
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -839,13 +850,15 @@ apprepository:
   ## @param apprepository.syncImage.registry Kubeapps Asset Syncer image registry
   ## @param apprepository.syncImage.repository Kubeapps Asset Syncer image repository
   ## @param apprepository.syncImage.tag Kubeapps Asset Syncer image tag (immutable tags are recommended)
+  ## @param apprepository.syncImage.digest Kubeapps Asset Syncer image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param apprepository.syncImage.pullPolicy Kubeapps Asset Syncer image pull policy
   ## @param apprepository.syncImage.pullSecrets Kubeapps Asset Syncer image pull secrets
   ##
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-asset-syncer
-    tag: 2.4.6-scratch-r1
+    tag: 2.5.0-scratch-r0
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1121,13 +1134,15 @@ kubeops:
   ## @param kubeops.image.registry Kubeops image registry
   ## @param kubeops.image.repository Kubeops image repository
   ## @param kubeops.image.tag Kubeops image tag (immutable tags are recommended)
+  ## @param kubeops.image.digest Kubeops image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param kubeops.image.pullPolicy Kubeops image pull policy
   ## @param kubeops.image.pullSecrets Kubeops image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/kubeapps-kubeops
-    tag: 2.4.6-scratch-r1
+    tag: 2.5.0-scratch-r0
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1417,13 +1432,15 @@ authProxy:
   ## @param authProxy.image.registry OAuth2 Proxy image registry
   ## @param authProxy.image.repository OAuth2 Proxy image repository
   ## @param authProxy.image.tag OAuth2 Proxy image tag (immutable tags are recommended)
+  ## @param authProxy.image.digest OAuth2 Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param authProxy.image.pullPolicy OAuth2 Proxy image pull policy
   ## @param authProxy.image.pullSecrets OAuth2 Proxy image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/oauth2-proxy
-    tag: 7.3.0-debian-11-r10
+    tag: 7.3.0-debian-11-r27
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1549,13 +1566,15 @@ pinnipedProxy:
   ## @param pinnipedProxy.image.registry Pinniped Proxy image registry
   ## @param pinnipedProxy.image.repository Pinniped Proxy image repository
   ## @param pinnipedProxy.image.tag Pinniped Proxy image tag (immutable tags are recommended)
+  ## @param pinnipedProxy.image.digest Pinniped Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param pinnipedProxy.image.pullPolicy Pinniped Proxy image pull policy
   ## @param pinnipedProxy.image.pullSecrets Pinniped Proxy image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/kubeapps-pinniped-proxy
-    tag: 2.4.6-debian-11-r2
+    tag: 2.5.0-debian-11-r2
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1569,19 +1588,30 @@ pinnipedProxy:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param pinnipedProxy.defaultPinnipedNamespace Specify the (default) namespace in which pinniped concierge is installed
+  ## @param pinnipedProxy.defaultPinnipedNamespace Namespace in which pinniped concierge is installed
   ##
   defaultPinnipedNamespace: pinniped-concierge
-  ## @param pinnipedProxy.defaultAuthenticatorType Specify the (default) authenticator type
+  ## @param pinnipedProxy.defaultAuthenticatorType Authenticator type
   ##
   defaultAuthenticatorType: JWTAuthenticator
-  ## @param pinnipedProxy.defaultAuthenticatorName Specify the (default) authenticator name
+  ## @param pinnipedProxy.defaultAuthenticatorName Authenticator name
   ##
   defaultAuthenticatorName: jwt-authenticator
-  ## @param pinnipedProxy.defaultPinnipedAPISuffix Specify the (default) API suffix
+  ## @param pinnipedProxy.defaultPinnipedAPISuffix API suffix
   ##
   defaultPinnipedAPISuffix: pinniped.dev
-  ## @param pinnipedProxy.lifecycleHooks for the Pinniped Proxy container(s) to automate configuration before or after startup
+  ## TLS settings for Pinniped Proxy
+  ## ref: https://kubeapps.dev/docs/latest/howto/oidc/using-an-oidc-provider-with-pinniped/#running-the-pinniped-proxy-service-over-tls
+  ##
+  tls:
+    ## @param pinnipedProxy.tls.existingSecret TLS secret with which to proxy requests
+    ##
+    existingSecret: ""
+    ## @param pinnipedProxy.tls.caCertificate TLS CA cert config map which clients of pinniped proxy should use with TLS requests
+    ## This config map must contain a ca.crt key with the CA cert content as the value.
+    ##
+    caCertificate: ""
+  ## @param pinnipedProxy.lifecycleHooks For the Pinniped Proxy container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
   ## @param pinnipedProxy.command Override default container command (useful when using custom images)
@@ -1703,13 +1733,15 @@ rbac:
 ## @param testImage.registry NGINX image registry
 ## @param testImage.repository NGINX image repository
 ## @param testImage.tag NGINX image tag (immutable tags are recommended)
+## @param testImage.digest NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param testImage.pullPolicy NGINX image pull policy
 ## @param testImage.pullSecrets NGINX image pull secrets
 ##
 testImage:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.21.6-debian-11-r10
+  tag: 1.23.1-debian-11-r12
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1730,7 +1762,7 @@ testImage:
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
 ## @param postgresql.enabled Deploy a PostgreSQL server to satisfy the applications database requirements
 ## @param postgresql.auth.postgresPassword Password for 'postgres' user
-## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql#setting-the-root-password-on-first-run
 ## @param postgresql.auth.database Name for a custom database to create
 ## @param postgresql.auth.existingSecret Name of existing secret to use for PostgreSQL credentials
 ##
@@ -1745,6 +1777,9 @@ postgresql:
   primary:
     persistence:
       enabled: false
+  ## @param postgresql.architecture PostgreSQL architecture (`standalone` or `replication`)
+  ##
+  architecture: standalone
   ## @param postgresql.securityContext.enabled Enabled PostgreSQL replicas pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
@@ -1813,13 +1848,15 @@ kubeappsapis:
   ## @param kubeappsapis.image.registry Kubeapps-APIs image registry
   ## @param kubeappsapis.image.repository Kubeapps-APIs image repository
   ## @param kubeappsapis.image.tag Kubeapps-APIs image tag (immutable tags are recommended)
+  ## @param kubeappsapis.image.digest Kubeapps-APIs image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param kubeappsapis.image.pullPolicy Kubeapps-APIs image pull policy
   ## @param kubeappsapis.image.pullSecrets Kubeapps-APIs image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apis
-    tag: 2.4.6-debian-11-r2
+    tag: 2.5.0-debian-11-r2
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2088,45 +2125,70 @@ kubeappsapis:
 ## @section Redis&reg; chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
 ##
-## Redis will be enabled and installed if `packages.flux.enabled` is true.
+## Redis(R) will be enabled and installed if `packages.flux.enabled` is true.
 redis:
   ## @param redis.auth.enabled Enable password authentication
   ## @param redis.auth.password Redis&reg; password
   ## @param redis.auth.existingSecret The name of an existing secret with Redis&reg; credentials
+  ##
   auth:
     enabled: true
     password: ""
     existingSecret: ""
+  ## @param redis.architecture Redis(R) architecture (`standalone` or `replication`)
+  ##
+  architecture: standalone
   master:
     ## @param redis.master.extraFlags Array with additional command line flags for Redis&reg; master
+    ##
     extraFlags:
-      ## The maxmemory configuration directive is used in order to configure Redis to use a specified
+      ## The maxmemory configuration directive is used in order to configure Redis(R) to use a specified
       ## amount of memory for the data set. Setting maxmemory to zero results into no memory limits
       ## see https://redis.io/topics/lru-cache for more details
+      ##
       - "--maxmemory 200mb"
-      ## The exact behavior Redis follows when the maxmemory limit is reached is configured using the
+      ## The exact behavior Redis(R) follows when the maxmemory limit is reached is configured using the
       ## maxmemory-policy configuration directive
       ## allkeys-lru: evict keys by trying to remove the less recently used (LRU) keys first, in order
       ## to make space for the new data added
+      ##
       - "--maxmemory-policy allkeys-lru"
       ## ref https://stackoverflow.com/questions/22815364/flushall-and-flushdb-commands-on-redis-return-unk-command
       ## Redis official Helm chart by default disables FLUSHDB and FLUSHALL commands
-    ## @param redis.master.disableCommands Array with commands to deactivate on Redis&trade
+      ##
+    ## @param redis.master.disableCommands Array with commands to deactivate on Redis&reg;
     disableCommands: []
+    ## Redis(R) Master persistence configuration
+    #
+    persistence:
+      ## @param redis.master.persistence.enabled Enable Redis&reg; master data persistence using PVC
+      ##
+      enabled: false
   replica:
     ## @param redis.replica.replicaCount Number of Redis&reg; replicas to deploy
+    ##
     replicaCount: 1
     ## @param redis.replica.extraFlags Array with additional command line flags for Redis&reg; replicas
+    ##
     extraFlags:
-      ## The maxmemory configuration directive is used in order to configure Redis to use a specified
+      ## The maxmemory configuration directive is used in order to configure Redis(R) to use a specified
       ## amount of memory for the data set. Setting maxmemory to zero results into no memory limits
+      ##
       - "--maxmemory 200mb"
-      ## The exact behavior Redis follows when the maxmemory limit is reached is configured using the
+      ## The exact behavior Redis(R) follows when the maxmemory limit is reached is configured using the
       ## maxmemory-policy configuration directive
       ## allkeys-lru: evict keys by trying to remove the less recently used (LRU) keys first, in order
       ## to make space for the new data added
+      ##
       - "--maxmemory-policy allkeys-lru"
     ## ref https://stackoverflow.com/questions/22815364/flushall-and-flushdb-commands-on-redis-return-unk-command
-    ## Redis official Helm chart by default disables FLUSHDB and FLUSHALL commands
-    ## @param redis.replica.disableCommands Array with commands to deactivate on Redis&trade
+    ## Redis(R) official Helm chart by default disables FLUSHDB and FLUSHALL commands
+    ## @param redis.replica.disableCommands Array with commands to deactivate on Redis&reg;
+    ##
     disableCommands: []
+    ## Redis(R) Replica persistence configuration
+    ##
+    persistence:
+      ## @param redis.replica.persistence.enabled Enable Redis&reg; replica data persistence using PVC
+      ##
+      enabled: false

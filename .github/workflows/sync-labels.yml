@@ -2,7 +2,7 @@ name: '[Support] Synchronize labels from the containers repository'
 on:
   schedule:
     # Daily
-    - cron: '0 1 * * *'
+    - cron: '0 3 * * *'
 permissions:
   issues: write
 

@@ -1,4 +1,4 @@
-const COMMAND_DELAY = 500;
+const COMMAND_DELAY = 2000;
 const BASE_URL = 'http://vmware-prestashop.my';
 
 for (const command of ['click']) {
@@ -32,7 +32,9 @@ Cypress.Commands.add(
     cy.get('div#error').should('not.exist');
     cy.contains('Dashboard');
     cy.get('body').then(($body) => {
-      if ($body.find('button[class*="onboarding-button-shut-down"]').length > 0) {
+      if (
+        $body.find('button[class*="onboarding-button-shut-down"]').length > 0
+      ) {
         cy.get('button[class*="onboarding-button-shut-down"]').click();
       }
     });

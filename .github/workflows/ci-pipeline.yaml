@@ -14,9 +14,36 @@ env:
   CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
   VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
 jobs:
+  auto-pr-triage:
+    runs-on: ubuntu-latest
+    name: Triage for automated PRs
+    if: |
+      contains(github.event.pull_request.title, 'Release') &&
+      github.event.action == 'opened' &&
+      github.actor == 'bitnami-bot'
+    steps:
+      # Enables auto-merge and adds necessary labels for automated releases' PRs
+      - id: labeling
+        name: Label PR
+        uses: andymckay/labeler@1.0.4
+        with:
+          # We can't use GITHUB_TOKEN because the labeling needs to trigger a new CI pipeline
+          repo-token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
+          add-labels: "verify, auto-merge"
+      - id: auto-merge
+        name: Enable auto-merge
+        run: |
+          curl --request POST \
+          --url https://api.github.com/graphql \
+          --header 'authorization: Bearer ${{ secrets.BITNAMI_BOT_TOKEN }}' \
+          --data '{
+            "query": "mutation { enablePullRequestAutoMerge(input: {pullRequestId: \"${{ github.event.pull_request.node_id }}\", mergeMethod: SQUASH}) { clientMutationId }}"
+            }' \
+          --fail
   get-chart:
     runs-on: ubuntu-latest
     name: 'Get modified charts'
+    if: ${{ github.event.pull_request.state != 'closed' }}
     outputs:
       chart: ${{ steps.get-chart.outputs.chart }}
       result: ${{ steps.get-chart.outputs.result }}
@@ -89,14 +116,16 @@ jobs:
     needs: get-chart
     # Given performance issues of the action feature on GH's side, we need to be very restrictive in the job's triggers:
     # -> The 'Get modified charts' job suceededs AND
-    # -> The event action is different from opened AND
+    # -> The event is not opened (avoids running twice on consecutive opened and labeled events)  AND
     #  ( ---> The pipeline was triggered due to a label addition and said label was the 'verify' one OR
     #    ---> The pipeline was NOT triggered due to a label addition but the PR already contains the 'verify' one )
     if: |
         needs.get-chart.outputs.result == 'ok' &&
         github.event.action != 'opened' &&
-        (github.event.action == 'labeled' && github.event.label.name == 'verify' ||
-        github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'verify'))
+        (
+          (github.event.action == 'labeled' && github.event.label.name == 'verify') ||
+          (github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'verify'))
+        )
     name: VIB Verify
     steps:
       - uses: actions/checkout@v2
@@ -113,7 +142,7 @@ jobs:
           VIB_ENV_TARGET_PLATFORM: ${{ secrets.VIB_ENV_TARGET_PLATFORM }}
           # Alternative Target-Platform to be used in case of incompatibilities
           VIB_ENV_ALTERNATIVE_TARGET_PLATFORM: ${{ secrets.VIB_ENV_ALTERNATIVE_TARGET_PLATFORM }}
-  ci-pr-review:
+  auto-pr-review:
     runs-on: ubuntu-latest
     needs: vib-verify
     name: Reviewal for automated PRs
@@ -135,17 +164,28 @@ jobs:
             "event": "APPROVE"
             }' \
           --fail
-      # Removes "auto-merge" label and add related agents as reviewers if the 'VIB Verify' job failed
+      - name: Remove auto-merge label
+        if: ${{ needs.vib-verify.result == 'failure' }}
+        uses: andymckay/labeler@1.0.4
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          remove-labels: "auto-merge"
+      - name: Disable auto-merge
+        if: ${{ needs.vib-verify.result == 'failure' }}
+        run: |
+          curl --request POST \
+          --url https://api.github.com/graphql \
+          --header 'authorization: Bearer ${{ secrets.BITNAMI_BOT_TOKEN }}' \
+          --data '{
+            "query": "mutation { disablePullRequestAutoMerge(input: {pullRequestId: \"${{ github.event.pull_request.node_id }}\"}) { clientMutationId }}"
+            }' \
+          --fail
       - name: Manual review required
         if: ${{ needs.vib-verify.result == 'failure' }}
         run: |
-          curl --request DELETE \
-          --url https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels/auto-merge \
-          --header 'authorization: Bearer ${{ secrets.BITNAMI_BOT_TOKEN }}' \
-          --fail
           curl --request POST \
           --url https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments \
-          --header 'authorization: Bearer ${{ secrets.BITNAMI_BOT_TOKEN }}' \
+          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
           --header 'content-type: application/json' \
           --data '{
             "body": "There has been an error during the automated release process. Manual revision is now required."

@@ -87,6 +87,7 @@ diagnosticMode:
 ## @param image.registry PostgreSQL image registry
 ## @param image.repository PostgreSQL image repository
 ## @param image.tag PostgreSQL image tag (immutable tags are recommended)
+## @param image.digest PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy PostgreSQL image pull policy
 ## @param image.pullSecrets Specify image pull secrets
 ## @param image.debug Specify if debug values should be set
@@ -94,7 +95,8 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/postgresql
-  tag: 14.4.0-debian-11-r11
+  tag: 14.5.0-debian-11-r6
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -112,9 +114,9 @@ image:
   ##
   debug: false
 ## Authentication parameters
-## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
-## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-on-first-run
-## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-user-on-first-run
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql#setting-the-root-password-on-first-run
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql#creating-a-database-on-first-run
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql#creating-a-database-user-on-first-run
 ##
 auth:
   ## @param auth.enablePostgresUser Assign a password to the "postgres" admin user. Otherwise, remote access will be blocked for this user
@@ -173,7 +175,7 @@ replication:
 containerPorts:
   postgresql: 5432
 ## Audit settings
-## https://github.com/bitnami/bitnami-docker-postgresql#auditing
+## https://github.com/bitnami/containers/tree/main/bitnami/postgresql#auditing
 ## @param audit.logHostname Log client hostnames
 ## @param audit.logConnections Add client log-in operations to the log file
 ## @param audit.logDisconnections Add client log-outs operations to the log file
@@ -284,6 +286,9 @@ tls:
 ## @section PostgreSQL Primary parameters
 ##
 primary:
+  ## @param primary.name Name of the primary database (eg primary, master, leader, ...)
+  ##
+  name: primary
   ## @param primary.configuration PostgreSQL Primary main configuration to be injected as ConfigMap
   ## ref: https://www.postgresql.org/docs/current/static/runtime-config.html
   ##
@@ -302,7 +307,7 @@ primary:
   ##
   existingConfigmap: ""
   ## @param primary.extendedConfiguration Extended PostgreSQL Primary configuration (appended to main or default configuration)
-  ## ref: https://github.com/bitnami/bitnami-docker-postgresql#allow-settings-to-be-loaded-from-files-other-than-the-default-postgresqlconf
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql#allow-settings-to-be-loaded-from-files-other-than-the-default-postgresqlconf
   ##
   extendedConfiguration: ""
   ## @param primary.existingExtendedConfigmap Name of an existing ConfigMap with PostgreSQL Primary extended configuration
@@ -310,7 +315,7 @@ primary:
   ##
   existingExtendedConfigmap: ""
   ## Initdb configuration
-  ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#specifying-initdb-arguments
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql#specifying-initdb-arguments
   ##
   initdb:
     ## @param primary.initdb.args PostgreSQL initdb extra arguments
@@ -668,12 +673,19 @@ primary:
     ##
     dataSource: {}
 
-## @section PostgreSQL read only replica parameters
+## @section PostgreSQL read only replica parameters (only used when `architecture` is set to `replication`)
 ##
 readReplicas:
+  ## @param readReplicas.name Name of the read replicas database (eg secondary, slave, ...)
+  ##
+  name: read
   ## @param readReplicas.replicaCount Number of PostgreSQL read only replicas
   ##
   replicaCount: 1
+  ## @param readReplicas.extendedConfiguration Extended PostgreSQL read only replicas configuration (appended to main or default configuration)
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql#allow-settings-to-be-loaded-from-files-other-than-the-default-postgresqlconf
+  ##
+  extendedConfiguration: ""
   ## @param readReplicas.extraEnvVars Array with extra environment variables to add to PostgreSQL read only nodes
   ## e.g:
   ## extraEnvVars:
@@ -950,6 +962,9 @@ readReplicas:
     ## @param readReplicas.persistence.enabled Enable PostgreSQL read only data persistence using PVC
     ##
     enabled: true
+    ## @param readReplicas.persistence.existingClaim Name of an existing PVC to use
+    ##
+    existingClaim: ""
     ## @param readReplicas.persistence.mountPath The path the volume will be mounted at
     ## Note: useful when using custom PostgreSQL images
     ##
@@ -1090,13 +1105,15 @@ volumePermissions:
   ## @param volumePermissions.image.registry Init container volume-permissions image registry
   ## @param volumePermissions.image.repository Init container volume-permissions image repository
   ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r16
+    tag: 11-debian-11-r27
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1175,13 +1192,15 @@ metrics:
   ## @param metrics.image.registry PostgreSQL Prometheus Exporter image registry
   ## @param metrics.image.repository PostgreSQL Prometheus Exporter image repository
   ## @param metrics.image.tag PostgreSQL Prometheus Exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.digest PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy PostgreSQL Prometheus Exporter image pull policy
   ## @param metrics.image.pullSecrets Specify image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.10.1-debian-11-r16
+    tag: 0.11.1-debian-11-r0
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

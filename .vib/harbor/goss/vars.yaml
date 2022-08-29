@@ -1,0 +1,9 @@
+logLevel: debug
+persistence:
+  imageChartStorage:
+    filesystem:
+      rootdirectory: /storage
+registry:
+  server:
+    containerPorts:
+      debug: 5001

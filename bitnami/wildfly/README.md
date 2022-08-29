@@ -17,7 +17,7 @@ $ helm install my-release bitnami/wildfly
 
 ## Introduction
 
-This chart bootstraps a [WildFly](https://github.com/bitnami/bitnami-docker-wildfly) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [WildFly](https://github.com/bitnami/containers/tree/main/bitnami/wildfly) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 WildFly is written in Java, and implements the Java Platform, Enterprise Edition (Java EE) specification.
 
@@ -82,14 +82,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### WildFly Image parameters
 
-| Name                | Description                                        | Value                 |
-| ------------------- | -------------------------------------------------- | --------------------- |
-| `image.registry`    | WildFly image registry                             | `docker.io`           |
-| `image.repository`  | WildFly image repository                           | `bitnami/wildfly`     |
-| `image.tag`         | WildFly image tag (immutable tags are recommended) | `26.1.1-debian-11-r0` |
-| `image.pullPolicy`  | WildFly image pull policy                          | `IfNotPresent`        |
-| `image.pullSecrets` | WildFly image pull secrets                         | `[]`                  |
-| `image.debug`       | Enable image debug mode                            | `false`               |
+| Name                | Description                                                                                             | Value                  |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `image.registry`    | WildFly image registry                                                                                  | `docker.io`            |
+| `image.repository`  | WildFly image repository                                                                                | `bitnami/wildfly`      |
+| `image.tag`         | WildFly image tag (immutable tags are recommended)                                                      | `26.1.1-debian-11-r32` |
+| `image.digest`      | WildFly image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `image.pullPolicy`  | WildFly image pull policy                                                                               | `IfNotPresent`         |
+| `image.pullSecrets` | WildFly image pull secrets                                                                              | `[]`                   |
+| `image.debug`       | Enable image debug mode                                                                                 | `false`                |
 
 
 ### WildFly Configuration parameters
@@ -116,6 +117,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hostAliases`                           | WildFly pod host aliases                                                                  | `[]`            |
 | `extraVolumes`                          | Optionally specify extra list of additional volumes for WildFly pods                      | `[]`            |
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for WildFly container(s)         | `[]`            |
+| `serviceAccountName`                    | Name of existing ServiceAccount to be connected                                           | `""`            |
 | `sidecars`                              | Add additional sidecar containers to the WildFly pod                                      | `[]`            |
 | `initContainers`                        | Add additional init containers to the WildFly pods                                        | `[]`            |
 | `podLabels`                             | Extra labels for WildFly pods                                                             | `{}`            |
@@ -207,26 +209,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence Parameters
 
-| Name                                          | Description                                                                                     | Value                   |
-| --------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------- |
-| `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                               | `true`                  |
-| `persistence.storageClass`                    | Persistent Volume storage class                                                                 | `""`                    |
-| `persistence.existingClaim`                   | Use a existing PVC which must be created manually before bound                                  | `""`                    |
-| `persistence.accessModes`                     | Persistent Volume access modes                                                                  | `[]`                    |
-| `persistence.size`                            | Persistent Volume size                                                                          | `8Gi`                   |
-| `persistence.annotations`                     | Persistent Volume Claim annotations                                                             | `{}`                    |
-| `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
-| `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
-| `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r0`       |
-| `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
-| `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
-| `volumePermissions.resources.requests`        | The requested resources for the init container                                                  | `{}`                    |
-| `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
+| Name                                          | Description                                                                                                   | Value                   |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                                             | `true`                  |
+| `persistence.storageClass`                    | Persistent Volume storage class                                                                               | `""`                    |
+| `persistence.existingClaim`                   | Use a existing PVC which must be created manually before bound                                                | `""`                    |
+| `persistence.accessModes`                     | Persistent Volume access modes                                                                                | `[]`                    |
+| `persistence.size`                            | Persistent Volume size                                                                                        | `8Gi`                   |
+| `persistence.annotations`                     | Persistent Volume Claim annotations                                                                           | `{}`                    |
+| `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
+| `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                                  | `docker.io`             |
+| `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r28`      |
+| `volumePermissions.image.digest`              | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
+| `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                              | `[]`                    |
+| `volumePermissions.resources.limits`          | The resources limits for the init container                                                                   | `{}`                    |
+| `volumePermissions.resources.requests`        | The requested resources for the init container                                                                | `{}`                    |
+| `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                               | `0`                     |
 
 
-The above parameters map to the env variables defined in [bitnami/wildfly](https://github.com/bitnami/bitnami-docker-wildfly). For more information please refer to the [bitnami/wildfly](https://github.com/bitnami/bitnami-docker-wildfly) image documentation.
+The above parameters map to the env variables defined in [bitnami/wildfly](https://github.com/bitnami/containers/tree/main/bitnami/wildfly). For more information please refer to the [bitnami/wildfly](https://github.com/bitnami/containers/tree/main/bitnami/wildfly) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -258,7 +261,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ## Persistence
 
-The [Bitnami WildFly](https://github.com/bitnami/bitnami-docker-wildfly) image stores the WildFly data and configurations at the `/bitnami/wildfly` path of the container.
+The [Bitnami WildFly](https://github.com/bitnami/containers/tree/main/bitnami/wildfly) image stores the WildFly data and configurations at the `/bitnami/wildfly` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
@@ -304,7 +307,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 10.0.0
 
-Due to recent changes in the container image (see [Notable changes](https://github.com/bitnami/bitnami-docker-apache#notable-changes)), the major version of the chart has been bumped preemptively.
+Due to recent changes in the container image (see [Notable changes](https://github.com/bitnami/containers/tree/main/bitnami/apache#notable-changes)), the major version of the chart has been bumped preemptively.
 
 Upgrading from version `9.x.x` should be possible without any extra required step, but it's highly recommended to backup your custom web apps data before upgrading.
 

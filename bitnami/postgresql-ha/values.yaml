@@ -93,6 +93,7 @@ postgresql:
   ## @param postgresql.image.registry PostgreSQL with Repmgr image registry
   ## @param postgresql.image.repository PostgreSQL with Repmgr image repository
   ## @param postgresql.image.tag PostgreSQL with Repmgr image tag
+  ## @param postgresql.image.digest PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param postgresql.image.pullPolicy PostgreSQL with Repmgr image pull policy
   ## @param postgresql.image.pullSecrets Specify docker-registry secret names as an array
   ## @param postgresql.image.debug Specify if debug logs should be enabled
@@ -100,7 +101,8 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql-repmgr
-    tag: 14.4.0-debian-11-r11
+    tag: 14.5.0-debian-11-r6
+    digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -369,7 +371,7 @@ postgresql:
   ##
   existingSecret: ""
   ## @param postgresql.postgresPassword PostgreSQL password for the `postgres` user when `username` is not `postgres`
-  ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-user-on-first-run (see note!)
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql#creating-a-database-user-on-first-run (see note!)
   ##
   postgresPassword: ""
   ## @param postgresql.usePasswordFile Set to `true` to mount PostgreSQL secret as a file instead of passing environment variable
@@ -421,7 +423,7 @@ postgresql:
   ##
   usePgRewind: false
   ## Audit settings
-  ## https://github.com/bitnami/bitnami-docker-postgresql#auditing
+  ## https://github.com/bitnami/containers/tree/main/bitnami/postgresql#auditing
   ##
   audit:
     ## @param postgresql.audit.logHostname Add client hostnames to the log file
@@ -487,8 +489,8 @@ postgresql:
   ## @param postgresql.repmgrConfiguration Repmgr configuration
   ## You can use this parameter to specify the content for repmgr.conf
   ## Otherwise, a repmgr.conf will be generated based on the environment variables
-  ## ref: https://github.com/bitnami/bitnami-docker-postgresql-repmgr#configuration
-  ## ref: https://github.com/bitnami/bitnami-docker-postgresql-repmgr#configuration-file
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql-repmgr#configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql-repmgr#configuration-file
   ## Example:
   ## repmgrConfiguration: |-
   ##   ssh_options='-o "StrictHostKeyChecking no" -v'
@@ -499,8 +501,8 @@ postgresql:
   ## @param postgresql.configuration PostgreSQL configuration
   ## You can use this parameter to specify the content for postgresql.conf
   ## Otherwise, a repmgr.conf will be generated based on the environment variables
-  ## ref: https://github.com/bitnami/bitnami-docker-postgresql-repmgr#configuration
-  ## ref: https://github.com/bitnami/bitnami-docker-postgresql-repmgr#configuration-file
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql-repmgr#configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql-repmgr#configuration-file
   ## Example:
   ## configuration: |-
   ##   listen_addresses = '*'
@@ -511,8 +513,8 @@ postgresql:
   ## @param postgresql.pgHbaConfiguration PostgreSQL client authentication configuration
   ## You can use this parameter to specify the content for pg_hba.conf
   ## Otherwise, a repmgr.conf will be generated based on the environment variables
-  ## ref: https://github.com/bitnami/bitnami-docker-postgresql-repmgr#configuration
-  ## ref: https://github.com/bitnami/bitnami-docker-postgresql-repmgr#configuration-file
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql-repmgr#configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql-repmgr#configuration-file
   ## Example:
   ## pgHbaConfiguration: |-
   ##   host     all            repmgr    0.0.0.0/0    md5
@@ -526,7 +528,7 @@ postgresql:
   configurationCM: ""
   ## @param postgresql.extendedConf Extended PostgreSQL configuration (appended to main or default configuration). Implies `volumePermissions.enabled`.
   ## Similar to postgresql.configuration, but _appended_ to the main configuration
-  ## ref: https://github.com/bitnami/bitnami-docker-postgresql-repmgr#allow-settings-to-be-loaded-from-files-other-than-the-default-postgresqlconf
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql-repmgr#allow-settings-to-be-loaded-from-files-other-than-the-default-postgresqlconf
   ## Example:
   ## extendedConf: |-
   ##   deadlock_timeout = 1s
@@ -586,6 +588,7 @@ pgpool:
   ## @param pgpool.image.registry Pgpool image registry
   ## @param pgpool.image.repository Pgpool image repository
   ## @param pgpool.image.tag Pgpool image tag
+  ## @param pgpool.image.digest Pgpool image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param pgpool.image.pullPolicy Pgpool image pull policy
   ## @param pgpool.image.pullSecrets Specify docker-registry secret names as an array
   ## @param pgpool.image.debug Specify if debug logs should be enabled
@@ -593,7 +596,8 @@ pgpool:
   image:
     registry: docker.io
     repository: bitnami/pgpool
-    tag: 4.3.2-debian-11-r17
+    tag: 4.3.3-debian-11-r1
+    digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -882,57 +886,57 @@ pgpool:
   ##
   authenticationMethod: scram-sha-256
   ## @param pgpool.logConnections Log all client connections (PGPOOL_ENABLE_LOG_CONNECTIONS)
-  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/pgpool#configuration
   ##
   logConnections: false
   ## @param pgpool.logHostname Log the client hostname instead of IP address (PGPOOL_ENABLE_LOG_HOSTNAME)
-  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/pgpool#configuration
   ##
   logHostname: true
   ## @param pgpool.logPerNodeStatement Log every SQL statement for each DB node separately (PGPOOL_ENABLE_LOG_PER_NODE_STATEMENT)
-  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/pgpool#configuration
   ##
   logPerNodeStatement: false
   ## @param pgpool.logLinePrefix Format of the log entry lines (PGPOOL_LOG_LINE_PREFIX)
-  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/pgpool#configuration
   ## ref: https://www.pgpool.net/docs/latest/en/html/runtime-config-logging.html
   ##
   logLinePrefix: ""
   ## @param pgpool.clientMinMessages Log level for clients
-  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/pgpool#configuration
   ##
   clientMinMessages: error
   ## @param pgpool.numInitChildren The number of preforked Pgpool-II server processes. It is also the concurrent
   ## connections limit to Pgpool-II from clients. Must be a positive integer. (PGPOOL_NUM_INIT_CHILDREN)
-  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/pgpool#configuration
   ##
   numInitChildren: ""
   ## @param pgpool.reservedConnections Number of reserved connections. When zero, excess connection block. When non-zero, excess connections are refused with an error message.
   ## When this parameter is set to 1 or greater, incoming connections from clients are not accepted with error message
   ## "Sorry, too many clients already", rather than blocked if the number of current connections from clients is more than
   ## (num_init_children - reserved_connections).
-  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/pgpool#configuration
   ##
   reservedConnections: 1
 
   ## @param pgpool.maxPool The maximum number of cached connections in each child process (PGPOOL_MAX_POOL)
-  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/pgpool#configuration
   ##
   maxPool: ""
   ## @param pgpool.childMaxConnections The maximum number of client connections in each child process (PGPOOL_CHILD_MAX_CONNECTIONS)
-  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/pgpool#configuration
   ##
   childMaxConnections: ""
   ## @param pgpool.childLifeTime The time in seconds to terminate a Pgpool-II child process if it remains idle (PGPOOL_CHILD_LIFE_TIME)
-  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/pgpool#configuration
   ##
   childLifeTime: ""
   ## @param pgpool.clientIdleLimit The time in seconds to disconnect a client if it remains idle since the last query (PGPOOL_CLIENT_IDLE_LIMIT)
-  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/pgpool#configuration
   ##
   clientIdleLimit: ""
   ## @param pgpool.connectionLifeTime The time in seconds to terminate the cached connections to the PostgreSQL backend (PGPOOL_CONNECTION_LIFE_TIME)
-  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/pgpool#configuration
   ##
   connectionLifeTime: ""
   ## @param pgpool.useLoadBalancing Use Pgpool Load-Balancing
@@ -945,8 +949,8 @@ pgpool:
   ## @param pgpool.configuration Pgpool configuration
   ## You can use this parameter to specify the content for pgpool.conf
   ## Otherwise, a repmgr.conf will be generated based on the environment variables
-  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
-  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration-file
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/pgpool#configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/pgpool#configuration-file
   ## Example:
   ## configuration: |-
   ##   listen_addresses = '*'
@@ -1094,6 +1098,7 @@ metrics:
   ## @param metrics.image.registry PostgreSQL Prometheus exporter image registry
   ## @param metrics.image.repository PostgreSQL Prometheus exporter image repository
   ## @param metrics.image.tag PostgreSQL Prometheus exporter image tag
+  ## @param metrics.image.digest PostgreSQL Prometheus exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy PostgreSQL Prometheus exporter image pull policy
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
   ## @param metrics.image.debug Specify if debug logs should be enabled
@@ -1101,7 +1106,8 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.10.1-debian-11-r16
+    tag: 0.11.1-debian-11-r0
+    digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -1335,13 +1341,15 @@ volumePermissions:
   ## @param volumePermissions.image.registry Init container volume-permissions image registry
   ## @param volumePermissions.image.repository Init container volume-permissions image repository
   ## @param volumePermissions.image.tag Init container volume-permissions image tag
+  ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r16
+    tag: 11-debian-11-r27
+    digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -1418,6 +1426,9 @@ persistence:
   ## @param persistence.annotations Persistent Volume Claim annotations
   ##
   annotations: {}
+  ## @param persistence.labels Persistent Volume Claim labels
+  ##
+  labels: {}
   ## @param persistence.selector Selector to match an existing Persistent Volume (this value is evaluated as a template)
   ## selector:
   ##   matchLabels:
@@ -1427,7 +1438,7 @@ persistence:
 
 ## @section Traffic Exposure parameters
 
-## PgPool service parameters
+## PostgreSQL service parameters
 ##
 service:
   ## @param service.type Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)

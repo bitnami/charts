@@ -1,16 +1,8 @@
 /// <reference types="cypress" />
 import { random } from '../support/utils';
 
-it('allows to log in and out', () => {
-  cy.login();
-  cy.contains('a', 'Unread');
-  cy.get('#current-user').click();
-  cy.get('[title="Preferences"]').click();
-  cy.contains('Log Out').click();
-  cy.contains('button', 'Log In');
-});
-
 it('allows to sign up', () => {
+  cy.visit('/');
   cy.contains('button', 'Sign Up').click();
   cy.fixture('users').then((user) => {
     cy.get('#new-account-email').type(`${random}.${user.newUser.email}`);
@@ -27,38 +19,13 @@ it('allows to create a topic', () => {
   cy.login();
   cy.contains('button', 'New Topic').click();
   cy.fixture('topics').then((topic) => {
-    cy.get('[id="reply-title"]').type(`${topic.newTopic.title}-${random}`);
+    cy.get('#reply-title').type(`${topic.newTopic.title}-${random}`);
     cy.get('textarea').type(`${topic.newTopic.content} ${random}`);
     cy.contains('button', 'Create Topic').click();
     cy.contains('Saving').should('not.exist');
     cy.reload();
-    cy.get('[class*="topic-list"]').within(() => {
+    cy.get('.topic-list').within(() => {
       cy.contains('td', `${topic.newTopic.title}-${random}`);
     });
-  });
-});
-
-it('allows to modify user settings', () => {
-  cy.login();
-  cy.visit('/u/user/preferences/account');
-  cy.fixture('user-settings').then((userSettings) => {
-    cy.get('[class*="pref-name"]').within(() => {
-      cy.get('input')
-        .clear({ force: true })
-        .type(`${userSettings.user.realName} ${random}`);
-    });
-    cy.contains('button', 'Save Changes').click();
-    cy.contains('Saved');
-    cy.contains('h2', `${userSettings.user.realName} ${random}`);
-  });
-});
-
-it('checks sideqik and discourse status', () => {
-  const PROCESS_NAME = 'discourse';
-
-  cy.login();
-  cy.visit('/sidekiq/busy');
-  cy.get('[class*="processes"]').within(() => {
-    cy.contains('td', PROCESS_NAME);
   });
 });
