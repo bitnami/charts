@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/fluentd"
         },
-        "runtime_parameters": "YWdncmVnYXRvcjoKICBlbmFibGVkOiB0cnVlCmZvcndhcmRlcjoKICBlbmFibGVkOiB0cnVlCiAgc2VydmljZToKICAgIHR5cGU6IExvYWRCYWxhbmNlcgogICAgcG9ydHM6CiAgICAgIGh0dHA6CiAgICAgICAgcG9ydDogODA=",
+        "runtime_parameters": "YWdncmVnYXRvcjoKICBlbmFibGVkOiB0cnVlCmZvcndhcmRlcjoKICBlbmFibGVkOiB0cnVlCiAgc2VydmljZToKICAgIHR5cGU6IExvYWRCYWxhbmNlcgogICAgcG9ydHM6CiAgICAgIGh0dHA6CiAgICAgICAgcG9ydDogODAKICAgICAgICB0YXJnZXRQb3J0OiA5ODgw",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
           "size": {
