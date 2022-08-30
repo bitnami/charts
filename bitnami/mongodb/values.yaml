@@ -181,6 +181,12 @@ tls:
   ## NOTE: When it's set it will disable secret creation.
   ##
   existingSecret: ""
+  ## Add Custom CA certificate
+  ## @param tls.caCert Custom CA certificated (base64 encoded)
+  ## @param tls.caKey CA certificate private key (base64 encoded)
+  ##
+  caCert: ""
+  caKey: ""
   standalone:
     ## @param tls.standalone.existingSecret Existing secret with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).
     ## NOTE: When it's set it will disable certificate self-generation from existing CA.
@@ -188,11 +194,17 @@ tls:
     existingSecret: ""
   replicaset:
     ## @param tls.replicaset.existingSecrets Array of existing secrets with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).
+    ## existingSecrets:
+    ##  - "mySecret-0"
+    ##  - "mySecret-1"
     ## NOTE: When it's set it will disable certificate self-generation from existing CA.
     ##
     existingSecrets: []
   hidden:
     ## @param tls.hidden.existingSecrets Array of existing secrets with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).
+    ## existingSecrets:
+    ##  - "mySecret-0"
+    ##  - "mySecret-1"
     ## NOTE: When it's set it will disable certificate self-generation from existing CA.
     ##
     existingSecrets: []
@@ -201,12 +213,6 @@ tls:
     ## NOTE: When it's set it will disable certificate self-generation from existing CA.
     ##
     existingSecret: ""
-  ## Add Custom CA certificate
-  ## @param tls.caCert Custom CA certificated (base64 encoded)
-  ## @param tls.caKey CA certificate private key (base64 encoded)
-  ##
-  caCert: ""
-  caKey: ""
   ## Bitnami Nginx image
   ## @param tls.image.registry Init container TLS certs setup image registry
   ## @param tls.image.repository Init container TLS certs setup image repository

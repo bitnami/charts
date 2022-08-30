@@ -107,9 +107,9 @@ data:
     {{- if eq .Values.architecture "standalone" }}
       ID="0"
     {{- else }}
-    if [[ "$MY_POD_NAME" =~ "arbiter-"[0-9]{1,} ]]; then
-      ID="${MY_POD_NAME#"{{ printf "%s-arbiter-" $fullname }}"}"
-    elif [[ "$MY_POD_NAME" =~ "hidden-"[0-9]{1,} ]]; then
+    if [[ "$MY_POD_NAME" =~ "arbiter-0"$ ]]; then
+      ID="0"
+    elif [[ "$MY_POD_NAME" =~ "hidden-"[0-9]{1,}$ ]]; then
       ID="${MY_POD_NAME#"{{ printf "%s-hidden-" $fullname }}"}"
     else
       ID="${MY_POD_NAME#"{{ $fullname }}-"}"
