@@ -179,7 +179,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.requests`                          | The requested resources for the OAuth2 Proxy containers                                          | `{}`            |
 | `pdb.create`                                  | Enable a Pod Disruption Budget creation                                                          | `false`         |
 | `pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                   | `1`             |
-| `pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                   | `1`             |
+| `pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                   | `""`            |
 | `podSecurityContext.enabled`                  | Enabled OAuth2 Proxy pods' Security Context                                                      | `true`          |
 | `podSecurityContext.fsGroup`                  | Set OAuth2 Proxy pod's Security Context fsGroup                                                  | `1001`          |
 | `containerSecurityContext.enabled`            | Enabled OAuth2 Proxy containers' Security Context                                                | `true`          |
