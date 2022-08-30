@@ -289,3 +289,14 @@ redis: tls.enabled
 {{- end }}
 {{- end }}
 {{- end }}
+
+{{/*
+Return the name of the StatefulSet Redis sentinel
+*/}}
+{{- define "redis.sentinel.name" -}}
+{{- if .Values.sentinel.suffixName -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) .Values.sentinel.suffixName -}}
+{{- else -}}
+{{- include "common.names.fullname" . -}}
+{{- end -}}
+{{- end -}}

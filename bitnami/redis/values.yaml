@@ -913,6 +913,8 @@ replica:
 ##
 
 sentinel:
+  ## @param sentinel.suffixName Allows to edit the suffix of name
+  suffixName: node
   ## @param sentinel.enabled Use Redis&reg; Sentinel on Redis&reg; pods.
   ## IMPORTANT: this will disable the master and replicas services and
   ## create a single Redis&reg; service exposing both the Redis and Sentinel ports
