@@ -35,6 +35,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/minio/**'
       - 'bitnami/mongodb/**'
       - 'bitnami/mysql/**'
+      - 'bitnami/nats/**'
       - 'bitnami/nginx-intel/**'
       - 'bitnami/nginx/**'
       - 'bitnami/node/**'
