@@ -319,6 +319,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                          | Description                                                                                                                                 | Value                    |
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `sentinel.suffixName`                         | Allows to edit the suffix of name                                                                                                           | `node`                   |
 | `sentinel.enabled`                            | Use Redis&reg; Sentinel on Redis&reg; pods.                                                                                                 | `false`                  |
 | `sentinel.image.registry`                     | Redis&reg; Sentinel image registry                                                                                                          | `docker.io`              |
 | `sentinel.image.repository`                   | Redis&reg; Sentinel image repository                                                                                                        | `bitnami/redis-sentinel` |
