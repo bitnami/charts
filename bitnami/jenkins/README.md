@@ -302,6 +302,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 11.0.0
+
+This major release is no loger contais preinstalled plugins.
+
 ### To 10.0.0
 
 This major release is no longer contains the metrics section because the container `bitnami/enkins-exporter` has been deprecated due to the upstream project is not maintained.
