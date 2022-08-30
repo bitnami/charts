@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/nginx-intel"
         },
-        "runtime_parameters": "InNlcnZpY2UiOgogICJwb3J0cyI6IAogICAgImh0dHAiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciIK",
+        "runtime_parameters": "Y29udGFpbmVyUG9ydHM6CiAgaHR0cDogODA4MAogIGh0dHBzOiA4NDQzCnBvZFNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgZnNHcm91cDogMTAwMgpjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIHJ1bkFzVXNlcjogMTAwMgpzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgaHR0cDogODAKICAgIGh0dHBzOiA0NDQK",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -34,6 +34,28 @@
         {
           "action_id": "health-check",
           "params": {
+            "endpoint": "lb-nginx-intel-http",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/nginx-intel/goss"
+            },
+            "vars_file": "vars.yaml",
+            "remote": {
+              "workload": "deploy-nginx-intel"
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/nginx-intel/cypress"
+            },
             "endpoint": "lb-nginx-intel-http",
             "app_protocol": "HTTP"
           }
