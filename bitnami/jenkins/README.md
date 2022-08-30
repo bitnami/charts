@@ -304,7 +304,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 11.0.0
 
-This major release is no loger contais preinstalled plugins.
+This major release no longer contains preinstalled plugins.
 
 ### To 10.0.0
 
