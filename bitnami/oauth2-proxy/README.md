@@ -151,6 +151,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                          | Description                                                                                      | Value           |
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------ | --------------- |
 | `containerPort`                               | OAuth2 Proxy port number                                                                         | `4180`          |
+| `extraContainerPorts`                         | Array of additional container ports for the OAuth2 Proxy container                               | `[]`            |
 | `replicaCount`                                | Number of OAuth2 Proxy replicas to deploy                                                        | `1`             |
 | `extraArgs`                                   | add extra args to the default command                                                            | `[]`            |
 | `startupProbe.enabled`                        | Enable startupProbe on OAuth2 Proxy nodes                                                        | `false`         |
