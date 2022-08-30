@@ -55,7 +55,7 @@ clusterDomain: cluster.local
 image:
   registry: docker.io
   repository: bitnami/nginx-ingress-controller
-  tag: 1.3.0-debian-11-r9
+  tag: 1.3.0-debian-11-r17
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -481,7 +481,7 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.23.1-debian-11-r6
+    tag: 1.23.1-debian-11-r12
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

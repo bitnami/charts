@@ -23,4 +23,4 @@ name: haproxy
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/haproxy
   - https://github.com/haproxytech/haproxy
-version: 0.5.1
+version: 0.5.2

@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------- |
 | `image.registry`                | Discourse image registry                                                                                                 | `docker.io`          |
 | `image.repository`              | Discourse image repository                                                                                               | `bitnami/discourse`  |
-| `image.tag`                     | Discourse image tag                                                                                                      | `2.8.8-debian-11-r3` |
+| `image.tag`                     | Discourse image tag                                                                                                      | `2.8.8-debian-11-r6` |
 | `image.digest`                  | Discourse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                 |
 | `image.pullPolicy`              | Discourse image pull policy                                                                                              | `IfNotPresent`       |
 | `image.pullSecrets`             | Discourse image pull secrets                                                                                             | `[]`                 |

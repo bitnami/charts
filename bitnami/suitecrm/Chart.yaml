@@ -29,4 +29,4 @@ name: suitecrm
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/suitecrm
   - https://www.suitecrm.com/
-version: 11.2.0
+version: 11.2.1

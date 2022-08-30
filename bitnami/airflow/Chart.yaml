@@ -1,7 +1,7 @@
 annotations:
   category: WorkFlow
 apiVersion: v2
-appVersion: 2.3.3
+appVersion: 2.3.4
 dependencies:
   - condition: redis.enabled
     name: redis
@@ -32,4 +32,4 @@ name: airflow
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/airflow
   - https://airflow.apache.org/
-version: 13.1.0
+version: 13.1.3

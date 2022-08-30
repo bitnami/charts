@@ -69,7 +69,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 3.2.1-debian-11-r4
+  tag: 3.2.1-debian-11-r9
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -159,9 +159,9 @@ logRetentionHours: 168
 ## @param logSegmentBytes The maximum size of a log segment file. When this size is reached a new log segment will be created
 ##
 logSegmentBytes: _1073741824
-## @param logsDirs A comma separated list of directories under which to store log files
-##
-logsDirs: /opt/bitnami/kafka/logs
+## @param logsDirs A comma separated list of directories in which kafka's log data is kept
+## ref: https://kafka.apache.org/documentation/#brokerconfigs_log.dirs
+logsDirs: /bitnami/kafka/data
 ## @param maxMessageBytes The largest record batch size allowed by Kafka
 ##
 maxMessageBytes: _1000012
@@ -753,7 +753,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.24.3-debian-11-r10
+      tag: 1.24.4-debian-11-r3
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -831,6 +831,9 @@ externalAccess:
     ## If not specified, the container will try to get the kubernetes node external IP
     ##
     domain: ""
+    ## @param externalAccess.service.labels Service labels for external access
+    ##
+    labels: {}
     ## @param externalAccess.service.annotations Service annotations for external access
     ##
     annotations: {}
@@ -982,7 +985,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r23
+    tag: 11-debian-11-r30
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1062,7 +1065,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kafka-exporter
-      tag: 1.4.2-debian-11-r25
+      tag: 1.6.0-debian-11-r1
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1298,7 +1301,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.17.0-debian-11-r24
+      tag: 0.17.0-debian-11-r30
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1391,6 +1394,14 @@ metrics:
     ## NOTE: This will override metrics.jmx.config
     ##
     existingConfigmap: ""
+    ## @param metrics.jmx.extraRules  Add extra rules to JMX exporter configuration
+    ## e.g:
+    ## extraRules: |-
+    ##  - pattern: kafka.server<type=socket-server-metrics, listener=(.+), networkProcessor=(.+)><>(connection-count)
+    ##    name: kafka_server_socket_server_metrics_$3
+    ##    labels:
+    ##      listener: $1
+    extraRules: ""
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
