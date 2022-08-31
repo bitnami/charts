@@ -1,14 +1,14 @@
 /// <reference types="cypress" />
 
-import { closeThePopups, skipTheWelcomeScreen, random } from '../support/utils';
+import { skipTheWelcomeScreen, random } from '../support/utils';
 
 before(() => {
   skipTheWelcomeScreen();
 });
 
 it('allows uploading data', () => {
-  cy.get('a[data-test-subj="uploadFile"]').click();
-  cy.get('input#filePicker').selectFile(
+  cy.get('[data-test-subj="uploadFile"]').click();
+  cy.get('[type=file]').selectFile(
     'cypress/fixtures/test-data-to-import.ndjson',
     {
       force: true,
@@ -21,18 +21,14 @@ it('allows uploading data', () => {
     );
   });
   cy.get('[data-test-subj="dataVisualizerFileImportButton"]').click();
-  cy.contains(
-    '[data-test-subj="dataVisualizerFileImportSuccessCallout"]',
-    'Import complete'
-  );
+  cy.get('[data-test-subj="dataVisualizerFileImportSuccessCallout"]');
 });
 
 it('allows creating a dashboard and visualisation', () => {
   cy.visit('app/visualize/');
-  closeThePopups();
-  cy.contains('button', 'Create').click();
+  cy.get('[data-test-subj="createVisualizationPromptButton"]').click();
   cy.get('[data-test-subj="visType-vega"]').forceClick();
-  cy.contains('[data-test-subj="visualizeSaveButton"]', 'Save').forceClick();
+  cy.get('[data-test-subj="visualizeSaveButton"]').forceClick();
   cy.fixture('visualizations').then((visualization) => {
     cy.get('[data-test-subj="savedObjectTitle"]').type(
       `${visualization.newVisualization.title}.${random}`
@@ -42,11 +38,8 @@ it('allows creating a dashboard and visualisation', () => {
     );
   });
   cy.get('[id="new-dashboard-option"]').forceClick();
-  cy.contains(
-    '[data-test-subj="confirmSaveSavedObjectButton"]',
-    'Save and go'
-  ).forceClick();
-  cy.contains('[data-test-subj="dashboardSaveMenuItem"]', 'Save').click();
+  cy.get('[data-test-subj="confirmSaveSavedObjectButton"]').forceClick();
+  cy.get('[data-test-subj="dashboardSaveMenuItem"]').click();
   cy.fixture('dashboards').then((dashboard) => {
     cy.get('[data-test-subj="savedObjectTitle"]').type(
       `${dashboard.newDashboard.title}.${random}`
@@ -54,10 +47,7 @@ it('allows creating a dashboard and visualisation', () => {
     cy.get('[data-test-subj="dashboardDescription"]').type(
       `${dashboard.newDashboard.description}.${random}`
     );
-    cy.contains(
-      '[data-test-subj="confirmSaveSavedObjectButton"]',
-      'Save'
-    ).forceClick();
+    cy.get('[data-test-subj="confirmSaveSavedObjectButton"]').forceClick();
     cy.visit('/app/dashboards/list');
     cy.contains(`${dashboard.newDashboard.title}.${random}`);
   });
