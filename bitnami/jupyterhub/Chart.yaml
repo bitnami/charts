@@ -26,4 +26,4 @@ name: jupyterhub
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/jupyterhub
   - https://github.com/jupyterhub/jupyterhub
-version: 1.4.1
+version: 1.4.2
