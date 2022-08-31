@@ -25,4 +25,4 @@ name: contour-operator
 sources:
   - https://github.com/projectcontour/contour-operator
   - https://github.com/bitnami/containers/tree/main/bitnami/contour-operator
-version: 2.1.0
+version: 2.1.1

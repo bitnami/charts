@@ -1,4 +1,4 @@
-{{- if and .Values.storegateway.enabled .Values.storegateway.pdb.create }}
+{{- if and .Values.storegateway.enabled .Values.storegateway.pdb.create (not .Values.storegateway.sharded.enabled) }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:

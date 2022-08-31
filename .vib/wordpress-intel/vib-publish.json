@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/wordpress-intel"
         },
-        "runtime_parameters": "InNlcnZpY2UiOgogICJwb3J0IjogODAKICAidHlwZSI6ICJMb2FkQmFsYW5jZXIiCiJ3b3JkcHJlc3NQYXNzd29yZCI6ICJDb21wbGljYXRlZFBhc3N3b3JkMTIzITQi",
+        "runtime_parameters": "d29yZHByZXNzVXNlcm5hbWU6IHRlc3RfdXNlcgp3b3JkcHJlc3NQYXNzd29yZDogQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0CndvcmRwcmVzc0VtYWlsOiB0ZXN0X3VzZXJfZW1haWxAZW1haWwuY29tCm1hcmlhZGI6CiAgYXV0aDoKICAgIGRhdGFiYXNlOiB0ZXN0X3dvcmRwcmVzc19kYXRhYmFzZQogICAgdXNlcm5hbWU6IHRlc3Rfd29yZHByZXNzX3VzZXJuYW1lCiAgICBwYXNzd29yZDogdGVzdF93b3JkcHJlc3NfcGFzc3dvcmQKcG9kU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBmc0dyb3VwOiAxMDAyCmNvbnRhaW5lclNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgcnVuQXNVc2VyOiAxMDAyCndvcmRwcmVzc1RhYmxlUHJlZml4OiB3b3JkcHJlc3NfCnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCiAgcG9ydHM6CiAgICBodHRwOiA4MAogICAgaHR0cHM6IDQ0Mwpjb250YWluZXJQb3J0czoKICBodHRwOiA4MDgxCiAgaHR0cHM6IDg0NDQ=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -36,6 +36,35 @@
           "params": {
             "endpoint": "lb-wordpress-intel-http",
             "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/wordpress-intel/goss"
+            },
+            "remote": {
+              "workload": "deploy-wordpress-intel"
+            },
+            "vars_file": "vars.yaml",
+            "wait": {
+              "file": "goss-wait.yaml"
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/wordpress-intel/cypress"
+            },
+            "endpoint": "lb-wordpress-intel-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "username": "test_user",
+              "password": "ComplicatedPassword123!4"
+            }
           }
         }
       ]

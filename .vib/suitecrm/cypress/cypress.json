@@ -1,10 +1,7 @@
 {
   "env": {
-    "username": "user",
-    "password": "ComplicatedPassword123!4",
-    "emailServer": "testhost",
-    "smtpPort": "9125",
-    "smtpUser": "testHostUser"
+    "username": "test_user",
+    "password": "ComplicatedPassword123!4"
   },
   "hosts": {
     "vmware-suitecrm.my": "{{ TARGET_IP }}"

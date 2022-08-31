@@ -17,6 +17,9 @@ metadata:
     {{- if $root.Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" $root.Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+    {{- if $root.Values.externalAccess.service.labels }}
+    {{- include "common.tplvalues.render" ( dict "value" $root.Values.externalAccess.service.labels "context" $) | nindent 4 }}
+    {{- end }}
   {{- if or $root.Values.externalAccess.service.annotations $root.Values.commonAnnotations $root.Values.externalAccess.service.loadBalancerAnnotations }}
   annotations:
     {{- if and (not (empty $root.Values.externalAccess.service.loadBalancerAnnotations)) (eq (len $root.Values.externalAccess.service.loadBalancerAnnotations) $replicaCount) }}

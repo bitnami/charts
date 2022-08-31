@@ -31,4 +31,4 @@ name: owncloud
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/owncloud
   - https://owncloud.org/
-version: 12.2.0
+version: 12.2.1
