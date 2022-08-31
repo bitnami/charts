@@ -1,0 +1,28 @@
+http:
+  http://osclass:{{ .Vars.service.ports.https }}:
+    status: 200
+    allow-insecure: true
+command:
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+      - uid={{ .Vars.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
+file:
+  /bitnami/osclass/config.php:
+    exists: true
+    filetype: file
+    mode: "0666"
+    contains:
+    - /WEB_PATH.*{{ .Vars.containerPorts.http }}/
+  /etc/hosts:
+    exists: true
+    filetype: file
+    contains:
+    {{ range .Vars.hostAliases }}
+    {{ $ip := .ip }}
+    {{ range $host := .hostnames }}
+      - /{{ $ip }}.*{{$host}}/
+    {{ end }}
+    {{ end }}
