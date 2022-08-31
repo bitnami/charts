@@ -304,7 +304,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 11.0.0
 
-This major release no longer contains preinstalled plugins.
+This major release no longer contains preinstalled plugins. In case you want to install a plugin you can follow the [official documentation](https://www.jenkins.io/doc/book/managing/plugins/)
 
 ### To 10.0.0
 
