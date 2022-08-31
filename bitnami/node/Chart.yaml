@@ -28,4 +28,4 @@ name: node
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/node
   - http://nodejs.org/
-version: 19.1.1
+version: 19.1.2

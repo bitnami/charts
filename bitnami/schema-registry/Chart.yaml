@@ -28,4 +28,4 @@ maintainers:
 name: schema-registry
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/schema-registry
-version: 5.1.1
+version: 5.1.3

@@ -27,4 +27,4 @@ name: solr
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/solr
   - https://lucene.apache.org/solr/
-version: 6.1.2
+version: 6.1.3

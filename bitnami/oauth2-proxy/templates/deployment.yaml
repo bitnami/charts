@@ -171,6 +171,9 @@ spec:
             - containerPort: {{ .Values.containerPort }}
               name: http
               protocol: TCP
+            {{- if .Values.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
           {{- if .Values.resources }}
           resources: {{ include "common.tplvalues.render" (dict "value" .Values.resources "context" $) | nindent 12 }}
           {{- end }}
