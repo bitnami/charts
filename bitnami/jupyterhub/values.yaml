@@ -1416,7 +1416,7 @@ singleuser:
   ## @param singleuser.command Override Single User default command
   ##
   command: []
-  ## @param singleuser.extraEnvVars Extra environment variables that should be set for the user pods.
+  ## @param singleuser.extraEnvVars Extra environment variables that should be set for the user pods
   ## ref: https://zero-to-jupyterhub.readthedocs.io/en/latest/resources/reference.html#singleuser-extraenv
   ##
   extraEnvVars: {}
