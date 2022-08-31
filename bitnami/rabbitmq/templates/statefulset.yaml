@@ -382,12 +382,12 @@ spec:
         {{- if .Values.initScriptsCM }}
         - name: custom-init-scripts-cm
           configMap:
-            name: {{ template ".Values.initScriptsCM" . }}
+            name: {{ tpl .Values.initScriptsCM . | quote }}
         {{- end }}
         {{- if .Values.initScriptsSecret }}
         - name: custom-init-scripts-secret
           secret:
-            secretName: {{ template ".Values.initScriptsSecret" . }}
+            secretName: {{ tpl .Values.initScriptsSecret . | quote }}
             defaultMode: 0755
         {{- end }}
         {{- if .Values.extraVolumes }}
