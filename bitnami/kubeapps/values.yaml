@@ -523,7 +523,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 2.5.0-debian-11-r3
+    tag: 2.4.6-debian-11-r11
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -830,7 +830,7 @@ apprepository:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 2.5.0-scratch-r0
+    tag: 2.4.6-scratch-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -857,7 +857,7 @@ apprepository:
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-asset-syncer
-    tag: 2.5.0-scratch-r0
+    tag: 2.4.6-scratch-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1141,7 +1141,7 @@ kubeops:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-kubeops
-    tag: 2.5.0-scratch-r0
+    tag: 2.4.6-scratch-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1156,16 +1156,6 @@ kubeops:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param kubeops.namespaceHeaderName Additional header name for trusted namespaces
-  ## e.g:
-  ## namespaceHeaderName: X-Consumer-Groups
-  ##
-  namespaceHeaderName: ""
-  ## @param kubeops.namespaceHeaderPattern Additional header pattern for trusted namespaces
-  ## e.g:
-  ## namespaceHeaderPattern: namespace:^([\w-]+):\w+$
-  ##
-  namespaceHeaderPattern: ""
   ## @param kubeops.qps Kubeops QPS (queries per second) rate
   ##
   qps: ""
@@ -1573,7 +1563,7 @@ pinnipedProxy:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-pinniped-proxy
-    tag: 2.5.0-debian-11-r2
+    tag: 2.4.6-debian-11-r11
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1843,6 +1833,22 @@ kubeappsapis:
           defaultUpgradePolicy: none
             ## @param kubeappsapis.pluginConfig.flux.packages.v1alpha1.userManagedSecrets Default policy for handling repository secrets, either managed by the user or by kubeapps-apis
           userManagedSecrets: false
+    resources:
+      packages:
+        v1alpha1:
+          ## Trusted namespaces parameters
+          ##
+          trustedNamespaces:
+            ## @param kubeappsapis.pluginConfig.resources.packages.v1alpha1.trustedNamespaces.headerName Optional header name for trusted namespaces
+            ## e.g:
+            ## headerName: X-Consumer-Groups
+            ##
+            headerName: ""
+            ## @param kubeappsapis.pluginConfig.resources.packages.v1alpha1.trustedNamespaces.headerPattern Optional header pattern for trusted namespaces
+            ## e.g:
+            ## headerPattern: namespace:^([\w-]+):\w+$
+            ##
+            headerPattern: ""
   ## Bitnami Kubeapps-APIs image
   ## ref: https://hub.docker.com/r/bitnami/kubeapps-apis/tags/
   ## @param kubeappsapis.image.registry Kubeapps-APIs image registry
@@ -1855,7 +1861,7 @@ kubeappsapis:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apis
-    tag: 2.5.0-debian-11-r2
+    tag: 2.4.6-debian-11-r13
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
