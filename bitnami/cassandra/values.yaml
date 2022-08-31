@@ -692,6 +692,9 @@ metrics:
     ##    memory: 128Mi
     ##
     requests: {}
+  ## @param metrics.extraVolumeMounts Optionally specify extra list of additional volumeMounts for cassandra-exporter container
+  ##
+  extraVolumeMounts: []
   ## @param metrics.podAnnotations [object] Metrics exporter pod Annotation and Labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
