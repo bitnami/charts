@@ -136,27 +136,26 @@ jobs:
       always() &&
       needs.auto-pr-triage.result == 'success'
     steps:
-      # Approves the CI's PR if the 'VIB Verify' job succeeded
-      # Approved by the 'github-actions' user; a PR can't be approved by its author
-      - name: PR approval
-        if: ${{ needs.vib-verify.result == 'success' }}
-        uses: hmarr/auto-approve-action@v2.4.0
-        with:
-          pull-request-number: ${{ github.event.number }}
-      - name: Label PR as auto-merge
-        if: ${{ needs.vib-verify.result == 'success' }}
-        uses: andymckay/labeler@1.0.4
-        with:
-          repo-token: '${{ secrets.GITHUB_TOKEN }}'
-          add-labels: 'auto-merge'
       - name: Enable auto-merge feature
         if: ${{ needs.vib-verify.result == 'success' }}
         uses: reitermarkus/automerge@v2.1.2
         with:
           token: ${{ secrets.BITNAMI_BOT_TOKEN }}
           merge-method: squash
-          required-labels: auto-merge
           pull-request: ${{ github.event.number }}
+      - name: Label PR as auto-merge
+        if: ${{ needs.vib-verify.result == 'success' }}
+        uses: andymckay/labeler@1.0.4
+        with:
+          repo-token: '${{ secrets.GITHUB_TOKEN }}'
+          add-labels: 'auto-merge'
+      # Approve the CI's PR if the 'VIB Verify' job succeeded
+      # Approved by the 'github-actions' user; a PR can't be approved by its author
+      - name: PR approval
+        if: ${{ needs.vib-verify.result == 'success' }}
+        uses: hmarr/auto-approve-action@v2.4.0
+        with:
+          pull-request-number: ${{ github.event.number }}
 
       # If the CI did not succeed ('VIB Verify' failed or skipped),
       # post a comment on the PR and assign a maintainer agent to review it
