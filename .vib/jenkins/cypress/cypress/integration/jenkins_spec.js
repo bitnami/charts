@@ -11,13 +11,11 @@ it('should be possible to create a new Jenkins pipeline', () => {
     cy.contains('button', 'OK').should('be.enabled').click();
     cy.contains('Error').should('not.be.visible');
 
-    cy.get('.radio-block-start').contains('Git').click();
-    cy.get("[name*='url']").type(item.freestyleProject.repositoryURL);
     cy.contains('button', 'Save').click();
     cy.contains('h1', item.freestyleProject.name);
   });
 
-  // As a new Git project is created in every execution, the next build
+  // As a new project is created in every execution, the next build
   // will always be the first one.
   const nextBuildNumber = 1;
   cy.contains('Build Now').click();
@@ -33,7 +31,7 @@ it('should be possible to create a new Jenkins pipeline', () => {
       `/job/${item.freestyleProject.name}-${random}/${nextBuildNumber}/`
     );
     cy.contains(`Build #${nextBuildNumber}`);
-    cy.contains('Build has been executing for');
+    cy.contains('Started by user');
   });
 });
 
