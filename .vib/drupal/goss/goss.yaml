@@ -10,6 +10,11 @@ command:
       - uid={{ .Vars.containerSecurityContext.runAsUser }}
       - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
 file:
+  /bitnami/drupal:
+    exists: true
+    filetype: directory
+    mode: '2775'
+    owner: root
   /var/run/secrets/kubernetes.io/serviceaccount:
     exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
     filetype: directory
@@ -21,6 +26,6 @@ file:
     {{ range .Vars.hostAliases }}
     {{ $ip := .ip }}
     {{ range $host := .hostnames }}
-      - /^{{ $ip }}.*{{ $host }}$/
+      - /{{ $ip }}.*{{ $host }}/
     {{ end }}
     {{ end }}
