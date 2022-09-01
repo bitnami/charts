@@ -110,6 +110,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraVolumeMounts`                     | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `[]`                  |
 | `initContainers`                        | Add additional init containers to the pod (evaluated as a template)                                                   | `[]`                  |
 | `sidecars`                              | Attach additional containers to the pod (evaluated as a template)                                                     | `[]`                  |
+| `serviceAccountName`                    | Attach serviceAccount to the pod and sidecars                                                                         | `""`                  |
 | `tolerations`                           | Tolerations for pod assignment                                                                                        | `[]`                  |
 | `existingSecret`                        | Name of a secret with the application password                                                                        | `""`                  |
 | `smtpHost`                              | SMTP host                                                                                                             | `""`                  |
