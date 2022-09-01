@@ -57,15 +57,16 @@ jobs:
           num_version_bumps="$(echo "$files_changed_data" | jq -r '[.[] | select(.filename|endswith("Chart.yaml")) | select(.patch|contains("+version")) ] | length' )"
           non_readme_files=$(echo "$files_changed" | grep -vc "\.md" || true)
 
-          if [[ ${{ github.event.action }} == "synchronize" && ${{ github.actor }} == "bitnami-bot" && "$latest_commit_message" == *"readme-generator-for-helm"*  ]]; then
-            echo "::set-output name=result::skip"
-          elif [[ "$non_readme_files" -le "0" ]]; then
+          if [[ "$non_readme_files" -le "0" ]]; then
             # The only changes are .md files -> SKIP
             echo "::set-output name=result::skip"
           elif [[ "$num_charts_changed" -ne "$num_version_bumps" ]]; then
             # Changes done in charts but version not bumped -> ERROR
             echo "::set-output name=error::Detected changes in charts without version bump in Chart.yaml.\nCharts changed: ${num_charts_changed}\n${charts_dirs_changed}\nVersion bumps detected: ${num_version_bumps}"
             echo "::set-output name=result::fail"
+          elif [[ ${{ github.actor }} == "bitnami-bot" && "$latest_commit_message" == *"readme-generator-for-helm"*  ]]; then
+            # The CI was launched by the readme generator workflow
+            echo "::set-output name=result::skip"
           elif [[ "$num_charts_changed" -eq "1" ]]; then
             # Changes done in only one chart -> OK
             chart_name=$(echo "$charts_dirs_changed" | sed "s|bitnami/||g")
