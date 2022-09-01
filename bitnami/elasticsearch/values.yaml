@@ -1289,7 +1289,7 @@ coordinating:
 ingest:
   ## @param ingest.enabled Enable ingest nodes
   ##
-  enabled: false
+  enabled: true
   ## @param ingest.replicaCount Number of ingest-only replicas to deploy
   ##
   replicaCount: 2
