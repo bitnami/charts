@@ -261,6 +261,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                                                                 | `[]`    |
 | `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels                                                  | `false` |
 | `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.                                         | `""`    |
+| `metrics.prometheusRule.enabled`           | Create PrometheusRule Resource for scraping metrics using PrometheusOperator                                              | `false` |
+| `metrics.prometheusRule.namespace`         | Namespace which Prometheus is running in                                                                                  | `""`    |
+| `metrics.prometheusRule.labels`            | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                     | `{}`    |
+| `metrics.prometheusRule.groups`            | Groups, containing the alert rules.                                                                                       | `{}`    |
 
 
 ### keycloak-config-cli parameters
