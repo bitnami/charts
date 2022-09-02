@@ -255,6 +255,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                   | `[]`                         |
 | `metrics.resources.limits`                 | The resources limits for the container                                                                             | `{}`                         |
 | `metrics.resources.requests`               | The requested resources for the container                                                                          | `{}`                         |
+| `metrics.extraVolumeMounts`                | Optionally specify extra list of additional volumeMounts for cassandra-exporter container                          | `[]`                         |
 | `metrics.podAnnotations`                   | Metrics exporter pod Annotation and Labels                                                                         | `{}`                         |
 | `metrics.serviceMonitor.enabled`           | If `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)             | `false`                      |
 | `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                                           | `monitoring`                 |
