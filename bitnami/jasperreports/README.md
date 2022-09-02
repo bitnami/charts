@@ -103,6 +103,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                                                             | `""`                    |
 | `updateStrategy.type`   | StrategyType                                                                                                  | `RollingUpdate`         |
 
+
 ### Jasperreports deployment parameters
 
 | Name                                    | Description                                                                               | Value                      |
