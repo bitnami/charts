@@ -27,7 +27,18 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Return the MariaDB Hostname
+Return the database Type
+*/}}
+{{- define "jasperreports.databaseType" -}}
+{{- if .Values.mariadb.enabled }}
+    {{- print "mariadb" -}}
+{{- else -}}
+    {{- printf "%s" .Values.externalDatabase.type -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the database Hostname
 */}}
 {{- define "jasperreports.databaseHost" -}}
 {{- if .Values.mariadb.enabled }}
@@ -42,7 +53,7 @@ Return the MariaDB Hostname
 {{- end -}}
 
 {{/*
-Return the MariaDB Port
+Return the database Port
 */}}
 {{- define "jasperreports.databasePort" -}}
 {{- if .Values.mariadb.enabled }}
@@ -53,7 +64,7 @@ Return the MariaDB Port
 {{- end -}}
 
 {{/*
-Return the MariaDB Database Name
+Return the database Database Name
 */}}
 {{- define "jasperreports.databaseName" -}}
 {{- if .Values.mariadb.enabled }}
@@ -64,7 +75,7 @@ Return the MariaDB Database Name
 {{- end -}}
 
 {{/*
-Return the MariaDB User
+Return the database User
 */}}
 {{- define "jasperreports.databaseUser" -}}
 {{- if .Values.mariadb.enabled }}
@@ -75,7 +86,7 @@ Return the MariaDB User
 {{- end -}}
 
 {{/*
-Return the MariaDB Secret Name
+Return the database Secret Name
 */}}
 {{- define "jasperreports.databaseSecretName" -}}
 {{- if .Values.mariadb.enabled }}

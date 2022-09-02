@@ -71,6 +71,12 @@ spec:
         {{- if .Values.concierge.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.concierge.initContainers "context" $) | nindent 8 }}
         {{- end }}
+      {{- if .Values.concierge.hostNetwork }}
+      hostNetwork: {{ .Values.concierge.hostNetwork }}
+      {{- end }}
+      {{- if .Values.concierge.dnsPolicy }}
+      dnsPolicy: {{ .Values.concierge.dnsPolicy }}
+      {{- end }}
       containers:
         - name: concierge
           image: {{ template "pinniped.image" . }}

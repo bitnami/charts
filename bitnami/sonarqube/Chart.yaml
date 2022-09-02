@@ -1,7 +1,7 @@
 annotations:
   category: DeveloperTools
 apiVersion: v2
-appVersion: 9.5.0
+appVersion: 9.6.1
 dependencies:
   - condition: postgresql.enabled
     name: postgresql
@@ -28,4 +28,4 @@ name: sonarqube
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/sonarqube
   - https://github.com/SonarSource/sonarqube
-version: 1.5.2
+version: 1.5.4

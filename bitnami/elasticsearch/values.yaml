@@ -177,7 +177,7 @@ initContainers: []
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 8.3.3-debian-11-r5
+  tag: 8.4.1-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1289,7 +1289,7 @@ coordinating:
 ingest:
   ## @param ingest.enabled Enable ingest nodes
   ##
-  enabled: false
+  enabled: true
   ## @param ingest.replicaCount Number of ingest-only replicas to deploy
   ##
   replicaCount: 2
@@ -1739,7 +1739,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-exporter
-    tag: 1.5.0-debian-11-r5
+    tag: 1.5.0-debian-11-r11
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2066,7 +2066,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r23
+    tag: 11-debian-11-r30
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2113,7 +2113,7 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: 11-debian-11-r23
+  tag: 11-debian-11-r30
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
