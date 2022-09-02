@@ -78,7 +78,7 @@ containers:
         value: {{ .Values.tomcatAllowRemoteManagement | quote }}
       {{- if or .Values.catalinaOpts .Values.metrics.jmx.enabled }}
       - name: CATALINA_OPTS
-        value: {{ include "tomcat.catalinaOpts" . | quote }} 
+        value: {{ include "tomcat.catalinaOpts" . | quote }}
       {{- end }}
       {{- if .Values.extraEnvVars }}
       {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 6 }}
@@ -143,6 +143,9 @@ containers:
   - name: jmx-exporter
     image: {{ template "tomcat.metrics.jmx.image" . }}
     imagePullPolicy: {{ .Values.metrics.jmx.image.pullPolicy | quote }}
+    {{- if .Values.metrics.jmx.containerSecurityContext.enabled }}
+    securityContext: {{- omit .Values.metrics.jmx.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+    {{- end }}
     command:
       - java
       - -XX:+UnlockExperimentalVMOptions

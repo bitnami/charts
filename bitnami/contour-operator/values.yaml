@@ -47,13 +47,15 @@ extraDeploy: []
 ## @param image.registry Contour Operator image registry
 ## @param image.repository Contour Operator image repository
 ## @param image.tag Contour Operator image tag (immutable tags are recommended)
+## @param image.digest Contour Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Contour Operator image pull policy
 ## @param image.pullSecrets Contour Operator image pull secrets
 ##
 image:
   registry: docker.io
   repository: bitnami/contour-operator
-  tag: 1.22.0-scratch-r1
+  tag: 1.22.0-scratch-r2
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -73,12 +75,14 @@ image:
 ## @param contourImage.registry Contour Image registry
 ## @param contourImage.repository Contour Image repository
 ## @param contourImage.tag Contour Image tag (immutable tags are recommended)
+## @param contourImage.digest Contour image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param contourImage.pullSecrets Contour Image pull secrets
 ##
 contourImage:
   registry: docker.io
   repository: bitnami/contour
-  tag: 1.22.0-debian-11-r1
+  tag: 1.22.0-debian-11-r3
+  digest: ""
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-contourImage-private-registry/
@@ -93,12 +97,14 @@ contourImage:
 ## @param envoyImage.registry Envoy Image registry
 ## @param envoyImage.repository Envoy Image repository
 ## @param envoyImage.tag Envoy Image tag (immutable tags are recommended)
+## @param envoyImage.digest Envoy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param envoyImage.pullSecrets Envoy Image pull secrets
 ##
 envoyImage:
   registry: docker.io
   repository: bitnami/envoy
-  tag: 1.23.0-debian-11-r6
+  tag: 1.23.0-debian-11-r7
+  digest: ""
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-envoyImage-private-registry/

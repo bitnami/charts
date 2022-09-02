@@ -56,12 +56,14 @@ diagnosticMode:
 ## @param rabbitmqImage.registry RabbitMQ Image registry
 ## @param rabbitmqImage.repository RabbitMQ Image repository
 ## @param rabbitmqImage.tag RabbitMQ Image tag (immutable tags are recommended)
+## @param rabbitmqImage.digest RabbitMQ image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param rabbitmqImage.pullSecrets RabbitMQ Image pull secrets
 ##
 rabbitmqImage:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.10.7-debian-11-r1
+  tag: 3.10.7-debian-11-r3
+  digest: ""
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-rabbitmqImage-private-registry/
@@ -73,15 +75,17 @@ rabbitmqImage:
 
 ## Bitnami RabbitMQ Default User Credential Updater Image
 ## ref: https://hub.docker.com/r/bitnami/rmq-default-credential-updater/tags/
-## @param credentialUpdaterImage.registry RabbitMQ Default User Credential Updater Image registry
-## @param credentialUpdaterImage.repository RabbitMQ Default User Credential Updater Image repository
-## @param credentialUpdaterImage.tag RabbitMQ Default User Credential Updater Image tag (immutable tags are recommended)
-## @param credentialUpdaterImage.pullSecrets RabbitMQ Default User Credential Updater Image pull secrets
+## @param credentialUpdaterImage.registry RabbitMQ Default User Credential Updater image registry
+## @param credentialUpdaterImage.repository RabbitMQ Default User Credential Updater image repository
+## @param credentialUpdaterImage.tag RabbitMQ Default User Credential Updater image tag (immutable tags are recommended)
+## @param credentialUpdaterImage.digest RabbitMQ Default User Credential Updater image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param credentialUpdaterImage.pullSecrets RabbitMQ Default User Credential Updater image pull secrets
 ##
 credentialUpdaterImage:
   registry: docker.io
   repository: bitnami/rmq-default-credential-updater
-  tag: 1.0.2-scratch-r5
+  tag: 1.0.2-scratch-r6
+  digest: ""
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-credentialUpdaterImage-private-registry/
@@ -97,13 +101,15 @@ clusterOperator:
   ## @param clusterOperator.image.registry RabbitMQ Cluster Operator image registry
   ## @param clusterOperator.image.repository RabbitMQ Cluster Operator image repository
   ## @param clusterOperator.image.tag RabbitMQ Cluster Operator image tag (immutable tags are recommended)
+  ## @param clusterOperator.image.digest RabbitMQ Cluster Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param clusterOperator.image.pullPolicy RabbitMQ Cluster Operator image pull policy
   ## @param clusterOperator.image.pullSecrets RabbitMQ Cluster Operator image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/rabbitmq-cluster-operator
-    tag: 1.14.0-scratch-r4
+    tag: 1.14.0-scratch-r5
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -475,13 +481,15 @@ msgTopologyOperator:
   ## @param msgTopologyOperator.image.registry RabbitMQ Messaging Topology Operator image registry
   ## @param msgTopologyOperator.image.repository RabbitMQ Messaging Topology Operator image repository
   ## @param msgTopologyOperator.image.tag RabbitMQ Messaging Topology Operator image tag (immutable tags are recommended)
+  ## @param msgTopologyOperator.image.digest RabbitMQ Messaging Topology Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param msgTopologyOperator.image.pullPolicy RabbitMQ Messaging Topology Operator image pull policy
   ## @param msgTopologyOperator.image.pullSecrets RabbitMQ Messaging Topology Operator image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/rmq-messaging-topology-operator
-    tag: 1.7.1-scratch-r2
+    tag: 1.7.1-scratch-r3
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

@@ -45,6 +45,7 @@ extraDeploy: []
 ## @param image.registry phpMyAdmin image registry
 ## @param image.repository phpMyAdmin image repository
 ## @param image.tag phpMyAdmin image tag (immutable tags are recommended)
+## @param image.digest phpMyAdmin image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
 ## @param image.debug Enable phpmyadmin image debug mode
@@ -52,7 +53,8 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/phpmyadmin
-  tag: 5.2.0-debian-11-r24
+  tag: 5.2.0-debian-11-r26
+  digest: ""
   ## Specify a imagePullPolicy
   ##
   pullPolicy: IfNotPresent
@@ -441,8 +443,8 @@ ingress:
   ##   secretName: phpmyadmin.local-tls
   ##
   extraTls: []
-  ## @param ingress.secrets If you're providing your own certificates and want to manage the secret via helm, 
-  ## please use this to add the certificates as secrets key and certificate should start with 
+  ## @param ingress.secrets If you're providing your own certificates and want to manage the secret via helm,
+  ## please use this to add the certificates as secrets key and certificate should start with
   ## -----BEGIN CERTIFICATE----- or -----BEGIN RSA PRIVATE KEY-----
   ## name should line up with a secretName set further up
   ##
@@ -461,7 +463,7 @@ ingress:
   ## @param ingress.existingSecretName If you're providing your own certificate and want to manage the secret yourself,
   ## please provide the name of the secret with this parameter. This secret will then be used for tls termination.
   ## It has higher priority than the cert-manager or the generation of the certificate from the chart.
-  ## 
+  ##
   ## Example:
   ## existingSecretName: "byo-phpmyadmin-tls"
   ##
@@ -478,7 +480,7 @@ ingress:
   ## - host: phpmyadmin.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: phpmyadmin-svc
   ##           port:
@@ -549,13 +551,15 @@ metrics:
   ## @param metrics.image.registry Apache exporter image registry
   ## @param metrics.image.repository Apache exporter image repository
   ## @param metrics.image.tag Apache exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.digest Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy Image pull policy
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.11.0-debian-11-r26
+    tag: 0.11.0-debian-11-r28
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

@@ -81,37 +81,38 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Schema Registry parameters
 
-| Name                                            | Description                                                                                                 | Value                     |
-| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------- |
-| `image.registry`                                | Schema Registry image registry                                                                              | `docker.io`               |
-| `image.repository`                              | Schema Registry image repository                                                                            | `bitnami/schema-registry` |
-| `image.tag`                                     | Schema Registry image tag (immutable tags are recommended)                                                  | `7.1.3-debian-11-r9`      |
-| `image.pullPolicy`                              | Schema Registry image pull policy                                                                           | `IfNotPresent`            |
-| `image.pullSecrets`                             | Schema Registry image pull secrets                                                                          | `[]`                      |
-| `image.debug`                                   | Enable image debug mode                                                                                     | `false`                   |
-| `command`                                       | Override default container command (useful when using custom images)                                        | `[]`                      |
-| `args`                                          | Override default container args (useful when using custom images)                                           | `[]`                      |
-| `hostAliases`                                   | Schema Registry pods host aliases                                                                           | `[]`                      |
-| `podLabels`                                     | Extra labels for Schema Registry pods                                                                       | `{}`                      |
-| `configuration`                                 | Specify content for schema-registry.properties. Auto-generated based on other parameters when not specified | `{}`                      |
-| `existingConfigmap`                             | Name of existing ConfigMap with Schema Registry configuration                                               | `""`                      |
-| `log4j`                                         | Schema Registry Log4J Configuration (optional)                                                              | `{}`                      |
-| `existingLog4jConfigMap`                        | Name of existing ConfigMap containing a custom log4j.properties file.                                       | `""`                      |
-| `auth.tls.enabled`                              | Enable TLS configuration to provide to be used when a listener uses HTTPS                                   | `false`                   |
-| `auth.tls.jksSecret`                            | Existing secret containing the truststore and one keystore per Schema Registry replica                      | `""`                      |
-| `auth.tls.keystorePassword`                     | Password to access the keystore when it's password-protected                                                | `""`                      |
-| `auth.tls.truststorePassword`                   | Password to access the truststore when it's password-protected                                              | `""`                      |
-| `auth.tls.clientAuthentication`                 | Client authentication configuration.                                                                        | `NONE`                    |
-| `auth.kafka.jksSecret`                          | Existing secret containing the truststore and one keystore per Schema Registry replica                      | `""`                      |
-| `auth.kafka.tlsEndpointIdentificationAlgorithm` | The endpoint identification algorithm used validate brokers hostnames                                       | `https`                   |
-| `auth.kafka.keystorePassword`                   | Password to access the keystore when it's password-protected                                                | `""`                      |
-| `auth.kafka.truststorePassword`                 | Password to access the truststore when it's password-protected                                              | `""`                      |
-| `auth.kafka.saslMechanism`                      | Mechanism that schema registry will use to connect to kafka. Allowed: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512   | `PLAIN`                   |
-| `listeners`                                     | Comma-separated list of listeners that listen for API requests over either HTTP or HTTPS                    | `http://0.0.0.0:8081`     |
-| `avroCompatibilityLevel`                        | Avro compatibility type                                                                                     | `backward`                |
-| `extraEnvVars`                                  | Extra environment variables to be set on Schema Registry container                                          | `[]`                      |
-| `extraEnvVarsCM`                                | Name of existing ConfigMap containing extra env vars                                                        | `""`                      |
-| `extraEnvVarsSecret`                            | Name of existing Secret containing extra env vars                                                           | `""`                      |
+| Name                                            | Description                                                                                                     | Value                     |
+| ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `image.registry`                                | Schema Registry image registry                                                                                  | `docker.io`               |
+| `image.repository`                              | Schema Registry image repository                                                                                | `bitnami/schema-registry` |
+| `image.tag`                                     | Schema Registry image tag (immutable tags are recommended)                                                      | `7.2.1-debian-11-r0`      |
+| `image.digest`                                  | Schema Registry image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
+| `image.pullPolicy`                              | Schema Registry image pull policy                                                                               | `IfNotPresent`            |
+| `image.pullSecrets`                             | Schema Registry image pull secrets                                                                              | `[]`                      |
+| `image.debug`                                   | Enable image debug mode                                                                                         | `false`                   |
+| `command`                                       | Override default container command (useful when using custom images)                                            | `[]`                      |
+| `args`                                          | Override default container args (useful when using custom images)                                               | `[]`                      |
+| `hostAliases`                                   | Schema Registry pods host aliases                                                                               | `[]`                      |
+| `podLabels`                                     | Extra labels for Schema Registry pods                                                                           | `{}`                      |
+| `configuration`                                 | Specify content for schema-registry.properties. Auto-generated based on other parameters when not specified     | `{}`                      |
+| `existingConfigmap`                             | Name of existing ConfigMap with Schema Registry configuration                                                   | `""`                      |
+| `log4j`                                         | Schema Registry Log4J Configuration (optional)                                                                  | `{}`                      |
+| `existingLog4jConfigMap`                        | Name of existing ConfigMap containing a custom log4j.properties file.                                           | `""`                      |
+| `auth.tls.enabled`                              | Enable TLS configuration to provide to be used when a listener uses HTTPS                                       | `false`                   |
+| `auth.tls.jksSecret`                            | Existing secret containing the truststore and one keystore per Schema Registry replica                          | `""`                      |
+| `auth.tls.keystorePassword`                     | Password to access the keystore when it's password-protected                                                    | `""`                      |
+| `auth.tls.truststorePassword`                   | Password to access the truststore when it's password-protected                                                  | `""`                      |
+| `auth.tls.clientAuthentication`                 | Client authentication configuration.                                                                            | `NONE`                    |
+| `auth.kafka.jksSecret`                          | Existing secret containing the truststore and one keystore per Schema Registry replica                          | `""`                      |
+| `auth.kafka.tlsEndpointIdentificationAlgorithm` | The endpoint identification algorithm used validate brokers hostnames                                           | `https`                   |
+| `auth.kafka.keystorePassword`                   | Password to access the keystore when it's password-protected                                                    | `""`                      |
+| `auth.kafka.truststorePassword`                 | Password to access the truststore when it's password-protected                                                  | `""`                      |
+| `auth.kafka.saslMechanism`                      | Mechanism that schema registry will use to connect to kafka. Allowed: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512       | `PLAIN`                   |
+| `listeners`                                     | Comma-separated list of listeners that listen for API requests over either HTTP or HTTPS                        | `http://0.0.0.0:8081`     |
+| `avroCompatibilityLevel`                        | Avro compatibility type                                                                                         | `backward`                |
+| `extraEnvVars`                                  | Extra environment variables to be set on Schema Registry container                                              | `[]`                      |
+| `extraEnvVarsCM`                                | Name of existing ConfigMap containing extra env vars                                                            | `""`                      |
+| `extraEnvVarsSecret`                            | Name of existing Secret containing extra env vars                                                               | `""`                      |
 
 
 ### Schema Registry statefulset parameters

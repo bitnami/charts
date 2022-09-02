@@ -62,6 +62,7 @@ diagnosticMode:
 ## @param image.registry Fluentd image registry
 ## @param image.repository Fluentd image repository
 ## @param image.tag Fluentd image tag (immutable tags are recommended)
+## @param image.digest Fluentd image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Fluentd image pull policy
 ## @param image.pullSecrets Fluentd image pull secrets
 ## @param image.debug Enable image debug mode
@@ -69,7 +70,8 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.15.1-debian-11-r5
+  tag: 1.15.2-debian-11-r0
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -94,10 +96,12 @@ forwarder:
   ## @param forwarder.image.registry Fluentd forwarder image registry override
   ## @param forwarder.image.repository Fluentd forwarder image repository override
   ## @param forwarder.image.tag Fluentd forwarder image tag override (immutable tags are recommended)
+  ## @param forwarder.image.digest Fluentd forwarder image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   image:
     registry: ""
     repository: ""
     tag: ""
+    digest: ""
   ## @param forwarder.daemonUser Forwarder daemon user and group (set to root by default because it reads from host paths)
   ##
   daemonUser: root
@@ -633,10 +637,12 @@ aggregator:
   ## @param aggregator.image.registry Fluentd aggregator image registry override
   ## @param aggregator.image.repository Fluentd aggregator image repository override
   ## @param aggregator.image.tag Fluentd aggregator image tag override (immutable tags are recommended)
+  ## @param aggregator.image.digest Fluentd aggregator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   image:
     registry: ""
     repository: ""
     tag: ""
+    digest: ""
   ## @param aggregator.replicaCount Number of aggregator pods to deploy in the Stateful Set
   ##
   replicaCount: 1
@@ -933,7 +939,7 @@ aggregator:
     ## - host: example.local
     ##     http:
     ##       path: /
-    ##       backend: 
+    ##       backend:
     ##         service:
     ##           name: example-svc
     ##           port:

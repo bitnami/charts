@@ -50,31 +50,29 @@ extraDeploy: []
 
 ## @section Wavefront HPA Adapter for Kubernetes deployment parameters
 ##
+
+## @param image.registry Adapter image registry
+## @param image.repository Adapter image repository
+## @param image.tag Adapter image tag (immutable tags are recommended)
+## @param image.digest Adapter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param image.pullPolicy Adapter image pull policy
+## @param image.pullSecrets Specify docker-registry secret names as an array
+##
 image:
-  ## @param image.registry Adapter image registry
-  ##
   registry: docker.io
-  ## @param image.repository Adapter image repository
-  ##
   repository: bitnami/wavefront-hpa-adapter
-  ## @param image.tag Adapter image tag (immutabe tags are recommended)
-  ##
-  tag: 0.9.9-scratch-r3
+  tag: 0.9.9-scratch-r4
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  ## @param image.pullPolicy Adapter image pull policy
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
-  ## @param image.pullSecrets Adapter image pull secrets
-  ##
   pullSecrets: []
-  #   - myRegistryKeySecretName
   ## Enable debug mode
   ## @param image.debug Enable image debug mode
   ##

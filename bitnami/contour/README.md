@@ -92,7 +92,8 @@ $ helm uninstall my-release
 | `contour.enabled`                                             | Contour Deployment creation.                                                                                                       | `true`                |
 | `contour.image.registry`                                      | Contour image registry                                                                                                             | `docker.io`           |
 | `contour.image.repository`                                    | Contour image name                                                                                                                 | `bitnami/contour`     |
-| `contour.image.tag`                                           | Contour image tag                                                                                                                  | `1.21.1-debian-11-r5` |
+| `contour.image.tag`                                           | Contour image tag                                                                                                                  | `1.22.0-debian-11-r4` |
+| `contour.image.digest`                                        | Contour image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                            | `""`                  |
 | `contour.image.pullPolicy`                                    | Contour Image pull policy                                                                                                          | `IfNotPresent`        |
 | `contour.image.pullSecrets`                                   | Contour Image pull secrets                                                                                                         | `[]`                  |
 | `contour.image.debug`                                         | Enable image debug mode                                                                                                            | `false`               |
@@ -192,7 +193,8 @@ $ helm uninstall my-release
 | `envoy.enabled`                                     | Envoy Proxy creation                                                                                                  | `true`                |
 | `envoy.image.registry`                              | Envoy Proxy image registry                                                                                            | `docker.io`           |
 | `envoy.image.repository`                            | Envoy Proxy image repository                                                                                          | `bitnami/envoy`       |
-| `envoy.image.tag`                                   | Envoy Proxy image tag (immutable tags are recommended)                                                                | `1.22.2-debian-11-r6` |
+| `envoy.image.tag`                                   | Envoy Proxy image tag (immutable tags are recommended)                                                                | `1.23.0-debian-11-r8` |
+| `envoy.image.digest`                                | Envoy Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag           | `""`                  |
 | `envoy.image.pullPolicy`                            | Envoy image pull policy                                                                                               | `IfNotPresent`        |
 | `envoy.image.pullSecrets`                           | Envoy image pull secrets                                                                                              | `[]`                  |
 | `envoy.priorityClassName`                           | Priority class assigned to the pods                                                                                   | `""`                  |
@@ -300,95 +302,96 @@ $ helm uninstall my-release
 
 ### Default backend parameters
 
-| Name                                                   | Description                                                                                          | Value                    |
-| ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- | ------------------------ |
-| `defaultBackend.enabled`                               | Enable a default backend based on NGINX                                                              | `false`                  |
-| `defaultBackend.image.registry`                        | Default backend image registry                                                                       | `docker.io`              |
-| `defaultBackend.image.repository`                      | Default backend image name                                                                           | `bitnami/nginx`          |
-| `defaultBackend.image.tag`                             | Default backend image tag                                                                            | `1.21.6-debian-11-r10`   |
-| `defaultBackend.image.pullPolicy`                      | Image pull policy                                                                                    | `IfNotPresent`           |
-| `defaultBackend.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                     | `[]`                     |
-| `defaultBackend.extraArgs`                             | Additional command line arguments to pass to NGINX container                                         | `{}`                     |
-| `defaultBackend.lifecycleHooks`                        | lifecycleHooks for the container to automate configuration before or after startup.                  | `{}`                     |
-| `defaultBackend.extraEnvVars`                          | Array containing extra env vars to be added to all Contour containers                                | `[]`                     |
-| `defaultBackend.extraEnvVarsCM`                        | ConfigMap containing extra env vars to be added to all Contour containers                            | `""`                     |
-| `defaultBackend.extraEnvVarsSecret`                    | Secret containing extra env vars to be added to all Contour containers                               | `""`                     |
-| `defaultBackend.extraVolumes`                          | Array to add extra volumes                                                                           | `[]`                     |
-| `defaultBackend.extraVolumeMounts`                     | Array to add extra mounts (normally used with extraVolumes)                                          | `[]`                     |
-| `defaultBackend.initContainers`                        | Attach additional init containers to the http backend pods                                           | `[]`                     |
-| `defaultBackend.sidecars`                              | Add additional sidecar containers to the default backend                                             | `[]`                     |
-| `defaultBackend.containerPorts.http`                   | Set http port inside Contour pod                                                                     | `8001`                   |
-| `defaultBackend.updateStrategy`                        | Strategy to use to update Pods                                                                       | `{}`                     |
-| `defaultBackend.command`                               | Override default command                                                                             | `[]`                     |
-| `defaultBackend.args`                                  | Override default args                                                                                | `[]`                     |
-| `defaultBackend.hostAliases`                           | Add deployment host aliases                                                                          | `[]`                     |
-| `defaultBackend.replicaCount`                          | Desired number of default backend pods                                                               | `1`                      |
-| `defaultBackend.podSecurityContext.enabled`            | Default backend Pod securityContext                                                                  | `true`                   |
-| `defaultBackend.podSecurityContext.fsGroup`            | Set Default backend Pod's Security Context fsGroup                                                   | `1001`                   |
-| `defaultBackend.containerSecurityContext.enabled`      | Default backend container securityContext                                                            | `true`                   |
-| `defaultBackend.containerSecurityContext.runAsUser`    | User ID for the Envoy container (to change this, http and https containerPorts must be set to >1024) | `1001`                   |
-| `defaultBackend.containerSecurityContext.runAsNonRoot` | Run as non root                                                                                      | `true`                   |
-| `defaultBackend.resources.limits`                      | The resources limits for the Default backend container                                               | `{}`                     |
-| `defaultBackend.resources.requests`                    | The requested resources for the Default backend container                                            | `{}`                     |
-| `defaultBackend.livenessProbe.enabled`                 | Enable livenessProbe                                                                                 | `true`                   |
-| `defaultBackend.livenessProbe.httpGet`                 | Path, port and scheme for the livenessProbe                                                          | `{}`                     |
-| `defaultBackend.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                              | `30`                     |
-| `defaultBackend.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                     | `10`                     |
-| `defaultBackend.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                    | `5`                      |
-| `defaultBackend.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                  | `3`                      |
-| `defaultBackend.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                  | `1`                      |
-| `defaultBackend.readinessProbe.enabled`                | Enable readinessProbe                                                                                | `true`                   |
-| `defaultBackend.readinessProbe.httpGet`                | Path, port and scheme for the readinessProbe                                                         | `{}`                     |
-| `defaultBackend.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                             | `0`                      |
-| `defaultBackend.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                    | `5`                      |
-| `defaultBackend.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                   | `5`                      |
-| `defaultBackend.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                 | `6`                      |
-| `defaultBackend.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                 | `1`                      |
-| `defaultBackend.startupProbe.enabled`                  | Enable/disable the startup probe                                                                     | `false`                  |
-| `defaultBackend.startupProbe.initialDelaySeconds`      | Delay before startup probe is initiated                                                              | `15`                     |
-| `defaultBackend.startupProbe.periodSeconds`            | How often to perform the probe                                                                       | `10`                     |
-| `defaultBackend.startupProbe.timeoutSeconds`           | When the probe times out                                                                             | `5`                      |
-| `defaultBackend.startupProbe.failureThreshold`         | Minimum consecutive failures for the probe to be considered failed after having succeeded.           | `3`                      |
-| `defaultBackend.startupProbe.successThreshold`         | Minimum consecutive successes for the probe to be considered successful after having failed.         | `1`                      |
-| `defaultBackend.customLivenessProbe`                   | Override default liveness probe, it overrides the default one (evaluated as a template)              | `{}`                     |
-| `defaultBackend.customReadinessProbe`                  | Override default readiness probe, it overrides the default one (evaluated as a template)             | `{}`                     |
-| `defaultBackend.customStartupProbe`                    | Override default startup probe                                                                       | `{}`                     |
-| `defaultBackend.podLabels`                             | Extra labels for Controller pods                                                                     | `{}`                     |
-| `defaultBackend.podAnnotations`                        | Annotations for Controller pods                                                                      | `{}`                     |
-| `defaultBackend.priorityClassName`                     | Priority class assigned to the pods                                                                  | `""`                     |
-| `defaultBackend.schedulerName`                         | Name of the k8s scheduler (other than default)                                                       | `""`                     |
-| `defaultBackend.terminationGracePeriodSeconds`         | In seconds, time the given to the default backend pod needs to terminate gracefully                  | `60`                     |
-| `defaultBackend.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                                       | `[]`                     |
-| `defaultBackend.podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                  | `""`                     |
-| `defaultBackend.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`             | `soft`                   |
-| `defaultBackend.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`            | `""`                     |
-| `defaultBackend.nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set.                                               | `""`                     |
-| `defaultBackend.nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                            | `[]`                     |
-| `defaultBackend.affinity`                              | Affinity for pod assignment. Evaluated as a template.                                                | `{}`                     |
-| `defaultBackend.nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                             | `{}`                     |
-| `defaultBackend.tolerations`                           | Tolerations for pod assignment. Evaluated as a template.                                             | `[]`                     |
-| `defaultBackend.service.type`                          | Service type                                                                                         | `ClusterIP`              |
-| `defaultBackend.service.ports.http`                    | Service port                                                                                         | `80`                     |
-| `defaultBackend.service.annotations`                   | Annotations to add to the service                                                                    | `{}`                     |
-| `defaultBackend.pdb.create`                            | Enable Pod Disruption Budget configuration                                                           | `false`                  |
-| `defaultBackend.pdb.minAvailable`                      | Minimum number/percentage of Default backend pods that should remain scheduled                       | `1`                      |
-| `defaultBackend.pdb.maxUnavailable`                    | Maximum number/percentage of Default backend pods that should remain scheduled                       | `""`                     |
-| `ingress.enabled`                                      | Ingress configuration enabled                                                                        | `false`                  |
-| `ingress.apiVersion`                                   | Force Ingress API version (automatically detected if not set)                                        | `""`                     |
-| `ingress.certManager`                                  | Add annotations for cert-manager                                                                     | `false`                  |
-| `ingress.annotations`                                  | Annotations to be added to the web ingress.                                                          | `{}`                     |
-| `ingress.hostname`                                     | Hostname for the Ingress object                                                                      | `contour.local`          |
-| `ingress.path`                                         | The Path to Concourse                                                                                | `/`                      |
-| `ingress.rulesOverride`                                | Ingress rules override                                                                               | `[]`                     |
-| `ingress.selfSigned`                                   | Create a TLS secret for this ingress record using self-signed certificates generated by Helm         | `false`                  |
-| `ingress.ingressClassName`                             | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                        | `""`                     |
-| `ingress.extraPaths`                                   | Add additional arbitrary paths that may need to be added to the ingress under the main host.         | `[]`                     |
-| `ingress.tls`                                          | TLS configuration.                                                                                   | `false`                  |
-| `ingress.pathType`                                     | Ingress Path type                                                                                    | `ImplementationSpecific` |
-| `ingress.extraHosts`                                   | The list of additional hostnames to be covered with this ingress record.                             | `[]`                     |
-| `ingress.extraTls`                                     | The tls configuration for additional hostnames to be covered with this ingress record.               | `[]`                     |
-| `ingress.secrets`                                      | If you're providing your own certificates, please use this to add the certificates as secrets        | `[]`                     |
-| `ingress.extraRules`                                   | Additional rules to be covered with this ingress record                                              | `[]`                     |
+| Name                                                   | Description                                                                                                     | Value                    |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `defaultBackend.enabled`                               | Enable a default backend based on NGINX                                                                         | `false`                  |
+| `defaultBackend.image.registry`                        | Default backend image registry                                                                                  | `docker.io`              |
+| `defaultBackend.image.repository`                      | Default backend image name                                                                                      | `bitnami/nginx`          |
+| `defaultBackend.image.tag`                             | Default backend image tag                                                                                       | `1.23.1-debian-11-r7`    |
+| `defaultBackend.image.digest`                          | Default backend image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
+| `defaultBackend.image.pullPolicy`                      | Image pull policy                                                                                               | `IfNotPresent`           |
+| `defaultBackend.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                | `[]`                     |
+| `defaultBackend.extraArgs`                             | Additional command line arguments to pass to NGINX container                                                    | `{}`                     |
+| `defaultBackend.lifecycleHooks`                        | lifecycleHooks for the container to automate configuration before or after startup.                             | `{}`                     |
+| `defaultBackend.extraEnvVars`                          | Array containing extra env vars to be added to all Contour containers                                           | `[]`                     |
+| `defaultBackend.extraEnvVarsCM`                        | ConfigMap containing extra env vars to be added to all Contour containers                                       | `""`                     |
+| `defaultBackend.extraEnvVarsSecret`                    | Secret containing extra env vars to be added to all Contour containers                                          | `""`                     |
+| `defaultBackend.extraVolumes`                          | Array to add extra volumes                                                                                      | `[]`                     |
+| `defaultBackend.extraVolumeMounts`                     | Array to add extra mounts (normally used with extraVolumes)                                                     | `[]`                     |
+| `defaultBackend.initContainers`                        | Attach additional init containers to the http backend pods                                                      | `[]`                     |
+| `defaultBackend.sidecars`                              | Add additional sidecar containers to the default backend                                                        | `[]`                     |
+| `defaultBackend.containerPorts.http`                   | Set http port inside Contour pod                                                                                | `8001`                   |
+| `defaultBackend.updateStrategy`                        | Strategy to use to update Pods                                                                                  | `{}`                     |
+| `defaultBackend.command`                               | Override default command                                                                                        | `[]`                     |
+| `defaultBackend.args`                                  | Override default args                                                                                           | `[]`                     |
+| `defaultBackend.hostAliases`                           | Add deployment host aliases                                                                                     | `[]`                     |
+| `defaultBackend.replicaCount`                          | Desired number of default backend pods                                                                          | `1`                      |
+| `defaultBackend.podSecurityContext.enabled`            | Default backend Pod securityContext                                                                             | `true`                   |
+| `defaultBackend.podSecurityContext.fsGroup`            | Set Default backend Pod's Security Context fsGroup                                                              | `1001`                   |
+| `defaultBackend.containerSecurityContext.enabled`      | Default backend container securityContext                                                                       | `true`                   |
+| `defaultBackend.containerSecurityContext.runAsUser`    | User ID for the Envoy container (to change this, http and https containerPorts must be set to >1024)            | `1001`                   |
+| `defaultBackend.containerSecurityContext.runAsNonRoot` | Run as non root                                                                                                 | `true`                   |
+| `defaultBackend.resources.limits`                      | The resources limits for the Default backend container                                                          | `{}`                     |
+| `defaultBackend.resources.requests`                    | The requested resources for the Default backend container                                                       | `{}`                     |
+| `defaultBackend.livenessProbe.enabled`                 | Enable livenessProbe                                                                                            | `true`                   |
+| `defaultBackend.livenessProbe.httpGet`                 | Path, port and scheme for the livenessProbe                                                                     | `{}`                     |
+| `defaultBackend.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                         | `30`                     |
+| `defaultBackend.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                | `10`                     |
+| `defaultBackend.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                               | `5`                      |
+| `defaultBackend.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                             | `3`                      |
+| `defaultBackend.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                             | `1`                      |
+| `defaultBackend.readinessProbe.enabled`                | Enable readinessProbe                                                                                           | `true`                   |
+| `defaultBackend.readinessProbe.httpGet`                | Path, port and scheme for the readinessProbe                                                                    | `{}`                     |
+| `defaultBackend.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                        | `0`                      |
+| `defaultBackend.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                               | `5`                      |
+| `defaultBackend.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                              | `5`                      |
+| `defaultBackend.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                            | `6`                      |
+| `defaultBackend.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                            | `1`                      |
+| `defaultBackend.startupProbe.enabled`                  | Enable/disable the startup probe                                                                                | `false`                  |
+| `defaultBackend.startupProbe.initialDelaySeconds`      | Delay before startup probe is initiated                                                                         | `15`                     |
+| `defaultBackend.startupProbe.periodSeconds`            | How often to perform the probe                                                                                  | `10`                     |
+| `defaultBackend.startupProbe.timeoutSeconds`           | When the probe times out                                                                                        | `5`                      |
+| `defaultBackend.startupProbe.failureThreshold`         | Minimum consecutive failures for the probe to be considered failed after having succeeded.                      | `3`                      |
+| `defaultBackend.startupProbe.successThreshold`         | Minimum consecutive successes for the probe to be considered successful after having failed.                    | `1`                      |
+| `defaultBackend.customLivenessProbe`                   | Override default liveness probe, it overrides the default one (evaluated as a template)                         | `{}`                     |
+| `defaultBackend.customReadinessProbe`                  | Override default readiness probe, it overrides the default one (evaluated as a template)                        | `{}`                     |
+| `defaultBackend.customStartupProbe`                    | Override default startup probe                                                                                  | `{}`                     |
+| `defaultBackend.podLabels`                             | Extra labels for Controller pods                                                                                | `{}`                     |
+| `defaultBackend.podAnnotations`                        | Annotations for Controller pods                                                                                 | `{}`                     |
+| `defaultBackend.priorityClassName`                     | Priority class assigned to the pods                                                                             | `""`                     |
+| `defaultBackend.schedulerName`                         | Name of the k8s scheduler (other than default)                                                                  | `""`                     |
+| `defaultBackend.terminationGracePeriodSeconds`         | In seconds, time the given to the default backend pod needs to terminate gracefully                             | `60`                     |
+| `defaultBackend.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                                                  | `[]`                     |
+| `defaultBackend.podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                     |
+| `defaultBackend.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                        | `soft`                   |
+| `defaultBackend.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                       | `""`                     |
+| `defaultBackend.nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set.                                                          | `""`                     |
+| `defaultBackend.nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                                       | `[]`                     |
+| `defaultBackend.affinity`                              | Affinity for pod assignment. Evaluated as a template.                                                           | `{}`                     |
+| `defaultBackend.nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                                        | `{}`                     |
+| `defaultBackend.tolerations`                           | Tolerations for pod assignment. Evaluated as a template.                                                        | `[]`                     |
+| `defaultBackend.service.type`                          | Service type                                                                                                    | `ClusterIP`              |
+| `defaultBackend.service.ports.http`                    | Service port                                                                                                    | `80`                     |
+| `defaultBackend.service.annotations`                   | Annotations to add to the service                                                                               | `{}`                     |
+| `defaultBackend.pdb.create`                            | Enable Pod Disruption Budget configuration                                                                      | `false`                  |
+| `defaultBackend.pdb.minAvailable`                      | Minimum number/percentage of Default backend pods that should remain scheduled                                  | `1`                      |
+| `defaultBackend.pdb.maxUnavailable`                    | Maximum number/percentage of Default backend pods that should remain scheduled                                  | `""`                     |
+| `ingress.enabled`                                      | Ingress configuration enabled                                                                                   | `false`                  |
+| `ingress.apiVersion`                                   | Force Ingress API version (automatically detected if not set)                                                   | `""`                     |
+| `ingress.certManager`                                  | Add annotations for cert-manager                                                                                | `false`                  |
+| `ingress.annotations`                                  | Annotations to be added to the web ingress.                                                                     | `{}`                     |
+| `ingress.hostname`                                     | Hostname for the Ingress object                                                                                 | `contour.local`          |
+| `ingress.path`                                         | The Path to Concourse                                                                                           | `/`                      |
+| `ingress.rulesOverride`                                | Ingress rules override                                                                                          | `[]`                     |
+| `ingress.selfSigned`                                   | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                    | `false`                  |
+| `ingress.ingressClassName`                             | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                   | `""`                     |
+| `ingress.extraPaths`                                   | Add additional arbitrary paths that may need to be added to the ingress under the main host.                    | `[]`                     |
+| `ingress.tls`                                          | TLS configuration.                                                                                              | `false`                  |
+| `ingress.pathType`                                     | Ingress Path type                                                                                               | `ImplementationSpecific` |
+| `ingress.extraHosts`                                   | The list of additional hostnames to be covered with this ingress record.                                        | `[]`                     |
+| `ingress.extraTls`                                     | The tls configuration for additional hostnames to be covered with this ingress record.                          | `[]`                     |
+| `ingress.secrets`                                      | If you're providing your own certificates, please use this to add the certificates as secrets                   | `[]`                     |
+| `ingress.extraRules`                                   | Additional rules to be covered with this ingress record                                                         | `[]`                     |
 
 
 ### Metrics parameters

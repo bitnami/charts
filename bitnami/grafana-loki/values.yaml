@@ -65,13 +65,15 @@ loki:
   ## @param loki.image.registry Grafana Loki image registry
   ## @param loki.image.repository Grafana Loki image repository
   ## @param loki.image.tag Grafana Loki image tag (immutable tags are recommended)
+  ## @param loki.image.digest Grafana Loki image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param loki.image.pullPolicy Grafana Loki image pull policy
   ## @param loki.image.pullSecrets Grafana Loki image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/grafana-loki
-    tag: 2.6.1-debian-11-r7
+    tag: 2.6.1-debian-11-r9
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -570,6 +572,7 @@ gateway:
   ## @param gateway.image.registry Nginx image registry
   ## @param gateway.image.repository Nginx image repository
   ## @param gateway.image.tag Nginx image tag (immutable tags are recommended)
+  ## @param gateway.image.digest Nginx image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param gateway.image.pullPolicy Nginx image pull policy
   ## @param gateway.image.pullSecrets Nginx image pull secrets
   ## @param gateway.image.debug Enable debugging in the initialization process
@@ -577,7 +580,8 @@ gateway:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.23.1-debian-11-r5
+    tag: 1.23.1-debian-11-r7
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2416,10 +2420,10 @@ queryScheduler:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
-    
+
   ## @param queryScheduler.minReadySeconds Minimum time to wait before performing readiness check
   ##
-  minReadySeconds: 10 
+  minReadySeconds: 10
 
   ## @param queryScheduler.readinessProbe.enabled Enable readinessProbe on queryScheduler nodes
   ## @param queryScheduler.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
@@ -2643,7 +2647,7 @@ queryScheduler:
     ## @param queryScheduler.service.extraPorts Extra ports to expose in the queryScheduler service
     ##
     extraPorts: []
-    
+
 ## @section Ruler Deployment Parameters
 ##
 ruler:
@@ -3233,13 +3237,15 @@ promtail:
   ## @param promtail.image.registry Grafana Promtail image registry
   ## @param promtail.image.repository Grafana Promtail image repository
   ## @param promtail.image.tag Grafana Promtail image tag (immutable tags are recommended)
+  ## @param promtail.image.digest Grafana Promtail image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param promtail.image.pullPolicy Grafana Promtail image pull policy
   ## @param promtail.image.pullSecrets Grafana Promtail image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/promtail
-    tag: 2.6.1-debian-11-r6
+    tag: 2.6.1-debian-11-r8
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -3646,13 +3652,15 @@ volumePermissions:
   ## @param volumePermissions.image.registry Bitnami Shell image registry
   ## @param volumePermissions.image.repository Bitnami Shell image repository
   ## @param volumePermissions.image.tag Bitnami Shell image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.digest Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Bitnami Shell image pull policy
   ## @param volumePermissions.image.pullSecrets Bitnami Shell image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r22
+    tag: 11-debian-11-r23
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -3768,12 +3776,13 @@ memcachedchunks:
   ## @param memcachedchunks.image.registry Memcached image registry
   ## @param memcachedchunks.image.repository Memcached image repository
   ## @param memcachedchunks.image.tag Memcached image tag (immutable tags are recommended)
+  ## @param memcachedchunks.image.digest Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.16-debian-11-r0
-
+    tag: 1.6.16-debian-11-r2
+    digest: ""
   ## @param memcachedchunks.nameOverride override the subchart name
   ##
   nameOverride: ""
@@ -3808,11 +3817,13 @@ memcachedfrontend:
   ## @param memcachedfrontend.image.registry Memcached image registry
   ## @param memcachedfrontend.image.repository Memcached image repository
   ## @param memcachedfrontend.image.tag Memcached image tag (immutable tags are recommended)
+  ## @param memcachedfrontend.image.digest Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.16-debian-11-r0
+    tag: 1.6.16-debian-11-r2
+    digest: ""
   ## @param memcachedfrontend.architecture Memcached architecture
   ##
   architecture: high-availability
@@ -3848,11 +3859,13 @@ memcachedindexqueries:
   ## @param memcachedindexqueries.image.registry Memcached image registry
   ## @param memcachedindexqueries.image.repository Memcached image repository
   ## @param memcachedindexqueries.image.tag Memcached image tag (immutable tags are recommended)
+  ## @param memcachedindexqueries.image.digest Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.16-debian-11-r0
+    tag: 1.6.16-debian-11-r2
+    digest: ""
   ## @param memcachedindexqueries.architecture Memcached architecture
   ##
   architecture: high-availability
@@ -3887,11 +3900,13 @@ memcachedindexwrites:
   ## @param memcachedindexwrites.image.registry Memcached image registry
   ## @param memcachedindexwrites.image.repository Memcached image repository
   ## @param memcachedindexwrites.image.tag Memcached image tag (immutable tags are recommended)
+  ## @param memcachedindexwrites.image.digest Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.16-debian-11-r0
+    tag: 1.6.16-debian-11-r2
+    digest: ""
   ## @param memcachedindexwrites.architecture Memcached architecture
   ##
   architecture: high-availability

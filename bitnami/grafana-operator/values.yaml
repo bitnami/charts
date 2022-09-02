@@ -137,13 +137,15 @@ operator:
   ## @param operator.image.registry Grafana Operator image registry
   ## @param operator.image.repository Grafana Operator image name
   ## @param operator.image.tag Grafana Operator image tag
+  ## @param operator.image.digest Grafana Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param operator.image.pullPolicy Grafana Operator image pull policy
   ## @param operator.image.pullSecrets Grafana Operator image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/grafana-operator
-    tag: 4.5.1-debian-11-r7
+    tag: 4.6.0-debian-11-r0
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## Ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -417,12 +419,14 @@ grafana:
   ## @param grafana.image.registry Grafana image registry
   ## @param grafana.image.repository Grafana image name
   ## @param grafana.image.tag Grafana image tag
+  ## @param grafana.image.digest Grafana image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param grafana.image.pullSecrets Grafana image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/grafana
-    tag: 8.5.9-debian-11-r6
+    tag: 9.1.0-debian-11-r0
+    digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

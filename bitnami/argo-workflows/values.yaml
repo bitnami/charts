@@ -58,13 +58,15 @@ server:
   ## @param server.image.registry server image registry
   ## @param server.image.repository server image repository
   ## @param server.image.tag server image tag (immutable tags are recommended)
+  ## @param server.image.digest server image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param server.image.pullPolicy server image pull policy
   ## @param server.image.pullSecrets server image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-cli
-    tag: 3.3.8-scratch-r7
+    tag: 3.3.9-scratch-r0
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -464,13 +466,15 @@ controller:
   ## @param controller.image.registry controller image registry
   ## @param controller.image.repository controller image repository
   ## @param controller.image.tag controller image tag (immutable tags are recommended)
+  ## @param controller.image.digest controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param controller.image.pullPolicy controller image pull policy
   ## @param controller.image.pullSecrets controller image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-controller
-    tag: 3.3.8-scratch-r3
+    tag: 3.3.8-scratch-r5
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -953,13 +957,15 @@ executor:
   ## @param executor.image.registry executor image registry
   ## @param executor.image.repository executor image repository
   ## @param executor.image.tag executor image tag (immutable tags are recommended)
+  ## @param executor.image.digest executor image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param executor.image.pullPolicy executor image pull policy
   ## @param executor.image.pullSecrets executor image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-exec
-    tag: 3.3.8-debian-11-r15
+    tag: 3.3.8-debian-11-r18
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

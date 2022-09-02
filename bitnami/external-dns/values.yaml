@@ -53,13 +53,15 @@ watchReleaseNamespace: false
 ## @param image.registry ExternalDNS image registry
 ## @param image.repository ExternalDNS image repository
 ## @param image.tag ExternalDNS Image tag (immutable tags are recommended)
+## @param image.digest ExternalDNS image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy ExternalDNS image pull policy
 ## @param image.pullSecrets ExternalDNS image pull secrets
 ##
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.12.2-debian-11-r3
+  tag: 0.12.2-debian-11-r5
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

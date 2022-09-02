@@ -65,13 +65,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### HAProxy chart parameters
 
-| Name                        | Description                                        | Value                   |
-| --------------------------- | -------------------------------------------------- | ----------------------- |
-| `haproxy.image.registry`    | HAProxy image registry                             | `docker.io`             |
-| `haproxy.image.repository`  | HAProxy image repository                           | `bitnami/haproxy-intel` |
-| `haproxy.image.tag`         | HAProxy image tag (immutable tags are recommended) | `2.6.2-debian-11-r7`    |
-| `haproxy.image.pullPolicy`  | HAProxy image pull policy                          | `IfNotPresent`          |
-| `haproxy.image.pullSecrets` | HAProxy image pull secrets                         | `[]`                    |
+| Name                        | Description                                                                                             | Value                   |
+| --------------------------- | ------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `haproxy.image.registry`    | HAProxy image registry                                                                                  | `docker.io`             |
+| `haproxy.image.repository`  | HAProxy image repository                                                                                | `bitnami/haproxy-intel` |
+| `haproxy.image.tag`         | HAProxy image tag (immutable tags are recommended)                                                      | `2.6.4-debian-11-r0`    |
+| `haproxy.image.digest`      | HAProxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `haproxy.image.pullPolicy`  | HAProxy image pull policy                                                                               | `IfNotPresent`          |
+| `haproxy.image.pullSecrets` | HAProxy image pull secrets                                                                              | `[]`                    |
 
 
 HAProxy is installed as a subchart, meaning that the whole list of parameters is defined in [bitnami/haproxy](https://github.com/bitnami/charts/tree/master/bitnami/haproxy). Please, note that parameters from the subchart should be prefixed with `haproxy.` in this chart.

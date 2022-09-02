@@ -56,6 +56,7 @@ diagnosticMode:
 ## @param server.image.registry TensorFlow Serving image registry
 ## @param server.image.repository TensorFlow Serving image repository
 ## @param server.image.tag TensorFlow Serving Image tag (immutable tags are recommended)
+## @param server.image.digest TensorFlow Serving image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param server.image.pullPolicy TensorFlow Serving image pull policy
 ## @param server.image.pullSecrets Specify docker-registry secret names as an array
 ##
@@ -63,7 +64,8 @@ server:
   image:
     registry: docker.io
     repository: bitnami/tensorflow-serving
-    tag: 2.9.1-debian-11-r10
+    tag: 2.9.1-debian-11-r12
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -81,7 +83,8 @@ server:
 ## ref: https://hub.docker.com/r/bitnami/tensorflow-resnet/tags/
 ## @param client.image.registry TensorFlow ResNet image registry
 ## @param client.image.repository TensorFlow ResNet image repository
-## @param client.image.tag TensorFlow ResNet Image tag (immutable tags are recommended)
+## @param client.image.tag TensorFlow ResNet image tag (immutable tags are recommended)
+## @param client.image.digest TensorFlow ResNet image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param client.image.pullPolicy TensorFlow ResNet image pull policy
 ## @param client.image.pullSecrets Specify docker-registry secret names as an array
 ##
@@ -89,7 +92,8 @@ client:
   image:
     registry: docker.io
     repository: bitnami/tensorflow-resnet
-    tag: 2.9.1-debian-11-r9
+    tag: 2.9.1-debian-11-r11
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

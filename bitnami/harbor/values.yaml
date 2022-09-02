@@ -643,6 +643,65 @@ persistence:
       rootdirectory: ""
       secretkey: ""
 
+## @section Tracing parameters
+##
+
+## Tracing parameters:
+## tracing: Configure tracing for Harbor, only one of tracing.jeager.enabled and tracing.otel.enabled should be set
+tracing:
+  ## @param tracing.enabled Enable tracing
+  ##
+  enabled: false
+  ## @param tracing.sampleRate Tracing sample rate from 0 to 1
+  ##
+  sampleRate: 1
+  ## @param tracing.namespace Used to differentiate traces between different harbor services
+  ##
+  namespace: ""
+  ## @param tracing.attributes A key value dict containing user defined attributes used to initialize the trace provider
+  ## e.g:
+  ## attributes:
+  ##   application: harbor
+  ##
+  attributes: {}
+
+  ## @extra tracing.jaeger Configuration for exporting to jaeger. If using jaeger collector mode, use endpoint, username and password. If using jaeger agent mode, use agentHostname and agentPort.
+  ## e.g:
+  ## jaeger:
+  ##   enabled: true
+  ##   endpoint: http://hostname:14268/api/traces
+  ##   username: "jaeger-username"
+  ##   password: "jaeger-password"
+  ## @param tracing.jaeger.enabled Enable jaeger export
+  ## @param tracing.jaeger.endpoint Jaeger endpoint
+  ## @param tracing.jaeger.username Jaeger username
+  ## @param tracing.jaeger.password Jaeger password
+  ## @param tracing.jaeger.agentHost Jaeger agent hostname
+  ## @param tracing.jaeger.agentPort Jaeger agent port
+  ##
+  jaeger:
+    enabled: false
+    endpoint: ""
+    username: ""
+    password: ""
+    agentHost: ""
+    agentPort: ""
+  ## @extra tracing.otel Configuration for exporting to an otel endpoint
+  ## @param tracing.otel.enabled Enable otel export
+  ## @param tracing.otel.endpoint The hostname and port for an otel compatible backend
+  ## @param tracing.otel.urlpath Url path of otel endpoint
+  ## @param tracing.otel.compression Enable data compression
+  ## @param tracing.otel.timeout The timeout for data transfer
+  ## @param tracing.otel.insecure Ignore cert verification for otel backend
+  ##
+  otel:
+    enabled: false
+    endpoint: "hostname:4318"
+    urlpath: "/v1/traces"
+    compression: false
+    timeout: 10s
+    insecure: true
+
 ## @section Volume Permissions parameters
 ##
 
@@ -656,13 +715,15 @@ volumePermissions:
   ## @param volumePermissions.image.registry Init container volume-permissions image registry
   ## @param volumePermissions.image.repository Init container volume-permissions image repository
   ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r22
+    tag: 11-debian-11-r23
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -699,6 +760,7 @@ nginx:
   ## @param nginx.image.registry NGINX image registry
   ## @param nginx.image.repository NGINX image repository
   ## @param nginx.image.tag NGINX image tag (immutable tags are recommended)
+  ## @param nginx.image.digest NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param nginx.image.pullPolicy NGINX image pull policy
   ## @param nginx.image.pullSecrets NGINX image pull secrets
   ## @param nginx.image.debug Enable NGINX image debug mode
@@ -706,7 +768,8 @@ nginx:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.23.1-debian-11-r5
+    tag: 1.23.1-debian-11-r7
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -962,6 +1025,7 @@ portal:
   ## @param portal.image.registry Harbor Portal image registry
   ## @param portal.image.repository Harbor Portal image repository
   ## @param portal.image.tag Harbor Portal image tag (immutable tags are recommended)
+  ## @param portal.image.digest Harbor Portal image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param portal.image.pullPolicy Harbor Portal image pull policy
   ## @param portal.image.pullSecrets Harbor Portal image pull secrets
   ## @param portal.image.debug Enable Harbor Portal image debug mode
@@ -969,7 +1033,8 @@ portal:
   image:
     registry: docker.io
     repository: bitnami/harbor-portal
-    tag: 2.5.3-debian-11-r12
+    tag: 2.5.3-debian-11-r14
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1220,6 +1285,7 @@ core:
   ## @param core.image.registry Harbor Core image registry
   ## @param core.image.repository Harbor Core image repository
   ## @param core.image.tag Harbor Core image tag (immutable tags are recommended)
+  ## @param core.image.digest Harbor Core image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param core.image.pullPolicy Harbor Core image pull policy
   ## @param core.image.pullSecrets Harbor Core image pull secrets
   ## @param core.image.debug Enable Harbor Core image debug mode
@@ -1227,7 +1293,8 @@ core:
   image:
     registry: docker.io
     repository: bitnami/harbor-core
-    tag: 2.5.3-debian-11-r9
+    tag: 2.5.3-debian-11-r11
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1511,6 +1578,7 @@ jobservice:
   ## @param jobservice.image.registry Harbor Jobservice image registry
   ## @param jobservice.image.repository Harbor Jobservice image repository
   ## @param jobservice.image.tag Harbor Jobservice image tag (immutable tags are recommended)
+  ## @param jobservice.image.digest Harbor Jobservice image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param jobservice.image.pullPolicy Harbor Jobservice image pull policy
   ## @param jobservice.image.pullSecrets Harbor Jobservice image pull secrets
   ## @param jobservice.image.debug Enable Harbor Jobservice image debug mode
@@ -1518,7 +1586,8 @@ jobservice:
   image:
     registry: docker.io
     repository: bitnami/harbor-jobservice
-    tag: 2.5.3-debian-11-r9
+    tag: 2.5.3-debian-11-r11
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1952,6 +2021,7 @@ registry:
     ## @param registry.server.image.registry Harbor Registry image registry
     ## @param registry.server.image.repository Harbor Registry image repository
     ## @param registry.server.image.tag Harbor Registry image tag (immutable tags are recommended)
+    ## @param registry.server.image.digest Harbor Registry image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param registry.server.image.pullPolicy Harbor Registry image pull policy
     ## @param registry.server.image.pullSecrets Harbor Registry image pull secrets
     ## @param registry.server.image.debug Enable Harbor Registry image debug mode
@@ -1959,7 +2029,8 @@ registry:
     image:
       registry: docker.io
       repository: bitnami/harbor-registry
-      tag: 2.5.3-debian-11-r12
+      tag: 2.5.3-debian-11-r14
+      digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2097,6 +2168,7 @@ registry:
     ## @param registry.controller.image.registry Harbor Registryctl image registry
     ## @param registry.controller.image.repository Harbor Registryctl image repository
     ## @param registry.controller.image.tag Harbor Registryctl image tag (immutable tags are recommended)
+    ## @param registry.controller.image.digest Harbor Registryctl image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param registry.controller.image.pullPolicy Harbor Registryctl image pull policy
     ## @param registry.controller.image.pullSecrets Harbor Registryctl image pull secrets
     ## @param registry.controller.image.debug Enable Harbor Registryctl image debug mode
@@ -2104,7 +2176,8 @@ registry:
     image:
       registry: docker.io
       repository: bitnami/harbor-registryctl
-      tag: 2.5.3-debian-11-r9
+      tag: 2.5.3-debian-11-r11
+      digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2238,6 +2311,7 @@ chartmuseum:
   ## @param chartmuseum.image.registry ChartMuseum image registry
   ## @param chartmuseum.image.repository ChartMuseum image repository
   ## @param chartmuseum.image.tag ChartMuseum image tag (immutable tags are recommended)
+  ## @param chartmuseum.image.digest ChartMuseum image image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param chartmuseum.image.pullPolicy ChartMuseum image pull policy
   ## @param chartmuseum.image.pullSecrets ChartMuseum image pull secrets
   ## @param chartmuseum.image.debug Enable ChartMuseum image debug mode
@@ -2245,7 +2319,8 @@ chartmuseum:
   image:
     registry: docker.io
     repository: bitnami/chartmuseum
-    tag: 0.15.0-debian-11-r9
+    tag: 0.15.0-debian-11-r11
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2560,6 +2635,7 @@ notary:
     ## @param notary.server.image.registry Harbor Notary Server image registry
     ## @param notary.server.image.repository Harbor Notary Server image repository
     ## @param notary.server.image.tag Harbor Notary Server image tag (immutable tags are recommended)
+    ## @param notary.server.image.digest Notary Server image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param notary.server.image.pullPolicy Harbor Notary Server image pull policy
     ## @param notary.server.image.pullSecrets Harbor Notary Server image pull secrets
     ## @param notary.server.image.debug Enable Harbor Notary Server image debug mode
@@ -2567,7 +2643,8 @@ notary:
     image:
       registry: docker.io
       repository: bitnami/harbor-notary-server
-      tag: 2.5.3-debian-11-r12
+      tag: 2.5.3-debian-11-r14
+      digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2795,6 +2872,7 @@ notary:
     ## @param notary.signer.image.registry Harbor Notary Signer image registry
     ## @param notary.signer.image.repository Harbor Notary Signer image repository
     ## @param notary.signer.image.tag Harbor Notary Signer image tag (immutable tags are recommended)
+    ## @param notary.signer.image.digest Harbor Notary Signer image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param notary.signer.image.pullPolicy Harbor Notary Signer image pull policy
     ## @param notary.signer.image.pullSecrets Harbor Notary Signer image pull secrets
     ## @param notary.signer.image.debug Enable Harbor Notary Signer image debug mode
@@ -2802,7 +2880,8 @@ notary:
     image:
       registry: docker.io
       repository: bitnami/harbor-notary-signer
-      tag: 2.5.3-debian-11-r10
+      tag: 2.5.3-debian-11-r12
+      digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -3043,6 +3122,7 @@ trivy:
   ## @param trivy.image.registry Harbor Adapter Trivy image registry
   ## @param trivy.image.repository Harbor Adapter Trivy image repository
   ## @param trivy.image.tag Harbor Adapter Trivy image tag (immutable tags are recommended)
+  ## @param trivy.image.digest Harbor Adapter Trivy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param trivy.image.pullPolicy Harbor Adapter Trivy image pull policy
   ## @param trivy.image.pullSecrets Harbor Adapter Trivy image pull secrets
   ## @param trivy.image.debug Enable Harbor Adapter Trivy image debug mode
@@ -3050,7 +3130,8 @@ trivy:
   image:
     registry: docker.io
     repository: bitnami/harbor-adapter-trivy
-    tag: 2.5.3-debian-11-r7
+    tag: 2.5.3-debian-11-r9
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -3346,9 +3427,10 @@ trivy:
 exporter:
   ## Bitnami Harbor Exporter image
   ## ref: https://hub.docker.com/r/bitnami/harbor-exporter/tags/
-  ## @param exporter.image.registry Registry for exporter image
-  ## @param exporter.image.repository Repository for exporter image
-  ## @param exporter.image.tag Tag for exporter image
+  ## @param exporter.image.registry Harbor Exporter image registry
+  ## @param exporter.image.repository Harbor Exporter image repository
+  ## @param exporter.image.tag Harbor Exporter image tag
+  ## @param exporter.image.digest Harbor Exporter image image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param exporter.image.pullPolicy Harbor exporter image pull policy
   ## @param exporter.image.pullSecrets Specify docker-registry secret names as an array
   ## @param exporter.image.debug Specify if debug logs should be enabled
@@ -3356,7 +3438,8 @@ exporter:
   image:
     registry: docker.io
     repository: bitnami/harbor-exporter
-    tag: 2.5.3-debian-11-r10
+    tag: 2.5.3-debian-11-r12
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -3599,11 +3682,13 @@ postgresql:
   ## @param postgresql.image.registry PostgreSQL image registry
   ## @param postgresql.image.repository PostgreSQL image repository
   ## @param postgresql.image.tag PostgreSQL image tag (immutable tags are recommended)
+  ## @param postgresql.image.digest PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 13.7.0-debian-11-r30
+    tag: 13.7.0-debian-11-r32
+    digest: ""
   auth:
     enablePostgresUser: true
     postgresPassword: not-secure-database-password

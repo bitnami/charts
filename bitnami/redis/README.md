@@ -95,14 +95,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Redis&reg; Image parameters
 
-| Name                | Description                                           | Value                |
-| ------------------- | ----------------------------------------------------- | -------------------- |
-| `image.registry`    | Redis&reg; image registry                             | `docker.io`          |
-| `image.repository`  | Redis&reg; image repository                           | `bitnami/redis`      |
-| `image.tag`         | Redis&reg; image tag (immutable tags are recommended) | `7.0.4-debian-11-r9` |
-| `image.pullPolicy`  | Redis&reg; image pull policy                          | `IfNotPresent`       |
-| `image.pullSecrets` | Redis&reg; image pull secrets                         | `[]`                 |
-| `image.debug`       | Enable image debug mode                               | `false`              |
+| Name                | Description                                                                                                | Value                 |
+| ------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------- |
+| `image.registry`    | Redis&reg; image registry                                                                                  | `docker.io`           |
+| `image.repository`  | Redis&reg; image repository                                                                                | `bitnami/redis`       |
+| `image.tag`         | Redis&reg; image tag (immutable tags are recommended)                                                      | `7.0.4-debian-11-r17` |
+| `image.digest`      | Redis&reg; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
+| `image.pullPolicy`  | Redis&reg; image pull policy                                                                               | `IfNotPresent`        |
+| `image.pullSecrets` | Redis&reg; image pull secrets                                                                              | `[]`                  |
+| `image.debug`       | Enable image debug mode                                                                                    | `false`               |
 
 
 ### Redis&reg; common configuration parameters
@@ -321,7 +322,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.enabled`                            | Use Redis&reg; Sentinel on Redis&reg; pods.                                                                                                 | `false`                  |
 | `sentinel.image.registry`                     | Redis&reg; Sentinel image registry                                                                                                          | `docker.io`              |
 | `sentinel.image.repository`                   | Redis&reg; Sentinel image repository                                                                                                        | `bitnami/redis-sentinel` |
-| `sentinel.image.tag`                          | Redis&reg; Sentinel image tag (immutable tags are recommended)                                                                              | `7.0.4-debian-11-r6`     |
+| `sentinel.image.tag`                          | Redis&reg; Sentinel image tag (immutable tags are recommended)                                                                              | `7.0.4-debian-11-r14`    |
+| `sentinel.image.digest`                       | Redis&reg; Sentinel image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                     |
 | `sentinel.image.pullPolicy`                   | Redis&reg; Sentinel image pull policy                                                                                                       | `IfNotPresent`           |
 | `sentinel.image.pullSecrets`                  | Redis&reg; Sentinel image pull secrets                                                                                                      | `[]`                     |
 | `sentinel.image.debug`                        | Enable image debug mode                                                                                                                     | `false`                  |
@@ -330,7 +332,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.getMasterTimeout`                   | Amount of time to allow before get_sentinel_master_info() times out.                                                                        | `220`                    |
 | `sentinel.automateClusterRecovery`            | Automate cluster recovery in cases where the last replica is not considered a good replica and Sentinel won't automatically failover to it. | `false`                  |
 | `sentinel.downAfterMilliseconds`              | Timeout for detecting a Redis&reg; node is down                                                                                             | `60000`                  |
-| `sentinel.failoverTimeout`                    | Timeout for performing a election failover                                                                                                  | `18000`                  |
+| `sentinel.failoverTimeout`                    | Timeout for performing a election failover                                                                                                  | `180000`                 |
 | `sentinel.parallelSyncs`                      | Number of replicas that can be reconfigured in parallel to use the new master after a failover                                              | `1`                      |
 | `sentinel.configuration`                      | Configuration for Redis&reg; Sentinel nodes                                                                                                 | `""`                     |
 | `sentinel.command`                            | Override default container command (useful when using custom images)                                                                        | `[]`                     |
@@ -429,70 +431,73 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics Parameters
 
-| Name                                         | Description                                                                                      | Value                    |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------------ | ------------------------ |
-| `metrics.enabled`                            | Start a sidecar prometheus exporter to expose Redis&reg; metrics                                 | `false`                  |
-| `metrics.image.registry`                     | Redis&reg; Exporter image registry                                                               | `docker.io`              |
-| `metrics.image.repository`                   | Redis&reg; Exporter image repository                                                             | `bitnami/redis-exporter` |
-| `metrics.image.tag`                          | Redis&reg; Redis&reg; Exporter image tag (immutable tags are recommended)                        | `1.43.0-debian-11-r16`   |
-| `metrics.image.pullPolicy`                   | Redis&reg; Exporter image pull policy                                                            | `IfNotPresent`           |
-| `metrics.image.pullSecrets`                  | Redis&reg; Exporter image pull secrets                                                           | `[]`                     |
-| `metrics.command`                            | Override default metrics container init command (useful when using custom images)                | `[]`                     |
-| `metrics.redisTargetHost`                    | A way to specify an alternative Redis&reg; hostname                                              | `localhost`              |
-| `metrics.extraArgs`                          | Extra arguments for Redis&reg; exporter, for example:                                            | `{}`                     |
-| `metrics.extraEnvVars`                       | Array with extra environment variables to add to Redis&reg; exporter                             | `[]`                     |
-| `metrics.containerSecurityContext.enabled`   | Enabled Redis&reg; exporter containers' Security Context                                         | `true`                   |
-| `metrics.containerSecurityContext.runAsUser` | Set Redis&reg; exporter containers' Security Context runAsUser                                   | `1001`                   |
-| `metrics.extraVolumes`                       | Optionally specify extra list of additional volumes for the Redis&reg; metrics sidecar           | `[]`                     |
-| `metrics.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the Redis&reg; metrics sidecar      | `[]`                     |
-| `metrics.resources.limits`                   | The resources limits for the Redis&reg; exporter container                                       | `{}`                     |
-| `metrics.resources.requests`                 | The requested resources for the Redis&reg; exporter container                                    | `{}`                     |
-| `metrics.podLabels`                          | Extra labels for Redis&reg; exporter pods                                                        | `{}`                     |
-| `metrics.podAnnotations`                     | Annotations for Redis&reg; exporter pods                                                         | `{}`                     |
-| `metrics.service.type`                       | Redis&reg; exporter service type                                                                 | `ClusterIP`              |
-| `metrics.service.port`                       | Redis&reg; exporter service port                                                                 | `9121`                   |
-| `metrics.service.externalTrafficPolicy`      | Redis&reg; exporter service external traffic policy                                              | `Cluster`                |
-| `metrics.service.extraPorts`                 | Extra ports to expose (normally used with the `sidecar` value)                                   | `[]`                     |
-| `metrics.service.loadBalancerIP`             | Redis&reg; exporter service Load Balancer IP                                                     | `""`                     |
-| `metrics.service.loadBalancerSourceRanges`   | Redis&reg; exporter service Load Balancer sources                                                | `[]`                     |
-| `metrics.service.annotations`                | Additional custom annotations for Redis&reg; exporter service                                    | `{}`                     |
-| `metrics.serviceMonitor.enabled`             | Create ServiceMonitor resource(s) for scraping metrics using PrometheusOperator                  | `false`                  |
-| `metrics.serviceMonitor.namespace`           | The namespace in which the ServiceMonitor will be created                                        | `""`                     |
-| `metrics.serviceMonitor.interval`            | The interval at which metrics should be scraped                                                  | `30s`                    |
-| `metrics.serviceMonitor.scrapeTimeout`       | The timeout after which the scrape is ended                                                      | `""`                     |
-| `metrics.serviceMonitor.relabellings`        | Metrics RelabelConfigs to apply to samples before scraping.                                      | `[]`                     |
-| `metrics.serviceMonitor.metricRelabelings`   | Metrics RelabelConfigs to apply to samples before ingestion.                                     | `[]`                     |
-| `metrics.serviceMonitor.honorLabels`         | Specify honorLabels parameter to add the scrape endpoint                                         | `false`                  |
-| `metrics.serviceMonitor.additionalLabels`    | Additional labels that can be used so ServiceMonitor resource(s) can be discovered by Prometheus | `{}`                     |
-| `metrics.prometheusRule.enabled`             | Create a custom prometheusRule Resource for scraping metrics using PrometheusOperator            | `false`                  |
-| `metrics.prometheusRule.namespace`           | The namespace in which the prometheusRule will be created                                        | `""`                     |
-| `metrics.prometheusRule.additionalLabels`    | Additional labels for the prometheusRule                                                         | `{}`                     |
-| `metrics.prometheusRule.rules`               | Custom Prometheus rules                                                                          | `[]`                     |
+| Name                                         | Description                                                                                                         | Value                    |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `metrics.enabled`                            | Start a sidecar prometheus exporter to expose Redis&reg; metrics                                                    | `false`                  |
+| `metrics.image.registry`                     | Redis&reg; Exporter image registry                                                                                  | `docker.io`              |
+| `metrics.image.repository`                   | Redis&reg; Exporter image repository                                                                                | `bitnami/redis-exporter` |
+| `metrics.image.tag`                          | Redis&reg; Exporter image tag (immutable tags are recommended)                                                      | `1.43.1-debian-11-r4`    |
+| `metrics.image.digest`                       | Redis&reg; Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
+| `metrics.image.pullPolicy`                   | Redis&reg; Exporter image pull policy                                                                               | `IfNotPresent`           |
+| `metrics.image.pullSecrets`                  | Redis&reg; Exporter image pull secrets                                                                              | `[]`                     |
+| `metrics.command`                            | Override default metrics container init command (useful when using custom images)                                   | `[]`                     |
+| `metrics.redisTargetHost`                    | A way to specify an alternative Redis&reg; hostname                                                                 | `localhost`              |
+| `metrics.extraArgs`                          | Extra arguments for Redis&reg; exporter, for example:                                                               | `{}`                     |
+| `metrics.extraEnvVars`                       | Array with extra environment variables to add to Redis&reg; exporter                                                | `[]`                     |
+| `metrics.containerSecurityContext.enabled`   | Enabled Redis&reg; exporter containers' Security Context                                                            | `true`                   |
+| `metrics.containerSecurityContext.runAsUser` | Set Redis&reg; exporter containers' Security Context runAsUser                                                      | `1001`                   |
+| `metrics.extraVolumes`                       | Optionally specify extra list of additional volumes for the Redis&reg; metrics sidecar                              | `[]`                     |
+| `metrics.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the Redis&reg; metrics sidecar                         | `[]`                     |
+| `metrics.resources.limits`                   | The resources limits for the Redis&reg; exporter container                                                          | `{}`                     |
+| `metrics.resources.requests`                 | The requested resources for the Redis&reg; exporter container                                                       | `{}`                     |
+| `metrics.podLabels`                          | Extra labels for Redis&reg; exporter pods                                                                           | `{}`                     |
+| `metrics.podAnnotations`                     | Annotations for Redis&reg; exporter pods                                                                            | `{}`                     |
+| `metrics.service.type`                       | Redis&reg; exporter service type                                                                                    | `ClusterIP`              |
+| `metrics.service.port`                       | Redis&reg; exporter service port                                                                                    | `9121`                   |
+| `metrics.service.externalTrafficPolicy`      | Redis&reg; exporter service external traffic policy                                                                 | `Cluster`                |
+| `metrics.service.extraPorts`                 | Extra ports to expose (normally used with the `sidecar` value)                                                      | `[]`                     |
+| `metrics.service.loadBalancerIP`             | Redis&reg; exporter service Load Balancer IP                                                                        | `""`                     |
+| `metrics.service.loadBalancerSourceRanges`   | Redis&reg; exporter service Load Balancer sources                                                                   | `[]`                     |
+| `metrics.service.annotations`                | Additional custom annotations for Redis&reg; exporter service                                                       | `{}`                     |
+| `metrics.serviceMonitor.enabled`             | Create ServiceMonitor resource(s) for scraping metrics using PrometheusOperator                                     | `false`                  |
+| `metrics.serviceMonitor.namespace`           | The namespace in which the ServiceMonitor will be created                                                           | `""`                     |
+| `metrics.serviceMonitor.interval`            | The interval at which metrics should be scraped                                                                     | `30s`                    |
+| `metrics.serviceMonitor.scrapeTimeout`       | The timeout after which the scrape is ended                                                                         | `""`                     |
+| `metrics.serviceMonitor.relabellings`        | Metrics RelabelConfigs to apply to samples before scraping.                                                         | `[]`                     |
+| `metrics.serviceMonitor.metricRelabelings`   | Metrics RelabelConfigs to apply to samples before ingestion.                                                        | `[]`                     |
+| `metrics.serviceMonitor.honorLabels`         | Specify honorLabels parameter to add the scrape endpoint                                                            | `false`                  |
+| `metrics.serviceMonitor.additionalLabels`    | Additional labels that can be used so ServiceMonitor resource(s) can be discovered by Prometheus                    | `{}`                     |
+| `metrics.prometheusRule.enabled`             | Create a custom prometheusRule Resource for scraping metrics using PrometheusOperator                               | `false`                  |
+| `metrics.prometheusRule.namespace`           | The namespace in which the prometheusRule will be created                                                           | `""`                     |
+| `metrics.prometheusRule.additionalLabels`    | Additional labels for the prometheusRule                                                                            | `{}`                     |
+| `metrics.prometheusRule.rules`               | Custom Prometheus rules                                                                                             | `[]`                     |
 
 
 ### Init Container Parameters
 
-| Name                                                   | Description                                                                                     | Value                   |
-| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | ----------------------- |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
-| `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
-| `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r22`      |
-| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
-| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
-| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
-| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
-| `sysctl.enabled`                                       | Enable init container to modify Kernel settings                                                 | `false`                 |
-| `sysctl.image.registry`                                | Bitnami Shell image registry                                                                    | `docker.io`             |
-| `sysctl.image.repository`                              | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `sysctl.image.tag`                                     | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r22`      |
-| `sysctl.image.pullPolicy`                              | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
-| `sysctl.image.pullSecrets`                             | Bitnami Shell image pull secrets                                                                | `[]`                    |
-| `sysctl.command`                                       | Override default init-sysctl container command (useful when using custom images)                | `[]`                    |
-| `sysctl.mountHostSys`                                  | Mount the host `/sys` folder to `/host-sys`                                                     | `false`                 |
-| `sysctl.resources.limits`                              | The resources limits for the init container                                                     | `{}`                    |
-| `sysctl.resources.requests`                            | The requested resources for the init container                                                  | `{}`                    |
+| Name                                                   | Description                                                                                                   | Value                   |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
+| `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
+| `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r29`      |
+| `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
+| `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
+| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                                   | `{}`                    |
+| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                                | `{}`                    |
+| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                               | `0`                     |
+| `sysctl.enabled`                                       | Enable init container to modify Kernel settings                                                               | `false`                 |
+| `sysctl.image.registry`                                | Bitnami Shell image registry                                                                                  | `docker.io`             |
+| `sysctl.image.repository`                              | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
+| `sysctl.image.tag`                                     | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r29`      |
+| `sysctl.image.digest`                                  | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `sysctl.image.pullPolicy`                              | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
+| `sysctl.image.pullSecrets`                             | Bitnami Shell image pull secrets                                                                              | `[]`                    |
+| `sysctl.command`                                       | Override default init-sysctl container command (useful when using custom images)                              | `[]`                    |
+| `sysctl.mountHostSys`                                  | Mount the host `/sys` folder to `/host-sys`                                                                   | `false`                 |
+| `sysctl.resources.limits`                              | The resources limits for the init container                                                                   | `{}`                    |
+| `sysctl.resources.requests`                            | The requested resources for the init container                                                                | `{}`                    |
 
 
 ### useExternalDNS Parameters
@@ -501,7 +506,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
 | `useExternalDNS.enabled`               | Enable various syntax that would enable external-dns to work.  Note this requires a working installation of `external-dns` to be usable. | `false`                             |
 | `useExternalDNS.additionalAnnotations` | Extra annotations to be utilized when `external-dns` is enabled.                                                                         | `{}`                                |
-| `useExternalDNS.annotationKey`         | The annotation key utilized when `external-dns` is enabled.                                                                              | `external-dns.alpha.kubernetes.io/` |
+| `useExternalDNS.annotationKey`         | The annotation key utilized when `external-dns` is enabled. Setting this to `false` will disable annotations.                            | `external-dns.alpha.kubernetes.io/` |
 | `useExternalDNS.suffix`                | The DNS suffix utilized when `external-dns` is enabled.  Note that we prepend the suffix with the full name of the release.              | `""`                                |
 
 
@@ -705,6 +710,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 ## Upgrading
 
 A major chart version change (like v1.2.3 -> v2.0.0) indicates that there is an incompatible breaking change needing manual actions.
+
+### To 17.0.0
+
+This major version updates the Redis&reg; docker image version used from `6.2` to `7.0`, the new stable version. There are no major changes in the chart, but we recommend checking the [Redis&reg; 7.0 release notes](https://raw.githubusercontent.com/redis/redis/7.0/00-RELEASENOTES) before upgrading.
 
 ### To 16.0.0
 

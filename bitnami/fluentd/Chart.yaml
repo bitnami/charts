@@ -1,13 +1,13 @@
 annotations:
   category: Analytics
 apiVersion: v2
-appVersion: 1.15.1
+appVersion: 1.15.2
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
-    version: 1.x.x
+    version: 2.x.x
 description: Fluentd collects events from various data sources and writes them to files, RDBMS, NoSQL, IaaS, SaaS, Hadoop and so on.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/fluentd
@@ -25,4 +25,4 @@ name: fluentd
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/fluentd
   - https://www.fluentd.org/
-version: 5.3.2
+version: 5.4.0

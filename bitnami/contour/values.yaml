@@ -85,6 +85,7 @@ contour:
   ## @param contour.image.registry Contour image registry
   ## @param contour.image.repository Contour image name
   ## @param contour.image.tag Contour image tag
+  ## @param contour.image.digest Contour image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param contour.image.pullPolicy Contour Image pull policy
   ## @param contour.image.pullSecrets [array] Contour Image pull secrets
   ## @param contour.image.debug Enable image debug mode
@@ -92,7 +93,8 @@ contour:
   image:
     registry: docker.io
     repository: bitnami/contour
-    tag: 1.22.0-debian-11-r2
+    tag: 1.22.0-debian-11-r4
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -459,13 +461,15 @@ envoy:
   ## @param envoy.image.registry Envoy Proxy image registry
   ## @param envoy.image.repository Envoy Proxy image repository
   ## @param envoy.image.tag Envoy Proxy image tag (immutable tags are recommended)
+  ## @param envoy.image.digest Envoy Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param envoy.image.pullPolicy Envoy image pull policy
   ## @param envoy.image.pullSecrets [array] Envoy image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/envoy
-    tag: 1.23.0-debian-11-r6
+    tag: 1.23.0-debian-11-r8
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -876,13 +880,15 @@ defaultBackend:
   ## @param defaultBackend.image.registry Default backend image registry
   ## @param defaultBackend.image.repository Default backend image name
   ## @param defaultBackend.image.tag Default backend image tag
+  ## @param defaultBackend.image.digest Default backend image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param defaultBackend.image.pullPolicy Image pull policy
   ## @param defaultBackend.image.pullSecrets [array] Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.23.1-debian-11-r6
+    tag: 1.23.1-debian-11-r7
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

@@ -56,14 +56,16 @@ operator:
   ## ref: https://hub.docker.com/r/bitnami/prometheus-operator/tags/
   ## @param operator.image.registry Prometheus Operator image registry
   ## @param operator.image.repository Prometheus Operator image repository
-  ## @param operator.image.tag Prometheus Operator Image tag (immutable tags are recommended)
+  ## @param operator.image.tag Prometheus Operator image tag (immutable tags are recommended)
+  ## @param operator.image.digest Prometheus Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param operator.image.pullPolicy Prometheus Operator image pull policy
   ## @param operator.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.58.0-debian-11-r6
+    tag: 0.58.0-debian-11-r8
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -424,6 +426,7 @@ operator:
     ## registry:
     ## repository:
     ## tag:
+    ## digest: ""
     ## pullSecrets:
     ##
     image: {}
@@ -489,13 +492,15 @@ prometheus:
   ## ref: https://hub.docker.com/r/bitnami/prometheus/tags/
   ## @param prometheus.image.registry Prometheus image registry
   ## @param prometheus.image.repository Prometheus image repository
-  ## @param prometheus.image.tag Prometheus Image tag (immutable tags are recommended)
+  ## @param prometheus.image.tag Prometheus image tag (immutable tags are recommended)
+  ## @param prometheus.image.digest Prometheus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param prometheus.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.37.0-debian-11-r8
+    tag: 2.37.0-debian-11-r9
+    digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -1113,13 +1118,15 @@ prometheus:
     ## @param prometheus.thanos.image.registry Thanos image registry
     ## @param prometheus.thanos.image.repository Thanos image name
     ## @param prometheus.thanos.image.tag Thanos image tag
+    ## @param prometheus.thanos.image.digest Thanos image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param prometheus.thanos.image.pullPolicy Thanos image pull policy
     ## @param prometheus.thanos.image.pullSecrets Specify docker-registry secret names as an array
     ##
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.27.0-scratch-r6
+      tag: 0.27.0-scratch-r7
+      digest: ""
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
       ##
@@ -1402,14 +1409,16 @@ alertmanager:
   ## Bitnami Alertmanager image version
   ## ref: https://hub.docker.com/r/bitnami/prometheus-operator/tags/
   ## @param alertmanager.image.registry Prometheus image registry
-  ## @param alertmanager.image.repository Prometheus Image repository
-  ## @param alertmanager.image.tag Prometheus Image tag (immutable tags are recommended)
+  ## @param alertmanager.image.repository Prometheus image repository
+  ## @param alertmanager.image.tag Prometheus image tag (immutable tags are recommended)
+  ## @param alertmanager.image.digest Prometheus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param alertmanager.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/alertmanager
     tag: 0.24.0-debian-11-r22
+    digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -1960,15 +1969,17 @@ blackboxExporter:
   ## Bitnami Alertmanager image version
   ## ref: https://hub.docker.com/r/bitnami/prometheus-operator/tags/
   ## @param blackboxExporter.image.registry Blackbox Exporter image registry
-  ## @param blackboxExporter.image.repository Blackbox Exporter Image repository
-  ## @param blackboxExporter.image.pullPolicy Blackbox Exporter Image pull policy
-  ## @param blackboxExporter.image.tag Blackbox Exporter Image tag (immutable tags are recommended)
+  ## @param blackboxExporter.image.repository Blackbox Exporter image repository
+  ## @param blackboxExporter.image.pullPolicy Blackbox Exporter image pull policy
+  ## @param blackboxExporter.image.tag Blackbox Exporter image tag (immutable tags are recommended)
+  ## @param blackboxExporter.image.digest Blackbox Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param blackboxExporter.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/blackbox-exporter
-    tag: 0.21.1-debian-11-r15
+    tag: 0.22.0-debian-11-r0
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

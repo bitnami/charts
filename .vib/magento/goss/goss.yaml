@@ -1,40 +1,11 @@
 command:
-  user-id-test:
-    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
-    exit-status: 0
-    stdout: []
-    stderr: []
   magento-store-list:
     exec: magento store:list
     exit-status: 0
-    stdout:
-    - "Default Store View"
-    - "Admin"
-    stderr: []
-    timeout: 0 
-  magento-uri:
-    exec: magento info:adminuri
-    exit-status: 0
-    stdout:
-     - {{ printf "%s" .Env.MAGENTO_ADMIN_URL_PREFIX }}
-    stderr: []
-    timeout: 0    
-  apache-running:
-    exec: ps aux | grep apache
-    exit-status: 0
-    stdout:
-      - /opt/bitnami/apache/bin/httpd
-    stderr: []
-    timeout: 0
-file:    
-  /opt/bitnami/magento:
-    filetype: symlink
-    linked-to: /bitnami/magento
+    timeout: 10000
+file:
+  /bitnami/magento:
     exists: true
-  /bitnami/magento/setup/config/modules.config.php:
-    filetype: file
-    exists: true
-    contains: 
-      - "Setup"
-      - "Di"
-      - "Router"
+    filetype: directory
+    mode: "2775"
+    owner: root

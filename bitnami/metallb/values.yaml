@@ -91,13 +91,15 @@ controller:
   ## @param controller.image.registry MetalLB Controller image registry
   ## @param controller.image.repository MetalLB Controller image repository
   ## @param controller.image.tag MetalLB Controller  image tag (immutable tags are recommended)
+  ## @param controller.image.digest MetalLB Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param controller.image.pullPolicy MetalLB Controller image pull policy
   ## @param controller.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/metallb-controller
-    tag: 0.13.4-debian-11-r1
+    tag: 0.13.4-debian-11-r3
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -446,13 +448,15 @@ speaker:
   ## @param speaker.image.registry MetalLB Speaker image registry
   ## @param speaker.image.repository MetalLB Speaker image repository
   ## @param speaker.image.tag MetalLB Speaker  image tag (immutable tags are recommended)
+  ## @param speaker.image.digest MetalLB Speaker image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param speaker.image.pullPolicy MetalLB Speaker image pull policy
   ## @param speaker.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/metallb-speaker
-    tag: 0.13.4-debian-11-r5
+    tag: 0.13.4-debian-11-r7
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

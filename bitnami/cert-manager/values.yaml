@@ -61,6 +61,7 @@ controller:
   ## @param controller.image.registry Controller image registry
   ## @param controller.image.repository Controller image repository
   ## @param controller.image.tag Controller image tag (immutable tags are recommended)
+  ## @param controller.image.digest Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param controller.image.pullPolicy Controller image pull policy
   ## @param controller.image.pullSecrets Controller image pull secrets
   ## @param controller.image.debug Controller image debug mode
@@ -68,7 +69,8 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/cert-manager
-    tag: 1.9.1-debian-11-r4
+    tag: 1.9.1-debian-11-r6
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -90,6 +92,7 @@ controller:
     ## @param controller.acmesolver.image.registry Controller image registry
     ## @param controller.acmesolver.image.repository Controller image repository
     ## @param controller.acmesolver.image.tag Controller image tag (immutable tags are recommended)
+    ## @param controller.acmesolver.image.digest Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param controller.acmesolver.image.pullPolicy Controller image pull policy
     ## @param controller.acmesolver.image.pullSecrets Controller image pull secrets
     ## @param controller.acmesolver.image.debug Controller image debug mode
@@ -97,7 +100,8 @@ controller:
     image:
       registry: docker.io
       repository: bitnami/acmesolver
-      tag: 1.9.1-debian-11-r6
+      tag: 1.9.1-debian-11-r8
+      digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -314,6 +318,7 @@ webhook:
   ## @param webhook.image.registry Webhook image registry
   ## @param webhook.image.repository Webhook image repository
   ## @param webhook.image.tag Webhook image tag (immutable tags are recommended)
+  ## @param webhook.image.digest Webhook image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param webhook.image.pullPolicy Webhook image pull policy
   ## @param webhook.image.pullSecrets Webhook image pull secrets
   ## @param webhook.image.debug Webhook image debug mode
@@ -321,7 +326,8 @@ webhook:
   image:
     registry: docker.io
     repository: bitnami/cert-manager-webhook
-    tag: 1.9.1-debian-11-r3
+    tag: 1.9.1-debian-11-r5
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -576,6 +582,7 @@ cainjector:
   ## @param cainjector.image.registry CAInjector image registry
   ## @param cainjector.image.repository CAInjector image repository
   ## @param cainjector.image.tag CAInjector image tag (immutable tags are recommended)
+  ## @param cainjector.image.digest CAInjector image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param cainjector.image.pullPolicy CAInjector image pull policy
   ## @param cainjector.image.pullSecrets CAInjector image pull secrets
   ## @param cainjector.image.debug CAInjector image debug mode
@@ -583,7 +590,8 @@ cainjector:
   image:
     registry: docker.io
     repository: bitnami/cainjector
-    tag: 1.9.1-debian-11-r4
+    tag: 1.9.1-debian-11-r6
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

@@ -57,13 +57,15 @@ diagnosticMode:
 ## @param image.registry kiam image registry
 ## @param image.repository kiam image name
 ## @param image.tag kiam image tag
+## @param image.digest kiam image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy kiam image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
 ##
 image:
   registry: docker.io
   repository: bitnami/kiam
-  tag: 4.2.0-debian-11-r22
+  tag: 4.2.0-debian-11-r24
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

@@ -59,13 +59,15 @@ diagnosticMode:
 ## @param image.registry Metrics Server image registry
 ## @param image.repository Metrics Server image repository
 ## @param image.tag Metrics Server image tag (immutable tags are recommended)
+## @param image.digest Metrics Server image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Metrics Server image pull policy
 ## @param image.pullSecrets Metrics Server image pull secrets
 ##
 image:
   registry: docker.io
   repository: bitnami/metrics-server
-  tag: 0.6.1-debian-11-r24
+  tag: 0.6.1-debian-11-r26
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

@@ -69,6 +69,7 @@ diagnosticMode:
 ## @param image.registry MariaDB Galera image registry
 ## @param image.repository MariaDB Galera image repository
 ## @param image.tag MariaDB Galera image tag (immutable tags are recommended)
+## @param image.digest MariaDB Galera image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy MariaDB Galera image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
 ## @param image.debug Specify if debug logs should be enabled
@@ -76,7 +77,8 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mariadb-galera
-  tag: 10.6.8-debian-11-r21
+  tag: 10.6.9-debian-11-r1
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -786,13 +788,15 @@ metrics:
   ## @param metrics.image.registry MariaDB Prometheus exporter image registry
   ## @param metrics.image.repository MariaDB Prometheus exporter image repository
   ## @param metrics.image.tag MariaDB Prometheus exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.digest MariaDB Prometheus exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy MariaDB Prometheus exporter image pull policy
   ## @param metrics.image.pullSecrets MariaDB Prometheus exporter image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.14.0-debian-11-r21
+    tag: 0.14.0-debian-11-r27
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

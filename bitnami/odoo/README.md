@@ -68,24 +68,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                     | Description                                                                             | Value                        |
-| ------------------------ | --------------------------------------------------------------------------------------- | ---------------------------- |
-| `kubeVersion`            | Override Kubernetes version                                                             | `""`                         |
-| `nameOverride`           | String to partially override common.names.fullname                                      | `""`                         |
-| `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`                         |
-| `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`                         |
-| `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`                         |
-| `clusterDomain`          | Default Kubernetes cluster domain                                                       | `cluster.local`              |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`                         |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`                      |
-| `diagnosticMode.command` | Command to override all containers in the the statefulset                               | `["sleep"]`                  |
-| `diagnosticMode.args`    | Args to override all containers in the the statefulset                                  | `["infinity"]`               |
-| `image.registry`         | Odoo image registry                                                                     | `docker.io`                  |
-| `image.repository`       | Odoo image repository                                                                   | `bitnami/odoo`               |
-| `image.tag`              | Odoo image tag (immutable tags are recommended)                                         | `15.0.20220710-debian-11-r9` |
-| `image.pullPolicy`       | Odoo image pull policy                                                                  | `IfNotPresent`               |
-| `image.pullSecrets`      | Odoo image pull secrets                                                                 | `[]`                         |
-| `image.debug`            | Enable image debug mode                                                                 | `false`                      |
+| Name                     | Description                                                                                          | Value                        |
+| ------------------------ | ---------------------------------------------------------------------------------------------------- | ---------------------------- |
+| `kubeVersion`            | Override Kubernetes version                                                                          | `""`                         |
+| `nameOverride`           | String to partially override common.names.fullname                                                   | `""`                         |
+| `fullnameOverride`       | String to fully override common.names.fullname                                                       | `""`                         |
+| `commonLabels`           | Labels to add to all deployed objects                                                                | `{}`                         |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                                           | `{}`                         |
+| `clusterDomain`          | Default Kubernetes cluster domain                                                                    | `cluster.local`              |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                                    | `[]`                         |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)              | `false`                      |
+| `diagnosticMode.command` | Command to override all containers in the the statefulset                                            | `["sleep"]`                  |
+| `diagnosticMode.args`    | Args to override all containers in the the statefulset                                               | `["infinity"]`               |
+| `image.registry`         | Odoo image registry                                                                                  | `docker.io`                  |
+| `image.repository`       | Odoo image repository                                                                                | `bitnami/odoo`               |
+| `image.tag`              | Odoo image tag (immutable tags are recommended)                                                      | `15.0.20220810-debian-11-r0` |
+| `image.digest`           | Odoo image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
+| `image.pullPolicy`       | Odoo image pull policy                                                                               | `IfNotPresent`               |
+| `image.pullSecrets`      | Odoo image pull secrets                                                                              | `[]`                         |
+| `image.debug`            | Enable image debug mode                                                                              | `false`                      |
 
 
 ### Odoo Configuration parameters

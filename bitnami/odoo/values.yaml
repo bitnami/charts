@@ -61,6 +61,7 @@ diagnosticMode:
 ## @param image.registry Odoo image registry
 ## @param image.repository Odoo image repository
 ## @param image.tag Odoo image tag (immutable tags are recommended)
+## @param image.digest Odoo image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Odoo image pull policy
 ## @param image.pullSecrets Odoo image pull secrets
 ## @param image.debug Enable image debug mode
@@ -68,7 +69,8 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/odoo
-  tag: 15.0.20220710-debian-11-r9
+  tag: 15.0.20220810-debian-11-r0
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

@@ -65,13 +65,15 @@ tempo:
   ## @param tempo.image.registry Grafana Tempo image registry
   ## @param tempo.image.repository Grafana Tempo image repository
   ## @param tempo.image.tag Grafana Tempo image tag (immutable tags are recommended)
+  ## @param tempo.image.digest Grafana Tempo image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param tempo.image.pullPolicy Grafana Tempo image pull policy
   ## @param tempo.image.pullSecrets Grafana Tempo image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/grafana-tempo
-    tag: 1.4.1-debian-11-r25
+    tag: 1.5.0-debian-11-r0
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1822,13 +1824,15 @@ queryFrontend:
     ## @param queryFrontend.query.image.registry Grafana Tempo Query image registry
     ## @param queryFrontend.query.image.repository Grafana Tempo Query image repository
     ## @param queryFrontend.query.image.tag Grafana Tempo Query image tag (immutable tags are recommended)
+    ## @param queryFrontend.query.image.digest Grafana Tempo Query image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param queryFrontend.query.image.pullPolicy Grafana Tempo Query image pull policy
     ## @param queryFrontend.query.image.pullSecrets Grafana Tempo Query image pull secrets
     ##
     image:
       registry: docker.io
       repository: bitnami/grafana-tempo-query
-      tag: 1.4.1-debian-11-r24
+      tag: 1.4.1-debian-11-r28
+      digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2025,13 +2029,15 @@ vulture:
   ## @param vulture.image.registry Grafana Vulture image registry
   ## @param vulture.image.repository Grafana Vulture image repository
   ## @param vulture.image.tag Grafana Vulture image tag (immutable tags are recommended)
+  ## @param vulture.image.digest Grafana Vulture image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param vulture.image.pullPolicy Grafana Vulture image pull policy
   ## @param vulture.image.pullSecrets Grafana Vulture image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/grafana-tempo-vulture
-    tag: 1.4.1-debian-11-r23
+    tag: 1.4.1-debian-11-r27
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2321,13 +2327,15 @@ volumePermissions:
   ## @param volumePermissions.image.registry Bitnami Shell image registry
   ## @param volumePermissions.image.repository Bitnami Shell image repository
   ## @param volumePermissions.image.tag Bitnami Shell image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.digest Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Bitnami Shell image pull policy
   ## @param volumePermissions.image.pullSecrets Bitnami Shell image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r22
+    tag: 11-debian-11-r26
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
