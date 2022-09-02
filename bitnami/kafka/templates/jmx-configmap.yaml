@@ -58,4 +58,7 @@ data:
         labels:
           topic: $3
           partition: $4
+      {{- if .Values.metrics.jmx.extraRules }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.jmx.extraRules "context" $ ) | nindent 6 }}
+      {{- end }}
 {{- end -}}

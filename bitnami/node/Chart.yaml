@@ -11,7 +11,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
-    version: 1.x.x
+    version: 2.x.x
 description: Node.js is a runtime environment built on V8 JavaScript engine. Its event-driven, non-blocking I/O model enables the development of fast, scalable, and data-intensive server applications.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/node
@@ -28,4 +28,4 @@ name: node
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/node
   - http://nodejs.org/
-version: 19.0.3
+version: 19.1.2

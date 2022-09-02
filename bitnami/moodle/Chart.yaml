@@ -1,7 +1,7 @@
 annotations:
   category: E-Learning
 apiVersion: v2
-appVersion: 4.0.2
+appVersion: 4.0.3
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
@@ -9,7 +9,9 @@ dependencies:
     version: 11.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
-    version: 1.x.x
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Moodle(TM) LMS is an open source online Learning Management System widely used at universities, schools, and corporations. It is modular and highly adaptable to any type of online learning.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/moodle
@@ -25,4 +27,4 @@ name: moodle
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/moodle
   - https://www.moodle.org/
-version: 14.1.16
+version: 14.2.1

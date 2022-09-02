@@ -11,7 +11,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
-    version: 1.x.x
+    version: 2.x.x
 description: Apache Solr is an extremely powerful, open source enterprise search platform built on Apache Lucene. It is highly reliable and flexible, scalable, and designed to add value very quickly after launch.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/solr
@@ -27,4 +27,4 @@ name: solr
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/solr
   - https://lucene.apache.org/solr/
-version: 6.0.7
+version: 6.1.3

@@ -122,6 +122,11 @@ spec:
                 secretKeyRef:
                   name: {{ include "discourse.database.secretName" . }}
                   key: {{ include "discourse.database.secretPasswordKey" . }}
+            - name: POSTGRESQL_CLIENT_CREATE_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "discourse.database.secretName" . }}
+                  key: {{ include "discourse.database.secretPasswordKey" . }}
             {{- if or .Values.postgresql.enabled .Values.externalDatabase.create }}
             - name: POSTGRESQL_CLIENT_POSTGRES_PASSWORD
               valueFrom:

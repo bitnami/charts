@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/opencart"
         },
-        "runtime_parameters": "c2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czogCiAgICBodHRwOiA4MApvcGVuY2FydEhvc3Q6IHZtd2FyZS1vcGVuY2FydC5teQpvcGVuY2FydFVzZXJuYW1lOiB1c2VyCm9wZW5jYXJ0UGFzc3dvcmQ6IENvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNApzbXRwSG9zdDogc210cHRlc3Rob3N0CnNtdHBVc2VyOiBzbXRwVXNlcgpzbXRwUGFzc3dvcmQ6IHNtdHBDb21wbGljYXRlZFBhc3N3b3JkMTIzITQKc210cFBvcnQ6IDk0MjEK",
+        "runtime_parameters": "b3BlbmNhcnRIb3N0OiB2bXdhcmUtb3BlbmNhcnQubXkKb3BlbmNhcnRVc2VybmFtZTogb3BlbmNhcnRVc2VyCm9wZW5jYXJ0UGFzc3dvcmQ6IENvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNApzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOiAKICAgIGh0dHA6IDgwCiAgICBodHRwczogNDQ0Cmhvc3RBbGlhc2VzOgogIC0gaXA6ICIxMjcuMC4wLjEiCiAgICBob3N0bmFtZXM6CiAgICAgIC0gInN0YXR1cy5sb2NhbGhvc3QiCmNvbnRhaW5lclBvcnRzOgogIGh0dHA6IDgwODEKICBodHRwczogODQ0NApwb2RTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIGZzR3JvdXA6IDEwMDIKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBydW5Bc1VzZXI6IDEwMDIKbWFyaWFkYjoKICBhdXRoOgogICAgZGF0YWJhc2U6IHRlc3Rfb2NfZGF0YWJhc2UKICAgIHVzZXJuYW1lOiB0ZXN0X29jX3VzZXJuYW1lCiAgICBwYXNzd29yZDogdGVzdF9vY19wYXNzd29yZAo=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -44,6 +44,7 @@
             "resources": {
               "path": "/.vib/opencart/goss"
             },
+            "vars_file": "vars.yaml",
             "remote": {
               "workload": "deploy-opencart"
             }
@@ -58,7 +59,7 @@
             "endpoint": "lb-opencart-http",
             "app_protocol": "HTTP",
             "env": {
-              "username": "user",
+              "username": "opencartUser",
               "password": "ComplicatedPassword123!4"
             }
           }

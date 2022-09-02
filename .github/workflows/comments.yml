@@ -4,8 +4,9 @@ on:
     types:
       - created
 permissions:
-  repository-projects: write
   issues: write
+  pull-requests: write
+  repository-projects: write
 
 # To fix the concurrency when for example more than one label is added
 concurrency:
@@ -53,3 +54,8 @@ jobs:
         with:
           add-labels: "triage"
           remove-labels: "solved"
+      - name: Removing the stale label
+        if: ${{ contains(github.event.issue.labels.*.name, 'stale') }}
+        uses: andymckay/labeler@1.0.4
+        with:
+          remove-labels: "stale"

@@ -17,7 +17,7 @@ data:
     {{- if .Values.tls.enabled }}
     TLS_OPTIONS='--tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert'
     {{- end }}
-    mongosh  $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval 'db.hello().isWritablePrimary || db.hello().secondary' | grep -q 'true'
+    mongosh  $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval 'db.hello().isWritablePrimary || db.hello().secondary' | grep -q 'true$'
   readiness-probe.sh: |
     #!/bin/bash
     {{- if .Values.tls.enabled }}
@@ -30,9 +30,9 @@ data:
     VERSION_MINOR="$(get_sematic_version "$VERSION" 2)"
     VERSION_PATCH="$(get_sematic_version "$VERSION" 3)"
     if [[ ( "$VERSION_MAJOR" -ge 5 ) || ( "$VERSION_MAJOR" -ge 4 && "$VERSION_MINOR" -ge 4 && "$VERSION_PATCH" -ge 2 ) ]]; then
-        mongosh $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval 'db.hello().isWritablePrimary || db.hello().secondary' | grep -q 'true'
+        mongosh $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval 'db.hello().isWritablePrimary || db.hello().secondary' | grep -q 'true$'
     else
-        mongosh  $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval 'db.isMaster().ismaster || db.isMaster().secondary' | grep -q 'true'
+        mongosh  $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval 'db.isMaster().ismaster || db.isMaster().secondary' | grep -q 'true$'
     fi
   ping-mongodb.sh: |
     #!/bin/bash
