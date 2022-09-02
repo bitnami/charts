@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 2.6.2
+appVersion: 2.6.4
 dependencies:
   - name: haproxy
     repository: https://charts.bitnami.com/bitnami
@@ -10,7 +10,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
-    version: 1.x.x
+    version: 2.x.x
 description: HAProxy is a high-performance, open-source load balancer and reverse proxy for TCP and HTTP applications. This image is optimized with Intel(R) QuickAssist Technology OpenSSL* Engine (QAT_Engine).
 home: https://www.haproxy.org/
 icon: https://bitnami.com/assets/stacks/haproxy/img/haproxy-stack-220x234.png
@@ -26,4 +26,4 @@ name: haproxy-intel
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/haproxy-intel
   - https://github.com/haproxytech/haproxy
-version: 0.1.12
+version: 0.2.4

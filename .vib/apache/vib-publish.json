@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/apache"
         },
-        "runtime_parameters": "InNlcnZpY2UiOgogICJwb3J0IjogODAKICAidHlwZSI6ICJMb2FkQmFsYW5jZXIi",
+        "runtime_parameters": "c2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGh0dHA6IDgwCiAgICBodHRwczogNDQ0CmNvbnRhaW5lclBvcnRzOgogIGh0dHA6IDgwODEKICBodHRwczogODQ0NApob3N0QWxpYXNlczoKICAtIGlwOiAxMjcuMC4wLjEKICAgIGhvc3RuYW1lczoKICAgICAgLSBzdGF0dXMubG9jYWxob3N0CnBvZFNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgZnNHcm91cDogMTAwMgpjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIHJ1bkFzVXNlcjogMTAwMg==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -34,6 +34,28 @@
         {
           "action_id": "health-check",
           "params": {
+            "endpoint": "lb-apache-http",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/apache/goss"
+            },
+            "remote": {
+              "workload": "deploy-apache"
+            },
+            "vars_file": "vars.yaml"
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/apache/cypress"
+            },
             "endpoint": "lb-apache-http",
             "app_protocol": "HTTP"
           }
