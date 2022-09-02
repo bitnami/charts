@@ -30,4 +30,4 @@ name: jasperreports
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/jasperreports
   - http://community.jaspersoft.com/project/jasperreports-server
-version: 14.2.1
+version: 14.3.0
