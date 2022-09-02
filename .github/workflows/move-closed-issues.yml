@@ -9,6 +9,7 @@ on:
 
 permissions:
   issues: write
+  pull-requests: write
   repository-projects: write
 
 # To fix the concurrency when for example more than one label is added
@@ -35,12 +36,10 @@ jobs:
           project-name: Support
           # If the author comes from Bitnami, send it to Bitnami. Otherwise, all to Triage
           column-name: 'Solved'
-          token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
           issue-number: ${{ github.event_name != 'issues' && github.event.number || github.event.issue.number }}
       - name: Solved labeling
         # Only if moved into Solved
         uses: andymckay/labeler@1.0.4
         with:
-          repo-token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
           add-labels: "solved"
           remove-labels: "in-progress, on-hold, triage"
