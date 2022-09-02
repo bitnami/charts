@@ -182,7 +182,7 @@ initContainers: []
 ## @param sidecars Attach additional containers to the pod (evaluated as a template)
 ##
 sidecars: []
-## @param serviceAccount Attach serviceAccount to the pod and sidecars
+## @param serviceAccountName Attach serviceAccountName to the pod and sidecars
 ##
 serviceAccountName: ""
 ## @param tolerations Tolerations for pod assignment
