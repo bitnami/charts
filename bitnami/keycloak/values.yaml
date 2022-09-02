@@ -738,9 +738,17 @@ metrics:
     ## @param metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator
     ##
     enabled: false
-    ## @param metrics.serviceMonitor.path Metrics service HTTP path
+    ## @param metrics.serviceMonitor.port Metrics service HTTP port
     ##
-    path: /metrics
+    port: http
+    ## @param metrics.serviceMonitor.endpoints [array] The endpoint configuration of the ServiceMonitor. Path is mandatory. Interval, timeout and labellings can be overwritten.
+    ##
+    endpoints:
+      - path: /metrics
+      - path: /realms/master/metrics
+    ## @param metrics.serviceMonitor.path Metrics service HTTP path. Deprecated: Use @param metrics.serviceMonitor.endpoints instead
+    ##
+    path: ""
     ## @param metrics.serviceMonitor.namespace Namespace which Prometheus is running in
     ##
     namespace: ""
