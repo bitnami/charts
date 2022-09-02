@@ -1,26 +1,27 @@
+http:
+  https://suitecrm:{{ .Vars.service.ports.https }}:
+    status: 200
+    allow-insecure: true
 command:
-  user-id-test:
-    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
+  check-user-info:
+    exec: id
     exit-status: 0
-    stdout: []
-    stderr: []    
+    stdout:
+      - uid={{ .Vars.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
 file:
-  /opt/bitnami/suitecrm/sugar_version.json:
-    mode: "0664"
+  /bitnami/suitecrm:
+    exists: true
+    filetype: directory
+    mode: '2775'
+    owner: root
+  /etc/hosts:
+    exists: true
     filetype: file
     contains:
-      - sugar_db_version
-      - sugar_version
-    exists: true
-  /opt/bitnami/suitecrm/config.php:
-    mode: "0755"
-    filetype: file
-    contains:
-      - vmware-suitecrm
-      - dbconfig
-    exists: true
-  /opt/bitnami/apache/conf/extra/httpd-manual.conf:
-    mode: "0664"
-    filetype: file
-    exists: true
-    group: root
+    {{ range .Vars.hostAliases }}
+    {{ $ip := .ip }}
+    {{ range $host := .hostnames }}
+      - /{{ $ip }}.*{{$host}}/
+    {{ end }}
+    {{ end }}

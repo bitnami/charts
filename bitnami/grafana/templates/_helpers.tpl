@@ -128,7 +128,6 @@ Validate values for Grafana.
 */}}
 {{- define "grafana.validateValues" -}}
 {{- $messages := list -}}
-{{- $messages := append $messages (include "grafana.validateValues.database" .) -}}
 {{- $messages := append $messages (include "grafana.validateValues.configmapsOrSecrets" .) -}}
 {{- $messages := append $messages (include "grafana.validateValues.ldap.configuration" .) -}}
 {{- $messages := append $messages (include "grafana.validateValues.ldap.configmapsecret" .) -}}
@@ -138,17 +137,6 @@ Validate values for Grafana.
 
 {{- if $message -}}
 {{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
-{{- end -}}
-{{- end -}}
-
-{{/* Validate values of Grafana - Requirements to use an external database */}}
-{{- define "grafana.validateValues.database" -}}
-{{- $replicaCount := int .Values.grafana.replicaCount }}
-{{- if gt $replicaCount 1 -}}
-grafana: replicaCount
-        Using more than one replica requires using an external database to share data between Grafana instances.
-        By default Grafana uses an internal sqlite3 per instance but you can configure an external MySQL or PostgreSQL.
-        Please, ensure you provide a configuration file configuring the external database to share data between replicas.
 {{- end -}}
 {{- end -}}
 
@@ -234,4 +222,15 @@ search_filter = "({{ .Values.ldap.searchAttribute }}=%s)"
 search_base_dns = [{{ (required "You must set ldap.basedn" .Values.ldap.basedn) | quote }}]
 
 {{ .Values.ldap.extraConfiguration }}
+{{- end -}}
+
+{{/* Validate values of Grafana - Requirements to use an external database */}}
+{{- define "grafana.validateValues.database" -}}
+{{- $replicaCount := int .Values.grafana.replicaCount }}
+{{- if gt $replicaCount 1 -}}
+grafana: replicaCount
+        Using more than one replica requires using an external database to share data between Grafana instances.
+        By default Grafana uses an internal sqlite3 per instance but you can configure an external MySQL or PostgreSQL.
+        Please, ensure you provide a configuration file configuring the external database to share data between replicas.
+{{- end -}}
 {{- end -}}
