@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/phpbb"
         },
-        "runtime_parameters": "InBocGJiUGFzc3dvcmQiOiAiYml0bmFtaSIKInNlcnZpY2UiOgogICJwb3J0IjogODAKICAidHlwZSI6ICJMb2FkQmFsYW5jZXIi",
+        "runtime_parameters": "cGhwYmJVc2VybmFtZTogInVzZXIiCnBocGJiUGFzc3dvcmQ6ICJDb21wbGljYXRlZFBhc3N3b3JkMTIzITQiCnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCiAgcG9ydHM6CiAgICBodHRwOiA4MAo=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -36,6 +36,31 @@
           "params": {
             "endpoint": "lb-phpbb-http",
             "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/phpbb/goss"
+            },
+            "remote": {
+              "workload": "deploy-phpbb"
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/phpbb/cypress"
+            },
+            "endpoint": "lb-phpbb-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "username": "user",
+              "password": "ComplicatedPassword123!4"
+            }
           }
         }
       ]

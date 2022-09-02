@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/etcd"
         },
-        "runtime_parameters": "ImF1dGgiOgogICJyYmFjIjoKICAgICJyb290UGFzc3dvcmQiOiAiQ3YzdzliTmRjcW1wIgoic2VydmljZSI6CiAgInBvcnRzIjoKICAgICJjbGllbnQiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciI=",
+        "runtime_parameters": "YXV0aDoKICByYmFjOgogICAgcm9vdFBhc3N3b3JkOiBDb21wbGljYXRlZFBhc3N3b3JkMTIzITQKcmVwbGljYUNvdW50OiAzCmNvbnRhaW5lclBvcnRzOgogIGNsaWVudDogMjM3OAogIHBlZXI6IDIzODEKcG9kU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBmc0dyb3VwOiAxMDAyCmNvbnRhaW5lclNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgcnVuQXNVc2VyOiAxMDAyCnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCiAgcG9ydHM6CiAgICBjbGllbnQ6IDgwCiAgICBwZWVyOiAyMzgx",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -36,6 +36,18 @@
           "params": {
             "endpoint": "lb-etcd-client",
             "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/etcd/goss"
+            },
+            "remote": {
+              "workload": "sts-etcd"
+            },
+            "vars_file": "vars.yaml"
           }
         }
       ]

@@ -9,7 +9,9 @@ dependencies:
     version: 11.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
-    version: 1.x.x
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Odoo is an open source ERP and CRM platform, formerly known as OpenERP, that can connect a wide variety of business operations such as sales, supply chain, finance, and project management.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/odoo
@@ -27,4 +29,4 @@ name: odoo
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/odoo
   - https://www.odoo.com/
-version: 21.5.5
+version: 21.6.1

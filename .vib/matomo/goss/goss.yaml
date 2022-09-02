@@ -1,36 +1,6 @@
 file:
-  /opt/bitnami/matomo/js:
-    filetype: symlink
-    linked-to: /bitnami/matomo/js
+  /bitnami/matomo:
     exists: true
-  /opt/bitnami/matomo/plugins:
-    filetype: symlink
-    linked-to: /bitnami/matomo/plugins
-    exists: true
-  /bitnami/matomo/config/config.ini.php:
-    mode: "0644"
-    filetype: file
-    exists: true
-    contains:
-      - {{ printf "/dbname.*%s/" .Env.MATOMO_DATABASE_NAME }}
-      - {{ printf "/username.*%s/" .Env.MATOMO_DATABASE_USER }}
-      - {{ printf "/host.*%s/" .Env.MATOMO_DATABASE_HOST }}
-# Checks the user running the container is non-root
-command:
-  user-id-test:
-    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
-    exit-status: 0
-    stdout: []
-    stderr: []
-  which-php:
-    exec: which php
-    exit-status: 0
-    stdout:
-    - "/opt/bitnami/php/bin/php"
-    stderr: []
-  ps-aux-apache:
-    exec: ps aux
-    exit-status: 0
-    stdout:
-    - "/opt/bitnami/apache/bin/httpd"
-    stderr: []
+    mode: "2775"
+    owner: root
+    filetype: directory

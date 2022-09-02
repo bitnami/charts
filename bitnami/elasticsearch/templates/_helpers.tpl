@@ -162,7 +162,7 @@ Returns true if at least one data-only node replica has been configured.
 Returns true if at least one ingest-only node replica has been configured.
 */}}
 {{- define "elasticsearch.ingest.enabled" -}}
-{{- if or .Values.ingest.autoscaling.enabled (gt (int .Values.ingest.replicaCount) 0) -}}
+{{- if and .Values.ingest.enabled (or .Values.ingest.autoscaling.enabled (gt (int .Values.ingest.replicaCount) 0)) -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}
