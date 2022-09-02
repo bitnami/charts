@@ -601,6 +601,9 @@ externalDatabase:
   ## @param externalDatabase.database Name of the existing database
   ##
   database: bitnami_jasperreports
+  ## @param externalDatabase.type Type of the existing database, allowed values: mariadb, mysql, postgresql
+  ##
+  type: mariadb
 
 ## @section NetworkPolicy parameters
 

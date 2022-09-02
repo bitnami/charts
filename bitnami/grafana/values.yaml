@@ -54,7 +54,7 @@ commonAnnotations: {}
 image:
   registry: docker.io
   repository: bitnami/grafana
-  tag: 9.1.1-debian-11-r0
+  tag: 9.1.2-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -828,7 +828,7 @@ imageRenderer:
   image:
     registry: docker.io
     repository: bitnami/grafana-image-renderer
-    tag: 3.5.0-debian-11-r15
+    tag: 3.5.0-debian-11-r16
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1167,7 +1167,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r28
+    tag: 11-debian-11-r30
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

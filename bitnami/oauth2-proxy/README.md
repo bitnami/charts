@@ -151,6 +151,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                          | Description                                                                                      | Value           |
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------ | --------------- |
 | `containerPort`                               | OAuth2 Proxy port number                                                                         | `4180`          |
+| `extraContainerPorts`                         | Array of additional container ports for the OAuth2 Proxy container                               | `[]`            |
 | `replicaCount`                                | Number of OAuth2 Proxy replicas to deploy                                                        | `1`             |
 | `extraArgs`                                   | add extra args to the default command                                                            | `[]`            |
 | `startupProbe.enabled`                        | Enable startupProbe on OAuth2 Proxy nodes                                                        | `false`         |
@@ -178,7 +179,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.requests`                          | The requested resources for the OAuth2 Proxy containers                                          | `{}`            |
 | `pdb.create`                                  | Enable a Pod Disruption Budget creation                                                          | `false`         |
 | `pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                   | `1`             |
-| `pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                   | `1`             |
+| `pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                   | `""`            |
 | `podSecurityContext.enabled`                  | Enabled OAuth2 Proxy pods' Security Context                                                      | `true`          |
 | `podSecurityContext.fsGroup`                  | Set OAuth2 Proxy pod's Security Context fsGroup                                                  | `1001`          |
 | `containerSecurityContext.enabled`            | Enabled OAuth2 Proxy containers' Security Context                                                | `true`          |

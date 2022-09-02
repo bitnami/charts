@@ -84,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`    | Jenkins image registry                                                                                  | `docker.io`            |
 | `image.repository`  | Jenkins image repository                                                                                | `bitnami/jenkins`      |
-| `image.tag`         | Jenkins image tag (immutable tags are recommended)                                                      | `2.346.3-debian-11-r1` |
+| `image.tag`         | Jenkins image tag (immutable tags are recommended)                                                      | `2.346.3-debian-11-r3` |
 | `image.digest`      | Jenkins image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `image.pullPolicy`  | Jenkins image pull policy                                                                               | `IfNotPresent`         |
 | `image.pullSecrets` | Jenkins image pull secrets                                                                              | `[]`                   |
@@ -212,7 +212,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r26`      |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r29`      |
 | `volumePermissions.image.digest`              | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -301,6 +301,10 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 11.0.0
+
+This major release no longer contains preinstalled plugins. In case you want to install a plugin you can follow the [official documentation](https://www.jenkins.io/doc/book/managing/plugins/)
 
 ### To 10.0.0
 

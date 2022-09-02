@@ -1416,13 +1416,10 @@ singleuser:
   ## @param singleuser.command Override Single User default command
   ##
   command: []
-  ## @param singleuser.extraEnvVars Add extra environment variables to the Single User container
-  ## Example:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: "bar"
+  ## @param singleuser.extraEnvVars Extra environment variables that should be set for the user pods
+  ## ref: https://zero-to-jupyterhub.readthedocs.io/en/latest/resources/reference.html#singleuser-extraenv
   ##
-  extraEnvVars: []
+  extraEnvVars: {}
   ## @param singleuser.containerPort Single User container port
   ##
   containerPort: 8888
