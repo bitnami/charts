@@ -1,12 +1,12 @@
 dependencies:
 - name: node-exporter
   repository: https://charts.bitnami.com/bitnami
-  version: 3.0.8
+  version: 3.1.2
 - name: kube-state-metrics
   repository: https://charts.bitnami.com/bitnami
-  version: 3.1.6
+  version: 3.2.1
 - name: common
   repository: https://charts.bitnami.com/bitnami
-  version: 1.16.1
-digest: sha256:ce9d20eadce09e972fe494e8d355ff41fc4b04ca0367161df097ac7a219ff146
-generated: "2022-08-09T06:43:52.283675032Z"
+  version: 2.0.1
+digest: sha256:be37276210b961104fb8fe61e29898889bf7e4d6d418ac7d0dc3ba54febe5140
+generated: "2022-09-04T02:59:16.975327923Z"

@@ -15,7 +15,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
-    version: 1.x.x
+    version: 2.x.x
 description: Argo Workflows is meant to orchestrate Kubernetes jobs in parallel. It uses DAG and step-based workflows
 engine: gotpl
 home: https://argoproj.github.io/workflows/
@@ -35,4 +35,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/argo-workflow-controller
   - https://github.com/bitnami/containers/tree/main/bitnami/argo-workflow-exec
   - https://argoproj.github.io/workflows/
-version: 2.3.10
+version: 2.4.2

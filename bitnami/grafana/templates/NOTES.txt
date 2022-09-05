@@ -31,3 +31,4 @@ APP VERSION: {{ .Chart.AppVersion }}
 {{- include "common.warnings.rollingTag" .Values.imageRenderer.image }}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{ include "grafana.validateValues" . }}
+{{ include "grafana.validateValues.database" . }}

@@ -81,13 +81,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### kiam image parameters
 
-| Name                | Description                                      | Value                  |
-| ------------------- | ------------------------------------------------ | ---------------------- |
-| `image.registry`    | kiam image registry                              | `docker.io`            |
-| `image.repository`  | kiam image name                                  | `bitnami/kiam`         |
-| `image.tag`         | kiam image tag                                   | `4.2.0-debian-10-r188` |
-| `image.pullPolicy`  | kiam image pull policy                           | `IfNotPresent`         |
-| `image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                   |
+| Name                | Description                                                                                          | Value                 |
+| ------------------- | ---------------------------------------------------------------------------------------------------- | --------------------- |
+| `image.registry`    | kiam image registry                                                                                  | `docker.io`           |
+| `image.repository`  | kiam image name                                                                                      | `bitnami/kiam`        |
+| `image.tag`         | kiam image tag                                                                                       | `4.2.0-debian-11-r24` |
+| `image.digest`      | kiam image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
+| `image.pullPolicy`  | kiam image pull policy                                                                               | `IfNotPresent`        |
+| `image.pullSecrets` | Specify docker-registry secret names as an array                                                     | `[]`                  |
 
 
 ### kiam server parameters

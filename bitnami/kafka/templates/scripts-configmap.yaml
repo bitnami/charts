@@ -76,8 +76,8 @@ data:
     #!/bin/bash
 
     ID="${MY_POD_NAME#"{{ $fullname }}-"}"
-    if [[ -f "/opt/bitnami/kafka/logs/meta.properties" ]]; then
-        export KAFKA_CFG_BROKER_ID="$(grep "broker.id" /opt/bitnami/kafka/logs/meta.properties | awk -F '=' '{print $2}')"
+    if [[ -f "{{ .Values.logsDirs | splitList "," | first }}/meta.properties" ]]; then
+        export KAFKA_CFG_BROKER_ID="$(grep "broker.id" "{{ .Values.logsDirs | splitList "," | first }}/meta.properties" | awk -F '=' '{print $2}')"
     else
         export KAFKA_CFG_BROKER_ID="$((ID + {{ .Values.minBrokerId }}))"
     fi
