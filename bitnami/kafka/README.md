@@ -231,7 +231,6 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure parameters
 
-
 | Name                                              | Description                                                                                                | Value                 |
 | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------- |
 | `service.type`                                    | Kubernetes Service type                                                                                    | `ClusterIP`           |
