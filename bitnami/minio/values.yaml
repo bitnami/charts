@@ -1041,7 +1041,7 @@ metrics:
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ##
     selector: {}
-    ## @param metrics.serviceMonitor.apiVersion ApiVersion for the serviceMonitor Resource(defaults to "monitoring.coreos.com/v1")
+    ## @param metrics.serviceMonitor.apiVersion ApiVersion for the serviceMonitor Resource (defaults to "monitoring.coreos.com/v1")
     apiVersion: ""
 
   ## Prometheus Operator PrometheusRule configuration
