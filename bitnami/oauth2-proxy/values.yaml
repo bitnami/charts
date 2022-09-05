@@ -353,6 +353,14 @@ configuration:
 ##
 containerPort: 4180
 
+## @param extraContainerPorts Array of additional container ports for the OAuth2 Proxy container
+## e.g:
+## extraContainerPorts:
+##   - name: metrics
+##     containerPort: 9100
+##
+extraContainerPorts: []
+
 ## @param replicaCount Number of OAuth2 Proxy replicas to deploy
 ##
 replicaCount: 1
@@ -435,7 +443,7 @@ resources:
 pdb:
   create: false
   minAvailable: 1
-  maxUnavailable: 1
+  maxUnavailable: ""
 
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod

@@ -81,15 +81,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### WordPress Image parameters
 
-| Name                | Description                                                                                               | Value                 |
-| ------------------- | --------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`    | WordPress image registry                                                                                  | `docker.io`           |
-| `image.repository`  | WordPress image repository                                                                                | `bitnami/wordpress`   |
-| `image.tag`         | WordPress image tag (immutable tags are recommended)                                                      | `6.0.1-debian-11-r21` |
-| `image.digest`      | WordPress image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `image.pullPolicy`  | WordPress image pull policy                                                                               | `IfNotPresent`        |
-| `image.pullSecrets` | WordPress image pull secrets                                                                              | `[]`                  |
-| `image.debug`       | Specify if debug values should be set                                                                     | `false`               |
+| Name                | Description                                                                                               | Value                |
+| ------------------- | --------------------------------------------------------------------------------------------------------- | -------------------- |
+| `image.registry`    | WordPress image registry                                                                                  | `docker.io`          |
+| `image.repository`  | WordPress image repository                                                                                | `bitnami/wordpress`  |
+| `image.tag`         | WordPress image tag (immutable tags are recommended)                                                      | `6.0.2-debian-11-r0` |
+| `image.digest`      | WordPress image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
+| `image.pullPolicy`  | WordPress image pull policy                                                                               | `IfNotPresent`       |
+| `image.pullSecrets` | WordPress image pull secrets                                                                              | `[]`                 |
+| `image.debug`       | Specify if debug values should be set                                                                     | `false`              |
 
 
 ### WordPress Configuration parameters
@@ -252,7 +252,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r29`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r30`      |
 | `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |

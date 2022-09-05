@@ -4,8 +4,9 @@ on:
     types:
       - created
 permissions:
-  repository-projects: write
   issues: write
+  pull-requests: write
+  repository-projects: write
 
 # To fix the concurrency when for example more than one label is added
 concurrency:

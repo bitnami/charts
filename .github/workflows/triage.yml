@@ -10,8 +10,9 @@ on:
       - reopened
       - opened
 permissions:
-  repository-projects: write
   issues: write
+  pull-requests: write
+  repository-projects: write
 
 # To fix the concurrency when for example more than one label is added
 concurrency:
@@ -52,7 +53,6 @@ jobs:
         # Only if moved into Solved
         uses: andymckay/labeler@1.0.4
         with:
-          repo-token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
           add-labels: ${{ (!contains(fromJson(env.BITNAMI_TEAM), github.actor)) && 'triage' || 'bitnami' }}
           # For reopened issues
           remove-labels: "solved"

@@ -1,7 +1,7 @@
 annotations:
   category: CMS
 apiVersion: v2
-appVersion: 5.7.1
+appVersion: 5.13.0
 dependencies:
   - condition: mysql.enabled
     name: mysql
@@ -33,4 +33,4 @@ name: ghost
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/ghost
   - https://www.ghost.org/
-version: 19.1.1
+version: 19.1.4

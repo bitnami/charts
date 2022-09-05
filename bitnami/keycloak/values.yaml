@@ -464,6 +464,10 @@ service:
   ## @param service.type Kubernetes service type
   ##
   type: LoadBalancer
+  ## @param service.http.enabled Enable http port on service
+  ##
+  http:
+    enabled: true
   ## @param service.ports.http Keycloak service HTTP port
   ## @param service.ports.https Keycloak service HTTPS port
   ##

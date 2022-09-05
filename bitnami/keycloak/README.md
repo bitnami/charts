@@ -184,6 +184,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                               | Description                                                                                                                      | Value                    |
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                     | Kubernetes service type                                                                                                          | `LoadBalancer`           |
+| `service.http.enabled`             | Enable http port on service                                                                                                      | `true`                   |
 | `service.ports.http`               | Keycloak service HTTP port                                                                                                       | `80`                     |
 | `service.ports.https`              | Keycloak service HTTPS port                                                                                                      | `443`                    |
 | `service.nodePorts`                | Specify the nodePort values for the LoadBalancer and NodePort service types.                                                     | `{}`                     |
