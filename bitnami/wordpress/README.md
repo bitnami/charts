@@ -144,62 +144,65 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### WordPress deployment parameters
 
-| Name                                    | Description                                                                                                              | Value           |
-| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------- |
-| `replicaCount`                          | Number of WordPress replicas to deploy                                                                                   | `1`             |
-| `updateStrategy.type`                   | WordPress deployment strategy type                                                                                       | `RollingUpdate` |
-| `updateStrategy.rollingUpdate`          | WordPress deployment rolling update configuration parameters                                                             | `{}`            |
-| `schedulerName`                         | Alternate scheduler                                                                                                      | `""`            |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`            |
-| `priorityClassName`                     | Name of the existing priority class to be used by WordPress pods, priority class needs to be created beforehand          | `""`            |
-| `hostAliases`                           | WordPress pod host aliases                                                                                               | `[]`            |
-| `extraVolumes`                          | Optionally specify extra list of additional volumes for WordPress pods                                                   | `[]`            |
-| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for WordPress container(s)                                      | `[]`            |
-| `sidecars`                              | Add additional sidecar containers to the WordPress pod                                                                   | `[]`            |
-| `initContainers`                        | Add additional init containers to the WordPress pods                                                                     | `[]`            |
-| `podLabels`                             | Extra labels for WordPress pods                                                                                          | `{}`            |
-| `podAnnotations`                        | Annotations for WordPress pods                                                                                           | `{}`            |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                      | `""`            |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`          |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `""`            |
-| `nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set                                                                    | `""`            |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set                                                                 | `[]`            |
-| `affinity`                              | Affinity for pod assignment                                                                                              | `{}`            |
-| `nodeSelector`                          | Node labels for pod assignment                                                                                           | `{}`            |
-| `tolerations`                           | Tolerations for pod assignment                                                                                           | `[]`            |
-| `resources.limits`                      | The resources limits for the WordPress containers                                                                        | `{}`            |
-| `resources.requests.memory`             | The requested memory for the WordPress containers                                                                        | `512Mi`         |
-| `resources.requests.cpu`                | The requested cpu for the WordPress containers                                                                           | `300m`          |
-| `containerPorts.http`                   | WordPress HTTP container port                                                                                            | `8080`          |
-| `containerPorts.https`                  | WordPress HTTPS container port                                                                                           | `8443`          |
-| `extraContainerPorts`                   | Optionally specify extra list of additional ports for WordPress container(s)                                             | `[]`            |
-| `podSecurityContext.enabled`            | Enabled WordPress pods' Security Context                                                                                 | `true`          |
-| `podSecurityContext.fsGroup`            | Set WordPress pod's Security Context fsGroup                                                                             | `1001`          |
-| `containerSecurityContext.enabled`      | Enabled WordPress containers' Security Context                                                                           | `true`          |
-| `containerSecurityContext.runAsUser`    | Set WordPress container's Security Context runAsUser                                                                     | `1001`          |
-| `containerSecurityContext.runAsNonRoot` | Set WordPress container's Security Context runAsNonRoot                                                                  | `true`          |
-| `livenessProbe.enabled`                 | Enable livenessProbe on WordPress containers                                                                             | `true`          |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                                  | `120`           |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                         | `10`            |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                        | `5`             |
-| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                      | `6`             |
-| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                      | `1`             |
-| `readinessProbe.enabled`                | Enable readinessProbe on WordPress containers                                                                            | `true`          |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                                 | `30`            |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                        | `10`            |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                       | `5`             |
-| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                     | `6`             |
-| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                                     | `1`             |
-| `startupProbe.enabled`                  | Enable startupProbe on WordPress containers                                                                              | `false`         |
-| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                   | `30`            |
-| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                          | `10`            |
-| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                         | `5`             |
-| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                       | `6`             |
-| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                       | `1`             |
-| `customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                                      | `{}`            |
-| `customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                                     | `{}`            |
-| `customStartupProbe`                    | Custom startupProbe that overrides the default one                                                                       | `{}`            |
-| `lifecycleHooks`                        | for the WordPress container(s) to automate configuration before or after startup                                         | `{}`            |
+| Name                                                | Description                                                                                                              | Value            |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------- |
+| `replicaCount`                                      | Number of WordPress replicas to deploy                                                                                   | `1`              |
+| `updateStrategy.type`                               | WordPress deployment strategy type                                                                                       | `RollingUpdate`  |
+| `updateStrategy.rollingUpdate`                      | WordPress deployment rolling update configuration parameters                                                             | `{}`             |
+| `schedulerName`                                     | Alternate scheduler                                                                                                      | `""`             |
+| `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`             |
+| `priorityClassName`                                 | Name of the existing priority class to be used by WordPress pods, priority class needs to be created beforehand          | `""`             |
+| `hostAliases`                                       | WordPress pod host aliases                                                                                               | `[]`             |
+| `extraVolumes`                                      | Optionally specify extra list of additional volumes for WordPress pods                                                   | `[]`             |
+| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for WordPress container(s)                                      | `[]`             |
+| `sidecars`                                          | Add additional sidecar containers to the WordPress pod                                                                   | `[]`             |
+| `initContainers`                                    | Add additional init containers to the WordPress pods                                                                     | `[]`             |
+| `podLabels`                                         | Extra labels for WordPress pods                                                                                          | `{}`             |
+| `podAnnotations`                                    | Annotations for WordPress pods                                                                                           | `{}`             |
+| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                      | `""`             |
+| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`           |
+| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `""`             |
+| `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set                                                                    | `""`             |
+| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set                                                                 | `[]`             |
+| `affinity`                                          | Affinity for pod assignment                                                                                              | `{}`             |
+| `nodeSelector`                                      | Node labels for pod assignment                                                                                           | `{}`             |
+| `tolerations`                                       | Tolerations for pod assignment                                                                                           | `[]`             |
+| `resources.limits`                                  | The resources limits for the WordPress containers                                                                        | `{}`             |
+| `resources.requests.memory`                         | The requested memory for the WordPress containers                                                                        | `512Mi`          |
+| `resources.requests.cpu`                            | The requested cpu for the WordPress containers                                                                           | `300m`           |
+| `containerPorts.http`                               | WordPress HTTP container port                                                                                            | `8080`           |
+| `containerPorts.https`                              | WordPress HTTPS container port                                                                                           | `8443`           |
+| `extraContainerPorts`                               | Optionally specify extra list of additional ports for WordPress container(s)                                             | `[]`             |
+| `podSecurityContext.enabled`                        | Enabled WordPress pods' Security Context                                                                                 | `true`           |
+| `podSecurityContext.fsGroup`                        | Set WordPress pod's Security Context fsGroup                                                                             | `1001`           |
+| `podSecurityContext.seccompProfile.type`            | Set WordPress container's Security Context seccomp profile                                                               | `RuntimeDefault` |
+| `containerSecurityContext.enabled`                  | Enabled WordPress containers' Security Context                                                                           | `true`           |
+| `containerSecurityContext.runAsUser`                | Set WordPress container's Security Context runAsUser                                                                     | `1001`           |
+| `containerSecurityContext.runAsNonRoot`             | Set WordPress container's Security Context runAsNonRoot                                                                  | `true`           |
+| `containerSecurityContext.allowPrivilegeEscalation` | Set WordPress container's privilege escalation                                                                           | `false`          |
+| `containerSecurityContext.capabilities.drop`        | Set WordPress container's Security Context runAsNonRoot                                                                  | `["ALL"]`        |
+| `livenessProbe.enabled`                             | Enable livenessProbe on WordPress containers                                                                             | `true`           |
+| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                  | `120`            |
+| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                         | `10`             |
+| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                        | `5`              |
+| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                      | `6`              |
+| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                      | `1`              |
+| `readinessProbe.enabled`                            | Enable readinessProbe on WordPress containers                                                                            | `true`           |
+| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                 | `30`             |
+| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                        | `10`             |
+| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                       | `5`              |
+| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                     | `6`              |
+| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                     | `1`              |
+| `startupProbe.enabled`                              | Enable startupProbe on WordPress containers                                                                              | `false`          |
+| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                   | `30`             |
+| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                          | `10`             |
+| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                         | `5`              |
+| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                       | `6`              |
+| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                       | `1`              |
+| `customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                      | `{}`             |
+| `customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                     | `{}`             |
+| `customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                       | `{}`             |
+| `lifecycleHooks`                                    | for the WordPress container(s) to automate configuration before or after startup                                         | `{}`             |
 
 
 ### Traffic Exposure Parameters
