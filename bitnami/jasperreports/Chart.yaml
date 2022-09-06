@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 8.0.2
+appVersion: 8.1.0
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
@@ -30,4 +30,4 @@ name: jasperreports
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/jasperreports
   - http://community.jaspersoft.com/project/jasperreports-server
-version: 14.3.0
+version: 14.3.1
