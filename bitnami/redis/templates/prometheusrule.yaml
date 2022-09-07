@@ -15,9 +15,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- with .Values.metrics.prometheusRule.rules }}
   groups:
-    - name: {{ template "common.names.name" $ }}
-      rules: {{- tpl (toYaml .) $ | nindent 8 }}
-  {{- end }}
+    - name: {{ include "common.names.fullname" . }}
+      rules: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.prometheusRule.rules "context" $ ) | nindent 8 }}
 {{- end }}

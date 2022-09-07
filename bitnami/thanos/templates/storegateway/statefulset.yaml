@@ -237,6 +237,9 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: data
+        {{- if .Values.storegateway.persistence.labels }}
+        labels: {{- include "common.tplvalues.render" ( dict "value" .Values.storegateway.persistence.labels "context" $) | nindent 10 }}
+        {{- end }}
         {{- if .Values.storegateway.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.storegateway.persistence.annotations "context" $) | nindent 10 }}
         {{- end }}
