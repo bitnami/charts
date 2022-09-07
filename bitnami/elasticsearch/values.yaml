@@ -99,6 +99,12 @@ config: {}
 ## ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html
 ##
 extraConfig: {}
+## @param extraHosts A list of external hosts which are part of this cluster
+## Example Use Case: When you have a cluster with nodes spaned acorss multiple K8s or namespaces
+## extraHosts:
+##   - datacenter2-elasticsearch-master-hl.namespace2.svc
+##   - datacenter2-elasticsearch-data-hl.namespace2.svc
+extraHosts: []
 ## @param extraVolumes A list of volumes to be added to the pod
 ## Example Use Case: mount ssl certificates when elasticsearch has tls enabled
 ## extraVolumes:

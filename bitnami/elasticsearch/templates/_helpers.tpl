@@ -189,6 +189,9 @@ Return the hostname of every ElasticSearch seed node
 {{- $ingestFullname := (printf "%s-hl" (include "elasticsearch.ingest.fullname" .) | trunc 63 | trimSuffix "-") }}
 {{- $ingestFullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
 {{- end -}}
+{{- range .Values.extraHosts }}
+{{- . }},
+{{- end }}
 {{- end -}}
 
 {{/*
