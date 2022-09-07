@@ -282,6 +282,7 @@ podSecurityContext:
 ## @param containerSecurityContext.enabled HashiCorp Consul Container securityContext
 ## @param containerSecurityContext.runAsUser User ID for the HashiCorp Consul container
 ## @param containerSecurityContext.runAsNonRoot Force the container to be run as non root
+## @param containerSecurityContext.allowPrivilegeEscalation Force the child process to be run as nonprivilege
 ##
 containerSecurityContext:
   enabled: true
