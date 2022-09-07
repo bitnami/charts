@@ -22,27 +22,23 @@ spec:
   endpoints:
     {{- $endpoints := ternary (.Values.metrics.serviceMonitor.endpoints) (list (dict "path" .Values.metrics.serviceMonitor.path)) (empty .Values.metrics.serviceMonitor.path) }}
     {{- range $endpoints }}
-    - port: {{ .port | default .Values.metrics.serviceMonitor.port }}
-      path: {{ .path }}
-      {{- $interval := .interval | default .Values.metrics.serviceMonitor.interval }}
-      {{- if $interval }}
-      interval: {{ $interval }}
+    {{- $endpoint := merge . $.Values.metrics.serviceMonitor }}
+    - port: {{ $endpoint.port }}
+      path: {{ $endpoint.path }}
+      {{- if $endpoint.interval }}
+      interval: {{ $endpoint.interval }}
       {{- end }}
-      {{- $scrapeTimeout := .scrapeTimeout | default .Values.metrics.serviceMonitor.scrapeTimeout }}
-      {{- if $scrapeTimeout }}
-      scrapeTimeout: {{ $scrapeTimeout }}
+      {{- if $endpoint.scrapeTimeout }}
+      scrapeTimeout: {{ $endpoint.scrapeTimeout }}
       {{- end }}
-      {{- $relabelings := .relabelings | default .Values.metrics.serviceMonitor.relabelings }}
-      {{- if $relabelings }}
-      relabelings: {{- include "common.tplvalues.render" ( dict "value" $relabelings "context" $) | nindent 6 }}
+      {{- if $endpoint.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" $endpoint.relabelings "context" $) | nindent 6 }}
       {{- end }}
-      {{- $metricRelabelings := .metricRelabelings | default .Values.metrics.serviceMonitor.metricRelabelings }}
-      {{- if $metricRelabelings }}
-      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" $metricRelabelings "context" $) | nindent 6 }}
+      {{- if $endpoint.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" $endpoint.metricRelabelings "context" $) | nindent 6 }}
       {{- end }}
-      {{- $honorLabels := .honorLabels | default .Values.metrics.serviceMonitor.honorLabels }}
-      {{- if $honorLabels }}
-      honorLabels: {{ $honorLabels }}
+      {{- if $endpoint.honorLabels }}
+      honorLabels: {{ $endpoint.honorLabels }}
       {{- end }}
     {{- end }}
   namespaceSelector:
