@@ -1,14 +1,13 @@
-{{- $serviceMonitor := .Values.metrics.serviceMonitor }}
-{{- if and .Values.metrics.enabled $serviceMonitor.enabled }}
+{{- if and .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ template "keycloak.fullname" . }}
-  namespace: {{ default (include "common.names.namespace" .) $serviceMonitor.namespace }}
+  namespace: {{ default (include "common.names.namespace" .) .Values.metrics.serviceMonitor.namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: keycloak
-    {{- if $serviceMonitor.labels }}
-    {{- include "common.tplvalues.render" (dict "value" $serviceMonitor.labels "context" $) | nindent 4 }}
+    {{- if .Values.metrics.serviceMonitor.labels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.labels "context" $) | nindent 4 }}
     {{- end }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -17,31 +16,31 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if $serviceMonitor.jobLabel }}
-  jobLabel: {{ $serviceMonitor.jobLabel }}
+  {{- if .Values.metrics.serviceMonitor.jobLabel }}
+  jobLabel: {{ .Values.metrics.serviceMonitor.jobLabel }}
   {{- end }}
   endpoints:
-    {{- $endpoints := ternary ($serviceMonitor.endpoints) (list (dict "path" $serviceMonitor.path)) (empty $serviceMonitor.path) }}
+    {{- $endpoints := ternary (.Values.metrics.serviceMonitor.endpoints) (list (dict "path" .Values.metrics.serviceMonitor.path)) (empty .Values.metrics.serviceMonitor.path) }}
     {{- range $endpoints }}
-    - port: {{ .port | default $serviceMonitor.port }}
+    - port: {{ .port | default .Values.metrics.serviceMonitor.port }}
       path: {{ .path }}
-      {{- $interval := .interval | default $serviceMonitor.interval }}
+      {{- $interval := .interval | default .Values.metrics.serviceMonitor.interval }}
       {{- if $interval }}
       interval: {{ $interval }}
       {{- end }}
-      {{- $scrapeTimeout := .scrapeTimeout | default $serviceMonitor.scrapeTimeout }}
+      {{- $scrapeTimeout := .scrapeTimeout | default .Values.metrics.serviceMonitor.scrapeTimeout }}
       {{- if $scrapeTimeout }}
       scrapeTimeout: {{ $scrapeTimeout }}
       {{- end }}
-      {{- $relabelings := .relabelings | default $serviceMonitor.relabelings }}
+      {{- $relabelings := .relabelings | default .Values.metrics.serviceMonitor.relabelings }}
       {{- if $relabelings }}
       relabelings: {{- include "common.tplvalues.render" ( dict "value" $relabelings "context" $) | nindent 6 }}
       {{- end }}
-      {{- $metricRelabelings := .metricRelabelings | default $serviceMonitor.metricRelabelings }}
+      {{- $metricRelabelings := .metricRelabelings | default .Values.metrics.serviceMonitor.metricRelabelings }}
       {{- if $metricRelabelings }}
       metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" $metricRelabelings "context" $) | nindent 6 }}
       {{- end }}
-      {{- $honorLabels := .honorLabels | default $serviceMonitor.honorLabels }}
+      {{- $honorLabels := .honorLabels | default .Values.metrics.serviceMonitor.honorLabels }}
       {{- if $honorLabels }}
       honorLabels: {{ $honorLabels }}
       {{- end }}
@@ -51,8 +50,8 @@ spec:
       - {{ include "common.names.namespace" . | quote }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
-      {{- if $serviceMonitor.selector }}
-      {{- include "common.tplvalues.render" (dict "value" $serviceMonitor.selector "context" $) | nindent 6 }}
+      {{- if .Values.metrics.serviceMonitor.selector }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
       {{- end }}
       app.kubernetes.io/component: metrics
 {{- end }}
