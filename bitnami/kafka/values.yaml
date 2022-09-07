@@ -514,6 +514,7 @@ podSecurityContext:
 ## @param containerSecurityContext.enabled Enable Kafka containers' Security Context
 ## @param containerSecurityContext.runAsUser Set Kafka containers' Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set Kafka containers' Security Context runAsNonRoot
+## @param containerSecurityContext.allowPrivilegeEscalation Force the child process to be run as nonprivilege
 ## e.g:
 ##   containerSecurityContext:
 ##     enabled: true
@@ -525,6 +526,7 @@ containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
+  allowPrivilegeEscalation: false
 ## @param hostAliases Kafka pods host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
