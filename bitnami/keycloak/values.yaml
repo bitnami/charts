@@ -920,6 +920,28 @@ keycloakConfigCli:
   ## @param keycloakConfigCli.extraVolumeMounts Extra volume mounts to add to the container
   ##
   extraVolumeMounts: []
+  ## @param keycloakConfigCli.initContainers Add additional init containers to the Keycloak config cli pod
+  ## Example:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  initContainers: []
+  ## @param keycloakConfigCli.sidecars Add additional sidecar containers to the Keycloak config cli pod
+  ## Example:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
   ## @param keycloakConfigCli.configuration keycloak-config-cli realms configuration
   ## NOTE: nil keys will be considered files to import locally
   ## Example:
