@@ -26,4 +26,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/cert-manager-webhook
   - https://github.com/bitnami/containers/tree/main/bitnami/cainjector
   - https://github.com/jetstack/cert-manager
-version: 0.8.1
+version: 0.8.2
