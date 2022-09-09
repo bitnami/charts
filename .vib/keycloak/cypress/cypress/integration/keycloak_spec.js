@@ -7,10 +7,10 @@ it('allows creating a new user', () => {
   cy.get('button[data-testid="add-user"]').click();
   cy.fixture('users').then((user) => {
     cy.get('#kc-username').type(`${user.newUser.username}.${random}`);
-    cy.get('#kc-firstname').type(`${user.newUser.firstName}.${random}`);
-    cy.get('#kc-lastname').type(`${user.newUser.lastName}.${random}`);
+    cy.get('input[data-testid="firstName-input"]').type(`${user.newUser.firstName}.${random}`);
+    cy.get('input[data-testid="lastName-input"]').type(`${user.newUser.lastName}.${random}`);
   });
-  cy.contains('button', 'Create').click();
+  cy.get('button[data-testid="create-user"]').click();
   cy.contains('h4', 'The user has been created');
 });
 
@@ -18,7 +18,7 @@ it('import and check user information', () => {
   cy.login();
   cy.get('[href*="/realm-settings"]').click();
   cy.get('div[data-testid="action-dropdown"]').click();
-  cy.contains('a', 'Partial import').click();
+  cy.get('a[data-testid="openPartialImportModal"]').click();
   const importFile = 'cypress/fixtures/import-data.json';
   const randomUsername = `test-realm-user-${random}`;
   const randomEmail = `test-realm-user-${random}@example.com`;
@@ -30,7 +30,7 @@ it('import and check user information', () => {
     const jsonText = JSON.stringify(obj);
     cy.get('.view-line').type(jsonText, { parseSpecialCharSequences: false, delay: 1 });
   });
-  cy.get('input#users-checkbox').click();
+  cy.get('input[data-testid="users-checkbox"]').click();
   cy.get('button[data-testid="import-button"]').click();
   cy.contains('h4', 'One record added');
   cy.get('button[data-testid="close-button"]').click();
