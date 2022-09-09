@@ -87,10 +87,6 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-  ## @param image.debug Enable image debug mode
-  ## Set to true if you would like to see extra information on logs
-  ##
-  debug: false
 ## Authentication parameters
 ##
 auth:
@@ -203,6 +199,9 @@ autoCompactionRetention: ""
 ## - 'existing': when upgrading the chart ('helm upgrade ...')
 ##
 initialClusterState: ""
+## @param logLevel Sets the log level for the etcd process. Allowed values: 'debug', 'info', 'warn', 'error', 'panic', 'fatal'
+##
+logLevel: "info"
 ## @param maxProcs Limits the number of operating system threads that can execute user-level
 ## Go code simultaneously by setting GOMAXPROCS environment variable
 ## ref: https://golang.org/pkg/runtime
