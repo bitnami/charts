@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/stale@v3
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token: ${{ secrets.BITNAMI_BOT_TOKEN }}
           stale-issue-message: 'This Issue has been automatically marked as "stale" because it has not had recent activity (for 15 days). It will be closed if no further activity occurs. Thanks for the feedback.'
           stale-pr-message: 'This Pull Request has been automatically marked as "stale" because it has not had recent activity (for 15 days). It will be closed if no further activity occurs. Thank you for your contribution.'
           close-issue-message: 'Due to the lack of activity in the last 5 days since it was marked as "stale", we proceed to close this Issue. Do not hesitate to reopen it later if necessary.'

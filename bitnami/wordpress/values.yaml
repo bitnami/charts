@@ -65,6 +65,7 @@ diagnosticMode:
 ## @param image.registry WordPress image registry
 ## @param image.repository WordPress image repository
 ## @param image.tag WordPress image tag (immutable tags are recommended)
+## @param image.digest WordPress image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy WordPress image pull policy
 ## @param image.pullSecrets WordPress image pull secrets
 ## @param image.debug Specify if debug values should be set
@@ -72,7 +73,8 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/wordpress
-  tag: 6.0.1-debian-11-r16
+  tag: 6.0.2-debian-11-r0
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -395,20 +397,28 @@ extraContainerPorts: []
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled WordPress pods' Security Context
 ## @param podSecurityContext.fsGroup Set WordPress pod's Security Context fsGroup
+## @param podSecurityContext.seccompProfile.type Set WordPress container's Security Context seccomp profile
 ##
 podSecurityContext:
   enabled: true
   fsGroup: 1001
+  seccompProfile:
+    type: "RuntimeDefault"
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled WordPress containers' Security Context
 ## @param containerSecurityContext.runAsUser Set WordPress container's Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set WordPress container's Security Context runAsNonRoot
+## @param containerSecurityContext.allowPrivilegeEscalation Set WordPress container's privilege escalation
+## @param containerSecurityContext.capabilities.drop Set WordPress container's Security Context runAsNonRoot
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
 ## Configure extra options for WordPress containers' liveness, readiness and startup probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe on WordPress containers
@@ -738,13 +748,15 @@ volumePermissions:
   ## @param volumePermissions.image.registry Bitnami Shell image registry
   ## @param volumePermissions.image.repository Bitnami Shell image repository
   ## @param volumePermissions.image.tag Bitnami Shell image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.digest Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Bitnami Shell image pull policy
   ## @param volumePermissions.image.pullSecrets Bitnami Shell image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r26
+    tag: 11-debian-11-r30
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -830,13 +842,15 @@ metrics:
   ## @param metrics.image.registry Apache exporter image registry
   ## @param metrics.image.repository Apache exporter image repository
   ## @param metrics.image.tag Apache exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.digest Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy Apache exporter image pull policy
   ## @param metrics.image.pullSecrets Apache exporter image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.11.0-debian-11-r30
+    tag: 0.11.0-debian-11-r34
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

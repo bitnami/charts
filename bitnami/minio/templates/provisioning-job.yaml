@@ -60,6 +60,9 @@ spec:
                 --timeout=120 \
                 {{ .Values.service.ports.api | int64 }};
               echo "Minio is available";
+          {{- if .Values.provisioning.resources }}
+          resources: {{- toYaml .Values.provisioning.resources | nindent 12 }}
+          {{- end }}
       containers:
         - name: minio
           image: {{ include "minio.image" . }}

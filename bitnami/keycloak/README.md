@@ -85,7 +85,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                 | Keycloak image registry                                                                                                      | `docker.io`            |
 | `image.repository`               | Keycloak image repository                                                                                                    | `bitnami/keycloak`     |
-| `image.tag`                      | Keycloak image tag (immutable tags are recommended)                                                                          | `18.0.2-debian-11-r19` |
+| `image.tag`                      | Keycloak image tag (immutable tags are recommended)                                                                          | `18.0.2-debian-11-r28` |
+| `image.digest`                   | Keycloak image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                     | `""`                   |
 | `image.pullPolicy`               | Keycloak image pull policy                                                                                                   | `IfNotPresent`         |
 | `image.pullSecrets`              | Specify docker-registry secret names as an array                                                                             | `[]`                   |
 | `image.debug`                    | Specify if debug logs should be enabled                                                                                      | `false`                |
@@ -183,6 +184,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                               | Description                                                                                                                      | Value                    |
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                     | Kubernetes service type                                                                                                          | `LoadBalancer`           |
+| `service.http.enabled`             | Enable http port on service                                                                                                      | `true`                   |
 | `service.ports.http`               | Keycloak service HTTP port                                                                                                       | `80`                     |
 | `service.ports.https`              | Keycloak service HTTPS port                                                                                                      | `443`                    |
 | `service.nodePorts`                | Specify the nodePort values for the LoadBalancer and NodePort service types.                                                     | `{}`                     |
@@ -242,55 +244,62 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                                       | Description                                                                           | Value      |
-| ------------------------------------------ | ------------------------------------------------------------------------------------- | ---------- |
-| `metrics.enabled`                          | Enable exposing Keycloak statistics                                                   | `false`    |
-| `metrics.service.ports.http`               | Metrics service HTTP port                                                             | `8080`     |
-| `metrics.service.annotations`              | Annotations for enabling prometheus to access the metrics endpoints                   | `{}`       |
-| `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator          | `false`    |
-| `metrics.serviceMonitor.path`              | Metrics service HTTP path                                                             | `/metrics` |
-| `metrics.serviceMonitor.namespace`         | Namespace which Prometheus is running in                                              | `""`       |
-| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped                                           | `30s`      |
-| `metrics.serviceMonitor.scrapeTimeout`     | Specify the timeout after which the scrape is ended                                   | `""`       |
-| `metrics.serviceMonitor.labels`            | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus | `{}`       |
-| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                   | `{}`       |
-| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                    | `[]`       |
-| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                             | `[]`       |
-| `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels              | `false`    |
-| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.     | `""`       |
+| Name                                       | Description                                                                                                               | Value   |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `metrics.enabled`                          | Enable exposing Keycloak statistics                                                                                       | `false` |
+| `metrics.service.ports.http`               | Metrics service HTTP port                                                                                                 | `8080`  |
+| `metrics.service.annotations`              | Annotations for enabling prometheus to access the metrics endpoints                                                       | `{}`    |
+| `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                              | `false` |
+| `metrics.serviceMonitor.port`              | Metrics service HTTP port                                                                                                 | `http`  |
+| `metrics.serviceMonitor.endpoints`         | The endpoint configuration of the ServiceMonitor. Path is mandatory. Interval, timeout and labellings can be overwritten. | `[]`    |
+| `metrics.serviceMonitor.path`              | Metrics service HTTP path. Deprecated: Use @param metrics.serviceMonitor.endpoints instead                                | `""`    |
+| `metrics.serviceMonitor.namespace`         | Namespace which Prometheus is running in                                                                                  | `""`    |
+| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped                                                                               | `30s`   |
+| `metrics.serviceMonitor.scrapeTimeout`     | Specify the timeout after which the scrape is ended                                                                       | `""`    |
+| `metrics.serviceMonitor.labels`            | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                                     | `{}`    |
+| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                                       | `{}`    |
+| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                                                        | `[]`    |
+| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                                                                 | `[]`    |
+| `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels                                                  | `false` |
+| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.                                         | `""`    |
+| `metrics.prometheusRule.enabled`           | Create PrometheusRule Resource for scraping metrics using PrometheusOperator                                              | `false` |
+| `metrics.prometheusRule.namespace`         | Namespace which Prometheus is running in                                                                                  | `""`    |
+| `metrics.prometheusRule.labels`            | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                     | `{}`    |
+| `metrics.prometheusRule.groups`            | Groups, containing the alert rules.                                                                                       | `{}`    |
 
 
 ### keycloak-config-cli parameters
 
-| Name                                                      | Description                                                                                     | Value                         |
-| --------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------------- |
-| `keycloakConfigCli.enabled`                               | Whether to enable keycloak-config-cli job                                                       | `false`                       |
-| `keycloakConfigCli.image.registry`                        | keycloak-config-cli container image registry                                                    | `docker.io`                   |
-| `keycloakConfigCli.image.repository`                      | keycloak-config-cli container image repository                                                  | `bitnami/keycloak-config-cli` |
-| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                         | `5.3.1-debian-11-r1`          |
-| `keycloakConfigCli.image.pullPolicy`                      | keycloak-config-cli container image pull policy                                                 | `IfNotPresent`                |
-| `keycloakConfigCli.image.pullSecrets`                     | keycloak-config-cli container image pull secrets                                                | `[]`                          |
-| `keycloakConfigCli.annotations`                           | Annotations for keycloak-config-cli job                                                         | `{}`                          |
-| `keycloakConfigCli.command`                               | Command for running the container (set to default if not set). Use array form                   | `[]`                          |
-| `keycloakConfigCli.args`                                  | Args for running the container (set to default if not set). Use array form                      | `[]`                          |
-| `keycloakConfigCli.hostAliases`                           | Job pod host aliases                                                                            | `[]`                          |
-| `keycloakConfigCli.resources.limits`                      | The resources limits for the keycloak-config-cli container                                      | `{}`                          |
-| `keycloakConfigCli.resources.requests`                    | The requested resources for the keycloak-config-cli container                                   | `{}`                          |
-| `keycloakConfigCli.containerSecurityContext.enabled`      | Enabled keycloak-config-cli containers' Security Context                                        | `true`                        |
-| `keycloakConfigCli.containerSecurityContext.runAsUser`    | Set keycloak-config-cli container's Security Context runAsUser                                  | `1001`                        |
-| `keycloakConfigCli.containerSecurityContext.runAsNonRoot` | Set keycloak-config-cli container's Security Context runAsNonRoot                               | `true`                        |
-| `keycloakConfigCli.podSecurityContext.enabled`            | Enabled keycloak-config-cli pods' Security Context                                              | `true`                        |
-| `keycloakConfigCli.podSecurityContext.fsGroup`            | Set keycloak-config-cli pod's Security Context fsGroup                                          | `1001`                        |
-| `keycloakConfigCli.backoffLimit`                          | Number of retries before considering a Job as failed                                            | `1`                           |
-| `keycloakConfigCli.podLabels`                             | Pod extra labels                                                                                | `{}`                          |
-| `keycloakConfigCli.podAnnotations`                        | Annotations for job pod                                                                         | `{}`                          |
-| `keycloakConfigCli.extraEnvVars`                          | Additional environment variables to set                                                         | `[]`                          |
-| `keycloakConfigCli.extraEnvVarsCM`                        | ConfigMap with extra environment variables                                                      | `""`                          |
-| `keycloakConfigCli.extraEnvVarsSecret`                    | Secret with extra environment variables                                                         | `""`                          |
-| `keycloakConfigCli.extraVolumes`                          | Extra volumes to add to the job                                                                 | `[]`                          |
-| `keycloakConfigCli.extraVolumeMounts`                     | Extra volume mounts to add to the container                                                     | `[]`                          |
-| `keycloakConfigCli.configuration`                         | keycloak-config-cli realms configuration                                                        | `{}`                          |
-| `keycloakConfigCli.existingConfigmap`                     | ConfigMap with keycloak-config-cli configuration. This will override `keycloakConfigCli.config` | `""`                          |
+| Name                                                      | Description                                                                                                                   | Value                         |
+| --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| `keycloakConfigCli.enabled`                               | Whether to enable keycloak-config-cli job                                                                                     | `false`                       |
+| `keycloakConfigCli.image.registry`                        | keycloak-config-cli container image registry                                                                                  | `docker.io`                   |
+| `keycloakConfigCli.image.repository`                      | keycloak-config-cli container image repository                                                                                | `bitnami/keycloak-config-cli` |
+| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                                                       | `5.3.1-debian-11-r10`         |
+| `keycloakConfigCli.image.digest`                          | keycloak-config-cli container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                          |
+| `keycloakConfigCli.image.pullPolicy`                      | keycloak-config-cli container image pull policy                                                                               | `IfNotPresent`                |
+| `keycloakConfigCli.image.pullSecrets`                     | keycloak-config-cli container image pull secrets                                                                              | `[]`                          |
+| `keycloakConfigCli.annotations`                           | Annotations for keycloak-config-cli job                                                                                       | `{}`                          |
+| `keycloakConfigCli.command`                               | Command for running the container (set to default if not set). Use array form                                                 | `[]`                          |
+| `keycloakConfigCli.args`                                  | Args for running the container (set to default if not set). Use array form                                                    | `[]`                          |
+| `keycloakConfigCli.hostAliases`                           | Job pod host aliases                                                                                                          | `[]`                          |
+| `keycloakConfigCli.resources.limits`                      | The resources limits for the keycloak-config-cli container                                                                    | `{}`                          |
+| `keycloakConfigCli.resources.requests`                    | The requested resources for the keycloak-config-cli container                                                                 | `{}`                          |
+| `keycloakConfigCli.containerSecurityContext.enabled`      | Enabled keycloak-config-cli containers' Security Context                                                                      | `true`                        |
+| `keycloakConfigCli.containerSecurityContext.runAsUser`    | Set keycloak-config-cli container's Security Context runAsUser                                                                | `1001`                        |
+| `keycloakConfigCli.containerSecurityContext.runAsNonRoot` | Set keycloak-config-cli container's Security Context runAsNonRoot                                                             | `true`                        |
+| `keycloakConfigCli.podSecurityContext.enabled`            | Enabled keycloak-config-cli pods' Security Context                                                                            | `true`                        |
+| `keycloakConfigCli.podSecurityContext.fsGroup`            | Set keycloak-config-cli pod's Security Context fsGroup                                                                        | `1001`                        |
+| `keycloakConfigCli.backoffLimit`                          | Number of retries before considering a Job as failed                                                                          | `1`                           |
+| `keycloakConfigCli.podLabels`                             | Pod extra labels                                                                                                              | `{}`                          |
+| `keycloakConfigCli.podAnnotations`                        | Annotations for job pod                                                                                                       | `{}`                          |
+| `keycloakConfigCli.extraEnvVars`                          | Additional environment variables to set                                                                                       | `[]`                          |
+| `keycloakConfigCli.extraEnvVarsCM`                        | ConfigMap with extra environment variables                                                                                    | `""`                          |
+| `keycloakConfigCli.extraEnvVarsSecret`                    | Secret with extra environment variables                                                                                       | `""`                          |
+| `keycloakConfigCli.extraVolumes`                          | Extra volumes to add to the job                                                                                               | `[]`                          |
+| `keycloakConfigCli.extraVolumeMounts`                     | Extra volume mounts to add to the container                                                                                   | `[]`                          |
+| `keycloakConfigCli.configuration`                         | keycloak-config-cli realms configuration                                                                                      | `{}`                          |
+| `keycloakConfigCli.existingConfigmap`                     | ConfigMap with keycloak-config-cli configuration. This will override `keycloakConfigCli.config`                               | `""`                          |
 
 
 ### Database parameters

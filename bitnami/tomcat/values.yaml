@@ -50,6 +50,7 @@ extraDeploy: []
 ## @param image.registry Tomcat image registry
 ## @param image.repository Tomcat image repository
 ## @param image.tag Tomcat image tag (immutable tags are recommended)
+## @param image.digest Tomcat image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Tomcat image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
 ## @param image.debug Specify if debug logs should be enabled
@@ -57,7 +58,8 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/tomcat
-  tag: 10.0.23-debian-11-r4
+  tag: 10.0.23-debian-11-r10
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -567,13 +569,15 @@ volumePermissions:
   ## @param volumePermissions.image.registry Init container volume-permissions image registry
   ## @param volumePermissions.image.repository Init container volume-permissions image repository
   ## @param volumePermissions.image.tag Init container volume-permissions image tag
+  ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r23
+    tag: 11-debian-11-r28
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -625,13 +629,15 @@ metrics:
     ## @param metrics.jmx.image.registry JMX exporter image registry
     ## @param metrics.jmx.image.repository JMX exporter image repository
     ## @param metrics.jmx.image.tag JMX exporter image tag (immutable tags are recommended)
+    ## @param metrics.jmx.image.digest JMX exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param metrics.jmx.image.pullPolicy JMX exporter image pull policy
     ## @param metrics.jmx.image.pullSecrets Specify docker-registry secret names as an array
     ##
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.17.0-debian-11-r24
+      tag: 0.17.0-debian-11-r29
+      digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -654,6 +660,15 @@ metrics:
       lowercaseOutputName: true
       lowercaseOutputLabelNames: true
       attrNameSnakeCase: true
+    ## Prometheus JMX exporter containers' Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param metrics.jmx.containerSecurityContext.enabled Enable Prometheus JMX exporter containers' Security Context
+    ## @param metrics.jmx.containerSecurityContext.runAsUser Set Prometheus JMX exporter containers' Security Context runAsUser
+    ## @param metrics.jmx.containerSecurityContext.runAsNonRoot Set Prometheus JMX exporter containers' Security Context runAsNonRoot
+    containerSecurityContext:
+      enabled: true
+      runAsUser: 1001
+      runAsNonRoot: true
     ## Prometheus JMX Exporter' resource requests and limits
     ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -694,9 +709,9 @@ metrics:
     ## @param metrics.podMonitor.enabled Create PodMonitor Resource for scraping metrics using PrometheusOperator
     ##
     enabled: false
-    ## @param metrics.podMonitor.namespace Namespace in which Prometheus is running
+    ## @param metrics.podMonitor.namespace Optional namespace in which Prometheus is running
     ##
-    namespace: monitoring
+    namespace: ""
     ## @param metrics.podMonitor.interval Specify the interval at which metrics should be scraped
     ##
     interval: 30s

@@ -10,8 +10,9 @@ on:
       - reopened
       - opened
 permissions:
-  repository-projects: write
   issues: write
+  pull-requests: write
+  repository-projects: write
 
 # To fix the concurrency when for example more than one label is added
 concurrency:
@@ -37,7 +38,8 @@ jobs:
         with:
           numOfAssignee: 1
           removePreviousAssignees: false
-          teams: ${{ env.TRIAGE_TEAM_NAME }}
+          # If it's an internal issue, assign directly to the support team. Otherwise, to the triage one.
+          teams: ${{ (contains(fromJson(env.BITNAMI_TEAM), github.actor)) && env.SUPPORT_TEAM_NAME || env.TRIAGE_TEAM_NAME }}
           repo-token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
       - name: Send to the board
         uses: peter-evans/create-or-update-project-card@v2
@@ -51,7 +53,6 @@ jobs:
         # Only if moved into Solved
         uses: andymckay/labeler@1.0.4
         with:
-          repo-token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
           add-labels: ${{ (!contains(fromJson(env.BITNAMI_TEAM), github.actor)) && 'triage' || 'bitnami' }}
           # For reopened issues
           remove-labels: "solved"

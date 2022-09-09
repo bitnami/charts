@@ -78,29 +78,30 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### JasperReports parameters
 
-| Name                    | Description                                                            | Value                   |
-| ----------------------- | ---------------------------------------------------------------------- | ----------------------- |
-| `image.registry`        | JasperReports image registry                                           | `docker.io`             |
-| `image.repository`      | JasperReports image repository                                         | `bitnami/jasperreports` |
-| `image.tag`             | JasperReports image tag (immutable tags are recommended)               | `8.0.0-debian-10-r33`   |
-| `image.pullPolicy`      | JasperReports image pull policy                                        | `IfNotPresent`          |
-| `image.pullSecrets`     | Specify docker-registry secret names as an array                       | `[]`                    |
-| `jasperreportsUsername` | JasperReports user                                                     | `jasperadmin`           |
-| `jasperreportsPassword` | JasperReports password                                                 | `""`                    |
-| `jasperreportsEmail`    | JasperReports user email                                               | `user@example.com`      |
-| `allowEmptyPassword`    | Set to `yes` to allow the container to be started with blank passwords | `no`                    |
-| `smtpHost`              | SMTP host                                                              | `""`                    |
-| `smtpPort`              | SMTP port                                                              | `""`                    |
-| `smtpEmail`             | SMTP email                                                             | `""`                    |
-| `smtpUser`              | SMTP user                                                              | `""`                    |
-| `smtpPassword`          | SMTP password                                                          | `""`                    |
-| `smtpProtocol`          | SMTP protocol [`ssl`, `none`]                                          | `""`                    |
-| `command`               | Override default container command (useful when using custom images)   | `[]`                    |
-| `args`                  | Override default container args (useful when using custom images)      | `[]`                    |
-| `extraEnvVars`          | Extra environment variables to be set on Jasperreports container       | `[]`                    |
-| `extraEnvVarsCM`        | Name of existing ConfigMap containing extra env vars                   | `""`                    |
-| `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                      | `""`                    |
-| `updateStrategy.type`   | StrategyType                                                           | `RollingUpdate`         |
+| Name                    | Description                                                                                                   | Value                   |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `image.registry`        | JasperReports image registry                                                                                  | `docker.io`             |
+| `image.repository`      | JasperReports image repository                                                                                | `bitnami/jasperreports` |
+| `image.tag`             | JasperReports image tag (immutable tags are recommended)                                                      | `8.0.2-debian-11-r25`   |
+| `image.digest`          | JasperReports image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `image.pullPolicy`      | JasperReports image pull policy                                                                               | `IfNotPresent`          |
+| `image.pullSecrets`     | Specify docker-registry secret names as an array                                                              | `[]`                    |
+| `jasperreportsUsername` | JasperReports user                                                                                            | `jasperadmin`           |
+| `jasperreportsPassword` | JasperReports password                                                                                        | `""`                    |
+| `jasperreportsEmail`    | JasperReports user email                                                                                      | `user@example.com`      |
+| `allowEmptyPassword`    | Set to `yes` to allow the container to be started with blank passwords                                        | `no`                    |
+| `smtpHost`              | SMTP host                                                                                                     | `""`                    |
+| `smtpPort`              | SMTP port                                                                                                     | `""`                    |
+| `smtpEmail`             | SMTP email                                                                                                    | `""`                    |
+| `smtpUser`              | SMTP user                                                                                                     | `""`                    |
+| `smtpPassword`          | SMTP password                                                                                                 | `""`                    |
+| `smtpProtocol`          | SMTP protocol [`ssl`, `none`]                                                                                 | `""`                    |
+| `command`               | Override default container command (useful when using custom images)                                          | `[]`                    |
+| `args`                  | Override default container args (useful when using custom images)                                             | `[]`                    |
+| `extraEnvVars`          | Extra environment variables to be set on Jasperreports container                                              | `[]`                    |
+| `extraEnvVarsCM`        | Name of existing ConfigMap containing extra env vars                                                          | `""`                    |
+| `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                                                             | `""`                    |
+| `updateStrategy.type`   | StrategyType                                                                                                  | `RollingUpdate`         |
 
 
 ### Jasperreports deployment parameters
@@ -198,26 +199,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Database parameters
 
-| Name                                        | Description                                          | Value                   |
-| ------------------------------------------- | ---------------------------------------------------- | ----------------------- |
-| `mariadb.enabled`                           | Whether to use the MariaDB chart                     | `true`                  |
-| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`) | `standalone`            |
-| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                 | `""`                    |
-| `mariadb.auth.database`                     | Database name to create                              | `bitnami_jasperreports` |
-| `mariadb.auth.username`                     | Database user to create                              | `bn_jasperreports`      |
-| `mariadb.auth.password`                     | Password for the database                            | `""`                    |
-| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                | `true`                  |
-| `mariadb.primary.persistence.storageClass`  | PVC Storage Class                                    | `""`                    |
-| `mariadb.primary.persistence.accessModes`   | Access mode of persistent volume                     | `["ReadWriteOnce"]`     |
-| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                      | `8Gi`                   |
-| `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                   | `""`                    |
-| `mariadb.primary.persistence.existingClaim` | Enable persistence using an existing PVC             | `""`                    |
-| `externalDatabase.existingSecret`           | Name of the database existing Secret Object          | `""`                    |
-| `externalDatabase.host`                     | Host of the existing database                        | `""`                    |
-| `externalDatabase.port`                     | Port of the existing database                        | `3306`                  |
-| `externalDatabase.user`                     | Existing username in the external db                 | `bn_jasperreports`      |
-| `externalDatabase.password`                 | Password for the above username                      | `""`                    |
-| `externalDatabase.database`                 | Name of the existing database                        | `bitnami_jasperreports` |
+| Name                                        | Description                                                               | Value                   |
+| ------------------------------------------- | ------------------------------------------------------------------------- | ----------------------- |
+| `mariadb.enabled`                           | Whether to use the MariaDB chart                                          | `true`                  |
+| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                      | `standalone`            |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                      | `""`                    |
+| `mariadb.auth.database`                     | Database name to create                                                   | `bitnami_jasperreports` |
+| `mariadb.auth.username`                     | Database user to create                                                   | `bn_jasperreports`      |
+| `mariadb.auth.password`                     | Password for the database                                                 | `""`                    |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                     | `true`                  |
+| `mariadb.primary.persistence.storageClass`  | PVC Storage Class                                                         | `""`                    |
+| `mariadb.primary.persistence.accessModes`   | Access mode of persistent volume                                          | `["ReadWriteOnce"]`     |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                           | `8Gi`                   |
+| `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                                        | `""`                    |
+| `mariadb.primary.persistence.existingClaim` | Enable persistence using an existing PVC                                  | `""`                    |
+| `externalDatabase.existingSecret`           | Name of the database existing Secret Object                               | `""`                    |
+| `externalDatabase.host`                     | Host of the existing database                                             | `""`                    |
+| `externalDatabase.port`                     | Port of the existing database                                             | `3306`                  |
+| `externalDatabase.user`                     | Existing username in the external db                                      | `bn_jasperreports`      |
+| `externalDatabase.password`                 | Password for the above username                                           | `""`                    |
+| `externalDatabase.database`                 | Name of the existing database                                             | `bitnami_jasperreports` |
+| `externalDatabase.type`                     | Type of the existing database, allowed values: mariadb, mysql, postgresql | `mariadb`               |
 
 
 ### NetworkPolicy parameters
