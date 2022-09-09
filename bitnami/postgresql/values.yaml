@@ -663,6 +663,9 @@ primary:
     ## @param primary.persistence.annotations Annotations for the PVC
     ##
     annotations: {}
+    ## @param primary.persistence.labels Labels for the PVC
+    ##
+    labels: {}
     ## @param primary.persistence.selector Selector to match an existing Persistent Volume (this value is evaluated as a template)
     ## selector:
     ##   matchLabels:
@@ -991,6 +994,9 @@ readReplicas:
     ## @param readReplicas.persistence.annotations Annotations for the PVC
     ##
     annotations: {}
+    ## @param readReplicas.persistence.labels Labels for the PVC
+    ##
+    labels: {}
     ## @param readReplicas.persistence.selector Selector to match an existing Persistent Volume (this value is evaluated as a template)
     ## selector:
     ##   matchLabels:
