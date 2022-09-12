@@ -253,6 +253,25 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array                                                                | `[]`                      |
 | `metrics.resources`         | Metrics exporter resource requests and limits                                                                   | `{}`                      |
 | `metrics.podAnnotations`    | Additional annotations for Metrics exporter pod                                                                 | `{}`                      |
+| `metrics.service.type`                       | Drupal exporter service type                                                                                    | `ClusterIP`              |
+| `metrics.service.port`                       | Drupal exporter service port                                                                                    | `9117`                   |
+| `metrics.service.externalTrafficPolicy`      | Drupal exporter service external traffic policy                                                                 | `Cluster`                |
+| `metrics.service.extraPorts`                 | Extra ports to expose (normally used with the `sidecar` value)                                                      | `[]`                     |
+| `metrics.service.loadBalancerIP`             | Drupal exporter service Load Balancer IP                                                                        | `""`                     |
+| `metrics.service.loadBalancerSourceRanges`   | Drupal exporter service Load Balancer sources                                                                   | `[]`                     |
+| `metrics.service.annotations`                | Additional custom annotations for Drupal exporter service                                                       | `{}`                     |
+| `metrics.serviceMonitor.enabled`             | Create ServiceMonitor resource(s) for scraping metrics using PrometheusOperator                                     | `false`                  |
+| `metrics.serviceMonitor.namespace`           | The namespace in which the ServiceMonitor will be created                                                           | `""`                     |
+| `metrics.serviceMonitor.interval`            | The interval at which metrics should be scraped                                                                     | `30s`                    |
+| `metrics.serviceMonitor.scrapeTimeout`       | The timeout after which the scrape is ended                                                                         | `""`                     |
+| `metrics.serviceMonitor.relabellings`        | Metrics RelabelConfigs to apply to samples before scraping.                                                         | `[]`                     |
+| `metrics.serviceMonitor.metricRelabelings`   | Metrics RelabelConfigs to apply to samples before ingestion.                                                        | `[]`                     |
+| `metrics.serviceMonitor.honorLabels`         | Specify honorLabels parameter to add the scrape endpoint                                                            | `false`                  |
+| `metrics.serviceMonitor.additionalLabels`    | Additional labels that can be used so ServiceMonitor resource(s) can be discovered by Prometheus                    | `{}`                     |
+| `metrics.prometheusRule.enabled`             | Create a custom prometheusRule Resource for scraping metrics using PrometheusOperator                               | `false`                  |
+| `metrics.prometheusRule.namespace`           | The namespace in which the prometheusRule will be created                                                           | `""`                     |
+| `metrics.prometheusRule.additionalLabels`    | Additional labels for the prometheusRule                                                                            | `{}`                     |
+| `metrics.prometheusRule.rules`               | Custom Prometheus rules                                                                                             | `[]`                     |
 
 
 ### Certificate injection parameters
