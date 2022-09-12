@@ -119,28 +119,28 @@ spec:
             - containerPort: {{ .Values.gateway.containerPorts.http }}
               name: http
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.gateway.startupProbe.enabled }}
+          {{- if .Values.gateway.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.gateway.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.gateway.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.gateway.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http
-          {{- else if .Values.gateway.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.gateway.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.gateway.livenessProbe.enabled }}
+          {{- if .Values.gateway.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.gateway.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.gateway.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.gateway.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /
               port: http
-          {{- else if .Values.gateway.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.gateway.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.gateway.readinessProbe.enabled }}
+          {{- if .Values.gateway.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.gateway.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.gateway.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.gateway.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /
               port: http
-          {{- else if .Values.gateway.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.gateway.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.gateway.resources }}

@@ -119,33 +119,33 @@ spec:
             - containerPort: {{ .Values.exporter.containerPorts.metrics }}
               name: metrics
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.exporter.startupProbe.enabled }}
+          {{- if .Values.exporter.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.exporter.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.exporter.startupProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: {{ .Values.metrics.path | quote }}
               port: metrics
               # Metrics are exposed only though HTTP https://github.com/goharbor/harbor/issues/16252
               scheme: HTTP
-          {{- else if .Values.exporter.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.exporter.livenessProbe.enabled }}
+          {{- if .Values.exporter.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.exporter.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.exporter.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: {{ .Values.metrics.path | quote }}
               port: metrics
               scheme: HTTP
-          {{- else if .Values.exporter.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.exporter.readinessProbe.enabled }}
+          {{- if .Values.exporter.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.exporter.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.exporter.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: {{ .Values.metrics.path | quote }}
               port: metrics
               scheme: HTTP
-          {{- else if .Values.exporter.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.exporter.lifecycleHooks }}

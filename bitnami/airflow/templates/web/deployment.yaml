@@ -191,14 +191,16 @@ spec:
             - name: http
               containerPort: {{ .Values.web.containerPorts.http }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.web.startupProbe.enabled }}
+          {{- if .Values.web.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.web.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.web.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http
-          {{- else if .Values.web.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.web.livenessProbe.enabled }}
+          {{- if .Values.web.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.web.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.web.livenessProbe "enabled") "context" $) | nindent 12 }}
             {{- if include "airflow.baseUrl" . }}
             tcpSocket:
@@ -208,10 +210,10 @@ spec:
               path: /health
               port: http
             {{- end }}
-          {{- else if .Values.web.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.web.readinessProbe.enabled }}
+          {{- if .Values.web.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.web.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.web.readinessProbe "enabled") "context" $) | nindent 12 }}
             {{- if include "airflow.baseUrl" . }}
             tcpSocket:
@@ -221,8 +223,6 @@ spec:
               path: /health
               port: http
             {{- end }}
-          {{- else if .Values.web.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.web.lifecycleHooks }}

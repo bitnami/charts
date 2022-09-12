@@ -201,28 +201,28 @@ spec:
             - name: transport
               containerPort: {{ .Values.containerPorts.transport }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.ingest.startupProbe.enabled }}
+          {{- if .Values.ingest.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingest.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.ingest.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingest.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: rest-api
-          {{- else if .Values.ingest.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingest.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.ingest.livenessProbe.enabled }}
+          {{- if .Values.ingest.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingest.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.ingest.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingest.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - /opt/bitnami/scripts/elasticsearch/healthcheck.sh
-          {{- else if .Values.ingest.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingest.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.ingest.readinessProbe.enabled }}
+          {{- if .Values.ingest.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingest.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.ingest.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingest.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - /opt/bitnami/scripts/elasticsearch/healthcheck.sh
-          {{- else if .Values.ingest.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingest.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.ingest.resources }}

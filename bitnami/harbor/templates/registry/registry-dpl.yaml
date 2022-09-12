@@ -160,30 +160,30 @@ spec:
               name: metrics
             {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.registry.server.startupProbe.enabled }}
+          {{- if .Values.registry.server.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.registry.server.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.registry.server.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.registry.server.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
-          {{- else if .Values.registry.server.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.registry.server.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.registry.server.livenessProbe.enabled }}
+          {{- if .Values.registry.server.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.registry.server.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.registry.server.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.registry.server.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /
               scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
               port: registry
-          {{- else if .Values.registry.server.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.registry.server.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.registry.server.readinessProbe.enabled }}
+          {{- if .Values.registry.server.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.registry.server.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.registry.server.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.registry.server.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /
               scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
               port: registry
-          {{- else if .Values.registry.server.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.registry.server.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.registry.server.lifecycleHooks }}
@@ -293,30 +293,30 @@ spec:
             - containerPort: {{ ternary .Values.registry.controller.containerPorts.https .Values.registry.controller.containerPorts.http .Values.internalTLS.enabled }}
               name: registryctl
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.registry.controller.startupProbe.enabled }}
+          {{- if .Values.registry.controller.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.registry.controller.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.registry.controller.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.registry.controller.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
-          {{- else if .Values.registry.controller.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.registry.controller.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.registry.controller.livenessProbe.enabled }}
+          {{- if .Values.registry.controller.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.registry.controller.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.registry.controller.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.registry.controller.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /api/health
               scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
               port: registryctl
-          {{- else if .Values.registry.controller.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.registry.controller.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.registry.controller.readinessProbe.enabled }}
+          {{- if .Values.registry.controller.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.registry.controller.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.registry.controller.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.registry.controller.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /api/health
               scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
               port: registryctl
-          {{- else if .Values.registry.controller.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.registry.controller.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.registry.controller.lifecycleHooks }}

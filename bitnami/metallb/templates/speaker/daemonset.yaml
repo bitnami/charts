@@ -126,28 +126,28 @@ spec:
             - name: metrics
               containerPort: {{ .Values.speaker.containerPorts.metrics }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.speaker.livenessProbe.enabled }}
+          {{- if .Values.speaker.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.speaker.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.speaker.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: metrics
-          {{- else if .Values.speaker.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.speaker.readinessProbe.enabled }}
+          {{- if .Values.speaker.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.speaker.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.speaker.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: metrics
-          {{- else if .Values.speaker.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.speaker.startupProbe.enabled }}
+          {{- if .Values.speaker.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.speaker.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.speaker.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: metrics
-          {{- else if .Values.speaker.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.speaker.resources }}

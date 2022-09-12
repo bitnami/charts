@@ -107,30 +107,30 @@ spec:
             - containerPort: {{ ternary .Values.portal.containerPorts.https .Values.portal.containerPorts.http .Values.internalTLS.enabled }}
               name: {{ ternary "https" "http" .Values.internalTLS.enabled }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.portal.startupProbe.enabled }}
+          {{- if .Values.portal.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.portal.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.portal.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.portal.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
-          {{- else if .Values.portal.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.portal.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.portal.livenessProbe.enabled }}
+          {{- if .Values.portal.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.portal.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.portal.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.portal.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /
               port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
               scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
-          {{- else if .Values.portal.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.portal.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.portal.readinessProbe.enabled }}
+          {{- if .Values.portal.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.portal.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.portal.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.portal.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /
               port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
               scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
-          {{- else if .Values.portal.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.portal.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.portal.lifecycleHooks }}

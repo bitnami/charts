@@ -319,7 +319,9 @@ spec:
             - name: rmi
               containerPort: {{ .Values.locator.containerPorts.rmi }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.locator.livenessProbe.enabled }}
+          {{- if .Values.locator.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.locator.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.locator.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.locator.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
@@ -328,10 +330,10 @@ spec:
                 - |
                   . /opt/bitnami/scripts/geode-env.sh
                   gfsh -e "connect --locator=$GEODE_NODE_NAME[$GEODE_LOCATOR_PORT_NUMBER]{{if .Values.auth.tls.enabled }} --use-ssl{{ end }}{{ if or .Values.auth.enabled .Values.auth.tls.enabled }} --security-properties-file=$GEODE_SEC_CONF_FILE{{ end }}" || exit 1
-          {{- else if .Values.locator.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.locator.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.locator.readinessProbe.enabled }}
+          {{- if .Values.locator.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.locator.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.locator.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.locator.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
@@ -340,15 +342,13 @@ spec:
                 - |
                   . /opt/bitnami/scripts/geode-env.sh
                   gfsh -e "connect --locator=$GEODE_NODE_NAME[$GEODE_LOCATOR_PORT_NUMBER]{{if .Values.auth.tls.enabled }} --use-ssl{{ end }}{{ if or .Values.auth.enabled .Values.auth.tls.enabled }} --security-properties-file=$GEODE_SEC_CONF_FILE{{ end }}" || exit 1
-          {{- else if .Values.locator.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.locator.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.locator.startupProbe.enabled }}
+          {{- if .Values.locator.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.locator.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.locator.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.locator.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: locator
-          {{- else if .Values.locator.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.locator.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.locator.lifecycleHooks }}
@@ -386,23 +386,23 @@ spec:
             - name: haproxy-configuration
               mountPath: /bitnami/haproxy/conf/haproxy.cfg
               subPath: haproxy.cfg
-          {{- if .Values.metrics.livenessProbe.enabled }}
+          {{- if .Values.metrics.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - pgrep
                 - haproxy
-          {{- else if .Values.metrics.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.metrics.readinessProbe.enabled }}
+          {{- if .Values.metrics.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - pgrep
                 - haproxy
-          {{- else if .Values.metrics.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           ports:
             - name: metrics

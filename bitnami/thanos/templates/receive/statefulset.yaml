@@ -188,7 +188,9 @@ spec:
             - containerPort: 19291
               name: remote-write
               protocol: TCP
-          {{- if .Values.receive.livenessProbe.enabled }}
+          {{- if .Values.receive.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.receive.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.receive.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.receive.livenessProbe "enabled") "context" $) | nindent 12 }}
             {{- if not .Values.auth.basicAuthUsers }}
             httpGet:
@@ -199,10 +201,10 @@ spec:
             tcpSocket:
               port: http
             {{- end }}
-          {{- else if .Values.receive.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.receive.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.receive.readinessProbe.enabled }}
+          {{- if .Values.receive.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.receive.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.receive.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.receive.readinessProbe "enabled") "context" $) | nindent 12 }}
             {{- if not .Values.auth.basicAuthUsers }}
             httpGet:
@@ -213,10 +215,10 @@ spec:
             tcpSocket:
               port: http
             {{- end }}
-          {{- else if .Values.receive.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.receive.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.receive.startupProbe.enabled }}
+          {{- if .Values.receive.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.receive.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.receive.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.receive.startupProbe "enabled") "context" $) | nindent 12 }}
             {{- if not .Values.auth.basicAuthUsers }}
             httpGet:
@@ -227,8 +229,6 @@ spec:
             tcpSocket:
               port: http
             {{- end }}
-          {{- else if .Values.receive.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.receive.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.receive.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.receive.lifecycleHooks "context" $) | nindent 12 }}
