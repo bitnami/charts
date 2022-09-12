@@ -42,6 +42,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/node/**'
       - 'bitnami/odoo/**'
       - 'bitnami/opencart/**'
+      - 'bitnami/osclass/**'
       - 'bitnami/owncloud/**'
       - 'bitnami/phpbb/**'
       - 'bitnami/phpmyadmin/**'
