@@ -1,7 +1,7 @@
 annotations:
   category: Analytics
 apiVersion: v2
-appVersion: 0.27.0
+appVersion: 0.28.0
 dependencies:
   - condition: minio.enabled
     name: minio
@@ -28,4 +28,4 @@ name: thanos
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/thanos
   - https://thanos.io
-version: 11.2.2
+version: 11.4.0

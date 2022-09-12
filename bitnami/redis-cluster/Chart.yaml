@@ -23,4 +23,4 @@ name: redis-cluster
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/redis
   - http://redis.io/
-version: 8.2.1
+version: 8.2.2

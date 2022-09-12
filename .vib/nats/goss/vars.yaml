@@ -1,0 +1,13 @@
+natsFilename: nats-testing-server
+replicaCount: 2
+auth:
+  user: test_nats_client
+  password: ComplicatedPassword123!4
+podSecurityContext:
+  fsGroup: 1002
+containerSecurityContext:
+  runAsUser: 1002
+service:
+  ports:
+    monitoring: 80
+    client: 4224

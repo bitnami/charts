@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 0.18.0
+appVersion: 0.19.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -22,4 +22,4 @@ name: pinniped
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/pinniped
   - https://github.com/vmware-tanzu/pinniped/
-version: 0.2.1
+version: 0.3.0
