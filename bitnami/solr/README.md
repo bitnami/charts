@@ -330,10 +330,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.metricRelabelings`      | MetricRelabelConfigs to apply to samples before ingestion                                                                      | `[]`                                                                  |
 | `metrics.serviceMonitor.honorLabels`            | Specify honorLabels parameter to add the scrape endpoint                                                                       | `false`                                                               |
 | `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in prometheus.                                              | `""`                                                                  |
-| `metrics.prometheusRule.enabled`             | Create a custom prometheusRule Resource for scraping metrics using PrometheusOperator                               | `false`                  |
-| `metrics.prometheusRule.namespace`           | The namespace in which the prometheusRule will be created                                                           | `""`                     |
-| `metrics.prometheusRule.additionalLabels`    | Additional labels for the prometheusRule                                                                            | `{}`                     |
-| `metrics.prometheusRule.rules`               | Custom Prometheus rules                                                                                             | `[]`                     |
+| `metrics.prometheusRule.enabled`                | Create a custom prometheusRule Resource for scraping metrics using PrometheusOperator                                          | `false`                                                               |
+| `metrics.prometheusRule.namespace`              | The namespace in which the prometheusRule will be created                                                                      | `""`                                                                  |
+| `metrics.prometheusRule.additionalLabels`       | Additional labels for the prometheusRule                                                                                       | `{}`                                                                  |
+| `metrics.prometheusRule.rules`                  | Custom Prometheus rules                                                                                                        | `[]`                                                                  |
 
 
 ### ZooKeeper parameters
