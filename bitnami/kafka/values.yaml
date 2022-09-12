@@ -1439,6 +1439,20 @@ metrics:
     ##
     jobLabel: ""
 
+  prometheusRule:
+    ## @param metrics.prometheusRule.enabled if `true`, creates a Prometheus Operator PrometheusRule (requires `metrics.kafka.enabled` or `metrics.jmx.enabled` to be `true`)
+    ##
+    enabled: false
+    ## @param metrics.prometheusRule.namespace Namespace in which Prometheus is running
+    ##
+    namespace: ""
+    ## @param metrics.prometheusRule.labels Additional labels that can be used so PrometheusRule will be discovered by Prometheus
+    ##
+    labels: {}
+    ## @param metrics.prometheusRule.groups Prometheus Rule Groups for Kafka
+    ##
+    groups: []
+
 ## @section Kafka provisioning parameters
 
 ## Kafka provisioning
