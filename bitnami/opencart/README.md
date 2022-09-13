@@ -410,7 +410,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 13.0.0
 
-OpenCart version was bumped to its latest major, `4.x.x`. The most remarkable chante is that the `/admin` folder has been moved to `/administration` for security requirements. Though no incompatibilities are expected while upgrading from previous versions, OpenCart recommends backing up your application first.
+OpenCart version was bumped to its latest major, `4.x.x`. The most remarkable change is that the `/admin` folder has been renamed to `/administration` for security requirements. Though no incompatibilities are expected while upgrading from previous versions, OpenCart recommends backing up your application first before upgrading.
 
 ### To 12.0.0
 
