@@ -1,0 +1,40 @@
+file:
+  /bitnami/mariadb/data/{{ .Vars.db.name }}:
+    mode: "2700"
+    filetype: directory
+    exists: true
+  /opt/bitnami/mariadb/.bootstrap:
+    mode: "2777"
+    filetype: directory
+    exists: true
+  /opt/bitnami/mariadb/conf/my.cnf:
+    mode: "0664"
+    filetype: file
+    exists: true
+    contains:
+      - "basedir=/opt/bitnami/mariadb"
+      - /wsrep_provider=.*libgalera_smm.so/
+      - "wsrep_cluster_name={{ .Vars.galera.name }}"
+command:
+  create-table-root:
+    exec: mariadb -h mariadb-galera -P {{ .Vars.service.ports.mysql }} -u {{ .Vars.rootUser.user }} -p'{{ .Vars.rootUser.password }}' {{ .Vars.db.name }} -e 'DROP TABLE IF EXISTS TEST; create table TEST(test_id int auto_increment, test_value int, primary key(test_id)); INSERT INTO TEST (TEST_VALUE) VALUES (1989);SELECT * FROM TEST'
+    exit-status: 0
+    stdout:
+    - 1989
+  {{- $numNodes := .Vars.replicaCount }}
+  {{- range $e, $i := until $numNodes }}
+  {{- $write_svc := printf "mariadb-galera-%d.mariadb-galera-headless" $i }}
+  {{- $conn_opts := printf "-P %d -u %s -p'%s' %s" $.Vars.containerPorts.mysql $.Vars.db.user $.Vars.db.password $.Vars.db.name }}
+  multimaster-write-{{ $i }}-read:
+    exec: mariadb -h mariadb-galera-{{ $i }}.mariadb-galera-headless {{ $conn_opts }} -e 'DROP TABLE IF EXISTS TEST_REP_{{ $i }}; create table TEST_REP_{{ $i }}(test_id int auto_increment, test_value varchar(4), primary key(test_id)); INSERT INTO TEST_REP_{{ $i }} (TEST_VALUE) VALUES (2022)' && sleep 2 {{ range $e, $j := until $numNodes }} && mariadb -h mariadb-galera-{{ $j }}.mariadb-galera-headless {{ $conn_opts }} -e 'SELECT * FROM TEST_REP_{{ $i }}'{{ end }}
+    exit-status: 0
+    stdout:
+    - 2022
+    timeout: 9000
+  {{- end }}
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+      - uid={{ .Vars.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
