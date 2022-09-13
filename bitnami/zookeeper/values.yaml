@@ -332,7 +332,7 @@ podSecurityContext:
 ## @param containerSecurityContext.enabled Enabled ZooKeeper containers' Security Context
 ## @param containerSecurityContext.runAsUser Set ZooKeeper containers' Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set ZooKeeper containers' Security Context runAsNonRoot
-## @param containerSecurityContext.allowPrivilegeEscalation Force the child process to be run as nonprivilege
+## @param containerSecurityContext.allowPrivilegeEscalation force the child process to be run as nonprivilege
 ##
 containerSecurityContext:
   enabled: true
