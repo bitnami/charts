@@ -408,6 +408,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 13.0.0
+
+OpenCart version was bumped to its latest major, `4.x.x`. The most remarkable change is that the `/admin` folder has been renamed to `/administration` for security requirements. Though no incompatibilities are expected while upgrading from previous versions, OpenCart recommends backing up your application first before upgrading.
+    
 ### To 12.0.0
 
 This major release bumps the MariaDB version to 10.6. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-105-to-mariadb-106/) for upgrading from MariaDB 10.5 to 10.6. No major issues are expected during the upgrade.
