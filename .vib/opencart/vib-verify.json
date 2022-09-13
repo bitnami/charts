@@ -60,7 +60,7 @@
             "app_protocol": "HTTP",
             "env": {
               "username": "opencartUser",
-              "password": "ComplicatedPassword123!4"
+              "password": "Password123!4"
             }
           }
         }
