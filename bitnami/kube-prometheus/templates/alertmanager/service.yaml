@@ -10,10 +10,10 @@ metadata:
     {{- end }}
   annotations:
     {{- if .Values.alertmanager.service.annotations }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.service.annotations "context" $) | nindent 10 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.service.annotations "context" $) | nindent 4 }}
     {{- end }}
     {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 10 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
     {{- end }}
 spec:
   type: {{ .Values.alertmanager.service.type }}
