@@ -6,23 +6,29 @@ it('allows a user to add an item and register', () => {
   cy.contains('Add to Cart').click();
   cy.contains('You have added');
   cy.visit('/index.php?route=checkout/checkout');
-  cy.contains('Guest Checkout').click();
-  cy.fixture('guests').then((guest) => {
+  cy.fixture('customers').then((customer) => {
     cy.get('#input-firstname').type(
-      `${guest.newGuest.firstName}.${random}`
+      `${customer.newCustomer.firstName}.${random}`
     );
     cy.get('#input-lastname').type(
-      `${guest.newGuest.lastName}.${random}`
+      `${customer.newCustomer.lastName}.${random}`
     );
-    cy.get('#input-email').type(`${guest.newGuest.email}`);
-    cy.get('#input-shipping-address-1').type(`${guest.newGuest.address}`);
-    cy.get('#input-shipping-city').type(guest.newGuest.city);
-    cy.get('#input-shipping-postcode').type(guest.newGuest.postCode);
-    cy.get('#input-shipping-zone').select(guest.newGuest.zone);
+    cy.get('#input-email').type(`${customer.newCustomer.email}`);
+    cy.get('#input-password').type(`${customer.newCustomer.password}`);
+    cy.get('#input-shipping-address-1').type(`${customer.newCustomer.address}`);
+    cy.get('#input-shipping-city').type(customer.newCustomer.city);
+    cy.get('#input-shipping-postcode').type(customer.newCustomer.postCode);
+    cy.get('#input-shipping-zone').select(customer.newCustomer.zone);
   });
-  cy.get('#button-payment-method').click();
+  cy.get('#agree').click();
   cy.get('#button-register').click();
   cy.contains('Your account has been created');
+  cy.login();
+  cy.contains('Customers').click();
+  cy.contains(`ul li ul li a`, 'Customers').click();
+  cy.fixture('customers').then((customer) => {
+  cy.contains(`${customer.newCustomer.email}`);
+  });
 });
 
 it('allows an admin to add a product to the catalog', () => {
