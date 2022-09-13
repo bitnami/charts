@@ -87,6 +87,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.digest`                         | etcd image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag        | `""`                  |
 | `image.pullPolicy`                     | etcd image pull policy                                                                                      | `IfNotPresent`        |
 | `image.pullSecrets`                    | etcd image pull secrets                                                                                     | `[]`                  |
+| `image.debug`                          | Enable image debug mode                                                                                     | `false`               |
 | `auth.rbac.create`                     | Switch to enable RBAC authentication                                                                        | `true`                |
 | `auth.rbac.allowNoneAuthentication`    | Allow to use etcd without configuring RBAC authentication                                                   | `true`                |
 | `auth.rbac.rootPassword`               | Root user password. The root user is always `root`                                                          | `""`                  |
