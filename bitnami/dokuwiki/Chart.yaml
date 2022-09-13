@@ -26,4 +26,4 @@ name: dokuwiki
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/dokuwiki
   - http://www.dokuwiki.org/
-version: 13.1.1
+version: 13.1.3

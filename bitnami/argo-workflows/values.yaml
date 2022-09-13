@@ -65,7 +65,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-cli
-    tag: 3.3.9-scratch-r0
+    tag: 3.3.9-scratch-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -473,7 +473,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-controller
-    tag: 3.3.8-scratch-r5
+    tag: 3.3.9-scratch-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -964,7 +964,7 @@ executor:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-exec
-    tag: 3.3.8-debian-11-r18
+    tag: 3.3.9-debian-11-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
