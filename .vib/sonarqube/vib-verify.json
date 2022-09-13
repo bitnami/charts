@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/sonarqube"
         },
-        "runtime_parameters": "InBvc3RncmVzcWwiOgogICJwb3N0Z3Jlc3FsUGFzc3dvcmQiOiAiV0ozbnRRY2EiCiJzZXJ2aWNlIjoKICAicG9ydHMiOgogICAgImh0dHAiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciIKInNvbmFycXViZVBhc3N3b3JkIjogImpLaG03OGJYIgoic29uYXJxdWJlVXNlcm5hbWUiOiAidXNlciI=",
+        "runtime_parameters": "c29uYXJxdWJlVXNlcm5hbWU6IHRlc3RfdXNlcgpzb25hcnF1YmVQYXNzd29yZDogQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0CnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCmNvbnRhaW5lclBvcnRzOgogIGh0dHA6IDkwOTAKICBlbGFzdGljOiA5MDkxCnBvZFNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgZnNHcm91cDogMTAwMgpjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIHJ1bkFzVXNlcjogMTAwMgpwb3N0Z3Jlc3FsOgogIHBvc3RncmVzcWxVc2VyOiB0ZXN0X2RhdGFiYXNlX3VzZXIKICBwb3N0Z3Jlc3FsUGFzc3dvcmQ6IHRlc3RfZGF0YWJhc2VfcGFzc3dvcmQ=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
           "size": {
@@ -36,6 +36,32 @@
           "params": {
             "endpoint": "lb-sonarqube-http",
             "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/sonarqube/cypress"
+            },
+            "endpoint": "lb-sonarqube-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "email": "user@example.com",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/sonarqube/goss"
+            },
+            "remote": {
+              "workload": "deploy-sonarqube"
+            },
+            "vars_file": "vars.yaml"
           }
         }
       ]

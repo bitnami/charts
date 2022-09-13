@@ -1,0 +1,19 @@
+file:
+  /bitnami/sonarqube:
+    exists: true
+    filetype: directory
+    mode: "2775"
+    owner: root
+  /opt/bitnami/sonarqube/conf/sonar.properties:
+    exists: true
+    filetype: file
+    contains:
+     - sonar.web.port={{ .Vars.containerPorts.http }}
+     - sonar.search.port={{ .Vars.containerPorts.elastic }}
+command:
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+      - uid={{ .Vars.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
