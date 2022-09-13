@@ -15,7 +15,7 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   replicas: {{ .Values.replicaCount }}
   podManagementPolicy: {{ .Values.podManagementPolicy }}
-  serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) }}
+  serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   updateStrategy: {{- include "common.tplvalues.render" (dict "value" .Values.updateStrategy "context" $ ) | nindent 4 }}
   template:
     metadata:
@@ -157,7 +157,7 @@ spec:
             - name: CONSUL_GOSSIP_ENCRYPTION_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ printf "%s-gossip-key" (include "common.names.fullname" .) }}
+                  name: {{ printf "%s-gossip-key" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
                   key: gossip-key
             {{- end }}
             {{- if .Values.localConfig }}
@@ -277,7 +277,7 @@ spec:
           {{- else }}
           command:
             - /bin/consul_exporter
-            - --consul.server={{ printf "%s-headless" (include "common.names.fullname" .) }}:{{ .Values.containerPorts.http }}
+            - --consul.server={{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}:{{ .Values.containerPorts.http }}
           {{- end }}
           ports:
             - name: metrics

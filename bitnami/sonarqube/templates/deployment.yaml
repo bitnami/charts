@@ -147,6 +147,74 @@ spec:
             - name: SONARQUBE_MAX_HEAP_SIZE
               value: {{ .Values.maxHeapSize | quote }}
             {{- end }}
+            {{- if .Values.sonarSecurityRealm }}
+            - name: SONAR_SECURITY_REALM
+              value: {{ .Values.sonarSecurityRealm | quote }}
+            {{- end }}
+            {{- if .Values.sonarAuthenticatorDowncase }}
+            - name: SONAR_AUTHENTICATOR_DOWNCASE
+              value: {{ .Values.sonarAuthenticatorDowncase | quote }}
+            {{- end }}
+            {{- if .Values.ldap.url }}
+            - name: LDAP_URL
+              value: {{ .Values.ldap.url | quote }}
+            {{- end }}
+            {{- if .Values.ldap.bindDn }}
+            - name: LDAP_BINDDN
+              value: {{ .Values.ldap.bindDn | quote }}
+            {{- end }}
+            {{- if .Values.ldap.bindPassword }}
+            - name: LDAP_BINDPASSWORD
+              value: {{ .Values.ldap.bindPassword | quote }}
+            {{- end }}
+            {{- if .Values.ldap.authentication }}
+            - name: LDAP_AUTHENTICATION
+              value: {{ .Values.ldap.authentication | quote }}
+            {{- end }}
+            {{- if .Values.ldap.realm }}
+            - name: LDAP_REALM
+              value: {{ .Values.ldap.realm | quote }}
+            {{- end }}
+            {{- if .Values.ldap.contextFactoryClass }}
+            - name: LDAP_CONTEXTFACTORYCLASS
+              value: {{ .Values.ldap.contextFactoryClass | quote }}
+            {{- end }}
+            {{- if .Values.ldap.StartTLS }}
+            - name: LDAP_STARTTLS
+              value: {{ .Values.ldap.StartTLS | quote }}
+            {{- end }}
+            {{- if .Values.ldap.followReferrals }}
+            - name: LDAP_FOLLOWREFERRALS
+              value: {{ .Values.ldap.followReferrals | quote }}
+            {{- end }}
+            {{- if .Values.ldap.user.baseDn }}
+            - name: LDAP_USER_BASEDN
+              value: {{ .Values.ldap.user.baseDn | quote }}
+            {{- end }}
+            {{- if .Values.ldap.user.request }}
+            - name: LDAP_USER_REQUEST
+              value: {{ .Values.ldap.user.request | quote }}
+            {{- end }}
+            {{- if .Values.ldap.user.realNameAttribute }}
+            - name: LDAP_USER_REALNAMEATTRIBUTE
+              value: {{ .Values.ldap.user.realNameAttribute | quote }}
+            {{- end }}
+            {{- if .Values.ldap.user.emailAttribute }}
+            - name: LDAP_USER_EMAILATTRIBUTE
+              value: {{ .Values.ldap.user.emailAttribute | quote }}
+            {{- end }}
+            {{- if .Values.ldap.group.baseDn }}
+            - name: LDAP_GROUP_BASEDN
+              value: {{ .Values.ldap.group.baseDn | quote }}
+            {{- end }}
+            {{- if .Values.ldap.group.request }}
+            - name: LDAP_GROUP_REQUEST
+              value: {{ .Values.ldap.group.request | quote }}
+            {{- end }}
+            {{- if .Values.ldap.group.idAttribute }}
+            - name: LDAP_GROUP_IDATTRIBUTE
+              value: {{ .Values.ldap.group.idAttribute | quote }}
+            {{- end }}
             - name: SONARQUBE_START_TIMEOUT
               value: {{ .Values.startTimeout | quote }}
             - name: SONARQUBE_DATABASE_HOST

@@ -35,7 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release bitnami/oauth2-proxys
+helm install my-release bitnami/oauth2-proxy
 ```
 
 The command deploys OAuth2 Proxy on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -113,13 +113,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### OAuth2 Proxy Image parameters
 
-| Name                | Description                                             | Value                  |
-| ------------------- | ------------------------------------------------------- | ---------------------- |
-| `image.registry`    | OAuth2 Proxy image registry                             | `docker.io`            |
-| `image.repository`  | OAuth2 Proxy image repository                           | `bitnami/oauth2-proxy` |
-| `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended) | `7.3.0-debian-11-r23`  |
-| `image.pullPolicy`  | OAuth2 Proxy image pull policy                          | `IfNotPresent`         |
-| `image.pullSecrets` | OAuth2 Proxy image pull secrets                         | `[]`                   |
+| Name                | Description                                                                                                  | Value                  |
+| ------------------- | ------------------------------------------------------------------------------------------------------------ | ---------------------- |
+| `image.registry`    | OAuth2 Proxy image registry                                                                                  | `docker.io`            |
+| `image.repository`  | OAuth2 Proxy image repository                                                                                | `bitnami/oauth2-proxy` |
+| `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended)                                                      | `7.3.0-debian-11-r23`  |
+| `image.digest`      | OAuth2 Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `image.pullPolicy`  | OAuth2 Proxy image pull policy                                                                               | `IfNotPresent`         |
+| `image.pullSecrets` | OAuth2 Proxy image pull secrets                                                                              | `[]`                   |
 
 
 ### OAuth2 Proxy configuration parameters
@@ -150,6 +151,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                          | Description                                                                                      | Value           |
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------ | --------------- |
 | `containerPort`                               | OAuth2 Proxy port number                                                                         | `4180`          |
+| `extraContainerPorts`                         | Array of additional container ports for the OAuth2 Proxy container                               | `[]`            |
 | `replicaCount`                                | Number of OAuth2 Proxy replicas to deploy                                                        | `1`             |
 | `extraArgs`                                   | add extra args to the default command                                                            | `[]`            |
 | `startupProbe.enabled`                        | Enable startupProbe on OAuth2 Proxy nodes                                                        | `false`         |
@@ -177,7 +179,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.requests`                          | The requested resources for the OAuth2 Proxy containers                                          | `{}`            |
 | `pdb.create`                                  | Enable a Pod Disruption Budget creation                                                          | `false`         |
 | `pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                   | `1`             |
-| `pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                   | `1`             |
+| `pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                   | `""`            |
 | `podSecurityContext.enabled`                  | Enabled OAuth2 Proxy pods' Security Context                                                      | `true`          |
 | `podSecurityContext.fsGroup`                  | Set OAuth2 Proxy pod's Security Context fsGroup                                                  | `1001`          |
 | `containerSecurityContext.enabled`            | Enabled OAuth2 Proxy containers' Security Context                                                | `true`          |

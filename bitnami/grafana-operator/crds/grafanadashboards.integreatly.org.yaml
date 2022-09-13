@@ -1,9 +1,9 @@
-# !kustomize build https://github.com/grafana-operator/grafana-operator/tree/v4.1.0/config/crd
+# !kustomize build https://github.com/grafana-operator/grafana-operator/tree/v4.6.0/config/crd
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.4.1
+    controller-gen.kubebuilder.io/version: v0.6.2
   name: grafanadashboards.integreatly.org
 spec:
   group: integreatly.org
@@ -36,7 +36,8 @@ spec:
             description: GrafanaDashboardSpec defines the desired state of GrafanaDashboard
             properties:
               configMapRef:
-                description: Selects a key from a ConfigMap.
+                description: ConfigMapRef is a reference to a ConfigMap data field
+                  containing the dashboard's JSON
                 properties:
                   key:
                     description: The key to select.
@@ -52,6 +53,14 @@ spec:
                 required:
                 - key
                 type: object
+              contentCacheDuration:
+                description: ContentCacheDuration sets how often the operator should
+                  resync with the external source when using the `grafanaCom.id` or
+                  `url` field to specify the source of the dashboard. The default
+                  value is decided by the `dashboardContentCacheDuration` field in
+                  the `Grafana` resource. The default is 0 which is interpreted as
+                  never refetching.
+                type: string
               customFolderName:
                 type: string
               datasources:
@@ -75,7 +84,31 @@ spec:
                 required:
                 - id
                 type: object
+              gzipConfigMapRef:
+                description: GzipConfigMapRef is a reference to a ConfigMap binaryData
+                  field containing the dashboard's JSON, compressed with Gzip.
+                properties:
+                  key:
+                    description: The key to select.
+                    type: string
+                  name:
+                    description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                      TODO: Add other useful fields. apiVersion, kind, uid?'
+                    type: string
+                  optional:
+                    description: Specify whether the ConfigMap or its key must be
+                      defined
+                    type: boolean
+                required:
+                - key
+                type: object
+              gzipJson:
+                description: GzipJson the dashboard's JSON compressed with Gzip. Base64-encoded
+                  when in YAML.
+                format: byte
+                type: string
               json:
+                description: Json is the dashboard's JSON
                 type: string
               jsonnet:
                 type: string
@@ -96,6 +129,27 @@ spec:
                 type: string
             type: object
           status:
+            properties:
+              contentCache:
+                format: byte
+                type: string
+              contentTimestamp:
+                format: date-time
+                type: string
+              contentUrl:
+                type: string
+              error:
+                properties:
+                  code:
+                    type: integer
+                  error:
+                    type: string
+                  retries:
+                    type: integer
+                required:
+                - code
+                - error
+                type: object
             type: object
         type: object
     served: true

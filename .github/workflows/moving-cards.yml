@@ -6,8 +6,9 @@ on:
       - moved
 
 permissions:
-  repository-projects: read
   issues: write
+  pull-requests: write
+  repository-projects: read
 
 # To fix the concurrency when for example more than one label is added
 concurrency:
@@ -33,7 +34,6 @@ jobs:
         if: ${{ github.event.project_card.column_id == env.ON_HOLD_COLUMN_ID  }}
         uses: andymckay/labeler@1.0.4
         with:
-          repo-token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
           add-labels: "on-hold"
           remove-labels: "triage"
       - name: In progress labeling
@@ -41,7 +41,6 @@ jobs:
         if: ${{ github.event.project_card.column_id == env.IN_PROGRESS_COLUMN_ID  }}
         uses: andymckay/labeler@1.0.4
         with:
-          repo-token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
           add-labels: "in-progress"
           remove-labels: "on-hold, triage"
       - name: Solved labeling
@@ -49,7 +48,6 @@ jobs:
         if: ${{ github.event.project_card.column_id == env.SOLVED_COLUMN_ID  }}
         uses: andymckay/labeler@1.0.4
         with:
-          repo-token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
           add-labels: "solved"
           remove-labels: "in-progress, on-hold, triage"
   assign-assignee-if-needed:

@@ -162,7 +162,7 @@ Returns true if at least one data-only node replica has been configured.
 Returns true if at least one ingest-only node replica has been configured.
 */}}
 {{- define "elasticsearch.ingest.enabled" -}}
-{{- if or .Values.ingest.autoscaling.enabled (gt (int .Values.ingest.replicaCount) 0) -}}
+{{- if and .Values.ingest.enabled (or .Values.ingest.autoscaling.enabled (gt (int .Values.ingest.replicaCount) 0)) -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -189,6 +189,9 @@ Return the hostname of every ElasticSearch seed node
 {{- $ingestFullname := (printf "%s-hl" (include "elasticsearch.ingest.fullname" .) | trunc 63 | trimSuffix "-") }}
 {{- $ingestFullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
 {{- end -}}
+{{- range .Values.extraHosts }}
+{{- . }},
+{{- end }}
 {{- end -}}
 
 {{/*
