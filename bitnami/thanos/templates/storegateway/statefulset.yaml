@@ -121,6 +121,9 @@ spec:
             - --http-address=0.0.0.0:10902
             - --data-dir=/data
             - --objstore.config-file=/conf/objstore.yml
+            {{- if (include "thanos.httpConfigEnabled" .) }}
+            - --http.config=/conf/http/http-config.yml
+            {{- end }}
             {{- if .Values.indexCacheConfig }}
             - --index-cache.config-file=/conf/index-cache.yml
             {{- end }}
@@ -165,6 +168,12 @@ spec:
             httpGet:
               path: /-/healthy
               port: http
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.https.enabled }}
+              {{- if .Values.auth.basicAuthUsers }}
+              httpHeaders:
+                - name: Authorization
+                  value: Basic {{ include "thanos.basicAuth" . }}
+              {{- end }}
           {{- else if .Values.storegateway.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -173,6 +182,12 @@ spec:
             httpGet:
               path: /-/ready
               port: http
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.https.enabled }}
+              {{- if .Values.auth.basicAuthUsers }}
+              httpHeaders:
+                - name: Authorization
+                  value: Basic {{ include "thanos.basicAuth" . }}
+              {{- end }}
           {{- else if .Values.storegateway.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -181,6 +196,17 @@ spec:
             httpGet:
               path: /-/ready
               port: http
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.https.enabled }}
+              {{- if .Values.auth.basicAuthUsers }}
+              httpHeaders:
+                - name: Authorization
+                  value: Basic {{ include "thanos.basicAuth" . }}
+              {{- end }}
+              {{- if .Values.auth.basicAuthUsers }}
+              httpHeaders:
+                - name: Authorization
+                  value: Basic {{ include "thanos.basicAuth" . }}
+              {{- end }}
           {{- else if .Values.storegateway.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -191,6 +217,14 @@ spec:
           resources: {{- toYaml .Values.storegateway.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
+            {{- if (include "thanos.httpConfigEnabled" .) }}
+            - name: http-config
+              mountPath: /conf/http
+            {{- if .Values.https.enabled }}
+            - name: http-certs
+              mountPath: /certs
+            {{- end }}
+            {{- end }}
             - name: objstore-config
               mountPath: /conf
             - name: data
@@ -220,6 +254,16 @@ spec:
         - name: cache-config
           configMap:
             name: {{ include "thanos.storegateway.configmapName" . }}
+        {{- end }}
+        {{- if (include "thanos.httpConfigEnabled" .) }}
+        - name: http-config
+          secret:
+            secretName: {{ include "thanos.httpConfigSecretName" . }}
+        {{- if .Values.https.enabled }}
+        - name: http-certs
+          secret:
+            secretName: {{ include "thanos.httpCertsSecretName" . }}
+        {{- end }}
         {{- end }}
         {{- if .Values.storegateway.grpc.server.tls.enabled }}
         - name: grpc-server-tls

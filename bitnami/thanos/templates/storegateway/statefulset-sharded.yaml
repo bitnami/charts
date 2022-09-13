@@ -60,7 +60,7 @@ spec:
     spec:
       {{- include "thanos.imagePullSecrets" $ | nindent 6 }}
       serviceAccount: {{ include "thanos.serviceAccount.name" (dict "component" "storegateway" "context" $) }}
-      automountServiceAccountToken: {{ $.Values.storegateway.automountServiceAccountToken }}      
+      automountServiceAccountToken: {{ $.Values.storegateway.automountServiceAccountToken }}
       {{- if $.Values.storegateway.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -136,6 +136,9 @@ spec:
             - --http-address=0.0.0.0:10902
             - --data-dir=/data
             - --objstore.config-file=/conf/objstore.yml
+            {{- if (include "thanos.httpConfigEnabled" $) }}
+            - --http.config=/conf/http/http-config.yml
+            {{- end }}
             {{- if $.Values.indexCacheConfig }}
             - --index-cache.config-file=/conf/index-cache.yml
             {{- end }}
@@ -200,6 +203,12 @@ spec:
             httpGet:
               path: /-/healthy
               port: http
+              scheme: {{ ternary "HTTPS" "HTTP" $.Values.https.enabled }}
+              {{- if $.Values.auth.basicAuthUsers }}
+              httpHeaders:
+                - name: Authorization
+                  value: Basic {{ include "thanos.basicAuth" $ }}
+              {{- end }}
           {{- else if $.Values.storegateway.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -208,6 +217,12 @@ spec:
             httpGet:
               path: /-/ready
               port: http
+              scheme: {{ ternary "HTTPS" "HTTP" $.Values.https.enabled }}
+              {{- if $.Values.auth.basicAuthUsers }}
+              httpHeaders:
+                - name: Authorization
+                  value: Basic {{ include "thanos.basicAuth" $ }}
+              {{- end }}
           {{- else if $.Values.storegateway.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -216,6 +231,12 @@ spec:
             httpGet:
               path: /-/ready
               port: http
+              scheme: {{ ternary "HTTPS" "HTTP" $.Values.https.enabled }}
+              {{- if $.Values.auth.basicAuthUsers }}
+              httpHeaders:
+                - name: Authorization
+                  value: Basic {{ include "thanos.basicAuth" $ }}
+              {{- end }}
           {{- else if $.Values.storegateway.customReadinessProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -228,6 +249,14 @@ spec:
           volumeMounts:
             - name: objstore-config
               mountPath: /conf
+            {{- if (include "thanos.httpConfigEnabled" $) }}
+            - name: http-config
+              mountPath: /conf/http
+            {{- if $.Values.https.enabled }}
+            - name: http-certs
+              mountPath: /certs
+            {{- end }}
+            {{- end }}
             - name: data
               mountPath: /data
             {{- if or $.Values.storegateway.config $.Values.storegateway.existingConfigmap }}
@@ -248,6 +277,16 @@ spec:
             {{- if $.Values.existingObjstoreSecretItems }}
             items: {{- toYaml $.Values.existingObjstoreSecretItems | nindent 14 }}
             {{- end }}
+        {{- if (include "thanos.httpConfigEnabled" $) }}
+        - name: http-config
+          secret:
+            secretName: {{ include "thanos.httpConfigSecretName" $ }}
+        {{- if $.Values.https.enabled }}
+        - name: http-certs
+          secret:
+            secretName: {{ include "thanos.httpCertsSecretName" $ }}
+        {{- end }}
+        {{- end }}
         {{- if $.Values.storegateway.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
