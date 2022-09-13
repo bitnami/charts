@@ -28,4 +28,4 @@ name: postgresql
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/postgresql
   - https://www.postgresql.org/
-version: 11.8.2
+version: 11.9.0
