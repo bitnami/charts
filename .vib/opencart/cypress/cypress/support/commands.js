@@ -26,7 +26,7 @@ Cypress.Commands.add(
   'login',
   (username = Cypress.env('username'), password = Cypress.env('password')) => {
     cy.visit('/administration');
-    cy.get('.panel-title');
+    cy.get('#form-login');
     cy.get('#input-username').type(username);
     cy.get('#input-password').type(password);
     cy.contains('button', 'Login').click();
