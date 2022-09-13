@@ -25,7 +25,7 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
 Cypress.Commands.add(
   'login',
   (username = Cypress.env('username'), password = Cypress.env('password')) => {
-    cy.visit('/admin');
+    cy.visit('/administration');
     cy.get('.panel-title');
     cy.get('#input-username').type(username);
     cy.get('#input-password').type(password);

@@ -306,7 +306,7 @@ containerSecurityContext:
 ##
 startupProbe:
   enabled: false
-  path: /admin/
+  path: /administration/
   initialDelaySeconds: 120
   periodSeconds: 10
   timeoutSeconds: 5
@@ -324,7 +324,7 @@ startupProbe:
 ##
 livenessProbe:
   enabled: true
-  path: /admin/
+  path: /administration/
   initialDelaySeconds: 120
   periodSeconds: 10
   timeoutSeconds: 5
@@ -342,7 +342,7 @@ livenessProbe:
 ##
 readinessProbe:
   enabled: true
-  path: /admin/
+  path: /administration/
   initialDelaySeconds: 30
   periodSeconds: 5
   timeoutSeconds: 3

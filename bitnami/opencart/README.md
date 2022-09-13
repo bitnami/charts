@@ -139,21 +139,21 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.runAsUser`    | OpenCart containers' Security Context runAsUser                                                          | `1001`                 |
 | `containerSecurityContext.runAsNonRoot` | OpenCart containers' Security Context runAsNonRoot                                                       | `true`                 |
 | `startupProbe.enabled`                  | Enable startupProbe                                                                                      | `false`                |
-| `startupProbe.path`                     | Request path for startupProbe                                                                            | `/admin/`              |
+| `startupProbe.path`                     | Request path for startupProbe                                                                            | `/administration/`     |
 | `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                   | `120`                  |
 | `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                          | `10`                   |
 | `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                         | `5`                    |
 | `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                       | `6`                    |
 | `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                       | `1`                    |
 | `livenessProbe.enabled`                 | Enable livenessProbe                                                                                     | `true`                 |
-| `livenessProbe.path`                    | Request path for livenessProbe                                                                           | `/admin/`              |
+| `livenessProbe.path`                    | Request path for livenessProbe                                                                           | `/administration/`     |
 | `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                  | `120`                  |
 | `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                         | `10`                   |
 | `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                        | `5`                    |
 | `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                      | `6`                    |
 | `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                      | `1`                    |
 | `readinessProbe.enabled`                | Enable readinessProbe                                                                                    | `true`                 |
-| `readinessProbe.path`                   | Request path for readinessProbe                                                                          | `/admin/`              |
+| `readinessProbe.path`                   | Request path for readinessProbe                                                                          | `/administration/`     |
 | `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                 | `30`                   |
 | `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                        | `5`                    |
 | `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                       | `3`                    |
