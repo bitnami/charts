@@ -227,7 +227,7 @@ loki:
       rule_path: /tmp/loki/scratch
       alertmanager_url: https://alertmanager.xx
       external_url: https://alertmanager.xx
-  ## @param loki.overrideConfiguration Loki components configuration override. Values defined here takes precedence over loki.configuration
+  ## @param loki.overrideConfiguration [object] Loki components configuration override. Values defined here takes precedence over loki.configuration
   ## e.g:
   ## overrideConfiguration:
   ##   auth_enabled: true
