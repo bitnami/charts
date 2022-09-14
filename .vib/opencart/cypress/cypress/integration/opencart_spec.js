@@ -41,7 +41,7 @@ it('allows an admin to add a product to the catalog', () => {
     cy.get('#input-meta-title-1').type(product.newProduct.metatagTitle);
     cy.contains('Data').click();
     cy.get('#input-model').type(product.newProduct.model);
-      cy.get('#input-keyword-0-1').type(product.newProduct.model, { force: true });
+    cy.get('#input-keyword-0-1').type(product.newProduct.model, { force: true });
     cy.get('button.btn.btn-primary i.fa-solid.fa-floppy-disk').click();
     cy.contains('Success');
     cy.visit('/');
