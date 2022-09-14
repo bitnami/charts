@@ -622,7 +622,10 @@ spec:
     - metadata:
         name: data
         {{- if .Values.primary.persistence.annotations }}
-        annotations: {{- toYaml .Values.primary.persistence.annotations | nindent 10 }}
+        annotations: {{- include "common.tplvalues.render" (dict "value" .Values.primary.persistence.annotations "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.primary.persistence.labels }}
+        labels: {{- include "common.tplvalues.render" (dict "value" .Values.primary.persistence.labels "context" $) | nindent 10 }}
         {{- end }}
       spec:
         accessModes:
