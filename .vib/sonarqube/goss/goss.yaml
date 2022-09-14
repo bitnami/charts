@@ -10,6 +10,9 @@ file:
     contains:
      - sonar.web.port={{ .Vars.containerPorts.http }}
      - sonar.search.port={{ .Vars.containerPorts.elastic }}
+     - sonarqube-postgresql:{{ .Vars.postgresql.service.ports.postgresql }}/{{ .Vars.postgresql.auth.database }}
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
 command:
   check-user-info:
     exec: id
@@ -17,3 +20,6 @@ command:
     stdout:
       - uid={{ .Vars.containerSecurityContext.runAsUser }}
       - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
+http:
+  http://localhost:{{ .Vars.service.ports.elastic }}:
+    status: 200
