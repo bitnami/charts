@@ -58,7 +58,7 @@ spec:
       {{- if .Values.master.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.master.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ template "redis.serviceAccountName" . }}
+      serviceAccountName: {{ template "redis.masterServiceAccountName" . }}
       {{- if .Values.master.priorityClassName }}
       priorityClassName: {{ .Values.master.priorityClassName | quote }}
       {{- end }}
