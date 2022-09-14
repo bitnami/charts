@@ -231,52 +231,52 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure parameters
 
-| Name                                              | Description                                                                                            | Value                 |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | --------------------- |
-| `service.type`                                    | Kubernetes Service type                                                                                | `ClusterIP`           |
-| `service.ports.client`                            | Kafka svc port for client connections                                                                  | `9092`                |
-| `service.ports.internal`                          | Kafka svc port for inter-broker connections                                                            | `9093`                |
-| `service.ports.external`                          | Kafka svc port for external connections                                                                | `9094`                |
-| `service.nodePorts.client`                        | Node port for the Kafka client connections                                                             | `""`                  |
-| `service.nodePorts.external`                      | Node port for the Kafka external connections                                                           | `""`                  |
-| `service.sessionAffinity`                         | Control where client requests go, to the same pod or round-robin                                       | `None`                |
-| `service.sessionAffinityConfig`                   | Additional settings for the sessionAffinity                                                            | `{}`                  |
-| `service.clusterIP`                               | Kafka service Cluster IP                                                                               | `""`                  |
-| `service.loadBalancerIP`                          | Kafka service Load Balancer IP                                                                         | `""`                  |
-| `service.loadBalancerSourceRanges`                | Kafka service Load Balancer sources                                                                    | `[]`                  |
-| `service.externalTrafficPolicy`                   | Kafka service external traffic policy                                                                  | `Cluster`             |
-| `service.annotations`                             | Additional custom annotations for Kafka service                                                        | `{}`                  |
-| `service.headless.annotations`                    | Annotations for the headless service.                                                                  | `{}`                  |
-| `service.headless.labels`                         | Labels for the headless service.                                                                       | `{}`                  |
-| `service.extraPorts`                              | Extra ports to expose in the Kafka service (normally used with the `sidecar` value)                    | `[]`                  |
-| `externalAccess.enabled`                          | Enable Kubernetes external cluster access to Kafka brokers                                             | `false`               |
-| `externalAccess.autoDiscovery.enabled`            | Enable using an init container to auto-detect external IPs/ports by querying the K8s API               | `false`               |
-| `externalAccess.autoDiscovery.image.registry`     | Init container auto-discovery image registry                                                           | `docker.io`           |
-| `externalAccess.autoDiscovery.image.repository`   | Init container auto-discovery image repository                                                         | `bitnami/kubectl`     |
-| `externalAccess.autoDiscovery.image.tag`          | Init container auto-discovery image tag (immutable tags are recommended)                               | `1.24.4-debian-11-r3` |
-| `externalAccess.autoDiscovery.image.digest`       | Petete image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `externalAccess.autoDiscovery.image.pullPolicy`   | Init container auto-discovery image pull policy                                                        | `IfNotPresent`        |
-| `externalAccess.autoDiscovery.image.pullSecrets`  | Init container auto-discovery image pull secrets                                                       | `[]`                  |
-| `externalAccess.autoDiscovery.resources.limits`   | The resources limits for the auto-discovery init container                                             | `{}`                  |
-| `externalAccess.autoDiscovery.resources.requests` | The requested resources for the auto-discovery init container                                          | `{}`                  |
-| `externalAccess.service.type`                     | Kubernetes Service type for external access. It can be NodePort or LoadBalancer                        | `LoadBalancer`        |
-| `externalAccess.service.ports.external`           | Kafka port used for external access when service type is LoadBalancer                                  | `9094`                |
-| `externalAccess.service.loadBalancerIPs`          | Array of load balancer IPs for each Kafka broker. Length must be the same as replicaCount              | `[]`                  |
-| `externalAccess.service.loadBalancerNames`        | Array of load balancer Names for each Kafka broker. Length must be the same as replicaCount            | `[]`                  |
-| `externalAccess.service.loadBalancerAnnotations`  | Array of load balancer annotations for each Kafka broker. Length must be the same as replicaCount      | `[]`                  |
-| `externalAccess.service.loadBalancerSourceRanges` | Address(es) that are allowed when service is LoadBalancer                                              | `[]`                  |
-| `externalAccess.service.nodePorts`                | Array of node ports used for each Kafka broker. Length must be the same as replicaCount                | `[]`                  |
-| `externalAccess.service.useHostIPs`               | Use service host IPs to configure Kafka external listener when service type is NodePort                | `false`               |
-| `externalAccess.service.usePodIPs`                | using the MY_POD_IP address for external access.                                                       | `false`               |
-| `externalAccess.service.domain`                   | Domain or external ip used to configure Kafka external listener when service type is NodePort          | `""`                  |
-| `externalAccess.service.labels`                   | Service labels for external access                                                                     | `{}`                  |
-| `externalAccess.service.annotations`              | Service annotations for external access                                                                | `{}`                  |
-| `externalAccess.service.extraPorts`               | Extra ports to expose in the Kafka external service                                                    | `[]`                  |
-| `networkPolicy.enabled`                           | Specifies whether a NetworkPolicy should be created                                                    | `false`               |
-| `networkPolicy.allowExternal`                     | Don't require client label for connections                                                             | `true`                |
-| `networkPolicy.explicitNamespacesSelector`        | A Kubernetes LabelSelector to explicitly select namespaces from which traffic could be allowed         | `{}`                  |
-| `networkPolicy.externalAccess.from`               | customize the from section for External Access on tcp-external port                                    | `[]`                  |
-| `networkPolicy.egressRules.customRules`           | Custom network policy rule                                                                             | `{}`                  |
+| Name                                              | Description                                                                                                | Value                 |
+| ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------- |
+| `service.type`                                    | Kubernetes Service type                                                                                    | `ClusterIP`           |
+| `service.ports.client`                            | Kafka svc port for client connections                                                                      | `9092`                |
+| `service.ports.internal`                          | Kafka svc port for inter-broker connections                                                                | `9093`                |
+| `service.ports.external`                          | Kafka svc port for external connections                                                                    | `9094`                |
+| `service.nodePorts.client`                        | Node port for the Kafka client connections                                                                 | `""`                  |
+| `service.nodePorts.external`                      | Node port for the Kafka external connections                                                               | `""`                  |
+| `service.sessionAffinity`                         | Control where client requests go, to the same pod or round-robin                                           | `None`                |
+| `service.sessionAffinityConfig`                   | Additional settings for the sessionAffinity                                                                | `{}`                  |
+| `service.clusterIP`                               | Kafka service Cluster IP                                                                                   | `""`                  |
+| `service.loadBalancerIP`                          | Kafka service Load Balancer IP                                                                             | `""`                  |
+| `service.loadBalancerSourceRanges`                | Kafka service Load Balancer sources                                                                        | `[]`                  |
+| `service.externalTrafficPolicy`                   | Kafka service external traffic policy                                                                      | `Cluster`             |
+| `service.annotations`                             | Additional custom annotations for Kafka service                                                            | `{}`                  |
+| `service.headless.annotations`                    | Annotations for the headless service.                                                                      | `{}`                  |
+| `service.headless.labels`                         | Labels for the headless service.                                                                           | `{}`                  |
+| `service.extraPorts`                              | Extra ports to expose in the Kafka service (normally used with the `sidecar` value)                        | `[]`                  |
+| `externalAccess.enabled`                          | Enable Kubernetes external cluster access to Kafka brokers                                                 | `false`               |
+| `externalAccess.autoDiscovery.enabled`            | Enable using an init container to auto-detect external IPs/ports by querying the K8s API                   | `false`               |
+| `externalAccess.autoDiscovery.image.registry`     | Init container auto-discovery image registry                                                               | `docker.io`           |
+| `externalAccess.autoDiscovery.image.repository`   | Init container auto-discovery image repository                                                             | `bitnami/kubectl`     |
+| `externalAccess.autoDiscovery.image.tag`          | Init container auto-discovery image tag (immutable tags are recommended)                                   | `1.24.4-debian-11-r3` |
+| `externalAccess.autoDiscovery.image.digest`       | Petete image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag     | `""`                  |
+| `externalAccess.autoDiscovery.image.pullPolicy`   | Init container auto-discovery image pull policy                                                            | `IfNotPresent`        |
+| `externalAccess.autoDiscovery.image.pullSecrets`  | Init container auto-discovery image pull secrets                                                           | `[]`                  |
+| `externalAccess.autoDiscovery.resources.limits`   | The resources limits for the auto-discovery init container                                                 | `{}`                  |
+| `externalAccess.autoDiscovery.resources.requests` | The requested resources for the auto-discovery init container                                              | `{}`                  |
+| `externalAccess.service.type`                     | Kubernetes Service type for external access. It can be NodePort, LoadBalancer or ClusterIP                 | `LoadBalancer`        |
+| `externalAccess.service.ports.external`           | Kafka port used for external access when service type is LoadBalancer                                      | `9094`                |
+| `externalAccess.service.loadBalancerIPs`          | Array of load balancer IPs for each Kafka broker. Length must be the same as replicaCount                  | `[]`                  |
+| `externalAccess.service.loadBalancerNames`        | Array of load balancer Names for each Kafka broker. Length must be the same as replicaCount                | `[]`                  |
+| `externalAccess.service.loadBalancerAnnotations`  | Array of load balancer annotations for each Kafka broker. Length must be the same as replicaCount          | `[]`                  |
+| `externalAccess.service.loadBalancerSourceRanges` | Address(es) that are allowed when service is LoadBalancer                                                  | `[]`                  |
+| `externalAccess.service.nodePorts`                | Array of node ports used for each Kafka broker. Length must be the same as replicaCount                    | `[]`                  |
+| `externalAccess.service.useHostIPs`               | Use service host IPs to configure Kafka external listener when service type is NodePort                    | `false`               |
+| `externalAccess.service.usePodIPs`                | using the MY_POD_IP address for external access.                                                           | `false`               |
+| `externalAccess.service.domain`                   | Domain or external ip used to configure Kafka external listener when service type is NodePort or ClusterIP | `""`                  |
+| `externalAccess.service.labels`                   | Service labels for external access                                                                         | `{}`                  |
+| `externalAccess.service.annotations`              | Service annotations for external access                                                                    | `{}`                  |
+| `externalAccess.service.extraPorts`               | Extra ports to expose in the Kafka external service                                                        | `[]`                  |
+| `networkPolicy.enabled`                           | Specifies whether a NetworkPolicy should be created                                                        | `false`               |
+| `networkPolicy.allowExternal`                     | Don't require client label for connections                                                                 | `true`                |
+| `networkPolicy.explicitNamespacesSelector`        | A Kubernetes LabelSelector to explicitly select namespaces from which traffic could be allowed             | `{}`                  |
+| `networkPolicy.externalAccess.from`               | customize the from section for External Access on tcp-external port                                        | `[]`                  |
+| `networkPolicy.egressRules.customRules`           | Custom network policy rule                                                                                 | `{}`                  |
 
 
 ### Persistence parameters
@@ -618,7 +618,7 @@ metrics.kafka.extraFlags={tls.insecure-skip-tls-verify: ""}
 
 In order to access Kafka Brokers from outside the cluster, an additional listener and advertised listener must be configured. Additionally, a specific service per kafka pod will be created.
 
-There are two ways of configuring external access. Using LoadBalancer services or using NodePort services.
+There are three ways of configuring external access. Using LoadBalancer services, using NodePort services or using ClusterIP services.
 
 #### Using LoadBalancer services
 
@@ -679,6 +679,26 @@ externalAccess.service.nodePorts[1]='node-port-2'
 Note: You need to know in advance the node ports that will be exposed so each Kafka broker advertised listener is configured with it.
 
 The pod will try to get the external ip of the node using `curl -s https://ipinfo.io/ip` unless `externalAccess.service.domain` or `externalAccess.service.useHostIPs` is provided.
+
+#### Using ClusterIP services
+
+Note: This option requires that an ingress is deployed within your cluster
+
+```console
+externalAccess.enabled=true
+externalAccess.service.type=ClusterIP
+externalAccess.service.ports.external=9094
+externalAccess.service.domain='ingress-ip'
+```
+
+Note: the deployed ingress must contain the following block:
+
+```console
+tcp:
+  9094: "{{ .Release.Namespace }}/{{ include "kafka.fullname" . }}-0-external:9094"
+  9095: "{{ .Release.Namespace }}/{{ include "kafka.fullname" . }}-1-external:9094"
+  9096: "{{ .Release.Namespace }}/{{ include "kafka.fullname" . }}-2-external:9094"
+```
 
 #### Name resolution with External-DNS
 

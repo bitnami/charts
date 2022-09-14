@@ -518,7 +518,10 @@ spec:
     - metadata:
         name: data
         {{- if .Values.readReplicas.persistence.annotations }}
-        annotations: {{- toYaml .Values.readReplicas.persistence.annotations | nindent 10 }}
+        annotations: {{- include "common.tplvalues.render" (dict "value" .Values.readReplicas.persistence.annotations "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.readReplicas.persistence.labels }}
+        labels: {{- include "common.tplvalues.render" (dict "value" .Values.readReplicas.persistence.labels "context" $) | nindent 10 }}
         {{- end }}
       spec:
         accessModes:
