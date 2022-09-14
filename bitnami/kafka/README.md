@@ -411,6 +411,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.metricRelabelings`                  | MetricRelabelConfigs to apply to samples before ingestion                                                                        | `[]`                                                                                    |
 | `metrics.serviceMonitor.honorLabels`                        | Specify honorLabels parameter to add the scrape endpoint                                                                         | `false`                                                                                 |
 | `metrics.serviceMonitor.jobLabel`                           | The name of the label on the target service to use as the job name in prometheus.                                                | `""`                                                                                    |
+| `metrics.prometheusRule.enabled`                            | if `true`, creates a Prometheus Operator PrometheusRule (requires `metrics.kafka.enabled` or `metrics.jmx.enabled` to be `true`) | `false`                                                                                 |
+| `metrics.prometheusRule.namespace`                          | Namespace in which Prometheus is running                                                                                         | `""`                                                                                    |
+| `metrics.prometheusRule.labels`                             | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                            | `{}`                                                                                    |
+| `metrics.prometheusRule.groups`                             | Prometheus Rule Groups for Kafka                                                                                                 | `[]`                                                                                    |
 
 
 ### Kafka provisioning parameters
