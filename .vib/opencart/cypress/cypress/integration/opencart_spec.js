@@ -24,8 +24,10 @@ it('allows a user to add an item and register', () => {
   cy.get('#button-register').click();
   cy.contains('Your account has been created');
   cy.login();
-  cy.contains('Customers').click();
-  cy.contains(`ul li ul li a`, 'Customers').click();
+  cy.get('#menu-customer').click();
+  cy.get('#menu-customer > ul').within(() => {
+    cy.contains('Customers').click({ force: true });
+  });
   cy.fixture('customers').then((customer) => {
   cy.contains(`${customer.newCustomer.email}`);
   });
@@ -35,7 +37,7 @@ it('allows an admin to add a product to the catalog', () => {
   cy.login();
   cy.contains('Catalog').click();
   cy.contains('Product').click();
-  cy.get('a.btn.btn-primary i.fa-solid.fa-plus').click();
+  cy.get('[title="Add New"]').click();
   cy.fixture('products').then((product) => {
     cy.get('#input-name-1').type(`${product.newProduct.name}.${random}`);
     cy.get('#input-meta-title-1').type(`${product.newProduct.metatagTitle}.${random}`);
