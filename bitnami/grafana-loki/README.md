@@ -706,21 +706,34 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Query Frontend Traffic Exposure Parameters
 
-| Name                                             | Description                                                      | Value       |
-| ------------------------------------------------ | ---------------------------------------------------------------- | ----------- |
-| `queryFrontend.service.type`                     | queryFrontend service type                                       | `ClusterIP` |
-| `queryFrontend.service.ports.http`               | queryFrontend HTTP service port                                  | `3100`      |
-| `queryFrontend.service.ports.grpc`               | queryFrontend GRPC service port                                  | `9095`      |
-| `queryFrontend.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
-| `queryFrontend.service.nodePorts.grpc`           | Node port for GRPC                                               | `""`        |
-| `queryFrontend.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
-| `queryFrontend.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
-| `queryFrontend.service.clusterIP`                | queryFrontend service Cluster IP                                 | `""`        |
-| `queryFrontend.service.loadBalancerIP`           | queryFrontend service Load Balancer IP                           | `""`        |
-| `queryFrontend.service.loadBalancerSourceRanges` | queryFrontend service Load Balancer sources                      | `[]`        |
-| `queryFrontend.service.externalTrafficPolicy`    | queryFrontend service external traffic policy                    | `Cluster`   |
-| `queryFrontend.service.annotations`              | Additional custom annotations for queryFrontend service          | `{}`        |
-| `queryFrontend.service.extraPorts`               | Extra ports to expose in the queryFrontend service               | `[]`        |
+| Name                                              | Description                                                      | Value       |
+| ------------------------------------------------- | ---------------------------------------------------------------- | ----------- |
+| `queryFrontend.service.type`                      | queryFrontend service type                                       | `ClusterIP` |
+| `queryFrontend.service.ports.http`                | queryFrontend HTTP service port                                  | `3100`      |
+| `queryFrontend.service.ports.grpc`                | queryFrontend GRPC service port                                  | `9095`      |
+| `queryFrontend.service.nodePorts.http`            | Node port for HTTP                                               | `""`        |
+| `queryFrontend.service.nodePorts.grpc`            | Node port for GRPC                                               | `""`        |
+| `queryFrontend.service.sessionAffinityConfig`     | Additional settings for the sessionAffinity                      | `{}`        |
+| `queryFrontend.service.sessionAffinity`           | Control where client requests go, to the same pod or round-robin | `None`      |
+| `queryFrontend.service.clusterIP`                 | queryFrontend service Cluster IP                                 | `""`        |
+| `queryFrontend.service.loadBalancerIP`            | queryFrontend service Load Balancer IP                           | `""`        |
+| `queryFrontend.service.loadBalancerSourceRanges`  | queryFrontend service Load Balancer sources                      | `[]`        |
+| `queryFrontend.service.externalTrafficPolicy`     | queryFrontend service external traffic policy                    | `Cluster`   |
+| `queryFrontend.service.annotations`               | Additional custom annotations for queryFrontend service          | `{}`        |
+| `queryFrontend.service.extraPorts`                | Extra ports to expose in the queryFrontend service               | `[]`        |
+| `queryScheduler.service.type`                     | queryScheduler service type                                      | `ClusterIP` |
+| `queryScheduler.service.ports.http`               | queryScheduler HTTP service port                                 | `3100`      |
+| `queryScheduler.service.ports.grpc`               | queryScheduler GRPC service port                                 | `9095`      |
+| `queryScheduler.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
+| `queryScheduler.service.nodePorts.grpc`           | Node port for GRPC                                               | `""`        |
+| `queryScheduler.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
+| `queryScheduler.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
+| `queryScheduler.service.clusterIP`                | queryScheduler service Cluster IP                                | `""`        |
+| `queryScheduler.service.loadBalancerIP`           | queryScheduler service Load Balancer IP                          | `""`        |
+| `queryScheduler.service.loadBalancerSourceRanges` | queryScheduler service Load Balancer sources                     | `[]`        |
+| `queryScheduler.service.externalTrafficPolicy`    | queryScheduler service external traffic policy                   | `Cluster`   |
+| `queryScheduler.service.annotations`              | Additional custom annotations for queryScheduler service         | `{}`        |
+| `queryScheduler.service.extraPorts`               | Extra ports to expose in the queryScheduler service              | `[]`        |
 
 
 ### Query Scheduler Deployment Parameters
@@ -783,25 +796,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryScheduler.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the queryScheduler container(s)             | `[]`            |
 | `queryScheduler.sidecars`                              | Add additional sidecar containers to the queryScheduler pod(s)                                           | `[]`            |
 | `queryScheduler.initContainers`                        | Add additional init containers to the queryScheduler pod(s)                                              | `[]`            |
-
-
-### Query Frontend Traffic Exposure Parameters
-
-| Name                                              | Description                                                      | Value       |
-| ------------------------------------------------- | ---------------------------------------------------------------- | ----------- |
-| `queryScheduler.service.type`                     | queryScheduler service type                                      | `ClusterIP` |
-| `queryScheduler.service.ports.http`               | queryScheduler HTTP service port                                 | `3100`      |
-| `queryScheduler.service.ports.grpc`               | queryScheduler GRPC service port                                 | `9095`      |
-| `queryScheduler.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
-| `queryScheduler.service.nodePorts.grpc`           | Node port for GRPC                                               | `""`        |
-| `queryScheduler.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
-| `queryScheduler.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
-| `queryScheduler.service.clusterIP`                | queryScheduler service Cluster IP                                | `""`        |
-| `queryScheduler.service.loadBalancerIP`           | queryScheduler service Load Balancer IP                          | `""`        |
-| `queryScheduler.service.loadBalancerSourceRanges` | queryScheduler service Load Balancer sources                     | `[]`        |
-| `queryScheduler.service.externalTrafficPolicy`    | queryScheduler service external traffic policy                   | `Cluster`   |
-| `queryScheduler.service.annotations`              | Additional custom annotations for queryScheduler service         | `{}`        |
-| `queryScheduler.service.extraPorts`               | Extra ports to expose in the queryScheduler service              | `[]`        |
 
 
 ### Ruler Deployment Parameters
