@@ -1,7 +1,7 @@
 annotations:
   category: MachineLearning
 apiVersion: v2
-appVersion: 2.9.1
+appVersion: 2.10.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -27,4 +27,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/tensorflow-serving
   - https://github.com/bitnami/containers/tree/main/bitnami/tensorflow-resnet
   - https://www.tensorflow.org/serving/
-version: 3.6.1
+version: 3.6.3

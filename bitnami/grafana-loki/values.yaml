@@ -72,7 +72,7 @@ loki:
   image:
     registry: docker.io
     repository: bitnami/grafana-loki
-    tag: 2.6.1-debian-11-r9
+    tag: 2.6.1-debian-11-r18
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -87,6 +87,7 @@ loki:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+
   ## @param loki.configuration [string] Loki components configuration
   ##
   configuration: |
@@ -226,7 +227,12 @@ loki:
       rule_path: /tmp/loki/scratch
       alertmanager_url: https://alertmanager.xx
       external_url: https://alertmanager.xx
-
+  ## @param loki.overrideConfiguration [object] Loki components configuration override. Values defined here takes precedence over loki.configuration
+  ## e.g:
+  ## overrideConfiguration:
+  ##   auth_enabled: true
+  ##
+  overrideConfiguration: {}
   ## @param loki.existingConfigmap Name of a ConfigMap with the Loki configuration
   ##
   existingConfigmap: ""
@@ -580,7 +586,7 @@ gateway:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.23.1-debian-11-r7
+    tag: 1.23.1-debian-11-r18
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -3244,7 +3250,7 @@ promtail:
   image:
     registry: docker.io
     repository: bitnami/promtail
-    tag: 2.6.1-debian-11-r8
+    tag: 2.6.1-debian-11-r17
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -3659,7 +3665,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r23
+    tag: 11-debian-11-r32
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -3781,7 +3787,7 @@ memcachedchunks:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.16-debian-11-r2
+    tag: 1.6.17-debian-11-r3
     digest: ""
   ## @param memcachedchunks.nameOverride override the subchart name
   ##
@@ -3822,7 +3828,7 @@ memcachedfrontend:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.16-debian-11-r2
+    tag: 1.6.17-debian-11-r3
     digest: ""
   ## @param memcachedfrontend.architecture Memcached architecture
   ##
@@ -3864,7 +3870,7 @@ memcachedindexqueries:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.16-debian-11-r2
+    tag: 1.6.17-debian-11-r3
     digest: ""
   ## @param memcachedindexqueries.architecture Memcached architecture
   ##
@@ -3905,7 +3911,7 @@ memcachedindexwrites:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.16-debian-11-r2
+    tag: 1.6.17-debian-11-r3
     digest: ""
   ## @param memcachedindexwrites.architecture Memcached architecture
   ##

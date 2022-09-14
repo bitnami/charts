@@ -123,6 +123,9 @@ spec:
             {{- if or .Values.objstoreConfig .Values.existingObjstoreSecret }}
             - --objstore.config=$(OBJSTORE_CONFIG)
             {{- end }}
+            {{- if (include "thanos.httpConfigEnabled" .) }}
+            - --http.config=/conf/http/http-config.yml
+            {{- end }}
             - --tsdb.path=/var/thanos/receive
             - --label={{ .Values.receive.replicaLabel }}="$(NAME)"
             - --label=receive="true"
@@ -187,25 +190,43 @@ spec:
               protocol: TCP
           {{- if .Values.receive.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.receive.livenessProbe "enabled") "context" $) | nindent 12 }}
+            {{- if not .Values.auth.basicAuthUsers }}
             httpGet:
               path: /-/healthy
               port: http
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.https.enabled }}
+            {{- else }}
+            tcpSocket:
+              port: http
+            {{- end }}
           {{- else if .Values.receive.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.receive.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.receive.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.receive.readinessProbe "enabled") "context" $) | nindent 12 }}
+            {{- if not .Values.auth.basicAuthUsers }}
             httpGet:
               path: /-/ready
               port: http
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.https.enabled }}
+            {{- else }}
+            tcpSocket:
+              port: http
+            {{- end }}
           {{- else if .Values.receive.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.receive.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.receive.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.receive.startupProbe "enabled") "context" $) | nindent 12 }}
+            {{- if not .Values.auth.basicAuthUsers }}
             httpGet:
               path: /-/ready
               port: http
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.https.enabled }}
+            {{- else }}
+            tcpSocket:
+              port: http
+            {{- end }}
           {{- else if .Values.receive.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.receive.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -216,6 +237,14 @@ spec:
           resources: {{- toYaml .Values.receive.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
+            {{- if (include "thanos.httpConfigEnabled" .) }}
+            - name: http-config
+              mountPath: /conf/http
+            {{- if .Values.https.enabled }}
+            - name: http-certs
+              mountPath: /certs
+            {{- end }}
+            {{- end }}
             - name: hashring-config
               mountPath: /var/lib/thanos-receive
             - name: data
@@ -235,6 +264,16 @@ spec:
         - name: grpc-server-tls
           secret:
             secretName: {{ include "common.secrets.name" (dict "existingSecret" .Values.receive.grpc.server.tls.existingSecret "defaultNameSuffix" "receive-grpc-server" "context" $) }}
+        {{- end }}
+        {{- if (include "thanos.httpConfigEnabled" .) }}
+        - name: http-config
+          secret:
+            secretName: {{ include "thanos.httpConfigSecretName" . }}
+        {{- if .Values.https.enabled }}
+        - name: http-certs
+          secret:
+            secretName: {{ include "thanos.httpCertsSecretName" . }}
+        {{- end }}
         {{- end }}
         {{- if .Values.receive.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.receive.extraVolumes "context" $) | nindent 8 }}

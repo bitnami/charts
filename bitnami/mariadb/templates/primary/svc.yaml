@@ -48,9 +48,9 @@ spec:
       {{- else if eq .Values.primary.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    {{- if .Values.metrics.enabled }}
+    {{- if and .Values.metrics.enabled (gt (.Values.primary.service.ports.metrics | int) 0) }}
     - name: metrics
-      port: 9104
+      port: {{ .Values.primary.service.ports.metrics }}
       protocol: TCP
       targetPort: metrics
     {{- end }}
