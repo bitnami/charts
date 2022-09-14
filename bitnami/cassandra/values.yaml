@@ -692,6 +692,18 @@ metrics:
     ##    memory: 128Mi
     ##
     requests: {}
+  ## @param metrics.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param metrics.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param metrics.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param metrics.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param metrics.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    initialDelaySeconds: 20
+    periodSeconds: 10
+    timeoutSeconds: 45
+    failureThreshold: 3
+    successThreshold: 1
   ## @param metrics.extraVolumeMounts Optionally specify extra list of additional volumeMounts for cassandra-exporter container
   ##
   extraVolumeMounts: []

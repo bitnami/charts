@@ -257,6 +257,7 @@ kubectl delete pvc -l release=my-release
 | `primary.persistence.accessModes`            | PVC Access Mode for PostgreSQL volume                                                                                    | `["ReadWriteOnce"]`   |
 | `primary.persistence.size`                   | PVC Storage Request for PostgreSQL volume                                                                                | `8Gi`                 |
 | `primary.persistence.annotations`            | Annotations for the PVC                                                                                                  | `{}`                  |
+| `primary.persistence.labels`                 | Labels for the PVC                                                                                                       | `{}`                  |
 | `primary.persistence.selector`               | Selector to match an existing Persistent Volume (this value is evaluated as a template)                                  | `{}`                  |
 | `primary.persistence.dataSource`             | Custom PVC data source                                                                                                   | `{}`                  |
 
@@ -347,6 +348,7 @@ kubectl delete pvc -l release=my-release
 | `readReplicas.persistence.accessModes`            | PVC Access Mode for PostgreSQL volume                                                                                    | `["ReadWriteOnce"]`   |
 | `readReplicas.persistence.size`                   | PVC Storage Request for PostgreSQL volume                                                                                | `8Gi`                 |
 | `readReplicas.persistence.annotations`            | Annotations for the PVC                                                                                                  | `{}`                  |
+| `readReplicas.persistence.labels`                 | Labels for the PVC                                                                                                       | `{}`                  |
 | `readReplicas.persistence.selector`               | Selector to match an existing Persistent Volume (this value is evaluated as a template)                                  | `{}`                  |
 | `readReplicas.persistence.dataSource`             | Custom PVC data source                                                                                                   | `{}`                  |
 

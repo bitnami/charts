@@ -244,31 +244,36 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                                       | Description                                                                                                        | Value                        |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | ---------------------------- |
-| `metrics.enabled`                          | Start a side-car prometheus exporter                                                                               | `false`                      |
-| `metrics.image.registry`                   | Cassandra exporter image registry                                                                                  | `docker.io`                  |
-| `metrics.image.repository`                 | Cassandra exporter image name                                                                                      | `bitnami/cassandra-exporter` |
-| `metrics.image.tag`                        | Cassandra exporter image tag                                                                                       | `2.3.8-debian-11-r34`        |
-| `metrics.image.digest`                     | Cassandra exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
-| `metrics.image.pullPolicy`                 | image pull policy                                                                                                  | `IfNotPresent`               |
-| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                   | `[]`                         |
-| `metrics.resources.limits`                 | The resources limits for the container                                                                             | `{}`                         |
-| `metrics.resources.requests`               | The requested resources for the container                                                                          | `{}`                         |
-| `metrics.extraVolumeMounts`                | Optionally specify extra list of additional volumeMounts for cassandra-exporter container                          | `[]`                         |
-| `metrics.podAnnotations`                   | Metrics exporter pod Annotation and Labels                                                                         | `{}`                         |
-| `metrics.serviceMonitor.enabled`           | If `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)             | `false`                      |
-| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                                           | `monitoring`                 |
-| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                                       | `""`                         |
-| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                            | `""`                         |
-| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                                | `{}`                         |
-| `metrics.serviceMonitor.metricRelabelings` | Specify Metric Relabelings to add to the scrape endpoint                                                           | `[]`                         |
-| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                                                 | `[]`                         |
-| `metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                                                           | `false`                      |
-| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.                                  | `""`                         |
-| `metrics.serviceMonitor.labels`            | Used to pass Labels that are required by the installed Prometheus Operator                                         | `{}`                         |
-| `metrics.containerPorts.http`              | HTTP Port on the Host and Container                                                                                | `8080`                       |
-| `metrics.containerPorts.jmx`               | JMX Port on the Host and Container                                                                                 | `5555`                       |
+| Name                                         | Description                                                                                                        | Value                        |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ---------------------------- |
+| `metrics.enabled`                            | Start a side-car prometheus exporter                                                                               | `false`                      |
+| `metrics.image.registry`                     | Cassandra exporter image registry                                                                                  | `docker.io`                  |
+| `metrics.image.repository`                   | Cassandra exporter image name                                                                                      | `bitnami/cassandra-exporter` |
+| `metrics.image.tag`                          | Cassandra exporter image tag                                                                                       | `2.3.8-debian-11-r34`        |
+| `metrics.image.digest`                       | Cassandra exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
+| `metrics.image.pullPolicy`                   | image pull policy                                                                                                  | `IfNotPresent`               |
+| `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                   | `[]`                         |
+| `metrics.resources.limits`                   | The resources limits for the container                                                                             | `{}`                         |
+| `metrics.resources.requests`                 | The requested resources for the container                                                                          | `{}`                         |
+| `metrics.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                           | `20`                         |
+| `metrics.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                  | `10`                         |
+| `metrics.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                 | `45`                         |
+| `metrics.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                               | `3`                          |
+| `metrics.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                               | `1`                          |
+| `metrics.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for cassandra-exporter container                          | `[]`                         |
+| `metrics.podAnnotations`                     | Metrics exporter pod Annotation and Labels                                                                         | `{}`                         |
+| `metrics.serviceMonitor.enabled`             | If `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)             | `false`                      |
+| `metrics.serviceMonitor.namespace`           | Namespace in which Prometheus is running                                                                           | `monitoring`                 |
+| `metrics.serviceMonitor.interval`            | Interval at which metrics should be scraped.                                                                       | `""`                         |
+| `metrics.serviceMonitor.scrapeTimeout`       | Timeout after which the scrape is ended                                                                            | `""`                         |
+| `metrics.serviceMonitor.selector`            | Prometheus instance selector labels                                                                                | `{}`                         |
+| `metrics.serviceMonitor.metricRelabelings`   | Specify Metric Relabelings to add to the scrape endpoint                                                           | `[]`                         |
+| `metrics.serviceMonitor.relabelings`         | RelabelConfigs to apply to samples before scraping                                                                 | `[]`                         |
+| `metrics.serviceMonitor.honorLabels`         | Specify honorLabels parameter to add the scrape endpoint                                                           | `false`                      |
+| `metrics.serviceMonitor.jobLabel`            | The name of the label on the target service to use as the job name in prometheus.                                  | `""`                         |
+| `metrics.serviceMonitor.labels`              | Used to pass Labels that are required by the installed Prometheus Operator                                         | `{}`                         |
+| `metrics.containerPorts.http`                | HTTP Port on the Host and Container                                                                                | `8080`                       |
+| `metrics.containerPorts.jmx`                 | JMX Port on the Host and Container                                                                                 | `5555`                       |
 
 
 ### TLS/SSL parameters

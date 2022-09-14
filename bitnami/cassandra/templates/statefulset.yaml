@@ -484,8 +484,11 @@ spec:
             httpGet:
               path: /metrics
               port: metrics
-            initialDelaySeconds: 20
-            timeoutSeconds: 45
+            initialDelaySeconds: {{ .Values.metrics.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.metrics.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.metrics.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.metrics.readinessProbe.failureThreshold }}
+            successThreshold: {{ .Values.metrics.readinessProbe.successThreshold }}
           {{- end }}
           {{- if .Values.metrics.extraVolumeMounts }}
           volumeMounts:
