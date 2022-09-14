@@ -4,30 +4,36 @@ import { random } from '../support/utils';
 it('allows creating a new user', () => {
   cy.login();
   cy.get('[href*="/users"]').click();
-  cy.get('#createUser').click();
+  cy.get('[data-testid="add-user"]').click();
   cy.fixture('users').then((user) => {
-    cy.get('#username').type(`${user.newUser.username}.${random}`);
-    cy.get('#email').type(`${user.newUser.email}.${random}`);
-    cy.get('#firstName').type(`${user.newUser.firstName}.${random}`);
-    cy.get('#lastName').type(`${user.newUser.lastName}.${random}`);
+    cy.get('#kc-username').type(`${user.newUser.username}.${random}`);
+    cy.get('[data-testid="firstName-input"]').type(`${user.newUser.firstName}.${random}`);
+    cy.get('[data-testid="lastName-input"]').type(`${user.newUser.lastName}.${random}`);
   });
-  cy.contains('button', 'Save').click();
-  cy.contains('.alert', 'Success');
+  cy.get('[data-testid="create-user"]').click();
+  cy.contains('The user has been created');
 });
 
-it('allows the upload and delete of a locale ', () => {
+it('import and check user information', () => {
   cy.login();
-  cy.contains('Localization').click();
-  cy.contains('Upload localization').click();
-  cy.get('input#import-file').selectFile(
-    'cypress/fixtures/empty-localization-file.json',
-    {
-      force: true,
-    }
-  );
-  cy.fixture('locales').then((locale) => {
-    cy.get('#locale').type(`${locale.German}.${random}`);
+  cy.get('[href*="/realm-settings"]').click();
+  cy.get('[data-testid="action-dropdown"]').click();
+  cy.get('[data-testid="openPartialImportModal"]').click();
+  const importFile = 'cypress/fixtures/import-data.json';
+  const randomUsername = `test-realm-user-${random}`;
+  const randomEmail = `test-realm-user-${random}@example.com`;
+  const randomLastname = `user-${random}`;
+  cy.readFile(importFile).then((obj) => {
+    obj.users[0].username = randomUsername;
+    obj.users[0].email = randomEmail;
+    obj.users[0].lastName = randomLastname;
+    const jsonText = JSON.stringify(obj);
+    cy.get('.view-line').type(jsonText, { parseSpecialCharSequences: false, delay: 1 });
   });
-  cy.contains('button', 'Import').click();
-  cy.contains('.alert', 'Success');
+  cy.get('[data-testid="users-checkbox"]').click();
+  cy.get('[data-testid="import-button"]').click();
+  cy.contains('One record added');
+  cy.get('[data-testid="close-button"]').click();
+  cy.get('[href*="/users"]').click();
+  cy.contains(randomEmail);
 });

@@ -77,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraDeploy`       | Array of extra objects to deploy with the release                                                        | `[]`                |
 | `image.registry`    | Pinniped image registry                                                                                  | `docker.io`         |
 | `image.repository`  | Pinniped image repository                                                                                | `bitnami/pinniped`  |
-| `image.tag`         | Pinniped image tag (immutable tags are recommended)                                                      | `0.18.0-scratch-r8` |
+| `image.tag`         | Pinniped image tag (immutable tags are recommended)                                                      | `0.19.0-scratch-r0` |
 | `image.digest`      | Pinniped image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                |
 | `image.pullPolicy`  | Pinniped image pull policy                                                                               | `IfNotPresent`      |
 | `image.pullSecrets` | Pinniped image pull secrets                                                                              | `[]`                |
@@ -91,6 +91,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `concierge.replicaCount`                                    | Number of Concierge replicas to deploy                                                                                   | `1`             |
 | `concierge.containerPorts.api`                              | Concierge API container port                                                                                             | `10250`         |
 | `concierge.containerPorts.proxy`                            | Concierge Proxy container port                                                                                           | `8443`          |
+| `concierge.configurationPorts.aggregatedAPIServerPort`      | Concierge API configuration port                                                                                         | `""`            |
+| `concierge.configurationPorts.impersonationProxyServerPort` | Concierge Proxy configuration port                                                                                       | `""`            |
+| `concierge.hostNetwork`                                     | Concierge API and Proxy container hostNetwork                                                                            | `false`         |
+| `concierge.dnsPolicy`                                       | Concierge API and Proxy container dnsPolicy                                                                              | `""`            |
 | `concierge.configuration`                                   | Concierge pinniped.yaml configuration file                                                                               | `""`            |
 | `concierge.credentialIssuerConfig`                          | Configuration for the credential issuer                                                                                  | `""`            |
 | `concierge.livenessProbe.enabled`                           | Enable livenessProbe on Concierge containers                                                                             | `true`          |

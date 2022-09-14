@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/wavefront-prometheus-storage-adapter
-  tag: 1.0.5-debian-11-r25
+  tag: 1.0.5-debian-11-r34
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

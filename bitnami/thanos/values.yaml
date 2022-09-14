@@ -54,7 +54,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.27.0-scratch-r6
+  tag: 0.28.0-scratch-r0
   digest: ""
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1019,6 +1019,9 @@ queryFrontend:
     ## @param queryFrontend.service.annotations Annotations for Thanos Query Frontend service
     ##
     annotations: {}
+    ## @param queryFrontend.service.labels Labels for Thanos Query Frontend service
+    ##
+    labels: {}
     ## @param queryFrontend.service.extraPorts Extra ports to expose in the Thanos Query Frontend service
     ##
     extraPorts: []
@@ -2318,6 +2321,9 @@ storegateway:
     ## @param storegateway.persistence.size PVC Storage Request for data volume
     ##
     size: 8Gi
+    ## @param storegateway.persistence.labels Labels for the PVC
+    ##
+    labels: {}
     ## @param storegateway.persistence.annotations Annotations for the PVC
     ##
     annotations: {}
@@ -3907,7 +3913,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r21
+    tag: 11-debian-11-r30
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

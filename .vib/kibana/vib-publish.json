@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/kibana"
         },
-        "runtime_parameters": "ZXh0cmFDb25maWd1cmF0aW9uOgogIGNzcC5zdHJpY3Q6IGZhbHNlCnNlcnZpY2U6CiAgcG9ydHM6IAogICAgaHR0cDogODAKICB0eXBlOiBMb2FkQmFsYW5jZXIKZWxhc3RpY3NlYXJjaDoKICBob3N0czoKICAgIC0gbG9jYWxob3N0CiAgcG9ydDogOTIwMApzaWRlY2FyczogCiAtIG5hbWU6IGVsYXN0aWNzZWFyY2gKICAgaW1hZ2U6IGJpdG5hbWkvZWxhc3RpY3NlYXJjaDpsYXRlc3QKICAgaW1hZ2VQdWxsUG9saWN5OiBJZk5vdFByZXNlbnQKICAgcG9ydHM6CiAgICAgLSBuYW1lOiBodHRwCiAgICAgICBjb250YWluZXJQb3J0OiA5MjAwCg==",
+        "runtime_parameters": "Y29udGFpbmVyUG9ydHM6CiAgaHR0cDogNTYwMgpwb2RTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIGZzR3JvdXA6IDEwMDIKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBydW5Bc1VzZXI6IDEwMDIKZXh0cmFDb25maWd1cmF0aW9uOgogIGNzcC5zdHJpY3Q6IGZhbHNlCnNlcnZpY2U6CiAgcG9ydHM6IAogICAgaHR0cDogODAKICB0eXBlOiBMb2FkQmFsYW5jZXIKZWxhc3RpY3NlYXJjaDoKICBob3N0czoKICAgIC0gbG9jYWxob3N0CiAgcG9ydDogOTIwMApzaWRlY2FyczogCiAtIG5hbWU6IGVsYXN0aWNzZWFyY2gKICAgaW1hZ2U6IGJpdG5hbWkvZWxhc3RpY3NlYXJjaDpsYXRlc3QKICAgaW1hZ2VQdWxsUG9saWN5OiBJZk5vdFByZXNlbnQKICAgcG9ydHM6CiAgICAgLSBuYW1lOiBodHRwCiAgICAgICBjb250YWluZXJQb3J0OiA5MjAwCnNlcnZpY2VBY2NvdW50OgogIGNyZWF0ZTogdHJ1ZQogIGF1dG9tb3VudFNlcnZpY2VBY2NvdW50VG9rZW46IHRydWU=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -46,7 +46,8 @@
             },
             "remote": {
               "workload": "deploy-kibana"
-            }
+            },
+            "vars_file": "vars.yaml"
           }
         },
         {
@@ -56,11 +57,7 @@
               "path": "/.vib/kibana/cypress"
             },
             "endpoint": "lb-kibana-http",
-            "app_protocol": "HTTP",
-            "env": {
-              "username": "test_admin",
-              "password": "ComplicatedPassword123!4"
-            }
+            "app_protocol": "HTTP"
           }
         }
       ]
