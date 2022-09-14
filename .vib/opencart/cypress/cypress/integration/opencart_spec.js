@@ -13,7 +13,7 @@ it('allows a user to add an item and register', () => {
     cy.get('#input-lastname').type(
       `${customer.newCustomer.lastName}.${random}`
     );
-    cy.get('#input-email').type(`${customer.newCustomer.email}`);
+    cy.get('#input-email').type(`${customer.newCustomer.email}.${random}`);
     cy.get('#input-password').type(`${customer.newCustomer.password}`);
     cy.get('#input-shipping-address-1').type(`${customer.newCustomer.address}`);
     cy.get('#input-shipping-city').type(customer.newCustomer.city);
@@ -38,10 +38,10 @@ it('allows an admin to add a product to the catalog', () => {
   cy.get('a.btn.btn-primary i.fa-solid.fa-plus').click();
   cy.fixture('products').then((product) => {
     cy.get('#input-name-1').type(`${product.newProduct.name}.${random}`);
-    cy.get('#input-meta-title-1').type(product.newProduct.metatagTitle);
+    cy.get('#input-meta-title-1').type(`${product.newProduct.metatagTitle}.${random}`);
     cy.contains('Data').click();
-    cy.get('#input-model').type(product.newProduct.model);
-    cy.get('#input-keyword-0-1').type(product.newProduct.model, { force: true });
+    cy.get('#input-model').type(`${product.newProduct.model}.${random}`);
+    cy.get('#input-keyword-0-1').type(`${product.newProduct.model}.${random}`, { force: true });
     cy.get('button.btn.btn-primary i.fa-solid.fa-floppy-disk').click();
     cy.contains('Success');
     cy.visit('/');
