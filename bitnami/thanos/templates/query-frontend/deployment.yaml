@@ -100,6 +100,9 @@ spec:
             - --log.format={{ .Values.queryFrontend.logFormat }}
             - --http-address=0.0.0.0:10902
             - --query-frontend.downstream-url=http://{{ include "common.names.fullname" . }}-query:{{ if $query.service.http }}{{ coalesce $query.service.ports.http $query.service.http.port }}{{ else }}{{ $query.service.ports.http }}{{ end }}
+            {{- if (include "thanos.httpConfigEnabled" .) }}
+            - --http.config=/conf/http/http-config.yml
+            {{- end }}
             {{- if or .Values.queryFrontend.config .Values.queryFrontend.existingConfigmap }}
             - --query-range.response-cache-config-file=/conf/cache/config.yml
             {{- end }}
@@ -127,25 +130,43 @@ spec:
               protocol: TCP
           {{- if .Values.queryFrontend.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryFrontend.livenessProbe "enabled") "context" $) | nindent 12 }}
+            {{- if not .Values.auth.basicAuthUsers }}
             httpGet:
               path: /-/healthy
               port: http
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.https.enabled }}
+            {{- else }}
+            tcpSocket:
+              port: http
+            {{- end }}
           {{- else if .Values.queryFrontend.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.queryFrontend.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryFrontend.readinessProbe "enabled") "context" $) | nindent 12 }}
+            {{- if not .Values.auth.basicAuthUsers }}
             httpGet:
               path: /-/ready
               port: http
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.https.enabled }}
+            {{- else }}
+            tcpSocket:
+              port: http
+            {{- end }}
           {{- else if .Values.queryFrontend.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.queryFrontend.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryFrontend.startupProbe "enabled") "context" $) | nindent 12 }}
+            {{- if not .Values.auth.basicAuthUsers }}
             httpGet:
               path: /-/ready
               port: http
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.https.enabled }}
+            {{- else }}
+            tcpSocket:
+              port: http
+            {{- end }}
           {{- else if .Values.queryFrontend.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -160,10 +181,28 @@ spec:
             - name: cache-config
               mountPath: /conf/cache
             {{- end }}
+            {{- if (include "thanos.httpConfigEnabled" .) }}
+            - name: http-config
+              mountPath: /conf/http
+            {{- if .Values.https.enabled }}
+            - name: http-certs
+              mountPath: /certs
+            {{- end }}
+            {{- end }}
             {{- if .Values.queryFrontend.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
       volumes:
+        {{- if (include "thanos.httpConfigEnabled" .) }}
+        - name: http-config
+          secret:
+            secretName: {{ include "thanos.httpConfigSecretName" . }}
+        {{- if .Values.https.enabled }}
+        - name: http-certs
+          secret:
+            secretName: {{ include "thanos.httpCertsSecretName" . }}
+        {{- end }}
+        {{- end }}
         {{- if or .Values.queryFrontend.config .Values.queryFrontend.existingConfigmap }}
         - name: cache-config
           configMap:
