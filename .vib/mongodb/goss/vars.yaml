@@ -9,7 +9,7 @@ auth:
     - awesome_db
 service:
   ports:
-    mongodb: 27018
+    mongodb: 80
 containerPorts:
   mongodb: 27018
 podSecurityContext:
