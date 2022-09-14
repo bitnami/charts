@@ -11,3 +11,6 @@ hostAliases:
   - ip: 127.0.0.1
     hostnames:
       - status.testhost
+mariadb:
+  auth:
+    database: test_osclass_database

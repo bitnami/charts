@@ -16,6 +16,7 @@ file:
     mode: "0666"
     contains:
     - /WEB_PATH.*{{ .Vars.containerPorts.http }}/
+    - /DB_NAME.*{{ .Vars.mariadb.auth.database }}/
   /etc/hosts:
     exists: true
     filetype: file
