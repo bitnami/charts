@@ -1206,7 +1206,7 @@ In addition, you can also set an external ConfigMap with the configuration file.
 
 ### Running Thanos with HTTPS and basic authentication
 
-This helm charts supports using HTTPS and basic authentitacion. The underlying feature is experimental and might change in the future, so are the associated settings in the chart.
+This helm charts supports using HTTPS and basic authentication. The underlying feature is experimental and might change in the future, so are the associated settings in the chart.
 For more information, please refer to [Thanos documentation](https://thanos.io/tip/operating/https.md/#running-thanos-with-https-and-basic-authentication).
 
 This feature can be enabled by using the following values:
