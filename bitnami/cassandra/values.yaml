@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/cassandra
-  tag: 4.0.5-debian-11-r13
+  tag: 4.0.6-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -591,7 +591,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r28
+    tag: 11-debian-11-r32
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -660,7 +660,7 @@ metrics:
     registry: docker.io
     pullPolicy: IfNotPresent
     repository: bitnami/cassandra-exporter
-    tag: 2.3.8-debian-11-r31
+    tag: 2.3.8-debian-11-r34
     digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -692,6 +692,21 @@ metrics:
     ##    memory: 128Mi
     ##
     requests: {}
+  ## @param metrics.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param metrics.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param metrics.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param metrics.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param metrics.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    initialDelaySeconds: 20
+    periodSeconds: 10
+    timeoutSeconds: 45
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param metrics.extraVolumeMounts Optionally specify extra list of additional volumeMounts for cassandra-exporter container
+  ##
+  extraVolumeMounts: []
   ## @param metrics.podAnnotations [object] Metrics exporter pod Annotation and Labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##

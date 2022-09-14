@@ -168,18 +168,18 @@ Compile all warnings into a single message, and call fail.
 
 {{/* Validate values of etcd - an existing claim must be provided when startFromSnapshot is enabled */}}
 {{- define "etcd.validateValues.startFromSnapshot.existingClaim" -}}
-{{- if and .Values.startFromSnapshot.enabled (not .Values.startFromSnapshot.existingClaim) -}}
+{{- if and .Values.startFromSnapshot.enabled (not .Values.startFromSnapshot.existingClaim) (not .Values.disasterRecovery.enabled) -}}
 etcd: startFromSnapshot.existingClaim
-    An existing claim must be provided when startFromSnapshot is enabled!!
+    An existing claim must be provided when startFromSnapshot is enabled and disasterRecovery is disabled!!
     Please provide it (--set startFromSnapshot.existingClaim="xxxx")
 {{- end -}}
 {{- end -}}
 
 {{/* Validate values of etcd - the snapshot filename must be provided when startFromSnapshot is enabled */}}
 {{- define "etcd.validateValues.startFromSnapshot.snapshotFilename" -}}
-{{- if and .Values.startFromSnapshot.enabled (not .Values.startFromSnapshot.snapshotFilename) -}}
+{{- if and .Values.startFromSnapshot.enabled (not .Values.startFromSnapshot.snapshotFilename) (not .Values.disasterRecovery.enabled) -}}
 etcd: startFromSnapshot.snapshotFilename
-    The snapshot filename must be provided when startFromSnapshot is enabled!!
+    The snapshot filename must be provided when startFromSnapshot is enabled and disasterRecovery is disabled!!
     Please provide it (--set startFromSnapshot.snapshotFilename="xxxx")
 {{- end -}}
 {{- end -}}

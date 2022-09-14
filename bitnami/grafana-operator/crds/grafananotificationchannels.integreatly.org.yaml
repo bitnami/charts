@@ -1,10 +1,10 @@
-# !kustomize build https://github.com/grafana-operator/grafana-operator/tree/v4.1.0/config/crd
+# !kustomize build https://github.com/grafana-operator/grafana-operator/tree/v4.6.0/config/crd
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.4.1
-  creationTimestamp:
+    controller-gen.kubebuilder.io/version: v0.6.2
+  creationTimestamp: null
   name: grafananotificationchannels.integreatly.org
 spec:
   group: integreatly.org

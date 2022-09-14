@@ -73,7 +73,7 @@ image:
   ## Bitnami Redis&reg; image tag
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/redis#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 7.0.4-debian-11-r4
+  tag: 7.0.4-debian-11-r14
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -337,7 +337,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r23
+    tag: 11-debian-11-r33
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -799,7 +799,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.43.0-debian-11-r19
+    tag: 1.44.0-debian-11-r3
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -961,7 +961,7 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: 11-debian-11-r23
+  tag: 11-debian-11-r33
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.

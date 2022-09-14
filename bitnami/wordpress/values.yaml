@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/wordpress
-  tag: 6.0.2-debian-11-r0
+  tag: 6.0.2-debian-11-r6
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -397,20 +397,28 @@ extraContainerPorts: []
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled WordPress pods' Security Context
 ## @param podSecurityContext.fsGroup Set WordPress pod's Security Context fsGroup
+## @param podSecurityContext.seccompProfile.type Set WordPress container's Security Context seccomp profile
 ##
 podSecurityContext:
   enabled: true
   fsGroup: 1001
+  seccompProfile:
+    type: "RuntimeDefault"
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled WordPress containers' Security Context
 ## @param containerSecurityContext.runAsUser Set WordPress container's Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set WordPress container's Security Context runAsNonRoot
+## @param containerSecurityContext.allowPrivilegeEscalation Set WordPress container's privilege escalation
+## @param containerSecurityContext.capabilities.drop Set WordPress container's Security Context runAsNonRoot
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
 ## Configure extra options for WordPress containers' liveness, readiness and startup probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe on WordPress containers
@@ -747,7 +755,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r30
+    tag: 11-debian-11-r34
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -841,7 +849,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.11.0-debian-11-r34
+    tag: 0.11.0-debian-11-r39
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

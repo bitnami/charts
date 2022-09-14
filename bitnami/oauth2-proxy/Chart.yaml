@@ -30,4 +30,4 @@ name: oauth2-proxy
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/oauth2-proxy
   - https://github.com/oauth2-proxy/oauth2-proxy
-version: 3.3.0
+version: 3.3.1

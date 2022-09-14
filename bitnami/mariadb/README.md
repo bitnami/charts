@@ -178,7 +178,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.initContainers`                        | Add additional init containers for the MariaDB Primary pod(s)                                                     | `[]`                |
 | `primary.sidecars`                              | Add additional sidecar containers for the MariaDB Primary pod(s)                                                  | `[]`                |
 | `primary.service.type`                          | MariaDB Primary Kubernetes service type                                                                           | `ClusterIP`         |
-| `primary.service.ports.mysql`                   | MariaDB Primary Kubernetes service port                                                                           | `3306`              |
+| `primary.service.ports.mysql`                   | MariaDB Primary Kubernetes service port for MariaDB                                                               | `3306`              |
+| `primary.service.ports.metrics`                 | MariaDB Primary Kubernetes service port for metrics                                                               | `9104`              |
 | `primary.service.nodePorts.mysql`               | MariaDB Primary Kubernetes service node port                                                                      | `""`                |
 | `primary.service.clusterIP`                     | MariaDB Primary Kubernetes service clusterIP IP                                                                   | `""`                |
 | `primary.service.loadBalancerIP`                | MariaDB Primary loadBalancerIP if service type is `LoadBalancer`                                                  | `""`                |
@@ -267,7 +268,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.initContainers`                        | Add additional init containers for the MariaDB secondary pod(s)                                                       | `[]`                |
 | `secondary.sidecars`                              | Add additional sidecar containers for the MariaDB secondary pod(s)                                                    | `[]`                |
 | `secondary.service.type`                          | MariaDB secondary Kubernetes service type                                                                             | `ClusterIP`         |
-| `secondary.service.ports.mysql`                   | MariaDB secondary Kubernetes service port                                                                             | `3306`              |
+| `secondary.service.ports.mysql`                   | MariaDB secondary Kubernetes service port for MariaDB                                                                 | `3306`              |
+| `secondary.service.ports.metrics`                 | MariaDB secondary Kubernetes service port for metrics                                                                 | `9104`              |
 | `secondary.service.nodePorts.mysql`               | MariaDB secondary Kubernetes service node port                                                                        | `""`                |
 | `secondary.service.clusterIP`                     | MariaDB secondary Kubernetes service clusterIP IP                                                                     | `""`                |
 | `secondary.service.loadBalancerIP`                | MariaDB secondary loadBalancerIP if service type is `LoadBalancer`                                                    | `""`                |

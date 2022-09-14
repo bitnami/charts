@@ -474,10 +474,13 @@ primary:
     ## @param primary.service.type MariaDB Primary Kubernetes service type
     ##
     type: ClusterIP
-    ## @param primary.service.ports.mysql MariaDB Primary Kubernetes service port
-    ##
     ports:
+      ## @param primary.service.ports.mysql MariaDB Primary Kubernetes service port for MariaDB
+      ##
       mysql: 3306
+      ## @param primary.service.ports.metrics MariaDB Primary Kubernetes service port for metrics
+      ##
+      metrics: 9104
     ## @param primary.service.nodePorts.mysql MariaDB Primary Kubernetes service node port
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
@@ -852,10 +855,13 @@ secondary:
     ## @param secondary.service.type MariaDB secondary Kubernetes service type
     ##
     type: ClusterIP
-    ## @param secondary.service.ports.mysql MariaDB secondary Kubernetes service port
-    ##
     ports:
+      ## @param secondary.service.ports.mysql MariaDB secondary Kubernetes service port for MariaDB
+      ##
       mysql: 3306
+      ## @param secondary.service.ports.metrics MariaDB secondary Kubernetes service port for metrics
+      ##
+      metrics: 9104
     ## @param secondary.service.nodePorts.mysql MariaDB secondary Kubernetes service node port
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
