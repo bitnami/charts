@@ -361,6 +361,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := list -}}
 {{- $messages := append $messages (include "kafka.validateValues.authProtocols" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.nodePortListLength" .) -}}
+{{- $messages := append $messages (include "kafka.validateValues.domainSpecified" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.externalAccessServiceType" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.externalAccessAutoDiscoveryRBAC" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.externalAccessAutoDiscoveryIPsOrNames" .) -}}
@@ -398,11 +399,19 @@ kafka: .Values.externalAccess.service.nodePorts
 {{- end -}}
 {{- end -}}
 
+{{/* Validate values of Kafka - domain must be defined if external service type ClusterIP */}}
+{{- define "kafka.validateValues.domainSpecified" -}}
+{{- if and (eq .Values.externalAccess.service.type "ClusterIP") (eq .Values.externalAccess.service.domain "") -}}
+kafka: .Values.externalAccess.service.domain
+    Domain must be specified if service type ClusterIP is set for external service
+{{- end -}}
+{{- end -}}
+
 {{/* Validate values of Kafka - service type for external access */}}
 {{- define "kafka.validateValues.externalAccessServiceType" -}}
-{{- if and (not (eq .Values.externalAccess.service.type "NodePort")) (not (eq .Values.externalAccess.service.type "LoadBalancer")) -}}
+{{- if and (not (eq .Values.externalAccess.service.type "NodePort")) (not (eq .Values.externalAccess.service.type "LoadBalancer")) (not (eq .Values.externalAccess.service.type "ClusterIP")) -}}
 kafka: externalAccess.service.type
-    Available service type for external access are NodePort or LoadBalancer.
+    Available service type for external access are NodePort, LoadBalancer or ClusterIP.
 {{- end -}}
 {{- end -}}
 
