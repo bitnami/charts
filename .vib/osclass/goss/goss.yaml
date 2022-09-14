@@ -1,5 +1,5 @@
 http:
-  http://osclass:{{ .Vars.service.ports.https }}:
+  https://osclass:{{ .Vars.service.ports.https }}:
     status: 200
     allow-insecure: true
 command:
@@ -23,6 +23,6 @@ file:
     {{ range .Vars.hostAliases }}
     {{ $ip := .ip }}
     {{ range $host := .hostnames }}
-      - /{{ $ip }}.*{{$host}}/
+      - /{{ $ip }}.*{{ $host }}/
     {{ end }}
     {{ end }}

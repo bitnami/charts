@@ -5,7 +5,3 @@ podSecurityContext:
   fsGroup: 1002
 containerSecurityContext:
   runAsUser: 1002
-hostAliases:
-  - ip: 127.0.0.1
-    hostnames:
-      - status.localhost
