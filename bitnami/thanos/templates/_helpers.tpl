@@ -62,7 +62,7 @@ Return true if a secret object should be created
 Return the Thanos HTTPS and basic auth configuration secret.
 */}}
 {{- define "thanos.httpConfigEnabled" -}}
-{{- if or .Values.existingHttpConfigSecret .Values.https.enabled .Values.auth.enabled .Values.httpConfig }}
+{{- if or .Values.existingHttpConfigSecret .Values.https.enabled .Values.auth.basicAuthUsers .Values.httpConfig }}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -93,7 +93,7 @@ Return the Thanos HTTPS and basic auth configuration secret.
 Return true if a secret object should be created
 */}}
 {{- define "thanos.createHttpConfigSecret" -}}
-{{- if and (not .Values.existingHttpConfigSecret) (or .Values.https.enabled .Values.auth.enabled .Values.httpConfig) }}
+{{- if and (not .Values.existingHttpConfigSecret) (or .Values.https.enabled .Values.auth.basicAuthUsers .Values.httpConfig) }}
     {{- true -}}
 {{- else -}}
 {{- end -}}
