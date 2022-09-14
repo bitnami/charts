@@ -100,17 +100,6 @@ Return true if a secret object should be created
 {{- end -}}
 
 {{/*
-Returns Thanos basic auth user and password for the HTTP request.
-*/}}
-{{- define "thanos.basicAuth" -}}
-{{- if .Values.auth.basicAuthUsers -}}
-{{- $username := .Values.auth.basicAuthUsers | keys | first -}}
-{{- $password := get .Values.auth.basicAuthUsers $username -}}
-{{ printf "%s:%s" $username $password | b64enc }}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Return a YAML of either .Values.query or .Values.querier
 If .Values.querier is used, we merge in the defaults from .Values.query, giving preference to .Values.querier
 */}}

@@ -165,7 +165,7 @@ spec:
               protocol: TCP
           {{- if .Values.storegateway.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.storegateway.livenessProbe "enabled") "context" $) | nindent 12 }}
-            {{- if not .Values.https.basicAuthUsers }}
+            {{- if not .Values.auth.basicAuthUsers }}
             httpGet:
               path: /-/healthy
               port: http
@@ -179,7 +179,7 @@ spec:
           {{- end }}
           {{- if .Values.storegateway.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.storegateway.readinessProbe "enabled") "context" $) | nindent 12 }}
-            {{- if not .Values.https.basicAuthUsers }}
+            {{- if not .Values.auth.basicAuthUsers }}
             httpGet:
               path: /-/ready
               port: http
@@ -193,7 +193,7 @@ spec:
           {{- end }}
           {{- if .Values.storegateway.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.storegateway.startupProbe "enabled") "context" $) | nindent 12 }}
-            {{- if not .Values.https.basicAuthUsers }}
+            {{- if not .Values.auth.basicAuthUsers }}
             httpGet:
               path: /-/ready
               port: http

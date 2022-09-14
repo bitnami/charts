@@ -130,7 +130,7 @@ spec:
               protocol: TCP
           {{- if .Values.queryFrontend.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryFrontend.livenessProbe "enabled") "context" $) | nindent 12 }}
-            {{- if not .Values.https.basicAuthUsers }}
+            {{- if not .Values.auth.basicAuthUsers }}
             httpGet:
               path: /-/healthy
               port: http
@@ -144,7 +144,7 @@ spec:
           {{- end }}
           {{- if .Values.queryFrontend.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryFrontend.readinessProbe "enabled") "context" $) | nindent 12 }}
-            {{- if not .Values.https.basicAuthUsers }}
+            {{- if not .Values.auth.basicAuthUsers }}
             httpGet:
               path: /-/ready
               port: http
@@ -158,7 +158,7 @@ spec:
           {{- end }}
           {{- if .Values.queryFrontend.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryFrontend.startupProbe "enabled") "context" $) | nindent 12 }}
-            {{- if not .Values.https.basicAuthUsers }}
+            {{- if not .Values.auth.basicAuthUsers }}
             httpGet:
               path: /-/ready
               port: http
