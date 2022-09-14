@@ -145,43 +145,43 @@ spec:
               protocol: TCP
           {{- if .Values.compactor.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.compactor.livenessProbe "enabled") "context" $) | nindent 12 }}
+            {{- if not .Values.https.basicAuthUsers }}
             httpGet:
               path: /-/healthy
               port: http
               scheme: {{ ternary "HTTPS" "HTTP" .Values.https.enabled }}
-              {{- if .Values.auth.basicAuthUsers }}
-              httpHeaders:
-                - name: Authorization
-                  value: Basic {{ include "thanos.basicAuth" . }}
-              {{- end }}
+            {{- else }}
+            tcpSocket:
+              port: http
+            {{- end }}
           {{- else if .Values.compactor.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.compactor.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.compactor.readinessProbe "enabled") "context" $) | nindent 12 }}
+            {{- if not .Values.https.basicAuthUsers }}
             httpGet:
               path: /-/ready
               port: http
               scheme: {{ ternary "HTTPS" "HTTP" .Values.https.enabled }}
-              {{- if .Values.auth.basicAuthUsers }}
-              httpHeaders:
-                - name: Authorization
-                  value: Basic {{ include "thanos.basicAuth" . }}
-              {{- end }}
+            {{- else }}
+            tcpSocket:
+              port: http
+            {{- end }}
           {{- else if .Values.compactor.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.compactor.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.compactor.startupProbe "enabled") "context" $) | nindent 12 }}
+            {{- if not .Values.https.basicAuthUsers }}
             httpGet:
               path: /-/ready
               port: http
               scheme: {{ ternary "HTTPS" "HTTP" .Values.https.enabled }}
-              {{- if .Values.auth.basicAuthUsers }}
-              httpHeaders:
-                - name: Authorization
-                  value: Basic {{ include "thanos.basicAuth" . }}
-              {{- end }}
+            {{- else }}
+            tcpSocket:
+              port: http
+            {{- end }}
           {{- else if .Values.compactor.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
