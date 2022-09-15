@@ -74,9 +74,11 @@ spec:
           env:
             - name: ALLOW_EMPTY_PASSWORD
               value: {{ .Values.allowEmptyPassword | quote }}
-            - name: MARIADB_HOST
+            - name: JASPERREPORTS_DATABASE_TYPE
+              value: {{ include "jasperreports.databaseType" . | quote }}
+            - name: JASPERREPORTS_DATABASE_HOST
               value: {{ include "jasperreports.databaseHost" . | quote }}
-            - name: MARIADB_PORT_NUMBER
+            - name: JASPERREPORTS_DATABASE_PORT_NUMBER
               value: {{ include "jasperreports.databasePort" . | quote }}
             - name: JASPERREPORTS_DATABASE_NAME
               value: {{ include "jasperreports.databaseName" . | quote }}

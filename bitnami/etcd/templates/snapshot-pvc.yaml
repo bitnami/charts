@@ -1,4 +1,4 @@
-{{- if and .Values.disasterRecovery.enabled (not .Values.disasterRecovery.pvc.existingClaim) (not .Values.startFromSnapshot.enabled) -}}
+{{- if and .Values.disasterRecovery.enabled (not .Values.disasterRecovery.pvc.existingClaim) -}}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:

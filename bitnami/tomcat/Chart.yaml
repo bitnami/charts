@@ -26,4 +26,4 @@ name: tomcat
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/tomcat
   - http://tomcat.apache.org
-version: 10.4.0
+version: 10.4.3

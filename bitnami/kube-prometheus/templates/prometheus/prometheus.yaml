@@ -143,6 +143,7 @@ spec:
   storage:
     volumeClaimTemplate:
       metadata:
+        {{- if or .Values.prometheus.persistence.annotations .Values.commonAnnotations }}
         annotations:
           {{- if .Values.prometheus.persistence.annotations }}
           {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.persistence.annotations "context" $) | nindent 10 }}
@@ -150,6 +151,7 @@ spec:
           {{- if .Values.commonAnnotations }}
           {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 10 }}
           {{- end }}
+        {{- end }}
         {{- if .Values.commonLabels }}
         labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
         {{- end }}
@@ -226,10 +228,10 @@ spec:
   {{- end }}
 {{- include "kube-prometheus.imagePullSecrets" . | indent 2 }}
   {{- if or .Values.prometheus.containers .Values.prometheus.thanos.create .Values.prometheus.containerSecurityContext.enabled .Values.prometheus.containerSecurityContext.enabled .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled }}
+  {{- if .Values.prometheus.initContainers }}
   initContainers:
-    {{- if .Values.prometheus.initContainers }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.initContainers "context" $) | nindent 4 }}
-    {{- end }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.initContainers "context" $) | nindent 4 }}
+  {{- end }}
   containers:
     {{- if .Values.prometheus.thanos.create }}
     - name: thanos-sidecar

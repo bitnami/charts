@@ -1,4 +1,4 @@
-{{- if and .Values.storegateway.enabled .Values.storegateway.autoscaling.enabled }}
+{{- if and .Values.storegateway.enabled .Values.storegateway.autoscaling.enabled (not .Values.storegateway.sharded.enabled) }}
 apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ ) }}
 kind: HorizontalPodAutoscaler
 metadata:

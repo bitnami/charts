@@ -70,6 +70,10 @@ spec:
       initContainers: {{- include "common.tplvalues.render" ( dict "value" .Values.forwarder.initContainers "context" $ ) | nindent 8 }}
       {{- end }}
       terminationGracePeriodSeconds: {{ .Values.forwarder.terminationGracePeriodSeconds }}
+      hostNetwork: {{ .Values.forwarder.hostNetwork }}
+      {{- if .Values.forwarder.dnsPolicy }}
+      dnsPolicy: {{ .Values.forwarder.dnsPolicy }}
+      {{- end }}
       containers:
         - name: fluentd
           image: {{ include "fluentd.forwarder.image" . }}

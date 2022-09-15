@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/elasticsearch"
         },
-        "runtime_parameters": "Cm1hc3RlcjoKICByZXBsaWNhQ291bnQ6IDEKY29vcmRpbmF0aW5nOgogIHJlcGxpY2FDb3VudDogMQpkYXRhOgogIHJlcGxpY2FDb3VudDogMQppbmdlc3Q6CiAgcmVwbGljYUNvdW50OiAxCnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCiAgcG9ydHM6CiAgICByZXN0QVBJOiA4MAogICAgdHJhbnNwb3J0OiA5MzAwCnN5c2N0bEltYWdlOgogIGVuYWJsZWQ6IHRydWUK",
+        "runtime_parameters": "bWFzdGVyOgogIHJlcGxpY2FDb3VudDogMQpjb29yZGluYXRpbmc6CiAgcmVwbGljYUNvdW50OiAxCmRhdGE6CiAgcmVwbGljYUNvdW50OiAxCmluZ2VzdDoKICBlbmFibGVkOiB0cnVlCiAgcmVwbGljYUNvdW50OiAxCnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCiAgcG9ydHM6CiAgICByZXN0QVBJOiA4MAogICAgdHJhbnNwb3J0OiA5MzAwCnN5c2N0bEltYWdlOgogIGVuYWJsZWQ6IHRydWU=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
           "size": {

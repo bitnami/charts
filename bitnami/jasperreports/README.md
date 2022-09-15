@@ -199,26 +199,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Database parameters
 
-| Name                                        | Description                                          | Value                   |
-| ------------------------------------------- | ---------------------------------------------------- | ----------------------- |
-| `mariadb.enabled`                           | Whether to use the MariaDB chart                     | `true`                  |
-| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`) | `standalone`            |
-| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                 | `""`                    |
-| `mariadb.auth.database`                     | Database name to create                              | `bitnami_jasperreports` |
-| `mariadb.auth.username`                     | Database user to create                              | `bn_jasperreports`      |
-| `mariadb.auth.password`                     | Password for the database                            | `""`                    |
-| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                | `true`                  |
-| `mariadb.primary.persistence.storageClass`  | PVC Storage Class                                    | `""`                    |
-| `mariadb.primary.persistence.accessModes`   | Access mode of persistent volume                     | `["ReadWriteOnce"]`     |
-| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                      | `8Gi`                   |
-| `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                   | `""`                    |
-| `mariadb.primary.persistence.existingClaim` | Enable persistence using an existing PVC             | `""`                    |
-| `externalDatabase.existingSecret`           | Name of the database existing Secret Object          | `""`                    |
-| `externalDatabase.host`                     | Host of the existing database                        | `""`                    |
-| `externalDatabase.port`                     | Port of the existing database                        | `3306`                  |
-| `externalDatabase.user`                     | Existing username in the external db                 | `bn_jasperreports`      |
-| `externalDatabase.password`                 | Password for the above username                      | `""`                    |
-| `externalDatabase.database`                 | Name of the existing database                        | `bitnami_jasperreports` |
+| Name                                        | Description                                                               | Value                   |
+| ------------------------------------------- | ------------------------------------------------------------------------- | ----------------------- |
+| `mariadb.enabled`                           | Whether to use the MariaDB chart                                          | `true`                  |
+| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                      | `standalone`            |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                      | `""`                    |
+| `mariadb.auth.database`                     | Database name to create                                                   | `bitnami_jasperreports` |
+| `mariadb.auth.username`                     | Database user to create                                                   | `bn_jasperreports`      |
+| `mariadb.auth.password`                     | Password for the database                                                 | `""`                    |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                     | `true`                  |
+| `mariadb.primary.persistence.storageClass`  | PVC Storage Class                                                         | `""`                    |
+| `mariadb.primary.persistence.accessModes`   | Access mode of persistent volume                                          | `["ReadWriteOnce"]`     |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                           | `8Gi`                   |
+| `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                                        | `""`                    |
+| `mariadb.primary.persistence.existingClaim` | Enable persistence using an existing PVC                                  | `""`                    |
+| `externalDatabase.existingSecret`           | Name of the database existing Secret Object                               | `""`                    |
+| `externalDatabase.host`                     | Host of the existing database                                             | `""`                    |
+| `externalDatabase.port`                     | Port of the existing database                                             | `3306`                  |
+| `externalDatabase.user`                     | Existing username in the external db                                      | `bn_jasperreports`      |
+| `externalDatabase.password`                 | Password for the above username                                           | `""`                    |
+| `externalDatabase.database`                 | Name of the existing database                                             | `bitnami_jasperreports` |
+| `externalDatabase.type`                     | Type of the existing database, allowed values: mariadb, mysql, postgresql | `mariadb`               |
 
 
 ### NetworkPolicy parameters

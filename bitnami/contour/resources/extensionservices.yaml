@@ -2,7 +2,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.6.2
+    controller-gen.kubebuilder.io/version: v0.7.0
   name: extensionservices.projectcontour.io
 spec:
   preserveUnknownFields: false
@@ -73,6 +73,20 @@ spec:
                                   header that will be used to calculate the hash key.
                                   If the header specified is not present on a request,
                                   no hash will be produced.
+                                minLength: 1
+                                type: string
+                            type: object
+                          queryParameterHashOptions:
+                            description: QueryParameterHashOptions should be set when
+                              request query parameter hash based load balancing is desired.
+                              It must be the only hash option field set, otherwise this
+                              request hash policy object will be ignored.
+                            properties:
+                              parameterName:
+                                description: ParameterName is the name of the HTTP request
+                                  query parameter that will be used to calculate the
+                                  hash key. If the query parameter specified is not
+                                  present on a request, no hash will be produced.
                                 minLength: 1
                                 type: string
                             type: object
@@ -153,6 +167,12 @@ spec:
                         manager-wide stream_idle_timeout default of 5m still applies.
                       pattern: ^(((\d*(\.\d*)?h)|(\d*(\.\d*)?m)|(\d*(\.\d*)?s)|(\d*(\.\d*)?ms)|(\d*(\.\d*)?us)|(\d*(\.\d*)?µs)|(\d*(\.\d*)?ns))+|infinity|infinite)$
                       type: string
+                    idleConnection:
+                      description: Timeout for how long connection from the proxy to
+                        the upstream service is kept when there are no active requests.
+                        If not supplied, Envoy's default value of 1h applies.
+                      pattern: ^(((\d*(\.\d*)?h)|(\d*(\.\d*)?m)|(\d*(\.\d*)?s)|(\d*(\.\d*)?ms)|(\d*(\.\d*)?us)|(\d*(\.\d*)?µs)|(\d*(\.\d*)?ns))+|infinity|infinite)$
+                      type: string
                     response:
                       description: Timeout for receiving a response from the server
                         after processing a request from client. If not supplied, Envoy's
@@ -166,11 +186,12 @@ spec:
                   properties:
                     caSecret:
                       description: Name or namespaced name of the Kubernetes secret
-                        used to validate the certificate presented by the backend
+                        used to validate the certificate presented by the backend. The
+                        secret must contain key named ca.crt.
                       type: string
                     subjectName:
                       description: Key which is expected to be present in the 'subjectAltName'
-                        of the presented certificate
+                        of the presented certificate.
                       type: string
                   required:
                     - caSecret
@@ -206,7 +227,7 @@ spec:
                     be indicated in the Reason field. There must be zero entries in
                     the `errors` slice in this case. \n `Valid`, `status: false` means
                     that the object has had one or more fatal errors during processing
-                    into Contour.  The details of the errors will be present under
+                    into Contour. The details of the errors will be present under
                     the `errors` field. There must be at least one error in the `errors`
                     slice if `status` is `false`. \n For DetailedConditions of types
                     other than `Valid`, the Condition must be in the negative polarity.

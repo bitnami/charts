@@ -59,6 +59,47 @@ Return true if a secret object should be created
 {{- end -}}
 
 {{/*
+Return the Thanos HTTPS and basic auth configuration secret.
+*/}}
+{{- define "thanos.httpConfigEnabled" -}}
+{{- if or .Values.existingHttpConfigSecret .Values.https.enabled .Values.auth.basicAuthUsers .Values.httpConfig }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Thanos HTTPS and basic auth configuration secret.
+*/}}
+{{- define "thanos.httpCertsSecretName" -}}
+{{- if .Values.https.existingSecret -}}
+    {{- printf "%s" (tpl .Values.https.existingSecret $) -}}
+{{- else -}}
+    {{- printf "%s-http-certs-secret" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Thanos HTTPS and basic auth configuration secret.
+*/}}
+{{- define "thanos.httpConfigSecretName" -}}
+{{- if .Values.existingHttpConfigSecret -}}
+    {{- printf "%s" (tpl .Values.existingHttpConfigSecret $) -}}
+{{- else -}}
+    {{- printf "%s-http-config-secret" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a secret object should be created
+*/}}
+{{- define "thanos.createHttpConfigSecret" -}}
+{{- if and (not .Values.existingHttpConfigSecret) (or .Values.https.enabled .Values.auth.basicAuthUsers .Values.httpConfig) }}
+    {{- true -}}
+{{- else -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return a YAML of either .Values.query or .Values.querier
 If .Values.querier is used, we merge in the defaults from .Values.query, giving preference to .Values.querier
 */}}

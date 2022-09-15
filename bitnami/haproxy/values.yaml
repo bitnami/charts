@@ -123,7 +123,7 @@ service:
 image:
   registry: docker.io
   repository: bitnami/haproxy
-  tag: 2.6.4-debian-11-r0
+  tag: 2.6.5-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
