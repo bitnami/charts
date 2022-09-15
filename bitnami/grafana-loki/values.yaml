@@ -87,6 +87,7 @@ loki:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+
   ## @param loki.configuration [string] Loki components configuration
   ##
   configuration: |
@@ -226,7 +227,12 @@ loki:
       rule_path: /tmp/loki/scratch
       alertmanager_url: https://alertmanager.xx
       external_url: https://alertmanager.xx
-
+  ## @param loki.overrideConfiguration [object] Loki components configuration override. Values defined here takes precedence over loki.configuration
+  ## e.g:
+  ## overrideConfiguration:
+  ##   auth_enabled: true
+  ##
+  overrideConfiguration: {}
   ## @param loki.existingConfigmap Name of a ConfigMap with the Loki configuration
   ##
   existingConfigmap: ""

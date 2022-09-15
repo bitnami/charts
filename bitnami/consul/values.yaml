@@ -282,11 +282,13 @@ podSecurityContext:
 ## @param containerSecurityContext.enabled HashiCorp Consul Container securityContext
 ## @param containerSecurityContext.runAsUser User ID for the HashiCorp Consul container
 ## @param containerSecurityContext.runAsNonRoot Force the container to be run as non root
+## @param containerSecurityContext.allowPrivilegeEscalation Force the child process to be run as nonprivilege
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
+  allowPrivilegeEscalation: false
 ## Container's resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious

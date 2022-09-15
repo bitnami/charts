@@ -332,11 +332,13 @@ podSecurityContext:
 ## @param containerSecurityContext.enabled Enabled ZooKeeper containers' Security Context
 ## @param containerSecurityContext.runAsUser Set ZooKeeper containers' Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set ZooKeeper containers' Security Context runAsNonRoot
+## @param containerSecurityContext.allowPrivilegeEscalation Force the child process to be run as nonprivilege
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
+  allowPrivilegeEscalation: false
 ## @param hostAliases ZooKeeper pods host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
