@@ -153,7 +153,7 @@ akamai:
   ## @param akamai.clientSecret When using the Akamai provider, `AKAMAI_CLIENT_SECRET` to set (optional)
   ##
   clientSecret: ""
-  ## @param akamai.clientSecretName Use an existing secret with key "akamai_api_seret" defined.
+  ## @param akamai.secretName Use an existing secret with key "akamai_api_seret" defined.
   ## This ignores akamai.clientSecret
   ##
   secretName: ""
