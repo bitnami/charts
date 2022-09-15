@@ -161,7 +161,6 @@ spec:
             {{- range .Values.sources }}
             - --source={{ . }}
             {{- end }}
-            {{- if eq .Values.provider "akamai" }}
             {{- if eq .Values.provider "alibabacloud" }}
             # Alibaba Cloud arguments
             {{- if or (and .Values.alibabacloud.accessKeyId .Values.alibabacloud.accessKeySecret) .Values.alibabacloud.secretName }}
@@ -291,7 +290,8 @@ spec:
             {{- end }}
           {{- end }}
           env:
-          # Akamai environment variables
+            {{- if eq .Values.provider "akamai" }}
+            # Akamai environment variables
             {{- if .Values.akamai.host }}
             - name: EXTERNAL_DNS_AKAMAI_SERVICECONSUMERDOMAIN
               value: {{ .Values.akamai.host }}
