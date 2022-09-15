@@ -32,4 +32,4 @@ name: mediawiki
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/mediawiki
   - https://www.mediawiki.org/
-version: 14.3.1
+version: 14.3.4

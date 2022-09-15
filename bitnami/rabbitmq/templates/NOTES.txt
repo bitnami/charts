@@ -150,6 +150,5 @@ Then, open the obtained URL in a browser.
 
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
-{{- include "rabbitmq.validateValues" . -}}
 
 {{- end }}

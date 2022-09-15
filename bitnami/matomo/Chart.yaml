@@ -30,4 +30,4 @@ name: matomo
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/matomo
   - https://www.matomo.org/
-version: 0.2.2
+version: 0.2.5

@@ -34,7 +34,7 @@ Usage:
 {{ include "consul.retryjoin.endpoint" . }}
 */}}
 {{- define "consul.retryjoin.endpoint" -}}
-    {{- $name := printf "%s-headless" (include "common.names.fullname" .) -}}
+    {{- $name := printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
     {{- $domain := .Values.clusterDomain -}}
     {{- $namespace := .Release.Namespace -}}
     {{- printf "%s.%s.svc.%s" $name $namespace $domain -}}
@@ -47,7 +47,7 @@ Return the configmap with the Consul configuration
 {{- if .Values.existingConfigmap -}}
     {{- printf "%s" (tpl .Values.existingConfigmap $) -}}
 {{- else -}}
-    {{- printf "%s" (printf "%s-configuration" (include "common.names.fullname" .)) -}}
+    {{- printf "%s" (printf "%s-configuration" (include "common.names.fullname" .)) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 

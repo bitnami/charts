@@ -99,6 +99,12 @@ config: {}
 ## ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html
 ##
 extraConfig: {}
+## @param extraHosts A list of external hosts which are part of this cluster
+## Example Use Case: When you have a cluster with nodes spaned acorss multiple K8s or namespaces
+## extraHosts:
+##   - datacenter2-elasticsearch-master-hl.namespace2.svc
+##   - datacenter2-elasticsearch-data-hl.namespace2.svc
+extraHosts: []
 ## @param extraVolumes A list of volumes to be added to the pod
 ## Example Use Case: mount ssl certificates when elasticsearch has tls enabled
 ## extraVolumes:
@@ -177,7 +183,7 @@ initContainers: []
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 8.3.3-debian-11-r5
+  tag: 8.4.1-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -459,6 +465,9 @@ master:
   ## @param master.fullnameOverride String to fully override elasticsearch.master.fullname
   ##
   fullnameOverride: ""
+  ## @param master.servicenameOverride String to fully override elasticsearch.master.servicename
+  ##
+  servicenameOverride: ""
   ## @param master.annotations [object] Annotations for the master statefulset
   ##
   annotations: {}
@@ -751,6 +760,9 @@ data:
   ## @param data.fullnameOverride String to fully override elasticsearch.data.fullname
   ##
   fullnameOverride: ""
+  ## @param data.servicenameOverride String to fully override elasticsearch.data.servicename
+  ##
+  servicenameOverride: ""
   ## @param data.annotations [object] Annotations for the data statefulset
   ##
   annotations: {}
@@ -1043,6 +1055,9 @@ coordinating:
   ## @param coordinating.fullnameOverride String to fully override elasticsearch.coordinating.fullname
   ##
   fullnameOverride: ""
+  ## @param coordinating.servicenameOverride String to fully override elasticsearch.coordinating.servicename
+  ##
+  servicenameOverride: ""
   ## @param coordinating.annotations [object] Annotations for the coordinating-only statefulset
   ##
   annotations: {}
@@ -1289,7 +1304,7 @@ coordinating:
 ingest:
   ## @param ingest.enabled Enable ingest nodes
   ##
-  enabled: false
+  enabled: true
   ## @param ingest.replicaCount Number of ingest-only replicas to deploy
   ##
   replicaCount: 2
@@ -1299,6 +1314,9 @@ ingest:
   ## @param ingest.fullnameOverride String to fully override elasticsearch.ingest.fullname
   ##
   fullnameOverride: ""
+  ## @param ingest.servicenameOverride String to fully override ingest.master.servicename
+  ##
+  servicenameOverride: ""
   ## @param ingest.annotations [object] Annotations for the ingest statefulset
   ##
   annotations: {}
@@ -1739,7 +1757,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-exporter
-    tag: 1.5.0-debian-11-r5
+    tag: 1.5.0-debian-11-r11
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2066,7 +2084,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r23
+    tag: 11-debian-11-r30
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2113,7 +2131,7 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: 11-debian-11-r23
+  tag: 11-debian-11-r30
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

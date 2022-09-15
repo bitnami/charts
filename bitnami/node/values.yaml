@@ -134,7 +134,7 @@ externaldb:
 image:
   registry: docker.io
   repository: bitnami/node
-  tag: 16.17.0-debian-11-r0
+  tag: 16.17.0-debian-11-r10
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -418,7 +418,7 @@ git:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.37.2-debian-11-r1
+    tag: 2.37.3-debian-11-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -474,7 +474,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r26
+    tag: 11-debian-11-r35
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

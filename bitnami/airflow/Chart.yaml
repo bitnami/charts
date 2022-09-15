@@ -32,4 +32,4 @@ name: airflow
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/airflow
   - https://airflow.apache.org/
-version: 13.1.3
+version: 13.1.5

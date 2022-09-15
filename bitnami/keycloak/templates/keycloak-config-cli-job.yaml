@@ -40,6 +40,10 @@ spec:
       {{- if .Values.keycloakConfigCli.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.hostAliases "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.keycloakConfigCli.initContainers }}
+      initContainers:
+        {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.initContainers "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: keycloak-config-cli
           image: {{ template "keycloak.keycloakConfigCli.image" . }}
@@ -106,6 +110,9 @@ spec:
           {{- if .Values.keycloakConfigCli.resources }}
           resources: {{- toYaml .Values.keycloakConfigCli.resources | nindent 12 }}
           {{- end }}
+        {{- if .Values.keycloakConfigCli.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.keycloakConfigCli.sidecars "context" $) | nindent 8 }}
+        {{- end }}
       {{- if or .Values.keycloakConfigCli.configuration .Values.keycloakConfigCli.existingConfigmap .Values.keycloakConfigCli.extraVolumes }}
       volumes:
         {{- if or .Values.keycloakConfigCli.configuration .Values.keycloakConfigCli.existingConfigmap }}

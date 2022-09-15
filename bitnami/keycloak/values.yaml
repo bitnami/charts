@@ -74,7 +74,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 18.0.2-debian-11-r25
+  tag: 19.0.1-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -464,6 +464,10 @@ service:
   ## @param service.type Kubernetes service type
   ##
   type: LoadBalancer
+  ## @param service.http.enabled Enable http port on service
+  ##
+  http:
+    enabled: true
   ## @param service.ports.http Keycloak service HTTP port
   ## @param service.ports.https Keycloak service HTTPS port
   ##
@@ -738,9 +742,17 @@ metrics:
     ## @param metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator
     ##
     enabled: false
-    ## @param metrics.serviceMonitor.path Metrics service HTTP path
+    ## @param metrics.serviceMonitor.port Metrics service HTTP port
     ##
-    path: /metrics
+    port: http
+    ## @param metrics.serviceMonitor.endpoints [array] The endpoint configuration of the ServiceMonitor. Path is mandatory. Interval, timeout and labellings can be overwritten.
+    ##
+    endpoints:
+      - path: /metrics
+      - path: /realms/master/metrics
+    ## @param metrics.serviceMonitor.path Metrics service HTTP path. Deprecated: Use @param metrics.serviceMonitor.endpoints instead
+    ##
+    path: ""
     ## @param metrics.serviceMonitor.namespace Namespace which Prometheus is running in
     ##
     namespace: ""
@@ -771,6 +783,32 @@ metrics:
     ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
     ##
     jobLabel: ""
+  ## Prometheus Operator alert rules configuration
+  ##
+  prometheusRule:
+    ## @param metrics.prometheusRule.enabled Create PrometheusRule Resource for scraping metrics using PrometheusOperator
+    ##
+    enabled: false
+    ## @param metrics.prometheusRule.namespace Namespace which Prometheus is running in
+    ##
+    namespace: ""
+    ## @param metrics.prometheusRule.labels Additional labels that can be used so PrometheusRule will be discovered by Prometheus
+    ##
+    labels: {}
+    ## @param metrics.prometheusRule.groups Groups, containing the alert rules.
+    ## Example:
+    ##   groups:
+    ##     default:
+    ##       rules:
+    ##         - alert: KeycloakInstanceNotAvailable
+    ##           annotations:
+    ##             message: "Keycloak instance in namespace {{ `{{` }} $labels.namespace {{ `}}` }} has not been available for the last 5 minutes."
+    ##           expr: |
+    ##             absent(kube_pod_status_ready{namespace="{{ include "common.names.namespace" . }}", condition="true"} * on (pod) kube_pod_labels{pod=~"{{ include "keycloak.fullname" . }}-\\d+", namespace="{{ include "common.names.namespace" . }}"}) != 0
+    ##           for: 5m
+    ##           labels:
+    ##             severity: critical
+    groups: {}
 
 ## @section keycloak-config-cli parameters
 
@@ -793,7 +831,7 @@ keycloakConfigCli:
   image:
     registry: docker.io
     repository: bitnami/keycloak-config-cli
-    tag: 5.3.1-debian-11-r7
+    tag: 5.3.1-debian-11-r10
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -882,6 +920,28 @@ keycloakConfigCli:
   ## @param keycloakConfigCli.extraVolumeMounts Extra volume mounts to add to the container
   ##
   extraVolumeMounts: []
+  ## @param keycloakConfigCli.initContainers Add additional init containers to the Keycloak config cli pod
+  ## Example:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  initContainers: []
+  ## @param keycloakConfigCli.sidecars Add additional sidecar containers to the Keycloak config cli pod
+  ## Example:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
   ## @param keycloakConfigCli.configuration keycloak-config-cli realms configuration
   ## NOTE: nil keys will be considered files to import locally
   ## Example:

@@ -77,7 +77,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mariadb
-  tag: 10.6.9-debian-11-r0
+  tag: 10.6.9-debian-11-r4
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -474,10 +474,13 @@ primary:
     ## @param primary.service.type MariaDB Primary Kubernetes service type
     ##
     type: ClusterIP
-    ## @param primary.service.ports.mysql MariaDB Primary Kubernetes service port
-    ##
     ports:
+      ## @param primary.service.ports.mysql MariaDB Primary Kubernetes service port for MariaDB
+      ##
       mysql: 3306
+      ## @param primary.service.ports.metrics MariaDB Primary Kubernetes service port for metrics
+      ##
+      metrics: 9104
     ## @param primary.service.nodePorts.mysql MariaDB Primary Kubernetes service node port
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
@@ -852,10 +855,13 @@ secondary:
     ## @param secondary.service.type MariaDB secondary Kubernetes service type
     ##
     type: ClusterIP
-    ## @param secondary.service.ports.mysql MariaDB secondary Kubernetes service port
-    ##
     ports:
+      ## @param secondary.service.ports.mysql MariaDB secondary Kubernetes service port for MariaDB
+      ##
       mysql: 3306
+      ## @param secondary.service.ports.metrics MariaDB secondary Kubernetes service port for metrics
+      ##
+      metrics: 9104
     ## @param secondary.service.nodePorts.mysql MariaDB secondary Kubernetes service node port
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
@@ -963,7 +969,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r26
+    tag: 11-debian-11-r29
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -999,7 +1005,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.14.0-debian-11-r26
+    tag: 0.14.0-debian-11-r30
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)

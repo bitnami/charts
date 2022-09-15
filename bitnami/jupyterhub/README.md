@@ -414,7 +414,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `singleuser.image.pullSecrets`                  | Single User image pull secrets                                                                              | `[]`                                 |
 | `singleuser.notebookDir`                        | Notebook directory (it will be the same as the PVC volume mount)                                            | `/opt/bitnami/jupyterhub-singleuser` |
 | `singleuser.command`                            | Override Single User default command                                                                        | `[]`                                 |
-| `singleuser.extraEnvVars`                       | Add extra environment variables to the Single User container                                                | `[]`                                 |
+| `singleuser.extraEnvVars`                       | Extra environment variables that should be set for the user pods                                            | `{}`                                 |
 | `singleuser.containerPort`                      | Single User container port                                                                                  | `8888`                               |
 | `singleuser.resources.limits`                   | The resources limits for the Singleuser containers                                                          | `{}`                                 |
 | `singleuser.resources.requests`                 | The requested resources for the Singleuser containers                                                       | `{}`                                 |

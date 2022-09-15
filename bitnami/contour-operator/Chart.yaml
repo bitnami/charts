@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 1.22.0
+appVersion: 1.22.1
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -25,4 +25,4 @@ name: contour-operator
 sources:
   - https://github.com/projectcontour/contour-operator
   - https://github.com/bitnami/containers/tree/main/bitnami/contour-operator
-version: 2.1.1
+version: 2.1.3

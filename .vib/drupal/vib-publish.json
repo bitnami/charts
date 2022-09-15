@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/drupal"
         },
-        "runtime_parameters": "ImRydXBhbFBhc3N3b3JkIjogIlMzOUJLV2pTa2gi",
+        "runtime_parameters": "ZHJ1cGFsVXNlcm5hbWU6IHRlc3RfdXNlcgpkcnVwYWxQYXNzd29yZDogQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0Cm1hcmlhZGI6CiAgYXV0aDoKICAgIGRhdGFiYXNlOiB0ZXN0X2RydXBhbF9kYXRhYmFzZQogICAgdXNlcm5hbWU6IHRlc3RfZHJ1cGFsX3VzZXJuYW1lCiAgICBwYXNzd29yZDogdGVzdF9kcnVwYWxfcGFzc3dvcmQKY29udGFpbmVyUG9ydHM6CiAgaHR0cDogODA4MQogIGh0dHBzOiA4NDQ0CnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCiAgcG9ydHM6CiAgICBodHRwOiA4MAogICAgaHR0cHM6IDQ0NApwb2RTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIGZzR3JvdXA6IDEwMDIKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBydW5Bc1VzZXI6IDEwMDIKaG9zdEFsaWFzZXM6CiAgLSBpcDogMTI3LjAuMC4xCiAgICBob3N0bmFtZXM6CiAgICAgIC0gc3RhdHVzLnRlc3Rob3N0CnNlcnZpY2VBY2NvdW50OgogIGF1dG9tb3VudFNlcnZpY2VBY2NvdW50VG9rZW46IHRydWU=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -36,6 +36,32 @@
           "params": {
             "endpoint": "lb-drupal-http",
             "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/drupal/goss"
+            },
+            "remote": {
+              "workload": "deploy-drupal"
+            },
+            "vars_file": "vars.yaml"
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/drupal/cypress"
+            },
+            "endpoint": "lb-drupal-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "username": "test_user",
+              "password": "ComplicatedPassword123!4"
+            }
           }
         }
       ]

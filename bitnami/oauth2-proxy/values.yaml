@@ -242,7 +242,7 @@ ingress:
 image:
   registry: docker.io
   repository: bitnami/oauth2-proxy
-  tag: 7.3.0-debian-11-r23
+  tag: 7.3.0-debian-11-r32
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -353,6 +353,14 @@ configuration:
 ##
 containerPort: 4180
 
+## @param extraContainerPorts Array of additional container ports for the OAuth2 Proxy container
+## e.g:
+## extraContainerPorts:
+##   - name: metrics
+##     containerPort: 9100
+##
+extraContainerPorts: []
+
 ## @param replicaCount Number of OAuth2 Proxy replicas to deploy
 ##
 replicaCount: 1
@@ -435,7 +443,7 @@ resources:
 pdb:
   create: false
   minAvailable: 1
-  maxUnavailable: 1
+  maxUnavailable: ""
 
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod

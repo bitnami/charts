@@ -106,6 +106,9 @@ data:
     {{- else }}
     export EXTERNAL_ACCESS_PORT=$(echo '{{ .Values.externalAccess.service.nodePorts }}' | tr -d '[]' | cut -d ' ' -f "$(($ID + 1))")
     {{- end }}
+    {{- else }}
+        export EXTERNAL_ACCESS_HOST={{ .Values.externalAccess.service.domain }}
+        export EXTERNAL_ACCESS_PORT="$((ID + {{ .Values.externalAccess.service.ports.external }}))"
     {{- end }}
 
     # Configure Kafka advertised listeners
