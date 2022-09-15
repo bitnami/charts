@@ -91,6 +91,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `loki.image.pullPolicy`               | Grafana Loki image pull policy                                                                               | `IfNotPresent`          |
 | `loki.image.pullSecrets`              | Grafana Loki image pull secrets                                                                              | `[]`                    |
 | `loki.configuration`                  | Loki components configuration                                                                                | `""`                    |
+| `loki.overrideConfiguration`          | Loki components configuration override. Values defined here takes precedence over loki.configuration         | `{}`                    |
 | `loki.existingConfigmap`              | Name of a ConfigMap with the Loki configuration                                                              | `""`                    |
 | `loki.dataDir`                        | path to the Loki data directory                                                                              | `/bitnami/grafana-loki` |
 | `loki.containerPorts.http`            | Loki components web container port                                                                           | `3100`                  |
