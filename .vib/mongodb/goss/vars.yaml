@@ -10,6 +10,8 @@ auth:
 service:
   ports:
     mongodb: 80
+persistence:
+  mountPath: /bitnami/mongodb
 containerPorts:
   mongodb: 27018
 podSecurityContext:
