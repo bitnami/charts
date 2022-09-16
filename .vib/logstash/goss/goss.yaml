@@ -1,5 +1,5 @@
 http:
-  http://localhost:{{ .Vars.service.ports.http }}:
+  http://logstash:{{ .Vars.service.ports.http }}:
     status: 200
 file:
   {{ .Vars.persistence.mountPath }}:
