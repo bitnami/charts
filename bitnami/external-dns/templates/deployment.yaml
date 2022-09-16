@@ -290,6 +290,28 @@ spec:
             {{- end }}
           {{- end }}
           env:
+            {{- if eq .Values.provider "akamai" }}
+            # Akamai environment variables
+            {{- if .Values.akamai.host }}
+            - name: EXTERNAL_DNS_AKAMAI_SERVICECONSUMERDOMAIN
+              value: {{ .Values.akamai.host }}
+            {{- end }}
+            {{- if .Values.akamai.accessToken }}
+            - name: EXTERNAL_DNS_AKAMAI_ACCESS_TOKEN
+              value: {{ .Values.akamai.accessToken }}
+            {{- end }}
+            {{- if .Values.akamai.clientToken }}
+            - name: EXTERNAL_DNS_AKAMAI_CLIENT_TOKEN
+              value: {{ .Values.akamai.clientToken }}
+            {{- end }}
+            {{- if or (.Values.akamai.clientSecret) (.Values.akamai.secretName) }}
+            - name: EXTERNAL_DNS_AKAMAI_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: akamai_client_secret
+            {{- end }}
+            {{- end }}
             {{- if or (eq .Values.provider "aws") (eq .Values.provider "aws-sd") }}
             # AWS environment variables
             {{- if .Values.aws.region }}

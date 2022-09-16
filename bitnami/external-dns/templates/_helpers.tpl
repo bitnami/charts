@@ -114,7 +114,9 @@ imagePullSecrets:
 Return true if a secret object should be created
 */}}
 {{- define "external-dns.createSecret" -}}
-{{- if and (eq .Values.provider "alibabacloud") .Values.alibabacloud.accessKeyId .Values.alibabacloud.accessKeySecret (not .Values.alibabacloud.secretName) }}
+{{- if and (eq .Values.provider "akamai") .Values.akamai.clientSecret (not .Values.akamai.secretName) -}}
+    {{- true -}}
+{{- else if and (eq .Values.provider "alibabacloud") .Values.alibabacloud.accessKeyId .Values.alibabacloud.accessKeySecret (not .Values.alibabacloud.secretName) }}
     {{- true -}}
 {{- else if and (eq .Values.provider "aws") .Values.aws.credentials.secretKey .Values.aws.credentials.accessKey (not .Values.aws.credentials.secretName) }}
     {{- true -}}
@@ -170,7 +172,9 @@ Return true if a configmap object should be created
 Return the name of the Secret used to store the passwords
 */}}
 {{- define "external-dns.secretName" -}}
-{{- if and (eq .Values.provider "alibabacloud") .Values.alibabacloud.secretName }}
+{{- if and (eq .Values.provider "akamai") .Values.akamai.secretName }}
+{{- .Values.akamai.secretName }}
+{{- else if and (eq .Values.provider "alibabacloud") .Values.alibabacloud.secretName }}
 {{- .Values.alibabacloud.secretName }}
 {{- else if and (eq .Values.provider "aws") .Values.aws.credentials.secretName }}
 {{- .Values.aws.credentials.secretName }}
@@ -276,6 +280,10 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := list -}}
 {{- $messages := append $messages (include "external-dns.validateValues.provider" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.sources" .) -}}
+{{- $messages := append $messages (include "external-dns.validateValues.akamai.host" .) -}}
+{{- $messages := append $messages (include "external-dns.validateValues.akamai.accessToken" .) -}}
+{{- $messages := append $messages (include "external-dns.validateValues.akamai.clientToken" .) -}}
+{{- $messages := append $messages (include "external-dns.validateValues.akamai.clientSecret" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.aws" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.infoblox.gridHost" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.infoblox.wapiPassword" .) -}}
@@ -339,6 +347,54 @@ Validate values of External DNS:
 external-dns: sources
     You must provide sources to be observed for new DNS entries by ExternalDNS
     Please set the sources parameter (--set sources="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of External DNS:
+- must provide the Akamai host when provider is "akamai"
+*/}}
+{{- define "external-dns.validateValues.akamai.host" -}}
+{{- if and (eq .Values.provider "akamai") (not .Values.akamai.host) -}}
+external-dns: akamai.host
+    You must provide the Akamai host when provider="akamai".
+    Please set the host parameter (--set akamai.host="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of External DNS:
+- must provide the Akamai access token when provider is "akamai"
+*/}}
+{{- define "external-dns.validateValues.akamai.accessToken" -}}
+{{- if and (eq .Values.provider "akamai") (not .Values.akamai.accessToken) -}}
+external-dns: akamai.accessToken
+    You must provide the Akamai access token when provider="akamai".
+    Please set the accessToken parameter (--set akamai.accessToken="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of External DNS:
+- must provide the Akamai client token when provider is "akamai"
+*/}}
+{{- define "external-dns.validateValues.akamai.clientToken" -}}
+{{- if and (eq .Values.provider "akamai") (not .Values.akamai.clientToken) -}}
+external-dns: akamai.clientToken
+    You must provide the Akamai client token when provider="akamai".
+    Please set the clientToken parameter (--set akamai.clientToken="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of External DNS:
+- must provide the Akamai client secret when provider is "akamai"
+*/}}
+{{- define "external-dns.validateValues.akamai.clientSecret" -}}
+{{- if and (eq .Values.provider "akamai") (not .Values.akamai.clientSecret) (not .Values.akamai.secretName) -}}
+external-dns: akamai.clientSecret
+    You must provide the Akamai client secret when provider="akamai".
+    Please set the clientSecret parameter (--set akamai.clientSecret="xxxx")
 {{- end -}}
 {{- end -}}
 
