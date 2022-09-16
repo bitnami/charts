@@ -5,6 +5,7 @@ server:
     runAsUser: 1002
   configuration:
     accountName: test_default
+skipper:
   service:
     port: 80
 serviceAccount:

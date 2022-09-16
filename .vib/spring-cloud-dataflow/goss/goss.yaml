@@ -1,3 +1,6 @@
+http:
+  http://spring-cloud-dataflow-skipper:{{ .Vars.skipper.service.port }}:
+    status: 200
 file:
   /opt/bitnami/spring-cloud-dataflow/conf/application.yml:
     exists: true
