@@ -1,0 +1,22 @@
+auth:
+  rootUser: bitnamiRoot
+  rootPassword: "ComplicatedPassword123!4"
+  usernames:
+    - kayle
+  passwords:
+    - R1sing0fSun2022
+  databases:
+    - awesome_db
+service:
+  ports:
+    mongodb: 80
+persistence:
+  mountPath: /bitnami/mongodb
+containerPorts:
+  mongodb: 27018
+podSecurityContext:
+  fsGroup: 1002
+containerSecurityContext:
+  runAsUser: 1002
+serviceAccount:
+  automountServiceAccountToken: true
