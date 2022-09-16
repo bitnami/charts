@@ -19,7 +19,6 @@ command:
   admin-command:
     exec: mongosh {{ $conn_opts }} --eval "db.adminCommand({listCollections:1})"
     exit-status: 0
-    timeout: 5000
   {{- $testCollection := "sapphire" }}
   {{- $conn_opts := printf "--quiet --username %s --password '%s' --host mongodb --port %d" (index .Vars.auth.usernames 0) (index .Vars.auth.passwords 0) .Vars.service.ports.mongodb }}
   create-collection:
@@ -27,7 +26,6 @@ command:
     exit-status: 0
     stdout:
       - {{ $testCollection }}
-    timeout: 5000
   check-user-info:
     exec: id
     exit-status: 0
