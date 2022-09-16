@@ -15,4 +15,4 @@ postgresql:
     database: test_db_database
   service:
     ports:
-      postgresql: 5433
+      postgresql: 5432
