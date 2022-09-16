@@ -3,7 +3,7 @@ import { random } from '../support/utils';
 
 it('should add a new page', () => {
   cy.login();
-  cy.visit('/oc-admin');
+  cy.visit('/oc-admin/index.php?page=pages&action=add');
   cy.fixture('pages').then((pages) => {
     cy.get('[id*="title"]').type(`${pages.newPage.title} ${random}`);
     cy.get('[id*="internal_name"]').type(`${pages.newPage.internalName}${random}`);
