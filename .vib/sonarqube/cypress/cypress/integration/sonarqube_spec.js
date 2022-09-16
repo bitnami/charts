@@ -1,35 +1,34 @@
 /// <reference types="cypress" />
 import { random } from '../support/utils';
 
-it('allows adding a user', () => {
-  cy.login();
-  cy.visit('/admin/users');
-  cy.fixture('users').then((users) => {
-    cy.contains('Create User').click();
-    cy.get('#create-user-login').type(`${users.newUser.loginName}${random}`);
-    cy.get('#create-user-name').type(`${users.newUser.fullName} ${random}`);
-    cy.get('#create-user-password').type(users.newUser.password);
-    cy.get('button[type="submit"]').contains('Create').click();
-    cy.visit('/admin/users');
-    cy.contains(`${users.newUser.fullName} ${random}`);
-  });
-});
-
-it('allows adding a project', () => {
+it('allows adding a project and a quality gate', () => {
   cy.login();
   cy.visit('/admin/projects_management');
+
+  // Step 1: Create a project
   cy.fixture('projects').then((projects) => {
     cy.contains('Create Project').click();
     cy.get('#create-project-name').type(`${projects.newProject.name} ${random}`);
     cy.get('#create-project-key').type(`${projects.newProject.key}${random}`);
     cy.get('button[type="submit"]').contains('Create').click();
-    cy.visit('/admin/projects_management');
-    cy.contains(`${projects.newProject.name} ${random}`);
-  });
-});
 
-it('checks the search engine status', () => {
-  cy.login();
-  cy.visit('/admin/system?expand=Search+Engine');
-  cy.get('table[id="Search State"]').contains('Status is up');
+    // Step 2: Create a Quality gate
+    cy.visit('quality_gates');
+    cy.fixture('quality-gates').then((qualityGates) => {
+      cy.contains('Create').click();
+      cy.get('#quality-gate-form-name').type(`${qualityGates.newQualityGate.name}${random}`);
+      cy.get('button[type="submit"]').contains('Save').click();
+      cy.contains('Add Condition').click();
+      cy.get('#condition-metric').click();
+      cy.contains('Lines').click({force: true});
+      cy.get('#condition-threshold').type(qualityGates.newQualityGate.threshold);
+      cy.get('[type="submit"]').click();
+
+      // Step 3: Add the project to the quality gate
+      cy.contains('Without').click();
+      cy.contains(`${projects.newProject.name} ${random}`).click();
+      cy.contains('With').click();
+      cy.contains(`${projects.newProject.name} ${random}`);
+    });
+  });
 });

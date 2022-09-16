@@ -47,7 +47,7 @@
             "endpoint": "lb-sonarqube-http",
             "app_protocol": "HTTP",
             "env": {
-              "email": "user@example.com",
+              "user": "test_user",
               "password": "ComplicatedPassword123!4"
             }
           }
