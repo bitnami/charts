@@ -1,4 +1,4 @@
 {
-  "baseUrl": "http://35.231.238.191",
+  "baseUrl": "http://localhost",
   "responseTimeout": 30000
 }
