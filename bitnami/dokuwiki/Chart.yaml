@@ -1,7 +1,7 @@
 annotations:
   category: Wiki
 apiVersion: v2
-appVersion: 2022.7.31
+appVersion: 20220731.1.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -26,4 +26,4 @@ name: dokuwiki
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/dokuwiki
   - http://www.dokuwiki.org/
-version: 13.1.3
+version: 13.1.4
