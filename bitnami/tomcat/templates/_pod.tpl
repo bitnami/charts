@@ -191,6 +191,6 @@ volumes:
   {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 2 }}
   {{- end }}
 {{- if .Values.extraPodSpec }}
-{{- include "common.tplvalues.render" (dict "value" .Values.extraPodSpec "context" $) }}
+{{ include "common.tplvalues.render" (dict "value" .Values.extraPodSpec "context" $) }}
 {{- end }}
 {{- end -}}
