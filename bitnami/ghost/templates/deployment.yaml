@@ -154,7 +154,7 @@ spec:
               value: {{ .Values.ghostBlogTitle | quote }}
             - name: GHOST_ENABLE_HTTPS
               value: {{ ternary "yes" "no" .Values.ghostEnableHttps | quote }}
-            {{- if eq ( toString ( .Values.service.type )) "LoadBalancer" }}
+            {{- if eq (toString .Values.service.type) "LoadBalancer" }}
             - name: GHOST_EXTERNAL_HTTP_PORT_NUMBER
               value: {{ coalesce .Values.service.ports.http .Values.service.port| quote }}
             - name: GHOST_EXTERNAL_HTTPS_PORT_NUMBER
