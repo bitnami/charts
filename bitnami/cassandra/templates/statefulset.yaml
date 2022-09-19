@@ -490,8 +490,11 @@ spec:
             failureThreshold: {{ .Values.metrics.readinessProbe.failureThreshold }}
             successThreshold: {{ .Values.metrics.readinessProbe.successThreshold }}
           {{- end }}
-          {{- if .Values.metrics.extraVolumeMounts }}
           volumeMounts:
+            - name: metrics-conf
+              mountPath: /opt/bitnami/cassandra-exporter/config.yml
+              subPath: config.yml
+          {{- if .Values.metrics.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
         {{- end }}
@@ -499,6 +502,9 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: metrics-conf
+          configMap:
+            name: {{ include "cassandra.metricsConfConfigMap" . }}
         {{- if (include "cassandra.tlsEncryption" . ) }}
         - name: certs
           secret:
