@@ -1,0 +1,34 @@
+secrets:
+  localUser: "bitnamiUser"
+  localPassword: "ComplicatedPassword123!4"
+web:
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 1002
+  serviceAccount:
+    automountServiceAccountToken: true
+service:
+  web:
+    ports:
+      http: 80
+      https: 444
+postgresql:
+  auth:
+    username: bn_test_concourse
+    password: "bitnami_test_concourse_p4ss"
+    database: bitnami_test_concourse
+examplePipeline: |-
+  jobs:
+  - name: job
+    public: true
+    plan:
+    - task: simple-task
+      config:
+        platform: linux
+        image_resource:
+          type: registry-image
+          source: { repository: bitnami/bitnami-shell }
+        run:
+          path: echo
+          args: ["Hello world!"]

@@ -1,0 +1,15 @@
+secrets:
+  localUser: "bitnamiUser"
+  localPassword: "ComplicatedPassword123!4"
+worker:
+  replicaCount: 2
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 0
+  serviceAccount:
+    automountServiceAccountToken: true
+service:
+  web:
+    ports:
+      http: 80
