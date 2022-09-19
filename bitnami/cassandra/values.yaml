@@ -770,6 +770,9 @@ metrics:
     http: 8080
     jmx: 5555
 
+  ## @param metrics.configuration [string] Configure Cassandra-exporter with a custom config.yml file
+  ## ref: https://github.com/criteo/cassandra_exporter/blob/master/config.yml
+  ##
   configuration: |
     host: localhost:{{ .Values.metrics.containerPorts.jmx }}
     ssl: False
