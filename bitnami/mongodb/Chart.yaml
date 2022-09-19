@@ -26,4 +26,4 @@ name: mongodb
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/mongodb
   - https://mongodb.org
-version: 13.1.4
+version: 13.1.5
