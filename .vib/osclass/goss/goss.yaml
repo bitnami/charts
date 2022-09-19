@@ -17,6 +17,8 @@ file:
     contains:
     - /WEB_PATH.*{{ .Vars.containerPorts.http }}/
     - /DB_NAME.*{{ .Vars.mariadb.auth.database }}/
+    - /DB_USER.*{{ .Vars.mariadb.auth.username }}/
+    - /DB_PASSWORD.*{{ .Vars.mariadb.auth.password }}/
   /etc/hosts:
     exists: true
     filetype: file

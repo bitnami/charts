@@ -14,3 +14,5 @@ hostAliases:
 mariadb:
   auth:
     database: test_osclass_database
+    username: test_osclass_username
+    password: test_osclass_password
