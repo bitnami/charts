@@ -210,7 +210,9 @@ spec:
             - name: tcp-redis-bus
               containerPort: {{ .Values.redis.containerPorts.bus }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.redis.livenessProbe.enabled }}
+          {{- if .Values.redis.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.redis.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.redis.livenessProbe.enabled }}
           livenessProbe:
             initialDelaySeconds: {{ .Values.redis.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.redis.livenessProbe.periodSeconds }}
@@ -223,10 +225,10 @@ spec:
                 - sh
                 - -c
                 - /scripts/ping_liveness_local.sh {{ .Values.redis.livenessProbe.timeoutSeconds }}
-          {{- else if .Values.redis.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.redis.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.redis.readinessProbe.enabled }}
+          {{- if .Values.redis.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.redis.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.redis.readinessProbe.enabled }}
           readinessProbe:
             initialDelaySeconds: {{ .Values.redis.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.redis.readinessProbe.periodSeconds }}
@@ -239,10 +241,10 @@ spec:
                 - sh
                 - -c
                 - /scripts/ping_readiness_local.sh {{ .Values.redis.readinessProbe.timeoutSeconds }}
-          {{- else if .Values.redis.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.redis.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.redis.startupProbe.enabled }}
+          {{- if .Values.redis.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.redis.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.redis.startupProbe.enabled }}
           startupProbe:
             tcpSocket:
               port: tcp-redis
@@ -251,8 +253,6 @@ spec:
             timeoutSeconds: {{ .Values.redis.startupProbe.timeoutSeconds }}
             successThreshold: {{ .Values.redis.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.redis.startupProbe.failureThreshold }}
-          {{- else if .Values.redis.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.redis.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.redis.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.redis.lifecycleHooks "context" $) | nindent 12 }}
