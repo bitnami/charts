@@ -222,7 +222,9 @@ spec:
               containerPort: {{ .Values.influxdb.containerPorts.rpc }}
               protocol: TCP
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.influxdb.startupProbe.enabled }}
+          {{- if .Values.influxdb.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.influxdb.startupProbe.enabled }}
           {{- $startupTimeout := sub (int .Values.influxdb.startupProbe.timeoutSeconds) 1 }}
           startupProbe: {{- omit .Values.influxdb.startupProbe "enabled" | toYaml | nindent 12 }}
             exec:
@@ -240,10 +242,10 @@ spec:
                   {{- end }}
 
                   timeout {{ $startupTimeout }}s influx --host http://$POD_IP:{{ .Values.influxdb.containerPorts.http }} ping
-          {{- else if .Values.influxdb.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.influxdb.livenessProbe.enabled }}
+          {{- if .Values.influxdb.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.influxdb.livenessProbe.enabled }}
           {{- $livenessTimeout := sub (int .Values.influxdb.livenessProbe.timeoutSeconds) 1 }}
           livenessProbe: {{- omit .Values.influxdb.livenessProbe "enabled" | toYaml | nindent 12 }}
             exec:
@@ -261,10 +263,10 @@ spec:
                   {{- end }}
 
                   timeout {{ $livenessTimeout }}s influx ping --host http://$POD_IP:{{ .Values.influxdb.containerPorts.http }}
-          {{- else if .Values.influxdb.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.influxdb.readinessProbe.enabled }}
+          {{- if .Values.influxdb.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.influxdb.readinessProbe.enabled }}
           {{- $readinessTimeout := sub (int .Values.influxdb.readinessProbe.timeoutSeconds) 1 }}
           readinessProbe: {{- omit .Values.influxdb.readinessProbe "enabled" | toYaml | nindent 12 }}
             exec:
@@ -282,8 +284,6 @@ spec:
                   {{- end }}
 
                   timeout {{ $readinessTimeout }}s influx ping --host http://$POD_IP:{{ .Values.influxdb.containerPorts.http }}
-          {{- else if .Values.influxdb.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.influxdb.resources }}
