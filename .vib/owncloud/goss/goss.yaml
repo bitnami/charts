@@ -1,18 +1,15 @@
+http:
+  https://owncloud:{{ .Vars.service.ports.https }}:
+    status: 400
+    allow-insecure: true
 command:
-  user-id-test:
-    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
+  check-user-info:
+    exec: id
     exit-status: 0
-    stdout: []
-    stderr: []
+    stdout:
+      - uid={{ .Vars.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
 file:
-  /opt/bitnami/apache/conf/extra/httpd-manual.conf:
-    mode: "0664"
-    filetype: file
-    exists: true
-  /opt/bitnami/mysql:
-    mode: "0755"
-    filetype: directory
-    exists: true
   /bitnami/owncloud/data:
     mode: "0770"
     filetype: directory
@@ -22,5 +19,17 @@ file:
     filetype: symlink
     exists: true
     contains:
-      - {{ printf "/dbuser.*%s/" .Env.OWNCLOUD_DATABASE_USER }}
-      - {{ printf "/dbpassword.*%s/" .Env.OWNCLOUD_DATABASE_PASSWORD }}
+      - /dbname.*{{ .Vars.mariadb.auth.database }}/
+      - /dbuser.*{{ .Vars.mariadb.auth.username }}/
+      - /dbpassword.*{{ .Vars.mariadb.auth.password }}/
+      - /dbhost.*owncloud-mariadb:{{ .Vars.externalDatabase.port }}/
+  /etc/hosts:
+    exists: true
+    filetype: file
+    contains:
+    {{ range .Vars.hostAliases }}
+    {{ $ip := .ip }}
+    {{ range $host := .hostnames }}
+      - /{{ $ip }}.*{{ $host }}/
+    {{ end }}
+    {{ end }}
