@@ -174,28 +174,28 @@ spec:
             - name: grpc-http
               containerPort: {{ .Values.kubeappsapis.containerPorts.http }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.kubeappsapis.livenessProbe.enabled }}
+          {{- if .Values.kubeappsapis.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.kubeappsapis.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.kubeappsapis.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /core/plugins/v1alpha1/configured-plugins
               port: grpc-http
-          {{- else if .Values.kubeappsapis.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.kubeappsapis.readinessProbe.enabled }}
+          {{- if .Values.kubeappsapis.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.kubeappsapis.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.kubeappsapis.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /core/plugins/v1alpha1/configured-plugins
               port: grpc-http
-          {{- else if .Values.kubeappsapis.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.kubeappsapis.startupProbe.enabled }}
+          {{- if .Values.kubeappsapis.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.kubeappsapis.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.kubeappsapis.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: grpc-http
-          {{- else if .Values.kubeappsapis.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.kubeappsapis.resources }}
