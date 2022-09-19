@@ -22,4 +22,4 @@ name: aspnet-core
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/aspnet-core
   - https://dotnet.microsoft.com/apps/aspnet
-version: 3.5.3
+version: 3.5.4
