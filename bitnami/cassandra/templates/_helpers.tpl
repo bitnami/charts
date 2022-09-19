@@ -257,5 +257,5 @@ otherwise it generates a new one.
 Get the metrics config map name.
 */}}
 {{- define "cassandra.metricsConfConfigMap" -}}
-    {{- printf "%s-httpd-conf" (include "common.names.fullname" . ) | trunc 63 | trimSuffix "-" -}}
+    {{- printf "%s-metrics-conf" (include "common.names.fullname" . ) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
