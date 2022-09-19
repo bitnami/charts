@@ -26,4 +26,4 @@ name: mongodb-sharded
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/mongodb-sharded
   - https://mongodb.org
-version: 6.1.2
+version: 6.1.3
