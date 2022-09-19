@@ -25,4 +25,4 @@ name: elasticsearch
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/elasticsearch
   - https://www.elastic.co/products/elasticsearch
-version: 19.4.0
+version: 19.4.1
