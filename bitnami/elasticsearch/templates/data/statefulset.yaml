@@ -28,7 +28,7 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: data
-  serviceName: {{ printf "%s-hl" (include "elasticsearch.data.fullname" .) | trunc 63 | trimSuffix "-" }}
+  serviceName: {{ include "elasticsearch.data.servicename" . }}
   {{- if .Values.data.updateStrategy }}
   updateStrategy: {{- toYaml .Values.data.updateStrategy | nindent 4 }}
   {{- end }}
@@ -178,8 +178,8 @@ spec:
             - name: ELASTICSEARCH_MINIMUM_MASTER_NODES
               value: {{ add (div (ternary .Values.master.autoscaling.minReplicas .Values.master.replicaCount .Values.master.autoscaling.enabled) 2) 1 | quote }}
             - name: ELASTICSEARCH_ADVERTISED_HOSTNAME
-              value: "$(MY_POD_NAME).{{ printf "%s-hl" (include "elasticsearch.data.fullname" .) | trunc 63 | trimSuffix "-" }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
-              {{- if .Values.plugins }}
+              value: "$(MY_POD_NAME).{{ (include "elasticsearch.data.servicename" .)}}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"                 
+            {{- if .Values.plugins }}
             - name: ELASTICSEARCH_PLUGINS
               value: {{ .Values.plugins | quote }}
             {{- end }}

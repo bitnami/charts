@@ -69,7 +69,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 3.2.1-debian-11-r9
+  tag: 3.2.1-debian-11-r16
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -514,6 +514,7 @@ podSecurityContext:
 ## @param containerSecurityContext.enabled Enable Kafka containers' Security Context
 ## @param containerSecurityContext.runAsUser Set Kafka containers' Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set Kafka containers' Security Context runAsNonRoot
+## @param containerSecurityContext.allowPrivilegeEscalation Force the child process to be run as nonprivilege
 ## e.g:
 ##   containerSecurityContext:
 ##     enabled: true
@@ -525,6 +526,7 @@ containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
+  allowPrivilegeEscalation: false
 ## @param hostAliases Kafka pods host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -753,7 +755,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.24.4-debian-11-r3
+      tag: 1.25.0-debian-11-r4
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -779,7 +781,7 @@ externalAccess:
   ## Note: A new service per broker will be created
   ##
   service:
-    ## @param externalAccess.service.type Kubernetes Service type for external access. It can be NodePort or LoadBalancer
+    ## @param externalAccess.service.type Kubernetes Service type for external access. It can be NodePort, LoadBalancer or ClusterIP
     ##
     type: LoadBalancer
     ## @param externalAccess.service.ports.external Kafka port used for external access when service type is LoadBalancer
@@ -827,8 +829,9 @@ externalAccess:
     ## @param externalAccess.service.usePodIPs using the MY_POD_IP address for external access.
     ##
     usePodIPs: false
-    ## @param externalAccess.service.domain Domain or external ip used to configure Kafka external listener when service type is NodePort
-    ## If not specified, the container will try to get the kubernetes node external IP
+    ## @param externalAccess.service.domain Domain or external ip used to configure Kafka external listener when service type is NodePort or ClusterIP
+    ## NodePort: If not specified, the container will try to get the kubernetes node external IP
+    ## ClusterIP: Must be specified, ingress IP or domain where tcp for external ports is configured
     ##
     domain: ""
     ## @param externalAccess.service.labels Service labels for external access
@@ -985,7 +988,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r30
+    tag: 11-debian-11-r35
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1065,7 +1068,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kafka-exporter
-      tag: 1.6.0-debian-11-r1
+      tag: 1.6.0-debian-11-r8
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1301,7 +1304,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.17.0-debian-11-r30
+      tag: 0.17.1-debian-11-r1
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1438,6 +1441,20 @@ metrics:
     ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
     ##
     jobLabel: ""
+
+  prometheusRule:
+    ## @param metrics.prometheusRule.enabled if `true`, creates a Prometheus Operator PrometheusRule (requires `metrics.kafka.enabled` or `metrics.jmx.enabled` to be `true`)
+    ##
+    enabled: false
+    ## @param metrics.prometheusRule.namespace Namespace in which Prometheus is running
+    ##
+    namespace: ""
+    ## @param metrics.prometheusRule.labels Additional labels that can be used so PrometheusRule will be discovered by Prometheus
+    ##
+    labels: {}
+    ## @param metrics.prometheusRule.groups Prometheus Rule Groups for Kafka
+    ##
+    groups: []
 
 ## @section Kafka provisioning parameters
 

@@ -1,7 +1,7 @@
 annotations:
   category: E-Commerce
 apiVersion: v2
-appVersion: 3.0.3-8
+appVersion: 4.0.1-1
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
@@ -29,4 +29,4 @@ name: opencart
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/opencart
   - https://opencart.com/
-version: 12.4.1
+version: 13.0.0

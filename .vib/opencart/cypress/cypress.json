@@ -1,7 +1,7 @@
 {
   "env": {
     "username": "opencartUser",
-    "password": "ComplicatedPassword123!4"
+    "password": "Password123!4"
   },
   "hosts": {
     "vmware-opencart.my": "{{ TARGET_IP }}"
