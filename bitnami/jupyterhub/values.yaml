@@ -1412,6 +1412,9 @@ singleuser:
   ## @param singleuser.notebookDir Notebook directory (it will be the same as the PVC volume mount)
   ##
   notebookDir: /opt/bitnami/jupyterhub-singleuser
+  ## @param singleuser.allowPrivilegeEscalation Controls whether a process can gain more privileges than its parent process
+  ##
+  allowPrivilegeEscalation: false
   ## Command for running the container (set to default if not set). Use array form
   ## @param singleuser.command Override Single User default command
   ##

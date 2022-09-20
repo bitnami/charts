@@ -58,8 +58,9 @@ data:
 
     # Connect to a proxy running in a different pod. Note that *_SERVICE_*
     # environment variables are set by Kubernetes for Services
+    # Adapted by Bitnami to allow other service names
     c.ConfigurableHTTPProxy.api_url = (
-        f'http://{get_name("proxy-api")}:{get_name_env("proxy-api", "_SERVICE_PORT")}'
+        f"http://{{ template "common.names.fullname" . }}-proxy-api:{os.environ['PROXY_API_SERVICE_PORT']}"
     )
     c.ConfigurableHTTPProxy.should_start = False
 
@@ -112,14 +113,14 @@ data:
 
     # hub_bind_url configures what the JupyterHub process within the hub pod's
     # container should listen to.
-    hub_container_port = 8081
+    hub_container_port = {{ coalesce .Values.hub.containerPorts.http .Values.hub.containerPort }}
     c.JupyterHub.hub_bind_url = f"http://:{hub_container_port}"
 
     # hub_connect_url is the URL for connecting to the hub for use by external
     # JupyterHub services such as the proxy. Note that *_SERVICE_* environment
     # variables are set by Kubernetes for Services.
     c.JupyterHub.hub_connect_url = (
-        f'http://{get_name("hub")}:{get_name_env("hub", "_SERVICE_PORT")}'
+        f"http://{{ template "common.names.fullname" . }}-hub:{os.environ['HUB_SERVICE_PORT']}"
     )
 
     # implement common labels
@@ -446,13 +447,11 @@ data:
             name="block-cloud-metadata",
             image=f"{network_tools_image_name}:{network_tools_image_tag}",
             command=[
-                "iptables",
-                "-A",
-                "OUTPUT",
-                "-d",
-                cloud_metadata.get("ip", "169.254.169.254"),
-                "-j",
-                "DROP",
+                "/bin/bash"
+            ],
+            args=[
+                "-ec",
+                "install_packages iptables && iptables -A OUTPUT -d " + cloud_metadata.get("ip", "169.254.169.254") + " -j DROP"
             ],
             security_context=client.V1SecurityContext(
                 privileged=True,
