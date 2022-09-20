@@ -11,9 +11,11 @@ command:
   mongos-check:
     exec: mongosh --quiet {{ $authOptions }} {{ $localEndpoint }} --eval "db.createCollection('{{ $collection }}')"{{ range $e, $i := until $mongos }} && mongosh --quiet {{ $authOptions }} mongodb-sharded-{{ $i }}:{{ $svcPort }} --eval "db.getCollectionNames()" | grep {{ $collection }}{{ end }}
     exit-status: 0
+    timeout: 20000
   sharding-status:
     exec: if [ "$(mongosh --quiet {{ $authOptions }} {{ $localEndpoint }} --eval 'sh.status()' | grep 'state.*1' | wc -l)" -ne {{ $shards }} ]; then exit 1; fi
     exit-status: 0
+    timeout: 20000
   shard-data-nodes:
     exec: mongosh --quiet {{ $authOptions }} {{ $localEndpoint }} --eval "sh.status()"
     exit-status: 0
@@ -23,6 +25,7 @@ command:
       - /host.*mongodb-sharded-shard{{ $shard }}-data-{{ $shardNode }}/
     {{ end }}
     {{ end }}
+    timeout: 20000
   check-user-info:
     exec: id
     exit-status: 0

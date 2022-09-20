@@ -36,6 +36,18 @@
           "params": {
             "endpoint": "lb-mongodb-sharded-mongodb"
           }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/mongodb-sharded/goss"
+            },
+            "remote": {
+              "workload": "sts-mongodb-sharded-mongos"
+            },
+            "vars_file": "vars.yaml"
+          }
         }
       ]
     }
