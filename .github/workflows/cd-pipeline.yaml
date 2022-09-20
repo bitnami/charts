@@ -36,6 +36,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/memcached/**'
       - 'bitnami/minio/**'
       - 'bitnami/mongodb/**'
+      - 'bitnami/mongodb-sharded/**'
       - 'bitnami/moodle/**'
       - 'bitnami/mysql/**'
       - 'bitnami/nats/**'
