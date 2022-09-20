@@ -28,6 +28,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/kafka/**'
       - 'bitnami/keycloak/**'
       - 'bitnami/kibana/**'
+      - 'bitnami/logstash/**'
       - 'bitnami/magento/**'
       - 'bitnami/mariadb-galera/**'
       - 'bitnami/mariadb/**'
