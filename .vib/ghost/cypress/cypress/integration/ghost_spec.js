@@ -24,7 +24,7 @@ it('allows to create and publish a new post', () => {
     cy.get('textarea[placeholder="Post title"]').type(
       `${$posts.newPost.title}-${random}`
     );
-    cy.get('div[contenteditable="true"]').type(`${$posts.newPost.content}-${random}`, {force: true});
+    cy.get('article div[contenteditable="true"]').type(`${$posts.newPost.content}-${random}`, {force: true});
   });
   // Publishing a post needs 3 steps
   // Step 1: Open drop-down menu
@@ -53,7 +53,7 @@ it('allows to create a new page', () => {
     cy.get('textarea[placeholder="Page title"]').type(
       `${$pages.newPage.title}-${random}`
     );
-    cy.get('div[contenteditable="true"]').type(`${$pages.newPage.content}-${random}`, {force: true});
+    cy.get('article div[contenteditable="true"]').type(`${$pages.newPage.content}-${random}`, {force: true});
   });
   // Publishing a page needs 3 steps
   // Step 1: Open drop down-menu
