@@ -138,6 +138,12 @@ forwarder:
     capabilities:
       drop:
         - ALL
+  ## @param forwarder.hostNetwork Enable use of host network
+  ##
+  hostNetwork: false
+  ## @param forwarder.dnsPolicy Pod-specific DNS policy
+  ##
+  dnsPolicy: ""
   ## @param forwarder.terminationGracePeriodSeconds Duration in seconds the pod needs to terminate gracefully
   ## https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
   ##

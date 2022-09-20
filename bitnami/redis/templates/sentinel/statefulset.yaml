@@ -202,8 +202,11 @@ spec:
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.replica.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.replica.startupProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
-              port: redis
+            exec:
+              command:
+                - sh
+                - -c
+                - /health/ping_liveness_local.sh {{ .Values.replica.livenessProbe.timeoutSeconds }}
           {{- else if .Values.replica.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.replica.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -372,8 +375,11 @@ spec:
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.sentinel.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.sentinel.startupProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
-              port: redis-sentinel
+            exec:
+              command:
+                - sh
+                - -c
+                - /health/ping_sentinel.sh {{ .Values.sentinel.livenessProbe.timeoutSeconds }}
           {{- else if .Values.sentinel.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.sentinel.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}

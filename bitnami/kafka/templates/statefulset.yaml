@@ -316,7 +316,7 @@ spec:
               value: {{ .Values.logFlushIntervalMs | quote }}
             - name: KAFKA_CFG_LOG_RETENTION_BYTES
               value: {{ .Values.logRetentionBytes | replace "_" "" | quote }}
-            - name: KAFKA_CFG_LOG_RETENTION_CHECK_INTERVALS_MS
+            - name: KAFKA_CFG_LOG_RETENTION_CHECK_INTERVAL_MS
               value: {{ .Values.logRetentionCheckIntervalMs | quote }}
             - name: KAFKA_CFG_LOG_RETENTION_HOURS
               value: {{ .Values.logRetentionHours | quote }}

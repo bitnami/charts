@@ -24,4 +24,4 @@ name: grafana-operator
 sources:
   - https://github.com/grafana-operator/grafana-operator
   - https://github.com/bitnami/containers/tree/main/bitnami/grafana-operator
-version: 2.7.2
+version: 2.7.3

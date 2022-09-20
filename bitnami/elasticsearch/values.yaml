@@ -465,6 +465,9 @@ master:
   ## @param master.fullnameOverride String to fully override elasticsearch.master.fullname
   ##
   fullnameOverride: ""
+  ## @param master.servicenameOverride String to fully override elasticsearch.master.servicename
+  ##
+  servicenameOverride: ""
   ## @param master.annotations [object] Annotations for the master statefulset
   ##
   annotations: {}
@@ -757,6 +760,9 @@ data:
   ## @param data.fullnameOverride String to fully override elasticsearch.data.fullname
   ##
   fullnameOverride: ""
+  ## @param data.servicenameOverride String to fully override elasticsearch.data.servicename
+  ##
+  servicenameOverride: ""
   ## @param data.annotations [object] Annotations for the data statefulset
   ##
   annotations: {}
@@ -1049,6 +1055,9 @@ coordinating:
   ## @param coordinating.fullnameOverride String to fully override elasticsearch.coordinating.fullname
   ##
   fullnameOverride: ""
+  ## @param coordinating.servicenameOverride String to fully override elasticsearch.coordinating.servicename
+  ##
+  servicenameOverride: ""
   ## @param coordinating.annotations [object] Annotations for the coordinating-only statefulset
   ##
   annotations: {}
@@ -1305,6 +1314,9 @@ ingest:
   ## @param ingest.fullnameOverride String to fully override elasticsearch.ingest.fullname
   ##
   fullnameOverride: ""
+  ## @param ingest.servicenameOverride String to fully override ingest.master.servicename
+  ##
+  servicenameOverride: ""
   ## @param ingest.annotations [object] Annotations for the ingest statefulset
   ##
   annotations: {}

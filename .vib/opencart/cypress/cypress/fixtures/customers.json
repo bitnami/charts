@@ -1,9 +1,9 @@
 {
-  "newGuest": {
+  "newCustomer": {
     "firstName": "Abigail",
     "lastName": "Somersat",
     "email": "abby@example.com",
-    "phone": "653111345",
+    "password": "P4ssW0rd",
     "address": "Summer Street 13",
     "city": "Midland",
     "postCode": "02003",

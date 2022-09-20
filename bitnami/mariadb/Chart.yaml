@@ -1,7 +1,7 @@
 annotations:
   category: Database
 apiVersion: v2
-appVersion: 10.6.9
+appVersion: 10.6.10
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -26,4 +26,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/mariadb
   - https://github.com/prometheus/mysqld_exporter
   - https://mariadb.org
-version: 11.3.0
+version: 11.3.1

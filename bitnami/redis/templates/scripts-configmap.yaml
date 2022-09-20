@@ -64,8 +64,8 @@ data:
 
     SENTINEL_SERVICE_PORT=$(get_port "{{ include "common.names.fullname" . }}" "TCP_SENTINEL")
     validate_quorum() {
-        if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
-            quorum_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} sentinel master {{ .Values.sentinel.masterSet }}"
+        if is_boolean_yes "$REDIS_TLS_ENABLED"; then
+            quorum_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel master {{ .Values.sentinel.masterSet }}"
         else
             quorum_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel master {{ .Values.sentinel.masterSet }}"
         fi
@@ -74,8 +74,8 @@ data:
     }
 
     trigger_manual_failover() {
-        if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
-            failover_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} sentinel failover {{ .Values.sentinel.masterSet }}"
+        if is_boolean_yes "$REDIS_TLS_ENABLED"; then
+            failover_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel failover {{ .Values.sentinel.masterSet }}"
         else
             failover_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel failover {{ .Values.sentinel.masterSet }}"
         fi
@@ -85,8 +85,8 @@ data:
     }
 
     get_sentinel_master_info() {
-        if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
-            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}timeout {{ .Values.sentinel.getMasterTimeout }} redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+        if is_boolean_yes "$REDIS_TLS_ENABLED"; then
+            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}timeout {{ .Values.sentinel.getMasterTimeout }} redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
         else
             sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}timeout {{ .Values.sentinel.getMasterTimeout }} redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
         fi
