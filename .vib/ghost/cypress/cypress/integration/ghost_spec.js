@@ -53,7 +53,10 @@ it('allows to create a new page', () => {
     cy.get('textarea[placeholder="Page title"]').type(
       `${$pages.newPage.title}-${random}`
     );
-    cy.get('article div[contenteditable="true"]').type(`${$pages.newPage.content}-${random}`, {force: true});
+    cy.get('div[contenteditable="true"]').type(`${$pages.newPage.content}-${random}`, {force: true});
+    // Ensure Page content is saved before publishing
+    cy.get('textarea[placeholder="Page title"]').click()
+    cy.contains('div[class=gh-editor-post-status]', 'Saved')
   });
   // Publishing a page needs 3 steps
   // Step 1: Open drop down-menu
