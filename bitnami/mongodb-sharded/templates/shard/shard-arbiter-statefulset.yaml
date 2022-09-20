@@ -204,26 +204,26 @@ spec:
           {{- if $.Values.shardsvr.arbiter.args }}
           args: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.args "context" $) | nindent 12 }}
           {{- end }}
-          {{- if $.Values.shardsvr.arbiter.livenessProbe.enabled }}
+          {{- if $.Values.shardsvr.arbiter.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if $.Values.shardsvr.arbiter.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit $.Values.shardsvr.arbiter.livenessProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: mongodb
-          {{- else if  $.Values.shardsvr.arbiter.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if  $.Values.shardsvr.arbiter.readinessProbe.enabled }}
+          {{- if $.Values.shardsvr.arbiter.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if $.Values.shardsvr.arbiter.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit $.Values.shardsvr.arbiter.readinessProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: mongodb
-          {{- else if  $.Values.shardsvr.arbiter.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if $.Values.shardsvr.arbiter.startupProbe.enabled }}
+          {{- if $.Values.shardsvr.arbiter.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if $.Values.shardsvr.arbiter.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit $.Values.shardsvr.arbiter.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: mongodb
-          {{- else if $.Values.shardsvr.arbiter.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if $.Values.shardsvr.arbiter.lifecycleHooks }}
@@ -298,28 +298,28 @@ spec:
             - name: metrics
               containerPort: {{ $.Values.metrics.containerPorts.metrics }}
           {{- if not $.Values.diagnosticMode.enabled }}
-          {{- if $.Values.metrics.livenessProbe.enabled }}
+          {{- if $.Values.metrics.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if $.Values.metrics.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit $.Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: metrics
-          {{- else if $.Values.metrics.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if $.Values.metrics.readinessProbe.enabled }}
+          {{- if $.Values.metrics.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if $.Values.metrics.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit $.Values.metrics.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: metrics
-          {{- else if $.Values.metrics.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if $.Values.metrics.startupProbe.enabled }}
+          {{- if $.Values.metrics.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.metrics.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if $.Values.metrics.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit $.Values.metrics.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: metrics
-          {{- else if $.Values.metrics.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.metrics.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           resources: {{ toYaml $.Values.metrics.resources | nindent 12 }}
