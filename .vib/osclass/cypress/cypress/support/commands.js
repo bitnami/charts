@@ -15,7 +15,7 @@ for (const command of ['click']) {
 Cypress.Commands.add(
   'login',
   (username = Cypress.env('username'), password = Cypress.env('password')) => {
-    cy.visit('oc-admin');
+    cy.visit('/oc-admin');
     cy.get('#user_login').type(username);
     cy.get('#user_pass').type(password);
     cy.contains('button', 'Log in').click();
