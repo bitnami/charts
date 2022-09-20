@@ -10,11 +10,11 @@ command:
   {{- $pipeline := printf "pipe_%s" (randAlphaNum 5 | toLower) }}
   {{- $port := .Vars.service.web.ports.http }}
   create-pipeline-trigger-job:
-    exec: fly -t {{ $target }} login -c http://concourse-web:{{ $port }} -u {{ $user }} -p '{{ $pwd }}' && (echo '{{ .Vars.examplePipeline | b64enc }}' | base64 -d) > /tmp/pipeline.yaml && fly -t {{ $target }} set-pipeline -p {{ $pipeline }} -c /tmp/pipeline.yaml -n && fly -t {{ $target }} unpause-pipeline -p {{ $pipeline }} && fly -t {{ $target }} trigger-job -j {{ $pipeline }}/job && sleep 30 && fly -t {{ $target }} jobs -p {{ $pipeline }}
+    exec: fly -t {{ $target }} login -c http://concourse-web:{{ $port }} -u {{ $user }} -p '{{ $pwd }}' && (echo '{{ .Vars.examplePipeline | b64enc }}' | base64 -d) > /tmp/pipeline.yaml && fly -t {{ $target }} set-pipeline -p {{ $pipeline }} -c /tmp/pipeline.yaml -n && fly -t {{ $target }} unpause-pipeline -p {{ $pipeline }} && fly -t {{ $target }} trigger-job -j {{ $pipeline }}/job && sleep 35 && fly -t {{ $target }} jobs -p {{ $pipeline }}
     exit-status: 0
     stdout:
       - "succeeded"
-    timeout: 35000
+    timeout: 40000
   check-db-config:
     exec: $(echo $CONCOURSE_POSTGRES_DATABASE | grep -q {{ .Vars.postgresql.auth.database }}) && $(echo $CONCOURSE_POSTGRES_USER | grep -q {{ .Vars.postgresql.auth.username }}) && $(echo $CONCOURSE_POSTGRES_PASSWORD | grep -q {{ .Vars.postgresql.auth.password }})
     exit-status: 0
