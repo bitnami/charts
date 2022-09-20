@@ -6,5 +6,5 @@
     "hosts": {
       "bitnami-ghost.my": "{{ TARGET_IP }}"
     },
-    "defaultCommandTimeout": 30000
+    "defaultCommandTimeout": 60000
 }
