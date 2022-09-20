@@ -252,3 +252,10 @@ otherwise it generates a new one.
 
     {{- printf "%s###%s###%s" $ca $crt $key -}}
 {{- end }}
+
+{{/*
+Get the metrics config map name.
+*/}}
+{{- define "cassandra.metricsConfConfigMap" -}}
+    {{- printf "%s-metrics-conf" (include "common.names.fullname" . ) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}

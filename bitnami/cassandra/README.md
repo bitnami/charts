@@ -274,6 +274,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.labels`              | Used to pass Labels that are required by the installed Prometheus Operator                                         | `{}`                         |
 | `metrics.containerPorts.http`                | HTTP Port on the Host and Container                                                                                | `8080`                       |
 | `metrics.containerPorts.jmx`                 | JMX Port on the Host and Container                                                                                 | `5555`                       |
+| `metrics.configuration`                      | Configure Cassandra-exporter with a custom config.yml file                                                         | `""`                         |
 
 
 ### TLS/SSL parameters
