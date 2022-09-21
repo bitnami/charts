@@ -26,4 +26,4 @@ name: apache
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/apache
   - https://httpd.apache.org
-version: 9.2.3
+version: 9.2.4
