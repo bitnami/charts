@@ -8,7 +8,7 @@ file:
     filetype: file
     exists: true
   /bitnami/clickhouse/data:
-    mode: "0750"
+    mode: "2750"
     filetype: directory
     exists: true
 http:
