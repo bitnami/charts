@@ -1,0 +1,19 @@
+server:
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 1002
+  configuration:
+    accountName: test_default
+skipper:
+  service:
+    port: 80
+serviceAccount:
+  automountServiceAccountToken: true
+deployer:
+  podSecurityContext:
+    runAsUser: 1002
+mariadb:
+  auth:
+    username: user_dataflow
+    database: test_dataflow

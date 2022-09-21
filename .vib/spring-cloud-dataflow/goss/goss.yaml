@@ -1,22 +1,31 @@
+http:
+  http://spring-cloud-dataflow-skipper:{{ .Vars.skipper.service.port }}:
+    status: 200
 file:
   /opt/bitnami/spring-cloud-dataflow/conf/application.yml:
     exists: true
     filetype: symlink
     mode: "0777"
     owner: root
-  /bitnami/spring-cloud-dataflow:
+    contains:
+    - {{ .Vars.server.configuration.accountName }}
+    - /runAsUser.*{{ .Vars.deployer.podSecurityContext.runAsUser }}/
+    - /url.*jdbc:mariadb.*{{ .Vars.mariadb.auth.database }}/
+    - /username.*{{ .Vars.mariadb.auth.username }}/
+  /etc/secrets/database:
     exists: true
     filetype: directory
-    mode: "0775"
+    mode: "3777"
+    owner: root
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
+    filetype: directory
+    mode: "3777"
     owner: root
 command:
-  user-id-test:
-    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
-    exit-status: 0
-    stdout: []
-    stderr: []
-  java-test:
-    exec: java -version
+  check-user-info:
+    exec: id
     exit-status: 0
     stdout:
-    stderr: []  
+    - uid={{ .Vars.server.containerSecurityContext.runAsUser }}
+    - /groups=.*{{ .Vars.server.podSecurityContext.fsGroup }}/
