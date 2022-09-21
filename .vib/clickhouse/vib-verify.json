@@ -44,6 +44,7 @@
             "resources": {
               "path": "/.vib/clickhouse/goss"
             },
+            "vars_file": "vars.yaml",
             "remote": {
               "workload": "sts-clickhouse-shard0"
             }
