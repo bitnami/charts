@@ -1,0 +1,42 @@
+file:
+  /opt/bitnami/clickhouse/etc/config.xml:
+    mode: "0664"
+    filetype: file
+    exists: true
+  /opt/bitnami/clickhouse/etc/users.xml:
+    mode: "0664"
+    filetype: file
+    exists: true
+  /bitnami/clickhouse/data:
+    mode: "0750"
+    filetype: directory
+    exists: true
+http:
+  http://clickhouse:{{ .Vars.service.ports.http }}:
+    status: 200
+    allow-insecure: true
+    body:
+      - Ok
+  http://clickhouse:{{ .Vars.service.ports.http }}/replicas_status:
+    status: 200
+    allow-insecure: true
+    body:
+      - Ok
+command:
+  user-id-test:
+    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
+    exit-status: 0
+    stdout: []
+    stderr: []
+  check-cluster-status:
+    exec: clickhouse-client --password '{{ .Vars.auth.password }}' --query='SELECT COUNT(*) FROM system.clusters;'
+    exit-status: 0
+    stdout:
+      - 4
+  create-database-in-cluster:
+    {{- $table := printf "%s.%s" .Vars.database .Vars.table }}
+    exec: clickhouse-client --multiquery --password '{{ .Vars.auth.password }}' --query='CREATE DATABASE {{ .Vars.database }} ON CLUSTER default ENGINE = Memory; CREATE TABLE {{ $table }} (a UInt8) ENGINE = Memory;  INSERT INTO {{ $table }} VALUES(23); SELECT * FROM {{ $table }};'
+    exit-status: 0
+    stdout:
+      - 23
+    timeout: 9000

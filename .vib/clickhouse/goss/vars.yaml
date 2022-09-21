@@ -1,0 +1,8 @@
+service:
+  ports:
+    http: 80
+auth:
+  password: bitnami1234
+
+database: test_db_goss
+table: test_table_goss
