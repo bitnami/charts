@@ -130,6 +130,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.password`                                     | ClickHouse Admin password                                                                                                | `""`                  |
 | `auth.existingSecret`                               | Name of a secret containing the Admin password                                                                           | `""`                  |
 | `auth.existingSecretKey`                            | Name of the key inside the existing secret                                                                               | `""`                  |
+| `logLevel`                                          | Logging level                                                                                                            | `information`         |
 | `defaultConfigurationOverrides`                     | Default configuration overrides (evaluated as a template)                                                                | `""`                  |
 | `existingOverridesConfigmap`                        | The name of an existing ConfigMap with your custom configuration for ClickHouse                                          | `""`                  |
 | `extraOverrides`                                    | Extra configuration overrides (evaluated as a template) apart from the default                                           | `""`                  |

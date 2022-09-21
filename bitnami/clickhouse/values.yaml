@@ -215,6 +215,10 @@ auth:
   existingSecret: ""
   existingSecretKey: ""
 
+## @param logLevel Logging level
+##
+logLevel: information
+
 ## @param defaultConfigurationOverrides [string] Default configuration overrides (evaluated as a template)
 ##
 defaultConfigurationOverrides: |
@@ -225,6 +229,10 @@ defaultConfigurationOverrides: |
       <replica from_env="CLICKHOUSE_REPLICA_ID"></replica>
       <layer>{{ include "common.names.fullname" . }}</layer>
     </macros>
+    <!-- Log Level -->
+    <logger>
+      <level>{{ .Values.logLevel }}</level>
+    </logger>
     {{- if or (ne (int .Values.shards) 1) (ne (int .Values.replicaCount) 1)}}
     <!-- Cluster configuration - Any update of the shards and replicas requires helm upgrade -->
     <remote_servers>
