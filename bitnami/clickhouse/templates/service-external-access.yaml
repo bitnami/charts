@@ -50,6 +50,16 @@ spec:
       {{- else }}
       nodePort: null
       {{- end }}
+    {{- if $.Values.metrics.enabled }}
+    - name: http-metrics
+      port: {{ $.Values.externalAccess.service.ports.metrics }}
+      targetPort: http-metrics
+      {{- if not (empty $.Values.externalAccess.service.nodePorts.metrics) }}
+      nodePort: {{ index $.Values.externalAccess.service.nodePorts.metrics $i }}
+      {{- else }}
+      nodePort: null
+      {{- end }}
+    {{- end }}
     - name: tcp
       port: {{ $.Values.externalAccess.service.ports.tcp }}
       targetPort: tcp

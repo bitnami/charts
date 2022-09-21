@@ -211,7 +211,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalAccess.service.ports.interserver`        | ClickHouse service Interserver port                                                                                              | `9009`                   |
 | `externalAccess.service.ports.metrics`            | ClickHouse service metrics port                                                                                                  | `8001`                   |
 | `externalAccess.service.loadBalancerIPs`          | Array of load balancer IPs for each ClickHouse . Length must be the same as replicaCount                                         | `[]`                     |
-| `externalAccess.service.loadBalancerNames`        | Array of load balancer Names for each ClickHouse . Length must be the same as replicaCount                                       | `[]`                     |
 | `externalAccess.service.loadBalancerAnnotations`  | Array of load balancer annotations for each ClickHouse . Length must be the same as replicaCount                                 | `[]`                     |
 | `externalAccess.service.loadBalancerSourceRanges` | Address(es) that are allowed when service is LoadBalancer                                                                        | `[]`                     |
 | `externalAccess.service.nodePorts.http`           | Node port for HTTP                                                                                                               | `[]`                     |
@@ -301,9 +300,11 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Zookeeper subchart parameters
 
-| Name                | Description               | Value  |
-| ------------------- | ------------------------- | ------ |
-| `zookeeper.enabled` | Deploy Zookeeper subchart | `true` |
+| Name                             | Description                   | Value  |
+| -------------------------------- | ----------------------------- | ------ |
+| `zookeeper.enabled`              | Deploy Zookeeper subchart     | `true` |
+| `zookeeper.replicaCount`         | Number of Zookeeper instances | `2`    |
+| `zookeeper.service.ports.client` | Zookeeper client port         | `2181` |
 
 
 See https://github.com/bitnami-labs/readme-generator-for-helm to create the table

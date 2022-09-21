@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -17,6 +18,7 @@ global:
   storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param kubeVersion Override Kubernetes version
 ##
@@ -55,6 +57,7 @@ diagnosticMode:
     - infinity
 
 ## @section Kafka parameters
+##
 
 ## Bitnami Kafka image version
 ## ref: https://hub.docker.com/r/bitnami/kafka/tags/
@@ -161,6 +164,7 @@ logRetentionHours: 168
 logSegmentBytes: _1073741824
 ## @param logsDirs A comma separated list of directories in which kafka's log data is kept
 ## ref: https://kafka.apache.org/documentation/#brokerconfigs_log.dirs
+##
 logsDirs: /bitnami/kafka/data
 ## @param maxMessageBytes The largest record batch size allowed by Kafka
 ##
@@ -420,6 +424,7 @@ extraEnvVarsCM: ""
 extraEnvVarsSecret: ""
 
 ## @section Statefulset parameters
+##
 
 ## @param replicaCount Number of Kafka nodes
 ##
@@ -661,6 +666,7 @@ pdb:
   maxUnavailable: 1
 
 ## @section Traffic Exposure parameters
+##
 
 ## Service parameters
 ##
@@ -795,13 +801,6 @@ externalAccess:
     ##   - Y.Y.Y.Y
     ##
     loadBalancerIPs: []
-    ## @param externalAccess.service.loadBalancerNames Array of load balancer Names for each Kafka broker. Length must be the same as replicaCount
-    ## e.g:
-    ## loadBalancerNames:
-    ##   - broker1.external.example.com
-    ##   - broker2.external.example.com
-    ##
-    loadBalancerNames: []
     ## @param externalAccess.service.loadBalancerAnnotations Array of load balancer annotations for each Kafka broker. Length must be the same as replicaCount
     ## e.g:
     ## loadBalancerAnnotations:
@@ -888,9 +887,11 @@ networkPolicy:
     ##       - namespaceSelector:
     ##           matchLabels:
     ##             label: example
+    ##
     customRules: []
 
 ## @section Persistence parameters
+##
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -1016,6 +1017,7 @@ volumePermissions:
     runAsUser: 0
 
 ## @section Other Parameters
+##
 
 ## ServiceAccount for Kafka
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -1046,6 +1048,7 @@ rbac:
   create: false
 
 ## @section Metrics parameters
+##
 
 ## Prometheus Exporters / Metrics
 ##
@@ -1404,6 +1407,7 @@ metrics:
     ##    name: kafka_server_socket_server_metrics_$3
     ##    labels:
     ##      listener: $1
+    ##
     extraRules: ""
   ## Prometheus Operator ServiceMonitor configuration
   ##
@@ -1457,6 +1461,7 @@ metrics:
     groups: []
 
 ## @section Kafka provisioning parameters
+##
 
 ## Kafka provisioning
 ##
@@ -1667,6 +1672,7 @@ provisioning:
   waitForKafka: true
 
 ## @section ZooKeeper chart parameters
+##
 
 ## ZooKeeper chart configuration
 ## https://github.com/bitnami/charts/blob/master/bitnami/zookeeper/values.yaml

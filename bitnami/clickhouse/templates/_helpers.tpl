@@ -110,7 +110,7 @@ Get the ClickHouse password key inside the secret
 */}}
 {{- define "clickhouse.secretKey" -}}
 {{- if .Values.auth.existingSecret -}}
-    {{- .Values.auth.auth.existingSecretKey -}}
+    {{- .Values.auth.existingSecretKey -}}
 {{- else }}
     {{- print "admin-password" -}}
 {{- end -}}

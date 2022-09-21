@@ -623,13 +623,6 @@ externalAccess:
     ##   - Y.Y.Y.Y
     ##
     loadBalancerIPs: []
-    ## @param externalAccess.service.loadBalancerNames Array of load balancer Names for each ClickHouse . Length must be the same as replicaCount
-    ## e.g:
-    ## loadBalancerNames:
-    ##   - 1.external.example.com
-    ##   - 2.external.example.com
-    ##
-    loadBalancerNames: []
     ## @param externalAccess.service.loadBalancerAnnotations Array of load balancer annotations for each ClickHouse . Length must be the same as replicaCount
     ## e.g:
     ## loadBalancerAnnotations:
@@ -959,6 +952,12 @@ externalZookeeper:
 ## @section Zookeeper subchart parameters
 ##
 ## @param zookeeper.enabled Deploy Zookeeper subchart
+## @param zookeeper.replicaCount Number of Zookeeper instances
+## @param zookeeper.service.ports.client Zookeeper client port
 ##
 zookeeper:
   enabled: true
+  replicaCount: 2
+  service:
+    ports:
+      client: 2181
