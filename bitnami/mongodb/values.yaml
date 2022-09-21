@@ -688,6 +688,9 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer
   ##
   loadBalancerIP: ""
+  ## @param service.loadBalancerClass loadBalancerClass for MongoDB(&reg;) Service (only for standalone architecture)
+  # ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
+  loadBalancerClass: ""
   ## @param service.loadBalancerSourceRanges Address(es) that are allowed when service is LoadBalancer (only for standalone architecture)
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ##
@@ -796,6 +799,9 @@ externalAccess:
     ##   - Y.Y.Y.Y
     ##
     loadBalancerIPs: []
+    ## @param externalAccess.service.loadBalancerClass loadBalancerClass when service type is LoadBalancer
+    # ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
+    loadBalancerClass: ""
     ## @param externalAccess.service.loadBalancerSourceRanges Address(es) that are allowed when service is LoadBalancer
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## Example:
@@ -864,6 +870,9 @@ externalAccess:
       ##   - Y.Y.Y.Y
       ##
       loadBalancerIPs: []
+      ## @param externalAccess.hidden.service.loadBalancerClass loadBalancerClass when service type is LoadBalancer
+      # ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
+      loadBalancerClass: ""
       ## @param externalAccess.hidden.service.loadBalancerSourceRanges Address(es) that are allowed when service is LoadBalancer
       ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
       ## Example:
