@@ -264,7 +264,7 @@ spec:
               mountPath: /bitnami/clickhouse
             - name: config
               mountPath: /bitnami/clickhouse/etc/conf.d/default
-          {{- if $.Values.extraOverridesConfigmap }}
+          {{- if or $.Values.extraOverridesConfigmap $.Values.extraOverrides }}
             - name: extra-config
               mountPath: /bitnami/clickhouse/etc/conf.d/extra-configmap
           {{- end }}
@@ -297,17 +297,17 @@ spec:
         {{- if or $.Values.initdbScriptsSecret $.Values.initdbScripts }}
         - name: custom-init-scripts
           secret:
-            secretName: {{ include "mysql.initdbScriptsSecret" $ }}
+            secretName: {{ include "clickhouse.initdbScriptsSecret" $ }}
         {{- end }}
         {{- if or $.Values.startdbScriptsSecret $.Values.startdbScripts }}
         - name: custom-start-scripts
           secret:
-            secretName: {{ include "mysql.startdbScriptsSecret" $ }}
+            secretName: {{ include "clickhouse.startdbScriptsSecret" $ }}
         {{- end }}
-        {{- if $.Values.extraOverridesConfigmap }}
+        {{- if or $.Values.extraOverridesConfigmap $.Values.extraOverrides }}
         - name: extra-config
           configMap:
-            name: {{ $.Values.extraOverridesConfigmap }}
+            name: {{ template "clickhouse.extraConfigmapName" $ }}
         {{- end }}
         {{- if $.Values.extraOverridesSecret }}
         - name: extra-secret

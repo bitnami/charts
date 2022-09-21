@@ -130,8 +130,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.password`                                     | ClickHouse Admin password                                                                                                | `""`                  |
 | `auth.existingSecret`                               | Name of a secret containing the Admin password                                                                           | `""`                  |
 | `auth.existingSecretKey`                            | Name of the key inside the existing secret                                                                               | `""`                  |
-| `configurationOverrides`                            | Configuration overrides (evaluated as a template)                                                                        | `""`                  |
+| `defaultConfigurationOverrides`                     | Default configuration overrides (evaluated as a template)                                                                | `""`                  |
 | `existingOverridesConfigmap`                        | The name of an existing ConfigMap with your custom configuration for ClickHouse                                          | `""`                  |
+| `extraOverrides`                                    | Extra configuration overrides (evaluated as a template) apart from the default                                           | `""`                  |
 | `extraOverridesConfigmap`                           | The name of an existing ConfigMap with extra configuration for ClickHouse                                                | `""`                  |
 | `extraOverridesSecret`                              | The name of an existing ConfigMap with your custom configuration for ClickHouse                                          | `""`                  |
 | `initdbScripts`                                     | Dictionary of initdb scripts                                                                                             | `{}`                  |

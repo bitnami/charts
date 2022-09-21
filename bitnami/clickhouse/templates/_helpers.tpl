@@ -84,6 +84,17 @@ Get the ClickHouse configuration configmap.
 {{- end -}}
 
 {{/*
+Get the ClickHouse configuration configmap.
+*/}}
+{{- define "clickhouse.extraConfigmapName" -}}
+{{- if .Values.extraOverridesConfigmap -}}
+    {{- .Values.extraOverridesConfigmap -}}
+{{- else }}
+    {{- printf "%s-extra" (include "common.names.fullname" . ) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Get the Clickhouse password secret name
 */}}
 {{- define "clickhouse.secretName" -}}
@@ -106,9 +117,9 @@ Get the ClickHouse password key inside the secret
 {{- end -}}
 
 {{/*
-Get the startialization scripts ConfigMap name.
+Get the startialization scripts Secret name.
 */}}
-{{- define "mysql.startdbScriptsSecret" -}}
+{{- define "clickhouse.startdbScriptsSecret" -}}
 {{- if .Values.startdbScriptsSecret -}}
     {{- printf "%s" (tpl .Values.startdbScriptsSecret $) -}}
 {{- else -}}
@@ -117,9 +128,9 @@ Get the startialization scripts ConfigMap name.
 {{- end -}}
 
 {{/*
-Get the initialization scripts ConfigMap name.
+Get the initialization scripts Secret name.
 */}}
-{{- define "mysql.initdbScriptsSecret" -}}
+{{- define "clickhouse.initdbScriptsSecret" -}}
 {{- if .Values.initdbScriptsSecret -}}
     {{- printf "%s" (tpl .Values.initdbScriptsSecret $) -}}
 {{- else -}}

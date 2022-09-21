@@ -215,9 +215,9 @@ auth:
   existingSecret: ""
   existingSecretKey: ""
 
-## @param configurationOverrides [string] Configuration overrides (evaluated as a template)
+## @param defaultConfigurationOverrides [string] Default configuration overrides (evaluated as a template)
 ##
-configurationOverrides: |
+defaultConfigurationOverrides: |
   <clickhouse>
     <!-- Macros -->
     <macros>
@@ -314,6 +314,10 @@ configurationOverrides: |
 ## @param existingOverridesConfigmap The name of an existing ConfigMap with your custom configuration for ClickHouse
 ##
 existingOverridesConfigmap: ""
+
+## @param extraOverrides Extra configuration overrides (evaluated as a template) apart from the default
+##
+extraOverrides: ""
 
 ## @param extraOverridesConfigmap The name of an existing ConfigMap with extra configuration for ClickHouse
 ##
