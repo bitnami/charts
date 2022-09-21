@@ -63,6 +63,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/spark/**'
       - 'bitnami/spring-cloud-dataflow/**'
       - 'bitnami/suitecrm/**'
+      - 'bitnami/tensorflow-resnet/**'
       - 'bitnami/tomcat/**'
       - 'bitnami/wildfly/**'
       - 'bitnami/wordpress/**'
