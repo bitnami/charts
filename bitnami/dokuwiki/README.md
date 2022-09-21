@@ -76,84 +76,84 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Dokuwiki parameters
 
-| Name                                    | Description                                                                                                           | Value                     |
-| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| `image.registry`                        | DokuWiki image registry                                                                                               | `docker.io`               |
-| `image.repository`                      | DokuWiki image repository                                                                                             | `bitnami/dokuwiki`        |
-| `image.tag`                             | DokuWiki image tag                                                                                                    | `2022.7.31-debian-11-r12` |
-| `image.digest`                          | DokuWiki image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                      |
-| `image.pullPolicy`                      | Image pull policy                                                                                                     | `IfNotPresent`            |
-| `image.pullSecrets`                     | Image pull policy                                                                                                     | `[]`                      |
-| `image.debug`                           | Enable image debugging                                                                                                | `false`                   |
-| `hostAliases`                           | Add deployment host aliases                                                                                           | `[]`                      |
-| `dokuwikiUsername`                      | User of the application                                                                                               | `user`                    |
-| `dokuwikiPassword`                      | Application password                                                                                                  | `""`                      |
-| `existingSecret`                        | Use an existing secret with the dokuwiki password                                                                     | `""`                      |
-| `dokuwikiEmail`                         | Admin email                                                                                                           | `user@example.com`        |
-| `dokuwikiFullName`                      | User's Full Name                                                                                                      | `User Name`               |
-| `dokuwikiWikiName`                      | Wiki name                                                                                                             | `My Wiki`                 |
-| `customPostInitScripts`                 | Custom post-init.d user scripts                                                                                       | `{}`                      |
-| `updateStrategy`                        | Strategy to use to update Pods                                                                                        | `{}`                      |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                                                        | `[]`                      |
-| `persistence.enabled`                   | Enable persistence using PVC                                                                                          | `true`                    |
-| `persistence.storageClass`              | PVC Storage Class for DokuWiki volume                                                                                 | `""`                      |
-| `persistence.accessModes`               | PVC Access Mode for DokuWiki volume                                                                                   | `[]`                      |
-| `persistence.size`                      | PVC Storage Request for DokuWiki volume                                                                               | `8Gi`                     |
-| `persistence.existingClaim`             | Name of an existing PVC to be used                                                                                    | `""`                      |
-| `persistence.annotations`               | Annotations to add to the PVC                                                                                         | `{}`                      |
-| `podSecurityContext.enabled`            | Enable securityContext on for DokuWiki deployment                                                                     | `true`                    |
-| `podSecurityContext.fsGroup`            | Group to configure permissions for volumes                                                                            | `1001`                    |
-| `containerSecurityContext.enabled`      | Enable securityContext on for DokuWiki deployment                                                                     | `true`                    |
-| `containerSecurityContext.runAsUser`    | User for the securityContext                                                                                          | `1001`                    |
-| `containerSecurityContext.runAsNonRoot` | Force the container as be run as non root                                                                             | `true`                    |
-| `resources.requests`                    | The requested resources for the container                                                                             | `{}`                      |
-| `resources.limits`                      | The requested limits for the container                                                                                | `{}`                      |
-| `livenessProbe.enabled`                 | Enable/disable the liveness probe                                                                                     | `true`                    |
-| `livenessProbe.initialDelaySeconds`     | Delay before liveness probe is initiated                                                                              | `120`                     |
-| `livenessProbe.periodSeconds`           | How often to perform the probe                                                                                        | `10`                      |
-| `livenessProbe.timeoutSeconds`          | When the probe times out                                                                                              | `5`                       |
-| `livenessProbe.failureThreshold`        | Minimum consecutive failures to be considered failed                                                                  | `6`                       |
-| `livenessProbe.successThreshold`        | Minimum consecutive successes to be considered successful                                                             | `1`                       |
-| `readinessProbe.enabled`                | Enable/disable the readiness probe                                                                                    | `true`                    |
-| `readinessProbe.initialDelaySeconds`    | Delay before readinessProbe is initiated                                                                              | `30`                      |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                     | `10`                      |
-| `readinessProbe.timeoutSeconds`         | When the probe times out                                                                                              | `5`                       |
-| `readinessProbe.failureThreshold`       | Minimum consecutive failures to be considered failed                                                                  | `6`                       |
-| `readinessProbe.successThreshold`       | Minimum consecutive successes to be considered successful                                                             | `1`                       |
-| `startupProbe.enabled`                  | Enable/disable the startup probe                                                                                      | `false`                   |
-| `startupProbe.initialDelaySeconds`      | Delay before startup probe is initiated                                                                               | `120`                     |
-| `startupProbe.periodSeconds`            | How often to perform the probe                                                                                        | `10`                      |
-| `startupProbe.timeoutSeconds`           | When the probe times out                                                                                              | `5`                       |
-| `startupProbe.failureThreshold`         | Minimum consecutive failures to be considered failed                                                                  | `6`                       |
-| `startupProbe.successThreshold`         | Minimum consecutive successes to be considered successful                                                             | `1`                       |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                   | `""`                      |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `soft`                    |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                      |
-| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                                                 | `""`                      |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                                             | `[]`                      |
-| `affinity`                              | Affinity for pod assignment                                                                                           | `{}`                      |
-| `nodeSelector`                          | Node labels for pod assignment                                                                                        | `{}`                      |
-| `tolerations`                           | Tolerations for pod assignment                                                                                        | `[]`                      |
-| `command`                               | Override default container command (useful when using custom images)                                                  | `[]`                      |
-| `args`                                  | Override default container args (useful when using custom images)                                                     | `[]`                      |
-| `extraEnvVars`                          | An array to add extra env vars                                                                                        | `[]`                      |
-| `extraEnvVarsCM`                        | ConfigMap containing extra env vars                                                                                   | `""`                      |
-| `extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                          | `""`                      |
-| `podAnnotations`                        | Pod annotations                                                                                                       | `{}`                      |
-| `customLivenessProbe`                   | Override default liveness probe                                                                                       | `{}`                      |
-| `customReadinessProbe`                  | Override default readiness probe                                                                                      | `{}`                      |
-| `customStartupProbe`                    | Override default startup probe                                                                                        | `{}`                      |
-| `extraVolumes`                          | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`    | `[]`                      |
-| `extraVolumeMounts`                     | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `[]`                      |
-| `lifecycleHooks`                        | LifecycleHook to set additional configuration at startup. Evaluated as a template                                     | `{}`                      |
-| `podLabels`                             | Add additional labels to the pod (evaluated as a template)                                                            | `{}`                      |
-| `initContainers`                        | Attach additional init containers to the pod (evaluated as a template)                                                | `[]`                      |
-| `sidecars`                              | Attach additional containers to the pod (evaluated as a template)                                                     | `[]`                      |
-| `priorityClassName`                     | Priority class assigned to the Pods                                                                                   | `""`                      |
-| `schedulerName`                         | Alternative scheduler                                                                                                 | `""`                      |
-| `terminationGracePeriodSeconds`         | In seconds, time the given to the pod to terminate gracefully                                                         | `""`                      |
-| `containerPorts.http`                   | Container HTTP port                                                                                                   | `8080`                    |
-| `containerPorts.https`                  | Container HTTPS port                                                                                                  | `8443`                    |
+| Name                                    | Description                                                                                                           | Value                       |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| `image.registry`                        | DokuWiki image registry                                                                                               | `docker.io`                 |
+| `image.repository`                      | DokuWiki image repository                                                                                             | `bitnami/dokuwiki`          |
+| `image.tag`                             | DokuWiki image tag                                                                                                    | `20220731.1.0-debian-11-r0` |
+| `image.digest`                          | DokuWiki image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                        |
+| `image.pullPolicy`                      | Image pull policy                                                                                                     | `IfNotPresent`              |
+| `image.pullSecrets`                     | Image pull policy                                                                                                     | `[]`                        |
+| `image.debug`                           | Enable image debugging                                                                                                | `false`                     |
+| `hostAliases`                           | Add deployment host aliases                                                                                           | `[]`                        |
+| `dokuwikiUsername`                      | User of the application                                                                                               | `user`                      |
+| `dokuwikiPassword`                      | Application password                                                                                                  | `""`                        |
+| `existingSecret`                        | Use an existing secret with the dokuwiki password                                                                     | `""`                        |
+| `dokuwikiEmail`                         | Admin email                                                                                                           | `user@example.com`          |
+| `dokuwikiFullName`                      | User's Full Name                                                                                                      | `User Name`                 |
+| `dokuwikiWikiName`                      | Wiki name                                                                                                             | `My Wiki`                   |
+| `customPostInitScripts`                 | Custom post-init.d user scripts                                                                                       | `{}`                        |
+| `updateStrategy`                        | Strategy to use to update Pods                                                                                        | `{}`                        |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                                                        | `[]`                        |
+| `persistence.enabled`                   | Enable persistence using PVC                                                                                          | `true`                      |
+| `persistence.storageClass`              | PVC Storage Class for DokuWiki volume                                                                                 | `""`                        |
+| `persistence.accessModes`               | PVC Access Mode for DokuWiki volume                                                                                   | `[]`                        |
+| `persistence.size`                      | PVC Storage Request for DokuWiki volume                                                                               | `8Gi`                       |
+| `persistence.existingClaim`             | Name of an existing PVC to be used                                                                                    | `""`                        |
+| `persistence.annotations`               | Annotations to add to the PVC                                                                                         | `{}`                        |
+| `podSecurityContext.enabled`            | Enable securityContext on for DokuWiki deployment                                                                     | `true`                      |
+| `podSecurityContext.fsGroup`            | Group to configure permissions for volumes                                                                            | `1001`                      |
+| `containerSecurityContext.enabled`      | Enable securityContext on for DokuWiki deployment                                                                     | `true`                      |
+| `containerSecurityContext.runAsUser`    | User for the securityContext                                                                                          | `1001`                      |
+| `containerSecurityContext.runAsNonRoot` | Force the container as be run as non root                                                                             | `true`                      |
+| `resources.requests`                    | The requested resources for the container                                                                             | `{}`                        |
+| `resources.limits`                      | The requested limits for the container                                                                                | `{}`                        |
+| `livenessProbe.enabled`                 | Enable/disable the liveness probe                                                                                     | `true`                      |
+| `livenessProbe.initialDelaySeconds`     | Delay before liveness probe is initiated                                                                              | `120`                       |
+| `livenessProbe.periodSeconds`           | How often to perform the probe                                                                                        | `10`                        |
+| `livenessProbe.timeoutSeconds`          | When the probe times out                                                                                              | `5`                         |
+| `livenessProbe.failureThreshold`        | Minimum consecutive failures to be considered failed                                                                  | `6`                         |
+| `livenessProbe.successThreshold`        | Minimum consecutive successes to be considered successful                                                             | `1`                         |
+| `readinessProbe.enabled`                | Enable/disable the readiness probe                                                                                    | `true`                      |
+| `readinessProbe.initialDelaySeconds`    | Delay before readinessProbe is initiated                                                                              | `30`                        |
+| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                     | `10`                        |
+| `readinessProbe.timeoutSeconds`         | When the probe times out                                                                                              | `5`                         |
+| `readinessProbe.failureThreshold`       | Minimum consecutive failures to be considered failed                                                                  | `6`                         |
+| `readinessProbe.successThreshold`       | Minimum consecutive successes to be considered successful                                                             | `1`                         |
+| `startupProbe.enabled`                  | Enable/disable the startup probe                                                                                      | `false`                     |
+| `startupProbe.initialDelaySeconds`      | Delay before startup probe is initiated                                                                               | `120`                       |
+| `startupProbe.periodSeconds`            | How often to perform the probe                                                                                        | `10`                        |
+| `startupProbe.timeoutSeconds`           | When the probe times out                                                                                              | `5`                         |
+| `startupProbe.failureThreshold`         | Minimum consecutive failures to be considered failed                                                                  | `6`                         |
+| `startupProbe.successThreshold`         | Minimum consecutive successes to be considered successful                                                             | `1`                         |
+| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                   | `""`                        |
+| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `soft`                      |
+| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                        |
+| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                                                 | `""`                        |
+| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                                             | `[]`                        |
+| `affinity`                              | Affinity for pod assignment                                                                                           | `{}`                        |
+| `nodeSelector`                          | Node labels for pod assignment                                                                                        | `{}`                        |
+| `tolerations`                           | Tolerations for pod assignment                                                                                        | `[]`                        |
+| `command`                               | Override default container command (useful when using custom images)                                                  | `[]`                        |
+| `args`                                  | Override default container args (useful when using custom images)                                                     | `[]`                        |
+| `extraEnvVars`                          | An array to add extra env vars                                                                                        | `[]`                        |
+| `extraEnvVarsCM`                        | ConfigMap containing extra env vars                                                                                   | `""`                        |
+| `extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                          | `""`                        |
+| `podAnnotations`                        | Pod annotations                                                                                                       | `{}`                        |
+| `customLivenessProbe`                   | Override default liveness probe                                                                                       | `{}`                        |
+| `customReadinessProbe`                  | Override default readiness probe                                                                                      | `{}`                        |
+| `customStartupProbe`                    | Override default startup probe                                                                                        | `{}`                        |
+| `extraVolumes`                          | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`    | `[]`                        |
+| `extraVolumeMounts`                     | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `[]`                        |
+| `lifecycleHooks`                        | LifecycleHook to set additional configuration at startup. Evaluated as a template                                     | `{}`                        |
+| `podLabels`                             | Add additional labels to the pod (evaluated as a template)                                                            | `{}`                        |
+| `initContainers`                        | Attach additional init containers to the pod (evaluated as a template)                                                | `[]`                        |
+| `sidecars`                              | Attach additional containers to the pod (evaluated as a template)                                                     | `[]`                        |
+| `priorityClassName`                     | Priority class assigned to the Pods                                                                                   | `""`                        |
+| `schedulerName`                         | Alternative scheduler                                                                                                 | `""`                        |
+| `terminationGracePeriodSeconds`         | In seconds, time the given to the pod to terminate gracefully                                                         | `""`                        |
+| `containerPorts.http`                   | Container HTTP port                                                                                                   | `8080`                      |
+| `containerPorts.https`                  | Container HTTPS port                                                                                                  | `8443`                      |
 
 
 ### Traffic Exposure Parameters
@@ -195,7 +195,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r34`      |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r35`      |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                    |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
@@ -210,7 +210,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`           | Start a exporter side-car                                                                                       | `false`                   |
 | `metrics.image.registry`    | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`  | Apache exporter image name                                                                                      | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag                                                                                       | `0.11.0-debian-11-r39`    |
+| `metrics.image.tag`         | Apache exporter image tag                                                                                       | `0.11.0-debian-11-r40`    |
 | `metrics.image.digest`      | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`  | Image pull policy                                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array                                                                | `[]`                      |
@@ -236,7 +236,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                      | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                                                                        | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image                                                                                           | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag                                                                                       | `11-debian-11-r34`                       |
+| `certificates.image.tag`                             | Container sidecar image tag                                                                                       | `11-debian-11-r35`                       |
 | `certificates.image.digest`                          | Container sidecar image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                              | `[]`                                     |

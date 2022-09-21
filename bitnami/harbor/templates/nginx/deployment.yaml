@@ -119,30 +119,30 @@ spec:
             - containerPort: {{ .Values.nginx.containerPorts.notary }}
               name: notary
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.nginx.startupProbe.enabled }}
+          {{- if .Values.nginx.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.nginx.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.nginx.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: {{ ternary "https" "http" .Values.nginx.tls.enabled }}
-          {{- else if .Values.nginx.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.nginx.livenessProbe.enabled }}
+          {{- if .Values.nginx.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.nginx.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.nginx.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /
               port: {{ ternary "https" "http" .Values.nginx.tls.enabled }}
               scheme: {{ ternary "https" "http" .Values.nginx.tls.enabled  | upper }}
-          {{- else if .Values.nginx.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.nginx.readinessProbe.enabled }}
+          {{- if .Values.nginx.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.nginx.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.nginx.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /
               port: {{ ternary "https" "http" .Values.nginx.tls.enabled }}
               scheme: {{ ternary "https" "http" .Values.nginx.tls.enabled  | upper }}
-          {{- else if .Values.nginx.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.nginx.resources }}

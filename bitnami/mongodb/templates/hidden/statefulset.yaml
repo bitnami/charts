@@ -313,29 +313,29 @@ spec:
             - containerPort: {{ .Values.hidden.containerPorts.mongodb }}
               name: mongodb
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.hidden.livenessProbe.enabled }}
+          {{- if .Values.hidden.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.hidden.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.hidden.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - /bitnami/scripts/ping-mongodb.sh
-          {{- else if .Values.hidden.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.hidden.readinessProbe.enabled }}
+          {{- if .Values.hidden.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.hidden.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.hidden.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - /bitnami/scripts/ping-mongodb.sh
-          {{- else if .Values.hidden.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.hidden.startupProbe.enabled }}
+          {{- if .Values.hidden.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.hidden.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.hidden.startupProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - /bitnami/scripts/startup-probe.sh
-          {{- else if .Values.hidden.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.hidden.resources }}
@@ -424,28 +424,28 @@ spec:
             - name: metrics
               containerPort: 9216
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.metrics.livenessProbe.enabled }}
+          {{- if .Values.metrics.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: metrics
-          {{- else if .Values.metrics.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.metrics.readinessProbe.enabled }}
+          {{- if .Values.metrics.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: metrics
-          {{- else if .Values.metrics.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.metrics.startupProbe.enabled }}
+          {{- if .Values.metrics.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: metrics
-          {{- else if .Values.metrics.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.metrics.resources }}
