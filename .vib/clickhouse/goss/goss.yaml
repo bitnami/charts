@@ -32,16 +32,16 @@ command:
       - uid={{ .Vars.containerSecurityContext.runAsUser }}
       - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
   check-cluster-status:
-    exec: clickhouse-client --username '{{ .Vars.auth.username }}' --password '{{ .Vars.auth.password }}' --query='SELECT COUNT(*) FROM system.clusters;'
+    exec: clickhouse-client --port {{ .Vars.containerPorts.tcp }}  --username '{{ .Vars.auth.username }}' --password '{{ .Vars.auth.password }}' --query='SELECT COUNT(*) FROM system.clusters;'
     exit-status: 0
     {{- $expectedCount := mul .Vars.shards .Vars.replicaCount }}
     stdout:
       - {{ $expectedCount }}
   create-database-in-cluster:
-    {{- $database := "test_goss_%s" (randAlpha 5) }}
+    {{- $database := printf "test_goss_%s" (randAlpha 5) }}
     {{- $table := printf "%s.table_$s" $database (randAlpha 5) }}
     {{- $insertValue := 23 }}
-    exec: clickhouse-client --multiquery --username '{{ .Vars.auth.username }}' --password '{{ .Vars.auth.password }}' --query='CREATE DATABASE {{ $database }} ON CLUSTER default ENGINE = Memory; CREATE TABLE {{ $table }} (a UInt8) ENGINE = Memory;  INSERT INTO {{ $table }} VALUES({{ $insertValue }}); SELECT * FROM {{ $table }};'
+    exec: clickhouse-client --port {{ .Vars.containerPorts.tcp }} --multiquery --username '{{ .Vars.auth.username }}' --password '{{ .Vars.auth.password }}' --query='CREATE DATABASE {{ $database }} ON CLUSTER default ENGINE = Memory; CREATE TABLE {{ $table }} (a UInt8) ENGINE = Memory;  INSERT INTO {{ $table }} VALUES({{ $insertValue }}); SELECT * FROM {{ $table }};'
     exit-status: 0
     stdout:
       - {{ $insertValue }}
