@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/clickhouse"
         },
-        "runtime_parameters": "YXV0aDoKICBwYXNzd29yZDogYml0bmFtaTEyMzQKCnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCiAgcG9ydHM6CiAgICBodHRwOiA4MAo=",
+        "runtime_parameters": "YXV0aDoKICB1c2VybmFtZTogdGVzdF91c2VyCiAgcGFzc3dvcmQ6IGJpdG5hbWkxMjM0CgpzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgaHR0cDogODAKICAgIHRjcDogOTAwMQogICAgdGNwU2VjdXJlOiA5NDQxCiAgICBteXNxbDogOTAwNQogICAgcG9zdGdyZXNxbDogOTAwNgogICAgaW50ZXJzZXJ2ZXI6IDkwMTAKICAgIG1ldHJpY3M6IDgwMDIKCmNvbnRhaW5lclBvcnRzOgogIGh0dHA6IDgxMjQKICB0Y3A6IDkwMDEKICB0Y3BTZWN1cmU6IDk0NDEKICBteXNxbDogOTAwNQogIHBvc3RncmVzcWw6IDkwMDYKICBpbnRlcnNlcnZlcjogOTAxMAogIG1ldHJpY3M6IDgwMDIKCnNlcnZpY2VBY2NvdW50OgogIGNyZWF0ZTogdHJ1ZQogIGF1dG9tb3VudFNlcnZpY2VBY2NvdW50VG9rZW46IHRydWUKCnNoYXJkczogMgpyZXBsaWNhQ291bnQ6IDIKCnBvZFNlY3VyaXR5Q29udGV4dDoKICBmc0dyb3VwOiAxMDAyCgpjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgcnVuQXNVc2VyOiAxMDAyCg==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
