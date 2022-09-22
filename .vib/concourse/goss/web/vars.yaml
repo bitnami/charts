@@ -1,5 +1,5 @@
 secrets:
-  localUser: "bitnamiUser"
+  localUser: bitnamiUser
   localPassword: "ComplicatedPassword123!4"
 web:
   podSecurityContext:
@@ -16,7 +16,7 @@ service:
 postgresql:
   auth:
     username: bn_test_concourse
-    password: "bitnami_test_concourse_p4ss"
+    password: bitnami_test_concourse_p4ss
     database: bitnami_test_concourse
 examplePipeline: |-
   jobs:
