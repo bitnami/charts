@@ -22,11 +22,11 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/geode"
         },
-        "runtime_parameters": "ImF1dGgiOgogICJwYXNzd29yZCI6ICJWOTlQaHI0SHFyOU5qaDQzIgogICJ1c2VybmFtZSI6ICJhZG1pbiIKImxvY2F0b3IiOgogICJzZXJ2aWNlIjoKICAgICJwb3J0cyI6CiAgICAgICJodHRwIjogODAKICAgICJzZXNzaW9uQWZmaW5pdHkiOiAiQ2xpZW50SVAiCiAgICAidHlwZSI6ICJMb2FkQmFsYW5jZXIiCiJzZXJ2ZXIiOgogICJzZXJ2aWNlIjoKICAgICJwb3J0cyI6CiAgICAgICJodHRwIjogODA=",
+        "runtime_parameters": "YXV0aDoKICB1c2VybmFtZTogdGVzdF9hZG1pbgogIHBhc3N3b3JkOiBDb21wbGljYXRlZFBhc3N3b3JkMTIzITQKbG9jYXRvcjoKICByZXBsaWNhQ291bnQ6IDIKICBjb250YWluZXJQb3J0czoKICAgIGxvY2F0b3I6IDEwMzM1CiAgICBodHRwOiA3MDcxCiAgICBybWk6IDExMDAKICAgIG1ldHJpY3M6IDk5MTYKICByZWFkaW5lc3NQcm9iZToKICAgIGVuYWJsZWQ6IHRydWUKICAgIGluaXRpYWxEZWxheVNlY29uZHM6IDEyMAogICAgdGltZW91dFNlY29uZHM6IDMwCiAgICBmYWlsdXJlVGhyZXNob2xkOiA1CiAgbGl2ZW5lc3NQcm9iZToKICAgIGVuYWJsZWQ6IHRydWUKICAgIGluaXRpYWxEZWxheVNlY29uZHM6IDEyMAogICAgdGltZW91dFNlY29uZHM6IDMwCiAgICBmYWlsdXJlVGhyZXNob2xkOiA1CiAgcG9kU2VjdXJpdHlDb250ZXh0OgogICAgZW5hYmxlZDogdHJ1ZQogICAgZnNHcm91cDogMTAwMgogICAgc3lzY3RsczoKICAgICAgLSBuYW1lOiBuZXQuaXB2NC50Y3Bfc3luY29va2llcwogICAgICAgIHZhbHVlOiAiMCIKICBjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgICBlbmFibGVkOiB0cnVlCiAgICBydW5Bc1VzZXI6IDEwMDIKICBzZXJ2aWNlOgogICAgcG9ydHM6CiAgICAgIGxvY2F0b3I6IDEwMzM1CiAgICAgIGh0dHA6IDgwCiAgICAgIHJtaTogMTEwMAogICAgc2Vzc2lvbkFmZmluaXR5OiBDbGllbnRJUAogICAgdHlwZTogTG9hZEJhbGFuY2VyCnNlcnZlcjoKICByZXBsaWNhQ291bnQ6IDMKICBjb250YWluZXJQb3J0czoKICAgIHNlcnZlcjogNDA0MDMKICAgIGh0dHA6IDcwNjkKICAgIHJtaTogMTA5OAogICAgbWV0cmljczogOTkxNAogIHJlYWRpbmVzc1Byb2JlOgogICAgZW5hYmxlZDogdHJ1ZQogICAgaW5pdGlhbERlbGF5U2Vjb25kczogMTIwCiAgICB0aW1lb3V0U2Vjb25kczogMzAKICAgIGZhaWx1cmVUaHJlc2hvbGQ6IDUKICBsaXZlbmVzc1Byb2JlOgogICAgZW5hYmxlZDogdHJ1ZQogICAgaW5pdGlhbERlbGF5U2Vjb25kczogMTIwCiAgICB0aW1lb3V0U2Vjb25kczogMzAKICAgIGZhaWx1cmVUaHJlc2hvbGQ6IDUKICBwb2RTZWN1cml0eUNvbnRleHQ6CiAgICBlbmFibGVkOiB0cnVlCiAgICBmc0dyb3VwOiAxMDAyCiAgICBzeXNjdGxzOgogICAgICAtIG5hbWU6IG5ldC5pcHY0LnRjcF9zeW5jb29raWVzCiAgICAgICAgdmFsdWU6ICIwIgogIGNvbnRhaW5lclNlY3VyaXR5Q29udGV4dDoKICAgIGVuYWJsZWQ6IHRydWUKICAgIHJ1bkFzVXNlcjogMTAwMgogIHNlcnZpY2U6CiAgICBwb3J0czoKICAgICAgc2VydmVyOiA0MDQwMwogICAgICBodHRwOiA4MAogICAgICBybWk6IDEwOTg=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
           "size": {
-            "name": "S4"
+            "name": "M4"
           }
         }
       },
@@ -34,6 +34,28 @@
         {
           "action_id": "health-check",
           "params": {
+            "endpoint": "lb-geode-locator-http",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/geode/goss"
+            },
+            "remote": {
+              "workload": "sts-geode-locator"
+            },
+            "vars_file": "vars.yaml"
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/geode/cypress"
+            },
             "endpoint": "lb-geode-locator-http",
             "app_protocol": "HTTP"
           }
