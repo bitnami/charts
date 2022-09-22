@@ -58,6 +58,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
@@ -73,6 +74,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
+
 
 ### ClickHouse Parameters
 
@@ -172,6 +174,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tls.certKeyFilename`                               | Certificate key filename                                                                                                 | `""`                  |
 | `tls.certCAFilename`                                | CA Certificate filename                                                                                                  | `""`                  |
 
+
 ### Traffic Exposure Parameters
 
 | Name                                              | Description                                                                                                                      | Value                    |
@@ -236,6 +239,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                                 | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.extraRules`                              | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
+
 ### Persistence Parameters
 
 | Name                       | Description                                                            | Value               |
@@ -247,6 +251,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.size`         | Size of data volume                                                    | `8Gi`               |
 | `persistence.selector`     | Selector to match an existing Persistent Volume for WordPress data PVC | `{}`                |
 | `persistence.dataSource`   | Custom PVC data source                                                 | `{}`                |
+
 
 ### Init Container Parameters
 
@@ -261,6 +266,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
 | `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
+
 
 ### Other Parameters
 
@@ -284,12 +290,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.relabelings`          | Specify general relabeling                                                                             | `[]`    |
 | `metrics.serviceMonitor.selector`             | Prometheus instance selector labels                                                                    | `{}`    |
 
+
 ### External Zookeeper paramaters
 
 | Name                        | Description                               | Value  |
 | --------------------------- | ----------------------------------------- | ------ |
 | `externalZookeeper.servers` | List of external zookeeper servers to use | `[]`   |
 | `externalZookeeper.port`    | Port of the Zookeeper servers             | `2888` |
+
 
 ### Zookeeper subchart parameters
 
@@ -298,6 +306,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `zookeeper.enabled`              | Deploy Zookeeper subchart     | `true` |
 | `zookeeper.replicaCount`         | Number of Zookeeper instances | `2`    |
 | `zookeeper.service.ports.client` | Zookeeper client port         | `2181` |
+
 
 See https://github.com/bitnami-labs/readme-generator-for-helm to create the table
 
