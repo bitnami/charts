@@ -41,7 +41,7 @@ command:
     {{- $database := printf "test_goss_%s" (randAlpha 5) }}
     {{- $table := printf "%s.table_%s" $database (randAlpha 5) }}
     {{- $insertValue := 23 }}
-    exec: clickhouse-client --port {{ .Vars.containerPorts.tcp }} --user '{{ .Vars.auth.username }}' --password '{{ .Vars.auth.password }}' --multiquery --query='CREATE DATABASE {{ $database }} ON CLUSTER default ENGINE = Memory; CREATE TABLE {{ $table }} (a UInt8) ENGINE = Memory;  INSERT INTO {{ $table }} VALUES({{ $insertValue }}); SELECT * FROM {{ $table }};'
+    exec: clickhouse-client --host clickhouse --port {{ .Vars.service.ports.tcp }} --user '{{ .Vars.auth.username }}' --password '{{ .Vars.auth.password }}' --multiquery --query='CREATE DATABASE {{ $database }} ON CLUSTER default ENGINE = Memory; CREATE TABLE {{ $table }} (a UInt8) ENGINE = Memory;  INSERT INTO {{ $table }} VALUES({{ $insertValue }}); SELECT * FROM {{ $table }};'
     exit-status: 0
     stdout:
       - {{ $insertValue }}
