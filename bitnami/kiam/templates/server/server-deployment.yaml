@@ -147,7 +147,9 @@ spec:
           resources: {{- toYaml .Values.server.resources | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.server.startupProbe.enabled }}
+          {{- if .Values.server.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.server.startupProbe.enabled }}
           startupProbe:
             grpc:
               port: grpclb
@@ -156,10 +158,10 @@ spec:
             timeoutSeconds: {{ .Values.server.startupProbe.timeoutSeconds }}
             successThreshold: {{ .Values.server.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.server.startupProbe.failureThreshold }}
-          {{- else if .Values.server.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.server.livenessProbe.enabled }}
+          {{- if .Values.server.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.server.livenessProbe.enabled }}
           livenessProbe:
             exec:
               command:
@@ -177,10 +179,10 @@ spec:
             timeoutSeconds: {{ .Values.server.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.server.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.server.livenessProbe.failureThreshold }}
-          {{- else if .Values.server.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.server.readinessProbe.enabled }}
+          {{- if .Values.server.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.server.readinessProbe.enabled }}
           readinessProbe:
             exec:
               command:
@@ -198,8 +200,6 @@ spec:
             timeoutSeconds: {{ .Values.server.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.server.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.server.readinessProbe.failureThreshold }}
-          {{- else if .Values.server.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           volumeMounts:

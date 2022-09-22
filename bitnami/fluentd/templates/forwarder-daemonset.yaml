@@ -131,7 +131,9 @@ spec:
               protocol: TCP
             {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.forwarder.startupProbe.enabled }}
+          {{- if .Values.forwarder.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.forwarder.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.forwarder.startupProbe.enabled }}
           startupProbe:
             httpGet:
               path: {{ .Values.forwarder.startupProbe.httpGet.path }}
@@ -141,10 +143,10 @@ spec:
             timeoutSeconds: {{ .Values.forwarder.startupProbe.timeoutSeconds }}
             successThreshold: {{ .Values.forwarder.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.forwarder.startupProbe.failureThreshold }}
-          {{- else if .Values.forwarder.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.forwarder.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.forwarder.livenessProbe.enabled }}
+          {{- if .Values.forwarder.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.forwarder.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.forwarder.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: {{ .Values.forwarder.livenessProbe.httpGet.path }}
@@ -154,10 +156,10 @@ spec:
             timeoutSeconds: {{ .Values.forwarder.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.forwarder.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.forwarder.livenessProbe.failureThreshold }}
-          {{- else if .Values.forwarder.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.forwarder.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.forwarder.readinessProbe.enabled }}
+          {{- if .Values.forwarder.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.forwarder.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.forwarder.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
               path: {{ .Values.forwarder.readinessProbe.httpGet.path }}
@@ -167,8 +169,6 @@ spec:
             timeoutSeconds: {{ .Values.forwarder.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.forwarder.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.forwarder.readinessProbe.failureThreshold }}
-          {{- else if .Values.forwarder.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.forwarder.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           volumeMounts:

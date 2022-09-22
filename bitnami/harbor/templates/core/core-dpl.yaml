@@ -147,32 +147,32 @@ spec:
               name: metrics
             {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.core.startupProbe.enabled }}
+          {{- if .Values.core.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.core.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.core.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.core.startupProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /api/v2.0/ping
               scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
               port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
-          {{- else if .Values.core.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.core.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.core.livenessProbe.enabled }}
+          {{- if .Values.core.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.core.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.core.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.core.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /api/v2.0/ping
               scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
               port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
-          {{- else if .Values.core.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.core.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.core.readinessProbe.enabled }}
+          {{- if .Values.core.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.core.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.core.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.core.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /api/v2.0/ping
               scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
               port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
-          {{- else if .Values.core.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.core.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.core.lifecycleHooks }}

@@ -22,4 +22,4 @@ name: memcached
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/memcached
   - http://memcached.org/
-version: 6.2.4
+version: 6.2.5
