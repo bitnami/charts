@@ -2,7 +2,7 @@ containerPorts:
   http: 8081
 service:
   ports:
-    https: 443
+    https: 444
 podSecurityContext:
   fsGroup: 1002
 containerSecurityContext:

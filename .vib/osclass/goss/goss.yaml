@@ -2,6 +2,7 @@ http:
   https://osclass:{{ .Vars.service.ports.https }}:
     status: 200
     allow-insecure: true
+    timeout: 700000
 command:
   check-user-info:
     exec: id
