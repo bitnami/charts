@@ -329,6 +329,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.honorLabels`          | Specify honorLabels parameter to add the scrape endpoint                                                                                                                     | `false`                   |
 | `metrics.serviceMonitor.labels`               | Used to pass Labels that are required by the installed Prometheus Operator                                                                                                   | `{}`                      |
 | `metrics.serviceMonitor.jobLabel`             | The name of the label on the target service to use as the job name in prometheus.                                                                                            | `""`                      |
+| `metrics.googlePodMonitor.enabled`            | Create Google Managed Prometheus PodMonitoring object                                                                                                                        | `false`                   |
+| `metrics.googlePodMonitor.namespace`          | Namespace in which PodMonitoring created                                                                                                                                     | `""`                      |
+| `metrics.googlePodMonitor.interval`           | Interval at which metrics should be scraped by Google Managed Prometheus                                                                                                     | `60s`                     |
+| `metrics.googlePodMonitor.endpoint`           | The endpoint for Google Managed Prometheus scraping the metrics                                                                                                              | `/metrics`                |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
