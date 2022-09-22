@@ -1,5 +1,6 @@
 {
   "env": {
+    "username": "test_user",
     "password": "bitnami1234"
   },
   "hosts": {

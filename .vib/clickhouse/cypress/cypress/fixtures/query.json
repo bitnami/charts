@@ -1,7 +1,0 @@
-{
-  "query": "SELECT COUNT(*) FROM system.clusters;",
-  "output": {
-    "header": "count()",
-    "return": "4"
-  }
-}

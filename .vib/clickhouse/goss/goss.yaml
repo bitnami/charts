@@ -1,12 +1,16 @@
 file:
-  /opt/bitnami/clickhouse/etc/config.xml:
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
+    filetype: directory
+    mode: "3777"
+  /opt/bitnami/clickhouse/etc/conf.d/00_default_overrides.xml:
     mode: "0664"
     filetype: file
     exists: true
-  /opt/bitnami/clickhouse/etc/users.xml:
-    mode: "0664"
-    filetype: file
-    exists: true
+    contains:
+      - zookeeper
+      - remote_servers
+      - logLevel
   /bitnami/clickhouse/data:
     mode: "2750"
     filetype: directory
@@ -14,29 +18,30 @@ file:
 http:
   http://clickhouse:{{ .Vars.service.ports.http }}:
     status: 200
-    allow-insecure: true
     body:
       - Ok
   http://clickhouse:{{ .Vars.service.ports.http }}/replicas_status:
     status: 200
-    allow-insecure: true
     body:
       - Ok
 command:
-  user-id-test:
-    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
+  check-user-info:
+    exec: id
     exit-status: 0
-    stdout: []
-    stderr: []
+    stdout:
+      - uid={{ .Vars.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
   check-cluster-status:
-    exec: clickhouse-client --password '{{ .Vars.auth.password }}' --query='SELECT COUNT(*) FROM system.clusters;'
+    exec: clickhouse-client --username '{{ .Vars.auth.username }}' --password '{{ .Vars.auth.password }}' --query='SELECT COUNT(*) FROM system.clusters;'
     exit-status: 0
+    {{- $expectedCount := mul .Vars.shards .Vars.replicaCount }}
     stdout:
-      - 4
+      - {{ $expectedCount }}
   create-database-in-cluster:
-    {{- $table := printf "%s.%s" .Vars.database .Vars.table }}
-    exec: clickhouse-client --multiquery --password '{{ .Vars.auth.password }}' --query='CREATE DATABASE {{ .Vars.database }} ON CLUSTER default ENGINE = Memory; CREATE TABLE {{ $table }} (a UInt8) ENGINE = Memory;  INSERT INTO {{ $table }} VALUES(23); SELECT * FROM {{ $table }};'
+    {{- $database := "test_db_goss" }}
+    {{- $table := printf "%s.test_table" $database }}
+    {{- $insertValue := 23 }}
+    exec: clickhouse-client --multiquery --username '{{ .Vars.auth.username }}' --password '{{ .Vars.auth.password }}' --query='CREATE DATABASE {{ .Vars.database }} ON CLUSTER default ENGINE = Memory; CREATE TABLE {{ $table }} (a UInt8) ENGINE = Memory;  INSERT INTO {{ $table }} VALUES({{ $insertValue }}); SELECT * FROM {{ $table }};'
     exit-status: 0
     stdout:
-      - 23
-    timeout: 9000
+      - {{ $insertValue }}
