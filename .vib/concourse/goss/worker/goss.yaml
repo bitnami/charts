@@ -1,4 +1,9 @@
 file:
+  /bitnami/concourse/workdir:
+    exists: true
+    filetype: directory
+    mode: "2777"
+    owner: root
   /var/run/secrets/kubernetes.io/serviceaccount:
     exists: {{ .Vars.worker.serviceAccount.automountServiceAccountToken }}
     filetype: directory
