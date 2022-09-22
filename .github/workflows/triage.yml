@@ -9,20 +9,9 @@ on:
     types:
       - reopened
       - opened
-permissions:
-  issues: write
-  pull-requests: write
-  repository-projects: write
-
-# To fix the concurrency when for example more than one label is added
-concurrency:
-  group: ${{ github.run_id }}
-  cancel-in-progress: false
-
 jobs:
   # For any opened or reopened issue, should be sent into Triage
   send_to_board:
-    if: ${{ github.actor != 'bitnami-bot' }}
     runs-on: ubuntu-latest
     steps:
       - name: Repo checkout
@@ -33,26 +22,18 @@ jobs:
         uses: xom9ikk/dotenv@v1.0.2
         with:
           path: .github/workflows/
-      - name: Assign to a person to work on it
-        uses: pozil/auto-assign-issue@v1.9.0
-        with:
-          numOfAssignee: 1
-          removePreviousAssignees: false
-          # If it's an internal issue, assign directly to the support team. Otherwise, to the triage one.
-          teams: ${{ (contains(fromJson(env.BITNAMI_TEAM), github.actor)) && env.SUPPORT_TEAM_NAME || env.TRIAGE_TEAM_NAME }}
-          repo-token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
+      - name: Get author
+        id: get-issue
+        run: |
+          author="${{ github.event.issue != null && github.event.issue.user.login || github.event.pull_request.user.login }}"
+          number="${{ github.event_name != 'issues' && github.event.number || github.event.issue.number }}"
+          echo "::set-output name=author::${author}"
+          echo "::set-output name=number::${number}"
       - name: Send to the board
         uses: peter-evans/create-or-update-project-card@v2
         with:
           project-name: Support
           # If the author comes from Bitnami, send it to Bitnami. Otherwise, all to Triage
-          column-name: ${{ (contains(fromJson(env.BITNAMI_TEAM), github.actor)) && 'From Bitnami' || 'Triage' }}
+          column-name: ${{ (contains(fromJson(env.BITNAMI_TEAM), steps.get-issue.outputs.author)) && 'From Bitnami' || 'Triage' }}
           token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
-          issue-number: ${{ github.event_name != 'issues' && github.event.number || github.event.issue.number }}
-      - name: Triage labeling
-        # Only if moved into Solved
-        uses: andymckay/labeler@1.0.4
-        with:
-          add-labels: ${{ (!contains(fromJson(env.BITNAMI_TEAM), github.actor)) && 'triage' || 'bitnami' }}
-          # For reopened issues
-          remove-labels: "solved"
+          issue-number: ${{ steps.get-issue.outputs.number }}

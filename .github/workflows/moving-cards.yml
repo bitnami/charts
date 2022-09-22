@@ -3,22 +3,41 @@ name: '[Support] Cards movements'
 on:
   project_card:
     types:
+      - created
       - moved
-
 permissions:
   issues: write
   pull-requests: write
-  repository-projects: read
-
-# To fix the concurrency when for example more than one label is added
-concurrency:
-  group: ${{ github.run_id }}
-  cancel-in-progress: false
-
 jobs:
-  label-card:
-    if: ${{ github.actor != 'bitnami-bot' }}
+  get-issue:
     runs-on: ubuntu-latest
+    name: Get issue info
+    outputs:
+      assignees: ${{ steps.get-issue-step.outputs.assignees }}
+      author: ${{ steps.get-issue-step.outputs.author }}
+      type: ${{ steps.get-issue-step.outputs.type }}
+      draft: ${{ steps.get-issue-step.outputs.draft }}
+    steps:
+      - name: Get issue info
+        id: get-issue-step
+        run: |
+          issue_info=$(curl -s --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' -X GET -G "${{ github.event.project_card.content_url }}" )
+          assignees="$(echo $issue_info | jq -r '.assignees')"
+          author="$(echo $issue_info | jq -r '.user.login')"
+          pull_request="$(echo $issue_info | jq -r '.pull_request')"
+          draft="$(echo $issue_info | jq -r '.draft' | sed -r "s|null|false|g")"
+          type="pull_request"
+          if [[ "${pull_request}" == "null" ]]; then
+            type="issue"
+          fi
+          echo "::set-output name=assignees::${assignees}"
+          echo "::set-output name=author::${author}"
+          echo "::set-output name=type::${type}"
+          echo "::set-output name=draft::${draft}"
+  label-card:
+    runs-on: ubuntu-latest
+    needs:
+      - get-issue
     steps:
       - name: Repo checkout
         uses: actions/checkout@v3
@@ -29,30 +48,67 @@ jobs:
         with:
           path: .github/workflows/
       # Now handling the needed labeling
+      - name: Triage labeling
+        # Only if moved into triage
+        if: ${{ github.event.project_card.column_id == env.TRIAGE_COLUMN_ID }}
+        uses: andymckay/labeler@1.0.4
+        with:
+          add-labels: triage
+          remove-labels: on-hold, in-progress, solved
+      - name: From Bitnami labeling
+        if: ${{ github.event.project_card.column_id == env.BITNAMI_COLUMN_ID }}
+        uses: andymckay/labeler@1.0.4
+        with:
+          add-labels: ${{ (needs.get-issue.outputs.author == 'bitnami-bot' && needs.get-issue.outputs.type == 'pull_request') && 'automated, auto-merge' || 'bitnami' }}
+          remove-labels: on-hold, in-progress, triage, solved
+      - name: Verify labeling
+        # Only if moved into bitnami column and the PR is ready for review
+        if: |
+          github.event.project_card.column_id == env.BITNAMI_COLUMN_ID &&
+          needs.get-issue.outputs.type == 'pull_request' && needs.get-issue.outputs.draft == 'false'
+        uses: andymckay/labeler@1.0.4
+        with:
+          add-labels: verify
+          # Required to trigger CI workflow
+          repo-token: ${{ secrets.BITNAMI_BOT_TOKEN }}
+      - name: Build Maintenance labeling
+        if: ${{ github.event.project_card.column_id == env.BUILD_MAINTENANCE_COLUMN_ID }}
+        uses: andymckay/labeler@1.0.4
+        with:
+          add-labels: review-required
+          remove-labels: auto-merge
       - name: On hold labeling
         # Only if moved into on hold
         if: ${{ github.event.project_card.column_id == env.ON_HOLD_COLUMN_ID  }}
         uses: andymckay/labeler@1.0.4
         with:
-          add-labels: "on-hold"
-          remove-labels: "triage"
+          add-labels: on-hold
+          remove-labels: triage, in-progress, solved
       - name: In progress labeling
         # Only if moved into In progress
         if: ${{ github.event.project_card.column_id == env.IN_PROGRESS_COLUMN_ID  }}
         uses: andymckay/labeler@1.0.4
         with:
-          add-labels: "in-progress"
-          remove-labels: "on-hold, triage"
+          add-labels: in-progress
+          remove-labels: on-hold, triage, solved
       - name: Solved labeling
-        # Only if moved into Solved
-        if: ${{ github.event.project_card.column_id == env.SOLVED_COLUMN_ID  }}
+        # Only if moved into Solved and the issue author is not bitnami-bot
+        if: |
+          github.event.project_card.column_id == env.SOLVED_COLUMN_ID &&
+          (needs.get-issue.outputs.author != 'bitnami-bot')
         uses: andymckay/labeler@1.0.4
         with:
-          add-labels: "solved"
-          remove-labels: "in-progress, on-hold, triage"
+          add-labels: solved
+          # Triage is not on the list to know how many issues/PRs are solved
+          # directly on triage
+          remove-labels: in-progress, on-hold
   assign-assignee-if-needed:
-    if: ${{ github.actor != 'bitnami-bot' && (!contains(github.event.issue.labels.*.name, 'auto-merge')) }}
     runs-on: ubuntu-latest
+    needs:
+      - get-issue
+    # The job shouldn't run for solved cards or new PRs created by bitnami-bot
+    if: |
+      (github.event.action != 'created' || needs.get-issue.outputs.type != 'pull_request' || needs.get-issue.outputs.author != 'bitnami-bot')
     steps:
       - name: Repo checkout
         uses: actions/checkout@v3
@@ -63,11 +119,22 @@ jobs:
         with:
           path: .github/workflows/
       - name: Assign to a person to work on it
-        # Only if moved into In progress FROM Triage
-        if: ${{ github.event.project_card.column_id == env.IN_PROGRESS_COLUMN_ID && github.event.changes != null && github.event.changes.column_id && github.event.changes.column_id.from == env.TRIAGE_COLUMN_ID }}
+        # Assign when there is nobody assigned or the card is new
+        if: ${{ github.event.project_card.column_id != env.SOLVED_COLUMN_ID && (needs.get-issue.outputs.assignees == '[]' || github.event.action == 'created') }}
+        uses: pozil/auto-assign-issue@v1.9.0
+        with:
+          numOfAssignee: 1
+          teams: ${{ github.event.project_card.column_id == env.BITNAMI_COLUMN_ID && env.SUPPORT_TEAM_NAME || (github.event.project_card.column_id == env.BUILD_MAINTENANCE_COLUMN_ID && env.BUILD_MAINTAINERS_TEAM_NAME || env.TRIAGE_TEAM_NAME) }}
+          repo-token: ${{ secrets.BITNAMI_BOT_TOKEN }}
+      - name: Reassign when moved into 'In progress' from 'Triage'
+        # Reassigned when moved into In progress FROM Triage
+        if: |
+          github.event.action == 'moved' && needs.get-issue.outputs.assignees != '[]' &&
+          github.event.project_card.column_id == env.IN_PROGRESS_COLUMN_ID &&
+          github.event.changes.column_id.from == env.TRIAGE_COLUMN_ID
         uses: pozil/auto-assign-issue@v1.9.0
         with:
           numOfAssignee: 1
           removePreviousAssignees: true
           teams: ${{ env.SUPPORT_TEAM_NAME }}
-          repo-token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
+          repo-token: ${{ secrets.BITNAMI_BOT_TOKEN }}
