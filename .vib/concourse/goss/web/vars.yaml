@@ -2,6 +2,10 @@ secrets:
   localUser: bitnamiUser
   localPassword: "ComplicatedPassword123!4"
 web:
+  containerPorts:
+    http: 8081
+    tsa: 2223
+    pprof: 2222
   podSecurityContext:
     fsGroup: 1002
   containerSecurityContext:

@@ -18,6 +18,9 @@ command:
   check-db-config:
     exec: $(echo $CONCOURSE_POSTGRES_DATABASE | grep -q {{ .Vars.postgresql.auth.database }}) && $(echo $CONCOURSE_POSTGRES_USER | grep -q {{ .Vars.postgresql.auth.username }}) && $(echo $CONCOURSE_POSTGRES_PASSWORD | grep -q {{ .Vars.postgresql.auth.password }})
     exit-status: 0
+  check-ports-config:
+    exec: $(echo $CONCOURSE_BIND_PORT | grep -q {{ .Vars.web.containerPorts.http }}) && $(echo $CONCOURSE_TSA_BIND_PORT | grep -q {{ .Vars.web.containerPorts.tsa }}) && $(echo $CONCOURSE_TSA_DEBUG_BIND_PORT | grep -q {{ .Vars.web.containerPorts.pprof }})
+    exit-status: 0
   check-user-info:
     exec: id
     exit-status: 0
