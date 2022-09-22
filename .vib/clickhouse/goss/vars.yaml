@@ -1,6 +1,7 @@
 service:
   ports:
     http: 80
+    tcp: 9001
 auth:
   username: test_user
   password: bitnami1234
