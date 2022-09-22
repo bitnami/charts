@@ -16,10 +16,6 @@ file:
     filetype: directory
     exists: true
 http:
-  http://clickhouse:{{ .Vars.service.ports.http }}:
-    status: 200
-    body:
-      - Ok
   http://clickhouse:{{ .Vars.service.ports.http }}/replicas_status:
     status: 200
     body:
