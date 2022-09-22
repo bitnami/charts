@@ -58,7 +58,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
@@ -74,7 +73,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
-
 
 ### ClickHouse Parameters
 
@@ -174,7 +172,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tls.certKeyFilename`                               | Certificate key filename                                                                                                 | `""`                  |
 | `tls.certCAFilename`                                | CA Certificate filename                                                                                                  | `""`                  |
 
-
 ### Traffic Exposure Parameters
 
 | Name                                              | Description                                                                                                                      | Value                    |
@@ -239,7 +236,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                                 | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.extraRules`                              | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Persistence Parameters
 
 | Name                       | Description                                                            | Value               |
@@ -251,7 +247,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.size`         | Size of data volume                                                    | `8Gi`               |
 | `persistence.selector`     | Selector to match an existing Persistent Volume for WordPress data PVC | `{}`                |
 | `persistence.dataSource`   | Custom PVC data source                                                 | `{}`                |
-
 
 ### Init Container Parameters
 
@@ -266,7 +261,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
 | `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
-
 
 ### Other Parameters
 
@@ -290,14 +284,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.relabelings`          | Specify general relabeling                                                                             | `[]`    |
 | `metrics.serviceMonitor.selector`             | Prometheus instance selector labels                                                                    | `{}`    |
 
-
 ### External Zookeeper paramaters
 
 | Name                        | Description                               | Value  |
 | --------------------------- | ----------------------------------------- | ------ |
 | `externalZookeeper.servers` | List of external zookeeper servers to use | `[]`   |
 | `externalZookeeper.port`    | Port of the Zookeeper servers             | `2888` |
-
 
 ### Zookeeper subchart parameters
 
@@ -307,7 +299,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `zookeeper.replicaCount`         | Number of Zookeeper instances | `2`    |
 | `zookeeper.service.ports.client` | Zookeeper client port         | `2181` |
 
-
 See https://github.com/bitnami-labs/readme-generator-for-helm to create the table
 
 The above parameters map to the env variables defined in [bitnami/clickhouse](https://github.com/bitnami/containers/tree/main/bitnami/clickhouse). For more information please refer to the [bitnami/clickhouse](https://github.com/bitnami/containers/tree/main/bitnami/clickhouse) image documentation.
@@ -316,13 +307,12 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 helm install my-release \
-  --set clickhouseUsername=admin \
-  --set clickhousePassword=password \
-  --set mariadb.auth.rootPassword=secretpassword \
+  --set auth.username=admin \
+  --set auth.password=password \
     bitnami/clickhouse
 ```
 
-The above command sets the ClickHouse administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
+The above command sets the ClickHouse administrator account username and password to `admin` and `password` respectively.
 
 > NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
 
@@ -438,13 +428,11 @@ ingress:
 
 ### Using custom scripts
 
-For advanced operations, the Bitnami ClickHouse chart allows using custom init and start scripts that will be mounted in `/docker-entrypoint.initdb.d` and `/docker-entrypoint.startdb.d` . The `init` scripts will be run on the first boot whereas the `start` scripts will be run on every container start. For adding the scripts directly as values use the `initdbScripts` and `startdbScripts` values. For using ConfigMaps use the `initdbScriptsSecret` and `startdbScriptsSecret`.
+For advanced operations, the Bitnami ClickHouse chart allows using custom init and start scripts that will be mounted in `/docker-entrypoint.initdb.d` and `/docker-entrypoint.startdb.d` . The `init` scripts will be run on the first boot whereas the `start` scripts will be run on every container start. For adding the scripts directly as values use the `initdbScripts` and `startdbScripts` values. For using Secrets use the `initdbScriptsSecret` and `startdbScriptsSecret`.
 
-```console
-elasticsearch.hosts[0]=elasticsearch-host
-elasticsearch.port=9200
-initscriptsSecret=special-scripts
-initScriptsSecret=special-scripts-sensitive
+```yaml
+initdbScriptsSecret: init-scripts-secret
+startdbScriptsSecret: start-scripts-secret
 ```
 
 ### Pod affinity
