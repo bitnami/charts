@@ -4,13 +4,13 @@ file:
     filetype: directory
     mode: "3777"
   /opt/bitnami/clickhouse/etc/conf.d/00_default_overrides.xml:
-    mode: "0664"
+    mode: "0644"
     filetype: file
     exists: true
     contains:
       - zookeeper
       - remote_servers
-      - logLevel
+      - logger
   /bitnami/clickhouse/data:
     mode: "2750"
     filetype: directory
@@ -32,7 +32,7 @@ command:
       - uid={{ .Vars.containerSecurityContext.runAsUser }}
       - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
   check-cluster-status:
-    exec: clickhouse-client --port {{ .Vars.containerPorts.tcp }}  --username '{{ .Vars.auth.username }}' --password '{{ .Vars.auth.password }}' --query='SELECT COUNT(*) FROM system.clusters;'
+    exec: clickhouse-client --port {{ .Vars.containerPorts.tcp }}  --user '{{ .Vars.auth.username }}' --password '{{ .Vars.auth.password }}' --query='SELECT COUNT(*) FROM system.clusters;'
     exit-status: 0
     {{- $expectedCount := mul .Vars.shards .Vars.replicaCount }}
     stdout:
@@ -41,7 +41,7 @@ command:
     {{- $database := printf "test_goss_%s" (randAlpha 5) }}
     {{- $table := printf "%s.table_$s" $database (randAlpha 5) }}
     {{- $insertValue := 23 }}
-    exec: clickhouse-client --port {{ .Vars.containerPorts.tcp }} --multiquery --username '{{ .Vars.auth.username }}' --password '{{ .Vars.auth.password }}' --query='CREATE DATABASE {{ $database }} ON CLUSTER default ENGINE = Memory; CREATE TABLE {{ $table }} (a UInt8) ENGINE = Memory;  INSERT INTO {{ $table }} VALUES({{ $insertValue }}); SELECT * FROM {{ $table }};'
+    exec: clickhouse-client --port {{ .Vars.containerPorts.tcp }} --multiquery --user '{{ .Vars.auth.username }}' --password '{{ .Vars.auth.password }}' --query='CREATE DATABASE {{ $database }} ON CLUSTER default ENGINE = Memory; CREATE TABLE {{ $table }} (a UInt8) ENGINE = Memory;  INSERT INTO {{ $table }} VALUES({{ $insertValue }}); SELECT * FROM {{ $table }};'
     exit-status: 0
     stdout:
       - {{ $insertValue }}
