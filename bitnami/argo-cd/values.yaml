@@ -2443,3 +2443,16 @@ externalRedis:
   ## @param externalRedis.existingSecretPasswordKey Password key for the existing secret containing the external redis password
   ##
   existingSecretPasswordKey: 'redis-password'
+
+## Wait-for-redis init container configuration
+##
+redisWait:
+  ## @param redisWait.enabled Enables waiting for redis
+  ##
+  enabled: true
+  ## @param redisWait.extraArgs Additional arguments for the redis-cli call, such as TLS
+  ##
+  extraArgs: ''
+  ## @param redisWait.securityContext Security context for init container
+  ##
+  securityContext: {}
