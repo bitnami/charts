@@ -711,7 +711,7 @@ metrics:
     ## @param metrics.service.type Drupal exporter service type
     ##
     type: ClusterIP
-    ## @param metrics.service.port Drupal exporter service port
+    ## @param metrics.service.ports.http-metrics Drupal exporter service port
     ##
     ports: 
       http-metrics: 9117
