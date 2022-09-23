@@ -290,6 +290,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.accessModes`      | Persistent Volume Access Modes                                                                                                         | `["ReadWriteOnce"]`       |
 | `persistence.size`             | PVC Storage Request for Kafka data volume                                                                                              | `8Gi`                     |
 | `persistence.annotations`      | Annotations for the PVC                                                                                                                | `{}`                      |
+| `persistence.labels`           | Labels for the PVC                                                                                                                     | `{}`                      |
 | `persistence.selector`         | Selector to match an existing Persistent Volume for Kafka data PVC. If set, the PVC can't have a PV dynamically provisioned for it     | `{}`                      |
 | `persistence.mountPath`        | Mount path of the Kafka data volume                                                                                                    | `/bitnami/kafka`          |
 | `logPersistence.enabled`       | Enable Kafka logs persistence using PVC, note that ZooKeeper persistence is unaffected                                                 | `false`                   |
