@@ -713,7 +713,8 @@ metrics:
     type: ClusterIP
     ## @param metrics.service.port Drupal exporter service port
     ##
-    port: 9117
+    ports: 
+      http-metrics: 9117
     ## @param metrics.service.externalTrafficPolicy Drupal exporter service external traffic policy
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
