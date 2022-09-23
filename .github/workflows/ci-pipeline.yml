@@ -13,6 +13,9 @@ env:
   CSP_API_URL: https://console.cloud.vmware.com
   CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
   VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
+# Avoid concurrency over the same PR
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
 jobs:
   get-chart:
     runs-on: ubuntu-latest
@@ -93,9 +96,7 @@ jobs:
     if: |
       needs.get-chart.outputs.result == 'ok' &&
       (
-        (github.event.action == 'labeled' && github.event.label.name == 'verify') ||
-        (github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'verify')) ||
-        (contains(github.event.pull_request.title, 'Release') && github.event.action == 'opened' && github.actor == 'bitnami-bot')
+        contains(github.event.pull_request.labels.*.name, 'verify') || (github.event.action == 'labeled' && github.event.label.name == 'verify')
       )
     name: VIB Verify
     steps:
