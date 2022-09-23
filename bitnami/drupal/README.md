@@ -254,7 +254,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.resources`                        | Metrics exporter resource requests and limits                                                                   | `{}`                      |
 | `metrics.podAnnotations`                   | Additional annotations for Metrics exporter pod                                                                 | `{}`                      |
 | `metrics.service.type`                     | Drupal exporter service type                                                                                    | `ClusterIP`               |
-| `metrics.service.ports.http-metrics`       | Drupal exporter service port                                                                                    | `9117`                    |
+| `metrics.service.ports.metrics`            | Drupal exporter service port                                                                                    | `9117`                    |
 | `metrics.service.externalTrafficPolicy`    | Drupal exporter service external traffic policy                                                                 | `Cluster`                 |
 | `metrics.service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                                  | `[]`                      |
 | `metrics.service.loadBalancerIP`           | Drupal exporter service Load Balancer IP                                                                        | `""`                      |
