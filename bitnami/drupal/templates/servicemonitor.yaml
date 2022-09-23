@@ -16,7 +16,7 @@ metadata:
   {{- end }}
 spec:
   endpoints:
-    - port: http-metrics
+    - port: metrics
       {{- if .Values.metrics.serviceMonitor.interval }}
       interval: {{ .Values.metrics.serviceMonitor.interval }}
       {{- end }}
@@ -32,9 +32,6 @@ spec:
       {{- if .Values.metrics.serviceMonitor.metricRelabelings }}
       metricRelabelings: {{- toYaml .Values.metrics.serviceMonitor.metricRelabelings | nindent 6 }}
       {{- end }}
-  {{- if .Values.metrics.serviceMonitor.podTargetLabels }}
-  podTargetLabels: {{- toYaml .Values.metrics.serviceMonitor.podTargetLabels | nindent 4 }}
-  {{- end }}
   namespaceSelector:
     matchNames:
       - {{ .Release.Namespace }}
