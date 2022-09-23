@@ -242,17 +242,36 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                        | Description                                                                                                     | Value                     |
-| --------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| `metrics.enabled`           | Start a exporter side-car                                                                                       | `false`                   |
-| `metrics.image.registry`    | Apache exporter image registry                                                                                  | `docker.io`               |
-| `metrics.image.repository`  | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag                                                                                       | `0.11.0-debian-11-r42`    |
-| `metrics.image.digest`      | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
-| `metrics.image.pullPolicy`  | Image pull policy                                                                                               | `IfNotPresent`            |
-| `metrics.image.pullSecrets` | Specify docker-registry secret names as an array                                                                | `[]`                      |
-| `metrics.resources`         | Metrics exporter resource requests and limits                                                                   | `{}`                      |
-| `metrics.podAnnotations`    | Additional annotations for Metrics exporter pod                                                                 | `{}`                      |
+| Name                                       | Description                                                                                                     | Value                     |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `metrics.enabled`                          | Start a exporter side-car                                                                                       | `false`                   |
+| `metrics.image.registry`                   | Apache exporter image registry                                                                                  | `docker.io`               |
+| `metrics.image.repository`                 | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
+| `metrics.image.tag`                        | Apache exporter image tag                                                                                       | `0.11.0-debian-11-r42`    |
+| `metrics.image.digest`                     | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
+| `metrics.image.pullPolicy`                 | Image pull policy                                                                                               | `IfNotPresent`            |
+| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                | `[]`                      |
+| `metrics.resources`                        | Metrics exporter resource requests and limits                                                                   | `{}`                      |
+| `metrics.podAnnotations`                   | Additional annotations for Metrics exporter pod                                                                 | `{}`                      |
+| `metrics.service.type`                     | Drupal exporter service type                                                                                    | `ClusterIP`               |
+| `metrics.service.ports.metrics`            | Drupal exporter service port                                                                                    | `9117`                    |
+| `metrics.service.externalTrafficPolicy`    | Drupal exporter service external traffic policy                                                                 | `Cluster`                 |
+| `metrics.service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                                  | `[]`                      |
+| `metrics.service.loadBalancerIP`           | Drupal exporter service Load Balancer IP                                                                        | `""`                      |
+| `metrics.service.loadBalancerSourceRanges` | Drupal exporter service Load Balancer sources                                                                   | `[]`                      |
+| `metrics.service.annotations`              | Additional custom annotations for Drupal exporter service                                                       | `{}`                      |
+| `metrics.serviceMonitor.enabled`           | Create ServiceMonitor resource(s) for scraping metrics using PrometheusOperator                                 | `false`                   |
+| `metrics.serviceMonitor.namespace`         | The namespace in which the ServiceMonitor will be created                                                       | `""`                      |
+| `metrics.serviceMonitor.interval`          | The interval at which metrics should be scraped                                                                 | `30s`                     |
+| `metrics.serviceMonitor.scrapeTimeout`     | The timeout after which the scrape is ended                                                                     | `""`                      |
+| `metrics.serviceMonitor.relabellings`      | Metrics RelabelConfigs to apply to samples before scraping.                                                     | `[]`                      |
+| `metrics.serviceMonitor.metricRelabelings` | Metrics RelabelConfigs to apply to samples before ingestion.                                                    | `[]`                      |
+| `metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                                                        | `false`                   |
+| `metrics.serviceMonitor.additionalLabels`  | Additional labels that can be used so ServiceMonitor resource(s) can be discovered by Prometheus                | `{}`                      |
+| `metrics.prometheusRule.enabled`           | Create a custom prometheusRule Resource for scraping metrics using PrometheusOperator                           | `false`                   |
+| `metrics.prometheusRule.namespace`         | The namespace in which the prometheusRule will be created                                                       | `""`                      |
+| `metrics.prometheusRule.additionalLabels`  | Additional labels for the prometheusRule                                                                        | `{}`                      |
+| `metrics.prometheusRule.rules`             | Custom Prometheus rules                                                                                         | `[]`                      |
 
 
 ### Certificate injection parameters
