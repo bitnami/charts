@@ -263,7 +263,7 @@ replicaCount: 1
 ## @param updateStrategy.type WordPress deployment strategy type
 ## @param updateStrategy.rollingUpdate WordPress deployment rolling update configuration parameters
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
-## NOTE: Set it to `Recreate` if you use a PV that cannot be mounted on multiple pods
+## NOTE: Set it to `Recreate` if you use a PV that cannot be mounted on multiple pods. Optionally specify rollingUpdate if using type RollingUpdate
 ## e.g:
 ## updateStrategy:
 ##  type: RollingUpdate
@@ -273,7 +273,6 @@ replicaCount: 1
 ##
 updateStrategy:
   type: RollingUpdate
-  rollingUpdate: {}
 ## @param schedulerName Alternate scheduler
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
