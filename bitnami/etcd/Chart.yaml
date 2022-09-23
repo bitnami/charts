@@ -24,4 +24,4 @@ name: etcd
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/etcd
   - https://coreos.com/etcd/
-version: 8.5.2
+version: 8.5.5

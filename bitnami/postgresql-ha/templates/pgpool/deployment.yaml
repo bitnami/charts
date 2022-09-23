@@ -295,31 +295,31 @@ spec:
               containerPort: {{ .Values.pgpool.containerPorts.postgresql }}
               protocol: TCP
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.pgpool.livenessProbe.enabled }}
+          {{- if .Values.pgpool.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.pgpool.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.pgpool.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - /opt/bitnami/scripts/pgpool/healthcheck.sh
-          {{- else if .Values.pgpool.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.pgpool.readinessProbe.enabled }}
+          {{- if .Values.pgpool.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.pgpool.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.pgpool.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - bash
                 - -ec
                 - PGPASSWORD=${PGPOOL_POSTGRES_PASSWORD} psql -U {{ (include "postgresql-ha.postgresqlUsername" .) | quote }} {{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}{{- end }} -h /opt/bitnami/pgpool/tmp -tA -c "SELECT 1" >/dev/null
-          {{- else if .Values.pgpool.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.pgpool.startupProbe.enabled }}
+          {{- if .Values.pgpool.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.pgpool.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.pgpool.startupProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - /opt/bitnami/scripts/pgpool/healthcheck.sh
-          {{- else if .Values.pgpool.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.pgpool.resources }}

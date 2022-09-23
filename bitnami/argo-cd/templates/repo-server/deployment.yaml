@@ -185,7 +185,9 @@ spec:
           {{- if .Values.repoServer.resources }}
           resources: {{- toYaml .Values.repoServer.resources | nindent 12 }}
           {{- end }}
-          {{- if .Values.repoServer.startupProbe.enabled }}
+          {{- if .Values.repoServer.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.repoServer.startupProbe.enabled }}
           startupProbe:
             tcpSocket:
               port: {{ .Values.repoServer.containerPorts.repoServer }}
@@ -194,10 +196,10 @@ spec:
             timeoutSeconds: {{ .Values.repoServer.startupProbe.timeoutSeconds }}
             successThreshold: {{ .Values.repoServer.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.repoServer.startupProbe.failureThreshold }}
-          {{- else if .Values.repoServer.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.repoServer.livenessProbe.enabled }}
+          {{- if .Values.repoServer.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.repoServer.livenessProbe.enabled }}
           livenessProbe:
             tcpSocket:
               port: {{ .Values.repoServer.containerPorts.repoServer }}
@@ -206,10 +208,10 @@ spec:
             timeoutSeconds: {{ .Values.repoServer.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.repoServer.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.repoServer.livenessProbe.failureThreshold }}
-          {{- else if .Values.repoServer.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.repoServer.readinessProbe.enabled }}
+          {{- if .Values.repoServer.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.repoServer.readinessProbe.enabled }}
           readinessProbe:
             tcpSocket:
               port: {{ .Values.repoServer.containerPorts.repoServer }}
@@ -218,8 +220,6 @@ spec:
             timeoutSeconds: {{ .Values.repoServer.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.repoServer.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.repoServer.readinessProbe.failureThreshold }}
-          {{- else if .Values.repoServer.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             # Mounting into a path that will be read by Argo CD

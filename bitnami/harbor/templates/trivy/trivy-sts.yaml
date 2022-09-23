@@ -135,30 +135,30 @@ spec:
             - name: api-server
               containerPort: {{ ternary .Values.trivy.containerPorts.https .Values.trivy.containerPorts.http .Values.internalTLS.enabled }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.trivy.startupProbe.enabled }}
+          {{- if .Values.trivy.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.trivy.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.trivy.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.trivy.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: api-server
-          {{- else if .Values.trivy.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.trivy.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.trivy.livenessProbe.enabled }}
+          {{- if .Values.trivy.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.trivy.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.trivy.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.trivy.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
               path: /probe/healthy
               port: api-server
-          {{- else if .Values.trivy.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.trivy.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.trivy.readinessProbe.enabled }}
+          {{- if .Values.trivy.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.trivy.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.trivy.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.trivy.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
               path: /probe/ready
               port: api-server
-          {{- else if .Values.trivy.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.trivy.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.trivy.lifecycleHooks }}

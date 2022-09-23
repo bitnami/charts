@@ -115,26 +115,26 @@ spec:
             - containerPort: {{ .Values.notary.signer.containerPorts.signer }}
               name: notary-signer
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.notary.signer.startupProbe.enabled }}
+          {{- if .Values.notary.signer.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.notary.signer.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.notary.signer.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.notary.signer.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: notary-signer
-          {{- else if .Values.notary.signer.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.notary.signer.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.notary.signer.livenessProbe.enabled }}
+          {{- if .Values.notary.signer.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.notary.signer.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.notary.signer.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.notary.signer.livenessProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: notary-signer
-          {{- else if .Values.notary.signer.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.notary.signer.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.notary.signer.readinessProbe.enabled }}
+          {{- if .Values.notary.signer.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.notary.signer.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.notary.signer.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.notary.signer.readinessProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: notary-signer
-          {{- else if .Values.notary.signer.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.notary.signer.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.notary.signer.lifecycleHooks }}

@@ -69,7 +69,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------- | ------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `haproxy.image.registry`    | HAProxy image registry                                                                                  | `docker.io`             |
 | `haproxy.image.repository`  | HAProxy image repository                                                                                | `bitnami/haproxy-intel` |
-| `haproxy.image.tag`         | HAProxy image tag (immutable tags are recommended)                                                      | `2.6.5-debian-11-r0`    |
+| `haproxy.image.tag`         | HAProxy image tag (immutable tags are recommended)                                                      | `2.6.6-debian-11-r0`    |
 | `haproxy.image.digest`      | HAProxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `haproxy.image.pullPolicy`  | HAProxy image pull policy                                                                               | `IfNotPresent`          |
 | `haproxy.image.pullSecrets` | HAProxy image pull secrets                                                                              | `[]`                    |

@@ -35,4 +35,4 @@ name: wordpress-intel
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/wordpress-intel
   - https://wordpress.org/
-version: 2.1.7
+version: 2.1.9

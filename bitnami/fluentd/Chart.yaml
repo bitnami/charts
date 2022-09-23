@@ -25,4 +25,4 @@ name: fluentd
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/fluentd
   - https://www.fluentd.org/
-version: 5.5.0
+version: 5.5.2

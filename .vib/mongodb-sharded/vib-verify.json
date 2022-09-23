@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/mongodb-sharded"
         },
-        "runtime_parameters": "ImF1dGgiOgogICJyb290UGFzc3dvcmQiOiAiQzY1ZDRRcnQiCiAgInJlcGxpY2FTZXRLZXkiOiAiOXc2cVR4a1YiCiJzZXJ2aWNlIjoKICAicG9ydHMiOgogICAgIm1vbmdvZGIiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciIKInBlcnNpc3RlbmNlIjoKICAiZW5hYmxlZCI6IGZhbHNlCg==",
+        "runtime_parameters": "YXV0aDoKICBlbmFibGVkOiB0cnVlCiAgcm9vdFVzZXI6IHJvb3QKICByb290UGFzc3dvcmQ6IFBhc3N3b3JkMTIzITQKICByZXBsaWNhU2V0S2V5OiBTZXRQYXNzd29yZDEyMzQKc2hhcmRzOiAzCmNvbW1vbjoKICBjb250YWluZXJQb3J0czoKICAgIG1vbmdvZGI6IDI3MDE3CnNlcnZpY2U6CiAgcG9ydHM6CiAgICBtb25nb2RiOiA4MAogIHR5cGU6IExvYWRCYWxhbmNlcgpjb25maWdzdnI6CiAgcmVwbGljYUNvdW50OiAxCiAgcG9kU2VjdXJpdHlDb250ZXh0OgogICAgZW5hYmxlZDogdHJ1ZQogICAgZnNHcm91cDogMTAwMgogIGNvbnRhaW5lclNlY3VyaXR5Q29udGV4dDoKICAgIGVuYWJsZWQ6IHRydWUKICAgIHJ1bkFzVXNlcjogMTAwMgptb25nb3M6CiAgcmVwbGljYUNvdW50OiAyCiAgcG9kU2VjdXJpdHlDb250ZXh0OgogICAgZW5hYmxlZDogdHJ1ZQogICAgZnNHcm91cDogMTAwMgogIGNvbnRhaW5lclNlY3VyaXR5Q29udGV4dDoKICAgIGVuYWJsZWQ6IHRydWUKICAgIHJ1bkFzVXNlcjogMTAwMgogIHVzZVN0YXRlZnVsU2V0OiB0cnVlCiAgc2VydmljZVBlclJlcGxpY2E6CiAgICBlbmFibGVkOiB0cnVlCiAgICB0eXBlOiBDbHVzdGVySVAKICAgIHBvcnQ6IDgwCnNoYXJkc3ZyOgogIGRhdGFOb2RlOgogICAgcmVwbGljYUNvdW50OiAyCiAgICBwb2RTZWN1cml0eUNvbnRleHQ6CiAgICAgIGVuYWJsZWQ6IHRydWUKICAgICAgZnNHcm91cDogMTAwMgogICAgY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogICAgICBlbmFibGVkOiB0cnVlCiAgICAgIHJ1bkFzVXNlcjogMTAwMgogIGFyYml0ZXI6CiAgICByZXBsaWNhQ291bnQ6IDA=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -35,6 +35,18 @@
           "action_id": "health-check",
           "params": {
             "endpoint": "lb-mongodb-sharded-mongodb"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/mongodb-sharded/goss"
+            },
+            "remote": {
+              "workload": "sts-mongodb-sharded-mongos"
+            },
+            "vars_file": "vars.yaml"
           }
         }
       ]
