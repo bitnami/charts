@@ -3,7 +3,7 @@
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ include "concourse.web.fullname" . }}
+  name: {{ include "concourse.web.fullname.namespace" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: web
@@ -27,7 +27,7 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ printf "%s-psp" (include "concourse.web.fullname" .) }}
+  name: {{ printf "%s-psp" (include "concourse.web.fullname.namespace" .) }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: web
     {{- if .Values.commonLabels }}
@@ -41,6 +41,6 @@ rules:
     resources: ['podsecuritypolicies']
     verbs:     ['use']
     resourceNames:
-      - {{ include "concourse.web.fullname" . }}
+      - {{ include "concourse.web.fullname.namespace" . }}
 {{- end }}
 {{- end }}
