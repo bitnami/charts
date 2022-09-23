@@ -87,7 +87,7 @@ spec:
                 . /opt/bitnami/scripts/liblog.sh
 
                 check_redis_connection() {
-                  local result="$(redis-cli -h {{ include "argocd.redisHost" . }} -p {{ include "argocd.redisPort" . }} {{ .Values.redisWait.extraArgs | default '' }} PING)"
+                  local result="$(redis-cli -h {{ include "argocd.redisHost" . }} -p {{ include "argocd.redisPort" . }} {{ .Values.redisWait.extraArgs }} PING)"
                   if [[ "$result" != "PONG" ]]; then
                     false
                   fi
