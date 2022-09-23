@@ -6,40 +6,14 @@ on:
   pull_request_target:
     types:
       - closed
-
-permissions:
-  issues: write
-  pull-requests: write
-  repository-projects: write
-
-# To fix the concurrency when for example more than one label is added
-concurrency:
-  group: ${{ github.run_id }}
-  cancel-in-progress: false
-
 jobs:
   send_to_solved:
-    if: ${{ github.actor != 'bitnami-bot' || (github.actor == 'bitnami-bot' && github.event.issue && (!contains(github.event.issue.labels.*.name, 'stale'))) }}
     runs-on: ubuntu-latest
     steps:
-      - name: Repo checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 1
-      - name: Load .env file
-        uses: xom9ikk/dotenv@v1.0.2
-        with:
-          path: .github/workflows/
       - name: Send to the Solved column
         uses: peter-evans/create-or-update-project-card@v2
         with:
           project-name: Support
-          # If the author comes from Bitnami, send it to Bitnami. Otherwise, all to Triage
           column-name: 'Solved'
+          token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
           issue-number: ${{ github.event_name != 'issues' && github.event.number || github.event.issue.number }}
-      - name: Solved labeling
-        # Only if moved into Solved
-        uses: andymckay/labeler@1.0.4
-        with:
-          add-labels: "solved"
-          remove-labels: "in-progress, on-hold, triage"

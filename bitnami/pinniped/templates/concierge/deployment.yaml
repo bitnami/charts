@@ -118,32 +118,32 @@ spec:
               containerPort: {{ .Values.concierge.containerPorts.proxy }}
             - name: https-api
               containerPort: {{ .Values.concierge.containerPorts.api }}
-          {{- if .Values.concierge.livenessProbe.enabled }}
+          {{- if .Values.concierge.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.concierge.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.concierge.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.concierge.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /healthz
               port: https-api
               scheme: HTTPS
-          {{- else if .Values.concierge.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.concierge.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.concierge.readinessProbe.enabled }}
+          {{- if .Values.concierge.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.concierge.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.concierge.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.concierge.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /healthz
               port: https-api
               scheme: HTTPS
-          {{- else if .Values.concierge.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.concierge.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.concierge.startupProbe.enabled }}
+          {{- if .Values.concierge.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.concierge.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.concierge.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.concierge.startupProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /healthz
               port: https-api
               scheme: HTTPS
-          {{- else if .Values.concierge.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.concierge.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.concierge.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.concierge.lifecycleHooks "context" $) | nindent 12 }}

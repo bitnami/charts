@@ -68,7 +68,7 @@ hub:
   image:
     registry: docker.io
     repository: bitnami/jupyterhub
-    tag: 1.5.0-debian-11-r34
+    tag: 1.5.0-debian-11-r40
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -637,7 +637,7 @@ proxy:
   image:
     registry: docker.io
     repository: bitnami/configurable-http-proxy
-    tag: 4.5.2-debian-11-r5
+    tag: 4.5.3-debian-11-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1393,7 +1393,7 @@ singleuser:
   image:
     registry: docker.io
     repository: bitnami/jupyter-base-notebook
-    tag: 1.5.0-debian-11-r35
+    tag: 1.5.0-debian-11-r40
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1574,7 +1574,7 @@ singleuser:
 auxiliaryImage:
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: 11-debian-11-r32
+  tag: 11-debian-11-r37
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
