@@ -13,6 +13,9 @@ env:
   CSP_API_URL: https://console.cloud.vmware.com
   CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
   VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
+# Avoid concurrency over the same PR
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
 jobs:
   get-chart:
     runs-on: ubuntu-latest
@@ -50,7 +53,7 @@ jobs:
             # Changes done in charts but version not bumped -> ERROR
             echo "::set-output name=error::Detected changes in charts without version bump in Chart.yaml.\nCharts changed: ${num_charts_changed}\n${charts_dirs_changed}\nVersion bumps detected: ${num_version_bumps}"
             echo "::set-output name=result::fail"
-          elif [[ ${{ github.actor }} == "bitnami-bot" && "$latest_commit_message" == *"readme-generator-for-helm"*  ]]; then
+          elif [[ ${{ github.actor }} == "bitnami-bot" && ${{ github.event.action }} == "synchronize" && "$latest_commit_message" == *"readme-generator-for-helm"*  ]]; then
             # The CI was launched by the readme generator workflow
             echo "::set-output name=result::skip"
           elif [[ "$num_charts_changed" -eq "1" ]]; then
@@ -120,7 +123,7 @@ jobs:
     # Job to be run only when the triage for automated PRs did as well,
     # not taking into account whether 'VIB Verify' succeeded
     if: |
-      always() &&
+      always() && github.event.action == 'labeled' &&
       contains(github.event.pull_request.labels.*.name, 'auto-merge') &&
       github.event.pull_request.user.login == 'bitnami-bot'
     steps:
