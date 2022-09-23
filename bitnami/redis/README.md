@@ -475,6 +475,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.metricRelabelings`   | Metrics RelabelConfigs to apply to samples before ingestion.                                                        | `[]`                     |
 | `metrics.serviceMonitor.honorLabels`         | Specify honorLabels parameter to add the scrape endpoint                                                            | `false`                  |
 | `metrics.serviceMonitor.additionalLabels`    | Additional labels that can be used so ServiceMonitor resource(s) can be discovered by Prometheus                    | `{}`                     |
+| `metrics.serviceMonitor.podTargetLabels`     | Labels from the Kubernetes pod to be transferred to the created metrics                                             | `[]`                     |
 | `metrics.prometheusRule.enabled`             | Create a custom prometheusRule Resource for scraping metrics using PrometheusOperator                               | `false`                  |
 | `metrics.prometheusRule.namespace`           | The namespace in which the prometheusRule will be created                                                           | `""`                     |
 | `metrics.prometheusRule.additionalLabels`    | Additional labels for the prometheusRule                                                                            | `{}`                     |
