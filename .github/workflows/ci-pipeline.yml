@@ -62,7 +62,7 @@ jobs:
             echo "::set-output name=result::skip"
           else
             # Changes done in more than chart -> SKIP
-            echo -e "::set-output name=error::Changes detected in more than one chart directory:\n${charts_dirs_changed}\nIt is strongly advised to change only one chart in a PR. The rest of the tests will be skipped."
+            echo "::set-output name=error::Changes detected in more than one chart directory:\n${charts_dirs_changed}\nIt is strongly advised to change only one chart in a PR. The rest of the tests will be skipped."
             echo "::set-output name=result::skip"
           fi
       # Using actions/github-scripts because using exit 1 in the script above would not provide any output
@@ -85,7 +85,7 @@ jobs:
     if: |
       needs.get-chart.outputs.result == 'ok' &&
       (
-        (contains(github.event.pull_request.labels.*.name, 'verify') || (github.event.action == 'labeled' && github.event.label.name == 'verify') ||
+        contains(github.event.pull_request.labels.*.name, 'verify') || (github.event.action == 'labeled' && github.event.label.name == 'verify')
       )
     name: VIB Verify
     steps:

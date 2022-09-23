@@ -25,8 +25,13 @@ jobs:
           # Using grep -c as a better alternative to wc -l when dealing with empty strings."
           num_charts_changed="$(echo "$charts_dirs_changed" | grep -c "bitnami" || true)"
           num_version_bumps="$(echo "$files_changed_data" | jq -r '[.[] | select(.filename|endswith("Chart.yaml")) | select(.patch|contains("+version")) ] | length' )"
+          non_readme_files=$(echo "$files_changed" | grep -vc "\.md" || true)
 
-          if [[ "$num_charts_changed" -ne "$num_version_bumps" ]]; then
+          if [[ "$non_readme_files" -le "0" ]]; then
+            # The only changes are .md files -> OK
+            echo "::set-output name=message::The only changes are .md files"
+            echo "::set-output name=result::ok"
+          elif [[ "$num_charts_changed" -ne "$num_version_bumps" ]]; then
             # Changes done in charts but version not bumped -> ERROR
             echo "::set-output name=message::Detected changes in charts without version bump in Chart.yaml.\nCharts changed: ${num_charts_changed}\n${charts_dirs_changed}\nVersion bumps detected: ${num_version_bumps}"
             echo "::set-output name=result::fail"
@@ -40,8 +45,8 @@ jobs:
             echo "::set-output name=message::No changes detected in charts. The rest of the tests will be skipped."
             echo "::set-output name=result::ok"
           else
-            # Changes done in more than chart -> SKIP
-            echo -e "::set-output name=message::Changes detected in more than one chart directory:\n${charts_dirs_changed}\nIt is strongly advised to change only one chart in a PR. The rest of the tests will be skipped."
+            # Changes done in more than chart -> WARN
+            echo "::set-output name=message::Changes detected in more than one chart directory:\n${charts_dirs_changed}\nIt is strongly advised to change only one chart in a PR. The rest of the tests will be skipped."
             echo "::set-output name=result::warn"
           fi
       # Using actions/github-scripts because using exit 1 in the script above would not provide any output
