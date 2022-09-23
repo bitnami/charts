@@ -16,7 +16,6 @@ service:
   web:
     ports:
       http: 80
-      https: 444
 postgresql:
   auth:
     username: bn_test_concourse
