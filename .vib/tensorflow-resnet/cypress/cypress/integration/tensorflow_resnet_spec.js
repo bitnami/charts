@@ -41,10 +41,13 @@ it('classifies sample image', () => {
         expect(response.status).to.eq(200);
 
         const predictionByCategory = response.body.predictions[0];
-        expect(predictionByCategory).to.be.array();
-        expect(predictionByCategory).not.to.be.containingAnyOf([null, ""]);
+        expect(
+          Array.isArray(predictionByCategory) &&
+            !predictionByCategory.includes('') &&
+            !predictionByCategory.includes(null)
+        ).to.be.true;
 
-        const maxValue = Math.max(...predictionByCategory)
+        const maxValue = Math.max(...predictionByCategory);
         expect(maxValue !== -Infinity && !isNaN(maxValue)).to.be.true;
       });
     });

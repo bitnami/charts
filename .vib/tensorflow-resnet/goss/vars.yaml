@@ -3,7 +3,7 @@ containerPorts:
   restApi: 8501
 service:
   ports:
-    server: 8500
+    server: 8501
     restApi: 80
 containerSecurityContext:
   runAsUser: 1002
