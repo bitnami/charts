@@ -142,26 +142,26 @@ spec:
           resources: {{- toYaml .Values.ingester.resources | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.ingester.livenessProbe.enabled }}
+          {{- if .Values.ingester.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.ingester.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingester.livenessProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http
-          {{- else if .Values.ingester.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.ingester.readinessProbe.enabled }}
+          {{- if .Values.ingester.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.ingester.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingester.readinessProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http
-          {{- else if .Values.ingester.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.ingester.startupProbe.enabled }}
+          {{- if .Values.ingester.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.ingester.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingester.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http
-          {{- else if .Values.ingester.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.ingester.lifecycleHooks }}
