@@ -24,6 +24,3 @@ command:
     stdout:
       - uid={{ .Vars.containerSecurityContext.runAsUser }}
       - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
-http:
-  http://localhost:{{ .Vars.service.ports.elastic }}:
-    status: 200

@@ -1,6 +1,3 @@
-service:
-  ports:
-    elastic: 9091
 containerPorts:
   http: 9090
   elastic: 9091
@@ -10,8 +7,6 @@ containerSecurityContext:
   runAsUser: 1002
 serviceAccount:
   automountServiceAccountToken: true
-  filetype: directory
-  mode: "3777"
 postgresql:
   auth:
     database: test_db_database
