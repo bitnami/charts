@@ -260,7 +260,7 @@ defaultConfigurationOverrides: |
       {{- $nodes := .Values.zookeeper.replicaCount | int }}
       {{- range $node, $e := until $nodes }}
       <node>
-        <host>{{ printf "%s-zookeeper-%d.%s.%s.svc.%s" (include "common.names.fullname" $ ) $node (include "clickhouse.zookeeeper.headlessServiceName" $) (include "common.names.namespace" $) $.Values.clusterDomain }}</host>
+        <host>{{ printf "%s-%d.%s.%s.svc.%s" (include "clickhouse.zookeeper.fullname" $ ) $node (include "clickhouse.zookeeper.headlessServiceName" $) (include "common.names.namespace" $) $.Values.clusterDomain }}</host>
         <port>{{ $.Values.zookeeper.service.ports.client }}</port>
       </node>
       {{- end }}

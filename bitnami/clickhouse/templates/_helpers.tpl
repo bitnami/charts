@@ -146,10 +146,18 @@ Return the path to the CA cert file.
 {{- end -}}
 
 {{/*
+Create a default fully qualified app name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "clickhouse.zookeeper.fullname" -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "zookeeper" "chartValues" .Values.zookeeper "context" $) -}}
+{{- end -}}
+
+{{/*
 Return the path to the CA cert file.
 */}}
-{{- define "clickhouse.zookeeeper.headlessServiceName" -}}
-{{-  printf "%s-zookeeper-headless" (include "common.names.fullname" .) -}}
+{{- define "clickhouse.zookeeper.headlessServiceName" -}}
+{{-  printf "%s-headless" (include "clickhouse.zookeeper.fullname" .) -}}
 {{- end -}}
 
 {{/*
