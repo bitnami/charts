@@ -127,9 +127,9 @@ spec:
               value: replica
             - name: REDIS_MASTER_HOST
             {{- if and (eq (int64 .Values.master.count) 1) (ne .Values.master.kind "Deployment") }}
-              value: {{ template "common.names.fullname" . }}-master-0.{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+              value: {{ template "common.names.fullname" . }}-master-0.{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc{{ if .Values.clusterDomain }}{{ printf ".%s" .Values.clusterDomain }}{{ end }}
             {{- else }}
-              value: {{ template "common.names.fullname" . }}-master.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+              value: {{ template "common.names.fullname" . }}-master.{{ .Release.Namespace }}.svc{{ if .Values.clusterDomain }}{{ printf ".%s" .Values.clusterDomain }}{{ end }}
             {{- end }}
             - name: REDIS_MASTER_PORT_NUMBER
               value: {{ .Values.master.containerPorts.redis | quote }}
