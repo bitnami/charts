@@ -1,3 +1,4 @@
+{{- $clusterDomainWithDot := {{ if .Values.clusterDomain }}{{ printf ".%s" .Values.clusterDomain }}{{ else }}{{ print "" }}{{ end }} }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -54,12 +55,12 @@ data:
 
     REDISPORT=$(get_port "$HOSTNAME" "REDIS")
 
-    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc{{ $clusterDomainWithDot }}"
 
     if [ -n "$REDIS_EXTERNAL_MASTER_HOST" ]; then
         REDIS_SERVICE="$REDIS_EXTERNAL_MASTER_HOST"
     else
-        REDIS_SERVICE="{{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+        REDIS_SERVICE="{{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc{{ $clusterDomainWithDot }}"
     fi
 
     SENTINEL_SERVICE_PORT=$(get_port "{{ include "common.names.fullname" . }}" "TCP_SENTINEL")
@@ -234,8 +235,8 @@ data:
     . /opt/bitnami/scripts/libvalidations.sh
     . /opt/bitnami/scripts/libfile.sh
 
-    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
-    REDIS_SERVICE="{{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc{{ $clusterDomainWithDot }}"
+    REDIS_SERVICE="{{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc{{ $clusterDomainWithDot }}"
 
     get_port() {
         hostname="$1"
@@ -410,7 +411,7 @@ data:
     . /opt/bitnami/scripts/libvalidations.sh
     . /opt/bitnami/scripts/libos.sh
 
-    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc{{ $clusterDomainWithDot }}"
     SENTINEL_SERVICE_ENV_NAME={{ printf "%s%s"  (upper (include "common.names.fullname" .)| replace "-" "_") "_SERVICE_PORT_TCP_SENTINEL" }}
     SENTINEL_SERVICE_PORT=${!SENTINEL_SERVICE_ENV_NAME}
 
@@ -438,7 +439,7 @@ data:
       [[ "$REDIS_MASTER_HOST" != "$(get_full_hostname $HOSTNAME)" ]]
     }
 
-    REDIS_SERVICE="{{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+    REDIS_SERVICE="{{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc{{ $clusterDomainWithDot }}"
 
     {{ if .Values.auth.sentinel -}}
     # redis-cli automatically consumes credentials from the REDISCLI_AUTH variable
