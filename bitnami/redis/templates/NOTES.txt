@@ -1,3 +1,4 @@
+{{- $clusterDomainWithDot := {{ if .Values.clusterDomain }}{{ printf ".%s" .Values.clusterDomain }}{{ else }}{{ print "" }}{{ end }} }}
 CHART NAME: {{ .Chart.Name }}
 CHART VERSION: {{ .Chart.Version }}
 APP VERSION: {{ .Chart.AppVersion }}
@@ -58,7 +59,7 @@ For Redis Sentinel:
 
 Redis&reg; can be accessed via port {{ .Values.sentinel.service.ports.redis }} on the following DNS name from within your cluster:
 
-    {{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} for read only operations
+    {{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc{{ $clusterDomainWithDot }} for read only operations
 
 For read/write operations, first access the Redis&reg; Sentinel cluster, which is available in port {{ .Values.sentinel.service.ports.sentinel }} using the same domain name above.
 
@@ -66,15 +67,15 @@ For read/write operations, first access the Redis&reg; Sentinel cluster, which i
 
 Redis&reg; can be accessed on the following DNS names from within your cluster:
 
-    {{ printf "%s-master.%s.svc.%s" (include "common.names.fullname" .) .Release.Namespace .Values.clusterDomain }} for read/write operations (port {{ .Values.master.service.ports.redis }})
-    {{ printf "%s-replicas.%s.svc.%s" (include "common.names.fullname" .) .Release.Namespace .Values.clusterDomain }} for read-only operations (port {{ .Values.replica.service.ports.redis }})
+    {{ printf "%s-master.%s.svc%s" (include "common.names.fullname" .) .Release.Namespace $clusterDomainWithDot }} for read/write operations (port {{ .Values.master.service.ports.redis }})
+    {{ printf "%s-replicas.%s.svc%s" (include "common.names.fullname" .) .Release.Namespace $clusterDomainWithDot }} for read-only operations (port {{ .Values.replica.service.ports.redis }})
 
 {{- end }}
 {{- else }}
 
 Redis&reg; can be accessed via port {{ .Values.master.service.ports.redis }} on the following DNS name from within your cluster:
 
-    {{ template "common.names.fullname" . }}-master.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+    {{ template "common.names.fullname" . }}-master.{{ .Release.Namespace }}.svc{{ $clusterDomainWithDot }}
 
 {{- end }}
 
