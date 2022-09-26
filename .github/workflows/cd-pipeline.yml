@@ -37,6 +37,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/matomo/**'
       - 'bitnami/mediawiki/**'
       - 'bitnami/memcached/**'
+      - 'bitnami/metrics-server/**'
       - 'bitnami/minio/**'
       - 'bitnami/mongodb/**'
       - 'bitnami/mongodb-sharded/**'
