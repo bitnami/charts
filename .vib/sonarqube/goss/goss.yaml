@@ -8,11 +8,11 @@ file:
     exists: true
     filetype: file
     contains:
-     - /web.*port.*={{ .Vars.containerPorts.http }}/
-     - /search.*port.*={{ .Vars.containerPorts.elastic }}/
+     - /web.*port.*{{ .Vars.containerPorts.http }}/
+     - /search.*port.*{{ .Vars.containerPorts.elastic }}/
      - /postgresql.*:{{ .Vars.postgresql.service.ports.postgresql }}/{{ .Vars.postgresql.auth.database }}/
-     - /jdbc.*username.*={{ .Vars.postgresql.auth.username }}/
-     - /jdbc.*password=.*{{ .Vars.postgresql.auth.password }}/
+     - /jdbc.*username.*{{ .Vars.postgresql.auth.username }}/
+     - /jdbc.*password.*{{ .Vars.postgresql.auth.password }}/
   /var/run/secrets/kubernetes.io/serviceaccount:
     exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
     filetype: directory
