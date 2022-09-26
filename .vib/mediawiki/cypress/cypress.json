@@ -1,6 +1,6 @@
 {
   "env": {
-    "username": "user",
+    "username": "test_user",
     "password": "ComplicatedPassword123!4"
   },
   "hosts": {
