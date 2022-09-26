@@ -1,5 +1,5 @@
 const COMMAND_DELAY = 2000;
-const BASE_URL = 'http://bitnami-mediawiki.my';
+const BASE_URL = 'http://vmware-mediawiki.my';
 
 for (const command of ['click']) {
   Cypress.Commands.overwrite(command, (originalFn, ...args) => {
