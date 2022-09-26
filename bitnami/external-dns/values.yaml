@@ -1029,3 +1029,18 @@ metrics:
     ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
     ##
     jobLabel: ""
+  ## Google Managed Prometheus PodMonitor configuration
+  ##
+  googlePodMonitor:
+    ## @param metrics.googlePodMonitor.enabled Create Google Managed Prometheus PodMonitoring object
+    ##
+    enabled: false
+    ## @param metrics.googlePodMonitor.namespace Namespace in which PodMonitoring created
+    ##
+    namespace: ""
+    ## @param metrics.googlePodMonitor.interval Interval at which metrics should be scraped by Google Managed Prometheus
+    ##
+    interval: "60s"
+    ## @param  metrics.googlePodMonitor.endpoint The endpoint for Google Managed Prometheus scraping the metrics
+    ##
+    endpoint: /metrics
