@@ -1,0 +1,26 @@
+file:
+  /bitnami/sonarqube:
+    exists: true
+    filetype: directory
+    mode: "2775"
+    owner: root
+  /opt/bitnami/sonarqube/conf/sonar.properties:
+    exists: true
+    filetype: file
+    contains:
+     - /web.*port.*{{ .Vars.containerPorts.http }}/
+     - /search.*port.*{{ .Vars.containerPorts.elastic }}/
+     - /postgresql.*{{ .Vars.postgresql.service.ports.postgresql }}/{{ .Vars.postgresql.auth.database }}/
+     - /jdbc.*username.*{{ .Vars.postgresql.auth.username }}/
+     - /jdbc.*password.*{{ .Vars.postgresql.auth.password }}/
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
+    filetype: directory
+    mode: "3777"
+command:
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+      - uid={{ .Vars.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
