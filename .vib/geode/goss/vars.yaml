@@ -8,6 +8,9 @@ locator:
     rmi: 1100
   podSecurityContext:
     fsGroup: 1002
+    sysctls:
+      name: net.ipv4.tcp_syncookies
+      value: "0"
   containerSecurityContext:
     runAsUser: 1002
   service:

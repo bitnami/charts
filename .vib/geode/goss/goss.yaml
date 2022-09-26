@@ -52,3 +52,8 @@ command:
     stdout:
     - uid={{ .Vars.locator.containerSecurityContext.runAsUser }}
     - /groups=.*{{ .Vars.locator.podSecurityContext.fsGroup }}/
+  check-syn-cookies-config:
+    exec: sysctl -a | grep {{ .Vars.locator.podSecurityContext.sysctls.name }}
+    exit-status: 0
+    stdout:
+    - /{{ .Vars.locator.podSecurityContext.sysctls.name }}.*{{ .Vars.locator.podSecurityContext.sysctls.value }}/
