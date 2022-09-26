@@ -63,6 +63,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/schema-registry/**'
       - 'bitnami/sealed-secrets/**'
       - 'bitnami/solr/**'
+      - 'bitnami/sonarqube/**'
       - 'bitnami/spark/**'
       - 'bitnami/spring-cloud-dataflow/**'
       - 'bitnami/suitecrm/**'
