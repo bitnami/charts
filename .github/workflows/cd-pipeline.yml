@@ -57,6 +57,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/pinniped/**'
       - 'bitnami/postgresql/**'
       - 'bitnami/prestashop/**'
+      - 'bitnami/pytorch/**'
       - 'bitnami/rabbitmq/**'
       - 'bitnami/redis-cluster/**'
       - 'bitnami/redis/**'
