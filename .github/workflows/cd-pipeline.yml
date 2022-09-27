@@ -42,6 +42,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/mongodb/**'
       - 'bitnami/mongodb-sharded/**'
       - 'bitnami/moodle/**'
+      - 'bitnami/mxnet/**'
       - 'bitnami/mysql/**'
       - 'bitnami/nats/**'
       - 'bitnami/nginx-intel/**'
