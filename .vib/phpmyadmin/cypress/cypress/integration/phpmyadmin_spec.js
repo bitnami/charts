@@ -1,13 +1,6 @@
 /// <reference types="cypress" />
 import { random } from '../support/utils';
 
-it('allows the user to log in and log out', () => {
-  cy.login();
-  cy.contains('[role="alert"]', 'Access denied').should('not.exist'); //checks if login was successful
-  cy.get('a[title="Log out"]').click();
-  cy.contains('#login_form', 'Log in');
-});
-
 it('allows creating a database and a table', () => {
   cy.login();
   cy.visit('index.php?route=/server/databases');
@@ -35,43 +28,3 @@ it('allows creating a database and a table', () => {
   });
 });
 
-it('allows importing a table and executing a query', () => {
-  cy.login();
-  cy.visit('index.php?route=/database/structure&server=1&db=mysql');
-  cy.contains('Import').click();
-  cy.get('#input_import_file').selectFile('cypress/fixtures/testdata.sql', {
-    force: true,
-  });
-  cy.get('#buttonGo').click();
-  cy.contains('No database selected', '[role="alert"]').should('not.exist');
-  cy.contains('Import has been successfully finished');
-  cy.fixture('testdata').then((td) => {
-    cy.contains('[title="Browse"]', td.importedDatabaseName).click();
-  });
-  cy.contains('#topmenu', 'SQL');
-  cy.visit('/index.php?route=/table/sql&db=mysql&table=authors');
-  cy.get('#button_submit_query').scrollIntoView().click();
-  cy.contains('Showing rows');
-});
-
-it('allows adding a user', () => {
-  cy.login();
-  cy.visit('index.php?route=/server/privileges&viewing_mode=server');
-  cy.get('#add_user_anchor').click();
-  cy.fixture('testdata').then((td) => {
-    cy.get('#pma_username').type(`${td.username}.${random}`);
-    cy.get('#text_pma_pw').type(td.password, { force: true });
-    cy.get('#text_pma_pw2').type(td.password, { force: true });
-    cy.get('#adduser_submit').click();
-  });
-  cy.contains('You have added a new user.');
-});
-
-it('shows the list of installed plugins', () => {
-  cy.login();
-  cy.visit('index.php?route=/server/plugins');
-  cy.fixture('plugins').then((plugin) => {
-    cy.get('#plugins-authentication').contains(plugin.installedPlugins.SQL);
-    cy.get('#plugins-datatype').contains(plugin.installedPlugins.MariaDB);
-  });
-});
