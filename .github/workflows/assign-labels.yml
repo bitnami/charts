@@ -8,6 +8,7 @@ permissions:
   issues: write
 jobs:
   assign-label:
+    name: Assign label
     runs-on: ubuntu-latest
     steps:
       - id: get-asset
