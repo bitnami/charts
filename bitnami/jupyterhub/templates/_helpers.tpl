@@ -35,9 +35,9 @@ Return the cookie_secret value
 */}}
 {{- define "jupyterhub.hub.config.JupyterHub.cookie_secret" -}}
     {{ $hubConfiguration := include "common.tplvalues.render" ( dict "value" .Values.hub.configuration "context" $ ) | fromYaml }}
-    {{- if $hubConfiguration.hub.config.JupyterHub.cookie_secret }}
+    {{- if hasKey $hubConfiguration "hub.config.JupyterHub.cookie_secret" }}
         {{- $hubConfiguration.hub.config.JupyterHub.cookie_secret }}
-    {{- else if $hubConfiguration.hub.cookieSecret }}
+    {{- else if hasKey $hubConfiguration "hub.cookieSecret" }}
         {{- $hubConfiguration.hub.cookieSecret }}
     {{- else }}
         {{- $secretData := (lookup "v1" "Secret" $.Release.Namespace ( include "jupyterhub.hub.name" . )).data }}
@@ -54,7 +54,7 @@ Return the CryptKeeper value
 */}}
 {{- define "jupyterhub.hub.config.CryptKeeper.keys" -}}
     {{ $hubConfiguration := include "common.tplvalues.render" ( dict "value" .Values.hub.configuration "context" $ ) | fromYaml }}
-    {{- if and $hubConfiguration.hub.config.CryptKeeper $hubConfiguration.hub.config.CryptKeeper.keys }}
+    {{- if hasKey $hubConfiguration "hub.config.CryptKeeper.keys" }}
         {{- $hubConfiguration.hub.config.CryptKeeper.keys | join ";" }}
     {{- else }}
         {{- $secretData := (lookup "v1" "Secret" $.Release.Namespace ( include "jupyterhub.hub.name" . )).data }}
