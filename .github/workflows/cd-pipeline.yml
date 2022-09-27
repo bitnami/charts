@@ -18,6 +18,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/etcd/**'
       - 'bitnami/external-dns/**'
       - 'bitnami/fluentd/**'
+      - 'bitnami/geode/**'
       - 'bitnami/ghost/**'
       - 'bitnami/grafana-loki/**'
       - 'bitnami/grafana/**'
