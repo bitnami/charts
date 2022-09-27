@@ -15,6 +15,35 @@
           "action_id": "helm-lint"
         }
       ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/pytorch"
+        },
+        "runtime_parameters": "cG9kU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBmc0dyb3VwOiAxMDAyCiAgcnVuQXNVc2VyOiAxMDAyCmNvbnRhaW5lclNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgcnVuQXNVc2VyOiAxMDAyCmNsb25lRmlsZXNGcm9tR2l0OgogIGVuYWJsZWQ6IHRydWUKICByZXBvc2l0b3J5OiAiaHR0cHM6Ly9naXRodWIuY29tL3B5dG9yY2gvdHV0b3JpYWxzLmdpdCIKICByZXZpc2lvbjogbWFzdGVyCnBlcnNpc3RlbmNlOgogIGVuYWJsZWQ6IHRydWUKICBtb3VudFBhdGg6IC9iaXRuYW1pL3B5dG9yY2gK",
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/pytorch/goss"
+            },
+            "remote": {
+              "workload": "deploy-pytorch"
+            },
+            "vars_file": "vars.yaml"
+          }
+        }
+      ]
     }
   }
 }
