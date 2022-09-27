@@ -70,11 +70,10 @@ spec:
             - |
               mkdir -p /bitnami/influxdb/{data,meta,wal}
               chmod 700 /bitnami/influxdb/{data,meta,wal}
-              find /bitnami/influxdb/{data,meta,wal} -mindepth 0 -maxdepth 1 | \
               {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
-                xargs -r chown -R `id -u`:`id -G | cut -d " " -f2`
+              chown -R `id -u`:`id -G | cut -d " " -f2` /bitnami/influxdb
               {{- else }}
-                xargs -r chown -R {{ .Values.influxdb.containerSecurityContext.runAsUser }}:{{ .Values.influxdb.podSecurityContext.fsGroup }}
+              chown -R {{ .Values.influxdb.containerSecurityContext.runAsUser }}:{{ .Values.influxdb.podSecurityContext.fsGroup }} /bitnami/influxdb
               {{- end }}
           {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
           securityContext:
