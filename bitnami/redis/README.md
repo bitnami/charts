@@ -7,7 +7,7 @@ Redis(R) is an open source, advanced key-value store. It is often referred to as
 [Overview of Redis&reg;](http://redis.io)
 
 Disclaimer: Redis is a registered trademark of Redis Ltd. Any rights therein are reserved to Redis Ltd. Any use by Bitnami is for referential purposes only and does not indicate any sponsorship, endorsement, or affiliation between Redis Ltd.
-
+                           
 ## TL;DR
 
 ```bash
@@ -95,15 +95,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Redis&reg; Image parameters
 
-| Name                | Description                                                                                                | Value                 |
-| ------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`    | Redis&reg; image registry                                                                                  | `docker.io`           |
-| `image.repository`  | Redis&reg; image repository                                                                                | `bitnami/redis`       |
-| `image.tag`         | Redis&reg; image tag (immutable tags are recommended)                                                      | `7.0.4-debian-11-r11` |
-| `image.digest`      | Redis&reg; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `image.pullPolicy`  | Redis&reg; image pull policy                                                                               | `IfNotPresent`        |
-| `image.pullSecrets` | Redis&reg; image pull secrets                                                                              | `[]`                  |
-| `image.debug`       | Enable image debug mode                                                                                    | `false`               |
+| Name                | Description                                                                                                | Value                |
+| ------------------- | ---------------------------------------------------------------------------------------------------------- | -------------------- |
+| `image.registry`    | Redis&reg; image registry                                                                                  | `docker.io`          |
+| `image.repository`  | Redis&reg; image repository                                                                                | `bitnami/redis`      |
+| `image.tag`         | Redis&reg; image tag (immutable tags are recommended)                                                      | `7.0.5-debian-11-r0` |
+| `image.digest`      | Redis&reg; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
+| `image.pullPolicy`  | Redis&reg; image pull policy                                                                               | `IfNotPresent`       |
+| `image.pullSecrets` | Redis&reg; image pull secrets                                                                              | `[]`                 |
+| `image.debug`       | Enable image debug mode                                                                                    | `false`              |
 
 
 ### Redis&reg; common configuration parameters
@@ -123,196 +123,204 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Redis&reg; master configuration parameters
 
-| Name                                        | Description                                                                                           | Value                    |
-| ------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
-| `master.count`                              | Number of Redis&reg; master instances to deploy (experimental, requires additional configuration)     | `1`                      |
-| `master.configuration`                      | Configuration for Redis&reg; master nodes                                                             | `""`                     |
-| `master.disableCommands`                    | Array with Redis&reg; commands to disable on master nodes                                             | `["FLUSHDB","FLUSHALL"]` |
-| `master.command`                            | Override default container command (useful when using custom images)                                  | `[]`                     |
-| `master.args`                               | Override default container args (useful when using custom images)                                     | `[]`                     |
-| `master.preExecCmds`                        | Additional commands to run prior to starting Redis&reg; master                                        | `[]`                     |
-| `master.extraFlags`                         | Array with additional command line flags for Redis&reg; master                                        | `[]`                     |
-| `master.extraEnvVars`                       | Array with extra environment variables to add to Redis&reg; master nodes                              | `[]`                     |
-| `master.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for Redis&reg; master nodes                      | `""`                     |
-| `master.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for Redis&reg; master nodes                         | `""`                     |
-| `master.containerPorts.redis`               | Container port to open on Redis&reg; master nodes                                                     | `6379`                   |
-| `master.startupProbe.enabled`               | Enable startupProbe on Redis&reg; master nodes                                                        | `false`                  |
-| `master.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                | `20`                     |
-| `master.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                       | `5`                      |
-| `master.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                      | `5`                      |
-| `master.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                    | `5`                      |
-| `master.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                    | `1`                      |
-| `master.livenessProbe.enabled`              | Enable livenessProbe on Redis&reg; master nodes                                                       | `true`                   |
-| `master.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                               | `20`                     |
-| `master.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                      | `5`                      |
-| `master.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                     | `5`                      |
-| `master.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                   | `5`                      |
-| `master.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                   | `1`                      |
-| `master.readinessProbe.enabled`             | Enable readinessProbe on Redis&reg; master nodes                                                      | `true`                   |
-| `master.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                              | `20`                     |
-| `master.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                     | `5`                      |
-| `master.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                    | `1`                      |
-| `master.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                  | `5`                      |
-| `master.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                  | `1`                      |
-| `master.customStartupProbe`                 | Custom startupProbe that overrides the default one                                                    | `{}`                     |
-| `master.customLivenessProbe`                | Custom livenessProbe that overrides the default one                                                   | `{}`                     |
-| `master.customReadinessProbe`               | Custom readinessProbe that overrides the default one                                                  | `{}`                     |
-| `master.resources.limits`                   | The resources limits for the Redis&reg; master containers                                             | `{}`                     |
-| `master.resources.requests`                 | The requested resources for the Redis&reg; master containers                                          | `{}`                     |
-| `master.podSecurityContext.enabled`         | Enabled Redis&reg; master pods' Security Context                                                      | `true`                   |
-| `master.podSecurityContext.fsGroup`         | Set Redis&reg; master pod's Security Context fsGroup                                                  | `1001`                   |
-| `master.containerSecurityContext.enabled`   | Enabled Redis&reg; master containers' Security Context                                                | `true`                   |
-| `master.containerSecurityContext.runAsUser` | Set Redis&reg; master containers' Security Context runAsUser                                          | `1001`                   |
-| `master.kind`                               | Use either Deployment or StatefulSet (default)                                                        | `StatefulSet`            |
-| `master.schedulerName`                      | Alternate scheduler for Redis&reg; master pods                                                        | `""`                     |
-| `master.updateStrategy.type`                | Redis&reg; master statefulset strategy type                                                           | `RollingUpdate`          |
-| `master.priorityClassName`                  | Redis&reg; master pods' priorityClassName                                                             | `""`                     |
-| `master.hostAliases`                        | Redis&reg; master pods host aliases                                                                   | `[]`                     |
-| `master.podLabels`                          | Extra labels for Redis&reg; master pods                                                               | `{}`                     |
-| `master.podAnnotations`                     | Annotations for Redis&reg; master pods                                                                | `{}`                     |
-| `master.shareProcessNamespace`              | Share a single process namespace between all of the containers in Redis&reg; master pods              | `false`                  |
-| `master.podAffinityPreset`                  | Pod affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`            | `""`                     |
-| `master.podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`       | `soft`                   |
-| `master.nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`      | `""`                     |
-| `master.nodeAffinityPreset.key`             | Node label key to match. Ignored if `master.affinity` is set                                          | `""`                     |
-| `master.nodeAffinityPreset.values`          | Node label values to match. Ignored if `master.affinity` is set                                       | `[]`                     |
-| `master.affinity`                           | Affinity for Redis&reg; master pods assignment                                                        | `{}`                     |
-| `master.nodeSelector`                       | Node labels for Redis&reg; master pods assignment                                                     | `{}`                     |
-| `master.tolerations`                        | Tolerations for Redis&reg; master pods assignment                                                     | `[]`                     |
-| `master.topologySpreadConstraints`          | Spread Constraints for Redis&reg; master pod assignment                                               | `[]`                     |
-| `master.dnsPolicy`                          | DNS Policy for Redis&reg; master pod                                                                  | `""`                     |
-| `master.dnsConfig`                          | DNS Configuration for Redis&reg; master pod                                                           | `{}`                     |
-| `master.lifecycleHooks`                     | for the Redis&reg; master container(s) to automate configuration before or after startup              | `{}`                     |
-| `master.extraVolumes`                       | Optionally specify extra list of additional volumes for the Redis&reg; master pod(s)                  | `[]`                     |
-| `master.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the Redis&reg; master container(s)       | `[]`                     |
-| `master.sidecars`                           | Add additional sidecar containers to the Redis&reg; master pod(s)                                     | `[]`                     |
-| `master.initContainers`                     | Add additional init containers to the Redis&reg; master pod(s)                                        | `[]`                     |
-| `master.persistence.enabled`                | Enable persistence on Redis&reg; master nodes using Persistent Volume Claims                          | `true`                   |
-| `master.persistence.medium`                 | Provide a medium for `emptyDir` volumes.                                                              | `""`                     |
-| `master.persistence.sizeLimit`              | Set this to enable a size limit for `emptyDir` volumes.                                               | `""`                     |
-| `master.persistence.path`                   | The path the volume will be mounted at on Redis&reg; master containers                                | `/data`                  |
-| `master.persistence.subPath`                | The subdirectory of the volume to mount on Redis&reg; master containers                               | `""`                     |
-| `master.persistence.storageClass`           | Persistent Volume storage class                                                                       | `""`                     |
-| `master.persistence.accessModes`            | Persistent Volume access modes                                                                        | `["ReadWriteOnce"]`      |
-| `master.persistence.size`                   | Persistent Volume size                                                                                | `8Gi`                    |
-| `master.persistence.annotations`            | Additional custom annotations for the PVC                                                             | `{}`                     |
-| `master.persistence.selector`               | Additional labels to match for the PVC                                                                | `{}`                     |
-| `master.persistence.dataSource`             | Custom PVC data source                                                                                | `{}`                     |
-| `master.persistence.existingClaim`          | Use a existing PVC which must be created manually before bound                                        | `""`                     |
-| `master.service.type`                       | Redis&reg; master service type                                                                        | `ClusterIP`              |
-| `master.service.ports.redis`                | Redis&reg; master service port                                                                        | `6379`                   |
-| `master.service.nodePorts.redis`            | Node port for Redis&reg; master                                                                       | `""`                     |
-| `master.service.externalTrafficPolicy`      | Redis&reg; master service external traffic policy                                                     | `Cluster`                |
-| `master.service.extraPorts`                 | Extra ports to expose (normally used with the `sidecar` value)                                        | `[]`                     |
-| `master.service.internalTrafficPolicy`      | Redis&reg; master service internal traffic policy (requires Kubernetes v1.22 or greater to be usable) | `Cluster`                |
-| `master.service.clusterIP`                  | Redis&reg; master service Cluster IP                                                                  | `""`                     |
-| `master.service.loadBalancerIP`             | Redis&reg; master service Load Balancer IP                                                            | `""`                     |
-| `master.service.loadBalancerSourceRanges`   | Redis&reg; master service Load Balancer sources                                                       | `[]`                     |
-| `master.service.annotations`                | Additional custom annotations for Redis&reg; master service                                           | `{}`                     |
-| `master.service.sessionAffinity`            | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                  | `None`                   |
-| `master.service.sessionAffinityConfig`      | Additional settings for the sessionAffinity                                                           | `{}`                     |
-| `master.terminationGracePeriodSeconds`      | Integer setting the termination grace period for the redis-master pods                                | `30`                     |
+| Name                                                 | Description                                                                                           | Value                    |
+| ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
+| `master.count`                                       | Number of Redis&reg; master instances to deploy (experimental, requires additional configuration)     | `1`                      |
+| `master.configuration`                               | Configuration for Redis&reg; master nodes                                                             | `""`                     |
+| `master.disableCommands`                             | Array with Redis&reg; commands to disable on master nodes                                             | `["FLUSHDB","FLUSHALL"]` |
+| `master.command`                                     | Override default container command (useful when using custom images)                                  | `[]`                     |
+| `master.args`                                        | Override default container args (useful when using custom images)                                     | `[]`                     |
+| `master.preExecCmds`                                 | Additional commands to run prior to starting Redis&reg; master                                        | `[]`                     |
+| `master.extraFlags`                                  | Array with additional command line flags for Redis&reg; master                                        | `[]`                     |
+| `master.extraEnvVars`                                | Array with extra environment variables to add to Redis&reg; master nodes                              | `[]`                     |
+| `master.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars for Redis&reg; master nodes                      | `""`                     |
+| `master.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars for Redis&reg; master nodes                         | `""`                     |
+| `master.containerPorts.redis`                        | Container port to open on Redis&reg; master nodes                                                     | `6379`                   |
+| `master.startupProbe.enabled`                        | Enable startupProbe on Redis&reg; master nodes                                                        | `false`                  |
+| `master.startupProbe.initialDelaySeconds`            | Initial delay seconds for startupProbe                                                                | `20`                     |
+| `master.startupProbe.periodSeconds`                  | Period seconds for startupProbe                                                                       | `5`                      |
+| `master.startupProbe.timeoutSeconds`                 | Timeout seconds for startupProbe                                                                      | `5`                      |
+| `master.startupProbe.failureThreshold`               | Failure threshold for startupProbe                                                                    | `5`                      |
+| `master.startupProbe.successThreshold`               | Success threshold for startupProbe                                                                    | `1`                      |
+| `master.livenessProbe.enabled`                       | Enable livenessProbe on Redis&reg; master nodes                                                       | `true`                   |
+| `master.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                               | `20`                     |
+| `master.livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                                      | `5`                      |
+| `master.livenessProbe.timeoutSeconds`                | Timeout seconds for livenessProbe                                                                     | `5`                      |
+| `master.livenessProbe.failureThreshold`              | Failure threshold for livenessProbe                                                                   | `5`                      |
+| `master.livenessProbe.successThreshold`              | Success threshold for livenessProbe                                                                   | `1`                      |
+| `master.readinessProbe.enabled`                      | Enable readinessProbe on Redis&reg; master nodes                                                      | `true`                   |
+| `master.readinessProbe.initialDelaySeconds`          | Initial delay seconds for readinessProbe                                                              | `20`                     |
+| `master.readinessProbe.periodSeconds`                | Period seconds for readinessProbe                                                                     | `5`                      |
+| `master.readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                                    | `1`                      |
+| `master.readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                                  | `5`                      |
+| `master.readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                                  | `1`                      |
+| `master.customStartupProbe`                          | Custom startupProbe that overrides the default one                                                    | `{}`                     |
+| `master.customLivenessProbe`                         | Custom livenessProbe that overrides the default one                                                   | `{}`                     |
+| `master.customReadinessProbe`                        | Custom readinessProbe that overrides the default one                                                  | `{}`                     |
+| `master.resources.limits`                            | The resources limits for the Redis&reg; master containers                                             | `{}`                     |
+| `master.resources.requests`                          | The requested resources for the Redis&reg; master containers                                          | `{}`                     |
+| `master.podSecurityContext.enabled`                  | Enabled Redis&reg; master pods' Security Context                                                      | `true`                   |
+| `master.podSecurityContext.fsGroup`                  | Set Redis&reg; master pod's Security Context fsGroup                                                  | `1001`                   |
+| `master.containerSecurityContext.enabled`            | Enabled Redis&reg; master containers' Security Context                                                | `true`                   |
+| `master.containerSecurityContext.runAsUser`          | Set Redis&reg; master containers' Security Context runAsUser                                          | `1001`                   |
+| `master.kind`                                        | Use either Deployment or StatefulSet (default)                                                        | `StatefulSet`            |
+| `master.schedulerName`                               | Alternate scheduler for Redis&reg; master pods                                                        | `""`                     |
+| `master.updateStrategy.type`                         | Redis&reg; master statefulset strategy type                                                           | `RollingUpdate`          |
+| `master.priorityClassName`                           | Redis&reg; master pods' priorityClassName                                                             | `""`                     |
+| `master.hostAliases`                                 | Redis&reg; master pods host aliases                                                                   | `[]`                     |
+| `master.podLabels`                                   | Extra labels for Redis&reg; master pods                                                               | `{}`                     |
+| `master.podAnnotations`                              | Annotations for Redis&reg; master pods                                                                | `{}`                     |
+| `master.shareProcessNamespace`                       | Share a single process namespace between all of the containers in Redis&reg; master pods              | `false`                  |
+| `master.podAffinityPreset`                           | Pod affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`            | `""`                     |
+| `master.podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`       | `soft`                   |
+| `master.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`      | `""`                     |
+| `master.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `master.affinity` is set                                          | `""`                     |
+| `master.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `master.affinity` is set                                       | `[]`                     |
+| `master.affinity`                                    | Affinity for Redis&reg; master pods assignment                                                        | `{}`                     |
+| `master.nodeSelector`                                | Node labels for Redis&reg; master pods assignment                                                     | `{}`                     |
+| `master.tolerations`                                 | Tolerations for Redis&reg; master pods assignment                                                     | `[]`                     |
+| `master.topologySpreadConstraints`                   | Spread Constraints for Redis&reg; master pod assignment                                               | `[]`                     |
+| `master.dnsPolicy`                                   | DNS Policy for Redis&reg; master pod                                                                  | `""`                     |
+| `master.dnsConfig`                                   | DNS Configuration for Redis&reg; master pod                                                           | `{}`                     |
+| `master.lifecycleHooks`                              | for the Redis&reg; master container(s) to automate configuration before or after startup              | `{}`                     |
+| `master.extraVolumes`                                | Optionally specify extra list of additional volumes for the Redis&reg; master pod(s)                  | `[]`                     |
+| `master.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for the Redis&reg; master container(s)       | `[]`                     |
+| `master.sidecars`                                    | Add additional sidecar containers to the Redis&reg; master pod(s)                                     | `[]`                     |
+| `master.initContainers`                              | Add additional init containers to the Redis&reg; master pod(s)                                        | `[]`                     |
+| `master.persistence.enabled`                         | Enable persistence on Redis&reg; master nodes using Persistent Volume Claims                          | `true`                   |
+| `master.persistence.medium`                          | Provide a medium for `emptyDir` volumes.                                                              | `""`                     |
+| `master.persistence.sizeLimit`                       | Set this to enable a size limit for `emptyDir` volumes.                                               | `""`                     |
+| `master.persistence.path`                            | The path the volume will be mounted at on Redis&reg; master containers                                | `/data`                  |
+| `master.persistence.subPath`                         | The subdirectory of the volume to mount on Redis&reg; master containers                               | `""`                     |
+| `master.persistence.storageClass`                    | Persistent Volume storage class                                                                       | `""`                     |
+| `master.persistence.accessModes`                     | Persistent Volume access modes                                                                        | `["ReadWriteOnce"]`      |
+| `master.persistence.size`                            | Persistent Volume size                                                                                | `8Gi`                    |
+| `master.persistence.annotations`                     | Additional custom annotations for the PVC                                                             | `{}`                     |
+| `master.persistence.selector`                        | Additional labels to match for the PVC                                                                | `{}`                     |
+| `master.persistence.dataSource`                      | Custom PVC data source                                                                                | `{}`                     |
+| `master.persistence.existingClaim`                   | Use a existing PVC which must be created manually before bound                                        | `""`                     |
+| `master.service.type`                                | Redis&reg; master service type                                                                        | `ClusterIP`              |
+| `master.service.ports.redis`                         | Redis&reg; master service port                                                                        | `6379`                   |
+| `master.service.nodePorts.redis`                     | Node port for Redis&reg; master                                                                       | `""`                     |
+| `master.service.externalTrafficPolicy`               | Redis&reg; master service external traffic policy                                                     | `Cluster`                |
+| `master.service.extraPorts`                          | Extra ports to expose (normally used with the `sidecar` value)                                        | `[]`                     |
+| `master.service.internalTrafficPolicy`               | Redis&reg; master service internal traffic policy (requires Kubernetes v1.22 or greater to be usable) | `Cluster`                |
+| `master.service.clusterIP`                           | Redis&reg; master service Cluster IP                                                                  | `""`                     |
+| `master.service.loadBalancerIP`                      | Redis&reg; master service Load Balancer IP                                                            | `""`                     |
+| `master.service.loadBalancerSourceRanges`            | Redis&reg; master service Load Balancer sources                                                       | `[]`                     |
+| `master.service.annotations`                         | Additional custom annotations for Redis&reg; master service                                           | `{}`                     |
+| `master.service.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                  | `None`                   |
+| `master.service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                                           | `{}`                     |
+| `master.terminationGracePeriodSeconds`               | Integer setting the termination grace period for the redis-master pods                                | `30`                     |
+| `master.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                  | `false`                  |
+| `master.serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                | `""`                     |
+| `master.serviceAccount.automountServiceAccountToken` | Whether to auto mount the service account token                                                       | `true`                   |
+| `master.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                  | `{}`                     |
 
 
 ### Redis&reg; replicas configuration parameters
 
-| Name                                         | Description                                                                                             | Value                    |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `replica.replicaCount`                       | Number of Redis&reg; replicas to deploy                                                                 | `3`                      |
-| `replica.configuration`                      | Configuration for Redis&reg; replicas nodes                                                             | `""`                     |
-| `replica.disableCommands`                    | Array with Redis&reg; commands to disable on replicas nodes                                             | `["FLUSHDB","FLUSHALL"]` |
-| `replica.command`                            | Override default container command (useful when using custom images)                                    | `[]`                     |
-| `replica.args`                               | Override default container args (useful when using custom images)                                       | `[]`                     |
-| `replica.preExecCmds`                        | Additional commands to run prior to starting Redis&reg; replicas                                        | `[]`                     |
-| `replica.extraFlags`                         | Array with additional command line flags for Redis&reg; replicas                                        | `[]`                     |
-| `replica.extraEnvVars`                       | Array with extra environment variables to add to Redis&reg; replicas nodes                              | `[]`                     |
-| `replica.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for Redis&reg; replicas nodes                      | `""`                     |
-| `replica.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for Redis&reg; replicas nodes                         | `""`                     |
-| `replica.externalMaster.enabled`             | Use external master for bootstrapping                                                                   | `false`                  |
-| `replica.externalMaster.host`                | External master host to bootstrap from                                                                  | `""`                     |
-| `replica.externalMaster.port`                | Port for Redis service external master host                                                             | `6379`                   |
-| `replica.containerPorts.redis`               | Container port to open on Redis&reg; replicas nodes                                                     | `6379`                   |
-| `replica.startupProbe.enabled`               | Enable startupProbe on Redis&reg; replicas nodes                                                        | `true`                   |
-| `replica.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                  | `10`                     |
-| `replica.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                         | `10`                     |
-| `replica.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                        | `5`                      |
-| `replica.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                      | `22`                     |
-| `replica.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                      | `1`                      |
-| `replica.livenessProbe.enabled`              | Enable livenessProbe on Redis&reg; replicas nodes                                                       | `true`                   |
-| `replica.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                 | `20`                     |
-| `replica.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                        | `5`                      |
-| `replica.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                       | `5`                      |
-| `replica.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                     | `5`                      |
-| `replica.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                     | `1`                      |
-| `replica.readinessProbe.enabled`             | Enable readinessProbe on Redis&reg; replicas nodes                                                      | `true`                   |
-| `replica.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                | `20`                     |
-| `replica.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                       | `5`                      |
-| `replica.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                      | `1`                      |
-| `replica.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                    | `5`                      |
-| `replica.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                    | `1`                      |
-| `replica.customStartupProbe`                 | Custom startupProbe that overrides the default one                                                      | `{}`                     |
-| `replica.customLivenessProbe`                | Custom livenessProbe that overrides the default one                                                     | `{}`                     |
-| `replica.customReadinessProbe`               | Custom readinessProbe that overrides the default one                                                    | `{}`                     |
-| `replica.resources.limits`                   | The resources limits for the Redis&reg; replicas containers                                             | `{}`                     |
-| `replica.resources.requests`                 | The requested resources for the Redis&reg; replicas containers                                          | `{}`                     |
-| `replica.podSecurityContext.enabled`         | Enabled Redis&reg; replicas pods' Security Context                                                      | `true`                   |
-| `replica.podSecurityContext.fsGroup`         | Set Redis&reg; replicas pod's Security Context fsGroup                                                  | `1001`                   |
-| `replica.containerSecurityContext.enabled`   | Enabled Redis&reg; replicas containers' Security Context                                                | `true`                   |
-| `replica.containerSecurityContext.runAsUser` | Set Redis&reg; replicas containers' Security Context runAsUser                                          | `1001`                   |
-| `replica.schedulerName`                      | Alternate scheduler for Redis&reg; replicas pods                                                        | `""`                     |
-| `replica.updateStrategy.type`                | Redis&reg; replicas statefulset strategy type                                                           | `RollingUpdate`          |
-| `replica.priorityClassName`                  | Redis&reg; replicas pods' priorityClassName                                                             | `""`                     |
-| `replica.podManagementPolicy`                | podManagementPolicy to manage scaling operation of %%MAIN_CONTAINER_NAME%% pods                         | `""`                     |
-| `replica.hostAliases`                        | Redis&reg; replicas pods host aliases                                                                   | `[]`                     |
-| `replica.podLabels`                          | Extra labels for Redis&reg; replicas pods                                                               | `{}`                     |
-| `replica.podAnnotations`                     | Annotations for Redis&reg; replicas pods                                                                | `{}`                     |
-| `replica.shareProcessNamespace`              | Share a single process namespace between all of the containers in Redis&reg; replicas pods              | `false`                  |
-| `replica.podAffinityPreset`                  | Pod affinity preset. Ignored if `replica.affinity` is set. Allowed values: `soft` or `hard`             | `""`                     |
-| `replica.podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `replica.affinity` is set. Allowed values: `soft` or `hard`        | `soft`                   |
-| `replica.nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `replica.affinity` is set. Allowed values: `soft` or `hard`       | `""`                     |
-| `replica.nodeAffinityPreset.key`             | Node label key to match. Ignored if `replica.affinity` is set                                           | `""`                     |
-| `replica.nodeAffinityPreset.values`          | Node label values to match. Ignored if `replica.affinity` is set                                        | `[]`                     |
-| `replica.affinity`                           | Affinity for Redis&reg; replicas pods assignment                                                        | `{}`                     |
-| `replica.nodeSelector`                       | Node labels for Redis&reg; replicas pods assignment                                                     | `{}`                     |
-| `replica.tolerations`                        | Tolerations for Redis&reg; replicas pods assignment                                                     | `[]`                     |
-| `replica.topologySpreadConstraints`          | Spread Constraints for Redis&reg; replicas pod assignment                                               | `[]`                     |
-| `replica.dnsPolicy`                          | DNS Policy for Redis&reg; replica pods                                                                  | `""`                     |
-| `replica.dnsConfig`                          | DNS Configuration for Redis&reg; replica pods                                                           | `{}`                     |
-| `replica.lifecycleHooks`                     | for the Redis&reg; replica container(s) to automate configuration before or after startup               | `{}`                     |
-| `replica.extraVolumes`                       | Optionally specify extra list of additional volumes for the Redis&reg; replicas pod(s)                  | `[]`                     |
-| `replica.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the Redis&reg; replicas container(s)       | `[]`                     |
-| `replica.sidecars`                           | Add additional sidecar containers to the Redis&reg; replicas pod(s)                                     | `[]`                     |
-| `replica.initContainers`                     | Add additional init containers to the Redis&reg; replicas pod(s)                                        | `[]`                     |
-| `replica.persistence.enabled`                | Enable persistence on Redis&reg; replicas nodes using Persistent Volume Claims                          | `true`                   |
-| `replica.persistence.medium`                 | Provide a medium for `emptyDir` volumes.                                                                | `""`                     |
-| `replica.persistence.sizeLimit`              | Set this to enable a size limit for `emptyDir` volumes.                                                 | `""`                     |
-| `replica.persistence.path`                   | The path the volume will be mounted at on Redis&reg; replicas containers                                | `/data`                  |
-| `replica.persistence.subPath`                | The subdirectory of the volume to mount on Redis&reg; replicas containers                               | `""`                     |
-| `replica.persistence.storageClass`           | Persistent Volume storage class                                                                         | `""`                     |
-| `replica.persistence.accessModes`            | Persistent Volume access modes                                                                          | `["ReadWriteOnce"]`      |
-| `replica.persistence.size`                   | Persistent Volume size                                                                                  | `8Gi`                    |
-| `replica.persistence.annotations`            | Additional custom annotations for the PVC                                                               | `{}`                     |
-| `replica.persistence.selector`               | Additional labels to match for the PVC                                                                  | `{}`                     |
-| `replica.persistence.dataSource`             | Custom PVC data source                                                                                  | `{}`                     |
-| `replica.persistence.existingClaim`          | Use a existing PVC which must be created manually before bound                                          | `""`                     |
-| `replica.service.type`                       | Redis&reg; replicas service type                                                                        | `ClusterIP`              |
-| `replica.service.ports.redis`                | Redis&reg; replicas service port                                                                        | `6379`                   |
-| `replica.service.nodePorts.redis`            | Node port for Redis&reg; replicas                                                                       | `""`                     |
-| `replica.service.externalTrafficPolicy`      | Redis&reg; replicas service external traffic policy                                                     | `Cluster`                |
-| `replica.service.internalTrafficPolicy`      | Redis&reg; replicas service internal traffic policy (requires Kubernetes v1.22 or greater to be usable) | `Cluster`                |
-| `replica.service.extraPorts`                 | Extra ports to expose (normally used with the `sidecar` value)                                          | `[]`                     |
-| `replica.service.clusterIP`                  | Redis&reg; replicas service Cluster IP                                                                  | `""`                     |
-| `replica.service.loadBalancerIP`             | Redis&reg; replicas service Load Balancer IP                                                            | `""`                     |
-| `replica.service.loadBalancerSourceRanges`   | Redis&reg; replicas service Load Balancer sources                                                       | `[]`                     |
-| `replica.service.annotations`                | Additional custom annotations for Redis&reg; replicas service                                           | `{}`                     |
-| `replica.service.sessionAffinity`            | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                    | `None`                   |
-| `replica.service.sessionAffinityConfig`      | Additional settings for the sessionAffinity                                                             | `{}`                     |
-| `replica.terminationGracePeriodSeconds`      | Integer setting the termination grace period for the redis-replicas pods                                | `30`                     |
-| `replica.autoscaling.enabled`                | Enable replica autoscaling settings                                                                     | `false`                  |
-| `replica.autoscaling.minReplicas`            | Minimum replicas for the pod autoscaling                                                                | `1`                      |
-| `replica.autoscaling.maxReplicas`            | Maximum replicas for the pod autoscaling                                                                | `11`                     |
-| `replica.autoscaling.targetCPU`              | Percentage of CPU to consider when autoscaling                                                          | `""`                     |
-| `replica.autoscaling.targetMemory`           | Percentage of Memory to consider when autoscaling                                                       | `""`                     |
+| Name                                                  | Description                                                                                             | Value                    |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `replica.replicaCount`                                | Number of Redis&reg; replicas to deploy                                                                 | `3`                      |
+| `replica.configuration`                               | Configuration for Redis&reg; replicas nodes                                                             | `""`                     |
+| `replica.disableCommands`                             | Array with Redis&reg; commands to disable on replicas nodes                                             | `["FLUSHDB","FLUSHALL"]` |
+| `replica.command`                                     | Override default container command (useful when using custom images)                                    | `[]`                     |
+| `replica.args`                                        | Override default container args (useful when using custom images)                                       | `[]`                     |
+| `replica.preExecCmds`                                 | Additional commands to run prior to starting Redis&reg; replicas                                        | `[]`                     |
+| `replica.extraFlags`                                  | Array with additional command line flags for Redis&reg; replicas                                        | `[]`                     |
+| `replica.extraEnvVars`                                | Array with extra environment variables to add to Redis&reg; replicas nodes                              | `[]`                     |
+| `replica.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars for Redis&reg; replicas nodes                      | `""`                     |
+| `replica.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars for Redis&reg; replicas nodes                         | `""`                     |
+| `replica.externalMaster.enabled`                      | Use external master for bootstrapping                                                                   | `false`                  |
+| `replica.externalMaster.host`                         | External master host to bootstrap from                                                                  | `""`                     |
+| `replica.externalMaster.port`                         | Port for Redis service external master host                                                             | `6379`                   |
+| `replica.containerPorts.redis`                        | Container port to open on Redis&reg; replicas nodes                                                     | `6379`                   |
+| `replica.startupProbe.enabled`                        | Enable startupProbe on Redis&reg; replicas nodes                                                        | `true`                   |
+| `replica.startupProbe.initialDelaySeconds`            | Initial delay seconds for startupProbe                                                                  | `10`                     |
+| `replica.startupProbe.periodSeconds`                  | Period seconds for startupProbe                                                                         | `10`                     |
+| `replica.startupProbe.timeoutSeconds`                 | Timeout seconds for startupProbe                                                                        | `5`                      |
+| `replica.startupProbe.failureThreshold`               | Failure threshold for startupProbe                                                                      | `22`                     |
+| `replica.startupProbe.successThreshold`               | Success threshold for startupProbe                                                                      | `1`                      |
+| `replica.livenessProbe.enabled`                       | Enable livenessProbe on Redis&reg; replicas nodes                                                       | `true`                   |
+| `replica.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                                 | `20`                     |
+| `replica.livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                                        | `5`                      |
+| `replica.livenessProbe.timeoutSeconds`                | Timeout seconds for livenessProbe                                                                       | `5`                      |
+| `replica.livenessProbe.failureThreshold`              | Failure threshold for livenessProbe                                                                     | `5`                      |
+| `replica.livenessProbe.successThreshold`              | Success threshold for livenessProbe                                                                     | `1`                      |
+| `replica.readinessProbe.enabled`                      | Enable readinessProbe on Redis&reg; replicas nodes                                                      | `true`                   |
+| `replica.readinessProbe.initialDelaySeconds`          | Initial delay seconds for readinessProbe                                                                | `20`                     |
+| `replica.readinessProbe.periodSeconds`                | Period seconds for readinessProbe                                                                       | `5`                      |
+| `replica.readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                                      | `1`                      |
+| `replica.readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                                    | `5`                      |
+| `replica.readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                                    | `1`                      |
+| `replica.customStartupProbe`                          | Custom startupProbe that overrides the default one                                                      | `{}`                     |
+| `replica.customLivenessProbe`                         | Custom livenessProbe that overrides the default one                                                     | `{}`                     |
+| `replica.customReadinessProbe`                        | Custom readinessProbe that overrides the default one                                                    | `{}`                     |
+| `replica.resources.limits`                            | The resources limits for the Redis&reg; replicas containers                                             | `{}`                     |
+| `replica.resources.requests`                          | The requested resources for the Redis&reg; replicas containers                                          | `{}`                     |
+| `replica.podSecurityContext.enabled`                  | Enabled Redis&reg; replicas pods' Security Context                                                      | `true`                   |
+| `replica.podSecurityContext.fsGroup`                  | Set Redis&reg; replicas pod's Security Context fsGroup                                                  | `1001`                   |
+| `replica.containerSecurityContext.enabled`            | Enabled Redis&reg; replicas containers' Security Context                                                | `true`                   |
+| `replica.containerSecurityContext.runAsUser`          | Set Redis&reg; replicas containers' Security Context runAsUser                                          | `1001`                   |
+| `replica.schedulerName`                               | Alternate scheduler for Redis&reg; replicas pods                                                        | `""`                     |
+| `replica.updateStrategy.type`                         | Redis&reg; replicas statefulset strategy type                                                           | `RollingUpdate`          |
+| `replica.priorityClassName`                           | Redis&reg; replicas pods' priorityClassName                                                             | `""`                     |
+| `replica.podManagementPolicy`                         | podManagementPolicy to manage scaling operation of %%MAIN_CONTAINER_NAME%% pods                         | `""`                     |
+| `replica.hostAliases`                                 | Redis&reg; replicas pods host aliases                                                                   | `[]`                     |
+| `replica.podLabels`                                   | Extra labels for Redis&reg; replicas pods                                                               | `{}`                     |
+| `replica.podAnnotations`                              | Annotations for Redis&reg; replicas pods                                                                | `{}`                     |
+| `replica.shareProcessNamespace`                       | Share a single process namespace between all of the containers in Redis&reg; replicas pods              | `false`                  |
+| `replica.podAffinityPreset`                           | Pod affinity preset. Ignored if `replica.affinity` is set. Allowed values: `soft` or `hard`             | `""`                     |
+| `replica.podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `replica.affinity` is set. Allowed values: `soft` or `hard`        | `soft`                   |
+| `replica.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `replica.affinity` is set. Allowed values: `soft` or `hard`       | `""`                     |
+| `replica.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `replica.affinity` is set                                           | `""`                     |
+| `replica.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `replica.affinity` is set                                        | `[]`                     |
+| `replica.affinity`                                    | Affinity for Redis&reg; replicas pods assignment                                                        | `{}`                     |
+| `replica.nodeSelector`                                | Node labels for Redis&reg; replicas pods assignment                                                     | `{}`                     |
+| `replica.tolerations`                                 | Tolerations for Redis&reg; replicas pods assignment                                                     | `[]`                     |
+| `replica.topologySpreadConstraints`                   | Spread Constraints for Redis&reg; replicas pod assignment                                               | `[]`                     |
+| `replica.dnsPolicy`                                   | DNS Policy for Redis&reg; replica pods                                                                  | `""`                     |
+| `replica.dnsConfig`                                   | DNS Configuration for Redis&reg; replica pods                                                           | `{}`                     |
+| `replica.lifecycleHooks`                              | for the Redis&reg; replica container(s) to automate configuration before or after startup               | `{}`                     |
+| `replica.extraVolumes`                                | Optionally specify extra list of additional volumes for the Redis&reg; replicas pod(s)                  | `[]`                     |
+| `replica.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for the Redis&reg; replicas container(s)       | `[]`                     |
+| `replica.sidecars`                                    | Add additional sidecar containers to the Redis&reg; replicas pod(s)                                     | `[]`                     |
+| `replica.initContainers`                              | Add additional init containers to the Redis&reg; replicas pod(s)                                        | `[]`                     |
+| `replica.persistence.enabled`                         | Enable persistence on Redis&reg; replicas nodes using Persistent Volume Claims                          | `true`                   |
+| `replica.persistence.medium`                          | Provide a medium for `emptyDir` volumes.                                                                | `""`                     |
+| `replica.persistence.sizeLimit`                       | Set this to enable a size limit for `emptyDir` volumes.                                                 | `""`                     |
+| `replica.persistence.path`                            | The path the volume will be mounted at on Redis&reg; replicas containers                                | `/data`                  |
+| `replica.persistence.subPath`                         | The subdirectory of the volume to mount on Redis&reg; replicas containers                               | `""`                     |
+| `replica.persistence.storageClass`                    | Persistent Volume storage class                                                                         | `""`                     |
+| `replica.persistence.accessModes`                     | Persistent Volume access modes                                                                          | `["ReadWriteOnce"]`      |
+| `replica.persistence.size`                            | Persistent Volume size                                                                                  | `8Gi`                    |
+| `replica.persistence.annotations`                     | Additional custom annotations for the PVC                                                               | `{}`                     |
+| `replica.persistence.selector`                        | Additional labels to match for the PVC                                                                  | `{}`                     |
+| `replica.persistence.dataSource`                      | Custom PVC data source                                                                                  | `{}`                     |
+| `replica.persistence.existingClaim`                   | Use a existing PVC which must be created manually before bound                                          | `""`                     |
+| `replica.service.type`                                | Redis&reg; replicas service type                                                                        | `ClusterIP`              |
+| `replica.service.ports.redis`                         | Redis&reg; replicas service port                                                                        | `6379`                   |
+| `replica.service.nodePorts.redis`                     | Node port for Redis&reg; replicas                                                                       | `""`                     |
+| `replica.service.externalTrafficPolicy`               | Redis&reg; replicas service external traffic policy                                                     | `Cluster`                |
+| `replica.service.internalTrafficPolicy`               | Redis&reg; replicas service internal traffic policy (requires Kubernetes v1.22 or greater to be usable) | `Cluster`                |
+| `replica.service.extraPorts`                          | Extra ports to expose (normally used with the `sidecar` value)                                          | `[]`                     |
+| `replica.service.clusterIP`                           | Redis&reg; replicas service Cluster IP                                                                  | `""`                     |
+| `replica.service.loadBalancerIP`                      | Redis&reg; replicas service Load Balancer IP                                                            | `""`                     |
+| `replica.service.loadBalancerSourceRanges`            | Redis&reg; replicas service Load Balancer sources                                                       | `[]`                     |
+| `replica.service.annotations`                         | Additional custom annotations for Redis&reg; replicas service                                           | `{}`                     |
+| `replica.service.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                    | `None`                   |
+| `replica.service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                                             | `{}`                     |
+| `replica.terminationGracePeriodSeconds`               | Integer setting the termination grace period for the redis-replicas pods                                | `30`                     |
+| `replica.autoscaling.enabled`                         | Enable replica autoscaling settings                                                                     | `false`                  |
+| `replica.autoscaling.minReplicas`                     | Minimum replicas for the pod autoscaling                                                                | `1`                      |
+| `replica.autoscaling.maxReplicas`                     | Maximum replicas for the pod autoscaling                                                                | `11`                     |
+| `replica.autoscaling.targetCPU`                       | Percentage of CPU to consider when autoscaling                                                          | `""`                     |
+| `replica.autoscaling.targetMemory`                    | Percentage of Memory to consider when autoscaling                                                       | `""`                     |
+| `replica.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                    | `false`                  |
+| `replica.serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                  | `""`                     |
+| `replica.serviceAccount.automountServiceAccountToken` | Whether to auto mount the service account token                                                         | `true`                   |
+| `replica.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                    | `{}`                     |
 
 
 ### Redis&reg; Sentinel configuration parameters
@@ -322,7 +330,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.enabled`                            | Use Redis&reg; Sentinel on Redis&reg; pods.                                                                                                 | `false`                  |
 | `sentinel.image.registry`                     | Redis&reg; Sentinel image registry                                                                                                          | `docker.io`              |
 | `sentinel.image.repository`                   | Redis&reg; Sentinel image repository                                                                                                        | `bitnami/redis-sentinel` |
-| `sentinel.image.tag`                          | Redis&reg; Sentinel image tag (immutable tags are recommended)                                                                              | `7.0.4-debian-11-r8`     |
+| `sentinel.image.tag`                          | Redis&reg; Sentinel image tag (immutable tags are recommended)                                                                              | `7.0.4-debian-11-r22`    |
 | `sentinel.image.digest`                       | Redis&reg; Sentinel image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                     |
 | `sentinel.image.pullPolicy`                   | Redis&reg; Sentinel image pull policy                                                                                                       | `IfNotPresent`           |
 | `sentinel.image.pullSecrets`                  | Redis&reg; Sentinel image pull secrets                                                                                                      | `[]`                     |
@@ -436,7 +444,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a sidecar prometheus exporter to expose Redis&reg; metrics                                                    | `false`                  |
 | `metrics.image.registry`                     | Redis&reg; Exporter image registry                                                                                  | `docker.io`              |
 | `metrics.image.repository`                   | Redis&reg; Exporter image repository                                                                                | `bitnami/redis-exporter` |
-| `metrics.image.tag`                          | Redis&reg; Exporter image tag (immutable tags are recommended)                                                      | `1.43.0-debian-11-r18`   |
+| `metrics.image.tag`                          | Redis&reg; Exporter image tag (immutable tags are recommended)                                                      | `1.44.0-debian-11-r8`    |
 | `metrics.image.digest`                       | Redis&reg; Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
 | `metrics.image.pullPolicy`                   | Redis&reg; Exporter image pull policy                                                                               | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                  | Redis&reg; Exporter image pull secrets                                                                              | `[]`                     |
@@ -467,6 +475,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.metricRelabelings`   | Metrics RelabelConfigs to apply to samples before ingestion.                                                        | `[]`                     |
 | `metrics.serviceMonitor.honorLabels`         | Specify honorLabels parameter to add the scrape endpoint                                                            | `false`                  |
 | `metrics.serviceMonitor.additionalLabels`    | Additional labels that can be used so ServiceMonitor resource(s) can be discovered by Prometheus                    | `{}`                     |
+| `metrics.serviceMonitor.podTargetLabels`     | Labels from the Kubernetes pod to be transferred to the created metrics                                             | `[]`                     |
 | `metrics.prometheusRule.enabled`             | Create a custom prometheusRule Resource for scraping metrics using PrometheusOperator                               | `false`                  |
 | `metrics.prometheusRule.namespace`           | The namespace in which the prometheusRule will be created                                                           | `""`                     |
 | `metrics.prometheusRule.additionalLabels`    | Additional labels for the prometheusRule                                                                            | `{}`                     |
@@ -480,7 +489,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r23`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r37`      |
 | `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -490,7 +499,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctl.enabled`                                       | Enable init container to modify Kernel settings                                                               | `false`                 |
 | `sysctl.image.registry`                                | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `sysctl.image.repository`                              | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `sysctl.image.tag`                                     | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r23`      |
+| `sysctl.image.tag`                                     | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r37`      |
 | `sysctl.image.digest`                                  | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `sysctl.image.pullPolicy`                              | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `sysctl.image.pullSecrets`                             | Bitnami Shell image pull secrets                                                                              | `[]`                    |

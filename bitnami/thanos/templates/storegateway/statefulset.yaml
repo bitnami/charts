@@ -121,6 +121,9 @@ spec:
             - --http-address=0.0.0.0:10902
             - --data-dir=/data
             - --objstore.config-file=/conf/objstore.yml
+            {{- if (include "thanos.httpConfigEnabled" .) }}
+            - --http.config=/conf/http/http-config.yml
+            {{- end }}
             {{- if .Values.indexCacheConfig }}
             - --index-cache.config-file=/conf/index-cache.yml
             {{- end }}
@@ -160,29 +163,47 @@ spec:
             - name: grpc
               containerPort: 10901
               protocol: TCP
-          {{- if .Values.storegateway.livenessProbe.enabled }}
+          {{- if .Values.storegateway.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.storegateway.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.storegateway.livenessProbe "enabled") "context" $) | nindent 12 }}
+            {{- if not .Values.auth.basicAuthUsers }}
             httpGet:
               path: /-/healthy
               port: http
-          {{- else if .Values.storegateway.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.customLivenessProbe "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.storegateway.readinessProbe.enabled }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.storegateway.readinessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /-/ready
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.https.enabled }}
+            {{- else }}
+            tcpSocket:
               port: http
-          {{- else if .Values.storegateway.customReadinessProbe }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.storegateway.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.customReadinessProbe "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.storegateway.startupProbe.enabled }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.storegateway.startupProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.storegateway.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.storegateway.readinessProbe "enabled") "context" $) | nindent 12 }}
+            {{- if not .Values.auth.basicAuthUsers }}
             httpGet:
               path: /-/ready
               port: http
-          {{- else if .Values.storegateway.customStartupProbe }}
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.https.enabled }}
+            {{- else }}
+            tcpSocket:
+              port: http
+            {{- end }}
+          {{- end }}
+          {{- if .Values.storegateway.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.storegateway.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.storegateway.startupProbe "enabled") "context" $) | nindent 12 }}
+            {{- if not .Values.auth.basicAuthUsers }}
+            httpGet:
+              path: /-/ready
+              port: http
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.https.enabled }}
+            {{- else }}
+            tcpSocket:
+              port: http
+            {{- end }}
           {{- end }}
           {{- if .Values.storegateway.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.lifecycleHooks "context" $) | nindent 12 }}
@@ -191,6 +212,14 @@ spec:
           resources: {{- toYaml .Values.storegateway.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
+            {{- if (include "thanos.httpConfigEnabled" .) }}
+            - name: http-config
+              mountPath: /conf/http
+            {{- if .Values.https.enabled }}
+            - name: http-certs
+              mountPath: /certs
+            {{- end }}
+            {{- end }}
             - name: objstore-config
               mountPath: /conf
             - name: data
@@ -221,6 +250,16 @@ spec:
           configMap:
             name: {{ include "thanos.storegateway.configmapName" . }}
         {{- end }}
+        {{- if (include "thanos.httpConfigEnabled" .) }}
+        - name: http-config
+          secret:
+            secretName: {{ include "thanos.httpConfigSecretName" . }}
+        {{- if .Values.https.enabled }}
+        - name: http-certs
+          secret:
+            secretName: {{ include "thanos.httpCertsSecretName" . }}
+        {{- end }}
+        {{- end }}
         {{- if .Values.storegateway.grpc.server.tls.enabled }}
         - name: grpc-server-tls
           secret:
@@ -237,6 +276,9 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: data
+        {{- if .Values.storegateway.persistence.labels }}
+        labels: {{- include "common.tplvalues.render" ( dict "value" .Values.storegateway.persistence.labels "context" $) | nindent 10 }}
+        {{- end }}
         {{- if .Values.storegateway.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.storegateway.persistence.annotations "context" $) | nindent 10 }}
         {{- end }}

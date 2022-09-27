@@ -20,25 +20,27 @@ spec:
   jobLabel: {{ .Values.metrics.serviceMonitor.jobLabel }}
   {{- end }}
   endpoints:
-    - port: http
-      {{- if .Values.metrics.serviceMonitor.path }}
-      path: {{ .Values.metrics.serviceMonitor.path }}
+    {{- $endpoints := ternary (.Values.metrics.serviceMonitor.endpoints) (list (dict "path" .Values.metrics.serviceMonitor.path)) (empty .Values.metrics.serviceMonitor.path) }}
+    {{- range $endpoints }}
+    {{- $endpoint := merge . $.Values.metrics.serviceMonitor }}
+    - port: {{ $endpoint.port }}
+      path: {{ $endpoint.path }}
+      {{- if $endpoint.interval }}
+      interval: {{ $endpoint.interval }}
       {{- end }}
-      {{- if .Values.metrics.serviceMonitor.interval }}
-      interval: {{ .Values.metrics.serviceMonitor.interval }}
+      {{- if $endpoint.scrapeTimeout }}
+      scrapeTimeout: {{ $endpoint.scrapeTimeout }}
       {{- end }}
-      {{- if .Values.metrics.serviceMonitor.scrapeTimeout }}
-      scrapeTimeout: {{ .Values.metrics.serviceMonitor.scrapeTimeout }}
+      {{- if $endpoint.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" $endpoint.relabelings "context" $) | nindent 6 }}
       {{- end }}
-      {{- if .Values.metrics.serviceMonitor.relabelings }}
-      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.relabelings "context" $) | nindent 6 }}
+      {{- if $endpoint.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" $endpoint.metricRelabelings "context" $) | nindent 6 }}
       {{- end }}
-      {{- if .Values.metrics.serviceMonitor.metricRelabelings }}
-      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 6 }}
+      {{- if $endpoint.honorLabels }}
+      honorLabels: {{ $endpoint.honorLabels }}
       {{- end }}
-      {{- if .Values.metrics.serviceMonitor.honorLabels }}
-      honorLabels: {{ .Values.metrics.serviceMonitor.honorLabels }}
-      {{- end }}
+    {{- end }}
   namespaceSelector:
     matchNames:
       - {{ include "common.names.namespace" . | quote }}

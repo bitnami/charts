@@ -293,29 +293,29 @@ spec:
               protocol: TCP
             {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.startupProbe.enabled }}
+          {{- if .Values.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.startupProbe.enabled }}
           startupProbe: {{- omit .Values.startupProbe "enabled" | toYaml | nindent 12 }}
             httpGet:
               path: {{ .Values.httpRelativePath }}
               port: http
-          {{- else if .Values.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.livenessProbe.enabled }}
+          {{- if .Values.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.livenessProbe.enabled }}
           livenessProbe: {{- omit .Values.livenessProbe "enabled" | toYaml | nindent 12 }}
             httpGet:
               path: {{ .Values.httpRelativePath }}
               port: http
-          {{- else if .Values.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.readinessProbe.enabled }}
+          {{- if .Values.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.readinessProbe.enabled }}
           readinessProbe: {{- omit .Values.readinessProbe "enabled" | toYaml | nindent 12 }}
             httpGet:
               path: {{ .Values.httpRelativePath }}realms/master
               port: http
-          {{- else if .Values.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           volumeMounts:

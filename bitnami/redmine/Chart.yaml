@@ -36,4 +36,4 @@ name: redmine
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/redmine
   - https://www.redmine.org/
-version: 20.3.3
+version: 20.3.4

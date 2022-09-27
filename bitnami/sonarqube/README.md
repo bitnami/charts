@@ -83,7 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | --------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`    | SonarQube image registry                                                                                  | `docker.io`          |
 | `image.repository`  | SonarQube image repository                                                                                | `bitnami/sonarqube`  |
-| `image.tag`         | SonarQube image tag (immutable tags are recommended)                                                      | `9.5.0-debian-11-r5` |
+| `image.tag`         | SonarQube image tag (immutable tags are recommended)                                                      | `9.6.1-debian-11-r0` |
 | `image.digest`      | SonarQube image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
 | `image.pullPolicy`  | SonarQube image pull policy                                                                               | `IfNotPresent`       |
 | `image.pullSecrets` | SonarQube image pull secrets                                                                              | `[]`                 |
@@ -92,28 +92,45 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### SonarQube Configuration parameters
 
-| Name                   | Description                                                                        | Value              |
-| ---------------------- | ---------------------------------------------------------------------------------- | ------------------ |
-| `sonarqubeUsername`    | SonarQube username                                                                 | `user`             |
-| `sonarqubePassword`    | SonarQube user password                                                            | `""`               |
-| `existingSecret`       | Name of existing secret containing SonarQube credentials                           | `""`               |
-| `sonarqubeEmail`       | SonarQube user email                                                               | `user@example.com` |
-| `minHeapSize`          | Minimum heap size for SonarQube                                                    | `1024m`            |
-| `maxHeapSize`          | Maximum heap size for SonarQube                                                    | `2048m`            |
-| `startTimeout`         | Timeout for the application to start in seconds                                    | `150`              |
-| `extraProperties`      | List of extra properties to be set in the sonar.properties file (key=value format) | `[]`               |
-| `sonarqubeSkipInstall` | Skip wizard installation                                                           | `false`            |
-| `smtpHost`             | SMTP server host                                                                   | `""`               |
-| `smtpPort`             | SMTP server port                                                                   | `""`               |
-| `smtpUser`             | SMTP username                                                                      | `""`               |
-| `smtpPassword`         | SMTP user password                                                                 | `""`               |
-| `smtpProtocol`         | SMTP protocol                                                                      | `""`               |
-| `smtpExistingSecret`   | The name of an existing secret with SMTP credentials                               | `""`               |
-| `command`              | Override default container command (useful when using custom images)               | `[]`               |
-| `args`                 | Override default container args (useful when using custom images)                  | `[]`               |
-| `extraEnvVars`         | Array with extra environment variables to add to SonarQube nodes                   | `[]`               |
-| `extraEnvVarsCM`       | Name of existing ConfigMap containing extra env vars for SonarQube nodes           | `""`               |
-| `extraEnvVarsSecret`   | Name of existing Secret containing extra env vars for SonarQube nodes              | `""`               |
+| Name                          | Description                                                                                                                                                               | Value                                                    |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| `sonarqubeUsername`           | SonarQube username                                                                                                                                                        | `user`                                                   |
+| `sonarqubePassword`           | SonarQube user password                                                                                                                                                   | `""`                                                     |
+| `existingSecret`              | Name of existing secret containing SonarQube credentials                                                                                                                  | `""`                                                     |
+| `sonarqubeEmail`              | SonarQube user email                                                                                                                                                      | `user@example.com`                                       |
+| `minHeapSize`                 | Minimum heap size for SonarQube                                                                                                                                           | `1024m`                                                  |
+| `maxHeapSize`                 | Maximum heap size for SonarQube                                                                                                                                           | `2048m`                                                  |
+| `startTimeout`                | Timeout for the application to start in seconds                                                                                                                           | `150`                                                    |
+| `extraProperties`             | List of extra properties to be set in the sonar.properties file (key=value format)                                                                                        | `[]`                                                     |
+| `sonarqubeSkipInstall`        | Skip wizard installation                                                                                                                                                  | `false`                                                  |
+| `sonarSecurityRealm`          | Set this to LDAP authenticate first against the external sytem. If the external system is not                                                                             | `""`                                                     |
+| `sonarAuthenticatorDowncase`  | Set to true when connecting to a LDAP server using a case-insensitive setup.                                                                                              | `""`                                                     |
+| `ldap.url`                    | URL of the LDAP server. If you are using ldaps, you should install the server certificate into the Java truststore                                                        | `""`                                                     |
+| `ldap.bindDn`                 | The username of an LDAP user to connect (or bind) with. Leave this blank for anonymous access to the LDAP directory.                                                      | `""`                                                     |
+| `ldap.bindPassword`           | The password of the user to connect with. Leave this blank for anonymous access to the LDAP directory.                                                                    | `""`                                                     |
+| `ldap.authentication`         | Possible values: simple, CRAM-MD5, DIGEST-MD5, GSSAPI. See the tutorial on authentication mechanisms (http://java.sun.com/products/jndi/tutorial/ldap/security/auth.html) | `simple`                                                 |
+| `ldap.realm`                  | See Digest-MD5 Authentication, CRAM-MD5 Authentication (http://java.sun.com/products/jndi/tutorial/ldap/security/digest.html)                                             | `""`                                                     |
+| `ldap.contextFactoryClass`    | Context factory class.                                                                                                                                                    | `com.sun.jndi.ldap.LdapCtxFactory`                       |
+| `ldap.StartTLS`               | Enable use of StartTLS                                                                                                                                                    | `false`                                                  |
+| `ldap.followReferrals`        | Follow referrals or not                                                                                                                                                   | `true`                                                   |
+| `ldap.user.baseDn`            | Distinguished Name (DN) of the root node in LDAP from which to search for users.                                                                                          | `""`                                                     |
+| `ldap.user.request`           | LDAP user request.                                                                                                                                                        | `(&(objectClass=inetOrgPerson)(uid={login}))`            |
+| `ldap.user.realNameAttribute` | in LDAP defining the user’s real name.                                                                                                                                    | `cn`                                                     |
+| `ldap.user.emailAttribute`    | Attribute in LDAP defining the user’s email.                                                                                                                              | `mail`                                                   |
+| `ldap.group.baseDn`           | Distinguished Name (DN) of the root node in LDAP from which to search for groups.                                                                                         | `""`                                                     |
+| `ldap.group.request`          | LDAP group request.                                                                                                                                                       | `(&(objectClass=groupOfUniqueNames)(uniqueMember={dn}))` |
+| `ldap.group.idAttribute`      | Attribute in LDAP defining the group’s real name.                                                                                                                         | `cn`                                                     |
+| `smtpHost`                    | SMTP server host                                                                                                                                                          | `""`                                                     |
+| `smtpPort`                    | SMTP server port                                                                                                                                                          | `""`                                                     |
+| `smtpUser`                    | SMTP username                                                                                                                                                             | `""`                                                     |
+| `smtpPassword`                | SMTP user password                                                                                                                                                        | `""`                                                     |
+| `smtpProtocol`                | SMTP protocol                                                                                                                                                             | `""`                                                     |
+| `smtpExistingSecret`          | The name of an existing secret with SMTP credentials                                                                                                                      | `""`                                                     |
+| `command`                     | Override default container command (useful when using custom images)                                                                                                      | `[]`                                                     |
+| `args`                        | Override default container args (useful when using custom images)                                                                                                         | `[]`                                                     |
+| `extraEnvVars`                | Array with extra environment variables to add to SonarQube nodes                                                                                                          | `[]`                                                     |
+| `extraEnvVarsCM`              | Name of existing ConfigMap containing extra env vars for SonarQube nodes                                                                                                  | `""`                                                     |
+| `extraEnvVarsSecret`          | Name of existing Secret containing extra env vars for SonarQube nodes                                                                                                     | `""`                                                     |
 
 
 ### SonarQube deployment parameters
@@ -219,7 +236,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r22`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r30`      |
 | `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -235,7 +252,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctl.enabled`            | Enable kernel settings modifier image                                                                         | `true`                  |
 | `sysctl.image.registry`     | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `sysctl.image.repository`   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `sysctl.image.tag`          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r22`      |
+| `sysctl.image.tag`          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r30`      |
 | `sysctl.image.digest`       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `sysctl.image.pullPolicy`   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `sysctl.image.pullSecrets`  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -266,7 +283,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.jmx.enabled`                               | Whether or not to expose JMX metrics to Prometheus                                                           | `false`                |
 | `metrics.jmx.image.registry`                        | JMX exporter image registry                                                                                  | `docker.io`            |
 | `metrics.jmx.image.repository`                      | JMX exporter image repository                                                                                | `bitnami/jmx-exporter` |
-| `metrics.jmx.image.tag`                             | JMX exporter image tag (immutable tags are recommended)                                                      | `0.17.0-debian-11-r22` |
+| `metrics.jmx.image.tag`                             | JMX exporter image tag (immutable tags are recommended)                                                      | `0.17.0-debian-11-r30` |
 | `metrics.jmx.image.digest`                          | JMX exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `metrics.jmx.image.pullPolicy`                      | JMX exporter image pull policy                                                                               | `IfNotPresent`         |
 | `metrics.jmx.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                             | `[]`                   |

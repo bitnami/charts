@@ -54,7 +54,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/contour-operator
-  tag: 1.22.0-scratch-r2
+  tag: 1.22.1-scratch-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -81,7 +81,7 @@ image:
 contourImage:
   registry: docker.io
   repository: bitnami/contour
-  tag: 1.22.0-debian-11-r3
+  tag: 1.22.1-debian-11-r0
   digest: ""
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -103,7 +103,7 @@ contourImage:
 envoyImage:
   registry: docker.io
   repository: bitnami/envoy
-  tag: 1.23.0-debian-11-r7
+  tag: 1.23.1-debian-11-r3
   digest: ""
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.

@@ -13,7 +13,7 @@ metadata:
 spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
-  serviceName: {{ include "common.names.fullname" . }}-headless
+  serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   podManagementPolicy: {{ .Values.podManagementPolicy }}
   replicas: {{ .Values.replicaCount }}
   updateStrategy: {{- include "common.tplvalues.render" (dict "value" .Values.updateStrategy "context" $ ) | nindent 4 }}
@@ -339,7 +339,9 @@ spec:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
             {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.livenessProbe.enabled }}
+          {{- if .Values.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.livenessProbe.enabled }}
           livenessProbe:
             exec:
               command:
@@ -352,10 +354,10 @@ spec:
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
-          {{- else if .Values.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.readinessProbe.enabled }}
+          {{- if .Values.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.readinessProbe.enabled }}
           readinessProbe:
             exec:
               command:
@@ -368,10 +370,10 @@ spec:
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
-          {{- else if .Values.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.startupProbe.enabled }}
+          {{- if .Values.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.startupProbe.enabled }}
           startupProbe:
             exec:
               command:
@@ -384,8 +386,6 @@ spec:
             timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
             successThreshold: {{ .Values.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.startupProbe.failureThreshold }}
-          {{- else if .Values.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if not .Values.lifecycleHooks }}
           lifecycle:
@@ -461,13 +461,6 @@ spec:
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.hostNetwork }}
-          env:
-            - name: CASSANDRA_EXPORTER_CONFIG_listenPort
-              value: {{ .Values.metrics.containerPorts.http | quote }}
-            - name:  CASSANDRA_EXPORTER_CONFIG_host
-              value: localhost:{{ .Values.containerPorts.jmx }}
-          {{- end }}
           ports:
             - name: metrics
               containerPort: {{ .Values.metrics.containerPorts.http | default "8080" }}
@@ -491,14 +484,27 @@ spec:
             httpGet:
               path: /metrics
               port: metrics
-            initialDelaySeconds: 20
-            timeoutSeconds: 45
+            initialDelaySeconds: {{ .Values.metrics.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.metrics.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.metrics.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.metrics.readinessProbe.failureThreshold }}
+            successThreshold: {{ .Values.metrics.readinessProbe.successThreshold }}
+          {{- end }}
+          volumeMounts:
+            - name: metrics-conf
+              mountPath: /opt/bitnami/cassandra-exporter/config.yml
+              subPath: config.yml
+          {{- if .Values.metrics.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
         {{- end }}
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: metrics-conf
+          configMap:
+            name: {{ include "cassandra.metricsConfConfigMap" . }}
         {{- if (include "cassandra.tlsEncryption" . ) }}
         - name: certs
           secret:

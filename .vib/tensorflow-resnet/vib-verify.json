@@ -15,6 +15,52 @@
           "action_id": "helm-lint"
         }
       ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/tensorflow-resnet"
+        },
+        "runtime_parameters": "Y29udGFpbmVyUG9ydHM6CiAgc2VydmVyOiA4NTAwCiAgcmVzdEFwaTogODUwMQpzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgc2VydmVyOiA4NTAxCiAgICByZXN0QXBpOiA4MApjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIHJ1bkFzVXNlcjogMTAwMgogIHJ1bkFzTm9uUm9vdDogdHJ1ZQpwb2RTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIGZzR3JvdXA6IDEwMDIK",
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "health-check",
+          "params": {
+            "endpoint": "lb-tensorflow-resnet-tf-serving-api",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/tensorflow-resnet/goss"
+            },
+            "remote": {
+              "workload": "deploy-tensorflow-resnet"
+            },
+            "vars_file": "vars.yaml"
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/tensorflow-resnet/cypress"
+            },
+            "endpoint": "lb-tensorflow-resnet-tf-serving-api",
+            "app_protocol": "HTTP"
+          }
+        }
+      ]
     }
   }
 }

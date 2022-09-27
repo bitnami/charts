@@ -57,7 +57,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/pinniped
-  tag: 0.18.0-scratch-r8
+  tag: 0.19.0-scratch-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -90,6 +90,25 @@ concierge:
     api: 10250
     proxy: 8443
 
+  ## @param concierge.configurationPorts.aggregatedAPIServerPort Concierge API configuration port
+  ## @param concierge.configurationPorts.impersonationProxyServerPort Concierge Proxy configuration port
+  ##
+  ## Changes to concierge.configuration overwrites this param.
+  ##
+  ## If changed, other YAML references to the default ports may also need to be updated
+  ##
+  configurationPorts:
+    aggregatedAPIServerPort: ""
+    impersonationProxyServerPort: ""
+
+  ## @param concierge.hostNetwork Concierge API and Proxy container hostNetwork
+  ##
+  hostNetwork: false
+
+  ## @param concierge.dnsPolicy Concierge API and Proxy container dnsPolicy
+  ##
+  dnsPolicy: ""
+
   ## @param concierge.configuration [string] Concierge pinniped.yaml configuration file
   ##
   configuration: |
@@ -100,8 +119,12 @@ concierge:
         durationSeconds: 2592000
         renewBeforeSeconds: 2160000
     apiGroupSuffix: pinniped.dev
-    # aggregatedAPIServerPort may be set here, although other YAML references to the default port (10250) may also need to be updated
-    # impersonationProxyServerPort may be set here, although other YAML references to the default port (8444) may also need to be updated
+    {{- if .Values.concierge.configurationPorts.aggregatedAPIServerPort }}
+    aggregatedAPIServerPort: {{ .Values.concierge.configurationPorts.aggregatedAPIServerPort }}
+    {{- end }}
+    {{- if .Values.concierge.configurationPorts.impersonationProxyServerPort }}
+    impersonationProxyServerPort: {{ .Values.concierge.configurationPorts.impersonationProxyServerPort }}
+    {{- end }}
     names:
       servingCertificateSecret: {{ printf "%s-%s" (include "pinniped.concierge.api.fullname" .) "tls-serving-certificate" | trunc 63 | trimSuffix "-" }}
       credentialIssuer: {{ template "pinniped.concierge.fullname" . }}

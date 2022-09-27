@@ -105,26 +105,26 @@ spec:
           {{- if .Values.blackboxExporter.resources }}
           resources: {{- toYaml .Values.blackboxExporter.resources | nindent 12 }}
           {{- end }}
-          {{- if .Values.blackboxExporter.livenessProbe.enabled }}
+          {{- if .Values.blackboxExporter.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.blackboxExporter.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.blackboxExporter.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               port: http
-          {{- else if .Values.blackboxExporter.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.blackboxExporter.readinessProbe.enabled }}
+          {{- if .Values.blackboxExporter.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.blackboxExporter.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.blackboxExporter.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               port: http
-          {{- else if .Values.blackboxExporter.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.blackboxExporter.startupProbe.enabled }}
+          {{- if .Values.blackboxExporter.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.blackboxExporter.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.blackboxExporter.startupProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               port: http
-          {{- else if .Values.blackboxExporter.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.blackboxExporter.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.lifecycleHooks "context" $) | nindent 12 }}

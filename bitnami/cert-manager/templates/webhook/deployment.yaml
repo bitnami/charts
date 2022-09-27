@@ -123,7 +123,9 @@ spec:
           {{- if .Values.webhook.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.webhook.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.webhook.livenessProbe.enabled }}
+          {{- if .Values.webhook.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.webhook.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.webhook.livenessProbe.enabled }}
           livenessProbe:
              httpGet:
                path: {{ .Values.webhook.livenessProbe.path }}
@@ -134,10 +136,10 @@ spec:
              timeoutSeconds: {{ .Values.webhook.livenessProbe.timeoutSeconds }}
              successThreshold: {{ .Values.webhook.livenessProbe.successThreshold }}
              failureThreshold: {{ .Values.webhook.livenessProbe.failureThreshold }}
-          {{- else if .Values.webhook.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.webhook.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.webhook.readinessProbe.enabled }}
+          {{- if .Values.webhook.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.webhook.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.webhook.readinessProbe.enabled }}
           readinessProbe:
              httpGet:
                path: {{ .Values.webhook.readinessProbe.path }}
@@ -148,8 +150,6 @@ spec:
              timeoutSeconds: {{ .Values.webhook.readinessProbe.timeoutSeconds }}
              successThreshold: {{ .Values.webhook.readinessProbe.successThreshold }}
              failureThreshold: {{ .Values.webhook.readinessProbe.failureThreshold }}
-          {{- else if .Values.webhook.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.webhook.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.webhook.resources }}
           resources: {{- toYaml .Values.webhook.resources | nindent 12 }}
