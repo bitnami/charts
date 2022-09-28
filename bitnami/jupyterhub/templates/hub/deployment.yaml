@@ -233,7 +233,7 @@ spec:
             - mountPath: /etc/jupyterhub/z2jh.py
               subPath: z2jh.py
               name: config
-            - mountPath: /etc/jupyterhub/secret/
+            - mountPath: /usr/local/etc/jupyterhub/secret/
               name: secret
           {{- if .Values.hub.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.hub.extraVolumeMounts "context" $) | nindent 12 }}
