@@ -113,28 +113,28 @@ spec:
           resources: {{- toYaml .Values.querier.resources | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.querier.livenessProbe.enabled }}
+          {{- if .Values.querier.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.querier.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.querier.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.querier.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /ready
               port: {{ .Values.tempo.containerPorts.web }}
-          {{- else if .Values.querier.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.querier.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.querier.readinessProbe.enabled }}
+          {{- if .Values.querier.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.querier.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.querier.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.querier.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /ready
               port: {{ .Values.tempo.containerPorts.web }}
-          {{- else if .Values.querier.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.querier.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.querier.startupProbe.enabled }}
+          {{- if .Values.querier.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.querier.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.querier.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.querier.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http
-          {{- else if .Values.querier.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.querier.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.querier.lifecycleHooks }}
