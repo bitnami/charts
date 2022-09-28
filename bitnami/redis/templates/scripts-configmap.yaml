@@ -1,4 +1,4 @@
-{{- $clusterDomainWithDot := {{ if .Values.clusterDomain }}{{ printf ".%s" .Values.clusterDomain }}{{ else }}{{ print "" }}{{ end }} }}
+{{- $clusterDomainWithDot := (empty .Values.clusterDomain) | ternary "" (printf ".%s" .Values.clusterDomain) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
