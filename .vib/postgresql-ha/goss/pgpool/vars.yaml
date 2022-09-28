@@ -1,0 +1,10 @@
+pgpool:
+  adminUsername: adminUser
+  adminPassword: adminPassword123!4
+  replicaCount: 1
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 1002
+postgresql:
+  replicaCount: 4
