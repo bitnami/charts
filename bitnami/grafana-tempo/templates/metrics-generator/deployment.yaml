@@ -114,28 +114,28 @@ spec:
           resources: {{- toYaml .Values.metricsGenerator.resources | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.metricsGenerator.livenessProbe.enabled }}
+          {{- if .Values.metricsGenerator.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metricsGenerator.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metricsGenerator.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /ready
               port: {{ .Values.tempo.containerPorts.http }}
-          {{- else if .Values.metricsGenerator.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.metricsGenerator.readinessProbe.enabled }}
+          {{- if .Values.metricsGenerator.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metricsGenerator.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metricsGenerator.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /ready
               port: {{ .Values.tempo.containerPorts.http }}
-          {{- else if .Values.metricsGenerator.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.metricsGenerator.startupProbe.enabled }}
+          {{- if .Values.metricsGenerator.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metricsGenerator.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metricsGenerator.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http
-          {{- else if .Values.metricsGenerator.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.metricsGenerator.lifecycleHooks }}
