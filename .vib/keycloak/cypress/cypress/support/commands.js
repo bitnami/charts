@@ -17,8 +17,8 @@ Cypress.Commands.add(
   (username = Cypress.env('username'), password = Cypress.env('password')) => {
     cy.clearCookies();
     cy.visit('/admin');
-    cy.get('input#username').type(username);
-    cy.get('input#password').type(password);
-    cy.get('input[type="submit"]').click();
+    cy.get('#username').type(username);
+    cy.get('#password').type(password);
+    cy.get('[type="submit"]').click();
   }
 );

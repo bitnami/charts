@@ -1,6 +1,7 @@
 {
   "newStream": {
     "name": "test-stream",
-    "type": "mongodb | cassandra"
+    "app1": "http",
+    "app2": "log"
   }
 }

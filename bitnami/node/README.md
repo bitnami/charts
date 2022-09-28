@@ -108,7 +108,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------- |
 | `image.registry`                              | NodeJS image registry                                                                                                    | `docker.io`            |
 | `image.repository`                            | NodeJS image repository                                                                                                  | `bitnami/node`         |
-| `image.tag`                                   | NodeJS image tag (immutable tags are recommended)                                                                        | `16.17.0-debian-11-r0` |
+| `image.tag`                                   | NodeJS image tag (immutable tags are recommended)                                                                        | `16.17.1-debian-11-r0` |
 | `image.digest`                                | NodeJS image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                   | `""`                   |
 | `image.pullPolicy`                            | NodeJS image pull policy                                                                                                 | `IfNotPresent`         |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                         | `[]`                   |
@@ -182,7 +182,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------ | --------------------------------------------------------------------------------------------------- | -------------------------------------------- |
 | `git.image.registry`           | Git image registry                                                                                  | `docker.io`                                  |
 | `git.image.repository`         | Git image repository                                                                                | `bitnami/git`                                |
-| `git.image.tag`                | Git image tag (immutable tags are recommended)                                                      | `2.37.2-debian-11-r1`                        |
+| `git.image.tag`                | Git image tag (immutable tags are recommended)                                                      | `2.37.3-debian-11-r8`                        |
 | `git.image.digest`             | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                         |
 | `git.image.pullPolicy`         | Git image pull policy                                                                               | `IfNotPresent`                               |
 | `git.image.pullSecrets`        | Specify docker-registry secret names as an array                                                    | `[]`                                         |
@@ -200,7 +200,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory                                                       | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r26`      |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r37`      |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                  | `[]`                    |

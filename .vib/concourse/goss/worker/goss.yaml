@@ -1,0 +1,29 @@
+file:
+  /bitnami/concourse/workdir:
+    exists: true
+    filetype: directory
+    mode: "2777"
+    owner: root
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    exists: {{ .Vars.worker.serviceAccount.automountServiceAccountToken }}
+    filetype: directory
+    mode: "3777"
+command:
+  {{- $user := .Vars.secrets.localUser }}
+  {{- $pwd := .Vars.secrets.localPassword }}
+  {{- $target := printf "target_%s" (randAlphaNum 5 | toLower) }}
+  {{- $port := .Vars.service.web.ports.http }}
+  check-running-workers:
+    exec: fly -t {{ $target }} login -c http://concourse-web:{{ $port }} -u {{ $user }} -p '{{ $pwd }}' && fly -t {{ $target }} workers | grep 'running' | wc -l
+    exit-status: 0
+    stdout:
+      - {{ .Vars.worker.replicaCount }}
+  check-ports-config:
+    exec: $(echo $CONCOURSE_BIND_PORT | grep -q {{ .Vars.worker.containerPorts.garden }}) && $(echo $CONCOURSE_HEALTHCHECK_BIND_PORT | grep -q {{ .Vars.worker.containerPorts.health }}) && $(echo $CONCOURSE_BAGGAGECLAIM_BIND_PORT | grep -q {{ .Vars.worker.containerPorts.baggageclaim }}) && $(echo $CONCOURSE_BAGGAGECLAIM_DEBUG_BIND_PORT | grep -q {{ .Vars.worker.containerPorts.pprof }})
+    exit-status: 0
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+      - uid={{ .Vars.worker.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.worker.podSecurityContext.fsGroup }}/

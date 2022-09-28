@@ -213,6 +213,12 @@ To connect to your Kafka server from outside the cluster, follow the instruction
 
     Kafka Brokers port: {{ .Values.externalAccess.service.ports.external }}
 
+{{- else if eq "ClusterIP" .Values.externalAccess.service.type }}
+
+    Kafka brokers domain: Use your provided hostname to reach Kafka brokers, {{ .Values.externalAccess.service.domain }}
+
+    Kafka brokers port: You will have a different port for each Kafka broker starting at {{ .Values.externalAccess.service.ports.external }}
+
 {{- end }}
 
 {{- if not (eq $clientProtocol $externalClientProtocol) }}

@@ -1,0 +1,43 @@
+file:
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
+    filetype: directory
+    mode: "3777"
+  /opt/bitnami/clickhouse/etc/conf.d/00_default_overrides.xml:
+    mode: "0644"
+    filetype: file
+    exists: true
+    contains:
+      - zookeeper
+      - remote_servers
+      - logger
+  /bitnami/clickhouse/data:
+    mode: "2750"
+    filetype: directory
+    exists: true
+http:
+  http://clickhouse:{{ .Vars.service.ports.http }}/replicas_status:
+    status: 200
+    body:
+      - Ok
+command:
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+      - uid={{ .Vars.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
+  check-cluster-status:
+    exec: clickhouse-client --port {{ .Vars.containerPorts.tcp }}  --user '{{ .Vars.auth.username }}' --password '{{ .Vars.auth.password }}' --query='SELECT COUNT(*) FROM system.clusters;'
+    exit-status: 0
+    {{- $expectedCount := mul .Vars.shards .Vars.replicaCount }}
+    stdout:
+      - {{ $expectedCount }}
+  create-database-in-cluster:
+    {{- $database := printf "test_goss_%s" (randAlpha 5) }}
+    {{- $table := printf "%s.table_%s" $database (randAlpha 5) }}
+    {{- $insertValue := 23 }}
+    exec: clickhouse-client --host clickhouse --port {{ .Vars.service.ports.tcp }} --user '{{ .Vars.auth.username }}' --password '{{ .Vars.auth.password }}' --multiquery --query='CREATE DATABASE {{ $database }} ON CLUSTER default ENGINE = Memory; CREATE TABLE {{ $table }} (a UInt8) ENGINE = Memory;  INSERT INTO {{ $table }} VALUES({{ $insertValue }}); SELECT * FROM {{ $table }};'
+    exit-status: 0
+    stdout:
+      - {{ $insertValue }}

@@ -163,30 +163,30 @@ spec:
               name: metrics
             {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.jobservice.startupProbe.enabled }}
+          {{- if .Values.jobservice.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.jobservice.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.jobservice.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
-          {{- else if .Values.jobservice.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.jobservice.livenessProbe.enabled }}
+          {{- if .Values.jobservice.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.jobservice.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.jobservice.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /api/v1/stats
               port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
               scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
-          {{- else if .Values.jobservice.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.jobservice.readinessProbe.enabled }}
+          {{- if .Values.jobservice.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.jobservice.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.jobservice.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /api/v1/stats
               port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
               scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
-          {{- else if .Values.jobservice.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.jobservice.lifecycleHooks }}

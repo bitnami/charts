@@ -139,30 +139,30 @@ spec:
             - containerPort: {{ ternary .Values.chartmuseum.containerPorts.https .Values.chartmuseum.containerPorts.http .Values.internalTLS.enabled }}
               name: {{ ternary "https" "http" .Values.internalTLS.enabled }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.chartmuseum.startupProbe.enabled }}
+          {{- if .Values.chartmuseum.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.chartmuseum.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.chartmuseum.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
-          {{- else if .Values.chartmuseum.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.chartmuseum.livenessProbe.enabled }}
+          {{- if .Values.chartmuseum.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.chartmuseum.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.chartmuseum.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /health
               port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
               scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
-          {{- else if .Values.chartmuseum.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.chartmuseum.readinessProbe.enabled }}
+          {{- if .Values.chartmuseum.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.chartmuseum.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.chartmuseum.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /health
               port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
               scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
-          {{- else if .Values.chartmuseum.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.chartmuseum.lifecycleHooks }}

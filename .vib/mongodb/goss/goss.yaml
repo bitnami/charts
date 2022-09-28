@@ -1,33 +1,34 @@
-process:
-  mongod:
-    running: true
-command:
-  mongod-version:
-    exec: mongod --version | grep --quiet "$APP_VERSION"
-    exit-status: 0
-    stdout: [ ]
-    stderr: [ ]
-    timeout: 20000
-  admin-command:
-    exec: mongosh --quiet --username "$MONGODB_ROOT_USER" --password "$MONGODB_ROOT_PASSWORD" --port "$MONGODB_PORT_NUMBER" --eval "db.adminCommand({listCollections:1})"
-    exit-status: 0
-    stdout:
-      - "system.version"
-    stderr: [ ]
-    timeout: 20000
-  create-collection:
-    exec: mongosh --quiet --username "$MONGODB_EXTRA_USERNAMES" --password "$MONGODB_EXTRA_PASSWORDS" --port "$MONGODB_PORT_NUMBER" --eval "db.sapphire.drop(); db.createCollection('sapphire'); db.getCollectionNames()" "$MONGODB_EXTRA_DATABASES"
-    exit-status: 0
-    stdout:
-      - "sapphire"
-    stderr: [ ]
-    timeout: 20000
 file:
-  /opt/bitnami/mongodb/conf/mongodb.conf:
-    mode: "0660"
-    filetype: file
-    contains: [
-      "dbPath: /bitnami/mongodb/data/db",
-      "authorization: enabled"
-    ]
+  {{ .Vars.persistence.mountPath }}:
     exists: true
+    filetype: directory
+    mode: "2775"
+    owner: root
+  /opt/bitnami/mongodb/conf/mongodb.conf:
+    exists: true
+    filetype: file
+    mode: "0660"
+    contains:
+      - /port:.*{{ .Vars.containerPorts.mongodb }}/
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
+    filetype: directory
+    mode: "3777"
+command:
+  {{- $conn_opts := printf "--quiet --username %s --password '%s' --host mongodb --port %d" .Vars.auth.rootUser .Vars.auth.rootPassword .Vars.service.ports.mongodb }}
+  admin-command:
+    exec: mongosh {{ $conn_opts }} --eval "db.adminCommand({listCollections:1})"
+    exit-status: 0
+  {{- $testCollection := "sapphire" }}
+  {{- $conn_opts := printf "--quiet --username %s --password '%s' --host mongodb --port %d" (index .Vars.auth.usernames 0) (index .Vars.auth.passwords 0) .Vars.service.ports.mongodb }}
+  create-collection:
+    exec: mongosh {{ $conn_opts }} --eval "db.{{ $testCollection }}.drop(); db.createCollection('{{ $testCollection }}'); db.getCollectionNames()" {{ (index .Vars.auth.databases 0) }}
+    exit-status: 0
+    stdout:
+      - {{ $testCollection }}
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+      - uid={{ .Vars.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/

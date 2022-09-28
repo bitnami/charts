@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/logstash"
         },
-        "runtime_parameters": "InNlcnZpY2UiOgogICJwb3J0cyI6CiAgICAtICJuYW1lIjogImh0dHAiCiAgICAgICJwb3J0IjogODAKICAgICAgInRhcmdldFBvcnQiOiAiaHR0cCIKICAgICAgInByb3RvY29sIjogIlRDUCIKICAidHlwZSI6ICJMb2FkQmFsYW5jZXIiCg==",
+        "runtime_parameters": "ZW5hYmxlTW9uaXRvcmluZ0FQSTogdHJ1ZQptb25pdG9yaW5nQVBJUG9ydDogOTYwMAppbnB1dDogfC0KICBodHRwIHsgcG9ydCA9PiA4MDgxIH0KICBmaWxlIHsKICAgIHBhdGggPT4gIi90bXAvdGVzdF9pbnB1dCIKICAgIG1vZGUgPT4gInRhaWwiCiAgfQpmaWx0ZXI6IHwtCiAgZ3JvayB7CiAgICBtYXRjaCA9PiB7ICJtZXNzYWdlIiA9PiAiJXtDT01CSU5FREFQQUNIRUxPR30iIH0KICB9CiAgZGF0ZSB7CiAgICBtYXRjaCA9PiBbICJ0aW1lc3RhbXAiICwgImRkL01NTS95eXl5OkhIOm1tOnNzIFoiIF0KICB9Cm91dHB1dDogfC0KICBzdGRvdXQge30KICBmaWxlIHsKICAgIHBhdGggPT4gIi90bXAvdGVzdF9sb2ciCiAgfQpzZXJ2aWNlQWNjb3VudDoKICBjcmVhdGU6IHRydWUKICBhdXRvbW91bnRTZXJ2aWNlQWNjb3VudFRva2VuOiB0cnVlCmNvbnRhaW5lclBvcnRzOgogIC0gbmFtZTogaHR0cAogICAgY29udGFpbmVyUG9ydDogODA4MQogICAgcHJvdG9jb2w6IFRDUAogIC0gbmFtZTogbW9uaXRvcmluZwogICAgY29udGFpbmVyUG9ydDogOTYwMAogICAgcHJvdG9jb2w6IFRDUApyZXBsaWNhQ291bnQ6IDEKcG9kU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBmc0dyb3VwOiAxMDAyCmNvbnRhaW5lclNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgcnVuQXNVc2VyOiAxMDAyCnNlcnZpY2U6CiAgcG9ydHM6CiAgICAtIG5hbWU6IGh0dHAKICAgICAgcG9ydDogODA4MQogICAgICB0YXJnZXRQb3J0OiBodHRwCiAgICAgIHByb3RvY29sOiBUQ1AKICAgIC0gbmFtZTogbW9uaXRvcmluZwogICAgICBwb3J0OiA4MAogICAgICB0YXJnZXRQb3J0OiBtb25pdG9yaW5nCiAgICAgIHByb3RvY29sOiBUQ1AKICB0eXBlOiBMb2FkQmFsYW5jZXIKcGVyc2lzdGVuY2U6CiAgbW91bnRQYXRoOiAvYml0bmFtaS9sb2dzdGFzaC9kYXRh",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -34,7 +34,29 @@
         {
           "action_id": "health-check",
           "params": {
-            "endpoint": "lb-logstash-http",
+            "endpoint": "lb-logstash-monitoring",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/logstash/goss"
+            },
+            "remote": {
+              "workload": "sts-logstash"
+            },
+            "vars_file": "vars.yaml"
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/logstash/cypress"
+            },
+            "endpoint": "lb-logstash-monitoring",
             "app_protocol": "HTTP"
           }
         }
