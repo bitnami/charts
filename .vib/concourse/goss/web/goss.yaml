@@ -1,0 +1,29 @@
+file:
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    exists: {{ .Vars.web.serviceAccount.automountServiceAccountToken }}
+    filetype: directory
+    mode: "3777"
+command:
+  {{- $user := .Vars.secrets.localUser }}
+  {{- $pwd := .Vars.secrets.localPassword }}
+  {{- $target := printf "target_%s" (randAlphaNum 5 | toLower) }}
+  {{- $pipeline := printf "pipe_%s" (randAlphaNum 5 | toLower) }}
+  {{- $port := .Vars.service.web.ports.http }}
+  create-pipeline-trigger-job:
+    exec: fly -t {{ $target }} login -c http://concourse-web:{{ $port }} -u {{ $user }} -p '{{ $pwd }}' && (echo '{{ .Vars.examplePipeline | b64enc }}' | base64 -d) > /tmp/pipeline.yaml && fly -t {{ $target }} set-pipeline -p {{ $pipeline }} -c /tmp/pipeline.yaml -n && fly -t {{ $target }} unpause-pipeline -p {{ $pipeline }} && fly -t {{ $target }} trigger-job -j {{ $pipeline }}/job && sleep 35 && fly -t {{ $target }} jobs -p {{ $pipeline }}
+    exit-status: 0
+    stdout:
+      - "succeeded"
+    timeout: 40000
+  check-db-config:
+    exec: $(echo $CONCOURSE_POSTGRES_DATABASE | grep -q {{ .Vars.postgresql.auth.database }}) && $(echo $CONCOURSE_POSTGRES_USER | grep -q {{ .Vars.postgresql.auth.username }}) && $(echo $CONCOURSE_POSTGRES_PASSWORD | grep -q {{ .Vars.postgresql.auth.password }})
+    exit-status: 0
+  check-ports-config:
+    exec: $(echo $CONCOURSE_BIND_PORT | grep -q {{ .Vars.web.containerPorts.http }}) && $(echo $CONCOURSE_TSA_BIND_PORT | grep -q {{ .Vars.web.containerPorts.tsa }}) && $(echo $CONCOURSE_TSA_DEBUG_BIND_PORT | grep -q {{ .Vars.web.containerPorts.pprof }})
+    exit-status: 0
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+      - uid={{ .Vars.web.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.web.podSecurityContext.fsGroup }}/

@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/osclass"
         },
-        "runtime_parameters": "Im9zY2xhc3NQYXNzd29yZCI6ICJiaXRuYW1pMSIKIm9zY2xhc3NVc2VybmFtZSI6ICJ1c2VyIgoic2VydmljZSI6CiAgInBvcnQiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciI=",
+        "runtime_parameters": "b3NjbGFzc1VzZXJuYW1lOiB0ZXN0X3VzZXIKb3NjbGFzc1Bhc3N3b3JkOiBDb21wbGljYXRlZFBhc3N3b3JkMTIzITQKc2VydmljZToKICBwb3J0czoKICAgIGh0dHA6IDgwCiAgICBodHRwczogNDQ0CiAgdHlwZTogTG9hZEJhbGFuY2VyCmNvbnRhaW5lclBvcnRzOgogIGh0dHA6IDgwODEKICBodHRwczogODQ0NAptYXJpYWRiOgogIGVuYWJsZWQ6IHRydWUKICBhdXRoOgogICAgZGF0YWJhc2U6IHRlc3Rfb3NjbGFzc19kYXRhYmFzZQogICAgdXNlcm5hbWU6IHRlc3Rfb3NjbGFzc191c2VybmFtZQogICAgcGFzc3dvcmQ6IHRlc3Rfb3NjbGFzc19wYXNzd29yZApwb2RTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIGZzR3JvdXA6IDEwMDIKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBydW5Bc1VzZXI6IDEwMDIKaG9zdEFsaWFzZXM6CiAgLSBpcDogMTI3LjAuMC4xCiAgICBob3N0bmFtZXM6CiAgICAgIC0gc3RhdHVzLnRlc3Rob3N0",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -36,6 +36,32 @@
           "params": {
             "endpoint": "lb-osclass-http",
             "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/osclass/goss"
+            },
+            "remote": {
+              "workload": "deploy-osclass"
+            },
+            "vars_file": "vars.yaml"
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/osclass/cypress"
+            },
+            "endpoint": "lb-osclass-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "username": "test_user",
+              "password": "ComplicatedPassword123!4"
+            }
           }
         }
       ]

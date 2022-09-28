@@ -13,21 +13,10 @@ env:
   CSP_API_URL: https://console.cloud.vmware.com
   CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
   VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
+# Avoid concurrency over the same PR
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
 jobs:
-  auto-pr-triage:
-    runs-on: ubuntu-latest
-    name: Triage for automated PRs
-    if: |
-      contains(github.event.pull_request.title, 'Release') &&
-      github.event.action == 'opened' &&
-      github.actor == 'bitnami-bot'
-    steps:
-      # Adds 'verify' label to indicate the VIB Verify job can be executed
-      - name: Label PR to be verified
-        uses: andymckay/labeler@1.0.4
-        with:
-          repo-token: '${{ secrets.GITHUB_TOKEN }}'
-          add-labels: 'verify'
   get-chart:
     runs-on: ubuntu-latest
     name: Get modified charts
@@ -64,7 +53,7 @@ jobs:
             # Changes done in charts but version not bumped -> ERROR
             echo "::set-output name=error::Detected changes in charts without version bump in Chart.yaml.\nCharts changed: ${num_charts_changed}\n${charts_dirs_changed}\nVersion bumps detected: ${num_version_bumps}"
             echo "::set-output name=result::fail"
-          elif [[ ${{ github.actor }} == "bitnami-bot" && "$latest_commit_message" == *"readme-generator-for-helm"*  ]]; then
+          elif [[ ${{ github.actor }} == "bitnami-bot" && ${{ github.event.action }} == "synchronize" && "$latest_commit_message" == *"readme-generator-for-helm"*  ]]; then
             # The CI was launched by the readme generator workflow
             echo "::set-output name=result::skip"
           elif [[ "$num_charts_changed" -eq "1" ]]; then
@@ -129,27 +118,23 @@ jobs:
           VIB_ENV_ALTERNATIVE_TARGET_PLATFORM: ${{ secrets.VIB_ENV_ALTERNATIVE_TARGET_PLATFORM }}
   auto-pr-review:
     runs-on: ubuntu-latest
-    needs: [auto-pr-triage, vib-verify]
+    needs: vib-verify
     name: Reviewal for automated PRs
     # Job to be run only when the triage for automated PRs did as well,
     # not taking into account whether 'VIB Verify' succeeded
     if: |
-      always() &&
-      needs.auto-pr-triage.result == 'success'
+      always() && github.event.action == 'labeled' &&
+      contains(github.event.pull_request.labels.*.name, 'auto-merge') &&
+      github.event.pull_request.user.login == 'bitnami-bot'
     steps:
       - name: Enable auto-merge feature
         if: ${{ needs.vib-verify.result == 'success' }}
         uses: reitermarkus/automerge@v2.1.2
         with:
+          # Necessary to trigger CD workflow
           token: ${{ secrets.BITNAMI_BOT_TOKEN }}
           merge-method: squash
           pull-request: ${{ github.event.number }}
-      - name: Label PR as auto-merge
-        if: ${{ needs.vib-verify.result == 'success' }}
-        uses: andymckay/labeler@1.0.4
-        with:
-          repo-token: '${{ secrets.GITHUB_TOKEN }}'
-          add-labels: 'auto-merge'
       # Approve the CI's PR if the 'VIB Verify' job succeeded
       # Approved by the 'github-actions' user; a PR can't be approved by its author
       - name: PR approval
@@ -157,7 +142,6 @@ jobs:
         uses: hmarr/auto-approve-action@v2.4.0
         with:
           pull-request-number: ${{ github.event.number }}
-
       # If the CI did not succeed ('VIB Verify' failed or skipped),
       # post a comment on the PR and assign a maintainer agent to review it
       - name: Manual review required
@@ -165,21 +149,8 @@ jobs:
         uses: peter-evans/create-or-update-comment@v2.0.0
         with:
           issue-number: ${{ github.event.number }}
+          # Necessary to trigger support workflows
+          token: ${{ secrets.BITNAMI_BOT_TOKEN }}
           body: |
             There has been an error during the automated release process. Manual revision is now required.
             Please check the related [action_run#${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for more information.
-      - name: Assign PR to a maintaner agent
-        if: ${{ needs.vib-verify.result != 'success' }}
-        uses: pozil/auto-assign-issue@v1.9.0
-        with:
-          numOfAssignee: 1
-          teams: build-maintainers
-          repo-token: '${{ secrets.BITNAMI_BOT_TOKEN }}'
-      - name: Move into From Bitnami
-        uses: peter-evans/create-or-update-project-card@v2.0.0
-        if: ${{ needs.vib-verify.result != 'success' }}
-        with:
-          project-name: Support
-          column-name: From Bitnami
-          token: '${{ secrets.GITHUB_TOKEN }}'
-          issue-number: ${{ github.event.number }}

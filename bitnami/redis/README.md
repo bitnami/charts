@@ -95,15 +95,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Redis&reg; Image parameters
 
-| Name                | Description                                                                                                | Value                 |
-| ------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`    | Redis&reg; image registry                                                                                  | `docker.io`           |
-| `image.repository`  | Redis&reg; image repository                                                                                | `bitnami/redis`       |
-| `image.tag`         | Redis&reg; image tag (immutable tags are recommended)                                                      | `7.0.4-debian-11-r23` |
-| `image.digest`      | Redis&reg; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `image.pullPolicy`  | Redis&reg; image pull policy                                                                               | `IfNotPresent`        |
-| `image.pullSecrets` | Redis&reg; image pull secrets                                                                              | `[]`                  |
-| `image.debug`       | Enable image debug mode                                                                                    | `false`               |
+| Name                | Description                                                                                                | Value                |
+| ------------------- | ---------------------------------------------------------------------------------------------------------- | -------------------- |
+| `image.registry`    | Redis&reg; image registry                                                                                  | `docker.io`          |
+| `image.repository`  | Redis&reg; image repository                                                                                | `bitnami/redis`      |
+| `image.tag`         | Redis&reg; image tag (immutable tags are recommended)                                                      | `7.0.5-debian-11-r0` |
+| `image.digest`      | Redis&reg; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
+| `image.pullPolicy`  | Redis&reg; image pull policy                                                                               | `IfNotPresent`       |
+| `image.pullSecrets` | Redis&reg; image pull secrets                                                                              | `[]`                 |
+| `image.debug`       | Enable image debug mode                                                                                    | `false`              |
 
 
 ### Redis&reg; common configuration parameters
@@ -330,7 +330,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.enabled`                            | Use Redis&reg; Sentinel on Redis&reg; pods.                                                                                                 | `false`                  |
 | `sentinel.image.registry`                     | Redis&reg; Sentinel image registry                                                                                                          | `docker.io`              |
 | `sentinel.image.repository`                   | Redis&reg; Sentinel image repository                                                                                                        | `bitnami/redis-sentinel` |
-| `sentinel.image.tag`                          | Redis&reg; Sentinel image tag (immutable tags are recommended)                                                                              | `7.0.4-debian-11-r20`    |
+| `sentinel.image.tag`                          | Redis&reg; Sentinel image tag (immutable tags are recommended)                                                                              | `7.0.4-debian-11-r22`    |
 | `sentinel.image.digest`                       | Redis&reg; Sentinel image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                     |
 | `sentinel.image.pullPolicy`                   | Redis&reg; Sentinel image pull policy                                                                                                       | `IfNotPresent`           |
 | `sentinel.image.pullSecrets`                  | Redis&reg; Sentinel image pull secrets                                                                                                      | `[]`                     |
@@ -444,7 +444,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a sidecar prometheus exporter to expose Redis&reg; metrics                                                    | `false`                  |
 | `metrics.image.registry`                     | Redis&reg; Exporter image registry                                                                                  | `docker.io`              |
 | `metrics.image.repository`                   | Redis&reg; Exporter image repository                                                                                | `bitnami/redis-exporter` |
-| `metrics.image.tag`                          | Redis&reg; Exporter image tag (immutable tags are recommended)                                                      | `1.44.0-debian-11-r5`    |
+| `metrics.image.tag`                          | Redis&reg; Exporter image tag (immutable tags are recommended)                                                      | `1.44.0-debian-11-r8`    |
 | `metrics.image.digest`                       | Redis&reg; Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
 | `metrics.image.pullPolicy`                   | Redis&reg; Exporter image pull policy                                                                               | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                  | Redis&reg; Exporter image pull secrets                                                                              | `[]`                     |
@@ -475,6 +475,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.metricRelabelings`   | Metrics RelabelConfigs to apply to samples before ingestion.                                                        | `[]`                     |
 | `metrics.serviceMonitor.honorLabels`         | Specify honorLabels parameter to add the scrape endpoint                                                            | `false`                  |
 | `metrics.serviceMonitor.additionalLabels`    | Additional labels that can be used so ServiceMonitor resource(s) can be discovered by Prometheus                    | `{}`                     |
+| `metrics.serviceMonitor.podTargetLabels`     | Labels from the Kubernetes pod to be transferred to the created metrics                                             | `[]`                     |
 | `metrics.prometheusRule.enabled`             | Create a custom prometheusRule Resource for scraping metrics using PrometheusOperator                               | `false`                  |
 | `metrics.prometheusRule.namespace`           | The namespace in which the prometheusRule will be created                                                           | `""`                     |
 | `metrics.prometheusRule.additionalLabels`    | Additional labels for the prometheusRule                                                                            | `{}`                     |
@@ -488,7 +489,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r35`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r37`      |
 | `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -498,7 +499,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctl.enabled`                                       | Enable init container to modify Kernel settings                                                               | `false`                 |
 | `sysctl.image.registry`                                | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `sysctl.image.repository`                              | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `sysctl.image.tag`                                     | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r35`      |
+| `sysctl.image.tag`                                     | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r37`      |
 | `sysctl.image.digest`                                  | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `sysctl.image.pullPolicy`                              | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `sysctl.image.pullSecrets`                             | Bitnami Shell image pull secrets                                                                              | `[]`                    |

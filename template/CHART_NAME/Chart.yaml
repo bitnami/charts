@@ -11,7 +11,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
-    version: 1.x.x
+    version: 2.x.x
 description: %%DESCRIPTION%%
 engine: gotpl
 home: %%UPSTREAM_PROJECT_URL%%

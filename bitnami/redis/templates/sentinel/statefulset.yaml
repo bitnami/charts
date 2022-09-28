@@ -200,17 +200,19 @@ spec:
             - name: redis
               containerPort: {{ .Values.replica.containerPorts.redis }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.replica.startupProbe.enabled }}
+          {{- if .Values.replica.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.replica.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.replica.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.replica.startupProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - sh
                 - -c
                 - /health/ping_liveness_local.sh {{ .Values.replica.livenessProbe.timeoutSeconds }}
-          {{- else if .Values.replica.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.replica.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.replica.livenessProbe.enabled }}
+          {{- if .Values.replica.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.replica.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.replica.livenessProbe.enabled }}
           livenessProbe:
             initialDelaySeconds: {{ .Values.replica.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.replica.livenessProbe.periodSeconds }}
@@ -222,10 +224,10 @@ spec:
                 - sh
                 - -c
                 - /health/ping_liveness_local.sh {{ .Values.replica.livenessProbe.timeoutSeconds }}
-          {{- else if .Values.replica.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.replica.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.replica.readinessProbe.enabled }}
+          {{- if .Values.replica.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.replica.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.replica.readinessProbe.enabled }}
           readinessProbe:
             initialDelaySeconds: {{ .Values.replica.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.replica.readinessProbe.periodSeconds }}
@@ -237,8 +239,6 @@ spec:
                 - sh
                 - -c
                 - /health/ping_readiness_local.sh {{ .Values.replica.readinessProbe.timeoutSeconds }}
-          {{- else if .Values.replica.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.replica.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.replica.resources }}
@@ -373,17 +373,19 @@ spec:
             - name: redis-sentinel
               containerPort: {{ .Values.sentinel.containerPorts.sentinel }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.sentinel.startupProbe.enabled }}
+          {{- if .Values.sentinel.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.sentinel.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.sentinel.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.sentinel.startupProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - sh
                 - -c
                 - /health/ping_sentinel.sh {{ .Values.sentinel.livenessProbe.timeoutSeconds }}
-          {{- else if .Values.sentinel.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.sentinel.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.sentinel.livenessProbe.enabled }}
+          {{- if .Values.sentinel.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.sentinel.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.sentinel.livenessProbe.enabled }}
           livenessProbe:
             initialDelaySeconds: {{ .Values.sentinel.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.sentinel.livenessProbe.periodSeconds }}
@@ -395,12 +397,12 @@ spec:
                 - sh
                 - -c
                 - /health/ping_sentinel.sh {{ .Values.sentinel.livenessProbe.timeoutSeconds }}
-          {{- else if .Values.sentinel.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.sentinel.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.sentinel.readinessProbe.enabled }}
+          {{- if .Values.sentinel.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.sentinel.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.sentinel.readinessProbe.enabled }}
           readinessProbe:
             initialDelaySeconds: {{ .Values.sentinel.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.sentinel.readinessProbe.periodSeconds }}
@@ -412,8 +414,6 @@ spec:
                 - sh
                 - -c
                 - /health/ping_sentinel.sh {{ .Values.sentinel.readinessProbe.timeoutSeconds }}
-          {{- else if .Values.sentinel.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.sentinel.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.sentinel.resources }}

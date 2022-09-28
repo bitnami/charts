@@ -65,9 +65,13 @@ spec:
       securityContext: {{- omit .Values.controller.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       initContainers:
+        {{- if .Values.redisWait.enabled }}
         - name: wait-for-redis
           image: {{ include "common.images.image" (dict "imageRoot" .Values.redis.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.redis.image.pullPolicy | quote }}
+          {{- with .Values.redisWait.securityContext }}
+          securityContext: {{ . | toYaml }}
+          {{- end }}
           command:
             - /bin/bash
           args:
@@ -83,7 +87,7 @@ spec:
                 . /opt/bitnami/scripts/liblog.sh
 
                 check_redis_connection() {
-                  local result="$(redis-cli -h {{ include "argocd.redisHost" . }} -p {{ include "argocd.redisPort" . }} PING)"
+                  local result="$(redis-cli -h {{ include "argocd.redisHost" . }} -p {{ include "argocd.redisPort" . }} {{ .Values.redisWait.extraArgs }} PING)"
                   if [[ "$result" != "PONG" ]]; then
                     false
                   fi
@@ -104,6 +108,7 @@ spec:
                   name: {{ include "argocd.redis.secretName" . }}
                   key: {{ include "argocd.redis.secretPasswordKey" . }}
           {{- end }}
+        {{- end }}
         {{- if .Values.controller.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.controller.initContainers "context" $) | nindent 8 }}
         {{- end }}
@@ -176,7 +181,9 @@ spec:
           {{- if .Values.controller.resources }}
           resources: {{- toYaml .Values.controller.resources | nindent 12 }}
           {{- end }}
-          {{- if .Values.controller.startupProbe.enabled }}
+          {{- if .Values.controller.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.controller.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.controller.startupProbe.enabled }}
           startupProbe:
             httpGet:
               path: /healthz
@@ -186,10 +193,10 @@ spec:
             timeoutSeconds: {{ .Values.controller.startupProbe.timeoutSeconds }}
             successThreshold: {{ .Values.controller.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.controller.startupProbe.failureThreshold }}
-          {{- else if .Values.controller.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.controller.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.controller.livenessProbe.enabled }}
+          {{- if .Values.controller.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.controller.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.controller.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /healthz
@@ -199,10 +206,10 @@ spec:
             timeoutSeconds: {{ .Values.controller.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.controller.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.controller.livenessProbe.failureThreshold }}
-          {{- else if .Values.controller.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.controller.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.controller.readinessProbe.enabled }}
+          {{- if .Values.controller.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.controller.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.controller.readinessProbe.enabled }}
           readinessProbe:
             tcpSocket:
               port: {{ .Values.controller.containerPorts.controller }}
@@ -211,8 +218,6 @@ spec:
             timeoutSeconds: {{ .Values.controller.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.controller.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.controller.readinessProbe.failureThreshold }}
-          {{- else if .Values.controller.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.controller.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             # Mounting into a path that will be read by Argo CD.

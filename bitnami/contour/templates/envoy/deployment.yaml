@@ -107,7 +107,9 @@ spec:
                   - contour
                   - envoy
                   - shutdown
-          {{- if .Values.contour.livenessProbe.enabled }}
+          {{- if .Values.envoy.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.contour.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /healthz
@@ -210,10 +212,10 @@ spec:
             timeoutSeconds: {{ .Values.envoy.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.envoy.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.envoy.readinessProbe.failureThreshold }}
-          {{- else if .Values.envoy.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.envoy.livenessProbe.enabled }}
+          {{- if .Values.envoy.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.envoy.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /ready
@@ -223,10 +225,10 @@ spec:
             timeoutSeconds: {{ .Values.envoy.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.envoy.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.envoy.livenessProbe.failureThreshold }}
-          {{- else if .Values.envoy.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.envoy.startupProbe.enabled }}
+          {{- if .Values.envoy.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.envoy.startupProbe.enabled }}
           startupProbe:
             httpGet:
               path: /ready
@@ -236,8 +238,6 @@ spec:
             timeoutSeconds: {{ .Values.envoy.startupProbe.timeoutSeconds }}
             successThreshold: {{ .Values.envoy.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.envoy.startupProbe.failureThreshold }}
-          {{- else if .Values.envoy.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           resources: {{- toYaml .Values.envoy.resources | nindent 12 }}
           volumeMounts:
