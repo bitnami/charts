@@ -71,6 +71,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/spring-cloud-dataflow/**'
       - 'bitnami/suitecrm/**'
       - 'bitnami/tensorflow-resnet/**'
+      - 'bitnami/thanos/**'
       - 'bitnami/tomcat/**'
       - 'bitnami/wildfly/**'
       - 'bitnami/wordpress/**'
