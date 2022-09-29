@@ -489,7 +489,7 @@ spec:
           env:
             {{- $database := required "In order to enable metrics you need to specify a database (.Values.auth.database or .Values.global.postgresql.auth.database)" (include "postgresql.database" .) }}
             - name: DATA_SOURCE_URI
-              value: {{ printf "127.0.0.1:%d/%s?sslmode=disable" (int (include "postgresql.service.port" .)) $database }}
+              value: {{ printf "127.0.0.1:%d/%s?sslmode=require" (int (include "postgresql.service.port" .)) $database }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: DATA_SOURCE_PASS_FILE
               value: {{ printf "/opt/bitnami/postgresql/secrets/%s" (ternary "password" "postgres-password" (and (not (empty $customUser)) (ne $customUser "postgres"))) }}
