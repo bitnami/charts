@@ -76,7 +76,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mongodb-sharded
-  tag: 6.0.1-debian-11-r1
+  tag: 6.0.1-debian-11-r8
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -245,7 +245,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r27
+    tag: 11-debian-11-r35
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1542,7 +1542,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.34.0-debian-11-r5
+    tag: 0.34.0-debian-11-r14
     digest: ""
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.

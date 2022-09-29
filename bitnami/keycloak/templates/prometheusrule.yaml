@@ -1,0 +1,24 @@
+{{- if and .Values.metrics.enabled .Values.metrics.prometheusRule.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ template "keycloak.fullname" . }}
+  namespace: {{ default (include "common.names.namespace" .) .Values.metrics.prometheusRule.namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: keycloak
+    {{- if .Values.metrics.prometheusRule.labels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.labels "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  groups:
+    {{- range $groupName, $group := .Values.metrics.prometheusRule.groups }}
+    - name: {{ $groupName }}
+      rules: {{- tpl (toYaml $group.rules) $ | nindent 8 }}
+    {{- end }}
+{{- end }}

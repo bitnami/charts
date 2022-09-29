@@ -117,29 +117,29 @@ spec:
               containerPort: {{ .Values.msgTopologyOperator.containerPorts.metrics }}
               protocol: TCP
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.msgTopologyOperator.livenessProbe.enabled }}
+          {{- if .Values.msgTopologyOperator.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.msgTopologyOperator.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.msgTopologyOperator.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: http-metrics
-          {{- else if .Values.msgTopologyOperator.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.msgTopologyOperator.readinessProbe.enabled }}
+          {{- if .Values.msgTopologyOperator.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.msgTopologyOperator.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.msgTopologyOperator.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: http-metrics
-          {{- else if .Values.msgTopologyOperator.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.msgTopologyOperator.startupProbe.enabled }}
+          {{- if .Values.msgTopologyOperator.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.msgTopologyOperator.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.msgTopologyOperator.startupProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: http-metrics
-          {{- else if .Values.msgTopologyOperator.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.msgTopologyOperator.lifecycleHooks }}

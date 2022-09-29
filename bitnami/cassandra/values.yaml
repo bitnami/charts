@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/cassandra
-  tag: 4.0.5-debian-11-r13
+  tag: 4.0.6-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -591,7 +591,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r28
+    tag: 11-debian-11-r32
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -660,7 +660,7 @@ metrics:
     registry: docker.io
     pullPolicy: IfNotPresent
     repository: bitnami/cassandra-exporter
-    tag: 2.3.8-debian-11-r31
+    tag: 2.3.8-debian-11-r34
     digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -692,6 +692,21 @@ metrics:
     ##    memory: 128Mi
     ##
     requests: {}
+  ## @param metrics.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param metrics.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param metrics.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param metrics.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param metrics.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    initialDelaySeconds: 20
+    periodSeconds: 10
+    timeoutSeconds: 45
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param metrics.extraVolumeMounts Optionally specify extra list of additional volumeMounts for cassandra-exporter container
+  ##
+  extraVolumeMounts: []
   ## @param metrics.podAnnotations [object] Metrics exporter pod Annotation and Labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
@@ -754,6 +769,67 @@ metrics:
   containerPorts:
     http: 8080
     jmx: 5555
+
+  ## @param metrics.configuration [string] Configure Cassandra-exporter with a custom config.yml file
+  ## ref: https://github.com/criteo/cassandra_exporter/blob/master/config.yml
+  ##
+  configuration: |
+    host: localhost:{{ .Values.metrics.containerPorts.jmx }}
+    ssl: False
+    user:
+    password:
+    listenPort: {{ .Values.metrics.containerPorts.http }}
+    blacklist:
+      # To profile the duration of jmx call you can start the program with the following options
+      # > java -Dorg.slf4j.simpleLogger.defaultLogLevel=trace -jar cassandra_exporter.jar config.yml --oneshot
+      #
+      # To get intuition of what is done by cassandra when something is called you can look in cassandra
+      # https://github.com/apache/cassandra/tree/trunk/src/java/org/apache/cassandra/metrics
+      # Please avoid to scrape frequently those calls that are iterating over all sstables
+      
+      # Unaccessible metrics (not enough privilege)
+      - java:lang:memorypool:.*usagethreshold.*
+      
+      # Leaf attributes not interesting for us but that are presents in many path
+      - .*:999thpercentile
+      - .*:95thpercentile
+      - .*:fifteenminuterate
+      - .*:fiveminuterate
+      - .*:durationunit
+      - .*:rateunit
+      - .*:stddev
+      - .*:meanrate
+      - .*:mean
+      - .*:min
+      
+      # Path present in many metrics but uninterresting
+      - .*:viewlockacquiretime:.*
+      - .*:viewreadtime:.*
+      - .*:cas[a-z]+latency:.*
+      - .*:colupdatetimedeltahistogram:.*
+      
+      # Mostly for RPC, do not scrap them
+      - org:apache:cassandra:db:.*
+      
+      # columnfamily is an alias for Table metrics
+      # https://github.com/apache/cassandra/blob/8b3a60b9a7dbefeecc06bace617279612ec7092d/src/java/org/apache/cassandra/metrics/TableMetrics.java#L162
+      - org:apache:cassandra:metrics:columnfamily:.*
+      
+      # Should we export metrics for system keyspaces/tables ?
+      - org:apache:cassandra:metrics:[^:]+:system[^:]*:.*
+      
+      # Don't scrap us
+      - com:criteo:nosql:cassandra:exporter:.*
+    
+    maxScrapFrequencyInSec:
+      50:
+        - .*
+    
+      # Refresh those metrics only every hour as it is costly for cassandra to retrieve them
+      3600:
+        - .*:snapshotssize:.*
+        - .*:estimated.*
+        - .*:totaldiskspaceused:.*
 
 ## @section TLS/SSL parameters
 ##

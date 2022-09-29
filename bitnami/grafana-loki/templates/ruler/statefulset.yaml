@@ -1,4 +1,4 @@
-{{- if .Values.indexGateway.enabled }}
+{{- if .Values.ruler.enabled }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:

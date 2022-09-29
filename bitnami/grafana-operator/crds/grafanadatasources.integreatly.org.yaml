@@ -1,9 +1,7 @@
-# !kustomize build https://github.com/grafana-operator/grafana-operator/tree/v4.1.0/config/crd
+# !kustomize build https://github.com/grafana-operator/grafana-operator/tree/v4.6.0/config/crd
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  annotations:
-    controller-gen.kubebuilder.io/version: v0.4.1
   name: grafanadatasources.integreatly.org
 spec:
   group: integreatly.org
@@ -46,6 +44,18 @@ spec:
                       type: string
                     basicAuthUser:
                       type: string
+                    customJsonData:
+                      description: CustomJsonData will be used in place of jsonData,
+                        if present, and supports arbitrary JSON, not just those of
+                        official datasources
+                      type: object
+                      x-kubernetes-preserve-unknown-fields: true
+                    customSecureJsonData:
+                      description: SecureCustomJsonData will be used in place of secureJsonData,
+                        if present, and supports arbitrary JSON, not just those of
+                        official datasources
+                      type: object
+                      x-kubernetes-preserve-unknown-fields: true
                     database:
                       type: string
                     editable:
@@ -57,10 +67,18 @@ spec:
                         json options See https://grafana.com/docs/administration/provisioning/#datasources
                       properties:
                         addCorsHeader:
-                          description: ' Useful fields for clickhouse datasource  See
-                            https://github.com/Vertamedia/clickhouse-grafana/tree/master/dist/README.md#configure-the-datasource-with-provisioning  See
-                            https://github.com/Vertamedia/clickhouse-grafana/tree/master/src/datasource.ts#L44'
+                          description: Useful fields for clickhouse datasource See
+                            https://github.com/Vertamedia/clickhouse-grafana/tree/master/dist/README.md#configure-the-datasource-with-provisioning
+                            See https://github.com/Vertamedia/clickhouse-grafana/tree/master/src/datasource.ts#L44
                           type: boolean
+                        alertmanagerUid:
+                          description: AlertManagerUID if null use the internal grafana
+                            alertmanager
+                          type: string
+                        allowInfraExplore:
+                          type: boolean
+                        apiToken:
+                          type: string
                         appInsightsAppId:
                           description: Fields for Azure data sources
                           type: string
@@ -111,7 +129,23 @@ spec:
                         encrypt:
                           type: string
                         esVersion:
-                          type: string
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          x-kubernetes-int-or-string: true
+                        exemplarTraceIdDestinations:
+                          items:
+                            properties:
+                              datasourceUid:
+                                type: string
+                              name:
+                                type: string
+                              url:
+                                type: string
+                              urlDisplayLabel:
+                                type: string
+                            type: object
+                          type: array
                         githubUrl:
                           description: Fields for Github data sources
                           type: string
@@ -158,6 +192,10 @@ spec:
                           type: string
                         logMessageField:
                           type: string
+                        manageAlerts:
+                          description: ManageAlerts turns on alert management from
+                            UI
+                          type: boolean
                         maxIdleConns:
                           type: integer
                         maxLines:
@@ -165,12 +203,36 @@ spec:
                           type: integer
                         maxOpenConns:
                           type: integer
+                        nodeGraph:
+                          properties:
+                            enabled:
+                              type: boolean
+                          type: object
                         oauthPassThru:
                           type: boolean
                         organization:
                           type: string
+                        port:
+                          type: integer
                         postgresVersion:
                           type: integer
+                        queryTimeout:
+                          type: string
+                        search:
+                          properties:
+                            hide:
+                              type: boolean
+                          type: object
+                        server:
+                          description: Fields for Grafana Clickhouse data sources
+                          type: string
+                        serviceMap:
+                          properties:
+                            datasourceUid:
+                              type: string
+                          type: object
+                        showOffline:
+                          type: boolean
                         sigV4AssumeRoleArn:
                           type: string
                         sigV4Auth:
@@ -196,6 +258,9 @@ spec:
                           type: string
                         timescaledb:
                           type: boolean
+                        timezone:
+                          description: Extra field for MySQL data source
+                          type: string
                         tlsAuth:
                           type: boolean
                         tlsAuthWithCACert:
@@ -210,6 +275,12 @@ spec:
                           properties:
                             datasourceUid:
                               type: string
+                            filterBySpanID:
+                              type: boolean
+                            filterByTraceID:
+                              type: boolean
+                            lokiSearch:
+                              type: boolean
                             spanEndTimeShift:
                               type: string
                             spanStartTimeShift:
@@ -223,10 +294,17 @@ spec:
                           type: string
                         tsdbVersion:
                           type: string
+                        url:
+                          description: Fields for Instana data sources See https://github.com/instana/instana-grafana-datasource/blob/main/provisioning/datasources/datasource.yml
+                          type: string
                         usePOST:
+                          type: boolean
+                        useProxy:
                           type: boolean
                         useYandexCloudAuthorization:
                           type: boolean
+                        username:
+                          type: string
                         version:
                           type: string
                         xHeaderKey:

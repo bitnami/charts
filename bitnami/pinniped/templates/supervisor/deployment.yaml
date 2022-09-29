@@ -110,32 +110,32 @@ spec:
           ports:
             - name: https
               containerPort: {{ .Values.supervisor.containerPorts.https }}
-          {{- if .Values.supervisor.livenessProbe.enabled }}
+          {{- if .Values.supervisor.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.supervisor.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.supervisor.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.supervisor.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /healthz
               port: https
               scheme: HTTPS
-          {{- else if .Values.supervisor.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.supervisor.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.supervisor.readinessProbe.enabled }}
+          {{- if .Values.supervisor.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.supervisor.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.supervisor.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.supervisor.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /healthz
               port: https
               scheme: HTTPS
-          {{- else if .Values.supervisor.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.supervisor.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.supervisor.startupProbe.enabled }}
+          {{- if .Values.supervisor.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.supervisor.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.supervisor.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.supervisor.startupProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /healthz
               port: https
               scheme: HTTPS
-          {{- else if .Values.supervisor.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.supervisor.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.supervisor.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.supervisor.lifecycleHooks "context" $) | nindent 12 }}

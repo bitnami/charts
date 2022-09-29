@@ -151,7 +151,9 @@ spec:
               containerPort: {{ .Values.skipper.jdwp.port }}
               protocol: TCP
             {{- end }}
-          {{- if .Values.skipper.startupProbe.enabled }}
+          {{- if .Values.skipper.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.skipper.startupProbe.enabled }}
           startupProbe:
             httpGet:
               path: /actuator/health
@@ -161,10 +163,10 @@ spec:
             timeoutSeconds: {{ .Values.skipper.startupProbe.timeoutSeconds }}
             successThreshold: {{ .Values.skipper.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.skipper.startupProbe.failureThreshold }}
-          {{- else if .Values.skipper.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.skipper.livenessProbe.enabled }}
+          {{- if .Values.skipper.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.skipper.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /actuator/health
@@ -174,10 +176,10 @@ spec:
             timeoutSeconds: {{ .Values.skipper.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.skipper.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.skipper.livenessProbe.failureThreshold }}
-          {{- else if .Values.skipper.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.skipper.readinessProbe.enabled }}
+          {{- if .Values.skipper.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.skipper.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
               path: /actuator/health
@@ -187,8 +189,6 @@ spec:
             timeoutSeconds: {{ .Values.skipper.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.skipper.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.skipper.readinessProbe.failureThreshold }}
-          {{- else if .Values.skipper.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.skipper.resources }}
           resources: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.resources "context" $) | nindent 12 }}

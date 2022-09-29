@@ -1,0 +1,22 @@
+auth:
+  username: test_admin
+  password: ComplicatedPassword123!4
+locator:
+  replicaCount: 2
+  containerPorts:
+    http: 7071
+    rmi: 1100
+  podSecurityContext:
+    fsGroup: 1002
+    sysctls:
+      name: net.ipv4.tcp_syncookies
+      value: "0"
+  containerSecurityContext:
+    runAsUser: 1002
+  service:
+    ports:
+      locator: 10335
+      http: 80
+      rmi: 1100
+server:
+  replicaCount: 3

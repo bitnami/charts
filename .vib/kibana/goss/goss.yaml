@@ -1,30 +1,29 @@
-command:
-  kibana-version-ok:
-    exec: kibana --version
-    exit-status: 0
-    stdout:
-    stderr: [ ]
-    timeout: 20000
-  which-kibana:
-    exec: which kibana
-    exit-status: 0
-    stdout:
-    - "/opt/bitnami/kibana/bin/kibana"
-    stderr: []
-    timeout: 0  
 file:
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
+    filetype: directory
+    mode: "3777"
+  /bitnami/kibana:
+    exists: true
+    filetype: directory
+    mode: "2775"
+    owner: root
+  /bitnami/kibana/conf:
+    exists: true
+    filetype: directory
+    mode: "2777"
+    owner: root
   /opt/bitnami/kibana/config/kibana.yml:
     mode: "0664"
     filetype: file
     exists: true
     group: root
-  /opt/bitnami/kibana/x-pack:
-    mode: "0755"
-    filetype: directory
-    exists: true
-    group: root
-  /opt/bitnami/kibana/config/node.options:
-    mode: "0664"
-    filetype: file
-    exists: true
-    group: root  
+    contains:
+    - "csp.strict: {{ .Vars.extraConfiguration.csp_strict }}"
+command:
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+    - uid={{ .Vars.containerSecurityContext.runAsUser }}
+    - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/

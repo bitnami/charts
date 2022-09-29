@@ -2,7 +2,7 @@
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
-  name: {{ printf "%s-auth-reader" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-auth-reader" (include "common.names.fullname.namespace" .) }}
   namespace: kube-system
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
