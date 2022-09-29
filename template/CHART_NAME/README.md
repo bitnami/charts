@@ -1,3 +1,5 @@
+<!--- app-name: %%CHART_NAME%% -->
+
 # %%CHART_NAME%%
 
 %%DESCRIPTION%% (check existing examples)

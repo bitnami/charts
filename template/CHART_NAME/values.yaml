@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -17,6 +18,7 @@ global:
   storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param kubeVersion Override Kubernetes version
 ##
@@ -59,6 +61,7 @@ diagnosticMode:
     - infinity
 
 ## @section %%MAIN_CONTAINER%% Parameters
+##
 
 ## %%MAIN_CONTAINER/POD_DESCRIPTION%%
 ##
@@ -68,6 +71,7 @@ diagnosticMode:
   ## @param %%MAIN_OBJECT_BLOCK%%.image.registry %%MAIN_CONTAINER%% image registry
   ## @param %%MAIN_OBJECT_BLOCK%%.image.repository %%MAIN_CONTAINER%% image repository
   ## @param %%MAIN_OBJECT_BLOCK%%.image.tag %%MAIN_CONTAINER%% image tag (immutable tags are recommended)
+  ## @param %%MAIN_OBJECT_BLOCK%%.image.digest %%MAIN_CONTAINER%% image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param %%MAIN_OBJECT_BLOCK%%.image.pullPolicy %%MAIN_CONTAINER%% image pull policy
   ## @param %%MAIN_OBJECT_BLOCK%%.image.pullSecrets %%MAIN_CONTAINER%% image pull secrets
   ## @param %%MAIN_OBJECT_BLOCK%%.image.debug Enable %%MAIN_CONTAINER%% image debug mode
@@ -76,6 +80,7 @@ diagnosticMode:
     registry: docker.io
     repository: bitnami/%%IMAGE_NAME%%
     tag: %%IMAGE_TAG%%
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -353,6 +358,7 @@ diagnosticMode:
   %%SAME_STRUCTURE_AS_THE_MAIN_CONTAINER/POD%%
 
 ## @section Traffic Exposure Parameters
+##
 
 ## %%MAIN_CONTAINER_NAME%% service parameters
 ##
@@ -508,7 +514,7 @@ ingress:
   ## - host: example.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: example-svc
   ##           port:
@@ -517,6 +523,7 @@ ingress:
   extraRules: []
 
 ## @section Persistence Parameters
+##
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -564,6 +571,7 @@ persistence:
   ##
   dataSource: {}
 ## @section Init Container Parameters
+##
 
 ## 'volumePermissions' init container parameters
 ## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
@@ -613,6 +621,7 @@ volumePermissions:
     runAsUser: 0
 
 ## @section Other Parameters
+##
 
 ## RBAC configuration
 ##

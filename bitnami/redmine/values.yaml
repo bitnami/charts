@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redmine
-  tag: 5.0.2-debian-11-r23
+  tag: 5.0.2-debian-11-r32
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -942,7 +942,7 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r28
+    tag: 11-debian-11-r37
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

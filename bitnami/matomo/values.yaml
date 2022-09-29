@@ -182,6 +182,9 @@ initContainers: []
 ## @param sidecars Attach additional containers to the pod (evaluated as a template)
 ##
 sidecars: []
+## @param serviceAccountName Attach serviceAccountName to the pod and sidecars
+##
+serviceAccountName: ""
 ## @param tolerations Tolerations for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##

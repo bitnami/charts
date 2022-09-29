@@ -2,7 +2,7 @@
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ include "common.names.fullname" . }}
+  name: {{ template "common.names.fullname.namespace" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
@@ -33,7 +33,7 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ printf "%s-view" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-view" (include "common.names.fullname.namespace" .) }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     rbac.authorization.k8s.io/aggregate-to-admin: "true"
