@@ -3,7 +3,7 @@ import { random } from '../support/utils';
 
 it('allows uploading a dashboard as JSON file', () => {
   cy.login();
-  cy.visit('dashboard/import');
+  cy.visit('/dashboard/import');
   cy.get('[type=file]').selectFile(
     'cypress/fixtures/test-dashboard.json',
     { force: true }
@@ -32,7 +32,7 @@ it('allows creating and deleting a data source', () => {
   cy.visit('/datasources');
   cy.get('@datasourceName').then((datasourceName) => {
     cy.contains('a', datasourceName).click({ force: true });
-  })
+  });
   cy.contains('button', 'Delete').click();
   cy.get('[aria-label*="Confirm"]').click();
   cy.get('[data-testid*="data-testid Alert success"]').should('be.visible');
@@ -47,8 +47,7 @@ it('checks admin settings endpoint', () => {
       username: Cypress.env('username'),
       password: Cypress.env('password'),
     },
-  }).as('adminSettings');
-  cy.get('@adminSettings').should((response) => {
+  }).then((response) => {
     expect(response.status).to.eq(200);
     expect(response.body).to.include.all.keys(
       'alerting',
