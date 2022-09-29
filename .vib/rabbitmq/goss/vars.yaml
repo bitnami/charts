@@ -12,5 +12,4 @@ service:
   ports:
     amqp: 5673
     dist: 25673
-    manager: 80
     epmd: 4370
