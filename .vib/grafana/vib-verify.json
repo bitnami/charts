@@ -22,11 +22,11 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/grafana"
         },
-        "runtime_parameters": "YWRtaW46CiAgdXNlcjogInRlc3RfYWRtaW4iCiAgcGFzc3dvcmQ6ICJDb21wbGljYXRlZFBhc3N3b3JkMTIzITQiCnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCiAgcG9ydHM6CiAgICBncmFmYW5hOiA4MApwbHVnaW5zOiAiZ3JhZmFuYS1rdWJlcm5ldGVzLWFwcCIKc210cDoKICBlbmFibGVkOiB0cnVlCiAgdXNlcjogc210cF91c2VyCiAgcGFzc3dvcmQ6IHNtdHBfcGFzc3dvcmQKICBob3N0OiAic210cCIKICBmcm9tQWRkcmVzczogInRlc3RAc210cC5jb20iCiAgZnJvbU5hbWU6ICJ0ZXN0X3NtdHAi",
+        "runtime_parameters": "YWRtaW46CiAgdXNlcjogdGVzdF9hZG1pbgogIHBhc3N3b3JkOiBDb21wbGljYXRlZFBhc3N3b3JkMTIzITQKcGx1Z2luczogZ3JhZmFuYS1rdWJlcm5ldGVzLWFwcApncmFmYW5hOgogIGNvbnRhaW5lclBvcnRzOgogICAgZ3JhZmFuYTogMzAwMAogIHBvZFNlY3VyaXR5Q29udGV4dDoKICAgIGVuYWJsZWQ6IHRydWUKICAgIGZzR3JvdXA6IDEwMDIKICBjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgICBlbmFibGVkOiB0cnVlCiAgICBydW5Bc1VzZXI6IDEwMDIKc2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGdyYWZhbmE6IDgwCnBlcnNpc3RlbmNlOgogIGVuYWJsZWQ6IHRydWU=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
-            "name": "L4"
+            "name": "S4"
           }
         }
       },
@@ -46,7 +46,8 @@
             },
             "remote": {
               "workload": "deploy-grafana"
-            }
+            },
+            "vars_file": "vars.yaml"
           }
         },
         {

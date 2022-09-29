@@ -1,5 +1,5 @@
 {
   "newDatasource": {
-    "name": "Prometheus"
+    "type": "Prometheus"
   }
 }
