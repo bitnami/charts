@@ -12,30 +12,22 @@ it('allows uploading broker definitions', () => {
   cy.contains('imported successfully');
 });
 
-it('allows adding a new queue and binding/unbinding it to the exchange', () => {
+it('allows publishing a message to a created exchange', () => {
   cy.login();
-  cy.visit('/#/queues');
-  cy.contains('Add a new queue').click();
-  cy.fixture('queues').then((queue) => {
-    cy.get('[name="name"]').type(`${queue.newQueue.name}${random}`);
-    cy.get('#arguments_1_mfkey').type(queue.newQueue.argument1);
-    cy.get('#arguments_1_mfvalue').type(queue.newQueue.argument2);
-    cy.contains('Add queue')
-      .click({ force: true });
+  cy.visit('/#/exchanges');
+  cy.contains('Add a new exchange').click();
+  cy.fixture('exchanges').then((exchange) => {
+    cy.get('[name="name"]').type(`${exchange.newExchange.name}${random}`);
+    cy.get('#arguments_1_mfkey').type(exchange.newExchange.argument1);
+    cy.get('#arguments_1_mfvalue').type(exchange.newExchange.argument2);
+    cy.contains('Add exchange').click({ force: true });
     cy.reload();
-    cy.contains('table', `${queue.newQueue.name}${random}`);
+    cy.contains('a', `${exchange.newExchange.name}${random}`).click();
   });
-  cy.visit('/#/exchanges/%2F/amq.direct');
-  cy.contains('Bindings').click();
-  cy.fixture('queues').then((queue) => {
-    cy.get('form[action*="bindings"][method*="post"]').within(() => {
-      cy.get('[name="destination"]').type(`${queue.newQueue.name}${random}`);
-      cy.contains('Bind').click();
-    });
-    cy.reload();
-    cy.get(`[href*="${queue.newQueue.name}${random}"]`).click();
-    cy.contains('Unbind').click({ force: true });
-    cy.visit('/#/exchanges/%2F/amq.direct');
-    cy.contains(`${queue.newQueue.name}${random}`).should('not.exist');
+  cy.contains('h2', 'Publish').click();
+  cy.fixture('messages').then((message) => {
+    cy.get('textarea').type(message.newMessage.payload);
   });
+  cy.contains('input', 'Publish').click();
+  cy.contains('Message published');
 });
