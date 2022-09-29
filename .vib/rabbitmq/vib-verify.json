@@ -22,11 +22,11 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/rabbitmq"
         },
-        "runtime_parameters": "YXV0aDoKICBlcmxhbmdDb29raWU6IFJqc3BDQzNubTRrTHY0TGpXRk5mRkhXM3hMeGI3elRDCiAgcGFzc3dvcmQ6IENvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNAogIHVzZXJuYW1lOiB1c2VyCnNlcnZpY2U6CiAgcG9ydHM6CiAgICBtYW5hZ2VyOiA4MAogIHR5cGU6IExvYWRCYWxhbmNlcg==",
+        "runtime_parameters": "YXV0aDoKICB1c2VybmFtZTogdGVzdF91c2VyCiAgcGFzc3dvcmQ6IENvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNAogIGVybGFuZ0Nvb2tpZTogUmpzcENDM25tNGtMdjRMaldGTmZGSFczeEx4Yjd6VEMKcGx1Z2luczogInJhYmJpdG1xX21hbmFnZW1lbnQgcmFiYml0bXFfcGVlcl9kaXNjb3ZlcnlfazhzIgpleHRyYVBsdWdpbnM6ICJyYWJiaXRtcV9hdXRoX2JhY2tlbmRfbGRhcCByYWJiaXRtcV90b3AiCmNsdXN0ZXJpbmc6CiAgZW5hYmxlZDogdHJ1ZQpjb250YWluZXJQb3J0czoKICBhbXFwOiA1NjcyCiAgZGlzdDogMjU2NzIKICBtYW5hZ2VyOiAxNTY3MgogIGVwbWQ6IDQzNjkKcmVwbGljYUNvdW50OiAyCnBvZFNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgZnNHcm91cDogMTAwMgpjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIHJ1bkFzVXNlcjogMTAwMgpzZXJ2aWNlQWNjb3VudDoKICBjcmVhdGU6IHRydWUKICBhdXRvbW91bnRTZXJ2aWNlQWNjb3VudFRva2VuOiB0cnVlCnJiYWM6CiAgY3JlYXRlOiB0cnVlCnBlcnNpc3RlbmNlOgogIGVuYWJsZWQ6IHRydWUKICBtb3VudFBhdGg6IC9iaXRuYW1pL3JhYmJpdG1xL21uZXNpYQpzZXJ2aWNlOgogIHBvcnRzOgogICAgYW1xcDogNTY3MwogICAgZGlzdDogMjU2NzMKICAgIG1hbmFnZXI6IDgwCiAgICBlcG1kOiA0MzcwCiAgdHlwZTogTG9hZEJhbGFuY2Vy",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
-            "name": "M8"
+            "name": "M4"
           }
         }
       },
@@ -46,7 +46,8 @@
             },
             "remote": {
               "workload": "sts-rabbitmq"
-            }
+            },
+            "vars_file": "vars.yaml"
           }
         },
         {
@@ -58,7 +59,7 @@
             "endpoint": "lb-rabbitmq-http-stats",
             "app_protocol": "HTTP",
             "env": {
-              "username": "user",
+              "username": "test_user",
               "password": "ComplicatedPassword123!4"
             }
           }

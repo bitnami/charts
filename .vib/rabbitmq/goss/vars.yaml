@@ -1,0 +1,15 @@
+extraPlugins: rabbitmq_top
+replicaCount: 2
+podSecurityContext:
+  fsGroup: 1002
+containerSecurityContext:
+  runAsUser: 1002
+serviceAccount:
+  automountServiceAccountToken: true
+persistence:
+  mountPath: /bitnami/rabbitmq/mnesia
+service:
+  ports:
+    amqp: 5673
+    dist: 25673
+    epmd: 4370
