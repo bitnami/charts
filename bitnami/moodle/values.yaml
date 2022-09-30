@@ -81,6 +81,7 @@ moodleSkipInstall: false
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/moodle#configuration
 ##
 moodleSiteName: ""
+moodleLang: ""
 ## @param moodleUsername User of the application
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/moodle#configuration
 ##
