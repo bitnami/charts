@@ -9,9 +9,10 @@ it('allows to enrol and verify certificate', () => {
       cy.get('#textfieldusername').type(Cypress.env('username'));
       cy.get('#textfieldpassword').type(Cypress.env('password'));
       cy.get('#buttonsubmitusername').click();
-      cy.get('#tokenKeySpec').select('RSA_2048');
-      cy.get('#certprofile').select('ENDUSER');
-
+      cy.fixture('certs').then((certs) => {
+        cy.get('#tokenKeySpec').select(certs.newAdminCert.cipherSpec);
+        cy.get('#certprofile').select(certs.newAdminCert.profile);
+      });
       // Clicking on the button will download the certificate, but Cypress
       // expects the page to be reloaded and fails with a timeout. We manually
       // force the reload to avoid it and then verify that the file was indeed
