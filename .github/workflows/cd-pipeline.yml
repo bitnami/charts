@@ -168,7 +168,8 @@ jobs:
       - name: Install and configure aws-cli and helm
         run: |
           # AWS CLI
-          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y awscli
+          export DEBIAN_FRONTEND=noninteractive
+          sudo apt-get update && sudo apt-get install -y awscli
           aws configure set region us-east-1
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
