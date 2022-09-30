@@ -24,4 +24,4 @@ name: nats
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/nats
   - https://nats.io/
-version: 7.4.7
+version: 7.4.8
