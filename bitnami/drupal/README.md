@@ -223,6 +223,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.user`                     | Existing username in the external db                                                     | `bn_drupal`         |
 | `externalDatabase.password`                 | Password for the above username                                                          | `""`                |
 | `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_drupal`    |
+| `externalDatabase.existingSecret`           | Name of a secret with the database password. (externalDatabase.password will be ignored and picked up from this secret). The secret has to contain the key db-password | `""`    |
 
 
 ### Volume Permissions parameters
