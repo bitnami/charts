@@ -1,0 +1,5 @@
+{
+  "newDatasource": {
+    "type": "Prometheus"
+  }
+}
