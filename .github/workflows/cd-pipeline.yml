@@ -59,6 +59,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/postgresql/**'
       - 'bitnami/prestashop/**'
       - 'bitnami/pytorch/**'
+      - 'bitnami/rabbitmq-cluster-operator/**'
       - 'bitnami/rabbitmq/**'
       - 'bitnami/redis-cluster/**'
       - 'bitnami/redis/**'
