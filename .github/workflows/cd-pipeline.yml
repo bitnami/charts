@@ -60,6 +60,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/phpmyadmin/**'
       - 'bitnami/pinniped/**'
       - 'bitnami/postgresql/**'
+      - 'bitnami/postgresql-ha/**'
       - 'bitnami/prestashop/**'
       - 'bitnami/pytorch/**'
       - 'bitnami/rabbitmq/**'
