@@ -3,7 +3,7 @@ addr:
     reachable: true
 http:
   http://rmq-op-webhook:{{ .Vars.msgTopologyOperator.service.ports.webhook }}:
-    status: 404
+    status: 400
   http://ve-testing:{{ .Vars.rabbitmq.service.ports.manager }}:
     status: 200
 file:
