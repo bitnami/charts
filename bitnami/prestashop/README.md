@@ -327,7 +327,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set prestashopUsername=admin,prestashopPassword=password,mariadb.auth.rootPassword=secretpassword \
-    bitnami/prestashop
+    my-repo/prestashop
 ```
 
 The above command sets the PrestaShop administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
@@ -495,13 +495,13 @@ export MARIADB_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=prestashop,ap
 Upgrade your release (maintaining the version) disabling MariaDB and scaling Prestashop replicas to 0:
 
 ```console
-$ helm upgrade prestashop bitnami/prestashop --set prestashopPassword=$PRESTASHOP_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 10.0.0
+$ helm upgrade prestashop my-repo/prestashop --set prestashopPassword=$PRESTASHOP_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 10.0.0
 ```
 
 Finally, upgrade you release to 11.0.0 reusing the existing PVC, and enabling back MariaDB:
 
 ```console
-$ helm upgrade prestashop bitnami/prestashop --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set prestashopPassword=$PRESTASHOP_PASSWORD
+$ helm upgrade prestashop my-repo/prestashop --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set prestashopPassword=$PRESTASHOP_PASSWORD
 ```
 
 You should see the lines below in MariaDB container logs:

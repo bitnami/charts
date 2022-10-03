@@ -220,7 +220,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 $ helm install my-release \
   --set mode=distributed \
   --set worldSize=4 \
-    bitnami/pytorch
+    my-repo/pytorch
 ```
 
 The above command create 4 pods for PyTorch: one master and three workers.

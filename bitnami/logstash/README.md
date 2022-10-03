@@ -208,7 +208,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install my-release \
-  --set enableMonitoringAPI=false bitnami/logstash
+  --set enableMonitoringAPI=false my-repo/logstash
 ```
 
 The above command disables the Logstash Monitoring API.

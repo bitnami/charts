@@ -704,7 +704,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 $ helm install my-release \
   --set operator.logLevel=debug \
   --set prometheus.replicaCount=5 \
-    bitnami/kube-prometheus
+    my-repo/kube-prometheus
 ```
 
 The above command sets the Prometheus Operator `logLevel` to `debug`. Additionally it sets the `prometheus.replicaCount` to `5`.
@@ -760,7 +760,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 ## Upgrading
 
 ```bash
-$ helm upgrade my-release bitnami/kube-prometheus
+$ helm upgrade my-release my-repo/kube-prometheus
 ```
 
 ### To 8.0.0
@@ -883,7 +883,7 @@ To upgrade from version 2.0.0, previously remove the Thanos sidecar svc to avoid
 
 ```bash
 $ kubectl delete svc my-relase-kube-prometheus-prometheus-thanos
-$ helm upgrade my-release --set prometheus.thanos.create=true bitnami/kube-prometheus
+$ helm upgrade my-release --set prometheus.thanos.create=true my-repo/kube-prometheus
 ```
 
 ### To 2.0.0

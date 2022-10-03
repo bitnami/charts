@@ -303,7 +303,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
     --set dbUser.user=admin,dbUser.password=password \
-    bitnami/cassandra
+    my-repo/cassandra
 ```
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
@@ -382,7 +382,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 It's necessary to set the `dbUser.password` parameter when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, some notes will be displayed providing the credentials you must use. Please note down the password and run the command below to upgrade your chart:
 
 ```bash
-$ helm upgrade my-release bitnami/cassandra --set dbUser.password=[PASSWORD]
+$ helm upgrade my-release my-repo/cassandra --set dbUser.password=[PASSWORD]
 ```
 
 | Note: you need to substitute the placeholder _[PASSWORD]_ with the value obtained in the installation notes.

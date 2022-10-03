@@ -647,7 +647,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```bash
 helm install kubeapps --namespace kubeapps \
   --set ingress.enabled=true \
-    bitnami/kubeapps
+    my-repo/kubeapps
 ```
 
 The above command enables an Ingress Rule to expose Kubeapps.
@@ -746,7 +746,7 @@ Now upgrade Kubeapps:
 
 ```bash
 export RELEASE_NAME=kubeapps
-helm upgrade $RELEASE_NAME bitnami/kubeapps
+helm upgrade $RELEASE_NAME my-repo/kubeapps
 ```
 
 If you find issues upgrading Kubeapps, check the [troubleshooting](#error-while-upgrading-the-chart) section.
@@ -1051,7 +1051,7 @@ After that, you will be able to upgrade Kubeapps to 2.3.1 using the existing dat
 > **WARNING**: Make sure that the variable `$POSTGRESQL_PASSWORD` is properly populated. Setting a wrong (or empty) password will corrupt the release.
 
 ```console
-$ helm upgrade kubeapps bitnami/kubeapps -n kubeapps --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD
+$ helm upgrade kubeapps my-repo/kubeapps -n kubeapps --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD
 ```
 
 ### Upgrading to 2.0.1 (Chart 5.0.0)

@@ -336,7 +336,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install my-release \
-  --set aggregator.port=24444 bitnami/fluentd
+  --set aggregator.port=24444 my-repo/fluentd
 ```
 
 The above command sets the aggregators to listen on port 24444.

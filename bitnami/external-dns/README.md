@@ -341,7 +341,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install my-release \
-  --set provider=aws bitnami/external-dns
+  --set provider=aws my-repo/external-dns
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
@@ -391,7 +391,7 @@ $ helm install my-release \
   --set aws.zoneType=public \
   --set txtOwnerId=HOSTED_ZONE_IDENTIFIER \
   --set domainFilters[0]=HOSTED_ZONE_NAME \
-  bitnami/external-dns
+  my-repo/external-dns
 ```
 
 ## Troubleshooting
@@ -457,7 +457,7 @@ Use the workaround below to upgrade from versions previous to 1.0.0. The followi
 
 ```console
 $ kubectl delete deployment my-release-external-dns
-$ helm upgrade my-release bitnami/external-dns
+$ helm upgrade my-release my-repo/external-dns
 ```
 
 Other mayor changes included in this major version are:

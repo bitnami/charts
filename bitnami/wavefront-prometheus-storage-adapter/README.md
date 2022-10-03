@@ -191,7 +191,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set livenessProbe.successThreshold=5 \
-    bitnami/wavefront-prometheus-storage-adapter
+    my-repo/wavefront-prometheus-storage-adapter
 ```
 
 The above command sets the `livenessProbe.successThreshold` to `5`.
@@ -234,7 +234,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 ## Upgrading
 
 ```bash
-$ helm upgrade my-release bitnami/wavefront-prometheus-storage-adapter
+$ helm upgrade my-release my-repo/wavefront-prometheus-storage-adapter
 ```
 
 ### To 2.0.0

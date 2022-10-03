@@ -176,7 +176,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install my-release \
-  --set rbac.create=true bitnami/metrics-server
+  --set rbac.create=true my-repo/metrics-server
 ```
 
 The above command enables RBAC authentication.
@@ -244,7 +244,7 @@ Use the workaround below to upgrade from versions previous to 4.0.0. The followi
 
 ```console
 $ kubectl delete deployment metrics-server --cascade=false
-$ helm upgrade metrics-server bitnami/metrics-server
+$ helm upgrade metrics-server my-repo/metrics-server
 ```
 
 ### To 2.0.0

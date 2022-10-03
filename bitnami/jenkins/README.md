@@ -231,7 +231,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 $ helm install my-release \
   --set jenkinsUser=admin \
   --set jenkinsPassword=password \
-  bitnami/jenkins
+  my-repo/jenkins
 ```
 
 The above command sets the Jenkins administrator account username and password to `admin` and `password` respectively.
@@ -338,7 +338,7 @@ $ kubectl delete deployments.apps jenkins
 - Upgrade your release and delete data that should not be persisted anymore:
 
 ```console
-$ helm upgrade jenkins bitnami/jenkins --set jenkinsPassword=$JENKINS_PASSWORD --set jenkinsHome=/bitnami/jenkins/jenkins_home
+$ helm upgrade jenkins my-repo/jenkins --set jenkinsPassword=$JENKINS_PASSWORD --set jenkinsHome=/bitnami/jenkins/jenkins_home
 $ kubectl exec -it $(kubectl get pod -l app.kubernetes.io/instance=jenkins,app.kubernetes.io/name=jenkins -o jsonpath="{.items[0].metadata.name}") -- find /bitnami/jenkins -mindepth 1 -maxdepth 1 -not -name jenkins_home -exec rm -rf {} \;
 ```
 
@@ -353,7 +353,7 @@ Consequences:
 ```console
 $ export JENKINS_PASSWORD=$(kubectl get secret --namespace default jenkins -o jsonpath="{.data.jenkins-password}" | base64 -d)
 $ kubectl delete deployments.apps jenkins
-$ helm upgrade jenkins bitnami/jenkins --set jenkinsPassword=$JENKINS_PASSWORD
+$ helm upgrade jenkins my-repo/jenkins --set jenkinsPassword=$JENKINS_PASSWORD
 ```
 
 ### To 6.1.0

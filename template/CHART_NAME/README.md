@@ -59,7 +59,7 @@ helm install my-release \
   --set %%CHART_NAME%%Username=admin \
   --set %%CHART_NAME%%Password=password \
   --set mariadb.auth.rootPassword=secretpassword \
-    bitnami/%%CHART_NAME%%
+    my-repo/%%CHART_NAME%%
 ```
 
 The above command sets the %%CHART_NAME%% administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.

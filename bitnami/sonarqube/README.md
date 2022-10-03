@@ -349,7 +349,7 @@ $ helm install my-release \
   --set sonarqubeUsername=admin \
   --set sonarqubePassword=password \
   --set postgresql.auth.password=secretpassword \
-    bitnami/sonarqube
+    my-repo/sonarqube
 ```
 
 The above command sets the sonarqube administrator account username and password to `admin` and `password` respectively. Additionally, it sets the PostgreSQL `postgres` user password to `secretpassword`.

@@ -426,7 +426,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set envoy.readinessProbe.successThreshold=5 \
-    bitnami/contour
+    my-repo/contour
 ```
 
 The above command sets the `envoy.readinessProbe.successThreshold` to `5`.
@@ -619,7 +619,7 @@ $ kubectl delete tlscertificatedelegations.projectcontour.io
 Upgrade the Contour chart with the release name `my-release`:
 
 ```console
-$ helm upgrade my-release bitnami/contour
+$ helm upgrade my-release my-repo/contour
 ```
 
 If you made a backup earlier, restore the objects:

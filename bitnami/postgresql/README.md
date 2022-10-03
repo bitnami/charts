@@ -469,7 +469,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```bash
 $ helm install my-release \
     --set auth.postgresPassword=secretpassword
-    bitnami/postgresql
+    my-repo/postgresql
 ```
 
 The above command sets the PostgreSQL `postgres` account password to `secretpassword`.

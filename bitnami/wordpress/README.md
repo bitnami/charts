@@ -392,7 +392,7 @@ helm install my-release \
   --set wordpressUsername=admin \
   --set wordpressPassword=password \
   --set mariadb.auth.rootPassword=secretpassword \
-    bitnami/wordpress
+    my-repo/wordpress
 ```
 
 The above command sets the WordPress administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
@@ -581,13 +581,13 @@ $ export MARIADB_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=wordpress,a
 Upgrade your release (maintaining the version) disabling MariaDB and scaling WordPress replicas to 0:
 
 ```console
-$ helm upgrade wordpress bitnami/wordpress --set wordpressPassword=$WORDPRESS_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 9.6.4
+$ helm upgrade wordpress my-repo/wordpress --set wordpressPassword=$WORDPRESS_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 9.6.4
 ```
 
 Finally, upgrade you release to `10.0.0` reusing the existing PVC, and enabling back MariaDB:
 
 ```console
-$ helm upgrade wordpress bitnami/wordpress --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set wordpressPassword=$WORDPRESS_PASSWORD
+$ helm upgrade wordpress my-repo/wordpress --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set wordpressPassword=$WORDPRESS_PASSWORD
 ```
 
 You should see the lines below in MariaDB container logs:

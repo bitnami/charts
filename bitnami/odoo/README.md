@@ -300,7 +300,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set odooPassword=password,postgresql.postgresPassword=secretpassword \
-    bitnami/odoo
+    my-repo/odoo
 ```
 
 The above command sets the Odoo administrator account password to `password` and the PostgreSQL `postgres` user password to `secretpassword`.

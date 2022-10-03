@@ -57,7 +57,7 @@ host. To configure phpBB to use and external database host:
 
 1. Complete your phpBB deployment by running:
 
-  helm upgrade --namespace {{ include "common.names.namespace" . }} {{ .Release.Name }} --set service.type={{ .Values.service.type }},mariadb.enabled=false,externalDatabase.host=YOUR_EXTERNAL_DATABASE_HOST bitnami/phpbb
+  helm upgrade --namespace {{ include "common.names.namespace" . }} {{ .Release.Name }} --set service.type={{ .Values.service.type }},mariadb.enabled=false,externalDatabase.host=YOUR_EXTERNAL_DATABASE_HOST my-repo/phpbb
 
 {{- end }}
 

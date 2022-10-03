@@ -409,7 +409,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set secrets.localUsers=admin:password \
-    bitnami/concourse
+    my-repo/concourse
 ```
 
 The above command sets the Concourse account username and password to `admin` and `password` respectively.

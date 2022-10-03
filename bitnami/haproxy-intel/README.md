@@ -84,7 +84,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set haproxy.service.type=LoadBalancer \
-    bitnami/haproxy-intel --render-subchart-notes
+    my-repo/haproxy-intel --render-subchart-notes
 ```
 
 The above command sets the HAProxy service type as LoadBalancer.

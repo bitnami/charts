@@ -342,7 +342,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```bash
 $ helm install my-release \
     --set image.pullPolicy=Always \
-    bitnami/nginx-ingress-controller
+    my-repo/nginx-ingress-controller
 ```
 
 The above command sets the `image.pullPolicy` to `Always`.

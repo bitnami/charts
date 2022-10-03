@@ -385,7 +385,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```bash
 $ helm install my-release \
   --set auth.rootPassword=secretpassword,auth.database=app_database \
-    bitnami/mariadb
+    my-repo/mariadb
 ```
 
 The above command sets the MariaDB `root` account password to `secretpassword`. Additionally it creates a database named `my_database`.
@@ -455,7 +455,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 It's necessary to set the `auth.rootPassword` parameter when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, some notes will be displayed providing the credentials you must use under the 'Administrator credentials' section. Please note down the password and run the command below to upgrade your chart:
 
 ```bash
-$ helm upgrade my-release bitnami/mariadb --set auth.rootPassword=[ROOT_PASSWORD]
+$ helm upgrade my-release my-repo/mariadb --set auth.rootPassword=[ROOT_PASSWORD]
 ```
 
 | Note: you need to substitute the placeholder _[ROOT_PASSWORD]_ with the value obtained in the installation notes.

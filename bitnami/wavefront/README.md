@@ -281,7 +281,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```bash
 $ helm install my-release \
   --set proxy.replicaCount=3 \
-    bitnami/wavefront
+    my-repo/wavefront
 ```
 
 The above command sets 3 proxy replicas.

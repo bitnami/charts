@@ -327,7 +327,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 helm install my-release \
   --set auth.username=admin \
   --set auth.password=password \
-    bitnami/clickhouse
+    my-repo/clickhouse
 ```
 
 The above command sets the ClickHouse administrator account username and password to `admin` and `password` respectively.

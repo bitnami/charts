@@ -401,7 +401,7 @@ $ helm install my-release \
   --set mode=distributed \
   --set server.replicaCount=2 \
   --set worker.replicaCount=3 \
-    bitnami/mxnet
+    my-repo/mxnet
 ```
 
 The above command creates 6 pods for Apache MXNet (Incubating): one scheduler, two servers, and three workers.

@@ -41,7 +41,7 @@ $ helm repo add my-repo REPO
 $ helm install my-release \
   --set elasticsearch.hosts[0]=<Hostname of your ES instance> \
   --set elasticsearch.port=<port of your ES instance> \
-  bitnami/kibana
+  my-repo/kibana
 ```
 
 These commands deploy Kibana on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -258,7 +258,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install my-release \
-  --set admin.user=admin-user bitnami/kibana
+  --set admin.user=admin-user my-repo/kibana
 ```
 
 The above command sets the Kibana admin user to `admin-user`.

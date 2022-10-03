@@ -249,7 +249,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set ejbcaAdminUsername=admin,ejbcaAdminPassword=password,mariadb.auth.password=secretpassword \
-    bitnami/discourse
+    my-repo/discourse
 ```
 
 The above command sets the EJBCA administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `bn_ejbca` user password to `secretpassword`.
@@ -364,13 +364,13 @@ export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=ejb
 Upgrade your release (maintaining the version) disabling MariaDB and scaling EJBCA replicas to 0:
 
 ```console
-$ helm upgrade ejbca bitnami/ejbca --set ejbcaAdminPassword=$EJBCA_ADMIN_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 0.4.0
+$ helm upgrade ejbca my-repo/ejbca --set ejbcaAdminPassword=$EJBCA_ADMIN_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 0.4.0
 ```
 
 Finally, upgrade you release to 1.0.0 reusing the existing PVC, and enabling back MariaDB:
 
 ```console
-$ helm upgrade ejbca bitnami/ejbca --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set ejbcaAdminPassword=$EJBCA_ADMIN_PASSWORD
+$ helm upgrade ejbca my-repo/ejbca --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set ejbcaAdminPassword=$EJBCA_ADMIN_PASSWORD
 ```
 
 You should see the lines below in MariaDB container logs:

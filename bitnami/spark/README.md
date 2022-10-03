@@ -339,7 +339,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install my-release \
-  --set master.webPort=8081 bitnami/spark
+  --set master.webPort=8081 my-repo/spark
 ```
 
 The above command sets the spark master web port to `8081`.

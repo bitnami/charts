@@ -808,7 +808,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set tempo.traces.jaeger.grpc=true \
-  bitnami/grafana-tempo
+  my-repo/grafana-tempo
 ```
 
 The above command enables the Jaeger GRPC traces.

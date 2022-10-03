@@ -344,7 +344,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set auth.username=admin,auth.password=password \
-    bitnami/discourse
+    my-repo/discourse
 ```
 
 The above command sets the Discourse administrator account username and password to `admin` and `password` respectively.
@@ -393,7 +393,7 @@ my-release-redis-master-0               1/1     Running   0          5m11s
 3. Perform an upgrade specifying the number of replicas and the credentials used.
 
 ```console
-$ helm upgrade my-release --set replicaCount=2,discourse.skipInstall=true bitnami/discourse
+$ helm upgrade my-release --set replicaCount=2,discourse.skipInstall=true my-repo/discourse
 ```
 
 Note that for this to work properly, you need to provide ReadWriteMany PVCs. If you don't have a provisioner for this type of storage, we recommend that you install the NFS provisioner chart (with the correct parameters, such as `persistence.enabled=true` and `persistence.size=10Gi`) and map it to a RWO volume.

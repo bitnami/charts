@@ -249,7 +249,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set jasperreportsUsername=admin,jasperreportsPassword=password,mariadb.auth.rootPassword=secretpassword \
-    bitnami/jasperreports
+    my-repo/jasperreports
 ```
 
 The above command sets the JasperReports administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
@@ -374,7 +374,7 @@ $ export JASPER_PASSWORD=$(kubectl get secret --namespace default jasperreports 
 $ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default jasperreports-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
 $ export MARIADB_PASSWORD=$(kubectl get secret --namespace default jasperreports-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
 $ kubectl delete deployments.apps jasperreports
-$ helm upgrade jasperreports bitnami/jasperreports --set jasperreportsPassword=$JASPER_PASSWORD,mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD
+$ helm upgrade jasperreports my-repo/jasperreports --set jasperreportsPassword=$JASPER_PASSWORD,mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD
 ```
 
 ### To 9.0.0
@@ -437,7 +437,7 @@ Delete the JasperReports deployment and delete the MariaDB statefulset. Notice t
 Now the upgrade works:
 
 ```console
-$ helm upgrade jasperreports bitnami/jasperreports --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set jasperreportsPassword=$JASPERREPORTS_PASSWORD --set allowEmptyPasswords=false
+$ helm upgrade jasperreports my-repo/jasperreports --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set jasperreportsPassword=$JASPERREPORTS_PASSWORD --set allowEmptyPasswords=false
 ```
 
 You will have to delete the existing MariaDB pod and the new statefulset is going to create a new one

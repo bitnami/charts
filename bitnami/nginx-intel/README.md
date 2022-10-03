@@ -286,7 +286,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```bash
 $ helm install my-release \
   --set imagePullPolicy=Always \
-    bitnami/nginx-intel
+    my-repo/nginx-intel
 ```
 
 The above command sets the `imagePullPolicy` to `Always`.

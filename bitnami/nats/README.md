@@ -257,7 +257,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```bash
 $ helm install my-release \
   --set auth.enabled=true,auth.user=my-user,auth.password=T0pS3cr3t \
-    bitnami/nats
+    my-repo/nats
 ```
 
 The above command enables NATS client authentication with `my-user` as user and `T0pS3cr3t` as password credentials.

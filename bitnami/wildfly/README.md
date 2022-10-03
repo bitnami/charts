@@ -238,7 +238,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set wildflyUser=manager,wildflyPassword=password \
-    bitnami/wildfly
+    my-repo/wildfly
 ```
 
 The above command sets the WildFly management username and password to `manager` and `password` respectively.
@@ -326,7 +326,7 @@ Consequences:
 ```console
 $ export WILDFLY_PASSWORD=$(kubectl get secret --namespace default wildfly -o jsonpath="{.data.wildfly-password}" | base64 -d)
 $ kubectl delete deployments.apps wildfly
-$ helm upgrade wildfly bitnami/wildfly --set wildflyPassword=$WILDFLY_PASSWORD
+$ helm upgrade wildfly my-repo/wildfly --set wildflyPassword=$WILDFLY_PASSWORD
 ```
 
 ### To 6.0.0
@@ -340,13 +340,13 @@ $ helm upgrade wildfly bitnami/wildfly --set wildflyPassword=$WILDFLY_PASSWORD
 WildFly container was moved to a non-root approach. There shouldn't be any issue when upgrading since the corresponding `securityContext` is enabled by default. Both the container image and the chart can be upgraded by running the command below:
 
 ```
-$ helm upgrade my-release bitnami/wildfly
+$ helm upgrade my-release my-repo/wildfly
 ```
 
 If you use a previous container image (previous to **14.0.1-r75**) disable the `securityContext` by running the command below:
 
 ```
-$ helm upgrade my-release bitnami/wildfly --set securityContext.enabled=false,image.tag=XXX
+$ helm upgrade my-release my-repo/wildfly --set securityContext.enabled=false,image.tag=XXX
 ```
 
 ### To 1.0.0

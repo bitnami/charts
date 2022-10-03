@@ -467,7 +467,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install my-release \
-  --set admin.user=admin-user bitnami/grafana
+  --set admin.user=admin-user my-repo/grafana
 ```
 
 The above command sets the Grafana admin user to `admin-user`.
@@ -639,7 +639,7 @@ Since the volume access mode when persistence is enabled is `ReadWriteOnce` in o
 
 ```console
 kubectl delete deployment <deployment-name>
-helm upgrade <release-name> bitnami/grafana
+helm upgrade <release-name> my-repo/grafana
 ```
 
 ### To 4.1.0

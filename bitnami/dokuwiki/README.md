@@ -251,7 +251,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set dokuwikiUsername=admin,dokuwikiPassword=password \
-    bitnami/dokuwiki
+    my-repo/dokuwiki
 ```
 
 The above command sets the DokuWiki administrator account username and password to `admin` and `password` respectively.

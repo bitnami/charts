@@ -273,7 +273,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set phpbbUsername=admin,phpbbPassword=password,mariadb.mariadbRootPassword=secretpassword \
-    bitnami/phpbb
+    my-repo/phpbb
 ```
 
 The above command sets the phpBB administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
@@ -429,13 +429,13 @@ export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=php
 Upgrade your release (maintaining the version) disabling MariaDB and scaling phpBB replicas to 0:
 
 ```console
-$ helm upgrade phpbb bitnami/phpbb --set phpbbPassword=$PHPBB_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.0.5
+$ helm upgrade phpbb my-repo/phpbb --set phpbbPassword=$PHPBB_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.0.5
 ```
 
 Finally, upgrade you release to 9.0.0 reusing the existing PVC, and enabling back MariaDB:
 
 ```console
-$ helm upgrade phpbb bitnami/phpbb --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set phpbbPassword=$PHPBB_PASSWORD
+$ helm upgrade phpbb my-repo/phpbb --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set phpbbPassword=$PHPBB_PASSWORD
 ```
 
 You should see the lines below in MariaDB container logs:

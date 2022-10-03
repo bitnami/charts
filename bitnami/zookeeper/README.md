@@ -328,7 +328,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set auth.clientUser=newUser \
-    bitnami/zookeeper
+    my-repo/zookeeper
 ```
 
 The above command sets the ZooKeeper user to `newUser`.

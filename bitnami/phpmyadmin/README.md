@@ -266,7 +266,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install my-release \
-  --set db.host=mymariadb,db.port=3306 bitnami/phpmyadmin
+  --set db.host=mymariadb,db.port=3306 my-repo/phpmyadmin
 ```
 
 The above command sets the phpMyAdmin to connect to a database in `mymariadb` host and `3306` port respectively.
@@ -420,7 +420,7 @@ Consequences:
 $ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default phpmyadmin-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
 $ export MARIADB_PASSWORD=$(kubectl get secret --namespace default phpmyadmin-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
 $ kubectl delete deployments.apps phpmyadmin
-$ helm upgrade phpmyadmin bitnami/phpmyadmin --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD
+$ helm upgrade phpmyadmin my-repo/phpmyadmin --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD
 ```
 
 ### To 7.0.0
@@ -485,7 +485,7 @@ Delete the phpMyAdmin deployment and delete the MariaDB statefulsets:
 Now the upgrade works:
 
 ```console
-$ helm upgrade phpmyadmin bitnami/phpmyadmin --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set db.bundleTestDB=true
+$ helm upgrade phpmyadmin my-repo/phpmyadmin --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set db.bundleTestDB=true
 ```
 
 Finally, you should see the lines below in MariaDB container logs:

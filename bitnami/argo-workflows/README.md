@@ -384,7 +384,7 @@ helm install my-release \
   --set argo-workflowsUsername=admin \
   --set argo-workflowsPassword=password \
   --set mysql.auth.rootPassword=secretpassword \
-    bitnami/argo-workflows
+    my-repo/argo-workflows
 ```
 
 The above command sets the Argo Workflows administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MySQL `root` user password to `secretpassword`.

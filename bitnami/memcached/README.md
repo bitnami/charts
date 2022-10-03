@@ -356,7 +356,7 @@ Use the workaround below to upgrade from versions previous to 4.0.0. The followi
 
 ```console
 $ kubectl delete deployment  memcached --cascade=false
-$ helm upgrade memcached bitnami/memcached
+$ helm upgrade memcached my-repo/memcached
 ```
 
 ### To 3.0.0

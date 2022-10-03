@@ -215,7 +215,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 ## Upgrading
 
 ```bash
-$ helm upgrade my-release bitnami/node-exporter
+$ helm upgrade my-release my-repo/node-exporter
 ```
 
 ### To 3.0.0

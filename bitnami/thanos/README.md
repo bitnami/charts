@@ -1310,7 +1310,7 @@ helm install kube-prometheus \
 helm install thanos \
     --values values.yaml \
     --namespace monitoring \
-    bitnami/thanos
+    my-repo/thanos
 ```
 
 That's all! Now you have Thanos fully integrated with Prometheus and Alertmanager.

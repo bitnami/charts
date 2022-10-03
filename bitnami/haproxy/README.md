@@ -193,7 +193,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set service.type=LoadBalancer \
-    bitnami/haproxy
+    my-repo/haproxy
 ```
 
 The above command sets the HAProxy service type as LoadBalancer.

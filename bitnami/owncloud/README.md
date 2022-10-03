@@ -334,7 +334,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set owncloudUsername=admin,owncloudPassword=password,mariadb.auth.rootPassword=secretpassword \
-    bitnami/owncloud
+    my-repo/owncloud
 ```
 
 The above command sets the ownCloud administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
@@ -541,7 +541,7 @@ $ kubectl delete statefulsets.apps owncloud-mariadb --cascade=false
 Now the upgrade works:
 
 ```console
-$ helm upgrade owncloud bitnami/owncloud --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set owncloudPassword=$OWNCLOUD_PASSWORD --set owncloudHost=$OWNCLOUD_HOST
+$ helm upgrade owncloud my-repo/owncloud --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set owncloudPassword=$OWNCLOUD_PASSWORD --set owncloudHost=$OWNCLOUD_HOST
 ```
 
 You will have to delete the existing MariaDB pod and the new statefulset is going to create a new one

@@ -263,7 +263,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set repository=https://github.com/jbianquetti-nami/simple-node-app.git,replicaCount=2 \
-    bitnami/node
+    my-repo/node
 ```
 
 The above command clones the remote git repository to the `/app/` directory  of the container. Additionally it sets the number of `replicaCount` to `2`.

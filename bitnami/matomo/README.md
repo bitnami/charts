@@ -312,7 +312,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set matomoUsername=user,matomoPassword=password,mariadb.auth.rootPassword=secretpassword \
-    bitnami/matomo
+    my-repo/matomo
 ```
 
 The above command sets the Matomo administrator account username and password to `user` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.

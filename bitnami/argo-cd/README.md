@@ -651,7 +651,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 helm install my-release \
   --set controller.replicaCount=2 \
   --set server.metrics.enabled=true \
-    bitnami/argo-cd
+    my-repo/argo-cd
 ```
 
 The above command sets the argo-cd controller replicas to 2, and enabled argo-cd server metrics.

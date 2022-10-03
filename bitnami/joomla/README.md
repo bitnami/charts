@@ -263,7 +263,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set joomlaUsername=admin,joomlaPassword=password,mariadb.mariadbRootPassword=secretpassword \
-    bitnami/joomla
+    my-repo/joomla
 ```
 
 The above command sets the Joomla! administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
@@ -430,13 +430,13 @@ export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=joo
 Upgrade your release (maintaining the version) disabling MariaDB and scaling Joomla replicas to 0:
 
 ```console
-$ helm upgrade joomla bitnami/joomla --set joomlaPassword=$JOOMLA_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.1.9
+$ helm upgrade joomla my-repo/joomla --set joomlaPassword=$JOOMLA_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.1.9
 ```
 
 Finally, upgrade you release to 9.0.0 reusing the existing PVC, and enabling back MariaDB:
 
 ```console
-$ helm upgrade joomla bitnami/joomla --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set joomlaPassword=$JOOMLA_PASSWORD
+$ helm upgrade joomla my-repo/joomla --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set joomlaPassword=$JOOMLA_PASSWORD
 ```
 
 You should see the lines below in MariaDB container logs:

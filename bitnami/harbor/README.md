@@ -1182,7 +1182,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set adminPassword=password \
-    bitnami/harbor
+    my-repo/harbor
 ```
 
 The above command sets the Harbor administrator account password to `password`.

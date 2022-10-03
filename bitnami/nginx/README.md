@@ -286,7 +286,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```bash
 $ helm install my-release \
   --set imagePullPolicy=Always \
-    bitnami/nginx
+    my-repo/nginx
 ```
 
 The above command sets the `imagePullPolicy` to `Always`.
@@ -451,7 +451,7 @@ Use the workaround below to upgrade from versions previous to 5.0.0. The followi
 
 ```console
 $ kubectl delete deployment nginx --cascade=false
-$ helm upgrade nginx bitnami/nginx
+$ helm upgrade nginx my-repo/nginx
 ```
 
 ### To 1.0.0

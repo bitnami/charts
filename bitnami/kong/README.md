@@ -355,7 +355,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
   helm install my-release \
-  --set service.exposeAdmin=true bitnami/kong
+  --set service.exposeAdmin=true my-repo/kong
 ```
 
 The above command exposes the Kong admin ports inside the Kong service.
@@ -521,7 +521,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 It's necessary to specify the existing passwords while performing a upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `postgresql.postgresqlPassword` or `cassandra.password` parameters when upgrading the chart:
 
 ```bash
-$ helm upgrade my-release bitnami/kong \
+$ helm upgrade my-release my-repo/kong \
     --set database=postgresql
     --set postgresql.enabled=true
     --set
@@ -584,7 +584,7 @@ $ kubectl delete statefulsets.apps kong-postgresql --cascade=false
 ##### Upgrade the chart release
 
 ```console
-$ helm upgrade kong bitnami/kong \
+$ helm upgrade kong my-repo/kong \
     --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
     --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
 ```

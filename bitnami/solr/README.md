@@ -357,7 +357,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install my-release \
-  --set cloudEnabled=true bitnami/solr
+  --set cloudEnabled=true my-repo/solr
 ```
 
 The above command enabled the Solr Cloud mode.

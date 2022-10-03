@@ -393,7 +393,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set livenessProbe.enabled=false \
-    bitnami/rabbitmq-cluster-operator
+    my-repo/rabbitmq-cluster-operator
 ```
 
 The above command disables the Operator liveness probes.
@@ -497,7 +497,7 @@ You need to manually delete the old CRD before upgrading the release.
 
 ```console
 kubectl delete crd rabbitmqclusters.rabbitmq.com
-helm upgrade my-release bitnami/rabbitmq-cluster-operator
+helm upgrade my-release my-repo/rabbitmq-cluster-operator
 ```
 
 ## License

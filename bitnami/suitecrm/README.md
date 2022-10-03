@@ -339,7 +339,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set suitecrmUsername=admin,suitecrmPassword=password,mariadb.auth.rootPassword=secretpassword \
-    bitnami/suitecrm
+    my-repo/suitecrm
 ```
 
 The above command sets the SuiteCRM administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
@@ -504,19 +504,19 @@ export SUITECRM_PASSWORD=$(kubectl get secret --namespace default suitecrm -o js
 export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default suitecrm-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
 export MARIADB_PASSWORD=$(kubectl get secret --namespace default suitecrm-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
 export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=suitecrm -o jsonpath="{.items[0].metadata.name}")
-\```
+```
 
 Upgrade your release (maintaining the version) disabling MariaDB and scaling SuiteCRM replicas to 0:
 
 ```console
-$ helm upgrade suitecrm bitnami/suitecrm --set suitecrmPassword=$SUITECRM_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.0.26
-\```
+$ helm upgrade suitecrm my-repo/suitecrm --set suitecrmPassword=$SUITECRM_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.0.26
+```
 
 Finally, upgrade your release to `9.0.0` reusing the existing PVC, and enabling back MariaDB:
 
 ```console
-$ helm upgrade suitecrm bitnami/suitecrm --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set suitecrmPassword=$SUITECRM_PASSWORD --set containerSecurityContext.runAsUser=0 --set podSecurityContext.fsGroup=0
-\```
+$ helm upgrade suitecrm my-repo/suitecrm --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set suitecrmPassword=$SUITECRM_PASSWORD --set containerSecurityContext.runAsUser=0 --set podSecurityContext.fsGroup=0
+```
 
 You should see the lines below in MariaDB container logs:
 

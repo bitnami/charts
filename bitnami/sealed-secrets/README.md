@@ -217,7 +217,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set livenessProbe.successThreshold=5 \
-    bitnami/sealed-secrets
+    my-repo/sealed-secrets
 ```
 
 The above command sets the `livenessProbe.successThreshold` to `5`.

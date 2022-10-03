@@ -335,7 +335,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install my-release \
-  --set auth.admin.username=admin-user bitnami/influxdb
+  --set auth.admin.username=admin-user my-repo/influxdb
 ```
 
 The above command sets the InfluxDB&trade; admin user to `admin-user`.
@@ -449,7 +449,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 It's necessary to specify the existing passwords while performing an upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `auth.admin.password`, `user.pwd`, ` auth.readUser.password` and `auth.writeUser.password` parameters when upgrading the chart:
 
 ```bash
-$ helm upgrade my-release bitnami/influxdb \
+$ helm upgrade my-release my-repo/influxdb \
     --set auth.admin.password=[ADMIN_USER_PASSWORD] \
     --set auth.user.password=[USER_PASSWORD] \
     --set auth.readUser.password=[READ_USER_PASSWORD] \
@@ -468,7 +468,7 @@ To update from the previous major, please follow this steps:
 
 ```
 $ kubectl delete deployments.apps influxdb
-$ helm upgrade influxdb bitnami/influxdb
+$ helm upgrade influxdb my-repo/influxdb
 ```
 
 ### To 4.0.0
@@ -499,7 +499,7 @@ However, you can use images for versions ~1.x.x taking into account the chart ma
 #### Installing InfluxDB&trade; v1 in chart v2.
 
 ```
-$ helm install bitnami/influxdb --set image.tag=1.8.3-debian-10-r88
+$ helm install my-repo/influxdb --set image.tag=1.8.3-debian-10-r88
 ```
 
 As a consecuece some breaking changes have been included in this version.
@@ -539,7 +539,7 @@ $ export INFLUXDB_ADMIN_PASSWORD=$(kubectl get secret --namespace default influx
 > NOTE: Please remember to migrate all the values to its new path following the above notes, e.g: `adminUser.pwd` -> `auth.admin.password`.
 
 ```console
-$ helm upgrade influxdb bitnami/influxdb --set image.tag=1.8.3-debian-10-r99 \
+$ helm upgrade influxdb my-repo/influxdb --set image.tag=1.8.3-debian-10-r99 \
   --set auth.admin.password=${INFLUXDB_ADMIN_PASSWORD}
 ```
 

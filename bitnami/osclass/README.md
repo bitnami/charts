@@ -333,7 +333,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set osclassUsername=admin,osclassPassword=password,mariadb.auth.rootPassword=secretpassword \
-    bitnami/osclass
+    my-repo/osclass
 ```
 
 The above command sets the Osclass administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
@@ -468,7 +468,7 @@ $ export APP_PASSWORD=$(kubectl get secret --namespace default osclass -o jsonpa
 $ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default osclass-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
 $ export MARIADB_PASSWORD=$(kubectl get secret --namespace default osclass-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
 $ kubectl delete deployments.apps osclass
-$ helm upgrade osclass bitnami/osclass --set osclassHost=$APP_HOST,osclassPassword=$APP_PASSWORD,mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD
+$ helm upgrade osclass my-repo/osclass --set osclassHost=$APP_HOST,osclassPassword=$APP_PASSWORD,mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD
 ```
 
 ### To 8.0.0
@@ -532,7 +532,7 @@ Delete the Osclass deployment and delete the MariaDB statefulset. Notice the opt
 Now the upgrade works:
 
 ```console
-$ helm upgrade osclass bitnami/osclass --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set osclassPassword=$OSCLASS_PASSWORD --set osclassHost=$OSCLASS_HOST
+$ helm upgrade osclass my-repo/osclass --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set osclassPassword=$OSCLASS_PASSWORD --set osclassHost=$OSCLASS_HOST
 ```
 
 You will have to delete the existing MariaDB pod and the new statefulset is going to create a new one

@@ -287,7 +287,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set readinessProbe.successThreshold=5 \
-    bitnami/metallb
+    my-repo/metallb
 ```
 The above command sets the `readinessProbe.successThreshold` to `5`.
 

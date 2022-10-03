@@ -372,7 +372,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set magentoUsername=admin,magentoPassword=password,mariadb.auth.rootPassword=secretpassword \
-    bitnami/magento
+    my-repo/magento
 ```
 
 The above command sets the Magento administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
@@ -703,7 +703,7 @@ $ export APP_PASSWORD=$(kubectl get secret --namespace default magento -o jsonpa
 $ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default magento-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
 $ export MARIADB_PASSWORD=$(kubectl get secret --namespace default magento-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
 $ kubectl delete deployments.apps magento
-$ helm upgrade magento bitnami/magento --set magentoHost=$APP_HOST,magentoPassword=$APP_PASSWORD,mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD
+$ helm upgrade magento my-repo/magento --set magentoHost=$APP_HOST,magentoPassword=$APP_PASSWORD,mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD
 ```
 
 ### To 15.0.0
@@ -766,7 +766,7 @@ $ kubectl delete statefulsets.apps magento-mariadb --cascade=false
 Now the upgrade works:
 
 ```console
-$ helm upgrade magento bitnami/magento --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set magentoPassword=$MAGENTO_PASSWORD --set magentoHost=$MAGENTO_HOST
+$ helm upgrade magento my-repo/magento --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set magentoPassword=$MAGENTO_PASSWORD --set magentoHost=$MAGENTO_HOST
 ```
 
 You will have to delete the existing MariaDB pod and the new statefulset is going to create a new one

@@ -318,7 +318,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set moodleUsername=admin,moodlePassword=password,mariadb.auth.rootPassword=secretpassword \
-    bitnami/moodle
+    my-repo/moodle
 ```
 
 The above command sets the Moodle&trade; administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
@@ -465,13 +465,13 @@ export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=moo
 Upgrade your release (maintaining the version) disabling MariaDB and scaling Moodle&trade; replicas to 0:
 
 ```console
-$ helm upgrade moodle bitnami/moodle --set moodlePassword=$MOODLE_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.1.6
+$ helm upgrade moodle my-repo/moodle --set moodlePassword=$MOODLE_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.1.6
 ```
 
 Finally, upgrade you release to 9.0.0 reusing the existing PVC, and enabling back MariaDB:
 
 ```console
-$ helm upgrade moodle bitnami/moodle --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set moodlePassword=$MOODLE_PASSWORD
+$ helm upgrade moodle my-repo/moodle --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set moodlePassword=$MOODLE_PASSWORD
 ```
 
 You should see the lines below in MariaDB container logs:

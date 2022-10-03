@@ -320,7 +320,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install my-release \
-  --set auth.rbac.rootPassword=secretpassword bitnami/etcd
+  --set auth.rbac.rootPassword=secretpassword my-repo/etcd
 ```
 
 The above command sets the etcd `root` account password to `secretpassword`.

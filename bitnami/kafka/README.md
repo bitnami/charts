@@ -492,7 +492,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set replicaCount=3 \
-  bitnami/kafka
+  my-repo/kafka
 ```
 
 The above command deploys Kafka with 3 brokers (replicas).
@@ -989,8 +989,8 @@ Backwards compatibility is not guaranteed when Kafka metrics are enabled, unless
 Use the workaround below to upgrade from versions previous to 7.0.0. The following example assumes that the release name is kafka:
 
 ```console
-helm upgrade kafka bitnami/kafka --version 6.1.8 --set metrics.kafka.enabled=false
-helm upgrade kafka bitnami/kafka --version 7.0.0 --set metrics.kafka.enabled=true
+helm upgrade kafka my-repo/kafka --version 6.1.8 --set metrics.kafka.enabled=false
+helm upgrade kafka my-repo/kafka --version 7.0.0 --set metrics.kafka.enabled=true
 ```
 
 ### To 2.0.0

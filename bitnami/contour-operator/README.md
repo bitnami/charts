@@ -274,7 +274,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set livenessProbe.enabled=false \
-    bitnami/contour-operator
+    my-repo/contour-operator
 ```
 
 The above command disables the Operator liveness probes.

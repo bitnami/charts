@@ -228,7 +228,7 @@ Use the workaround below to upgrade from versions previous to 2.0.0. The followi
 
 ```console
 $ kubectl delete deployment  tensorflow-resnet --cascade=false
-$ helm upgrade tensorflow-resnet bitnami/tensorflow-resnet
+$ helm upgrade tensorflow-resnet my-repo/tensorflow-resnet
 $ kubectl delete rs "$(kubectl get rs -l app=tensorflow-resnet -o jsonpath='{.items[0].metadata.name}')"
 ```
 

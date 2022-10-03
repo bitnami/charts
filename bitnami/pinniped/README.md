@@ -313,7 +313,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set supervisor.enabled=false \
-    bitnami/pinniped
+    my-repo/pinniped
 ```
 
 The above command sets disables the supervisor compoment deployment.

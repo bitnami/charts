@@ -504,7 +504,7 @@ $ helm install my-release \
                --set auth.password=my-passsword \
                --set auth.fernetKey=my-fernet-key \
                --set auth.secretKey=my-secret-key \
-               bitnami/airflow
+               my-repo/airflow
 ```
 
 The above command sets the credentials to access the Airflow web UI.

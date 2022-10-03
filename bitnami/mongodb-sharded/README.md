@@ -526,7 +526,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```bash
 $ helm install my-release \
   --set shards=4,configsvr.replicaCount=3,shardsvr.dataNode.replicaCount=2 \
-    bitnami/mongodb-sharded
+    my-repo/mongodb-sharded
 ```
 
 The above command sets the number of shards to 4, the number of replicas for the config servers to 3 and number of replicas for data nodes to 2.
@@ -640,7 +640,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 If authentication is enabled, it's necessary to set the `auth.rootPassword` and `auth.replicaSetKey` when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, some notes will be displayed providing the credentials you must use. Please note down the password, and run the command below to upgrade your chart:
 
 ```bash
-$ helm upgrade my-release bitnami/mongodb-sharded --set auth.rootPassword=[PASSWORD] (--set auth.replicaSetKey=[auth.replicaSetKey])
+$ helm upgrade my-release my-repo/mongodb-sharded --set auth.rootPassword=[PASSWORD] (--set auth.replicaSetKey=[auth.replicaSetKey])
 ```
 
 > Note: you need to substitute the placeholders [PASSWORD] and [auth.replicaSetKey] with the values obtained in the installation notes.

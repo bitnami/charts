@@ -256,7 +256,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set replicaCount=2 \
-    bitnami/oauth2-proxy
+    my-repo/oauth2-proxy
 ```
 
 The above command increase the default number of replicas.

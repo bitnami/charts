@@ -1209,7 +1209,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set loki.traces.jaeger.grpc=true \
-  bitnami/grafana-loki
+  my-repo/grafana-loki
 ```
 
 The above command enables the Jaeger GRPC traces.

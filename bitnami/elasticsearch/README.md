@@ -645,7 +645,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set name=my-elastic,client.service.port=8080 \
-  bitnami/elasticsearch
+  my-repo/elasticsearch
 ```
 
 The above command sets the Elasticsearch cluster name to `my-elastic` and REST port number to `8080`.
@@ -923,7 +923,7 @@ The field `podManagementPolicy` can't be updated in a StatefulSet, so you need t
 
 ```console
 $ kubectl delete statefulset elasticsearch-master
-$ helm upgrade <DEPLOYMENT_NAME> bitnami/elasticsearch
+$ helm upgrade <DEPLOYMENT_NAME> my-repo/elasticsearch
 ```
 
 ### TO 10.0.0

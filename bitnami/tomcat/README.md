@@ -258,7 +258,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install my-release \
-  --set tomcatUsername=manager,tomcatPassword=password bitnami/tomcat
+  --set tomcatUsername=manager,tomcatPassword=password my-repo/tomcat
 ```
 
 The above command sets the Tomcat management username and password to `manager` and `password` respectively.
@@ -354,7 +354,7 @@ Consequences:
 ```console
 $ export TOMCAT_PASSWORD=$(kubectl get secret --namespace default tomcat -o jsonpath="{.data.tomcat-password}" | base64 -d)
 $ kubectl delete deployments.apps tomcat
-$ helm upgrade tomcat bitnami/tomcat --set tomcatPassword=$TOMCAT_PASSWORD
+$ helm upgrade tomcat my-repo/tomcat --set tomcatPassword=$TOMCAT_PASSWORD
 ```
 
 ### To 7.0.0
@@ -372,13 +372,13 @@ This release updates the Bitnami Tomcat container to `9.0.26-debian-9-r0`, which
 Tomcat container was moved to a non-root approach. There shouldn't be any issue when upgrading since the corresponding `securityContext` is enabled by default. Both the container image and the chart can be upgraded by running the command below:
 
 ```
-$ helm upgrade my-release bitnami/tomcat
+$ helm upgrade my-release my-repo/tomcat
 ```
 
 If you use a previous container image (previous to **8.5.35-r26**) disable the `securityContext` by running the command below:
 
 ```
-$ helm upgrade my-release bitnami/tomcat --set securityContext.enabled=false,image.tag=XXX
+$ helm upgrade my-release my-repo/tomcat --set securityContext.enabled=false,image.tag=XXX
 ```
 
 ### To 1.0.0

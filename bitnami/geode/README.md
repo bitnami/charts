@@ -388,7 +388,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 helm install my-release \
     --set auth.username=admin \
     --set auth.password=password \
-    bitnami/geode
+    my-repo/geode
 ```
 
 The above command sets the credentials to access Locator nodes to `admin` and `password` respectively.

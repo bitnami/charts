@@ -356,7 +356,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 $ helm install my-release \
   --set auth.rootUser=minio-admin \
   --set auth.rootPassword=minio-secret-password \
-    bitnami/minio
+    my-repo/minio
 ```
 
 The above command sets the MinIO&reg; Server root user and password to `minio-admin` and `minio-secret-password`, respectively.

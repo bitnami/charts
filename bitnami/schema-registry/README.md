@@ -260,7 +260,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```bash
 helm install my-release \
   --set replicaCount=2 \
-    bitnami/schema-registry
+    my-repo/schema-registry
 ```
 
 The above command installs Schema Registry chart with 2 replicas.

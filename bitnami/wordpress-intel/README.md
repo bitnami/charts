@@ -348,7 +348,7 @@ helm install my-release \
   --set wordpressUsername=admin \
   --set wordpressPassword=password \
   --set mariadb.auth.rootPassword=secretpassword \
-    bitnami/wordpress
+    my-repo/wordpress
 ```
 
 The above command sets the WordPress administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.

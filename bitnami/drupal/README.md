@@ -328,7 +328,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set drupalUsername=admin,drupalPassword=password,mariadb.auth.rootPassword=secretpassword \
-    bitnami/drupal
+    my-repo/drupal
 ```
 
 The above command sets the Drupal administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
@@ -478,13 +478,13 @@ export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=dru
 Upgrade your release (maintaining the version) disabling MariaDB and scaling Drupal replicas to 0:
 
 ```console
-$ helm upgrade drupal bitnami/drupal --set drupalPassword=$DRUPAL_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.2.1
+$ helm upgrade drupal my-repo/drupal --set drupalPassword=$DRUPAL_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.2.1
 ```
 
 Finally, upgrade you release to 9.0.0 reusing the existing PVC, and enabling back MariaDB:
 
 ```console
-$ helm upgrade drupal bitnami/drupal --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set drupalPassword=$DRUPAL_PASSWORD
+$ helm upgrade drupal my-repo/drupal --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set drupalPassword=$DRUPAL_PASSWORD
 ```
 
 You should see the lines below in MariaDB container logs:
