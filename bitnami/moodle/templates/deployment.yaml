@@ -188,6 +188,10 @@ spec:
             - name: MOODLE_SITE_NAME
               value: {{ .Values.moodleSiteName| quote }}
             {{- end }}
+            {{- if .Values.moodleLang }}
+            - name: MOODLE_LANG
+              value: {{ .Values.moodleLang| quote }}
+            {{- end }}
             - name: MOODLE_EMAIL
               value: {{ .Values.moodleEmail | quote }}
             {{- if .Values.smtpHost }}

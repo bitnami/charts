@@ -89,6 +89,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replicaCount`                          | Number of Moodle replicas (requires ReadWriteMany PVC support)                                                        | `1`                   |
 | `moodleSkipInstall`                     | Skip Moodle&trade; installation wizard. Useful for migrations and restoring from SQL dump                             | `false`               |
 | `moodleSiteName`                        | Site name                                                                                                             | `""`                  |
+| `moodleLang`                            | Site language                                                                                                         | `""`                  |
 | `moodleUsername`                        | User of the application                                                                                               | `user`                |
 | `moodlePassword`                        | Application password                                                                                                  | `""`                  |
 | `moodleEmail`                           | Admin email                                                                                                           | `user@example.com`    |
