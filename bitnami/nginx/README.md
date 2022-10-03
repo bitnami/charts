@@ -84,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------- | ----------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`     | NGINX image registry                                                                                  | `docker.io`            |
 | `image.repository`   | NGINX image repository                                                                                | `bitnami/nginx`        |
-| `image.tag`          | NGINX image tag (immutable tags are recommended)                                                      | `1.23.1-debian-11-r27` |
+| `image.tag`          | NGINX image tag (immutable tags are recommended)                                                      | `1.23.1-debian-11-r29` |
 | `image.digest`       | NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `image.pullPolicy`   | NGINX image pull policy                                                                               | `IfNotPresent`         |
 | `image.pullSecrets`  | Specify docker-registry secret names as an array                                                      | `[]`                   |
