@@ -52,6 +52,9 @@ spec:
       {{- if .Values.server.schedulerName }}
       schedulerName: {{ .Values.server.schedulerName }}
       {{- end }}
+      {{- if .Values.server.shareProcessNamespace }}
+      shareProcessNamespace: {{ .Values.server.shareProcessNamespace }}
+      {{- end }}
       {{- if .Values.server.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.controller.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
