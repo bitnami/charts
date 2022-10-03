@@ -7,13 +7,15 @@ Kong is an open source Microservice API gateway and platform designed for managi
 [Overview of Kong](https://konghq.com/kong-community-edition/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-  helm repo add bitnami https://charts.bitnami.com/bitnami
-  helm install my-release bitnami/kong
+  helm repo add my-repo REPO
+  helm install my-release my-repo/kong
 ```
+
+Remember to replace the `REPO` placeholder by the repository from where you would like to deploy this Helm chart.
 
 ## Introduction
 
@@ -34,8 +36,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-  helm repo add bitnami https://charts.bitnami.com/bitnami
-  helm install my-release bitnami/kong
+  helm repo add my-repo REPO
+  helm install my-release my-repo/kong
 ```
 
 These commands deploy kong on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -361,7 +363,7 @@ The above command exposes the Kong admin ports inside the Kong service.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-  helm install my-release -f values.yaml bitnami/kong
+  helm install my-release -f values.yaml my-repo/kong
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -381,13 +383,13 @@ The Bitnami Kong chart allows setting two database backends: PostgreSQL or Cassa
 - Deploy the PostgreSQL sub-chart (default)
 
 ```console
-  helm install my-release bitnami/kong
+  helm install my-release my-repo/kong
 ```
 
 - Use an external PostgreSQL database
 
 ```console
-  helm install my-release bitnami/kong \
+  helm install my-release my-repo/kong \
     --set postgresql.enabled=false \
     --set postgresql.external.host=_HOST_OF_YOUR_POSTGRESQL_INSTALLATION_ \
     --set postgresql.external.password=_PASSWORD_OF_YOUR_POSTGRESQL_INSTALLATION_ \
@@ -397,7 +399,7 @@ The Bitnami Kong chart allows setting two database backends: PostgreSQL or Cassa
 - Deploy the Cassandra sub-chart
 
 ```console
-  helm install my-release bitnami/kong \
+  helm install my-release my-repo/kong \
     --set database=cassandra \
     --set postgresql.enabled=false \
     --set cassandra.enabled=true
@@ -406,7 +408,7 @@ The Bitnami Kong chart allows setting two database backends: PostgreSQL or Cassa
 - Use an existing Cassandra installation
 
 ```console
-  helm install my-release bitnami/kong \
+  helm install my-release my-repo/kong \
     --set database=cassandra \
     --set postgresql.enabled=false \
     --set cassandra.enabled=false \

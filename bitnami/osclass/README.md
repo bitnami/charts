@@ -7,13 +7,15 @@ Osclass allows you to easily create a classifieds site without any technical kno
 [Overview of Osclass](https://osclass-classifieds.com)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/osclass
+$ helm repo add my-repo REPO
+$ helm install my-release my-repo/osclass
 ```
+
+Remember to replace the `REPO` placeholder by the repository from where you would like to deploy this Helm chart.
 
 ## Introduction
 
@@ -35,7 +37,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install my-release bitnami/osclass
+$ helm install my-release my-repo/osclass
 ```
 
 The command deploys Osclass on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -341,7 +343,7 @@ The above command sets the Osclass administrator account username and password t
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/osclass
+$ helm install my-release -f values.yaml my-repo/osclass
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

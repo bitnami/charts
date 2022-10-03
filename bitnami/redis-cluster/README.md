@@ -7,13 +7,15 @@ Redis(R) is an open source, scalable, distributed in-memory cache for applicatio
 [Overview of Redis&reg; Cluster](http://redis.io)
 
 Disclaimer: Redis is a registered trademark of Redis Ltd. Any rights therein are reserved to Redis Ltd. Any use by Bitnami is for referential purposes only and does not indicate any sponsorship, endorsement, or affiliation between Redis Ltd.
-                           
+
 ## TL;DR
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/redis-cluster
+$ helm repo add my-repo REPO
+$ helm install my-release my-repo/redis-cluster
 ```
+
+Remember to replace the `REPO` placeholder by the repository from where you would like to deploy this Helm chart.
 
 ## Introduction
 
@@ -44,7 +46,7 @@ The main features of each chart are the following:
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install my-release bitnami/redis-cluster
+$ helm install my-release my-repo/redis-cluster
 ```
 
 The command deploys Redis&reg; on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -52,7 +54,7 @@ The command deploys Redis&reg; on the Kubernetes cluster in the default configur
 NOTE: if you get a timeout error waiting for the hook to complete increase the default timeout (300s) to a higher one, for example:
 
 ```
-helm install --timeout 600s myrelease bitnami/redis-cluster
+helm install --timeout 600s myrelease my-repo/redis-cluster
 ```
 
 > **Tip**: List all releases using `helm list`
@@ -348,7 +350,7 @@ The above command sets the Redis&reg; server password to `secretpassword`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/redis-cluster
+$ helm install my-release -f values.yaml my-repo/redis-cluster
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

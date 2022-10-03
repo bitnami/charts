@@ -7,13 +7,15 @@ Prometheus Operator provides easy monitoring definitions for Kubernetes services
 [Overview of Prometheus Operator](https://github.com/coreos/prometheus-operator)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/kube-prometheus
+$ helm repo add my-repo REPO
+$ helm install my-release my-repo/kube-prometheus
 ```
+
+Remember to replace the `REPO` placeholder by the repository from where you would like to deploy this Helm chart.
 
 ## Introduction
 
@@ -41,13 +43,13 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 Add the `bitnami` charts repo to Helm:
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
+$ helm repo add my-repo REPO
 ```
 
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install my-release bitnami/kube-prometheus
+$ helm install my-release my-repo/kube-prometheus
 ```
 
 The command deploys kube-prometheus on the Kubernetes cluster in the default configuration. The [configuration](#configuration-and-installation-details) section lists the parameters that can be configured during installation.
@@ -710,7 +712,7 @@ The above command sets the Prometheus Operator `logLevel` to `debug`. Additional
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/kube-prometheus
+$ helm install my-release -f values.yaml my-repo/kube-prometheus
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

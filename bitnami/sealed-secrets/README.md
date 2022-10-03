@@ -7,13 +7,15 @@ Sealed Secrets are "one-way" encrypted K8s Secrets that can be created by anyone
 [Overview of Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets)
 
 
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/sealed-secrets
+$ helm repo add my-repo REPO
+$ helm install my-release my-repo/sealed-secrets
 ```
+
+Remember to replace the `REPO` placeholder by the repository from where you would like to deploy this Helm chart.
 
 ## Introduction
 
@@ -33,7 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release bitnami/sealed-secrets
+helm install my-release my-repo/sealed-secrets
 ```
 
 The command deploys the Sealed Secrets controller on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -223,7 +225,7 @@ The above command sets the `livenessProbe.successThreshold` to `5`.
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml bitnami/sealed-secrets
+helm install my-release -f values.yaml my-repo/sealed-secrets
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

@@ -7,13 +7,15 @@ NATS is an open source, lightweight and high-performance messaging system. It is
 [Overview of NATS](https://nats.io/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/nats
+$ helm repo add my-repo REPO
+$ helm install my-release my-repo/nats
 ```
+
+Remember to replace the `REPO` placeholder by the repository from where you would like to deploy this Helm chart.
 
 ## Introduction
 
@@ -31,7 +33,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install my-release bitnami/nats
+$ helm install my-release my-repo/nats
 ```
 
 The command deploys NATS on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -265,7 +267,7 @@ The above command enables NATS client authentication with `my-user` as user and 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/nats
+$ helm install my-release -f values.yaml my-repo/nats
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -318,7 +320,7 @@ NATS version 2.0.0 has renamed the server binary filename from `gnatsd` to `nats
 however, it is still possible to use the chart to deploy NATS version 1.x.x using the `natsFilename` property.
 
 ```bash
-helm install nats-v1 --set natsFilename=gnatsd --set image.tag=1.4.1 bitnami/nats
+helm install nats-v1 --set natsFilename=gnatsd --set image.tag=1.4.1 my-repo/nats
 ```
 
 ### To 7.0.0

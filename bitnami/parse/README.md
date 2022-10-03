@@ -7,13 +7,15 @@ Parse is a platform that enables users to add a scalable and powerful backend to
 [Overview of Parse Server](http://parseplatform.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/parse
+$ helm repo add my-repo REPO
+$ helm install my-release my-repo/parse
 ```
+
+Remember to replace the `REPO` placeholder by the repository from where you would like to deploy this Helm chart.
 
 ## Introduction
 
@@ -33,7 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install my-release bitnami/parse
+$ helm install my-release my-repo/parse
 ```
 
 The command deploys Parse on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -350,7 +352,7 @@ The above command sets the Parse administrator account username and password to 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/parse
+$ helm install my-release -f values.yaml my-repo/parse
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

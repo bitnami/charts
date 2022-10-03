@@ -7,13 +7,15 @@ WordPress for Intel is the most popular blogging application combined with crypt
 [Overview of WordPress for Intel](http://www.wordpress.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/wordpress-intel
+$ helm repo add my-repo REPO
+$ helm install my-release my-repo/wordpress-intel
 ```
+
+Remember to replace the `REPO` placeholder by the repository from where you would like to deploy this Helm chart.
 
 ## Introduction
 
@@ -43,7 +45,7 @@ It requires a 3rd gen Xeon Scalable Processor (Ice Lake) to get a breakthrough p
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release bitnami/wordpress
+helm install my-release my-repo/wordpress
 ```
 
 The command deploys WordPress on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -356,7 +358,7 @@ The above command sets the WordPress administrator account username and password
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml bitnami/wordpress
+helm install my-release -f values.yaml my-repo/wordpress
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

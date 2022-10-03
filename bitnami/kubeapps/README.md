@@ -7,13 +7,13 @@ Kubeapps is a web-based UI for launching and managing applications on Kubernetes
 [Overview of Kubeapps](https://github.com/vmware-tanzu/kubeapps)
 
 
-                           
+
 ## TL;DR
 
 ```bash
-helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo add my-repo REPO
 kubectl create namespace kubeapps
-helm install kubeapps --namespace kubeapps bitnami/kubeapps
+helm install kubeapps --namespace kubeapps my-repo/kubeapps
 ```
 
 > Check out the [getting started](https://github.com/vmware-tanzu/kubeapps/blob/main/site/content/docs/latest/tutorials/getting-started.md) to start deploying apps with Kubeapps.
@@ -47,9 +47,9 @@ It also packages the [Bitnami PostgreSQL chart](https://github.com/bitnami/chart
 To install the chart with the release name `kubeapps`:
 
 ```bash
-helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo add my-repo REPO
 kubectl create namespace kubeapps
-helm install kubeapps --namespace kubeapps bitnami/kubeapps
+helm install kubeapps --namespace kubeapps my-repo/kubeapps
 ```
 
 The command deploys Kubeapps on the Kubernetes cluster in the `kubeapps` namespace. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -655,7 +655,7 @@ The above command enables an Ingress Rule to expose Kubeapps.
 Alternatively, a YAML file that specifies the values for parameters can be provided while installing the chart. For example,
 
 ```bash
-helm install kubeapps --namespace kubeapps -f custom-values.yaml bitnami/kubeapps
+helm install kubeapps --namespace kubeapps -f custom-values.yaml my-repo/kubeapps
 ```
 
 ## Configuration and installation details
@@ -806,7 +806,7 @@ Have a look at the [dashboard documentation](https://github.com/vmware-tanzu/kub
 The example below will match the URL `http://example.com` to the Kubeapps dashboard. For further configuration, please refer to your specific Ingress configuration docs (e.g., [NGINX](https://github.com/kubernetes/ingress-nginx) or [HAProxy](https://github.com/haproxytech/kubernetes-ingress)).
 
 ```bash
-helm install kubeapps bitnami/kubeapps \
+helm install kubeapps my-repo/kubeapps \
   --namespace kubeapps \
   --set ingress.enabled=true \
   --set ingress.hostname=example.com \
@@ -818,7 +818,7 @@ helm install kubeapps bitnami/kubeapps \
 You may want to serve Kubeapps with a subpath, for instance `http://example.com/subpath`, you have to set the proper Ingress configuration. If you are using the ingress configuration provided by the Kubeapps chart, you will have to set the `ingress.hostname` and `path` parameters:
 
 ```bash
-helm install kubeapps bitnami/kubeapps \
+helm install kubeapps my-repo/kubeapps \
   --namespace kubeapps \
   --set ingress.enabled=true \
   --set ingress.hostname=example.com \
@@ -829,7 +829,7 @@ helm install kubeapps bitnami/kubeapps \
 Besides, if you are using the OAuth2/OIDC login (more information at the [using an OIDC provider documentation](https://github.com/vmware-tanzu/kubeapps/blob/main/site/content/docs/latest/tutorials/using-an-OIDC-provider.md)), you will need, also, to configure the different URLs:
 
 ```bash
-helm install kubeapps bitnami/kubeapps \
+helm install kubeapps my-repo/kubeapps \
   --namespace kubeapps \
   # ... other OIDC and ingress flags
   --set authProxy.oauthLoginURI="/subpath/oauth2/login" \
@@ -946,7 +946,7 @@ kubectl api-versions
 If the above command does not include entries for `rbac.authorization.k8s.io` you should perform the chart installation by setting `rbac.create=false`:
 
 ```bash
-helm install --name kubeapps --namespace kubeapps bitnami/kubeapps --set rbac.create=false
+helm install --name kubeapps --namespace kubeapps my-repo/kubeapps --set rbac.create=false
 ```
 
 ### Error while upgrading the Chart
@@ -990,7 +990,7 @@ kubectl delete namespace kubeapps
 
 ```bash
 helm repo update
-helm install --name kubeapps --namespace kubeapps bitnami/kubeapps
+helm install --name kubeapps --namespace kubeapps my-repo/kubeapps
 ```
 
 6. (Optional) Restore any repositories you backed up in the first step:

@@ -7,13 +7,15 @@ Spring Cloud Data Flow is a microservices-based toolkit for building streaming a
 [Overview of Spring Cloud Data Flow](https://github.com/spring-cloud/spring-cloud-dataflow)
 
 
-                           
+
 ## TL;DR
 
 ```bash
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install my-release bitnami/spring-cloud-dataflow
+helm repo add my-repo REPO
+helm install my-release my-repo/spring-cloud-dataflow
 ```
+
+Remember to replace the `REPO` placeholder by the repository from where you would like to deploy this Helm chart.
 
 ## Introduction
 
@@ -32,8 +34,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```bash
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install my-release bitnami/spring-cloud-dataflow
+helm repo add my-repo REPO
+helm install my-release my-repo/spring-cloud-dataflow
 ```
 
 These commands deploy Spring Cloud Data Flow on the Kubernetes cluster with the default configuration. The [parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -468,7 +470,7 @@ helm uninstall my-release
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```bash
-helm install my-release --set server.replicaCount=2 bitnami/spring-cloud-dataflow
+helm install my-release --set server.replicaCount=2 my-repo/spring-cloud-dataflow
 ```
 
 The above command installs Spring Cloud Data Flow chart with 2 Dataflow server replicas.
@@ -476,7 +478,7 @@ The above command installs Spring Cloud Data Flow chart with 2 Dataflow server r
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-helm install my-release -f values.yaml bitnami/spring-cloud-dataflow
+helm install my-release -f values.yaml my-repo/spring-cloud-dataflow
 ```
 
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/blob/master/bitnami/spring-cloud-dataflow/values.yaml)

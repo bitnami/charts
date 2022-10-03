@@ -7,13 +7,15 @@ Wavefront HPA Adapter for Kubernetes is a Kubernetes Horizontal Pod Autoscaler a
 [Overview of Wavefront HPA Adapter for Kubernetes](https://github.com/wavefrontHQ/wavefront-kubernetes-adapter)
 
 
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/wavefront-hpa-adapter
+$ helm repo add my-repo REPO
+$ helm install my-release my-repo/wavefront-hpa-adapter
 ```
+
+Remember to replace the `REPO` placeholder by the repository from where you would like to deploy this Helm chart.
 
 ## Introduction
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
@@ -34,8 +36,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/wavefront-hpa-adapter
+$ helm repo add my-repo REPO
+$ helm install my-release my-repo/wavefront-hpa-adapter
 ```
 
 These commands deploy wavefront-hpa-adapter on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -189,7 +191,7 @@ The above command sets the `livenessProbe.successThreshold` to `5`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/wavefront-hpa-adapter
+$ helm install my-release -f values.yaml my-repo/wavefront-hpa-adapter
 ```
 
 ## Configuration and installation details

@@ -7,16 +7,18 @@ Wavefront is a high-performance streaming analytics platform for monitoring and 
 [Overview of Wavefront](https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes)
 
 
-                           
+
 ## TL;DR
 
 ```console
 $ kubectl create namespace wavefront
-$ helm install my-release bitnami/wavefront --namespace wavefront \
+$ helm install my-release my-repo/wavefront --namespace wavefront \
     --set clusterName=<K8s-CLUSTER-NAME> \
     --set wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
     --set wavefront.token=<YOUR_API_TOKEN>
 ```
+
+Remember to replace the `REPO` placeholder by the repository from where you would like to deploy this Helm chart.
 
 ## Introduction
 
@@ -38,7 +40,7 @@ To install the chart with the release name `my-release` (if not already done, cr
 
 ```console
 $ kubectl create namespace wavefront
-$ helm install my-release bitnami/wavefront --namespace wavefront \
+$ helm install my-release my-repo/wavefront --namespace wavefront \
     --set clusterName=<K8s-CLUSTER-NAME> \
     --set wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
     --set wavefront.token=<YOUR_API_TOKEN>
@@ -287,7 +289,7 @@ The above command sets 3 proxy replicas.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/wavefront
+$ helm install my-release -f values.yaml my-repo/wavefront
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

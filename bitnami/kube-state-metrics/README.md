@@ -7,13 +7,15 @@ kube-state-metrics is a simple service that listens to the Kubernetes API server
 [Overview of Kube State Metrics](https://github.com/kubernetes/kube-state-metrics)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/kube-state-metrics
+$ helm repo add my-repo REPO
+$ helm install my-release my-repo/kube-state-metrics
 ```
+
+Remember to replace the `REPO` placeholder by the repository from where you would like to deploy this Helm chart.
 
 ## Introduction
 
@@ -31,13 +33,13 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 Add the `bitnami` charts repo to Helm:
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
+$ helm repo add my-repo REPO
 ```
 
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install my-release bitnami/kube-state-metrics
+$ helm install my-release my-repo/kube-state-metrics
 ```
 
 The command deploys kube-state-metrics on the Kubernetes cluster in the default configuration. The [configuration](#configuration-and-installation-details) section lists the parameters that can be configured during installation.
@@ -209,13 +211,13 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example the following command sets the `replicas` of the kube-state-metrics Pods to `2`.
 
 ```bash
-$ helm install my-release --set replicas=2 bitnami/kube-state-metrics
+$ helm install my-release --set replicas=2 my-repo/kube-state-metrics
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/kube-state-metrics
+$ helm install my-release -f values.yaml my-repo/kube-state-metrics
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

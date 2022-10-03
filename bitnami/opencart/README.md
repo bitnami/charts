@@ -7,13 +7,15 @@ OpenCart is free open source ecommerce platform for online merchants. OpenCart p
 [Overview of OpenCart](http://www.opencart.com)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/opencart
+$ helm repo add my-repo REPO
+$ helm install my-release my-repo/opencart
 ```
+
+Remember to replace the `REPO` placeholder by the repository from where you would like to deploy this Helm chart.
 
 ## Introduction
 
@@ -35,7 +37,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install my-release bitnami/opencart
+$ helm install my-release my-repo/opencart
 ```
 
 The command deploys OpenCart on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -329,7 +331,7 @@ The above command sets the OpenCart administrator account username and password 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/opencart
+$ helm install my-release -f values.yaml my-repo/opencart
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -380,7 +382,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 1. Install the chart
 
 ```bash
-$ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/prestashop
+$ helm install my-release --set persistence.existingClaim=PVC_NAME my-repo/prestashop
 ```
 
 ### Host path
@@ -396,7 +398,7 @@ $ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/prest
 1. Install the chart
 
     ```bash
-    $ helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT bitnami/prestashop
+    $ helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT my-repo/prestashop
     ```
 
     This will mount the `prestashop-data` volume into the `hostPath` directory. The site data will be persisted if the mount path contains valid data, else the site data will be initialized at first launch.
@@ -411,7 +413,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 ### To 13.0.0
 
 OpenCart version was bumped to its latest major, `4.x.x`. The most remarkable change is that the `/admin` folder has been renamed to `/administration` for security requirements. Though no incompatibilities are expected while upgrading from previous versions, OpenCart recommends backing up your application first before upgrading.
-    
+
 ### To 12.0.0
 
 This major release bumps the MariaDB version to 10.6. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-105-to-mariadb-106/) for upgrading from MariaDB 10.5 to 10.6. No major issues are expected during the upgrade.

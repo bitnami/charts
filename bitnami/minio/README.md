@@ -7,13 +7,15 @@ MinIO(R) is an object storage server, compatible with Amazon S3 cloud storage se
 [Overview of Bitnami Object Storage based on MinIO&reg;](https://min.io/)
 
 Disclaimer: All software products, projects and company names are trademark(TM) or registered(R) trademarks of their respective holders, and use of them does not imply any affiliation or endorsement. This software is licensed to you subject to one or more open source licenses and VMware provides the software on an AS-IS basis. MinIO(R) is a registered trademark of the MinIO Inc. in the US and other countries. Bitnami is not affiliated, associated, authorized, endorsed by, or in any way officially connected with MinIO Inc. MinIO(R) is licensed under GNU AGPL v3.0.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/minio
+$ helm repo add my-repo REPO
+$ helm install my-release my-repo/minio
 ```
+
+Remember to replace the `REPO` placeholder by the repository from where you would like to deploy this Helm chart.
 
 ## Introduction
 
@@ -33,8 +35,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/minio
+$ helm repo add my-repo REPO
+$ helm install my-release my-repo/minio
 ```
 
 These commands deploy MinIO&reg; on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -362,7 +364,7 @@ The above command sets the MinIO&reg; Server root user and password to `minio-ad
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/minio
+$ helm install my-release -f values.yaml my-repo/minio
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

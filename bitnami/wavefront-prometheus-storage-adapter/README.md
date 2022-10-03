@@ -7,13 +7,15 @@ Wavefront Storage Adapter is a Prometheus integration to transfer metrics from P
 [Overview of Wavefront Prometheus Adapter](https://github.com/wavefrontHQ/prometheus-storage-adapter)
 
 
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/wavefront-prometheus-storage-adapter
+$ helm repo add my-repo REPO
+$ helm install my-release my-repo/wavefront-prometheus-storage-adapter
 ```
+
+Remember to replace the `REPO` placeholder by the repository from where you would like to deploy this Helm chart.
 
 ## Introduction
 
@@ -35,8 +37,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/wavefront-prometheus-storage-adapter
+$ helm repo add my-repo REPO
+$ helm install my-release my-repo/wavefront-prometheus-storage-adapter
 ```
 
 These commands deploy wavefront-prometheus-storage-adapter on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -197,7 +199,7 @@ The above command sets the `livenessProbe.successThreshold` to `5`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/wavefront-prometheus-storage-adapter
+$ helm install my-release -f values.yaml my-repo/wavefront-prometheus-storage-adapter
 ```
 
 ## Configuration and installation details

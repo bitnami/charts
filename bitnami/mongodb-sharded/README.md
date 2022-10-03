@@ -7,13 +7,15 @@ MongoDB(R) is an open source NoSQL database that uses JSON for data storage. Mon
 [Overview of MongoDB&reg; Sharded](http://www.mongodb.org)
 
 Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide a commercial license for any of these products. This listing has an open-source license. MongoDB(R) is run and maintained by MongoDB, which is a completely separate project from Bitnami.
-                           
+
 ## TL;DR
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/mongodb-sharded
+$ helm repo add my-repo REPO
+$ helm install my-release my-repo/mongodb-sharded
 ```
+
+Remember to replace the `REPO` placeholder by the repository from where you would like to deploy this Helm chart.
 
 ## Introduction
 
@@ -37,7 +39,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install my-release bitnami/mongodb-sharded
+$ helm install my-release my-repo/mongodb-sharded
 ```
 
 The command deploys MongoDB&reg; on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -532,7 +534,7 @@ The above command sets the number of shards to 4, the number of replicas for the
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/mongodb-sharded
+$ helm install my-release -f values.yaml my-repo/mongodb-sharded
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

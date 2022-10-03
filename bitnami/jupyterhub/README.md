@@ -7,13 +7,15 @@ JupyterHub brings the power of notebooks to groups of users. It gives users acce
 [Overview of JupyterHub](https://jupyter.org/hub)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/jupyterhub
+$ helm repo add my-repo REPO
+$ helm install my-release my-repo/jupyterhub
 ```
+
+Remember to replace the `REPO` placeholder by the repository from where you would like to deploy this Helm chart.
 
 ## Introduction
 
@@ -36,8 +38,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/jupyterhub
+$ helm repo add my-repo REPO
+$ helm install my-release my-repo/jupyterhub
 ```
 
 These commands deploy JupyterHub on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -511,7 +513,7 @@ The above command sets the `proxy.livenessProbe.successThreshold` to `5`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/jupyterhub
+$ helm install my-release -f values.yaml my-repo/jupyterhub
 ```
 
 ## Configuration and installation details

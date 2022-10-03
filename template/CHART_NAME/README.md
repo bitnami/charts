@@ -7,9 +7,11 @@
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/%%CHART_NAME%%
+$ helm repo add my-repo REPO
+$ helm install my-release my-repo/%%CHART_NAME%%
 ```
+
+Remember to replace the `REPO` placeholder by the repository from where you would like to deploy this Helm chart.
 
 ## Introduction
 
@@ -27,7 +29,7 @@ $ helm install my-release bitnami/%%CHART_NAME%%
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release bitnami/%%CHART_NAME%%
+helm install my-release my-repo/%%CHART_NAME%%
 ```
 
 The command deploys %%CHART_NAME%% on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -67,7 +69,7 @@ The above command sets the %%CHART_NAME%% administrator account username and pas
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml bitnami/%%CHART_NAME%%
+helm install my-release -f values.yaml my-repo/%%CHART_NAME%%
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

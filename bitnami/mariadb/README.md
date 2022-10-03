@@ -7,13 +7,15 @@ MariaDB is an open source, community-developed SQL database server that is widel
 [Overview of MariaDB](https://mariadb.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/mariadb
+$ helm repo add my-repo REPO
+$ helm install my-release my-repo/mariadb
 ```
+
+Remember to replace the `REPO` placeholder by the repository from where you would like to deploy this Helm chart.
 
 ## Introduction
 
@@ -34,7 +36,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install my-release bitnami/mariadb
+$ helm install my-release my-repo/mariadb
 ```
 
 The command deploys MariaDB on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -393,7 +395,7 @@ The above command sets the MariaDB `root` account password to `secretpassword`. 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/mariadb
+$ helm install my-release -f values.yaml my-repo/mariadb
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -510,7 +512,7 @@ Backwards compatibility is not guaranteed. To upgrade to `8.0.0`, install a new 
 - Reuse the PVC used to hold the master data on your previous release. To do so, use the `primary.persistence.existingClaim` parameter. The following example assumes that the release name is `mariadb`:
 
 ```bash
-$ helm install mariadb bitnami/mariadb --set auth.rootPassword=[ROOT_PASSWORD] --set primary.persistence.existingClaim=[EXISTING_PVC]
+$ helm install mariadb my-repo/mariadb --set auth.rootPassword=[ROOT_PASSWORD] --set primary.persistence.existingClaim=[EXISTING_PVC]
 ```
 
 | Note: you need to substitute the placeholder _[EXISTING_PVC]_ with the name of the PVC used on your previous release, and _[ROOT_PASSWORD]_ with the root password used in your previous release.

@@ -7,13 +7,15 @@ TensorFlow ResNet is a client utility for use with TensorFlow Serving and ResNet
 [Overview of TensorFlow ResNet](https://github.com/tensorflow/models/tree/master/official/resnet)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/tensorflow-resnet
+$ helm repo add my-repo REPO
+$ helm install my-release my-repo/tensorflow-resnet
 ```
+
+Remember to replace the `REPO` placeholder by the repository from where you would like to deploy this Helm chart.
 
 ## Introduction
 
@@ -31,8 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/tensorflow-resnet
+$ helm repo add my-repo REPO
+$ helm install my-release my-repo/tensorflow-resnet
 ```
 
 These commands deploy Tensorflow Serving ResNet model on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -171,13 +173,13 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release bitnami/tensorflow-resnet --set imagePullPolicy=Always
+$ helm install my-release my-repo/tensorflow-resnet --set imagePullPolicy=Always
 ```
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/tensorflow-resnet
+$ helm install my-release -f values.yaml my-repo/tensorflow-resnet
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
