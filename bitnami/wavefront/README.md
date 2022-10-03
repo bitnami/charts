@@ -11,6 +11,7 @@ Wavefront is a high-performance streaming analytics platform for monitoring and 
 ## TL;DR
 
 ```console
+$ helm repo add my-repo REPO
 $ kubectl create namespace wavefront
 $ helm install my-release my-repo/wavefront --namespace wavefront \
     --set clusterName=<K8s-CLUSTER-NAME> \
@@ -39,6 +40,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release` (if not already done, create a `wavefront` namespace):
 
 ```console
+$ helm repo add my-repo REPO
 $ kubectl create namespace wavefront
 $ helm install my-release my-repo/wavefront --namespace wavefront \
     --set clusterName=<K8s-CLUSTER-NAME> \

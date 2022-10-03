@@ -11,6 +11,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
+$ helm repo add my-repo REPO
 $ helm install my-release my-repo/airflow
 ```
 
