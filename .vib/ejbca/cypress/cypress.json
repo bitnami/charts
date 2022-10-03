@@ -1,0 +1,8 @@
+{
+  "baseUrl": "http://localhost",
+  "env": {
+    "username": "bitnamiTest",
+    "password": "ComplicatedPassword123!4",
+    "baseDN": "UID=c-1CCXmPAsNWmZuDtQQ8FHl7tcVdjCiNTH,O=ExampleCA,C=SE"
+  }
+}
