@@ -10,7 +10,7 @@ command:
       - uid={{ .Vars.containerSecurityContext.runAsUser }}
       - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
 file:
-  /bitnami/owncloud/data:
+  /bitnami/owncloud/:
     mode: "0770"
     filetype: directory
     exists: true
@@ -22,7 +22,6 @@ file:
       - /dbname.*{{ .Vars.mariadb.auth.database }}/
       - /dbuser.*{{ .Vars.mariadb.auth.username }}/
       - /dbpassword.*{{ .Vars.mariadb.auth.password }}/
-      - /dbhost.*owncloud-mariadb:{{ .Vars.externalDatabase.port }}/
   /etc/hosts:
     exists: true
     filetype: file

@@ -3,8 +3,6 @@ mariadb:
     database: test_db_name
     username: test_db_user
     password: test_db_password
-externalDatabase:
-  port: 3306
 podSecurityContext:
   fsGroup: 1002
 containerSecurityContext:
