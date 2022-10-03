@@ -481,7 +481,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.password`                  | Password for the non-root username for Airflow                                                         | `""`              |
 | `externalDatabase.database`                  | Airflow database name                                                                                  | `bitnami_airflow` |
 | `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials                                | `""`              |
-| `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials                                     | `""`              |
+| `externalDatabase.existingSecretUserKey`     | Name of an existing secret key containing the database user                                            | `""`              |
+| `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database password                                        | `""`              |
 | `redis.enabled`                              | Switch to enable or disable the Redis&reg; helm                                                        | `true`            |
 | `redis.auth.enabled`                         | Enable password authentication                                                                         | `true`            |
 | `redis.auth.password`                        | Redis&reg; password                                                                                    | `""`              |

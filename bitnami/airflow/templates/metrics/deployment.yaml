@@ -79,12 +79,15 @@ spec:
             - name: AIRFLOW_PROMETHEUS_DATABASE_PORT
               value: {{ include "airflow.database.port" . }}
             - name: AIRFLOW_PROMETHEUS_DATABASE_USER
-              value: {{ include "airflow.database.user" . }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "airflow.postgresql.secretName" . }}
+                  key: {{ include "airflow.database.existingsecret.userKey" . }}
             - name: AIRFLOW_PROMETHEUS_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "airflow.postgresql.secretName" . }}
-                  key: {{ include "airflow.database.existingsecret.key" . }}
+                  key: {{ include "airflow.database.existingsecret.passwordKey" . }}
             - name: AIRFLOW_PROMETHEUS_DATABASE_NAME
               value: {{ include "airflow.database.name" . }}
             {{- if .Values.metrics.extraEnvVars }}

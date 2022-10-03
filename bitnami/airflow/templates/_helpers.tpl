@@ -273,7 +273,7 @@ Add environment variables to configure database values
 {{/*
 Add environment variables to configure database values
 */}}
-{{- define "airflow.database.existingsecret.key" -}}
+{{- define "airflow.database.existingsecret.passwordKey" -}}
 {{- if .Values.postgresql.enabled -}}
     {{- printf "%s" "password" -}}
 {{- else -}}
@@ -285,6 +285,25 @@ Add environment variables to configure database values
         {{- end -}}
     {{- else -}}
         {{- printf "%s" "password" -}}
+    {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Add environment variables to configure database values
+*/}}
+{{- define "airflow.database.existingsecret.userKey" -}}
+{{- if .Values.postgresql.enabled -}}
+    {{- printf "%s" "user" -}}
+{{- else -}}
+    {{- if .Values.externalDatabase.existingSecret -}}
+        {{- if .Values.externalDatabase.existingSecretUserKey -}}
+            {{- printf "%s" .Values.externalDatabase.existingSecretUserKey -}}
+        {{- else -}}
+            {{- printf "%s" "user" -}}
+        {{- end -}}
+    {{- else -}}
+        {{- printf "%s" "user" -}}
     {{- end -}}
 {{- end -}}
 {{- end -}}
@@ -322,12 +341,15 @@ Add environment variables to configure database values
 - name: AIRFLOW_DATABASE_NAME
   value: {{ include "airflow.database.name" . }}
 - name: AIRFLOW_DATABASE_USERNAME
-  value: {{ include "airflow.database.user" . }}
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "airflow.postgresql.secretName" . }}
+      key: {{ include "airflow.database.existingsecret.userKey" . }}
 - name: AIRFLOW_DATABASE_PASSWORD
   valueFrom:
     secretKeyRef:
       name: {{ include "airflow.postgresql.secretName" . }}
-      key: {{ include "airflow.database.existingsecret.key" . }}
+      key: {{ include "airflow.database.existingsecret.passwordKey" . }}
 - name: AIRFLOW_DATABASE_HOST
   value: {{ include "airflow.database.host" . }}
 - name: AIRFLOW_DATABASE_PORT_NUMBER

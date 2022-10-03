@@ -1485,7 +1485,8 @@ postgresql:
 ## @param externalDatabase.password Password for the non-root username for Airflow
 ## @param externalDatabase.database Airflow database name
 ## @param externalDatabase.existingSecret Name of an existing secret resource containing the database credentials
-## @param externalDatabase.existingSecretPasswordKey Name of an existing secret key containing the database credentials
+## @param externalDatabase.existingSecretUserKey Name of an existing secret key containing the database user
+## @param externalDatabase.existingSecretPasswordKey Name of an existing secret key containing the database password
 ##
 externalDatabase:
   host: localhost
@@ -1494,6 +1495,7 @@ externalDatabase:
   database: bitnami_airflow
   password: ""
   existingSecret: ""
+  existingSecretUserKey: ""
   existingSecretPasswordKey: ""
 
 ## Redis&reg; chart configuration
