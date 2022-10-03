@@ -188,6 +188,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.nodeSelector`                                      | Node labels for Argo CD pods assignment                                                              | `{}`            |
 | `controller.tolerations`                                       | Tolerations for Argo CD pods assignment                                                              | `[]`            |
 | `controller.schedulerName`                                     | Name of the k8s scheduler (other than default)                                                       | `""`            |
+| `controller.shareProcessNamespace`                             | Enable shared process namespace in a pod.                                                            | `false`         |
 | `controller.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                       | `[]`            |
 | `controller.updateStrategy.type`                               | Argo CD statefulset strategy type                                                                    | `RollingUpdate` |
 | `controller.priorityClassName`                                 | Argo CD pods' priorityClassName                                                                      | `""`            |
@@ -328,6 +329,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.nodeSelector`                                      | Node labels for Argo CD server pods assignment                                                                                  | `{}`                     |
 | `server.tolerations`                                       | Tolerations for Argo CD server pods assignment                                                                                  | `[]`                     |
 | `server.schedulerName`                                     | Name of the k8s scheduler (other than default)                                                                                  | `""`                     |
+| `server.shareProcessNamespace`                             | Enable shared process namespace in a pod.                                                                                       | `false`                  |
 | `server.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                                                  | `[]`                     |
 | `server.updateStrategy.type`                               | Argo CD server statefulset strategy type                                                                                        | `RollingUpdate`          |
 | `server.priorityClassName`                                 | Argo CD server pods' priorityClassName                                                                                          | `""`                     |
@@ -441,6 +443,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `repoServer.nodeSelector`                                      | Node labels for Argo CD repo server pods assignment                                                  | `{}`            |
 | `repoServer.tolerations`                                       | Tolerations for Argo CD repo server pods assignment                                                  | `[]`            |
 | `repoServer.schedulerName`                                     | Name of the k8s scheduler (other than default)                                                       | `""`            |
+| `repoServer.shareProcessNamespace`                             | Enable shared process namespace in a pod.                                                            | `false`         |
 | `repoServer.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                       | `[]`            |
 | `repoServer.updateStrategy.type`                               | Argo CD repo server statefulset strategy type                                                        | `RollingUpdate` |
 | `repoServer.priorityClassName`                                 | Argo CD repo server pods' priorityClassName                                                          | `""`            |
@@ -553,6 +556,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dex.nodeSelector`                                      | Node labels for Dex pods assignment                                                                 | `{}`                  |
 | `dex.tolerations`                                       | Tolerations for Dex pods assignment                                                                 | `[]`                  |
 | `dex.schedulerName`                                     | Name of the k8s scheduler (other than default)                                                      | `""`                  |
+| `dex.shareProcessNamespace`                             | Enable shared process namespace in a pod.                                                           | `false`               |
 | `dex.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                      | `[]`                  |
 | `dex.updateStrategy.type`                               | Dex statefulset strategy type                                                                       | `RollingUpdate`       |
 | `dex.priorityClassName`                                 | Dex pods' priorityClassName                                                                         | `""`                  |
