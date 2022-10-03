@@ -119,28 +119,28 @@ spec:
           resources: {{- toYaml .Values.indexGateway.resources | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.indexGateway.livenessProbe.enabled }}
+          {{- if .Values.indexGateway.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.indexGateway.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.indexGateway.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.indexGateway.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /ready
               port: http
-          {{- else if .Values.indexGateway.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.indexGateway.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.indexGateway.readinessProbe.enabled }}
+          {{- if .Values.indexGateway.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.indexGateway.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.indexGateway.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.indexGateway.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /ready
               port: http
-          {{- else if .Values.indexGateway.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.indexGateway.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.indexGateway.startupProbe.enabled }}
+          {{- if .Values.indexGateway.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.indexGateway.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.indexGateway.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.indexGateway.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http
-          {{- else if .Values.indexGateway.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.indexGateway.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.indexGateway.lifecycleHooks }}
