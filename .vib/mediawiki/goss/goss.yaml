@@ -11,12 +11,13 @@ file:
     {{ range .Vars.hostAliases }}
     {{ $ip := .ip }}
     {{ range $host := .hostnames }}
-      - /{{ $ip }}.*{{$host}}/
+      - /{{ $ip }}.*{{ $host }}/
     {{ end }}
     {{ end }}
 http:
   https://mediawiki:{{ .Vars.service.ports.https }}:
-    status: 200
+    status: 301
+    no-follow-redirects: true
     allow-insecure: true
 command:
   check-user-info:

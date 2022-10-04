@@ -29,8 +29,6 @@ it('allows to upload a file', () => {
   cy.get('[name="wpDestFile"]').type(`${random}.jpeg`);
   // If Mediawiki detects that an identical file was already uploaded
   // it will ask for confirmation, requiring additional steps
-  cy.get('[name="wpIgnoreWarning"]').click();
-  cy.get('[name="wpUpload"]').click();
-  cy.contains(`${random}.jpeg`, { matchCase: false });
+  cy.contains('h1', `File:${random}.png`, { matchCase: false });
 });
 
