@@ -178,6 +178,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerPorts.tls`                    | TLS Port on the Host and Container                                                        | `7001`          |
 | `containerPorts.jmx`                    | JMX Port on the Host and Container                                                        | `7199`          |
 | `containerPorts.cql`                    | CQL Port on the Host and Container                                                        | `9042`          |
+| `hostPorts.intra`                       | Intra Port on the Host                                                                    | `""`            |
+| `hostPorts.tls`                         | TLS Port on the Host                                                                      | `""`            |
+| `hostPorts.jmx`                         | JMX Port on the Host                                                                      | `""`            |
+| `hostPorts.cql`                         | CQL Port on the Host                                                                      | `""`            |
 
 
 ### RBAC parameters
@@ -274,6 +278,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.labels`              | Used to pass Labels that are required by the installed Prometheus Operator                                         | `{}`                         |
 | `metrics.containerPorts.http`                | HTTP Port on the Host and Container                                                                                | `8080`                       |
 | `metrics.containerPorts.jmx`                 | JMX Port on the Host and Container                                                                                 | `5555`                       |
+| `metrics.hostPorts.http`                     | HTTP Port on the Host                                                                                              | `""`                         |
+| `metrics.hostPorts.jmx`                      | JMX Port on the Host                                                                                               | `""`                         |
 | `metrics.configuration`                      | Configure Cassandra-exporter with a custom config.yml file                                                         | `""`                         |
 
 
