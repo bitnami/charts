@@ -59,7 +59,7 @@
             "endpoint": "lb-mediawiki-http",
             "app_protocol": "HTTP",
             "env": {
-              "username": "user",
+              "username": "test_user",
               "password": "ComplicatedPassword123!4"
             }
           }

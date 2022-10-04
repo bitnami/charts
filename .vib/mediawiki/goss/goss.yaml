@@ -26,3 +26,10 @@ command:
     stdout:
       - uid={{ .Vars.containerSecurityContext.runAsUser }}
       - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
+  check-db-credentials:
+    exec: env
+    exit-status: 0
+    stdout:
+      - /{{ .Vars.mariadb.auth.database }}/
+      - /{{ .Vars.mariadb.auth.username }}/
+      - /{{ .Vars.mariadb.auth.password }}/

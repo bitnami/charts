@@ -26,9 +26,11 @@ it('allows to upload a file', () => {
     force: true,
   });
   // We'll use a random fileName to bypass duplication-related errors
-  cy.get('[name="wpDestFile"]').type(`${random}.jpeg`);
+  cy.get('[name="wpDestFile"]').clear().type(`testfile-${random}.jpeg`);
   // If Mediawiki detects that an identical file was already uploaded
-  // it will ask for confirmation, requiring additional steps
-  cy.contains('h1', `File:${random}.png`, { matchCase: false });
+  cy.get('[name="wpIgnoreWarning"]').click();
+-  cy.get('[name="wpUpload"]').click();
+-  cy.contains(`testfile-${random}.jpeg`, { matchCase: false }); // it will ask for confirmation, requiring additional steps
+  cy.contains('h1', `File:testfile-${random}.jpeg`, { matchCase: false });
 });
 
