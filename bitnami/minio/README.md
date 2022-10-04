@@ -11,11 +11,9 @@ Disclaimer: All software products, projects and company names are trademark(TM) 
 ## TL;DR
 
 ```console
-$ helm repo add my-repo REPO
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/minio
 ```
-
-Remember to replace the `REPO` placeholder by the repository from where you would like to deploy this Helm chart.
 
 ## Introduction
 
@@ -35,7 +33,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo REPO
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/minio
 ```
 

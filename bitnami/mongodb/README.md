@@ -11,11 +11,9 @@ Disclaimer: The respective trademarks mentioned in the offering are owned by the
 ## TL;DR
 
 ```bash
-$ helm repo add my-repo REPO
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/mongodb
 ```
-
-Remember to replace the `REPO` placeholder by the repository from where you would like to deploy this Helm chart.
 
 ## Introduction
 

@@ -7,11 +7,9 @@
 ## TL;DR
 
 ```console
-$ helm repo add my-repo REPO
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/%%CHART_NAME%%
 ```
-
-Remember to replace the `REPO` placeholder by the repository from where you would like to deploy this Helm chart.
 
 ## Introduction
 

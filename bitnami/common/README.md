@@ -24,8 +24,6 @@ data:
   myvalue: "Hello World"
 ```
 
-Remember to replace the `REPO` placeholder by the repository from where you would like to deploy this Helm chart.
-
 ## Introduction
 
 This chart provides a common template helpers which can be used to develop new charts using [Helm](https://helm.sh) package manager.

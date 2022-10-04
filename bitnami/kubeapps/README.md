@@ -11,7 +11,7 @@ Kubeapps is a web-based UI for launching and managing applications on Kubernetes
 ## TL;DR
 
 ```bash
-helm repo add my-repo REPO
+helm repo add my-repo https://charts.bitnami.com/bitnami
 kubectl create namespace kubeapps
 helm install kubeapps --namespace kubeapps my-repo/kubeapps
 ```
@@ -47,7 +47,7 @@ It also packages the [Bitnami PostgreSQL chart](https://github.com/bitnami/chart
 To install the chart with the release name `kubeapps`:
 
 ```bash
-helm repo add my-repo REPO
+helm repo add my-repo https://charts.bitnami.com/bitnami
 kubectl create namespace kubeapps
 helm install kubeapps --namespace kubeapps my-repo/kubeapps
 ```

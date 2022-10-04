@@ -11,11 +11,9 @@ Sealed Secrets are "one-way" encrypted K8s Secrets that can be created by anyone
 ## TL;DR
 
 ```console
-$ helm repo add my-repo REPO
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/sealed-secrets
 ```
-
-Remember to replace the `REPO` placeholder by the repository from where you would like to deploy this Helm chart.
 
 ## Introduction
 

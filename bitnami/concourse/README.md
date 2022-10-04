@@ -11,11 +11,9 @@ Concourse is an automation system written in Go. It is most commonly used for CI
 ## TL;DR
 
 ```console
-$ helm repo add my-repo REPO
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/concourse
 ```
-
-Remember to replace the `REPO` placeholder by the repository from where you would like to deploy this Helm chart.
 
 ## Introduction
 

@@ -11,11 +11,9 @@ Wavefront HPA Adapter for Kubernetes is a Kubernetes Horizontal Pod Autoscaler a
 ## TL;DR
 
 ```console
-$ helm repo add my-repo REPO
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/wavefront-hpa-adapter
 ```
-
-Remember to replace the `REPO` placeholder by the repository from where you would like to deploy this Helm chart.
 
 ## Introduction
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
@@ -36,7 +34,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo REPO
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/wavefront-hpa-adapter
 ```
 

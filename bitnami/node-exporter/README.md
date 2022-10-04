@@ -11,11 +11,9 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```bash
-$ helm repo add my-repo REPO
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/node-exporter
 ```
-
-Remember to replace the `REPO` placeholder by the repository from where you would like to deploy this Helm chart.
 
 ## Introduction
 
@@ -33,7 +31,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 Add the `bitnami` charts repo to Helm:
 
 ```bash
-$ helm repo add my-repo REPO
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 ```
 
 To install the chart with the release name `my-release`:

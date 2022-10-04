@@ -11,11 +11,9 @@ Disclaimer: Redis is a registered trademark of Redis Ltd. Any rights therein are
 ## TL;DR
 
 ```bash
-$ helm repo add my-repo REPO
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/redis
 ```
-
-Remember to replace the `REPO` placeholder by the repository from where you would like to deploy this Helm chart.
 
 ## Introduction
 
