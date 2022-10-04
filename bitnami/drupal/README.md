@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                              | Drupal image registry                                                                                                  | `docker.io`          |
 | `image.repository`                            | Drupal Image name                                                                                                      | `bitnami/drupal`     |
-| `image.tag`                                   | Drupal Image tag                                                                                                       | `9.4.7-debian-11-r0` |
+| `image.tag`                                   | Drupal Image tag                                                                                                       | `9.4.7-debian-11-r1` |
 | `image.digest`                                | Drupal image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                 | `""`                 |
 | `image.pullPolicy`                            | Drupal image pull policy                                                                                               | `IfNotPresent`       |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                       | `[]`                 |
@@ -204,25 +204,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Database parameters
 
-| Name                                        | Description                                                                              | Value               |
-| ------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------- |
-| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements     | `true`              |
-| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                                     | `standalone`        |
-| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                     | `""`                |
-| `mariadb.auth.database`                     | Database name to create                                                                  | `bitnami_drupal`    |
-| `mariadb.auth.username`                     | Database user to create                                                                  | `bn_drupal`         |
-| `mariadb.auth.password`                     | Password for the database                                                                | `""`                |
-| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                    | `true`              |
-| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                          | `""`                |
-| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                  | `["ReadWriteOnce"]` |
-| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                          | `8Gi`               |
-| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production) | `""`                |
-| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                 | `""`                |
-| `externalDatabase.host`                     | Host of the existing database                                                            | `""`                |
-| `externalDatabase.port`                     | Port of the existing database                                                            | `3306`              |
-| `externalDatabase.user`                     | Existing username in the external db                                                     | `bn_drupal`         |
-| `externalDatabase.password`                 | Password for the above username                                                          | `""`                |
-| `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_drupal`    |
+| Name                                        | Description                                                                                                                                                            | Value               |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements                                                                                   | `true`              |
+| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                                                                                                                   | `standalone`        |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                                                                                                   | `""`                |
+| `mariadb.auth.database`                     | Database name to create                                                                                                                                                | `bitnami_drupal`    |
+| `mariadb.auth.username`                     | Database user to create                                                                                                                                                | `bn_drupal`         |
+| `mariadb.auth.password`                     | Password for the database                                                                                                                                              | `""`                |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                                                                                                  | `true`              |
+| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                                                                                                        | `""`                |
+| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                                                                                                | `["ReadWriteOnce"]` |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                                                                                                        | `8Gi`               |
+| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production)                                                                               | `""`                |
+| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                                                                                               | `""`                |
+| `externalDatabase.host`                     | Host of the existing database                                                                                                                                          | `""`                |
+| `externalDatabase.port`                     | Port of the existing database                                                                                                                                          | `3306`              |
+| `externalDatabase.user`                     | Existing username in the external db                                                                                                                                   | `bn_drupal`         |
+| `externalDatabase.password`                 | Password for the above username. Ignored if existing secret is provided                                                                                                | `""`                |
+| `externalDatabase.database`                 | Name of the existing database                                                                                                                                          | `bitnami_drupal`    |
+| `externalDatabase.existingSecret`           | Name of a secret with the database password. (externalDatabase.password will be ignored and picked up from this secret). The secret has to contain the key db-password | `""`                |
 
 
 ### Volume Permissions parameters
@@ -247,7 +248,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a exporter side-car                                                                                       | `false`                   |
 | `metrics.image.registry`                   | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`                 | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache exporter image tag                                                                                       | `0.11.0-debian-11-r44`    |
+| `metrics.image.tag`                        | Apache exporter image tag                                                                                       | `0.11.0-debian-11-r45`    |
 | `metrics.image.digest`                     | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`                 | Image pull policy                                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                | `[]`                      |

@@ -335,7 +335,7 @@ spec:
         {{- if .Values.customPostInitScripts }}
         - name: custom-postinit
           configMap:
-            name: {{ printf "%s-postinit" (include "common.names.fullname" .) }}
+            name: {{ printf "%s-postinit" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
             defaultMode: 0755
         {{- end }}
         {{- if .Values.extraVolumes }}

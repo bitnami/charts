@@ -1,0 +1,18 @@
+postgresql:
+  repmgrUsername: repmgr
+  repmgrPassword: repmgrPassword123!4
+  repmgrDatabase: repmgr
+  repmgrConnectTimeout: 7
+  replicaCount: 4
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 1002
+  containerPorts:
+    postgresql: 5431
+persistence:
+  mountPath: /bitnami/postgresql
+service:
+  ports:
+    postgresql: 80
+  type: LoadBalancer
