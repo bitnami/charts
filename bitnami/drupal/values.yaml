@@ -605,8 +605,9 @@ mariadb:
 ## @param externalDatabase.host Host of the existing database
 ## @param externalDatabase.port Port of the existing database
 ## @param externalDatabase.user Existing username in the external db
-## @param externalDatabase.password Password for the above username
+## @param externalDatabase.password Password for the above username. Ignored if existing secret is provided
 ## @param externalDatabase.database Name of the existing database
+## @param externalDatabase.existingSecret Name of a secret with the database password. (externalDatabase.password will be ignored and picked up from this secret). The secret has to contain the key db-password
 ##
 externalDatabase:
   host: ""
@@ -614,6 +615,7 @@ externalDatabase:
   user: bn_drupal
   password: ""
   database: bitnami_drupal
+  existingSecret: ""
 
 ## @section Volume Permissions parameters
 
