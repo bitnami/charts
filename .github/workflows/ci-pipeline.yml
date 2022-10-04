@@ -2,6 +2,8 @@ name: '[CI/CD] CI Pipeline'
 on: # rebuild any PRs and main branch changes
   pull_request_target:
     types:
+      - opened
+      - reopened
       - synchronize
       - labeled
     branches:
@@ -80,8 +82,7 @@ jobs:
     # Given performance issues of the action feature on GH's side, we need to be very restrictive in the job's triggers:
     # -> The 'Get modified charts' job suceededs AND
     #  ( ---> The pipeline was triggered due to a label addition and said label was the 'verify' one OR
-    #    ---> The pipeline was NOT triggered due to a label addition but the PR already contains the 'verify' one OR
-    #    ---> The pipeline was triggered for a new automated PR )
+    #    ---> the PR already contains the 'verify' label )
     if: |
       needs.get-chart.outputs.result == 'ok' &&
       (
