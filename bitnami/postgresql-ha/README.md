@@ -36,7 +36,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 Install the PostgreSQL HA helm chart with a release name `my-release`:
 
 ```console
-$ helm repo add my-repo REPO
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/postgresql-ha
 ```
 
