@@ -1,5 +1,7 @@
 http:
   https://owncloud:{{ .Vars.service.ports.https }}:
+    ## A http 400 status code is expected here because HTTPS can only be accessed
+    ## using the domain name.
     status: 400
     allow-insecure: true
 command:

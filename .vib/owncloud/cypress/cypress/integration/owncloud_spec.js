@@ -13,22 +13,28 @@ it('allows creating a folder and uploading a file ', () => {
     cy.contains('No files in here');
     cy.get('.new').click();
     cy.get('[data-action="upload"]').click();
-    cy.get('input[type="file"]').selectFile(
+    cy.get('[type="file"]').selectFile(
       'cypress/fixtures/file_to_upload.json',
       { force: true }
     );
     cy.contains('file_to_upload').should('be.visible');
-    cy.get('[href*="file_to_upload"]')
-      .invoke('attr', 'href')
-      .then((href) => {
-        cy.log(href);
-        cy.request({
-          url: href,
-          method: 'GET',
-        }).then((response) => {
-            expect(response.status).to.eq(200);
-            expect(response.headers['content-type']).to.eq('text/plain;charset=UTF-8');
-          });
-      });
+    cy.get('[href*="file_to_upload"]').within(() => {
+      cy.get('[data-action="Share"]').click();
+    });
+    cy.get('[class="permalink"]').click();
+    cy.get('.detailFileInfoContainer').within(() => {
+      cy.get('input')
+        .invoke('val')
+        .should('contain', 'vmware')
+        .then((link) => {
+          cy.request({
+            method: 'GET',
+            url: link,
+            form: true,
+          }).then((response) => {
+              expect(response.status).to.eq(200);
+            });
+        });
+    });
   });
 });
