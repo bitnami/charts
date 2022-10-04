@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/redis"
         },
-        "runtime_parameters": "YXJjaGl0ZWN0dXJlOiBzdGFuZGFsb25lCm1hc3RlcjoKICBzZXJ2aWNlOgogICAgcG9ydHM6CiAgICAgIHJlZGlzOiA4MAogICAgdHlwZTogTG9hZEJhbGFuY2VyCg==",
+        "runtime_parameters": "YXJjaGl0ZWN0dXJlOiByZXBsaWNhdGlvbgphdXRoOgogIGVuYWJsZWQ6IHRydWUKICBwYXNzd29yZDogQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0Cm1hc3RlcjoKICBjb3VudDogMQogIGRpc2FibGVDb21tYW5kczoKICAgIC0gRkxVU0hBTEwKICAgIC0gRkxVU0hEQgogIGNvbnRhaW5lclBvcnRzOgogICAgcmVkaXM6IDYzODAKICBwb2RTZWN1cml0eUNvbnRleHQ6CiAgICBlbmFibGVkOiB0cnVlCiAgICBmc0dyb3VwOiAxMDAyCiAgY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogICAgZW5hYmxlZDogdHJ1ZQogICAgcnVuQXNVc2VyOiAxMDAyCiAga2luZDogU3RhdGVmdWxTZXQKICBwZXJzaXN0ZW5jZToKICAgIGVuYWJsZWQ6IHRydWUKICAgIHBhdGg6IC9kYXRhCiAgc2VydmljZToKICAgIHBvcnRzOgogICAgICByZWRpczogODAKICAgIHR5cGU6IExvYWRCYWxhbmNlcgpyZXBsaWNhOgogIHJlcGxpY2FDb3VudDogMwogIGNvbnRhaW5lclBvcnRzOgogICAgcmVkaXM6IDYzODAKICBwb2RTZWN1cml0eUNvbnRleHQ6CiAgICBlbmFibGVkOiB0cnVlCiAgICBmc0dyb3VwOiAxMDAyCiAgY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogICAgZW5hYmxlZDogdHJ1ZQogICAgcnVuQXNVc2VyOiAxMDAyCiAgcGVyc2lzdGVuY2U6CiAgICBlbmFibGVkOiB0cnVlCiAgICBwYXRoOiAvZGF0YQogIHNlcnZpY2U6CiAgICBwb3J0czoKICAgICAgcmVkaXM6IDYzNzgKICAgIHR5cGU6IENsdXN0ZXJJUApzZW50aW5lbDoKICBlbmFibGVkOiBmYWxzZQpzZXJ2aWNlQWNjb3VudDoKICBjcmVhdGU6IHRydWUKICBhdXRvbW91bnRTZXJ2aWNlQWNjb3VudFRva2VuOiB0cnVlCg==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -51,11 +51,12 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/redis/standalone/goss"
+              "path": "/.vib/redis/goss"
             },
             "remote": {
               "workload": "sts-redis-master"
-            }
+            },
+            "vars_file": "vars.yaml"
           }
         }
       ]
