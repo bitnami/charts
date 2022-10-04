@@ -195,7 +195,9 @@ spec:
             - name: mysql
               containerPort: 3306
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.primary.startupProbe.enabled }}
+          {{- if .Values.primary.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.primary.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.primary.startupProbe.enabled }}
           startupProbe: {{- omit .Values.primary.startupProbe "enabled" | toYaml | nindent 12 }}
             exec:
               command:
@@ -207,10 +209,10 @@ spec:
                       password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
                   fi
                   mysqladmin status -uroot -p"${password_aux}"
-          {{- else if .Values.primary.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.primary.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.primary.livenessProbe.enabled }}
+          {{- if .Values.primary.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.primary.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.primary.livenessProbe.enabled }}
           livenessProbe: {{- omit .Values.primary.livenessProbe "enabled" | toYaml | nindent 12 }}
             exec:
               command:
@@ -222,10 +224,10 @@ spec:
                       password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
                   fi
                   mysqladmin status -uroot -p"${password_aux}"
-          {{- else if .Values.primary.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.primary.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.primary.readinessProbe.enabled }}
+          {{- if .Values.primary.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.primary.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.primary.readinessProbe.enabled }}
           readinessProbe: {{- omit .Values.primary.readinessProbe "enabled" | toYaml | nindent 12 }}
             exec:
               command:
@@ -237,8 +239,6 @@ spec:
                       password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
                   fi
                   mysqladmin status -uroot -p"${password_aux}"
-          {{- else if .Values.primary.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.primary.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.primary.resources }}
