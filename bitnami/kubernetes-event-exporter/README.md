@@ -4,7 +4,7 @@
 
 Kubernetes Event Exporter makes it easy to export Kubernetes events to other tools, thereby enabling better event observability, custom alerts and aggregation.
 
-[Overview of Kubernetes Event Exporter](https://github.com/opsgenie/kubernetes-event-exporter)
+[Overview of Kubernetes Event Exporter](https://github.com/resmoio/kubernetes-event-exporter)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
                            
@@ -17,7 +17,7 @@ $ helm install my-release bitnami/kubernetes-event-exporter
 
 ## Introduction
 
-This chart bootstraps a [Kubernetes Event Exporter](https://github.com/opsgenie/kubernetes-event-exporter) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Kubernetes Event Exporter](https://github.com/resmoio/kubernetes-event-exporter) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
