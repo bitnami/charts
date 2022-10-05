@@ -7,12 +7,12 @@ Harbor is an open source trusted cloud-native registry to store, sign, and scan 
 [Overview of Harbor](https://goharbor.io/)
 
 
-                           
+
 ## TL;DR
 
 ```bash
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install my-release bitnami/harbor
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/harbor
 ```
 
 ## Introduction
@@ -45,8 +45,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 Install the Harbor helm chart with a release name `my-release`:
 
 ```bash
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install my-release bitnami/harbor
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/harbor
 ```
 
 ## Uninstalling the Chart
@@ -1180,7 +1180,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set adminPassword=password \
-    bitnami/harbor
+    my-repo/harbor
 ```
 
 The above command sets the Harbor administrator account password to `password`.
@@ -1190,7 +1190,7 @@ The above command sets the Harbor administrator account password to `password`.
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/harbor
+$ helm install my-release -f values.yaml my-repo/harbor
 ```
 
 ## Configuration and installation details

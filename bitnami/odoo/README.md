@@ -7,12 +7,12 @@ Odoo is an open source ERP and CRM platform, formerly known as OpenERP, that can
 [Overview of Odoo](https://www.odoo.com/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/odoo
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/odoo
 ```
 
 ## Introduction
@@ -35,7 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install my-release bitnami/odoo
+$ helm install my-release my-repo/odoo
 ```
 
 The command deploys Odoo on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -298,7 +298,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set odooPassword=password,postgresql.postgresPassword=secretpassword \
-    bitnami/odoo
+    my-repo/odoo
 ```
 
 The above command sets the Odoo administrator account password to `password` and the PostgreSQL `postgres` user password to `secretpassword`.
@@ -308,7 +308,7 @@ The above command sets the Odoo administrator account password to `password` and
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/odoo
+$ helm install my-release -f values.yaml my-repo/odoo
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

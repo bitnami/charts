@@ -7,12 +7,12 @@ Apache Cassandra is an open source distributed database management system design
 [Overview of Apache Cassandra](http://cassandra.apache.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/cassandra
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/cassandra
 ```
 
 ## Introduction
@@ -32,8 +32,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/cassandra
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/cassandra
 ```
 
 These commands deploy one node with Apache Cassandra on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -307,13 +307,13 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
     --set dbUser.user=admin,dbUser.password=password \
-    bitnami/cassandra
+    my-repo/cassandra
 ```
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml bitnami/cassandra
+helm install my-release -f values.yaml my-repo/cassandra
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -386,7 +386,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 It's necessary to set the `dbUser.password` parameter when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, some notes will be displayed providing the credentials you must use. Please note down the password and run the command below to upgrade your chart:
 
 ```bash
-$ helm upgrade my-release bitnami/cassandra --set dbUser.password=[PASSWORD]
+$ helm upgrade my-release my-repo/cassandra --set dbUser.password=[PASSWORD]
 ```
 
 | Note: you need to substitute the placeholder _[PASSWORD]_ with the value obtained in the installation notes.

@@ -7,12 +7,12 @@ Grafana is an open source metric analytics and visualization suite for visualizi
 [Overview of Grafana](https://grafana.com/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/grafana
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/grafana
 ```
 
 ## Introduction
@@ -33,8 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/grafana
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/grafana
 ```
 
 These commands deploy grafana on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -465,7 +465,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install my-release \
-  --set admin.user=admin-user bitnami/grafana
+  --set admin.user=admin-user my-repo/grafana
 ```
 
 The above command sets the Grafana admin user to `admin-user`.
@@ -475,7 +475,7 @@ The above command sets the Grafana admin user to `admin-user`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/grafana
+$ helm install my-release -f values.yaml my-repo/grafana
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -637,7 +637,7 @@ Since the volume access mode when persistence is enabled is `ReadWriteOnce` in o
 
 ```console
 kubectl delete deployment <deployment-name>
-helm upgrade <release-name> bitnami/grafana
+helm upgrade <release-name> my-repo/grafana
 ```
 
 ### To 4.1.0

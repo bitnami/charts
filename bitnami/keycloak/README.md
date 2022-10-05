@@ -7,12 +7,12 @@ Keycloak is a high performance Java-based identity and access management solutio
 [Overview of Keycloak](https://www.keycloak.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-  helm repo add bitnami https://charts.bitnami.com/bitnami
-  helm install my-release bitnami/keycloak
+  helm repo add my-repo https://charts.bitnami.com/bitnami
+  helm install my-release my-repo/keycloak
 ```
 
 ## Introduction
@@ -33,8 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/keycloak
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/keycloak
 ```
 
 These commands deploy a Keycloak application on the Kubernetes cluster in the default configuration.
@@ -340,7 +340,7 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```bash
-helm install my-release --set auth.adminPassword=secretpassword bitnami/keycloak
+helm install my-release --set auth.adminPassword=secretpassword my-repo/keycloak
 ```
 
 The above command sets the Keycloak administrator password to `secretpassword`.
@@ -350,7 +350,7 @@ The above command sets the Keycloak administrator password to `secretpassword`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/keycloak
+$ helm install my-release -f values.yaml my-repo/keycloak
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

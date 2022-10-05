@@ -7,12 +7,12 @@ PyTorch is a deep learning platform that accelerates the transition from researc
 [Overview of PyTorch](https://pytorch.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/pytorch
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/pytorch
 ```
 
 ## Introduction
@@ -35,8 +35,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/pytorch
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/pytorch
 ```
 
 These commands deploy PyTorch on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured.
@@ -218,7 +218,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 $ helm install my-release \
   --set mode=distributed \
   --set worldSize=4 \
-    bitnami/pytorch
+    my-repo/pytorch
 ```
 
 The above command create 4 pods for PyTorch: one master and three workers.
@@ -226,7 +226,7 @@ The above command create 4 pods for PyTorch: one master and three workers.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/pytorch
+$ helm install my-release -f values.yaml my-repo/pytorch
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

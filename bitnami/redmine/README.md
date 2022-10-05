@@ -7,12 +7,12 @@ Redmine is an open source management application. It includes a tracking issue s
 [Overview of Redmine](http://www.redmine.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/redmine
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/redmine
 ```
 
 ## Introduction
@@ -35,7 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install my-release bitnami/redmine
+$ helm install my-release my-repo/redmine
 ```
 
 The command deploys Redmine on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -57,7 +57,7 @@ The command removes all the Kubernetes components associated with the chart and 
 This chart includes the option to use a PostgreSQL database for Redmine instead of MariaDB. To use this, set the `databaseType` parameter to `postgresql`:
 
 ```
-helm install my-release bitnami/redmine --set databaseType=postgresql
+helm install my-release my-repo/redmine --set databaseType=postgresql
 ```
 
 ## Parameters
@@ -379,7 +379,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```bash
 $ helm install my-release \
   --set redmineUsername=admin,redminePassword=password,mariadb.mariadb.auth.rootPassword=secretpassword \
-    bitnami/redmine
+    my-repo/redmine
 ```
 
 The above command sets the Redmine administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
@@ -389,7 +389,7 @@ The above command sets the Redmine administrator account username and password t
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/redmine
+$ helm install my-release -f values.yaml my-repo/redmine
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -504,7 +504,7 @@ The following example includes two PVCs, one for Redmine and another for MariaDB
 1. Install the chart
 
 ```bash
-$ helm install test --set persistence.existingClaim=PVC_REDMINE,mariadb.persistence.existingClaim=PVC_MARIADB bitnami/redmine
+$ helm install test --set persistence.existingClaim=PVC_REDMINE,mariadb.persistence.existingClaim=PVC_MARIADB my-repo/redmine
 ```
 
 ## Certificates

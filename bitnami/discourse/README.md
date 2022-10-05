@@ -7,12 +7,12 @@ Discourse is an open source discussion platform with built-in moderation and gov
 [Overview of Discourse&reg;](http://www.discourse.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/discourse
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/discourse
 ```
 
 ## Introduction
@@ -35,7 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install my-release bitnami/discourse
+$ helm install my-release my-repo/discourse
 ```
 
 The command deploys Discourse on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -342,7 +342,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set auth.username=admin,auth.password=password \
-    bitnami/discourse
+    my-repo/discourse
 ```
 
 The above command sets the Discourse administrator account username and password to `admin` and `password` respectively.
@@ -352,7 +352,7 @@ The above command sets the Discourse administrator account username and password
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/discourse
+$ helm install my-release -f values.yaml my-repo/discourse
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -374,7 +374,7 @@ By default, this Chart only deploys a single pod running Discourse. Should you w
 1. Create a conventional release, that will be scaled later:
 
 ```console
-$ helm install my-release bitnami/discourse
+$ helm install my-release my-repo/discourse
 ...
 ```
 
@@ -391,7 +391,7 @@ my-release-redis-master-0               1/1     Running   0          5m11s
 3. Perform an upgrade specifying the number of replicas and the credentials used.
 
 ```console
-$ helm upgrade my-release --set replicaCount=2,discourse.skipInstall=true bitnami/discourse
+$ helm upgrade my-release --set replicaCount=2,discourse.skipInstall=true my-repo/discourse
 ```
 
 Note that for this to work properly, you need to provide ReadWriteMany PVCs. If you don't have a provisioner for this type of storage, we recommend that you install the NFS provisioner chart (with the correct parameters, such as `persistence.enabled=true` and `persistence.size=10Gi`) and map it to a RWO volume.

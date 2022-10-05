@@ -7,12 +7,12 @@ Logstash is an open source data processing engine. It ingests data from multiple
 [Overview of Logstash](http://logstash.net)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/logstash
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/logstash
 ```
 
 ## Introduction
@@ -31,8 +31,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/logstash
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/logstash
 ```
 
 These commands deploy logstash on the Kubernetes cluster in the default configuration. The [configuration](#configuration-and-installation-details) section lists the parameters that can be configured during installation.
@@ -206,7 +206,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install my-release \
-  --set enableMonitoringAPI=false bitnami/logstash
+  --set enableMonitoringAPI=false my-repo/logstash
 ```
 
 The above command disables the Logstash Monitoring API.
@@ -214,7 +214,7 @@ The above command disables the Logstash Monitoring API.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/logstash
+$ helm install my-release -f values.yaml my-repo/logstash
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

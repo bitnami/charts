@@ -7,12 +7,12 @@ ownCloud is an open source content collaboration platform used to store and shar
 [Overview of ownCloud](http://owncloud.org)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/owncloud
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/owncloud
 ```
 
 ## Introduction
@@ -35,7 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install my-release bitnami/owncloud
+$ helm install my-release my-repo/owncloud
 ```
 
 The command deploys ownCloud on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -332,7 +332,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set owncloudUsername=admin,owncloudPassword=password,mariadb.auth.rootPassword=secretpassword \
-    bitnami/owncloud
+    my-repo/owncloud
 ```
 
 The above command sets the ownCloud administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
@@ -342,7 +342,7 @@ The above command sets the ownCloud administrator account username and password 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/owncloud
+$ helm install my-release -f values.yaml my-repo/owncloud
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -393,7 +393,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 1. Install the chart
 
     ```bash
-    $ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/owncloud
+    $ helm install my-release --set persistence.existingClaim=PVC_NAME my-repo/owncloud
     ```
 
 ### Host path
@@ -409,7 +409,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 1. Install the chart
 
     ```bash
-    $ helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT bitnami/owncloud
+    $ helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT my-repo/owncloud
     ```
 
     This will mount the `owncloud-data` volume into the `hostPath` directory. The site data will be persisted if the mount path contains valid data, else the site data will be initialized at first launch.
@@ -539,7 +539,7 @@ $ kubectl delete statefulsets.apps owncloud-mariadb --cascade=false
 Now the upgrade works:
 
 ```console
-$ helm upgrade owncloud bitnami/owncloud --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set owncloudPassword=$OWNCLOUD_PASSWORD --set owncloudHost=$OWNCLOUD_HOST
+$ helm upgrade owncloud my-repo/owncloud --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set owncloudPassword=$OWNCLOUD_PASSWORD --set owncloudHost=$OWNCLOUD_HOST
 ```
 
 You will have to delete the existing MariaDB pod and the new statefulset is going to create a new one

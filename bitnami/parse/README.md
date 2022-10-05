@@ -7,12 +7,12 @@ Parse is a platform that enables users to add a scalable and powerful backend to
 [Overview of Parse Server](http://parseplatform.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/parse
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/parse
 ```
 
 ## Introduction
@@ -33,7 +33,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install my-release bitnami/parse
+$ helm install my-release my-repo/parse
 ```
 
 The command deploys Parse on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -340,7 +340,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set dashboard.username=admin,dashboard.password=password \
-    bitnami/parse
+    my-repo/parse
 ```
 
 The above command sets the Parse administrator account username and password to `admin` and `password` respectively.
@@ -350,7 +350,7 @@ The above command sets the Parse administrator account username and password to 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/parse
+$ helm install my-release -f values.yaml my-repo/parse
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -523,13 +523,13 @@ Backwards compatibility is not guaranteed. The following notables changes were i
 Parse & Parse Dashboard containers were moved to a non-root approach. There shouldn't be any issue when upgrading since the corresponding `securityContext` is enabled by default. Both container images and chart can be upgraded by running the command below:
 
 ```
-$ helm upgrade my-release bitnami/parse
+$ helm upgrade my-release my-repo/parse
 ```
 
 If you use a previous container image (previous to **3.1.2-r14** for Parse or **1.2.0-r69** for Parse Dashboard), disable the `securityContext` by running the command below:
 
 ```
-$ helm upgrade my-release bitnami/parse --set server.securityContext.enabled=false,dashboard.securityContext.enabled=false,server.image.tag=XXX,dashboard.image.tag=YYY
+$ helm upgrade my-release my-repo/parse --set server.securityContext.enabled=false,dashboard.securityContext.enabled=false,server.image.tag=XXX,dashboard.image.tag=YYY
 ```
 
 ### To 3.0.0

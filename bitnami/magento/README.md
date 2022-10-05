@@ -7,12 +7,12 @@ Magento is a powerful open source e-commerce platform. With easy customizations 
 [Overview of Magento](http://www.magento.com)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/magento
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/magento
 ```
 
 ## Introduction
@@ -35,7 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install my-release bitnami/magento
+$ helm install my-release my-repo/magento
 ```
 
 The command deploys Magento on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -370,7 +370,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set magentoUsername=admin,magentoPassword=password,mariadb.auth.rootPassword=secretpassword \
-    bitnami/magento
+    my-repo/magento
 ```
 
 The above command sets the Magento administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
@@ -380,7 +380,7 @@ The above command sets the Magento administrator account username and password t
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/magento
+$ helm install my-release -f values.yaml my-repo/magento
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -555,7 +555,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 1. Install the chart
 
     ```bash
-    $ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/magento
+    $ helm install my-release --set persistence.existingClaim=PVC_NAME my-repo/magento
     ```
 
 ### Host path
@@ -571,7 +571,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 1. Install the chart
 
     ```bash
-    $ helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT bitnami/magento
+    $ helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT my-repo/magento
     ```
 
     This will mount the `magento-data` volume into the `hostPath` directory. The site data will be persisted if the mount path contains valid data, else the site data will be initialized at first launch.
@@ -701,7 +701,7 @@ $ export APP_PASSWORD=$(kubectl get secret --namespace default magento -o jsonpa
 $ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default magento-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
 $ export MARIADB_PASSWORD=$(kubectl get secret --namespace default magento-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
 $ kubectl delete deployments.apps magento
-$ helm upgrade magento bitnami/magento --set magentoHost=$APP_HOST,magentoPassword=$APP_PASSWORD,mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD
+$ helm upgrade magento my-repo/magento --set magentoHost=$APP_HOST,magentoPassword=$APP_PASSWORD,mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD
 ```
 
 ### To 15.0.0
@@ -764,7 +764,7 @@ $ kubectl delete statefulsets.apps magento-mariadb --cascade=false
 Now the upgrade works:
 
 ```console
-$ helm upgrade magento bitnami/magento --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set magentoPassword=$MAGENTO_PASSWORD --set magentoHost=$MAGENTO_HOST
+$ helm upgrade magento my-repo/magento --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set magentoPassword=$MAGENTO_PASSWORD --set magentoHost=$MAGENTO_HOST
 ```
 
 You will have to delete the existing MariaDB pod and the new statefulset is going to create a new one
