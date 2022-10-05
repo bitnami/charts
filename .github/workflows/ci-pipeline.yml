@@ -111,7 +111,7 @@ jobs:
     # Job to be run only when the triage for automated PRs did as well,
     # not taking into account whether 'VIB Verify' succeeded
     if: |
-      always() && github.event.action == 'labeled' &&
+      always() &&
       contains(github.event.pull_request.labels.*.name, 'auto-merge') &&
       github.event.pull_request.user.login == 'bitnami-bot'
     steps:
