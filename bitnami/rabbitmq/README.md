@@ -7,7 +7,7 @@ RabbitMQ is an open source general-purpose message broker that is designed for c
 [Overview of RabbitMQ](https://www.rabbitmq.com)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```bash
@@ -67,7 +67,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | -------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`    | RabbitMQ image registry                                                                                  | `docker.io`           |
 | `image.repository`  | RabbitMQ image repository                                                                                | `bitnami/rabbitmq`    |
-| `image.tag`         | RabbitMQ image tag (immutable tags are recommended)                                                      | `3.10.8-debian-11-r3` |
+| `image.tag`         | RabbitMQ image tag (immutable tags are recommended)                                                      | `3.10.8-debian-11-r4` |
 | `image.digest`      | RabbitMQ image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`  | RabbitMQ image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                                                         | `[]`                  |
