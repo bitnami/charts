@@ -557,7 +557,6 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `redis.replica.persistence.enabled` | Enable Redis&reg; replica data persistence using PVC             | `false`                                                  |
 
 
-
 ```bash
 helm install kubeapps --namespace kubeapps \
   --set ingress.enabled=true \
