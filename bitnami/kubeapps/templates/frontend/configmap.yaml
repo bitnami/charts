@@ -125,44 +125,6 @@ data:
         proxy_pass {{ include "kubeapps.kubeappsapis.proxy_pass" . -}};
       }
 
-  {{- if .Values.kubeops.enabled }}
-      location ~* /api/kubeops {
-        # Keep the connection open with the API server even if idle (the default is 60 seconds)
-        # Setting it to 10 minutes which should be enough for our current use case of deploying/upgrading/deleting apps
-        proxy_read_timeout 10m;
-        rewrite /api/kubeops/(.*) /$1 break;
-        rewrite /api/kubeops / break;
-
-    {{- if .Values.frontend.proxypassExtraSetHeader }}
-        proxy_set_header {{ .Values.frontend.proxypassExtraSetHeader }};
-    {{- end }}
-
-    {{- if .Values.frontend.proxypassAccessTokenAsBearer }}
-        # Google Kubernetes Engine requires the access_token as the Bearer when talking to the k8s api server.
-        proxy_set_header Authorization "Bearer $http_x_forwarded_access_token";
-    {{- end }}
-
-        proxy_pass {{ include "kubeapps.frontend-config.proxy_pass" . -}};
-      }
-
-      # The route for the Kubeapps backend API is not prefixed.
-      location ~* /api/ {
-        rewrite /api/(.*) /backend/$1 break;
-        rewrite /api/ /backend break;
-
-    {{- if .Values.frontend.proxypassExtraSetHeader }}
-        proxy_set_header {{ .Values.frontend.proxypassExtraSetHeader }};
-    {{- end }}
-
-    {{- if .Values.frontend.proxypassAccessTokenAsBearer }}
-        # Google Kubernetes Engine requires the access_token as the Bearer when talking to the k8s api server.
-        proxy_set_header Authorization "Bearer $http_x_forwarded_access_token";
-    {{- end }}
-
-        proxy_pass {{ include "kubeapps.frontend-config.proxy_pass" . -}};
-      }
-  {{- end }}
-
       location / {
         # Add the Authorization header if exists
         add_header Authorization $http_authorization;

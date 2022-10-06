@@ -57,13 +57,6 @@ Return the proper kubeappsapis image name
 {{- end -}}
 
 {{/*
-Return the proper kubeops image name
-*/}}
-{{- define "kubeapps.kubeops.image" -}}
-{{- include "common.images.image" (dict "imageRoot" .Values.kubeops.image "global" .Values.global) -}}
-{{- end -}}
-
-{{/*
 Create a default fully qualified app name for PostgreSQL dependency.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
@@ -141,13 +134,6 @@ Create name for kubeappsapis based on the fullname
 {{- end -}}
 
 {{/*
-Create name for kubeops based on the fullname
-*/}}
-{{- define "kubeapps.kubeops.fullname" -}}
-{{- printf "%s-internal-kubeops" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
 Create name for the clusters config based on the fullname
 */}}
 {{- define "kubeapps.clusters-config.fullname" -}}
@@ -174,24 +160,6 @@ Create the name of the kubeappsapis service account to use
 {{- else -}}
     {{- default "default" .Values.kubeappsapis.serviceAccount.name -}}
 {{- end -}}
-{{- end -}}
-
-{{/*
-Create the name of the kubeops service account to use
-*/}}
-{{- define "kubeapps.kubeops.serviceAccountName" -}}
-{{- if .Values.kubeops.serviceAccount.create -}}
-    {{- default (include "kubeapps.kubeops.fullname" .) .Values.kubeops.serviceAccount.name -}}
-{{- else -}}
-    {{- default "default" .Values.kubeops.serviceAccount.name -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create proxy_pass for the frontend config
-*/}}
-{{- define "kubeapps.frontend-config.proxy_pass" -}}
-{{- printf "http://%s:%d" (include "kubeapps.kubeops.fullname" .) (int .Values.kubeops.service.ports.http) -}}
 {{- end -}}
 
 {{/*
@@ -369,7 +337,6 @@ Check if there are rolling tags in the images
 {{- include "common.warnings.rollingTag" .Values.frontend.image }}
 {{- include "common.warnings.rollingTag" .Values.dashboard.image }}
 {{- include "common.warnings.rollingTag" .Values.apprepository.image }}
-{{- include "common.warnings.rollingTag" .Values.kubeops.image }}
 {{- include "common.warnings.rollingTag" .Values.authProxy.image }}
 {{- include "common.warnings.rollingTag" .Values.pinnipedProxy.image }}
 {{- include "common.warnings.rollingTag" .Values.kubeappsapis.image }}
