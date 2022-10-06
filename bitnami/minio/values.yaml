@@ -140,7 +140,7 @@ tls:
 ##   - name: FOO
 ##     value: "bar"
 ##
-extraEnvVars: {}
+extraEnvVars: []
 ## @param extraEnvVarsCM ConfigMap with extra environment variables
 ##
 extraEnvVarsCM: ""
