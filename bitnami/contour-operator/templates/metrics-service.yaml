@@ -8,7 +8,7 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  name: {{ template "common.names.fullname" . }}-metrics
+  name: {{ printf "%s-metrics" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ .Release.Namespace | quote }}
   {{- if or .Values.commonAnnotations .Values.metrics.service.annotations }}
   annotations:
