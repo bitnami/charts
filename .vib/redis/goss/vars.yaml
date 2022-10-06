@@ -1,7 +1,9 @@
 auth:
   password: ComplicatedPassword123!4
 master:
-  disableCommands: FLUSHALL
+  disableCommands:
+    - FLUSHDB
+    - FLUSHALL
   podSecurityContext:
     fsGroup: 1002
   containerSecurityContext:
