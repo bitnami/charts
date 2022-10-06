@@ -228,8 +228,6 @@ frontend:
   ##
   proxypassAccessTokenAsBearer: false
   ## @param frontend.proxypassExtraSetHeader Set an additional proxy header for all requests proxied via NGINX
-  ## Authorization header(s) set in this way will be included with the request from kubeops to the k8s service API URL.
-  ## ref: https://github.com/vmware-tanzu/kubeapps/blob/7e31d0e7241f826aa365856c134cf901d40890e7/pkg/http-handler/http-handler.go#L247
   ## e.g:
   ## proxypassExtraSetHeader: Authorization "Bearer $cookie_sessionid";
   ##
@@ -872,7 +870,7 @@ apprepository:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param apprepository.globalReposNamespaceSuffix Suffix for the namespace of global repos. Defaults to empty for backwards compatibility.
+  ## @param apprepository.globalReposNamespaceSuffix Suffix for the namespace of global repos in the Helm plugin. Defaults to empty for backwards compatibility. Ignored if kubeappsapis.pluginConfig.helm.packages.v1alpha1.globalPackagingNamespace is set.
   ##
   globalReposNamespaceSuffix: ""
   ## @param apprepository.initialRepos [array] Initial chart repositories to configure
@@ -1494,6 +1492,13 @@ kubeappsapis:
             patch: 3
           ## @param kubeappsapis.pluginConfig.core.packages.v1alpha1.timeoutSeconds Value to wait for Kubernetes commands to complete
           timeoutSeconds: 300
+    helm:
+      packages:
+        v1alpha1:
+          ## @param kubeappsapis.pluginConfig.helm.packages.v1alpha1.globalPackagingNamespace Custom global packaging namespace. Using this value will override the current "kubeapps release namespace + suffix" pattern and will create a new namespace if not exists.
+          globalPackagingNamespace: ""
+          ## @param kubeappsapis.pluginConfig.helm.packages.v1alpha1.userManagedSecrets Default policy for handling repository secrets, either managed by the user or by kubeapps-apis
+          userManagedSecrets: false
     kappController:
       packages:
         v1alpha1:
@@ -1509,6 +1514,9 @@ kubeappsapis:
           ## @param kubeappsapis.pluginConfig.kappController.packages.v1alpha1.defaultAllowDowngrades Default policy for allowing applications to be downgraded to previous versions
           ## ref: https://carvel.dev/kapp-controller/docs/latest/package-consumer-concepts/#downgrading
           defaultAllowDowngrades: false
+          ## @param kubeappsapis.pluginConfig.kappController.packages.v1alpha1.globalPackagingNamespace Default global packaging namespace
+          ## ref: https://carvel.dev/kapp-controller/docs/latest/package-consumer-concepts/#namespacing
+          globalPackagingNamespace: kapp-controller-packaging-global
     flux:
       packages:
         v1alpha1:
@@ -1517,6 +1525,22 @@ kubeappsapis:
           defaultUpgradePolicy: none
             ## @param kubeappsapis.pluginConfig.flux.packages.v1alpha1.userManagedSecrets Default policy for handling repository secrets, either managed by the user or by kubeapps-apis
           userManagedSecrets: false
+    resources:
+      packages:
+        v1alpha1:
+          ## Trusted namespaces parameters
+          ##
+          trustedNamespaces:
+            ## @param kubeappsapis.pluginConfig.resources.packages.v1alpha1.trustedNamespaces.headerName Optional header name for trusted namespaces
+            ## e.g:
+            ## headerName: X-Consumer-Groups
+            ##
+            headerName: ""
+            ## @param kubeappsapis.pluginConfig.resources.packages.v1alpha1.trustedNamespaces.headerPattern Optional header pattern for trusted namespaces
+            ## e.g:
+            ## headerPattern: namespace:^([\w-]+):\w+$
+            ##
+            headerPattern: ""
   ## Bitnami Kubeapps-APIs image
   ## ref: https://hub.docker.com/r/bitnami/kubeapps-apis/tags/
   ## @param kubeappsapis.image.registry Kubeapps-APIs image registry

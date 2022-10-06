@@ -239,10 +239,15 @@ Returns a JSON list of cluster names only (without sensitive tokens etc.)
 {{- end -}}
 
 {{/*
-Returns the name of the globalRepos namespace
+Returns the name of the global packaging namespace for the Helm plugin.
+It uses the value passed in the plugin's config, but falls back to the "release namespace + suffix" formula.
 */}}
-{{- define "kubeapps.globalReposNamespace" -}}
-{{- printf "%s%s" .Release.Namespace .Values.apprepository.globalReposNamespaceSuffix -}}
+{{- define "kubeapps.helmGlobalPackagingNamespace" -}}
+  {{- if .Values.kubeappsapis.pluginConfig.helm.packages.v1alpha1.globalPackagingNamespace }}
+      {{- printf "%s" .Values.kubeappsapis.pluginConfig.helm.packages.v1alpha1.globalPackagingNamespace -}}
+  {{- else -}}
+      {{- printf "%s%s" .Release.Namespace .Values.apprepository.globalReposNamespaceSuffix -}}
+  {{- end -}}
 {{- end -}}
 
 {{/*

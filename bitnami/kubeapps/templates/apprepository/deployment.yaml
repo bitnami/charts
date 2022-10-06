@@ -96,7 +96,7 @@ spec:
             {{- end }}
             - --repo-sync-cmd=/asset-syncer
             - --namespace={{ .Release.Namespace }}
-            - --global-repos-namespace={{ include "kubeapps.globalReposNamespace" . }}
+            - --global-repos-namespace={{ include "kubeapps.helmGlobalPackagingNamespace" . }}
             - --database-secret-name={{ include "kubeapps.postgresql.secretName" . }}
             - --database-secret-key=postgres-password
             - --database-url={{ printf "%s:%d" (include "kubeapps.postgresql.host" .) (int (include "kubeapps.postgresql.port" .)) }}
