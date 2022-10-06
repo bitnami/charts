@@ -22,10 +22,8 @@ keywords:
 maintainers:
   - name: Bitnami
     url: https://github.com/bitnami/charts
-  - email: cedric@desaintmartin.fr
-    name: desaintmartin
 name: postgresql
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/postgresql
   - https://www.postgresql.org/
-version: 11.9.6
+version: 11.9.7
