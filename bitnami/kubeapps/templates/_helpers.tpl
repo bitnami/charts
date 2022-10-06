@@ -4,7 +4,7 @@
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "kubeapps.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.frontend.image .Values.dashboard.image .Values.apprepository.image .Values.apprepository.syncImage .Values.kubeops.image .Values.authProxy.image .Values.pinnipedProxy.image .Values.kubeappsapis.image .Values.testImage) "global" .Values.global) }}
+{{ include "common.images.pullSecrets" (dict "images" (list .Values.frontend.image .Values.dashboard.image .Values.apprepository.image .Values.apprepository.syncImage .Values.authProxy.image .Values.pinnipedProxy.image .Values.kubeappsapis.image) "global" .Values.global) }}
 {{- end -}}
 
 {{/*
