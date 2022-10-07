@@ -1,0 +1,6 @@
+{{- if or .Values.apprepository.globalReposNamespaceSuffix .Values.kubeappsapis.pluginConfig.helm.packages.v1alpha1.globalPackagingNamespace }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ include "kubeapps.helmGlobalPackagingNamespace" . | quote }}
+{{- end }}

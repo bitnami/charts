@@ -108,7 +108,7 @@ spec:
             - --pinniped-proxy-ca-cert=/etc/pinniped-proxy-tls/ca.crt
             {{- end }}
             {{- end }}
-            - --global-repos-namespace={{ include "kubeapps.globalReposNamespace" . }}
+            - --global-repos-namespace={{ include "kubeapps.helmGlobalPackagingNamespace" . }}
             {{- if .Values.kubeappsapis.qps }}
             - --kube-api-qps={{ .Values.kubeappsapis.qps }}
             {{- end }}
