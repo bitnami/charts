@@ -3,7 +3,7 @@ import { random } from '../support/utils';
 
 it('allows creating a database and a table', () => {
   cy.login();
-  cy.visit('index.php?route=/server/databases');
+  cy.visit('/index.php?route=/server/databases');
   cy.fixture('testdata').then((td) => {
     cy.get('#text_create_db').type(`${td.databaseName}.${random}`, {
       force: true,

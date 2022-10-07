@@ -6,7 +6,7 @@ file:
     {{ range .Vars.hostAliases }}
     {{ $ip := .ip }}
     {{ range $host := .hostnames }}
-      - /{{ $ip }}.*{{$host}}/
+      - /{{ $ip }}.*{{ $host }}/
     {{ end }}
     {{ end }}
 http:
