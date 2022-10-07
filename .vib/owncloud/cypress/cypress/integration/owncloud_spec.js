@@ -8,7 +8,6 @@ it('allows creating a folder and uploading a file ', () => {
   cy.fixture('folders').then((folder) => {
     cy.get('[value="New folder"]').type(`${folder.newFolder.name}.${random}`);
     cy.contains('Create').click();
-    cy.contains(`${folder.newFolder.name}.${random}`).click();
     cy.get('span').contains(`${folder.newFolder.name}.${random}`).click();
     cy.contains('No files in here');
     cy.get('.new').click();
