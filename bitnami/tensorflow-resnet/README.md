@@ -7,12 +7,12 @@ TensorFlow ResNet is a client utility for use with TensorFlow Serving and ResNet
 [Overview of TensorFlow ResNet](https://github.com/tensorflow/models/tree/master/official/resnet)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/tensorflow-resnet
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/tensorflow-resnet
 ```
 
 ## Introduction
@@ -31,8 +31,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/tensorflow-resnet
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/tensorflow-resnet
 ```
 
 These commands deploy Tensorflow Serving ResNet model on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -171,13 +171,13 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release bitnami/tensorflow-resnet --set imagePullPolicy=Always
+$ helm install my-release my-repo/tensorflow-resnet --set imagePullPolicy=Always
 ```
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/tensorflow-resnet
+$ helm install my-release -f values.yaml my-repo/tensorflow-resnet
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -226,7 +226,7 @@ Use the workaround below to upgrade from versions previous to 2.0.0. The followi
 
 ```console
 $ kubectl delete deployment  tensorflow-resnet --cascade=false
-$ helm upgrade tensorflow-resnet bitnami/tensorflow-resnet
+$ helm upgrade tensorflow-resnet my-repo/tensorflow-resnet
 $ kubectl delete rs "$(kubectl get rs -l app=tensorflow-resnet -o jsonpath='{.items[0].metadata.name}')"
 ```
 

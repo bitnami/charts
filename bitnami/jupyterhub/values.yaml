@@ -68,7 +68,7 @@ hub:
   image:
     registry: docker.io
     repository: bitnami/jupyterhub
-    tag: 1.5.0-debian-11-r34
+    tag: 3.0.0-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -111,7 +111,6 @@ hub:
         JupyterHub:
           admin_access: true
           authenticator_class: dummy
-          cookie_secret_file: /tmp/jupyterhub_cookie_secret
           DummyAuthenticator:
           {{- if .Values.hub.password }}
             password: {{ .Values.hub.password | quote }}
@@ -637,7 +636,7 @@ proxy:
   image:
     registry: docker.io
     repository: bitnami/configurable-http-proxy
-    tag: 4.5.2-debian-11-r5
+    tag: 4.5.3-debian-11-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1393,7 +1392,7 @@ singleuser:
   image:
     registry: docker.io
     repository: bitnami/jupyter-base-notebook
-    tag: 1.5.0-debian-11-r35
+    tag: 3.0.0-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1412,6 +1411,9 @@ singleuser:
   ## @param singleuser.notebookDir Notebook directory (it will be the same as the PVC volume mount)
   ##
   notebookDir: /opt/bitnami/jupyterhub-singleuser
+  ## @param singleuser.allowPrivilegeEscalation Controls whether a process can gain more privileges than its parent process
+  ##
+  allowPrivilegeEscalation: false
   ## Command for running the container (set to default if not set). Use array form
   ## @param singleuser.command Override Single User default command
   ##
@@ -1574,7 +1576,7 @@ singleuser:
 auxiliaryImage:
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: 11-debian-11-r32
+  tag: 11-debian-11-r37
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.

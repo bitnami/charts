@@ -7,12 +7,12 @@ WordPress is the world's most popular blogging and content management platform. 
 [Overview of WordPress](http://www.wordpress.org)
 
 
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/wordpress
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/wordpress
 ```
 
 ## Introduction
@@ -35,7 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release bitnami/wordpress
+helm install my-release my-repo/wordpress
 ```
 
 The command deploys WordPress on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | --------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`    | WordPress image registry                                                                                  | `docker.io`          |
 | `image.repository`  | WordPress image repository                                                                                | `bitnami/wordpress`  |
-| `image.tag`         | WordPress image tag (immutable tags are recommended)                                                      | `6.0.2-debian-11-r6` |
+| `image.tag`         | WordPress image tag (immutable tags are recommended)                                                      | `6.0.2-debian-11-r9` |
 | `image.digest`      | WordPress image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
 | `image.pullPolicy`  | WordPress image pull policy                                                                               | `IfNotPresent`       |
 | `image.pullSecrets` | WordPress image pull secrets                                                                              | `[]`                 |
@@ -255,7 +255,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r34`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r37`      |
 | `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -289,7 +289,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a sidecar prometheus exporter to expose metrics                                                           | `false`                   |
 | `metrics.image.registry`                     | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`                   | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`                          | Apache exporter image tag (immutable tags are recommended)                                                      | `0.11.0-debian-11-r39`    |
+| `metrics.image.tag`                          | Apache exporter image tag (immutable tags are recommended)                                                      | `0.11.0-debian-11-r42`    |
 | `metrics.image.digest`                       | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`                   | Apache exporter image pull policy                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                  | Apache exporter image pull secrets                                                                              | `[]`                      |
@@ -390,7 +390,7 @@ helm install my-release \
   --set wordpressUsername=admin \
   --set wordpressPassword=password \
   --set mariadb.auth.rootPassword=secretpassword \
-    bitnami/wordpress
+    my-repo/wordpress
 ```
 
 The above command sets the WordPress administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
@@ -400,7 +400,7 @@ The above command sets the WordPress administrator account username and password
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml bitnami/wordpress
+helm install my-release -f values.yaml my-repo/wordpress
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -579,13 +579,13 @@ $ export MARIADB_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=wordpress,a
 Upgrade your release (maintaining the version) disabling MariaDB and scaling WordPress replicas to 0:
 
 ```console
-$ helm upgrade wordpress bitnami/wordpress --set wordpressPassword=$WORDPRESS_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 9.6.4
+$ helm upgrade wordpress my-repo/wordpress --set wordpressPassword=$WORDPRESS_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 9.6.4
 ```
 
 Finally, upgrade you release to `10.0.0` reusing the existing PVC, and enabling back MariaDB:
 
 ```console
-$ helm upgrade wordpress bitnami/wordpress --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set wordpressPassword=$WORDPRESS_PASSWORD
+$ helm upgrade wordpress my-repo/wordpress --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set wordpressPassword=$WORDPRESS_PASSWORD
 ```
 
 You should see the lines below in MariaDB container logs:

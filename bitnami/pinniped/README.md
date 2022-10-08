@@ -7,12 +7,12 @@ Pinniped is an identity service provider for Kubernetes. Provides a consistent, 
 [Overview of Pinniped](https://pinniped.dev/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/pinniped
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/pinniped
 ```
 
 ## Introduction
@@ -35,7 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release bitnami/pinniped
+helm install my-release my-repo/pinniped
 ```
 
 The command deploys pinniped on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -311,7 +311,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set supervisor.enabled=false \
-    bitnami/pinniped
+    my-repo/pinniped
 ```
 
 The above command sets disables the supervisor compoment deployment.
@@ -319,7 +319,7 @@ The above command sets disables the supervisor compoment deployment.
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml bitnami/pinniped
+helm install my-release -f values.yaml my-repo/pinniped
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

@@ -16,6 +16,42 @@
         }
       ]
     },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/metrics-server"
+        },
+        "runtime_parameters": "c2VydmljZUFjY291bnQ6CiAgY3JlYXRlOiB0cnVlCiAgYXV0b21vdW50U2VydmljZUFjY291bnRUb2tlbjogdHJ1ZQpleHRyYUFyZ3M6Ci0gLS1hdXRob3JpemF0aW9uLWFsd2F5cy1hbGxvdy1wYXRocz0vbWV0cmljcwotIC0ta3ViZWxldC1pbnNlY3VyZS10bHM9dHJ1ZQpjb250YWluZXJQb3J0czoKICBodHRwczogODQ0NApzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgaHR0cHM6IDQ0Mwpjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIHJ1bkFzVXNlcjogMTAwMgpyYmFjOgogIGNyZWF0ZTogdHJ1ZQ==",
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "health-check",
+          "params": {
+            "endpoint": "lb-metrics-server-https",
+            "app_protocol": "HTTPS"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/metrics-server/goss"
+            },
+            "remote": {
+              "workload": "deploy-metrics-server"
+            },
+            "vars_file": "vars.yaml"
+          }
+        }
+      ]
+    },
     "publish": {
       "actions": [
         {

@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 1.14.0
+appVersion: 2.0.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -26,4 +26,4 @@ name: rabbitmq-cluster-operator
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq-cluster-operator
   - https://github.com/rabbitmq/cluster-operator
-version: 2.7.3
+version: 3.1.0

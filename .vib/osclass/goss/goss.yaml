@@ -1,0 +1,32 @@
+http:
+  https://osclass:{{ .Vars.service.ports.https }}:
+    status: 200
+    allow-insecure: true
+    timeout: 70000
+command:
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+      - uid={{ .Vars.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
+file:
+  /bitnami/osclass/config.php:
+    exists: true
+    filetype: file
+    mode: "0666"
+    contains:
+    - /WEB_PATH.*{{ .Vars.containerPorts.http }}/
+    - /DB_NAME.*{{ .Vars.mariadb.auth.database }}/
+    - /DB_USER.*{{ .Vars.mariadb.auth.username }}/
+    - /DB_PASSWORD.*{{ .Vars.mariadb.auth.password }}/
+  /etc/hosts:
+    exists: true
+    filetype: file
+    contains:
+    {{ range .Vars.hostAliases }}
+    {{ $ip := .ip }}
+    {{ range $host := .hostnames }}
+      - /{{ $ip }}.*{{ $host }}/
+    {{ end }}
+    {{ end }}

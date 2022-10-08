@@ -7,12 +7,12 @@ ASP.NET Core is an open-source framework for web application development created
 [Overview of ASP.NET](https://github.com/dotnet/aspnetcore)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-  helm repo add bitnami https://charts.bitnami.com/bitnami
-  helm install my-release bitnami/aspnet-core
+  helm repo add my-repo https://charts.bitnami.com/bitnami
+  helm install my-release my-repo/aspnet-core
 ```
 
 ## Introduction
@@ -33,8 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/aspnet-core
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/aspnet-core
 ```
 
 These commands deploy a ASP.NET Core application on the Kubernetes cluster in the default configuration.
@@ -242,7 +242,7 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```bash
-helm install my-release --set replicaCount=2 bitnami/aspnet-core
+helm install my-release --set replicaCount=2 my-repo/aspnet-core
 ```
 
 The above command install ASP.NET Core chart with 2 replicas.
@@ -250,7 +250,7 @@ The above command install ASP.NET Core chart with 2 replicas.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/aspnet-core
+$ helm install my-release -f values.yaml my-repo/aspnet-core
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

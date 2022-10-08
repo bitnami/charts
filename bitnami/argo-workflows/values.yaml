@@ -65,7 +65,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-cli
-    tag: 3.3.9-scratch-r2
+    tag: 3.4.1-scratch-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -473,7 +473,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-controller
-    tag: 3.3.9-scratch-r1
+    tag: 3.4.0-scratch-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -610,12 +610,6 @@ controller:
     instanceID: {{ .Values.controller.instanceID.explicitID }}
     {{- end }}
     {{- end }}
-    ## Ref: https://argoproj.github.io/argo-workflows/workflow-executors/
-    ##
-    containerRuntimeExecutor: {{ .Values.controller.containerRuntimeExecutor }}
-    ## Uncomment to create containerRuntimeExecutors
-    ## Ref: https://argoproj.github.io/argo-workflows/workflow-executors/
-    ## containerRuntimeExecutors: {}
     ## How many workflows can be running at the same time
     ##
     parallelism:
@@ -632,11 +626,6 @@ controller:
       {{- end }}
       {{- if .Values.executor.podSecurityContext }}
       securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.executor.containerSecurityContext "context" $) | nindent 4 }}
-        {{- if not (eq .Values.controller.containerRuntimeExecutor "docker") }}
-        ## Docker executor requires to run executor as root
-        ##
-        runAsNonRoot: true
-        {{- end }}
       {{- end }}
     {{- end }}
     ## Uncomment to enable Artofact repository with the provided configuration
@@ -701,14 +690,7 @@ controller:
     useReleaseName: false
     explicitID: ""
 
-  ## Default container runtime that the executor will use.
-  ## Set as `k8sapi` because `docker` requires privileged access. Also, `k8sapi` allows to runAsNonRoot
-  ## Ref: https://argoproj.github.io/argo-workflows/workflow-executors/
-  ## @param controller.containerRuntimeExecutor Specifies the container runtime for the executor
-  ##
-  containerRuntimeExecutor: k8sapi
-
-  ## @param controller.clusterWorkflowTemplates.enabled Whether to create a ClusterRole and Cluster Role Binding to access ClusterWokflowTemplates resources
+   ## @param controller.clusterWorkflowTemplates.enabled Whether to create a ClusterRole and Cluster Role Binding to access ClusterWokflowTemplates resources
   ##
   clusterWorkflowTemplates:
     enabled: true
@@ -964,7 +946,7 @@ executor:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-exec
-    tag: 3.3.9-debian-11-r5
+    tag: 3.4.0-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

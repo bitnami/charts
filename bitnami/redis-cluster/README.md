@@ -7,12 +7,12 @@ Redis(R) is an open source, scalable, distributed in-memory cache for applicatio
 [Overview of Redis&reg; Cluster](http://redis.io)
 
 Disclaimer: Redis is a registered trademark of Redis Ltd. Any rights therein are reserved to Redis Ltd. Any use by Bitnami is for referential purposes only and does not indicate any sponsorship, endorsement, or affiliation between Redis Ltd.
-                           
+
 ## TL;DR
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/redis-cluster
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/redis-cluster
 ```
 
 ## Introduction
@@ -44,7 +44,7 @@ The main features of each chart are the following:
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install my-release bitnami/redis-cluster
+$ helm install my-release my-repo/redis-cluster
 ```
 
 The command deploys Redis&reg; on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -52,7 +52,7 @@ The command deploys Redis&reg; on the Kubernetes cluster in the default configur
 NOTE: if you get a timeout error waiting for the hook to complete increase the default timeout (300s) to a higher one, for example:
 
 ```
-helm install --timeout 600s myrelease bitnami/redis-cluster
+helm install --timeout 600s myrelease my-repo/redis-cluster
 ```
 
 > **Tip**: List all releases using `helm list`
@@ -94,7 +94,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`                         | Args to override all containers in the deployment                                                                                                   | `["infinity"]`          |
 | `image.registry`                              | Redis&reg; cluster image registry                                                                                                                   | `docker.io`             |
 | `image.repository`                            | Redis&reg; cluster image repository                                                                                                                 | `bitnami/redis-cluster` |
-| `image.tag`                                   | Redis&reg; cluster image tag (immutable tags are recommended)                                                                                       | `7.0.4-debian-11-r14`   |
+| `image.tag`                                   | Redis&reg; cluster image tag (immutable tags are recommended)                                                                                       | `7.0.5-debian-11-r0`    |
 | `image.digest`                                | Redis&reg; cluster image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                  | `""`                    |
 | `image.pullPolicy`                            | Redis&reg; cluster image pull policy                                                                                                                | `IfNotPresent`          |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                                    | `[]`                    |
@@ -156,7 +156,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes volume permissions in the registry (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                                                         | `11-debian-11-r33`      |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                                                         | `11-debian-11-r37`      |
 | `volumePermissions.image.digest`              | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                   | `""`                    |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                                    | `[]`                    |
@@ -284,7 +284,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                                           | Start a side-car prometheus exporter                                                                                               | `false`                  |
 | `metrics.image.registry`                                    | Redis&reg; exporter image registry                                                                                                 | `docker.io`              |
 | `metrics.image.repository`                                  | Redis&reg; exporter image name                                                                                                     | `bitnami/redis-exporter` |
-| `metrics.image.tag`                                         | Redis&reg; exporter image tag                                                                                                      | `1.44.0-debian-11-r3`    |
+| `metrics.image.tag`                                         | Redis&reg; exporter image tag                                                                                                      | `1.44.0-debian-11-r8`    |
 | `metrics.image.digest`                                      | Redis&reg; exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                     |
 | `metrics.image.pullPolicy`                                  | Redis&reg; exporter image pull policy                                                                                              | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                   | `[]`                     |
@@ -324,7 +324,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctlImage.command`            | sysctlImage command to execute                                                                                       | `[]`                    |
 | `sysctlImage.registry`           | sysctlImage Init container registry                                                                                  | `docker.io`             |
 | `sysctlImage.repository`         | sysctlImage Init container repository                                                                                | `bitnami/bitnami-shell` |
-| `sysctlImage.tag`                | sysctlImage Init container tag                                                                                       | `11-debian-11-r33`      |
+| `sysctlImage.tag`                | sysctlImage Init container tag                                                                                       | `11-debian-11-r37`      |
 | `sysctlImage.digest`             | sysctlImage Init container digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `sysctlImage.pullPolicy`         | sysctlImage Init container pull policy                                                                               | `IfNotPresent`          |
 | `sysctlImage.pullSecrets`        | Specify docker-registry secret names as an array                                                                     | `[]`                    |
@@ -338,7 +338,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```bash
 $ helm install my-release \
   --set password=secretpassword \
-    bitnami/redis-cluster
+    my-repo/redis-cluster
 ```
 
 The above command sets the Redis&reg; server password to `secretpassword`.
@@ -348,7 +348,7 @@ The above command sets the Redis&reg; server password to `secretpassword`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/redis-cluster
+$ helm install my-release -f values.yaml my-repo/redis-cluster
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -398,7 +398,7 @@ There is a job that will be executed using a `post-upgrade` hook that will allow
 The following will be an example to add one more node:
 
 ```
-helm upgrade --timeout 600s <release> --set "password=${REDIS_PASSWORD},cluster.nodes=7,cluster.update.addNodes=true,cluster.update.currentNumberOfNodes=6" bitnami/redis-cluster
+helm upgrade --timeout 600s <release> --set "password=${REDIS_PASSWORD},cluster.nodes=7,cluster.update.addNodes=true,cluster.update.currentNumberOfNodes=6" my-repo/redis-cluster
 ```
 
 Where `REDIS_PASSWORD` is the password obtained with the command that appears after the first installation of the Helm Chart.
@@ -409,7 +409,7 @@ The cluster will continue up while restarting pods one by one as the quorum is n
 If you are using external access, to add a new node you will need to perform two upgrades. First upgrade the release to add a new Redis&reg; node and to get a LoadBalancerIP service. For example:
 
 ```
-helm upgrade <release> --set "password=${REDIS_PASSWORD},cluster.externalAccess.enabled=true,cluster.externalAccess.service.type=LoadBalancer,cluster.externalAccess.service.loadBalancerIP[0]=<loadBalancerip-0>,cluster.externalAccess.service.loadBalancerIP[1]=<loadbalanacerip-1>,cluster.externalAccess.service.loadBalancerIP[2]=<loadbalancerip-2>,cluster.externalAccess.service.loadBalancerIP[3]=<loadbalancerip-3>,cluster.externalAccess.service.loadBalancerIP[4]=<loadbalancerip-4>,cluster.externalAccess.service.loadBalancerIP[5]=<loadbalancerip-5>,cluster.externalAccess.service.loadBalancerIP[6]=,cluster.nodes=7,cluster.init=false bitnami/redis-cluster
+helm upgrade <release> --set "password=${REDIS_PASSWORD},cluster.externalAccess.enabled=true,cluster.externalAccess.service.type=LoadBalancer,cluster.externalAccess.service.loadBalancerIP[0]=<loadBalancerip-0>,cluster.externalAccess.service.loadBalancerIP[1]=<loadbalanacerip-1>,cluster.externalAccess.service.loadBalancerIP[2]=<loadbalancerip-2>,cluster.externalAccess.service.loadBalancerIP[3]=<loadbalancerip-3>,cluster.externalAccess.service.loadBalancerIP[4]=<loadbalancerip-4>,cluster.externalAccess.service.loadBalancerIP[5]=<loadbalancerip-5>,cluster.externalAccess.service.loadBalancerIP[6]=,cluster.nodes=7,cluster.init=false my-repo/redis-cluster
 ```
 
 > Important here to provide the loadBalancerIP parameters for the new nodes empty to not get an index error.
@@ -420,7 +420,7 @@ At this point, you will have a new Redis&reg; Pod that will remain in `crashLoop
 Now, wait until the cluster provides the new LoadBalancerIP for the new service and perform the second upgrade:
 
 ```
-helm upgrade <release> --set "password=${REDIS_PASSWORD},cluster.externalAccess.enabled=true,cluster.externalAccess.service.type=LoadBalancer,cluster.externalAccess.service.loadBalancerIP[0]=<loadbalancerip-0>,cluster.externalAccess.service.loadBalancerIP[1]=<loadbalancerip-1>,cluster.externalAccess.service.loadBalancerIP[2]=<loadbalancerip-2>,cluster.externalAccess.service.loadBalancerIP[3]=<loadbalancerip-3>,cluster.externalAccess.service.loadBalancerIP[4]=<loadbalancerip-4>,cluster.externalAccess.service.loadBalancerIP[5]=<loadbalancerip-5>,cluster.externalAccess.service.loadBalancerIP[6]=<loadbalancerip-6>,cluster.nodes=7,cluster.init=false,cluster.update.addNodes=true,cluster.update.newExternalIPs[0]=<load-balancerip-6>" bitnami/redis-cluster
+helm upgrade <release> --set "password=${REDIS_PASSWORD},cluster.externalAccess.enabled=true,cluster.externalAccess.service.type=LoadBalancer,cluster.externalAccess.service.loadBalancerIP[0]=<loadbalancerip-0>,cluster.externalAccess.service.loadBalancerIP[1]=<loadbalancerip-1>,cluster.externalAccess.service.loadBalancerIP[2]=<loadbalancerip-2>,cluster.externalAccess.service.loadBalancerIP[3]=<loadbalancerip-3>,cluster.externalAccess.service.loadBalancerIP[4]=<loadbalancerip-4>,cluster.externalAccess.service.loadBalancerIP[5]=<loadbalancerip-5>,cluster.externalAccess.service.loadBalancerIP[6]=<loadbalancerip-6>,cluster.nodes=7,cluster.init=false,cluster.update.addNodes=true,cluster.update.newExternalIPs[0]=<load-balancerip-6>" my-repo/redis-cluster
 ```
 
 Note we are providing the new IPs at `cluster.update.newExternalIPs`, the flag `cluster.update.addNodes=true` to enable the creation of the Job that adds a new node and now we are setting the LoadBalancerIP of the new service instead of leave it empty.
@@ -627,7 +627,7 @@ Since this version performs changes in the statefulset, in order to upgrade from
 
 ```console
 kubectl delete statefulset <statefulsetName>
-helm upgrade <release-name>  bitnami/redis-cluster --set redis.password=<REDIS_PASSWORD>
+helm upgrade <release-name>  my-repo/redis-cluster --set redis.password=<REDIS_PASSWORD>
 ```
 
 ### To 6.0.0

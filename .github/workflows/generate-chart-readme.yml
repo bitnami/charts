@@ -6,7 +6,8 @@ on:
       - master
     paths:
       - 'bitnami/*/values.yaml'
-
+permissions:
+  contents: write
 jobs:
   update-readme-metadata:
     runs-on: ubuntu-latest
@@ -39,8 +40,7 @@ jobs:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
           path: charts
-          token: ${{ secrets.BITNAMI_BOT_TOKEN }}
-
+          token: ${{ github.actor == 'bitnami-bot' && secrets.GITHUB_TOKEN || secrets.BITNAMI_BOT_TOKEN }}
       - name: Execute readme-generator-for-helm
         run: |
           # Using the Github API to detect the files changed as git merge-base stops working when the branch is behind

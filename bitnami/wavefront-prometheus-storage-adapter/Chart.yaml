@@ -29,4 +29,4 @@ maintainers:
 name: wavefront-prometheus-storage-adapter
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/wavefront-prometheus-storage-adapter
-version: 2.1.2
+version: 2.1.3

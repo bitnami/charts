@@ -7,12 +7,12 @@ Apache MXNet (Incubating) is a flexible and efficient library for deep learning 
 [Overview of Apache MXNet (Incubating)](https://mxnet.incubator.apache.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/mxnet
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/mxnet
 ```
 
 ## Introduction
@@ -33,8 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/mxnet
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/mxnet
 ```
 
 These commands deploy Apache MXNet (Incubating) on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured.
@@ -399,7 +399,7 @@ $ helm install my-release \
   --set mode=distributed \
   --set server.replicaCount=2 \
   --set worker.replicaCount=3 \
-    bitnami/mxnet
+    my-repo/mxnet
 ```
 
 The above command creates 6 pods for Apache MXNet (Incubating): one scheduler, two servers, and three workers.
@@ -407,7 +407,7 @@ The above command creates 6 pods for Apache MXNet (Incubating): one scheduler, t
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/mxnet
+$ helm install my-release -f values.yaml my-repo/mxnet
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

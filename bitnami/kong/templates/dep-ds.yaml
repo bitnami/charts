@@ -186,32 +186,32 @@ spec:
               protocol: TCP
             {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.kong.startupProbe.enabled }}
+          {{- if .Values.kong.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kong.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.kong.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.kong.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http-proxy
-          {{- else if .Values.kong.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kong.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.kong.livenessProbe.enabled }}
+          {{- if .Values.kong.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kong.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.kong.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.kong.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - /bin/bash
                 - -ec
                 - /health/kong-container-health.sh
-          {{- else if .Values.kong.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kong.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.kong.readinessProbe.enabled }}
+          {{- if .Values.kong.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kong.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.kong.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.kong.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - /bin/bash
                 - -ec
                 - /health/kong-container-health.sh
-          {{- else if .Values.kong.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kong.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if not .Values.kong.lifecycleHooks }}
           lifecycle:
@@ -306,30 +306,30 @@ spec:
               containerPort: {{ .Values.ingressController.containerPorts.health }}
               protocol: TCP
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.ingressController.startupProbe.enabled }}
+          {{- if .Values.ingressController.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingressController.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.ingressController.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingressController.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http-health
-          {{- else if .Values.ingressController.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingressController.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.ingressController.livenessProbe.enabled }}
+          {{- if .Values.ingressController.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingressController.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.ingressController.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingressController.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: "/healthz"
               port: http-health
               scheme: HTTP
-          {{- else if .Values.ingressController.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingressController.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.ingressController.readinessProbe.enabled }}
+          {{- if .Values.ingressController.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingressController.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.ingressController.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingressController.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: "/healthz"
               port: http-health
               scheme: HTTP
-          {{- else if .Values.ingressController.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingressController.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.ingressController.lifecycleHooks }}

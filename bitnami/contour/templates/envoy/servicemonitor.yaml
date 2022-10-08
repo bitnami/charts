@@ -9,6 +9,9 @@ metadata:
   namespace: {{ include "common.names.namespace" . | quote }}
   {{- end }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.metrics.serviceMonitor.labels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.labels "context" $ ) | nindent 4 }}
+    {{- end }}
     app.kubernetes.io/component: envoy
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}

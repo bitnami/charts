@@ -1,0 +1,9 @@
+entrypoint:
+  workDir: /app
+persistence:
+  mountPath: /bitnami/mxnet
+standalone:
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 1002

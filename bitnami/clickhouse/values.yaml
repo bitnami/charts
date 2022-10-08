@@ -1,0 +1,973 @@
+## @section Global parameters
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
+##
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass: ""
+
+## @section Common parameters
+##
+
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
+## @param nameOverride String to partially override common.names.name
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+
+## @section ClickHouse Parameters
+##
+
+## Bitnami ClickHouse image
+## ref: https://hub.docker.com/r/bitnami/clickhouse/tags/
+## @param image.registry ClickHouse image registry
+## @param image.repository ClickHouse image repository
+## @param image.tag ClickHouse image tag (immutable tags are recommended)
+## @param image.digest ClickHouse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param image.pullPolicy ClickHouse image pull policy
+## @param image.pullSecrets ClickHouse image pull secrets
+## @param image.debug Enable ClickHouse image debug mode
+##
+image:
+  registry: docker.io
+  repository: bitnami/clickhouse
+  tag: 22.8.6-debian-11-r0
+  digest: ""
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Enable debug mode
+  ##
+  debug: false
+## @param shards Number of ClickHouse shards to deploy
+##
+shards: 2
+
+## @param replicaCount Number of ClickHouse replicas per shard to deploy
+##
+replicaCount: 2
+## @param containerPorts.http ClickHouse HTTP container port
+## @param containerPorts.tcp ClickHouse TCP container port
+## @param containerPorts.tcpSecure ClickHouse TCP container port
+## @param containerPorts.mysql ClickHouse MySQL container port
+## @param containerPorts.postgresql ClickHouse PostgreSQL container port
+## @param containerPorts.interserver ClickHouse Interserver container port
+## @param containerPorts.metrics ClickHouse metrics container port
+##
+containerPorts:
+  http: 8123
+  tcp: 9000
+  tcpSecure: 9440
+  mysql: 9004
+  postgresql: 9005
+  interserver: 9009
+  metrics: 8001
+## Configure extra options for ClickHouse containers' liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param livenessProbe.enabled Enable livenessProbe on ClickHouse containers
+## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+## @param livenessProbe.periodSeconds Period seconds for livenessProbe
+## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
+## @param livenessProbe.successThreshold Success threshold for livenessProbe
+##
+livenessProbe:
+  enabled: true
+  failureThreshold: 3
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 1
+## @param readinessProbe.enabled Enable readinessProbe on ClickHouse containers
+## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+## @param readinessProbe.periodSeconds Period seconds for readinessProbe
+## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
+## @param readinessProbe.successThreshold Success threshold for readinessProbe
+##
+readinessProbe:
+  enabled: true
+  failureThreshold: 3
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 1
+## @param startupProbe.enabled Enable startupProbe on ClickHouse containers
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  failureThreshold: 3
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 1
+## @param customLivenessProbe Custom livenessProbe that overrides the default one
+##
+customLivenessProbe: {}
+## @param customReadinessProbe Custom readinessProbe that overrides the default one
+##
+customReadinessProbe: {}
+## @param customStartupProbe Custom startupProbe that overrides the default one
+##
+customStartupProbe: {}
+## ClickHouse resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param resources.limits The resources limits for the ClickHouse containers
+## @param resources.requests The requested resources for the ClickHouse containers
+##
+resources:
+  limits: {}
+  requests: {}
+## Configure Pods Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param podSecurityContext.enabled Enabled ClickHouse pods' Security Context
+## @param podSecurityContext.fsGroup Set ClickHouse pod's Security Context fsGroup
+## @param podSecurityContext.seccompProfile.type Set ClickHouse container's Security Context seccomp profile
+##
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
+  seccompProfile:
+    type: "RuntimeDefault"
+## Configure Container Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+## @param containerSecurityContext.enabled Enabled ClickHouse containers' Security Context
+## @param containerSecurityContext.runAsUser Set ClickHouse containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set ClickHouse containers' Security Context runAsNonRoot
+## @param containerSecurityContext.allowPrivilegeEscalation Set ClickHouse container's privilege escalation
+## @param containerSecurityContext.capabilities.drop Set ClickHouse container's Security Context runAsNonRoot
+##
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
+  runAsNonRoot: true
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+
+## Authentication
+## @param auth.username ClickHouse Admin username
+## @param auth.password ClickHouse Admin password
+## @param auth.existingSecret Name of a secret containing the Admin password
+## @param auth.existingSecretKey Name of the key inside the existing secret
+##
+auth:
+  username: default
+  password: ""
+  existingSecret: ""
+  existingSecretKey: ""
+
+## @param logLevel Logging level
+##
+logLevel: information
+
+## @param defaultConfigurationOverrides [string] Default configuration overrides (evaluated as a template)
+##
+defaultConfigurationOverrides: |
+  <clickhouse>
+    <!-- Macros -->
+    <macros>
+      <shard from_env="CLICKHOUSE_SHARD_ID"></shard>
+      <replica from_env="CLICKHOUSE_REPLICA_ID"></replica>
+      <layer>{{ include "common.names.fullname" . }}</layer>
+    </macros>
+    <!-- Log Level -->
+    <logger>
+      <level>{{ .Values.logLevel }}</level>
+    </logger>
+    {{- if or (ne (int .Values.shards) 1) (ne (int .Values.replicaCount) 1)}}
+    <!-- Cluster configuration - Any update of the shards and replicas requires helm upgrade -->
+    <remote_servers>
+      <default>
+        {{- $shards := $.Values.shards | int }}
+        {{- range $shard, $e := until $shards }}
+        <shard>
+            {{- $replicas := $.Values.replicaCount | int }}
+            {{- range $i, $_e := until $replicas }}
+            <replica>
+                <host>{{ printf "%s-shard%d-%d.%s.%s.svc.%s" (include "common.names.fullname" $ ) $shard $i (include "clickhouse.headlessServiceName" $) (include "common.names.namespace" $) $.Values.clusterDomain }}</host>
+                <port>{{ $.Values.service.ports.tcp }}</port>
+            </replica>
+            {{- end }}
+        </shard>
+        {{- end }}
+      </default>
+    </remote_servers>
+    {{- end }}
+    {{- if or .Values.zookeeper.enabled .Values.externalZookeeper.servers }}
+    <!-- Zookeeper configuration -->
+    <zookeeper>
+      {{- if .Values.zookeeper.enabled }}
+      {{/* Zookeeper configuration using the helm chart */}}
+      {{- $nodes := .Values.zookeeper.replicaCount | int }}
+      {{- range $node, $e := until $nodes }}
+      <node>
+        <host>{{ printf "%s-%d.%s.%s.svc.%s" (include "clickhouse.zookeeper.fullname" $ ) $node (include "clickhouse.zookeeper.headlessServiceName" $) (include "common.names.namespace" $) $.Values.clusterDomain }}</host>
+        <port>{{ $.Values.zookeeper.service.ports.client }}</port>
+      </node>
+      {{- end }}
+      {{- else if .Values.externalZookeeper.servers }}
+      {{/* Zookeeper configuration using an external instance */}}
+      {{- range $node :=.Values.externalZookeeper.servers }}
+      <node>
+        <host>{{ $node }}</host>
+        <port>{{ $.Values.externalZookeeper.port }}</port>
+      </node>
+      {{- end }}
+      {{- end }}
+    </zookeeper>
+    {{- end }}
+    {{- if .Values.tls.enabled }}
+    <!-- TLS configuration -->
+    <tcp_port_secure from_env="CLICKHOUSE_TCP_SECURE_PORT"></tcp_port_secure>
+    <openSSL>
+        <server>
+            {{- $certFileName := default "tls.crt" .Values.tls.certFilename }}
+            {{- $keyFileName := default "tls.key" .Values.tls.certKeyFilename }}
+            <certificateFile>/bitnami/clickhouse/certs/{{$certFileName}}</certificateFile>
+            <privateKeyFile>/bitnami/clickhouse/certs/{{$keyFileName}}</privateKeyFile>
+            <verificationMode>none</verificationMode>
+            <cacheSessions>true</cacheSessions>
+            <disableProtocols>sslv2,sslv3</disableProtocols>
+            <preferServerCiphers>true</preferServerCiphers>
+            {{- if or .Values.tls.autoGenerated .Values.tls.certCAFilename }}
+            {{- $caFileName := default "ca.crt" .Values.tls.certFilename }}
+            <caConfig>/bitnami/clickhouse/certs/{{$caFileName}}</caConfig>
+            {{- else }}
+            <loadDefaultCAFile>true</loadDefaultCAFile>
+            {{- end }}
+        </server>
+        <client>
+            <loadDefaultCAFile>true</loadDefaultCAFile>
+            <cacheSessions>true</cacheSessions>
+            <disableProtocols>sslv2,sslv3</disableProtocols>
+            <preferServerCiphers>true</preferServerCiphers>
+            <verificationMode>none</verificationMode>
+            <invalidCertificateHandler>
+                <name>AcceptCertificateHandler</name>
+            </invalidCertificateHandler>
+        </client>
+    </openSSL>
+    {{- end }}
+    {{- if .Values.metrics.enabled }}
+     <!-- Prometheus metrics -->
+     <prometheus>
+        <endpoint>/metrics</endpoint>
+        <port from_env="CLICKHOUSE_METRICS_PORT"></port>
+        <metrics>true</metrics>
+        <events>true</events>
+        <asynchronous_metrics>true</asynchronous_metrics>
+    </prometheus>
+    {{- end }}
+  </clickhouse>
+
+## @param existingOverridesConfigmap The name of an existing ConfigMap with your custom configuration for ClickHouse
+##
+existingOverridesConfigmap: ""
+
+## @param extraOverrides Extra configuration overrides (evaluated as a template) apart from the default
+##
+extraOverrides: ""
+
+## @param extraOverridesConfigmap The name of an existing ConfigMap with extra configuration for ClickHouse
+##
+extraOverridesConfigmap: ""
+
+## @param extraOverridesSecret The name of an existing ConfigMap with your custom configuration for ClickHouse
+##
+extraOverridesSecret: ""
+
+## @param initdbScripts Dictionary of initdb scripts
+## Specify dictionary of scripts to be run at first boot
+## Example:
+## initdbScripts:
+##   my_init_script.sh: |
+##      #!/bin/bash
+##      echo "Do something."
+##
+initdbScripts: {}
+## @param initdbScriptsSecret ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)
+##
+initdbScriptsSecret: ""
+
+## @param startdbScripts Dictionary of startdb scripts
+## Specify dictionary of scripts to be run on every start
+## Example:
+## startdbScripts:
+##   my_start_script.sh: |
+##      #!/bin/bash
+##      echo "Do something."
+##
+startdbScripts: {}
+## @param startdbScriptsSecret ConfigMap with the startdb scripts (Note: Overrides `startdbScripts`)
+##
+startdbScriptsSecret: ""
+
+## @param command Override default container command (useful when using custom images)
+##
+command: []
+## @param args Override default container args (useful when using custom images)
+##
+args: []
+## @param hostAliases ClickHouse pods host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+## @param podLabels Extra labels for ClickHouse pods
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+## @param podAnnotations Annotations for ClickHouse pods
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAffinityPreset: ""
+## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAntiAffinityPreset: soft
+## Node affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+##
+nodeAffinityPreset:
+  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ##
+  type: ""
+  ## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
+  ##
+  key: ""
+  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+## @param affinity Affinity for ClickHouse pods assignment
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## NOTE: `podAffinityPreset`, `podAntiAffinityPreset`, and `nodeAffinityPreset` will be ignored when it's set
+##
+affinity: {}
+## @param nodeSelector Node labels for ClickHouse pods assignment
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+## @param tolerations Tolerations for ClickHouse pods assignment
+## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+## @param updateStrategy.type ClickHouse statefulset strategy type
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+##
+updateStrategy:
+  ## StrategyType
+  ## Can be set to RollingUpdate or OnDelete
+  ##
+  type: RollingUpdate
+
+## @param podManagementPolicy Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join
+## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+##
+podManagementPolicy: Parallel
+
+## @param priorityClassName ClickHouse pods' priorityClassName
+##
+priorityClassName: ""
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+##
+topologySpreadConstraints: []
+## @param schedulerName Name of the k8s scheduler (other than default) for ClickHouse pods
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+##
+terminationGracePeriodSeconds: ""
+## @param lifecycleHooks for the ClickHouse container(s) to automate configuration before or after startup
+##
+lifecycleHooks: {}
+## @param extraEnvVars Array with extra environment variables to add to ClickHouse nodes
+## e.g:
+## extraEnvVars:
+##   - name: FOO
+##     value: "bar"
+##
+extraEnvVars: []
+## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars for ClickHouse nodes
+##
+extraEnvVarsCM: ""
+## @param extraEnvVarsSecret Name of existing Secret containing extra env vars for ClickHouse nodes
+##
+extraEnvVarsSecret: ""
+## @param extraVolumes Optionally specify extra list of additional volumes for the ClickHouse pod(s)
+##
+extraVolumes: []
+## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for the ClickHouse container(s)
+##
+extraVolumeMounts: []
+## @param sidecars Add additional sidecar containers to the ClickHouse pod(s)
+## e.g:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: []
+## @param initContainers Add additional init containers to the ClickHouse pod(s)
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+## e.g:
+## initContainers:
+##  - name: your-image-name
+##    image: your-image
+##    imagePullPolicy: Always
+##    command: ['sh', '-c', 'echo "hello world"']
+##
+initContainers: []
+
+## TLS configuration
+##
+tls:
+  ## @param tls.enabled Enable TLS traffic support
+  ##
+  enabled: false
+  ## @param tls.autoGenerated Generate automatically self-signed TLS certificates
+  ##
+  autoGenerated: false
+  ## @param tls.certificatesSecret Name of an existing secret that contains the certificates
+  ##
+  certificatesSecret: ""
+  ## @param tls.certFilename Certificate filename
+  ##
+  certFilename: ""
+  ## @param tls.certKeyFilename Certificate key filename
+  ##
+  certKeyFilename: ""
+  ## @param tls.certCAFilename CA Certificate filename
+  ## If provided, PostgreSQL will authenticate TLS/SSL clients by requesting them a certificate
+  ## ref: https://www.postgresql.org/docs/9.6/auth-methods.html
+  ##
+  certCAFilename: ""
+
+## @section Traffic Exposure Parameters
+##
+
+## ClickHouse service parameters
+##
+service:
+  ## @param service.type ClickHouse service type
+  ##
+  type: ClusterIP
+  ## @param service.ports.http ClickHouse service HTTP port
+  ## @param service.ports.tcp ClickHouse service TCP port
+  ## @param service.ports.tcpSecure ClickHouse service TCP (secure) port
+  ## @param service.ports.mysql ClickHouse service MySQL port
+  ## @param service.ports.postgresql ClickHouse service PostgreSQL port
+  ## @param service.ports.interserver ClickHouse service Interserver port
+  ## @param service.ports.metrics ClickHouse service metrics port
+  ##
+  ports:
+    http: 8123
+    tcp: 9000
+    tcpSecure: 9440
+    mysql: 9004
+    postgresql: 9005
+    interserver: 9009
+    metrics: 8001
+  ## Node ports to expose
+  ## @param service.nodePorts.http Node port for HTTP
+  ## @param service.nodePorts.tcp Node port for TCP
+  ## @param service.nodePorts.tcpSecure Node port for TCP (with TLS)
+  ## @param service.nodePorts.mysql Node port for MySQL
+  ## @param service.nodePorts.postgresql Node port for PostgreSQL
+  ## @param service.nodePorts.interserver Node port for Interserver
+  ## @param service.nodePorts.metrics Node port for metrics
+  ## NOTE: choose port between <30000-32767>
+  ##
+  nodePorts:
+    http: ""
+    tcp: ""
+    tcpSecure: ""
+    mysql: ""
+    postgresql: ""
+    interserver: ""
+    metrics: ""
+  ## @param service.clusterIP ClickHouse service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
+  ##
+  clusterIP: ""
+  ## @param service.loadBalancerIP ClickHouse service Load Balancer IP
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+  ##
+  loadBalancerIP: ""
+  ## @param service.loadBalancerSourceRanges ClickHouse service Load Balancer sources
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
+  ## @param service.externalTrafficPolicy ClickHouse service external traffic policy
+  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
+  ## @param service.annotations Additional custom annotations for ClickHouse service
+  ##
+  annotations: {}
+  ## @param service.extraPorts Extra ports to expose in ClickHouse service (normally used with the `sidecars` value)
+  ##
+  extraPorts: []
+  ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
+  ## Values: ClientIP or None
+  ## ref: https://kubernetes.io/docs/user-guide/services/
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
+
+## External Access to ClickHouse  configuration
+##
+externalAccess:
+  ## @param externalAccess.enabled Enable Kubernetes external cluster access to ClickHouse
+  ##
+  enabled: false
+  ## Parameters to configure K8s service(s) used to externally access ClickHouse
+  ## Note: A new service per  will be created
+  ##
+  service:
+    ## @param externalAccess.service.type Kubernetes Service type for external access. It can be NodePort, LoadBalancer or ClusterIP
+    ##
+    type: LoadBalancer
+    ## @param externalAccess.service.ports.http ClickHouse service HTTP port
+    ## @param externalAccess.service.ports.tcp ClickHouse service TCP port
+    ## @param externalAccess.service.ports.tcpSecure ClickHouse service TCP (secure) port
+    ## @param externalAccess.service.ports.mysql ClickHouse service MySQL port
+    ## @param externalAccess.service.ports.postgresql ClickHouse service PostgreSQL port
+    ## @param externalAccess.service.ports.interserver ClickHouse service Interserver port
+    ## @param externalAccess.service.ports.metrics ClickHouse service metrics port
+    ##
+    ports:
+      http: 80
+      tcp: 9000
+      tcpSecure: 9440
+      mysql: 9004
+      postgresql: 9005
+      interserver: 9009
+      metrics: 8001
+    ## @param externalAccess.service.loadBalancerIPs Array of load balancer IPs for each ClickHouse . Length must be the same as replicaCount
+    ## e.g:
+    ## loadBalancerIPs:
+    ##   - X.X.X.X
+    ##   - Y.Y.Y.Y
+    ##
+    loadBalancerIPs: []
+    ## @param externalAccess.service.loadBalancerAnnotations Array of load balancer annotations for each ClickHouse . Length must be the same as replicaCount
+    ## e.g:
+    ## loadBalancerAnnotations:
+    ##   - external-dns.alpha.kubernetes.io/hostname: 1.external.example.com.
+    ##   - external-dns.alpha.kubernetes.io/hostname: 2.external.example.com.
+    ##
+    loadBalancerAnnotations: []
+    ## @param externalAccess.service.loadBalancerSourceRanges Address(es) that are allowed when service is LoadBalancer
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ## - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param externalAccess.service.nodePorts.http Node port for HTTP
+    ## @param externalAccess.service.nodePorts.tcp Node port for TCP
+    ## @param externalAccess.service.nodePorts.tcpSecure Node port for TCP (with TLS)
+    ## @param externalAccess.service.nodePorts.mysql Node port for MySQL
+    ## @param externalAccess.service.nodePorts.postgresql Node port for PostgreSQL
+    ## @param externalAccess.service.nodePorts.interserver Node port for Interserver
+    ## @param externalAccess.service.nodePorts.metrics Node port for metrics
+    ## NOTE: choose port between <30000-32767>
+    ## e.g:
+    ## nodePorts:
+    ##   tls:
+    ##   - 30001
+    ##   - 30002
+    ##
+    nodePorts:
+      http: []
+      tcp: []
+      tcpSecure: []
+      mysql: []
+      postgresql: []
+      interserver: []
+      metrics: []
+    ## @param externalAccess.service.labels Service labels for external access
+    ##
+    labels: {}
+    ## @param externalAccess.service.annotations Service annotations for external access
+    ##
+    annotations: {}
+    ## @param externalAccess.service.extraPorts Extra ports to expose in the ClickHouse external service
+    ##
+    extraPorts: []
+
+## ClickHouse ingress parameters
+## ref: http://kubernetes.io/docs/user-guide/ingress/
+##
+ingress:
+  ## @param ingress.enabled Enable ingress record generation for ClickHouse
+  ##
+  enabled: false
+  ## @param ingress.pathType Ingress path type
+  ##
+  pathType: ImplementationSpecific
+  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
+  ##
+  apiVersion: ""
+  ## @param ingress.hostname Default host for the ingress record
+  ##
+  hostname: clickhouse.local
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
+  ## @param ingress.path Default path for the ingress record
+  ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+  ##
+  path: /
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+  ##
+  annotations: {}
+  ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+  ## You can:
+  ##   - Use the `ingress.secrets` parameter to create this TLS secret
+  ##   - Rely on cert-manager to create it by setting the corresponding annotations
+  ##   - Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
+  ##
+  tls: false
+  ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+  ##
+  selfSigned: false
+  ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+  ## e.g:
+  ## extraHosts:
+  ##   - name: clickhouse.local
+  ##     path: /
+  ##
+  extraHosts: []
+  ## @param ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+  ## e.g:
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
+  ## @param ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## e.g:
+  ## extraTls:
+  ## - hosts:
+  ##     - clickhouse.local
+  ##   secretName: clickhouse.local-tls
+  ##
+  extraTls: []
+  ## @param ingress.secrets Custom TLS certificates as secrets
+  ## NOTE: 'key' and 'certificate' are expected in PEM format
+  ## NOTE: 'name' should line up with a 'secretName' set further up
+  ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+  ## It is also possible to create and manage the certificates outside of this helm chart
+  ## Please see README.md for more information
+  ## e.g:
+  ## secrets:
+  ##   - name: clickhouse.local-tls
+  ##     key: |-
+  ##       -----BEGIN RSA PRIVATE KEY-----
+  ##       ...
+  ##       -----END RSA PRIVATE KEY-----
+  ##     certificate: |-
+  ##       -----BEGIN CERTIFICATE-----
+  ##       ...
+  ##       -----END CERTIFICATE-----
+  ##
+  secrets: []
+  ## @param ingress.extraRules Additional rules to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g:
+  ## extraRules:
+  ## - host: example.local
+  ##     http:
+  ##       path: /
+  ##       backend:
+  ##         service:
+  ##           name: example-svc
+  ##           port:
+  ##             name: http
+  ##
+  extraRules: []
+
+## @section Persistence Parameters
+##
+
+## Enable persistence using Persistent Volume Claims
+## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+persistence:
+  ## @param persistence.enabled Enable persistence using Persistent Volume Claims
+  ##
+  enabled: true
+  ## @param persistence.storageClass Storage class of backing PVC
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  storageClass: ""
+  ## @param persistence.annotations Persistent Volume Claim annotations
+  ##
+  annotations: {}
+  ## @param persistence.accessModes Persistent Volume Access Modes
+  ##
+  accessModes:
+    - ReadWriteOnce
+  ## @param persistence.size Size of data volume
+  ##
+  size: 8Gi
+  ## @param persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
+  ## If set, the PVC can't have a PV dynamically provisioned for it
+  ## E.g.
+  ## selector:
+  ##   matchLabels:
+  ##     app: my-app
+  ##
+  selector: {}
+  ## @param persistence.dataSource Custom PVC data source
+  ##
+  dataSource: {}
+## @section Init Container Parameters
+##
+
+## 'volumePermissions' init container parameters
+## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
+##   based on the *podSecurityContext/*containerSecurityContext parameters
+##
+volumePermissions:
+  ## @param volumePermissions.enabled Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`
+  ##
+  enabled: false
+  ## Bitnami Shell image
+  ## ref: https://hub.docker.com/r/bitnami/bitnami-shell/tags/
+  ## @param volumePermissions.image.registry Bitnami Shell image registry
+  ## @param volumePermissions.image.repository Bitnami Shell image repository
+  ## @param volumePermissions.image.tag Bitnami Shell image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.pullPolicy Bitnami Shell image pull policy
+  ## @param volumePermissions.image.pullSecrets Bitnami Shell image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/bitnami-shell
+    tag: 11-debian-11-r37
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Init container's resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param volumePermissions.resources.limits The resources limits for the init container
+  ## @param volumePermissions.resources.requests The requested resources for the init container
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Init container Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
+  ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
+  ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
+  ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
+  ##
+  containerSecurityContext:
+    runAsUser: 0
+
+## @section Other Parameters
+##
+
+## ServiceAccount configuration
+##
+serviceAccount:
+  ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
+  ##
+  create: true
+  ## @param serviceAccount.name The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the common.names.fullname template
+  ##
+  name: ""
+  ## @param serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+  ##
+  annotations: {}
+  ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ##
+  automountServiceAccountToken: true
+
+## Prometheus metrics
+##
+metrics:
+  ## @param metrics.enabled Enable the export of Prometheus metrics
+  ##
+  enabled: false
+  ## @param metrics.podAnnotations [object] Annotations for metrics scraping
+  ##
+  podAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "{{ .Values.containerPorts.metrics }}"
+  ## Prometheus Operator ServiceMonitor configuration
+  ##
+  serviceMonitor:
+    ## @param metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+    ##
+    enabled: false
+    ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+    ##
+    namespace: ""
+    ## @param metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
+    ##
+    annotations: {}
+    ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
+    ##
+    jobLabel: ""
+    ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+    ##
+    honorLabels: false
+    ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## interval: 10s
+    ##
+    interval: ""
+    ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## scrapeTimeout: 10s
+    ##
+    scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+    ##
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.relabelings Specify general relabeling
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
+    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ## selector:
+    ##   prometheus: my-prometheus
+    ##
+    selector: {}
+
+## @section External Zookeeper paramaters
+##
+externalZookeeper:
+  ## @param externalZookeeper.servers List of external zookeeper servers to use
+  ## @param externalZookeeper.port Port of the Zookeeper servers
+  ##
+  servers: []
+  port: 2888
+
+## @section Zookeeper subchart parameters
+##
+## @param zookeeper.enabled Deploy Zookeeper subchart
+## @param zookeeper.replicaCount Number of Zookeeper instances
+## @param zookeeper.service.ports.client Zookeeper client port
+##
+zookeeper:
+  enabled: true
+  replicaCount: 2
+  service:
+    ports:
+      client: 2181

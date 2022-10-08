@@ -1,7 +1,7 @@
 annotations:
   category: DeveloperTools
 apiVersion: v2
-appVersion: 0.18.2
+appVersion: 0.18.5
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -23,4 +23,4 @@ name: sealed-secrets
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/sealed-secrets
   - https://github.com/bitnami-labs/sealed-secrets
-version: 1.1.2
+version: 1.1.5
