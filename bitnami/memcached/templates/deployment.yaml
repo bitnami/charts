@@ -159,6 +159,9 @@ spec:
         - name: metrics
           image: {{ template "memcached.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          {{- if .Values.metrics.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           ports:
             - name: metrics
               containerPort: {{ .Values.metrics.containerPorts.metrics }}
