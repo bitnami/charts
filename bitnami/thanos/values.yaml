@@ -3913,16 +3913,22 @@ metrics:
   ## PrometheusRule CRD configuration
   ##
   prometheusRule:
-    ## @param metrics.prometheusRule.enabled If `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true`)
-    ##
-    enabled: false
+    ## @param metrics.prometheusRule.default.create would create all default prometheus alerts 
+    ## @param metrics.prometheusRule.default.disabled disable one specific prometheus alert rule
+    ##default:
+    ##  create: true
+    ##  disabled: 
+    ##    ThanosCompactHalted: true
+    default:
+      create: true
+      disabled: {}
     ## @param metrics.prometheusRule.namespace Namespace in which the PrometheusRule CRD is created
     ##
     namespace: ""
     ## @param metrics.prometheusRule.additionalLabels Additional labels for the prometheusRule
     ##
     additionalLabels: {}
-    ## @param metrics.prometheusRule.groups Prometheus Rule Groups for Thanos components
+    ## @param metrics.prometheusRule.groups Prometheus Rule Groups for Thanos components  (also requires `metrics.enabled` to be `true`)
     ## These are just examples rules, please adapt them to your needs.
     ##   groups:
     ##     - name: Compactor
