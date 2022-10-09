@@ -907,6 +907,10 @@ keycloakConfigCli:
   ##   - name: FOO
   ##     value: "bar"
   ##
+  ## @param keycloakConfigCli.podTolerations Tolerations for job pod assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  podTolerations: []
   extraEnvVars: []
   ## @param keycloakConfigCli.extraEnvVarsCM ConfigMap with extra environment variables
   ##
