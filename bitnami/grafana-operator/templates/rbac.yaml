@@ -83,179 +83,179 @@ metadata:
   {{- end }}
 rules:
   - apiGroups:
-    - ""
+      - ""
     resources:
-    - configmaps
-    - persistentvolumeclaims
-    - secrets
-    - serviceaccounts
-    - services
+      - configmaps
+      - persistentvolumeclaims
+      - secrets
+      - serviceaccounts
+      - services
     verbs:
-    - create
-    - delete
-    - get
-    - list
-    - patch
-    - update
-    - watch
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
   - apiGroups:
-    - ""
+      - ""
     resources:
-    - events
+      - events
     verbs:
-    - create
-    - get
-    - list
-    - patch
-    - watch
+      - create
+      - get
+      - list
+      - patch
+      - watch
   - apiGroups:
-    - ""
+      - ""
     resources:
-    - pods
+      - pods
     verbs:
-    - get
-    - list
-    - watch
+      - get
+      - list
+      - watch
   - apiGroups:
-    - apps
-    - extensions
+      - apps
+      - extensions
     resources:
-    - deployments
-    - deployments/finalizers
+      - deployments
+      - deployments/finalizers
     verbs:
-    - create
-    - delete
-    - get
-    - list
-    - patch
-    - update
-    - watch
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
   - apiGroups:
-    - integreatly.org
+      - integreatly.org
     resources:
-    - grafanadashboards
+      - grafanadashboards
     verbs:
-    - create
-    - delete
-    - get
-    - list
-    - patch
-    - update
-    - watch
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
   - apiGroups:
-    - integreatly.org
+      - integreatly.org
     resources:
-    - grafanadashboards/status
+      - grafanadashboards/status
     verbs:
-    - get
-    - patch
-    - update
+      - get
+      - patch
+      - update
   - apiGroups:
-    - integreatly.org
+      - integreatly.org
     resources:
-    - grafanadatasources
+      - grafanadatasources
     verbs:
-    - create
-    - delete
-    - get
-    - list
-    - patch
-    - update
-    - watch
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
   - apiGroups:
-    - integreatly.org
+      - integreatly.org
     resources:
-    - grafanadatasources/status
+      - grafanadatasources/status
     verbs:
-    - get
-    - patch
-    - update
+      - get
+      - patch
+      - update
   - apiGroups:
-    - integreatly.org
+      - integreatly.org
     resources:
-    - grafanafolders
+      - grafanafolders
     verbs:
-    - create
-    - delete
-    - get
-    - list
-    - patch
-    - update
-    - watch
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
   - apiGroups:
-    - integreatly.org
+      - integreatly.org
     resources:
-    - grafanafolders/status
+      - grafanafolders/status
     verbs:
-    - get
-    - patch
-    - update
+      - get
+      - patch
+      - update
   - apiGroups:
-    - integreatly.org
+      - integreatly.org
     resources:
-    - grafananotificationchannels
+      - grafananotificationchannels
     verbs:
-    - create
-    - delete
-    - get
-    - list
-    - patch
-    - update
-    - watch
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
   - apiGroups:
-    - integreatly.org
+      - integreatly.org
     resources:
-    - grafananotificationchannels/status
+      - grafananotificationchannels/status
     verbs:
-    - get
-    - patch
-    - update
+      - get
+      - patch
+      - update
   - apiGroups:
-    - integreatly.org
+      - integreatly.org
     resources:
     - grafanas
     - grafanas/finalizers
     verbs:
-    - create
-    - delete
-    - get
-    - list
-    - patch
-    - update
-    - watch
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
   - apiGroups:
-    - integreatly.org
+      - integreatly.org
     resources:
-    - grafanas/status
+      - grafanas/status
     verbs:
-    - get
-    - patch
-    - update
+      - get
+      - patch
+      - update
   - apiGroups:
-    - networking.k8s.io
+      - networking.k8s.io
     resources:
-    - ingresses
+      - ingresses
     verbs:
-    - create
-    - delete
-    - get
-    - list
-    - patch
-    - update
-    - watch
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
   - apiGroups:
-    - route.openshift.io
+      - route.openshift.io
     resources:
-    - routes
-    - routes/custom-host
+      - routes
+      - routes/custom-host
     verbs:
-    - create
-    - delete
-    - get
-    - list
-    - patch
-    - update
-    - watch
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
   {{- if or .Values.operator.scanAllNamespaces  .Values.operator.scanNamespaces }}
   - nonResourceURLs:
       - /metrics
