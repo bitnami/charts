@@ -574,6 +574,16 @@ metrics:
   resources:
     limits: {}
     requests: {}
+  ## Configure Metrics Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param metrics.containerSecurityContext.enabled Enabled Metrics containers' Security Context
+  ## @param metrics.containerSecurityContext.runAsUser Set Metrics containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set Metrics containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
   ## Configure extra options for Memcached Prometheus exporter containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
   ## @param metrics.livenessProbe.enabled Enable livenessProbe on Memcached Prometheus exporter containers

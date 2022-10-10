@@ -4,58 +4,51 @@ on:
     types:
       - created
 permissions:
+  repository-projects: write
   issues: write
   pull-requests: write
-  repository-projects: write
-
-# To fix the concurrency when for example more than one label is added
-concurrency:
-  group: ${{ github.run_id }}
-  cancel-in-progress: false
-
 jobs:
   comments_handler:
-    if: ${{ github.actor != 'bitnami-bot' && ((github.event.pull_request && (!contains(github.event.pull_request.labels.*.name, 'auto-merge'))) || (github.event.issue && (!contains(github.event.issue.labels.*.name, 'auto-merge')))) }}
     runs-on: ubuntu-latest
     steps:
       - name: Repo checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 1
+        uses: actions/checkout@v3
       - name: Load .env file
         uses: xom9ikk/dotenv@v1.0.2
         with:
           path: .github/workflows/
+      - name: Move into From Build Maintenance
+        uses: peter-evans/create-or-update-project-card@v2
+        # The comment was created by bitnami-bot in a pull_request created by bitnami-bot
+        if: ${{ github.actor == 'bitnami-bot' && github.event.issue.user.login == 'bitnami-bot' && github.event.issue.pull_request != null }}
+        with:
+          project-name: Support
+          column-name: Build Maintenance
+          # Required to trigger moving-cards.yml workflow (clean labels and assign people to work on it)
+          token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
       - name: Move into Pending
         uses: peter-evans/create-or-update-project-card@v2
-        if: ${{ (!contains(github.event.issue.labels.*.name, 'bitnami')) && contains(fromJson(env.BITNAMI_TEAM), github.event.comment.user.login) }}
+        if: |
+          (github.actor != 'bitnami-bot' || github.event.issue.user.login != 'bitnami-bot' || github.event.issue.pull_request == null) &&
+          (!contains(github.event.issue.labels.*.name, 'bitnami')) && contains(fromJson(env.BITNAMI_TEAM), github.actor)
         with:
           project-name: Support
           column-name: Pending
-          token: "${{ secrets.GITHUB_TOKEN }}"
       - name: Move into In Progress
         uses: peter-evans/create-or-update-project-card@v2
-        if: ${{ contains(github.event.issue.labels.*.name, 'in-progress') && (!contains(fromJson(env.BITNAMI_TEAM), github.event.comment.user.login)) }}
+        if: |
+          (github.actor != 'bitnami-bot' || github.event.issue.user.login != 'bitnami-bot' || github.event.issue.pull_request == null) &&
+          contains(github.event.issue.labels.*.name, 'in-progress') && (!contains(fromJson(env.BITNAMI_TEAM), github.actor))
         with:
           project-name: Support
           column-name: In progress
-          token: "${{ secrets.GITHUB_TOKEN }}"
       - name: Move into Triage
         uses: peter-evans/create-or-update-project-card@v2
-        if: ${{ ((contains(github.event.issue.labels.*.name, 'triage')) || (contains(github.event.issue.labels.*.name, 'solved'))) && (!contains(fromJson(env.BITNAMI_TEAM), github.event.comment.user.login)) }}
+        if: |
+          (github.actor != 'bitnami-bot' || github.event.issue.user.login != 'bitnami-bot' || github.event.issue.pull_request == null) &&
+          ((contains(github.event.issue.labels.*.name, 'triage')) || (contains(github.event.issue.labels.*.name, 'solved'))) && (!contains(fromJson(env.BITNAMI_TEAM), github.actor))
         with:
           project-name: Support
           column-name: Triage
-          token: "${{ secrets.GITHUB_TOKEN }}"
-      - name: Label as triage back
-        # Only if commented when solved
-        if: ${{ contains(github.event.issue.labels.*.name, 'solved') }}
-        uses: andymckay/labeler@1.0.4
-        with:
-          add-labels: "triage"
-          remove-labels: "solved"
-      - name: Removing the stale label
-        if: ${{ contains(github.event.issue.labels.*.name, 'stale') }}
-        uses: andymckay/labeler@1.0.4
-        with:
-          remove-labels: "stale"
+          # Needs reasignation of the task
+          token: "${{ secrets.BITNAMI_BOT_TOKEN }}"

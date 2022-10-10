@@ -1,0 +1,38 @@
+http:
+  https://ejbca:{{ .Vars.service.ports.https }}:
+    status: 200
+    allow-insecure: true
+file:
+  /bitnami/ejbca:
+    exists: true
+    filetype: directory
+    mode: "0775"
+    owner: root
+  /opt/bitnami/wildfly/standalone/configuration/standalone.xml:
+    exists: true
+    filetype: file
+    mode: "0644"
+    contains:
+      - /http.*{{ .Vars.containerPorts.http }}/
+      - /https.*{{ .Vars.containerPorts.https }}/
+      - /connection-url.*{{ .Vars.mariadb.auth.database }}/
+      - /user-name.*{{ .Vars.mariadb.auth.username }}/
+      - /password.*{{ .Vars.mariadb.auth.password }}/
+command:
+  {{- $baseDN := .Vars.ejbcaCA.baseDN }}
+  {{- $caName := .Vars.ejbcaCA.name }}
+  {{- $user := printf "user_%s" (randAlpha 5) }}
+  {{- $pass := printf "%s" (randAlpha 5) }}
+  {{- $dn := printf "%s,CN=%s" $baseDN $user }}
+  # Identity type 1 corresponds to END-USER
+  {{- $identityType := "1" }}
+  add-identity-export-cert:
+    exec: ejbca.sh ra addendentity --username '{{ $user }}' --caname '{{ $caName}}' --dn '{{ $dn }}' --type {{ $identityType }} --token P12 --password '{{ $pass }}' && ejbca.sh ra setclearpwd '{{ $user }}' '{{ $pass }}' && ejbca.sh batch && ls ./p12/{{ $user }}.p12
+    exit-status: 0
+    timeout: 20000
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+    - uid={{ .Vars.containerSecurityContext.runAsUser }}
+    - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/

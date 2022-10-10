@@ -1,7 +1,7 @@
 annotations:
   category: LogManagement
 apiVersion: v2
-appVersion: 8.4.1
+appVersion: 8.4.2
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -23,4 +23,4 @@ name: logstash
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/logstash
   - https://www.elastic.co/products/logstash
-version: 5.1.2
+version: 5.1.4

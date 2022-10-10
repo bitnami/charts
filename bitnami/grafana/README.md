@@ -7,12 +7,12 @@ Grafana is an open source metric analytics and visualization suite for visualizi
 [Overview of Grafana](https://grafana.com/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/grafana
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/grafana
 ```
 
 ## Introduction
@@ -33,8 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/grafana
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/grafana
 ```
 
 These commands deploy grafana on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -164,7 +164,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
 | `image.registry`                   | Grafana image registry                                                                                                                               | `docker.io`                       |
 | `image.repository`                 | Grafana image repository                                                                                                                             | `bitnami/grafana`                 |
-| `image.tag`                        | Grafana image tag (immutable tags are recommended)                                                                                                   | `9.1.5-debian-11-r0`              |
+| `image.tag`                        | Grafana image tag (immutable tags are recommended)                                                                                                   | `9.1.7-debian-11-r0`              |
 | `image.digest`                     | Grafana image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                              | `""`                              |
 | `image.pullPolicy`                 | Grafana image pull policy                                                                                                                            | `IfNotPresent`                    |
 | `image.pullSecrets`                | Grafana image pull secrets                                                                                                                           | `[]`                              |
@@ -368,7 +368,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `imageRenderer.enabled`                                  | Enable using a remote rendering service to render PNG images                                                                              | `false`                          |
 | `imageRenderer.image.registry`                           | Grafana Image Renderer image registry                                                                                                     | `docker.io`                      |
 | `imageRenderer.image.repository`                         | Grafana Image Renderer image repository                                                                                                   | `bitnami/grafana-image-renderer` |
-| `imageRenderer.image.tag`                                | Grafana Image Renderer image tag (immutable tags are recommended)                                                                         | `3.6.1-debian-11-r4`             |
+| `imageRenderer.image.tag`                                | Grafana Image Renderer image tag (immutable tags are recommended)                                                                         | `3.6.1-debian-11-r10`            |
 | `imageRenderer.image.digest`                             | Grafana Image Renderer image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                    | `""`                             |
 | `imageRenderer.image.pullPolicy`                         | Grafana Image Renderer image pull policy                                                                                                  | `IfNotPresent`                   |
 | `imageRenderer.image.pullSecrets`                        | Grafana image Renderer pull secrets                                                                                                       | `[]`                             |
@@ -443,7 +443,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r34`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r38`      |
 | `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -465,7 +465,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install my-release \
-  --set admin.user=admin-user bitnami/grafana
+  --set admin.user=admin-user my-repo/grafana
 ```
 
 The above command sets the Grafana admin user to `admin-user`.
@@ -475,7 +475,7 @@ The above command sets the Grafana admin user to `admin-user`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/grafana
+$ helm install my-release -f values.yaml my-repo/grafana
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -637,7 +637,7 @@ Since the volume access mode when persistence is enabled is `ReadWriteOnce` in o
 
 ```console
 kubectl delete deployment <deployment-name>
-helm upgrade <release-name> bitnami/grafana
+helm upgrade <release-name> my-repo/grafana
 ```
 
 ### To 4.1.0

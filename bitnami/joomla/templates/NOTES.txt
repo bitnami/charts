@@ -57,7 +57,7 @@ host. To configure Joomla! to use and external database host:
 
 1. Complete your Joomla! deployment by running:
 
-  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} --set service.type={{ .Values.service.type }},mariadb.enabled=false,externalDatabase.host=YOUR_EXTERNAL_DATABASE_HOST bitnami/joomla
+  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} --set service.type={{ .Values.service.type }},mariadb.enabled=false,externalDatabase.host=YOUR_EXTERNAL_DATABASE_HOST my-repo/joomla
 
 {{- end }}
 

@@ -7,12 +7,12 @@ Matomo, formerly known as Piwik, is a real time web analytics program. It provid
 [Overview of Matomo](https://matomo.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/matomo
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/matomo
 ```
 
 ## Introduction
@@ -35,7 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install my-release bitnami/matomo
+$ helm install my-release my-repo/matomo
 ```
 
 The command deploys Matomo on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                        | Matomo image registry                                                                                                 | `docker.io`            |
 | `image.repository`                      | Matomo Image name                                                                                                     | `bitnami/matomo`       |
-| `image.tag`                             | Matomo Image tag                                                                                                      | `4.11.0-debian-11-r18` |
+| `image.tag`                             | Matomo Image tag                                                                                                      | `4.11.0-debian-11-r24` |
 | `image.digest`                          | Matomo image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                   |
 | `image.pullPolicy`                      | Matomo image pull policy                                                                                              | `IfNotPresent`         |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                      | `[]`                   |
@@ -110,6 +110,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraVolumeMounts`                     | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `[]`                   |
 | `initContainers`                        | Add additional init containers to the pod (evaluated as a template)                                                   | `[]`                   |
 | `sidecars`                              | Attach additional containers to the pod (evaluated as a template)                                                     | `[]`                   |
+| `serviceAccountName`                    | Attach serviceAccountName to the pod and sidecars                                                                     | `""`                   |
 | `tolerations`                           | Tolerations for pod assignment                                                                                        | `[]`                   |
 | `existingSecret`                        | Name of a secret with the application password                                                                        | `""`                   |
 | `smtpHost`                              | SMTP host                                                                                                             | `""`                   |
@@ -234,7 +235,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r35`      |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r37`      |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                    |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
@@ -249,7 +250,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`           | Start a exporter side-car                                                                                       | `false`                   |
 | `metrics.image.registry`    | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`  | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag                                                                                       | `0.11.0-debian-11-r39`    |
+| `metrics.image.tag`         | Apache exporter image tag                                                                                       | `0.11.0-debian-11-r45`    |
 | `metrics.image.digest`      | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`  | Image pull policy                                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array                                                                | `[]`                      |
@@ -275,7 +276,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                      | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                                                                        | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image                                                                                           | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag                                                                                       | `11-debian-11-r35`                       |
+| `certificates.image.tag`                             | Container sidecar image tag                                                                                       | `11-debian-11-r37`                       |
 | `certificates.image.digest`                          | Container sidecar image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                              | `[]`                                     |
@@ -309,7 +310,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set matomoUsername=user,matomoPassword=password,mariadb.auth.rootPassword=secretpassword \
-    bitnami/matomo
+    my-repo/matomo
 ```
 
 The above command sets the Matomo administrator account username and password to `user` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
@@ -319,7 +320,7 @@ The above command sets the Matomo administrator account username and password to
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/matomo
+$ helm install my-release -f values.yaml my-repo/matomo
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -370,7 +371,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 1. Install the chart
 
 ```bash
-$ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/matomo
+$ helm install my-release --set persistence.existingClaim=PVC_NAME my-repo/matomo
 ```
 
 ### Host path
@@ -386,7 +387,7 @@ $ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/matom
 1. Install the chart
 
     ```bash
-    $ helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT bitnami/matomo
+    $ helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT my-repo/matomo
     ```
 
     This will mount the `matomo-data` volume into the `hostPath` directory. The site data will be persisted if the mount path contains valid data, else the site data will be initialized at first launch.

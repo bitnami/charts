@@ -16,6 +16,35 @@
         }
       ]
     },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/mxnet"
+        },
+        "runtime_parameters": "ZW50cnlwb2ludDoKICB3b3JrRGlyOiAvYXBwCm1vZGU6IHN0YW5kYWxvbmUKY2xvbmVGaWxlc0Zyb21HaXQ6CiAgZW5hYmxlZDogdHJ1ZQogIHJlcG9zaXRvcnk6ICJodHRwczovL2dpdGh1Yi5jb20vYXBhY2hlL2luY3ViYXRvci1teG5ldC5naXQiCiAgcmV2aXNpb246IHYxLjIuMApwZXJzaXN0ZW5jZToKICBtb3VudFBhdGg6IC9iaXRuYW1pL214bmV0CnN0YW5kYWxvbmU6CiAgcG9kU2VjdXJpdHlDb250ZXh0OgogICAgZW5hYmxlZDogdHJ1ZQogICAgZnNHcm91cDogMTAwMgogIGNvbnRhaW5lclNlY3VyaXR5Q29udGV4dDoKICAgIGVuYWJsZWQ6IHRydWUKICAgIHJ1bkFzVXNlcjogMTAwMgo=",
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/mxnet/goss"
+            },
+            "remote": {
+              "workload": "deploy-mxnet"
+            },
+            "vars_file": "vars.yaml"
+          }
+        }
+      ]
+    },
     "publish": {
       "actions": [
         {

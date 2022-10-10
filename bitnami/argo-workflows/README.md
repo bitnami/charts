@@ -7,12 +7,12 @@ Argo Workflows is meant to orchestrate Kubernetes jobs in parallel. It uses DAG 
 [Overview of Argo Workflows](https://argoproj.github.io/workflows)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/argo-workflows
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/argo-workflows
 ```
 
 ## Introduction
@@ -33,7 +33,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release bitnami/argo-workflowss
+helm install my-release my-repo/argo-workflowss
 ```
 
 The command deploys Argo Workflows on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `server.image.registry`                                  | server image registry                                                                                               | `docker.io`                 |
 | `server.image.repository`                                | server image repository                                                                                             | `bitnami/argo-workflow-cli` |
-| `server.image.tag`                                       | server image tag (immutable tags are recommended)                                                                   | `3.3.9-scratch-r0`          |
+| `server.image.tag`                                       | server image tag (immutable tags are recommended)                                                                   | `3.3.9-scratch-r2`          |
 | `server.image.digest`                                    | server image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                        |
 | `server.image.pullPolicy`                                | server image pull policy                                                                                            | `Always`                    |
 | `server.image.pullSecrets`                               | server image pull secrets                                                                                           | `[]`                        |
@@ -186,7 +186,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `controller.image.registry`                                  | controller image registry                                                                                                     | `docker.io`                        |
 | `controller.image.repository`                                | controller image repository                                                                                                   | `bitnami/argo-workflow-controller` |
-| `controller.image.tag`                                       | controller image tag (immutable tags are recommended)                                                                         | `3.3.8-scratch-r5`                 |
+| `controller.image.tag`                                       | controller image tag (immutable tags are recommended)                                                                         | `3.3.9-scratch-r1`                 |
 | `controller.image.digest`                                    | controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                    | `""`                               |
 | `controller.image.pullPolicy`                                | controller image pull policy                                                                                                  | `IfNotPresent`                     |
 | `controller.image.pullSecrets`                               | controller image pull secrets                                                                                                 | `[]`                               |
@@ -230,7 +230,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.instanceID.enabled`                              | Enable submission filtering based on instanceID attribute. Requires to set instanceID.useReleaseName or instanceID.explicitID | `false`                            |
 | `controller.instanceID.useReleaseName`                       | Use the release name to filter submissions                                                                                    | `false`                            |
 | `controller.instanceID.explicitID`                           | Filter submissions based on an explicit instance ID                                                                           | `""`                               |
-| `controller.containerRuntimeExecutor`                        | Specifies the container runtime for the executor                                                                              | `k8sapi`                           |
 | `controller.clusterWorkflowTemplates.enabled`                | Whether to create a ClusterRole and Cluster Role Binding to access ClusterWokflowTemplates resources                          | `true`                             |
 | `controller.metrics.enabled`                                 | Enable controller metrics exporter                                                                                            | `false`                            |
 | `controller.metrics.path`                                    | Path to expose controller metrics                                                                                             | `/metrics`                         |
@@ -293,7 +292,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------- |
 | `executor.image.registry`                                  | executor image registry                                                                                  | `docker.io`                  |
 | `executor.image.repository`                                | executor image repository                                                                                | `bitnami/argo-workflow-exec` |
-| `executor.image.tag`                                       | executor image tag (immutable tags are recommended)                                                      | `3.3.8-debian-11-r18`        |
+| `executor.image.tag`                                       | executor image tag (immutable tags are recommended)                                                      | `3.3.9-debian-11-r5`         |
 | `executor.image.digest`                                    | executor image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
 | `executor.image.pullPolicy`                                | executor image pull policy                                                                               | `Always`                     |
 | `executor.image.pullSecrets`                               | executor image pull secrets                                                                              | `[]`                         |
@@ -383,7 +382,7 @@ helm install my-release \
   --set argo-workflowsUsername=admin \
   --set argo-workflowsPassword=password \
   --set mysql.auth.rootPassword=secretpassword \
-    bitnami/argo-workflows
+    my-repo/argo-workflows
 ```
 
 The above command sets the Argo Workflows administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MySQL `root` user password to `secretpassword`.
@@ -393,7 +392,7 @@ The above command sets the Argo Workflows administrator account username and pas
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml bitnami/argo-workflows
+helm install my-release -f values.yaml my-repo/argo-workflows
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

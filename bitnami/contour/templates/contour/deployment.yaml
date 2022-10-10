@@ -132,7 +132,9 @@ spec:
           {{- if .Values.contour.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.contour.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.contour.livenessProbe.enabled }}
+          {{- if .Values.contour.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.contour.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.contour.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /healthz
@@ -142,10 +144,10 @@ spec:
             timeoutSeconds: {{ .Values.contour.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.contour.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.contour.livenessProbe.failureThreshold }}
-          {{- else if .Values.contour.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.contour.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.contour.readinessProbe.enabled }}
+          {{- if .Values.contour.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.contour.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.contour.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
               path: /healthz
@@ -155,10 +157,10 @@ spec:
             timeoutSeconds: {{ .Values.contour.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.contour.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.contour.readinessProbe.failureThreshold }}
-          {{- else if .Values.contour.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.contour.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.contour.startupProbe.enabled }}
+          {{- if .Values.contour.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.contour.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.contour.startupProbe.enabled }}
           startupProbe:
             httpGet:
               path: /healthz
@@ -168,8 +170,6 @@ spec:
             timeoutSeconds: {{ .Values.contour.startupProbe.timeoutSeconds }}
             successThreshold: {{ .Values.contour.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.contour.startupProbe.failureThreshold }}
-          {{- else if .Values.contour.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.contour.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           resources: {{ toYaml .Values.contour.resources | nindent 12 }}

@@ -4,7 +4,7 @@ apiVersion: kubeapps.com/v1alpha1
 kind: AppRepository
 metadata:
   name: {{ .name }}
-  namespace: {{ default (include "kubeapps.globalReposNamespace" $) .namespace | quote }}
+  namespace: {{ default (include "kubeapps.helmGlobalPackagingNamespace" $) .namespace | quote }}
   labels: {{- include "common.labels.standard" $ | nindent 4 }}
     {{- if $.Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" $.Values.commonLabels "context" $ ) | nindent 4 }}

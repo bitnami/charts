@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/drupal
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/drupal
 ```
 
 ## Introduction
@@ -35,7 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install my-release bitnami/drupal
+$ helm install my-release my-repo/drupal
 ```
 
 The command deploys Drupal on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                              | Drupal image registry                                                                                                  | `docker.io`          |
 | `image.repository`                            | Drupal Image name                                                                                                      | `bitnami/drupal`     |
-| `image.tag`                                   | Drupal Image tag                                                                                                       | `9.4.5-debian-11-r1` |
+| `image.tag`                                   | Drupal Image tag                                                                                                       | `9.4.8-debian-11-r3` |
 | `image.digest`                                | Drupal image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                 | `""`                 |
 | `image.pullPolicy`                            | Drupal image pull policy                                                                                               | `IfNotPresent`       |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                       | `[]`                 |
@@ -204,25 +204,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Database parameters
 
-| Name                                        | Description                                                                              | Value               |
-| ------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------- |
-| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements     | `true`              |
-| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                                     | `standalone`        |
-| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                     | `""`                |
-| `mariadb.auth.database`                     | Database name to create                                                                  | `bitnami_drupal`    |
-| `mariadb.auth.username`                     | Database user to create                                                                  | `bn_drupal`         |
-| `mariadb.auth.password`                     | Password for the database                                                                | `""`                |
-| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                    | `true`              |
-| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                          | `""`                |
-| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                  | `["ReadWriteOnce"]` |
-| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                          | `8Gi`               |
-| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production) | `""`                |
-| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                 | `""`                |
-| `externalDatabase.host`                     | Host of the existing database                                                            | `""`                |
-| `externalDatabase.port`                     | Port of the existing database                                                            | `3306`              |
-| `externalDatabase.user`                     | Existing username in the external db                                                     | `bn_drupal`         |
-| `externalDatabase.password`                 | Password for the above username                                                          | `""`                |
-| `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_drupal`    |
+| Name                                        | Description                                                                                                                                                            | Value               |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements                                                                                   | `true`              |
+| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                                                                                                                   | `standalone`        |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                                                                                                   | `""`                |
+| `mariadb.auth.database`                     | Database name to create                                                                                                                                                | `bitnami_drupal`    |
+| `mariadb.auth.username`                     | Database user to create                                                                                                                                                | `bn_drupal`         |
+| `mariadb.auth.password`                     | Password for the database                                                                                                                                              | `""`                |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                                                                                                  | `true`              |
+| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                                                                                                        | `""`                |
+| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                                                                                                | `["ReadWriteOnce"]` |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                                                                                                        | `8Gi`               |
+| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production)                                                                               | `""`                |
+| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                                                                                               | `""`                |
+| `externalDatabase.host`                     | Host of the existing database                                                                                                                                          | `""`                |
+| `externalDatabase.port`                     | Port of the existing database                                                                                                                                          | `3306`              |
+| `externalDatabase.user`                     | Existing username in the external db                                                                                                                                   | `bn_drupal`         |
+| `externalDatabase.password`                 | Password for the above username. Ignored if existing secret is provided                                                                                                | `""`                |
+| `externalDatabase.database`                 | Name of the existing database                                                                                                                                          | `bitnami_drupal`    |
+| `externalDatabase.existingSecret`           | Name of a secret with the database password. (externalDatabase.password will be ignored and picked up from this secret). The secret has to contain the key db-password | `""`                |
 
 
 ### Volume Permissions parameters
@@ -232,7 +233,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r24`      |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r39`      |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                    |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
@@ -242,17 +243,36 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                        | Description                                                                                                     | Value                     |
-| --------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| `metrics.enabled`           | Start a exporter side-car                                                                                       | `false`                   |
-| `metrics.image.registry`    | Apache exporter image registry                                                                                  | `docker.io`               |
-| `metrics.image.repository`  | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag                                                                                       | `0.11.0-debian-11-r28`    |
-| `metrics.image.digest`      | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
-| `metrics.image.pullPolicy`  | Image pull policy                                                                                               | `IfNotPresent`            |
-| `metrics.image.pullSecrets` | Specify docker-registry secret names as an array                                                                | `[]`                      |
-| `metrics.resources`         | Metrics exporter resource requests and limits                                                                   | `{}`                      |
-| `metrics.podAnnotations`    | Additional annotations for Metrics exporter pod                                                                 | `{}`                      |
+| Name                                       | Description                                                                                                     | Value                     |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `metrics.enabled`                          | Start a exporter side-car                                                                                       | `false`                   |
+| `metrics.image.registry`                   | Apache exporter image registry                                                                                  | `docker.io`               |
+| `metrics.image.repository`                 | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
+| `metrics.image.tag`                        | Apache exporter image tag                                                                                       | `0.11.0-debian-11-r49`    |
+| `metrics.image.digest`                     | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
+| `metrics.image.pullPolicy`                 | Image pull policy                                                                                               | `IfNotPresent`            |
+| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                | `[]`                      |
+| `metrics.resources`                        | Metrics exporter resource requests and limits                                                                   | `{}`                      |
+| `metrics.podAnnotations`                   | Additional annotations for Metrics exporter pod                                                                 | `{}`                      |
+| `metrics.service.type`                     | Drupal exporter service type                                                                                    | `ClusterIP`               |
+| `metrics.service.ports.metrics`            | Drupal exporter service port                                                                                    | `9117`                    |
+| `metrics.service.externalTrafficPolicy`    | Drupal exporter service external traffic policy                                                                 | `Cluster`                 |
+| `metrics.service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                                  | `[]`                      |
+| `metrics.service.loadBalancerIP`           | Drupal exporter service Load Balancer IP                                                                        | `""`                      |
+| `metrics.service.loadBalancerSourceRanges` | Drupal exporter service Load Balancer sources                                                                   | `[]`                      |
+| `metrics.service.annotations`              | Additional custom annotations for Drupal exporter service                                                       | `{}`                      |
+| `metrics.serviceMonitor.enabled`           | Create ServiceMonitor resource(s) for scraping metrics using PrometheusOperator                                 | `false`                   |
+| `metrics.serviceMonitor.namespace`         | The namespace in which the ServiceMonitor will be created                                                       | `""`                      |
+| `metrics.serviceMonitor.interval`          | The interval at which metrics should be scraped                                                                 | `30s`                     |
+| `metrics.serviceMonitor.scrapeTimeout`     | The timeout after which the scrape is ended                                                                     | `""`                      |
+| `metrics.serviceMonitor.relabellings`      | Metrics RelabelConfigs to apply to samples before scraping.                                                     | `[]`                      |
+| `metrics.serviceMonitor.metricRelabelings` | Metrics RelabelConfigs to apply to samples before ingestion.                                                    | `[]`                      |
+| `metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                                                        | `false`                   |
+| `metrics.serviceMonitor.additionalLabels`  | Additional labels that can be used so ServiceMonitor resource(s) can be discovered by Prometheus                | `{}`                      |
+| `metrics.prometheusRule.enabled`           | Create a custom prometheusRule Resource for scraping metrics using PrometheusOperator                           | `false`                   |
+| `metrics.prometheusRule.namespace`         | The namespace in which the prometheusRule will be created                                                       | `""`                      |
+| `metrics.prometheusRule.additionalLabels`  | Additional labels for the prometheusRule                                                                        | `{}`                      |
+| `metrics.prometheusRule.rules`             | Custom Prometheus rules                                                                                         | `[]`                      |
 
 
 ### Certificate injection parameters
@@ -273,7 +293,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                      | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                                                                        | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image                                                                                           | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag                                                                                       | `11-debian-11-r24`                       |
+| `certificates.image.tag`                             | Container sidecar image tag                                                                                       | `11-debian-11-r39`                       |
 | `certificates.image.digest`                          | Container sidecar image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                              | `[]`                                     |
@@ -307,7 +327,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set drupalUsername=admin,drupalPassword=password,mariadb.auth.rootPassword=secretpassword \
-    bitnami/drupal
+    my-repo/drupal
 ```
 
 The above command sets the Drupal administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
@@ -317,7 +337,7 @@ The above command sets the Drupal administrator account username and password to
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/drupal
+$ helm install my-release -f values.yaml my-repo/drupal
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -368,7 +388,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 1. Install the chart
 
 ```bash
-$ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/drupal
+$ helm install my-release --set persistence.existingClaim=PVC_NAME my-repo/drupal
 ```
 
 ### Host path
@@ -384,7 +404,7 @@ $ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/drupa
 1. Install the chart
 
     ```bash
-    $ helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT bitnami/drupal
+    $ helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT my-repo/drupal
     ```
 
     This will mount the `drupal-data` volume into the `hostPath` directory. The site data will be persisted if the mount path contains valid data, else the site data will be initialized at first launch.
@@ -457,13 +477,13 @@ export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=dru
 Upgrade your release (maintaining the version) disabling MariaDB and scaling Drupal replicas to 0:
 
 ```console
-$ helm upgrade drupal bitnami/drupal --set drupalPassword=$DRUPAL_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.2.1
+$ helm upgrade drupal my-repo/drupal --set drupalPassword=$DRUPAL_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.2.1
 ```
 
 Finally, upgrade you release to 9.0.0 reusing the existing PVC, and enabling back MariaDB:
 
 ```console
-$ helm upgrade drupal bitnami/drupal --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set drupalPassword=$DRUPAL_PASSWORD
+$ helm upgrade drupal my-repo/drupal --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set drupalPassword=$DRUPAL_PASSWORD
 ```
 
 You should see the lines below in MariaDB container logs:

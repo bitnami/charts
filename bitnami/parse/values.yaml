@@ -76,7 +76,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/parse
-    tag: 5.2.5-debian-11-r0
+    tag: 5.2.7-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -411,7 +411,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/parse-dashboard
-    tag: 3.3.0-debian-11-r31
+    tag: 3.3.0-debian-11-r38
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -901,7 +901,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r31
+    tag: 11-debian-11-r37
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

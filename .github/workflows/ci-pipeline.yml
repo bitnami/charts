@@ -1,0 +1,147 @@
+name: '[CI/CD] CI Pipeline'
+on: # rebuild any PRs and main branch changes
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - labeled
+    branches:
+      - master
+      - bitnami:master
+permissions:
+  issues: write
+  pull-requests: write
+env:
+  CSP_API_URL: https://console.cloud.vmware.com
+  CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
+  VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
+# Avoid concurrency over the same PR
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+jobs:
+  get-chart:
+    runs-on: ubuntu-latest
+    name: Get modified charts
+    if: ${{ github.event.pull_request.state != 'closed' }}
+    outputs:
+      chart: ${{ steps.get-chart.outputs.chart }}
+      result: ${{ steps.get-chart.outputs.result }}
+    steps:
+      - id: get-chart
+        name: Get modified charts
+        run: |
+          # Using the Github API to detect the files changed as git merge-base stops working when the branch is behind
+          # and jitterbit/get-changed-files does not support pull_request_target
+          PR_URL="https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files"
+          files_changed_data=$(curl -s --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' -X GET -G "$PR_URL")
+          files_changed="$(echo $files_changed_data | jq -r '.[] | .filename')"
+          # Adding || true to avoid "Process exited with code 1" errors
+          charts_dirs_changed="$(echo "$files_changed" | xargs dirname | grep -o "bitnami/[^/]*" | sort | uniq || true)"
+          # Using grep -c as a better alternative to wc -l when dealing with empty strings."
+          num_charts_changed="$(echo "$charts_dirs_changed" | grep -c "bitnami" || true)"
+          num_version_bumps="$(echo "$files_changed_data" | jq -r '[.[] | select(.filename|endswith("Chart.yaml")) | select(.patch|contains("+version")) ] | length' )"
+          non_readme_files=$(echo "$files_changed" | grep -vc "\.md" || true)
+
+          if [[ "$non_readme_files" -le "0" ]]; then
+            # The only changes are .md files -> SKIP
+            echo "::set-output name=result::skip"
+          elif [[ "$num_charts_changed" -ne "$num_version_bumps" ]]; then
+            # Changes done in charts but version not bumped -> ERROR
+            echo "::set-output name=error::Detected changes in charts without version bump in Chart.yaml.\nCharts changed: ${num_charts_changed}\n${charts_dirs_changed}\nVersion bumps detected: ${num_version_bumps}"
+            echo "::set-output name=result::fail"
+          elif [[ "$num_charts_changed" -eq "1" ]]; then
+            # Changes done in only one chart -> OK
+            chart_name=$(echo "$charts_dirs_changed" | sed "s|bitnami/||g")
+            echo "::set-output name=chart::${chart_name}"
+            if [[ "$chart_name" == "common" ]]; then
+                # Changes done in bitnami/common -> SKIP
+                echo "::set-output name=result::skip"
+            else
+                # Changes done in a chart different from common -> OK
+                echo "::set-output name=result::ok"
+            fi
+          elif [[ "$num_charts_changed" -le "0" ]]; then
+            # Changes done in the bitnami/ folder but not inside a chart subfolder -> SKIP
+            echo "::set-output name=error::No changes detected in charts. The rest of the tests will be skipped."
+            echo "::set-output name=result::skip"
+          else
+            # Changes done in more than chart -> SKIP
+            echo "::set-output name=error::Changes detected in more than one chart directory:\n${charts_dirs_changed}\nIt is strongly advised to change only one chart in a PR. The rest of the tests will be skipped."
+            echo "::set-output name=result::skip"
+          fi
+      # Using actions/github-scripts because using exit 1 in the script above would not provide any output
+      # Source: https://github.community/t/no-output-on-process-completed-with-exit-code-1/123821/3
+      - id: show-error
+        name: Show error
+        if: ${{ steps.get-chart.outputs.result == 'fail' }}
+        uses: actions/github-script@v3
+        with:
+          script: |
+            core.setFailed('${{ steps.get-chart.outputs.error }}')
+  vib-verify:
+    runs-on: ubuntu-latest
+    needs: get-chart
+    # Given performance issues of the action feature on GH's side, we need to be very restrictive in the job's triggers:
+    # -> The 'Get modified charts' job suceededs AND
+    #  ( ---> The pipeline was triggered due to a label addition and said label was the 'verify' one OR
+    #    ---> the PR already contains the 'verify' label )
+    if: |
+      needs.get-chart.outputs.result == 'ok' &&
+      (
+        contains(github.event.pull_request.labels.*.name, 'verify') || (github.event.action == 'labeled' && github.event.label.name == 'verify')
+      )
+    name: VIB Verify
+    steps:
+      - uses: actions/checkout@v2
+        name: Checkout Repository
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+      - uses: vmware-labs/vmware-image-builder-action@main
+        name: Verify ${{ needs.get-chart.outputs.chart }}
+        with:
+          pipeline: ${{ needs.get-chart.outputs.chart }}/vib-verify.json
+        env:
+          # Target-Platform used by default
+          VIB_ENV_TARGET_PLATFORM: ${{ secrets.VIB_ENV_TARGET_PLATFORM }}
+          # Alternative Target-Platform to be used in case of incompatibilities
+          VIB_ENV_ALTERNATIVE_TARGET_PLATFORM: ${{ secrets.VIB_ENV_ALTERNATIVE_TARGET_PLATFORM }}
+  auto-pr-review:
+    runs-on: ubuntu-latest
+    needs: vib-verify
+    name: Reviewal for automated PRs
+    # Job to be run only when the triage for automated PRs did as well,
+    # not taking into account whether 'VIB Verify' succeeded
+    if: |
+      always() &&
+      contains(github.event.pull_request.labels.*.name, 'auto-merge') &&
+      github.event.pull_request.user.login == 'bitnami-bot'
+    steps:
+      - name: Enable auto-merge feature
+        if: ${{ needs.vib-verify.result == 'success' }}
+        uses: reitermarkus/automerge@v2.1.2
+        with:
+          # Necessary to trigger CD workflow
+          token: ${{ secrets.BITNAMI_BOT_TOKEN }}
+          merge-method: squash
+          pull-request: ${{ github.event.number }}
+      # Approve the CI's PR if the 'VIB Verify' job succeeded
+      # Approved by the 'github-actions' user; a PR can't be approved by its author
+      - name: PR approval
+        if: ${{ needs.vib-verify.result == 'success' }}
+        uses: hmarr/auto-approve-action@v2.4.0
+        with:
+          pull-request-number: ${{ github.event.number }}
+      # If the CI did not succeed ('VIB Verify' failed or skipped),
+      # post a comment on the PR and assign a maintainer agent to review it
+      - name: Manual review required
+        if: ${{ needs.vib-verify.result != 'success' }}
+        uses: peter-evans/create-or-update-comment@v2.0.0
+        with:
+          issue-number: ${{ github.event.number }}
+          # Necessary to trigger support workflows
+          token: ${{ secrets.BITNAMI_BOT_TOKEN }}
+          body: |
+            There has been an error during the automated release process. Manual revision is now required.
+            Please check the related [action_run#${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for more information.

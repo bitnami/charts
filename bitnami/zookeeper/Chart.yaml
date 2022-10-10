@@ -21,4 +21,4 @@ name: zookeeper
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/zookeeper
   - https://zookeeper.apache.org/
-version: 10.2.1
+version: 10.2.2

@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/mongodb"
         },
-        "runtime_parameters": "YXV0aDoKICByb290UGFzc3dvcmQ6IENvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNAogIHJvb3RVc2VyOiB1c2VyCiAgdXNlcm5hbWVzOgogICAgLSBrYXlsZQogIGRhdGFiYXNlczoKICAgIC0gYXdlc29tZV9kYgpzZXJ2aWNlOgogIHBvcnRzOgogICAgbW9uZ29kYjogODAKICB0eXBlOiBMb2FkQmFsYW5jZXIK",
+        "runtime_parameters": "YXV0aDoKICBlbmFibGVkOiB0cnVlCiAgcm9vdFVzZXI6IGJpdG5hbWlSb290CiAgcm9vdFBhc3N3b3JkOiAiQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0IgogIHVzZXJuYW1lczoKICAgIC0ga2F5bGUKICBwYXNzd29yZHM6CiAgICAtIFIxc2luZzBmU3VuMjAyMgogIGRhdGFiYXNlczoKICAgIC0gYXdlc29tZV9kYgpzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgbW9uZ29kYjogODAKcGVyc2lzdGVuY2U6CiAgZW5hYmxlZDogdHJ1ZQogIG1vdW50UGF0aDogL2JpdG5hbWkvbW9uZ29kYgpjb250YWluZXJQb3J0czoKICBtb25nb2RiOiAyNzAxOApwb2RTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIGZzR3JvdXA6IDEwMDIKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBydW5Bc1VzZXI6IDEwMDIKc2VydmljZUFjY291bnQ6CiAgY3JlYXRlOiB0cnVlCiAgYXV0b21vdW50U2VydmljZUFjY291bnRUb2tlbjogdHJ1ZQo=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -43,6 +43,7 @@
             "resources": {
               "path": "/.vib/mongodb/goss"
             },
+            "vars_file": "vars.yaml",
             "remote": {
               "workload": "deploy-mongodb"
             }

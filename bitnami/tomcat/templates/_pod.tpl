@@ -103,32 +103,32 @@ containers:
       {{- if .Values.containerExtraPorts }}
       {{- include "common.tplvalues.render" (dict "value" .Values.containerExtraPorts "context" $) | nindent 6 }}
       {{- end }}
-    {{- if .Values.livenessProbe.enabled }}
+    {{- if .Values.customLivenessProbe }}
+    livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 6 }}
+    {{- else if .Values.livenessProbe.enabled }}
     livenessProbe:
       httpGet:
         path: /
         port: http
         {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 6 }}
-    {{- else if .Values.customLivenessProbe }}
-    livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 6 }}
     {{- end }}
-    {{- if .Values.readinessProbe.enabled }}
+    {{- if .Values.customReadinessProbe }}
+    readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 6 }}
+    {{- else if .Values.readinessProbe.enabled }}
     readinessProbe:
       httpGet:
         path: /
         port: http
       {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 6 }}
-    {{- else if .Values.customReadinessProbe }}
-    readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 6 }}
     {{- end }}
-    {{- if .Values.startupProbe.enabled }}
+    {{- if .Values.customStartupProbe }}
+    startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 6 }}
+    {{- else if .Values.startupProbe.enabled }}
     startupProbe:
       httpGet:
         path: /
         port: http
       {{- include "common.tplvalues.render" (dict "value" (omit .Values.startupProbe "enabled") "context" $) | nindent 6 }}
-    {{- else if .Values.customStartupProbe }}
-    startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 6 }}
     {{- end }}
     {{- if .Values.resources }}
     resources: {{- toYaml .Values.resources | nindent 6 }}

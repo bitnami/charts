@@ -163,7 +163,9 @@ spec:
             - name: grpc
               containerPort: 10901
               protocol: TCP
-          {{- if .Values.storegateway.livenessProbe.enabled }}
+          {{- if .Values.storegateway.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.storegateway.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.storegateway.livenessProbe "enabled") "context" $) | nindent 12 }}
             {{- if not .Values.auth.basicAuthUsers }}
             httpGet:
@@ -174,10 +176,10 @@ spec:
             tcpSocket:
               port: http
             {{- end }}
-          {{- else if .Values.storegateway.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.storegateway.readinessProbe.enabled }}
+          {{- if .Values.storegateway.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.storegateway.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.storegateway.readinessProbe "enabled") "context" $) | nindent 12 }}
             {{- if not .Values.auth.basicAuthUsers }}
             httpGet:
@@ -188,10 +190,10 @@ spec:
             tcpSocket:
               port: http
             {{- end }}
-          {{- else if .Values.storegateway.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.storegateway.startupProbe.enabled }}
+          {{- if .Values.storegateway.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.storegateway.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.storegateway.startupProbe "enabled") "context" $) | nindent 12 }}
             {{- if not .Values.auth.basicAuthUsers }}
             httpGet:
@@ -202,8 +204,6 @@ spec:
             tcpSocket:
               port: http
             {{- end }}
-          {{- else if .Values.storegateway.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.storegateway.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.lifecycleHooks "context" $) | nindent 12 }}

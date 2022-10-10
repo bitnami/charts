@@ -7,12 +7,12 @@ Memcached is an high-performance, distributed memory object caching system, gene
 [Overview of Memcached](http://memcached.org)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/memcached
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/memcached
 ```
 
 ## Introduction
@@ -31,8 +31,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/memcached
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/memcached
 ```
 
 These commands deploy Memcached on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -229,6 +229,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.containerPorts.metrics`                       | Memcached Prometheus Exporter container port                                                                                      | `9150`                       |
 | `metrics.resources.limits`                             | Init container volume-permissions resource limits                                                                                 | `{}`                         |
 | `metrics.resources.requests`                           | Init container volume-permissions resource requests                                                                               | `{}`                         |
+| `metrics.containerSecurityContext.enabled`             | Enabled Metrics containers' Security Context                                                                                      | `true`                       |
+| `metrics.containerSecurityContext.runAsUser`           | Set Metrics containers' Security Context runAsUser                                                                                | `1001`                       |
+| `metrics.containerSecurityContext.runAsNonRoot`        | Set Metrics containers' Security Context runAsNonRoot                                                                             | `true`                       |
 | `metrics.livenessProbe.enabled`                        | Enable livenessProbe on Memcached Prometheus exporter containers                                                                  | `true`                       |
 | `metrics.livenessProbe.initialDelaySeconds`            | Initial delay seconds for livenessProbe                                                                                           | `15`                         |
 | `metrics.livenessProbe.periodSeconds`                  | Period seconds for livenessProbe                                                                                                  | `10`                         |
@@ -272,7 +275,7 @@ The above parameters map to the environment variables defined in the [bitnami/me
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release --set auth.username=user,auth.password=password bitnami/memcached
+$ helm install my-release --set auth.username=user,auth.password=password my-repo/memcached
 ```
 
 The above command sets the Memcached admin account username and password to `user` and `password` respectively.
@@ -282,7 +285,7 @@ The above command sets the Memcached admin account username and password to `use
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/memcached
+$ helm install my-release -f values.yaml my-repo/memcached
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -354,7 +357,7 @@ Use the workaround below to upgrade from versions previous to 4.0.0. The followi
 
 ```console
 $ kubectl delete deployment  memcached --cascade=false
-$ helm upgrade memcached bitnami/memcached
+$ helm upgrade memcached my-repo/memcached
 ```
 
 ### To 3.0.0

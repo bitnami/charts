@@ -1,7 +1,7 @@
 annotations:
   category: Analytics
 apiVersion: v2
-appVersion: 4.6.0
+appVersion: 4.7.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -16,12 +16,10 @@ keywords:
   - operator
   - monitoring
 maintainers:
-  - name: cellebyte
-    url: cellebyte@gmail.com
   - name: Bitnami
     url: https://github.com/bitnami/charts
 name: grafana-operator
 sources:
   - https://github.com/grafana-operator/grafana-operator
   - https://github.com/bitnami/containers/tree/main/bitnami/grafana-operator
-version: 2.7.2
+version: 2.7.7

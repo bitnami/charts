@@ -1,7 +1,7 @@
 annotations:
   category: ProjectManagement
 apiVersion: v2
-appVersion: 5.0.2
+appVersion: 5.0.3
 dependencies:
   - condition: postgresql.enabled
     name: postgresql
@@ -36,4 +36,4 @@ name: redmine
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/redmine
   - https://www.redmine.org/
-version: 20.3.3
+version: 20.3.7

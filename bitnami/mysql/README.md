@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/mysql
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/mysql
 ```
 
 ## Introduction
@@ -32,8 +32,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/mysql
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/mysql
 ```
 
 These commands deploy MySQL on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -84,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`           | MySQL image registry                                                                                                                                                                | `docker.io`            |
 | `image.repository`         | MySQL image repository                                                                                                                                                              | `bitnami/mysql`        |
-| `image.tag`                | MySQL image tag (immutable tags are recommended)                                                                                                                                    | `8.0.30-debian-11-r15` |
+| `image.tag`                | MySQL image tag (immutable tags are recommended)                                                                                                                                    | `8.0.30-debian-11-r27` |
 | `image.digest`             | MySQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                               | `""`                   |
 | `image.pullPolicy`         | MySQL image pull policy                                                                                                                                                             | `IfNotPresent`         |
 | `image.pullSecrets`        | Specify docker-registry secret names as an array                                                                                                                                    | `[]`                   |
@@ -304,7 +304,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`           | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                 |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`  | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r32`      |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r39`      |
 | `volumePermissions.image.digest`      | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
@@ -318,7 +318,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a side-car prometheus exporter                                                                                           | `false`                   |
 | `metrics.image.registry`                     | Exporter image registry                                                                                                        | `docker.io`               |
 | `metrics.image.repository`                   | Exporter image repository                                                                                                      | `bitnami/mysqld-exporter` |
-| `metrics.image.tag`                          | Exporter image tag (immutable tags are recommended)                                                                            | `0.14.0-debian-11-r33`    |
+| `metrics.image.tag`                          | Exporter image tag (immutable tags are recommended)                                                                            | `0.14.0-debian-11-r45`    |
 | `metrics.image.digest`                       | Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                       | `""`                      |
 | `metrics.image.pullPolicy`                   | Exporter image pull policy                                                                                                     | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                               | `[]`                      |
@@ -365,7 +365,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```bash
 $ helm install my-release \
   --set auth.rootPassword=secretpassword,auth.database=app_database \
-    bitnami/mysql
+    my-repo/mysql
 ```
 
 The above command sets the MySQL `root` account password to `secretpassword`. Additionally it creates a database named `app_database`.
@@ -375,7 +375,7 @@ The above command sets the MySQL `root` account password to `secretpassword`. Ad
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/mysql
+$ helm install my-release -f values.yaml my-repo/mysql
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -466,7 +466,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 It's necessary to set the `auth.rootPassword` parameter when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, some notes will be displayed providing the credentials you must use under the 'Administrator credentials' section. Please note down the password and run the command below to upgrade your chart:
 
 ```bash
-$ helm upgrade my-release bitnami/mysql --set auth.rootPassword=[ROOT_PASSWORD]
+$ helm upgrade my-release my-repo/mysql --set auth.rootPassword=[ROOT_PASSWORD]
 ```
 
 | Note: you need to substitute the placeholder _[ROOT_PASSWORD]_ with the value obtained in the installation notes.
@@ -509,7 +509,7 @@ Consequences:
   - Reuse the PVC used to hold the master data on your previous release. To do so, use the `primary.persistence.existingClaim` parameter. The following example assumes that the release name is `mysql`:
 
 ```bash
-$ helm install mysql bitnami/mysql --set auth.rootPassword=[ROOT_PASSWORD] --set primary.persistence.existingClaim=[EXISTING_PVC]
+$ helm install mysql my-repo/mysql --set auth.rootPassword=[ROOT_PASSWORD] --set primary.persistence.existingClaim=[EXISTING_PVC]
 ```
 
 | Note: you need to substitute the placeholder _[EXISTING_PVC]_ with the name of the PVC used on your previous release, and _[ROOT_PASSWORD]_ with the root password used in your previous release.

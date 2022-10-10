@@ -103,30 +103,30 @@ spec:
           {{- if .Values.defaultBackend.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.defaultBackend.livenessProbe.enabled }}
+          {{- if .Values.defaultBackend.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.defaultBackend.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.defaultBackend.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /healthz
               port: http
               scheme: HTTP
-          {{- else if .Values.defaultBackend.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.defaultBackend.readinessProbe.enabled }}
+          {{- if .Values.defaultBackend.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.defaultBackend.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.defaultBackend.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /healthz
               port: http
               scheme: HTTP
-          {{- else if .Values.defaultBackend.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.defaultBackend.startupProbe.enabled }}
+          {{- if .Values.defaultBackend.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.defaultBackend.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.defaultBackend.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http
-          {{- else if .Values.defaultBackend.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           ports:
             - name: http

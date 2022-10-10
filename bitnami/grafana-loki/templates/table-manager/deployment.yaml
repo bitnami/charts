@@ -91,7 +91,7 @@ spec:
           {{- else }}
           args:
             - -target=table-manager
-            - -config.file=/bitnami/grafana-loki/conf/loki.yaml
+            - -config.file={{ .Values.loki.dataDir }}/conf/loki.yaml
           {{- end }}
           {{- if .Values.tableManager.extraEnvVars }}
           env: {{- include "common.tplvalues.render" (dict "value" .Values.tableManager.extraEnvVars "context" $) | nindent 12 }}
@@ -114,28 +114,28 @@ spec:
           resources: {{- toYaml .Values.tableManager.resources | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.tableManager.livenessProbe.enabled }}
+          {{- if .Values.tableManager.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.tableManager.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.tableManager.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.tableManager.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /ready
               port: http
-          {{- else if .Values.tableManager.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.tableManager.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.tableManager.readinessProbe.enabled }}
+          {{- if .Values.tableManager.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.tableManager.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.tableManager.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.tableManager.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /ready
               port: http
-          {{- else if .Values.tableManager.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.tableManager.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.tableManager.startupProbe.enabled }}
+          {{- if .Values.tableManager.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.tableManager.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.tableManager.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.tableManager.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http
-          {{- else if .Values.tableManager.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.tableManager.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.tableManager.lifecycleHooks }}

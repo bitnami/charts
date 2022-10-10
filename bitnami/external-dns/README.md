@@ -7,12 +7,12 @@ ExternalDNS is a Kubernetes addon that configures public DNS servers with inform
 [Overview of ExternalDNS](https://github.com/kubernetes-incubator/external-dns)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/external-dns
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/external-dns
 ```
 
 ## Introduction
@@ -31,7 +31,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install my-release bitnami/external-dns
+$ helm install my-release my-repo/external-dns
 ```
 
 The command deploys ExternalDNS on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -78,7 +78,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                              | ExternalDNS image registry                                                                                                                                                   | `docker.io`               |
 | `image.repository`                            | ExternalDNS image repository                                                                                                                                                 | `bitnami/external-dns`    |
-| `image.tag`                                   | ExternalDNS Image tag (immutable tags are recommended)                                                                                                                       | `0.12.2-debian-11-r14`    |
+| `image.tag`                                   | ExternalDNS Image tag (immutable tags are recommended)                                                                                                                       | `0.12.2-debian-11-r22`    |
 | `image.digest`                                | ExternalDNS image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                  | `""`                      |
 | `image.pullPolicy`                            | ExternalDNS image pull policy                                                                                                                                                | `IfNotPresent`            |
 | `image.pullSecrets`                           | ExternalDNS image pull secrets                                                                                                                                               | `[]`                      |
@@ -329,19 +329,23 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.honorLabels`          | Specify honorLabels parameter to add the scrape endpoint                                                                                                                     | `false`                   |
 | `metrics.serviceMonitor.labels`               | Used to pass Labels that are required by the installed Prometheus Operator                                                                                                   | `{}`                      |
 | `metrics.serviceMonitor.jobLabel`             | The name of the label on the target service to use as the job name in prometheus.                                                                                            | `""`                      |
+| `metrics.googlePodMonitor.enabled`            | Create Google Managed Prometheus PodMonitoring object                                                                                                                        | `false`                   |
+| `metrics.googlePodMonitor.namespace`          | Namespace in which PodMonitoring created                                                                                                                                     | `""`                      |
+| `metrics.googlePodMonitor.interval`           | Interval at which metrics should be scraped by Google Managed Prometheus                                                                                                     | `60s`                     |
+| `metrics.googlePodMonitor.endpoint`           | The endpoint for Google Managed Prometheus scraping the metrics                                                                                                              | `/metrics`                |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
 $ helm install my-release \
-  --set provider=aws bitnami/external-dns
+  --set provider=aws my-repo/external-dns
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/external-dns
+$ helm install my-release -f values.yaml my-repo/external-dns
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -385,7 +389,7 @@ $ helm install my-release \
   --set aws.zoneType=public \
   --set txtOwnerId=HOSTED_ZONE_IDENTIFIER \
   --set domainFilters[0]=HOSTED_ZONE_NAME \
-  bitnami/external-dns
+  my-repo/external-dns
 ```
 
 ## Troubleshooting
@@ -451,7 +455,7 @@ Use the workaround below to upgrade from versions previous to 1.0.0. The followi
 
 ```console
 $ kubectl delete deployment my-release-external-dns
-$ helm upgrade my-release bitnami/external-dns
+$ helm upgrade my-release my-repo/external-dns
 ```
 
 Other mayor changes included in this major version are:

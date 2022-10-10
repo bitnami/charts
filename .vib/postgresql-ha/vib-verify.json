@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/postgresql-ha"
         },
-        "runtime_parameters": "Im5hbWVPdmVycmlkZSI6ICJwc3FsLWhhIgoicGdvb2wiOgogICJhZG1pblBhc3N3b3JkIjogIlVqUko5Z3k1R1EiCiJwb3N0Z3Jlc3FsIjoKICAicGFzc3dvcmQiOiAiN2RNeExmY3F4TiIKICAicmVwbWdyUGFzc3dvcmQiOiAiS21NWEhDOXJDVCIKICAicmVwbWdyVXNlcm5hbWUiOiAicmVwbWdyIgogICJ1c2VybmFtZSI6ICJwb3N0Z3JlcyIKInNlcnZpY2UiOgogICJwb3J0cyI6CiAgICAicG9zdGdyZXNxbCI6IDgwCiAgInR5cGUiOiAiTG9hZEJhbGFuY2VyIg==",
+        "runtime_parameters": "cGdwb29sOgogIGFkbWluVXNlcm5hbWU6IGFkbWluVXNlcgogIGFkbWluUGFzc3dvcmQ6IGFkbWluUGFzc3dvcmQxMjMhNAogIHJlcGxpY2FDb3VudDogMQogIHBvZFNlY3VyaXR5Q29udGV4dDoKICAgIGVuYWJsZWQ6IHRydWUKICAgIGZzR3JvdXA6IDEwMDIKICBjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgICBlbmFibGVkOiB0cnVlCiAgICBydW5Bc1VzZXI6IDEwMDIKICBjb250YWluZXJQb3J0czoKICAgIHBvc3RncmVzcWw6IDU0MzMKcG9zdGdyZXNxbDoKICByZXBtZ3JVc2VybmFtZTogcmVwbWdyCiAgcmVwbWdyUGFzc3dvcmQ6IHJlcG1nclBhc3N3b3JkMTIzITQKICByZXBtZ3JEYXRhYmFzZTogcmVwbWdyCiAgcmVwbWdyQ29ubmVjdFRpbWVvdXQ6IDcKICByZXBsaWNhQ291bnQ6IDQKICBjb250YWluZXJQb3J0czoKICAgIHBvc3RncmVzcWw6IDU0MzEKICBwb2RTZWN1cml0eUNvbnRleHQ6CiAgICBlbmFibGVkOiB0cnVlCiAgICBmc0dyb3VwOiAxMDAyCiAgY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogICAgZW5hYmxlZDogdHJ1ZQogICAgcnVuQXNVc2VyOiAxMDAyCnBlcnNpc3RlbmNlOgogIG1vdW50UGF0aDogL2JpdG5hbWkvcG9zdGdyZXNxbApzZXJ2aWNlOgogIHBvcnRzOgogICAgcG9zdGdyZXNxbDogODAKICB0eXBlOiBMb2FkQmFsYW5jZXI=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -34,7 +34,31 @@
         {
           "action_id": "health-check",
           "params": {
-            "endpoint": "lb-postgresql-ha-psql-ha-pgpool-postgresql"
+            "endpoint": "lb-postgresql-ha-pgpool-postgresql"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/postgresql-ha/goss/repmgr"
+            },
+            "remote": {
+              "workload": "sts-postgresql-ha-postgresql"
+            },
+            "vars_file": "vars.yaml"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/postgresql-ha/goss/pgpool"
+            },
+            "remote": {
+              "workload": "deploy-postgresql-ha-pgpool"
+            },
+            "vars_file": "vars.yaml"
           }
         }
       ]
