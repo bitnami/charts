@@ -213,8 +213,8 @@ rules:
   - apiGroups:
       - integreatly.org
     resources:
-    - grafanas
-    - grafanas/finalizers
+      - grafanas
+      - grafanas/finalizers
     verbs:
       - create
       - delete
