@@ -57,7 +57,7 @@ host. To configure JasperReports to use and external database host:
 
 1. Complete your JasperReports deployment by running:
 
-  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} --set service.type={{ .Values.service.type }},mariadb.enabled=false,externalDatabase.host=YOUR_EXTERNAL_DATABASE_HOST bitnami/jasperreports
+  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} --set service.type={{ .Values.service.type }},mariadb.enabled=false,externalDatabase.host=YOUR_EXTERNAL_DATABASE_HOST my-repo/jasperreports
 
 {{- end }}
 

@@ -117,28 +117,28 @@ spec:
           resources: {{- toYaml .Values.queryScheduler.resources | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.queryScheduler.livenessProbe.enabled }}
+          {{- if .Values.queryScheduler.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.queryScheduler.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryScheduler.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /ready
               port: http
-          {{- else if .Values.queryScheduler.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.queryScheduler.readinessProbe.enabled }}
+          {{- if .Values.queryScheduler.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.queryScheduler.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryScheduler.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /ready
               port: http
-          {{- else if .Values.queryScheduler.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.queryScheduler.startupProbe.enabled }}
+          {{- if .Values.queryScheduler.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.queryScheduler.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryScheduler.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http
-          {{- else if .Values.queryScheduler.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.queryScheduler.lifecycleHooks }}

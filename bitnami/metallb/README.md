@@ -7,12 +7,12 @@ MetalLB is a load-balancer implementation for bare metal Kubernetes clusters, us
 [Overview of MetalLB](https://metallb.universe.tf/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/metallb
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/metallb
 ```
 
 ## Introduction
@@ -33,8 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/metallb
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/metallb
 ```
 
 These commands deploy metallb on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -285,7 +285,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set readinessProbe.successThreshold=5 \
-    bitnami/metallb
+    my-repo/metallb
 ```
 The above command sets the `readinessProbe.successThreshold` to `5`.
 

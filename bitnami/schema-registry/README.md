@@ -7,12 +7,12 @@ Confluent Schema Registry provides a RESTful interface by adding a serving layer
 [Overview of Confluent Schema Registry](https://www.confluent.io)
 
 
-                           
+
 ## TL;DR
 
 ```bash
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install my-release bitnami/schema-registry
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/schema-registry
 ```
 
 ## Introduction
@@ -33,8 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```bash
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install my-release bitnami/schema-registry
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/schema-registry
 ```
 
 These commands deploy Schema Registry on the Kubernetes cluster with the default configuration. The [parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                                | Schema Registry image registry                                                                                  | `docker.io`               |
 | `image.repository`                              | Schema Registry image repository                                                                                | `bitnami/schema-registry` |
-| `image.tag`                                     | Schema Registry image tag (immutable tags are recommended)                                                      | `7.2.1-debian-11-r10`     |
+| `image.tag`                                     | Schema Registry image tag (immutable tags are recommended)                                                      | `7.2.2-debian-11-r0`      |
 | `image.digest`                                  | Schema Registry image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `image.pullPolicy`                              | Schema Registry image pull policy                                                                               | `IfNotPresent`            |
 | `image.pullSecrets`                             | Schema Registry image pull secrets                                                                              | `[]`                      |
@@ -258,7 +258,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```bash
 helm install my-release \
   --set replicaCount=2 \
-    bitnami/schema-registry
+    my-repo/schema-registry
 ```
 
 The above command installs Schema Registry chart with 2 replicas.
@@ -266,7 +266,7 @@ The above command installs Schema Registry chart with 2 replicas.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-helm install my-release -f values.yaml bitnami/schema-registry
+helm install my-release -f values.yaml my-repo/schema-registry
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

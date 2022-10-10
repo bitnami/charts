@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/jasperreports
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/jasperreports
 ```
 
 ## Introduction
@@ -35,7 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install my-release bitnami/jasperreports
+$ helm install my-release my-repo/jasperreports
 ```
 
 The command deploys JasperReports on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -247,7 +247,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set jasperreportsUsername=admin,jasperreportsPassword=password,mariadb.auth.rootPassword=secretpassword \
-    bitnami/jasperreports
+    my-repo/jasperreports
 ```
 
 The above command sets the JasperReports administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
@@ -257,7 +257,7 @@ The above command sets the JasperReports administrator account username and pass
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/jasperreports
+$ helm install my-release -f values.yaml my-repo/jasperreports
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -372,7 +372,7 @@ $ export JASPER_PASSWORD=$(kubectl get secret --namespace default jasperreports 
 $ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default jasperreports-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
 $ export MARIADB_PASSWORD=$(kubectl get secret --namespace default jasperreports-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
 $ kubectl delete deployments.apps jasperreports
-$ helm upgrade jasperreports bitnami/jasperreports --set jasperreportsPassword=$JASPER_PASSWORD,mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD
+$ helm upgrade jasperreports my-repo/jasperreports --set jasperreportsPassword=$JASPER_PASSWORD,mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD
 ```
 
 ### To 9.0.0
@@ -435,7 +435,7 @@ Delete the JasperReports deployment and delete the MariaDB statefulset. Notice t
 Now the upgrade works:
 
 ```console
-$ helm upgrade jasperreports bitnami/jasperreports --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set jasperreportsPassword=$JASPERREPORTS_PASSWORD --set allowEmptyPasswords=false
+$ helm upgrade jasperreports my-repo/jasperreports --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set jasperreportsPassword=$JASPERREPORTS_PASSWORD --set allowEmptyPasswords=false
 ```
 
 You will have to delete the existing MariaDB pod and the new statefulset is going to create a new one

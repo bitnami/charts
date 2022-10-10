@@ -7,12 +7,12 @@ NGINX Ingress Controller is an Ingress controller that manages external access t
 [Overview of NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/nginx-ingress-controller
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/nginx-ingress-controller
 ```
 
 ## Introduction
@@ -33,8 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/nginx-ingress-controller
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/nginx-ingress-controller
 ```
 
 These commands deploy nginx-ingress-controller on the Kubernetes cluster in the default configuration.
@@ -340,7 +340,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```bash
 $ helm install my-release \
     --set image.pullPolicy=Always \
-    bitnami/nginx-ingress-controller
+    my-repo/nginx-ingress-controller
 ```
 
 The above command sets the `image.pullPolicy` to `Always`.
@@ -348,7 +348,7 @@ The above command sets the `image.pullPolicy` to `Always`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/nginx-ingress-controller
+$ helm install my-release -f values.yaml my-repo/nginx-ingress-controller
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

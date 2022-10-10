@@ -1,7 +1,7 @@
 annotations:
   category: DeveloperTools
 apiVersion: v2
-appVersion: 1.13.1
+appVersion: 1.13.2
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -23,4 +23,4 @@ name: consul
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/consul
   - https://www.consul.io/
-version: 10.9.0
+version: 10.9.2

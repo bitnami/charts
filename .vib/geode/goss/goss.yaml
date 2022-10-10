@@ -1,0 +1,59 @@
+file:
+  /bitnami/geode:
+    exists: true
+    filetype: directory
+    mode: "2775"
+    owner: root
+  /opt/bitnami/geode/config/gemfire.properties:
+    exists: true
+    filetype: file
+    mode: "0644"
+    group: root
+    contains:
+    - http-service-port={{ .Vars.locator.containerPorts.http }}
+    - jmx-manager-port={{ .Vars.locator.containerPorts.rmi }}
+command:
+  {{- $servers := .Vars.server.replicaCount }}
+  {{- $locators := .Vars.locator.replicaCount }}
+  {{- $http_port := .Vars.locator.service.ports.http }}
+  {{- $auth_opts := printf "--user=%s --password=%s" .Vars.auth.username .Vars.auth.password }}
+  check-cluster-info:
+    exec: gfsh -e "connect --url=http://geode-locator:{{ $http_port }}/geode-mgmt/v1 {{ $auth_opts }}" -e "list members"
+    exit-status: 0
+    stdout:
+    {{ range $e, $l := until $locators }}
+      - /geode-locator-{{ $l }}/
+    {{ end }}
+    {{ range $e, $s := until $servers }}
+      - /geode-server-{{ $s }}/
+    {{ end }}
+    timeout: 60000
+  {{- $key := printf "key_%s" (randAlpha 5) }}
+  {{- $value := printf "value_%s" (randAlpha 5) }}
+  {{- $region := printf "region_%s" (randAlpha 5) }}
+  {{- $locator_port := .Vars.locator.service.ports.locator }}
+  {{- $jmx_manager_port := .Vars.locator.service.ports.rmi }}
+  {{- $create_region_cmd := printf "create region --name=%s --type=REPLICATE_PERSISTENT" $region }}
+  {{- $put_data_cmd := printf "put --key=(%s) --value=(%s) --region=%s" $key $value $region }}
+  {{- $get_data_cmd := printf "get --key=(%s) --region=%s" $key $region }}
+  test-replication:
+    exec: gfsh -e "connect --locator=geode-locator[{{ $locator_port }}] {{ $auth_opts }}" -e "{{ $create_region_cmd }}" -e "{{ $put_data_cmd }}" {{ range $e, $l := until $locators }} && gfsh -e "connect --jmx-manager=geode-locator-{{ $l }}.geode-locator-hl[{{ $jmx_manager_port }}] {{ $auth_opts }}" -e "{{ $get_data_cmd }}"{{ end }}
+    stdout:
+    {{ range $e, $s := until $servers }}
+      - /{{ $region }}.*created on.*geode-server-{{ $s }}/
+    {{ end }}
+      - /Cluster configuration.*updated/
+      - "!Result.*false"
+    exit-status: 0
+    timeout: 120000
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+    - uid={{ .Vars.locator.containerSecurityContext.runAsUser }}
+    - /groups=.*{{ .Vars.locator.podSecurityContext.fsGroup }}/
+  check-syn-cookies-config:
+    exec: sysctl -a | grep {{ .Vars.locator.podSecurityContext.sysctls.name }}
+    exit-status: 0
+    stdout:
+    - /{{ .Vars.locator.podSecurityContext.sysctls.name }}.*{{ .Vars.locator.podSecurityContext.sysctls.value }}/

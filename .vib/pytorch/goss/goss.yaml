@@ -1,0 +1,16 @@
+file:
+  {{ .Vars.persistence.mountPath }}:
+    exists: true
+    filetype: directory
+    mode: "2775"
+    owner: root
+command:
+  run-git-example:
+    exec: python /app/beginner_source/examples_tensor/polynomial_tensor.py
+    exit-status: 0
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+      - uid={{ .Vars.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/

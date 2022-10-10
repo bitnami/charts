@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/sonarqube"
         },
-        "runtime_parameters": "InBvc3RncmVzcWwiOgogICJwb3N0Z3Jlc3FsUGFzc3dvcmQiOiAiV0ozbnRRY2EiCiJzZXJ2aWNlIjoKICAicG9ydHMiOgogICAgImh0dHAiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciIKInNvbmFycXViZVBhc3N3b3JkIjogImpLaG03OGJYIgoic29uYXJxdWJlVXNlcm5hbWUiOiAidXNlciI=",
+        "runtime_parameters": "c29uYXJxdWJlVXNlcm5hbWU6IHRlc3RfdXNlcgpzb25hcnF1YmVQYXNzd29yZDogQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0CnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCiAgcG9ydHM6CiAgICBodHRwOiA4MAogICAgZWxhc3RpYzogOTA5MQpjb250YWluZXJQb3J0czoKICBodHRwOiA5MDkwCiAgZWxhc3RpYzogOTA5MQpwb2RTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIGZzR3JvdXA6IDEwMDIKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBydW5Bc1VzZXI6IDEwMDIKc2VydmljZUFjY291bnQ6CiAgY3JlYXRlOiB0cnVlCiAgYXV0b21vdW50U2VydmljZUFjY291bnRUb2tlbjogdHJ1ZQpwb3N0Z3Jlc3FsOgogIGVuYWJsZWQ6IHRydWUKICBzZXJ2aWNlOgogICAgcG9ydHM6CiAgICAgIHBvc3RncmVzcWw6IDU0MzIKICBhdXRoOgogICAgcGFzc3dvcmQ6IHRlc3RfZGJfcGFzc3dvcmQKICAgIHVzZXJuYW1lOiB0ZXN0X2RiX3VzZXIKICAgIGRhdGFiYXNlOiB0ZXN0X2RiX2RhdGFiYXNlCnN5c2N0bDoKICBlbmFibGVkOiB0cnVl",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
           "size": {
@@ -36,6 +36,32 @@
           "params": {
             "endpoint": "lb-sonarqube-http",
             "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/sonarqube/cypress"
+            },
+            "endpoint": "lb-sonarqube-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "user": "test_user",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/sonarqube/goss"
+            },
+            "remote": {
+              "workload": "deploy-sonarqube"
+            },
+            "vars_file": "vars.yaml"
           }
         }
       ]

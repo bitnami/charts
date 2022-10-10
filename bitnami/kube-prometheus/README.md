@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/kube-prometheus
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/kube-prometheus
 ```
 
 ## Introduction
@@ -41,13 +41,13 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 Add the `bitnami` charts repo to Helm:
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 ```
 
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install my-release bitnami/kube-prometheus
+$ helm install my-release my-repo/kube-prometheus
 ```
 
 The command deploys kube-prometheus on the Kubernetes cluster in the default configuration. The [configuration](#configuration-and-installation-details) section lists the parameters that can be configured during installation.
@@ -702,7 +702,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 $ helm install my-release \
   --set operator.logLevel=debug \
   --set prometheus.replicaCount=5 \
-    bitnami/kube-prometheus
+    my-repo/kube-prometheus
 ```
 
 The above command sets the Prometheus Operator `logLevel` to `debug`. Additionally it sets the `prometheus.replicaCount` to `5`.
@@ -710,7 +710,7 @@ The above command sets the Prometheus Operator `logLevel` to `debug`. Additional
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/kube-prometheus
+$ helm install my-release -f values.yaml my-repo/kube-prometheus
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -758,7 +758,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 ## Upgrading
 
 ```bash
-$ helm upgrade my-release bitnami/kube-prometheus
+$ helm upgrade my-release my-repo/kube-prometheus
 ```
 
 ### To 8.0.0
@@ -881,7 +881,7 @@ To upgrade from version 2.0.0, previously remove the Thanos sidecar svc to avoid
 
 ```bash
 $ kubectl delete svc my-relase-kube-prometheus-prometheus-thanos
-$ helm upgrade my-release --set prometheus.thanos.create=true bitnami/kube-prometheus
+$ helm upgrade my-release --set prometheus.thanos.create=true my-repo/kube-prometheus
 ```
 
 ### To 2.0.0

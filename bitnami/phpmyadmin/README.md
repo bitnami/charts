@@ -7,12 +7,12 @@ phpMyAdmin is a free software tool written in PHP, intended to handle the admini
 [Overview of phpMyAdmin](https://www.phpmyadmin.net/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/phpmyadmin
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/phpmyadmin
 ```
 
 ## Introduction
@@ -33,7 +33,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install my-release bitnami/phpmyadmin
+$ helm install my-release my-repo/phpmyadmin
 ```
 
 The command deploys phpMyAdmin on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -264,7 +264,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install my-release \
-  --set db.host=mymariadb,db.port=3306 bitnami/phpmyadmin
+  --set db.host=mymariadb,db.port=3306 my-repo/phpmyadmin
 ```
 
 The above command sets the phpMyAdmin to connect to a database in `mymariadb` host and `3306` port respectively.
@@ -272,7 +272,7 @@ The above command sets the phpMyAdmin to connect to a database in `mymariadb` ho
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/phpmyadmin
+$ helm install my-release -f values.yaml my-repo/phpmyadmin
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -418,7 +418,7 @@ Consequences:
 $ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default phpmyadmin-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
 $ export MARIADB_PASSWORD=$(kubectl get secret --namespace default phpmyadmin-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
 $ kubectl delete deployments.apps phpmyadmin
-$ helm upgrade phpmyadmin bitnami/phpmyadmin --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD
+$ helm upgrade phpmyadmin my-repo/phpmyadmin --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD
 ```
 
 ### To 7.0.0
@@ -483,7 +483,7 @@ Delete the phpMyAdmin deployment and delete the MariaDB statefulsets:
 Now the upgrade works:
 
 ```console
-$ helm upgrade phpmyadmin bitnami/phpmyadmin --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set db.bundleTestDB=true
+$ helm upgrade phpmyadmin my-repo/phpmyadmin --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set db.bundleTestDB=true
 ```
 
 Finally, you should see the lines below in MariaDB container logs:

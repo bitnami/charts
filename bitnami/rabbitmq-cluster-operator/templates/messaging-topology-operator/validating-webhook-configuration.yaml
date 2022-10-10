@@ -40,7 +40,7 @@ metadata:
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
-  name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
+  name: {{ template "rmqco.msgTopologyOperator.webhook.fullname.namespace" . }}
 webhooks:
   - admissionReviewVersions:
       - v1

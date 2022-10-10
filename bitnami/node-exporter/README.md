@@ -7,12 +7,12 @@ Prometheus exporter for hardware and OS metrics exposed by UNIX kernels, with pl
 [Overview of Node Exporter](https://prometheus.io/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/node-exporter
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/node-exporter
 ```
 
 ## Introduction
@@ -31,13 +31,13 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 Add the `bitnami` charts repo to Helm:
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 ```
 
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install my-release bitnami/node-exporter
+$ helm install my-release my-repo/node-exporter
 ```
 
 The command deploys Node Exporter on the Kubernetes cluster in the default configuration. The [configuration](#configuration-and-installation-details) section lists the parameters that can be configured during installation.
@@ -93,7 +93,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                                         | `{}`                    |
 | `image.registry`                              | Node Exporter image registry                                                                                                                                       | `docker.io`             |
 | `image.repository`                            | Node Exporter image repository                                                                                                                                     | `bitnami/node-exporter` |
-| `image.tag`                                   | Node Exporter image tag (immutable tags are recommended)                                                                                                           | `1.3.1-debian-11-r23`   |
+| `image.tag`                                   | Node Exporter image tag (immutable tags are recommended)                                                                                                           | `1.4.0-debian-11-r2`    |
 | `image.digest`                                | Node Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                      | `""`                    |
 | `image.pullPolicy`                            | Node Exporter image pull policy                                                                                                                                    | `IfNotPresent`          |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                                                   | `[]`                    |
@@ -181,13 +181,13 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example the following command sets the `minReadySeconds` of the Node Exporter Pods to `120` seconds.
 
 ```bash
-$ helm install my-release --set minReadySeconds=120 bitnami/node-exporter
+$ helm install my-release --set minReadySeconds=120 my-repo/node-exporter
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/node-exporter
+$ helm install my-release -f values.yaml my-repo/node-exporter
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -213,7 +213,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 ## Upgrading
 
 ```bash
-$ helm upgrade my-release bitnami/node-exporter
+$ helm upgrade my-release my-repo/node-exporter
 ```
 
 ### To 3.0.0

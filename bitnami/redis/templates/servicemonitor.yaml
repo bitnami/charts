@@ -32,6 +32,9 @@ spec:
       {{- if .Values.metrics.serviceMonitor.metricRelabelings }}
       metricRelabelings: {{- toYaml .Values.metrics.serviceMonitor.metricRelabelings | nindent 6 }}
       {{- end }}
+  {{- if .Values.metrics.serviceMonitor.podTargetLabels }}
+  podTargetLabels: {{- toYaml .Values.metrics.serviceMonitor.podTargetLabels | nindent 4 }}
+  {{- end }}
   namespaceSelector:
     matchNames:
       - {{ .Release.Namespace }}

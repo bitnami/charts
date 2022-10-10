@@ -12,6 +12,7 @@ on:
 jobs:
   # For any opened or reopened issue, should be sent into Triage
   send_to_board:
+    name: Organize triage
     runs-on: ubuntu-latest
     steps:
       - name: Repo checkout

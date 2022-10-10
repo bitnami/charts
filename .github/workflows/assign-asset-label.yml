@@ -1,0 +1,47 @@
+name: '[Support] Assign asset label'
+on:
+  pull_request_target:
+    types:
+      - opened
+permissions:
+  pull-requests: write
+  issues: write
+jobs:
+  assign-label:
+    name: Assign label
+    runs-on: ubuntu-latest
+    steps:
+      - id: get-asset
+        name: Get modified assets
+        run: |
+          # Using the Github API to detect the files changed as git merge-base stops working when the branch is behind
+          # and jitterbit/get-changed-files does not support pull_request_target
+          URL="https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files"
+          files_changed_data=$(curl -s --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' -X GET -G "$URL")
+          files_changed="$(echo $files_changed_data | jq -r '.[] | .filename')"
+          # Adding || true to avoid "Process exited with code 1" errors
+          assets=($(echo "$files_changed" | xargs dirname | sed -nr "s|bitnami/([^/]*).*|\1|p" | sort | uniq || true))
+
+          if [[ "${#assets[@]}" -ne "1" ]]; then
+            echo "::set-output name=result::skip"
+            echo "::set-output name=message::Label cannot be set, cannot infer a single label from: ${assets[@]}"
+            echo "::set-output name=name::NONE"
+          else
+            echo "::set-output name=result::ok"
+            echo "::set-output name=message::Adding label '${assets}'"
+            echo "::set-output name=name::${assets}"
+          fi
+      - name: Show messages
+        uses: actions/github-script@v6
+        with:
+          script: |
+            if ("${{ steps.get-asset.outputs.result }}" != "ok" ) {
+              core.warning("${{ steps.get-asset.outputs.message }}")
+            } else {
+              core.info("${{ steps.get-asset.outputs.message }}")
+            }
+      - name: Labeling
+        if: ${{ steps.get-asset.outputs.result == 'ok' }}
+        uses: andymckay/labeler@1.0.4
+        with:
+          add-labels: "${{ steps.get-asset.outputs.name }}"

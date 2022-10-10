@@ -7,12 +7,12 @@ This PostgreSQL cluster solution includes the PostgreSQL replication manager, an
 [Overview of PostgreSQL HA](https://www.postgresql.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/postgresql-ha
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/postgresql-ha
 ```
 
 ## Introduction
@@ -36,8 +36,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 Install the PostgreSQL HA helm chart with a release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/postgresql-ha
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/postgresql-ha
 ```
 
 ## Uninstalling the Chart
@@ -484,7 +484,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
     --set postgresql.password=password \
-    bitnami/postgresql-ha
+    my-repo/postgresql-ha
 ```
 
 The above command sets the password for user `postgres` to `password`.
@@ -666,7 +666,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 It's necessary to specify the existing passwords while performing a upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `postgresql.password` and `postgresql.repmgrPassword` parameters when upgrading the chart:
 
 ```bash
-$ helm upgrade my-release bitnami/postgresql-ha \
+$ helm upgrade my-release my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRES_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD]
 ```
@@ -704,7 +704,7 @@ A new major version of repmgr (5.3) was included. To upgrade to this major versi
 - Reduce your PostgreSQL setup to one replica (primary node) and upgrade to `8.0.0`, enabling the repmgr extension upgrade:
 
 ```bash
-$ helm upgrade my-release --version 8.0.0 bitnami/postgresql-ha \
+$ helm upgrade my-release --version 8.0.0 my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     --set postgresql.replicaCount=1 \
@@ -714,7 +714,7 @@ $ helm upgrade my-release --version 8.0.0 bitnami/postgresql-ha \
 - Scale your PostgreSQL setup to the original number of replicas:
 
 ```bash
-$ helm upgrade my-release --version 8.0.0 bitnami/postgresql-ha \
+$ helm upgrade my-release --version 8.0.0 my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     --set postgresql.replicaCount=[NUMBER_OF_REPLICAS]
@@ -757,7 +757,7 @@ A new  version of repmgr (5.2.0) was included. To upgrade to this version, it's 
 - Reduce your PostgreSQL setup to one replica (primary node) and upgrade to `5.2.0`, enabling the repmgr extension upgrade:
 
 ```bash
-$ helm upgrade my-release --version 5.2.0 bitnami/postgresql-ha \
+$ helm upgrade my-release --version 5.2.0 my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     --set postgresql.replicaCount=1 \
@@ -767,7 +767,7 @@ $ helm upgrade my-release --version 5.2.0 bitnami/postgresql-ha \
 - Scale your PostgreSQL setup to the original number of replicas:
 
 ```bash
-$ helm upgrade my-release --version 5.2.0 bitnami/postgresql-ha \
+$ helm upgrade my-release --version 5.2.0 my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     --set postgresql.replicaCount=[NUMBER_OF_REPLICAS]
@@ -787,7 +787,7 @@ $ # e.g. Previous deployment v3.9.1
 $ helm install my-release \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
-    bitnami/postgresql-ha --version 3.9.1
+    my-repo/postgresql-ha --version 3.9.1
 
 $ # Update repository information
 $ helm repo update
@@ -797,7 +797,7 @@ $ helm delete my-release
 $ helm install my-release \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
-    bitnami/postgresql-ha --version 5.0.0
+    my-repo/postgresql-ha --version 5.0.0
 ```
 
 ### To 4.0.x
@@ -811,7 +811,7 @@ A new major version of repmgr (5.1.0) was included. To upgrade to this major ver
 - Reduce your PostgreSQL setup to one replica (primary node) and upgrade to `3.0.0`, enabling the repmgr extension upgrade:
 
 ```bash
-$ helm upgrade my-release --version 3.0.0 bitnami/postgresql-ha \
+$ helm upgrade my-release --version 3.0.0 my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     --set postgresql.replicaCount=1 \
@@ -821,7 +821,7 @@ $ helm upgrade my-release --version 3.0.0 bitnami/postgresql-ha \
 - Scale your PostgreSQL setup to the original number of replicas:
 
 ```bash
-$ helm upgrade my-release --version 3.0.0 bitnami/postgresql-ha \
+$ helm upgrade my-release --version 3.0.0 my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     --set postgresql.replicaCount=[NUMBER_OF_REPLICAS]
@@ -845,7 +845,7 @@ A new major version of repmgr (5.0.0) was included. To upgrade to this major ver
 - Reduce your PostgreSQL setup to one replica (primary node) and upgrade to `1.0.0`, enabling the repmgr extension upgrade:
 
 ```bash
-$ helm upgrade my-release --version 1.0.0 bitnami/postgresql-ha \
+$ helm upgrade my-release --version 1.0.0 my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     --set postgresql.replicaCount=1 \
@@ -855,7 +855,7 @@ $ helm upgrade my-release --version 1.0.0 bitnami/postgresql-ha \
 - Scale your PostgreSQL setup to the original number of replicas:
 
 ```bash
-$ helm upgrade my-release --version 1.0.0 bitnami/postgresql-ha \
+$ helm upgrade my-release --version 1.0.0 my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     --set postgresql.replicaCount=[NUMBER_OF_REPLICAS]

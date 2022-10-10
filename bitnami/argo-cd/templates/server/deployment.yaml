@@ -52,6 +52,9 @@ spec:
       {{- if .Values.server.schedulerName }}
       schedulerName: {{ .Values.server.schedulerName }}
       {{- end }}
+      {{- if .Values.server.shareProcessNamespace }}
+      shareProcessNamespace: {{ .Values.server.shareProcessNamespace }}
+      {{- end }}
       {{- if .Values.server.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.controller.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
@@ -86,9 +89,13 @@ spec:
         {{- if .Values.server.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.server.initContainers "context" $) | nindent 8 }}
         {{- end }}
+        {{- if .Values.redisWait.enabled }}
         - name: wait-for-redis
           image: {{ include "common.images.image" (dict "imageRoot" .Values.redis.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.redis.image.pullPolicy | quote }}
+          {{- with .Values.redisWait.securityContext }}
+          securityContext: {{ . | toYaml }}
+          {{- end }}
           command:
             - /bin/bash
           args:
@@ -104,7 +111,7 @@ spec:
                 . /opt/bitnami/scripts/liblog.sh
 
                 check_redis_connection() {
-                  local result="$(redis-cli -h {{ include "argocd.redisHost" . }} -p {{ include "argocd.redisPort" . }} PING)"
+                  local result="$(redis-cli -h {{ include "argocd.redisHost" . }} -p {{ include "argocd.redisPort" . }} {{ .Values.redisWait.extraArgs }} PING)"
                   if [[ "$result" != "PONG" ]]; then
                     false
                   fi
@@ -125,6 +132,7 @@ spec:
                   name: {{ include "argocd.redis.secretName" . }}
                   key: {{ include "argocd.redis.secretPasswordKey" . }}
           {{- end }}
+        {{- end }}
       containers:
         - name: argocd-server
           image: {{ include "argocd.image" . }}
