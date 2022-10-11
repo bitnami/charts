@@ -184,6 +184,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.service.annotations`                   | Additional custom annotations for MySQL primary service                                                         | `{}`                |
 | `primary.service.sessionAffinity`               | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                            | `None`              |
 | `primary.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                     | `{}`                |
+| `primary.service.headless.annotations`          | Additional custom annotations for headless MySQL primary service.                                               | `{}`                |
 | `primary.pdb.create`                            | Enable/disable a Pod Disruption Budget creation for MySQL primary pods                                          | `false`             |
 | `primary.pdb.minAvailable`                      | Minimum number/percentage of MySQL primary pods that should remain scheduled                                    | `1`                 |
 | `primary.pdb.maxUnavailable`                    | Maximum number/percentage of MySQL primary pods that may be made unavailable                                    | `""`                |
@@ -270,6 +271,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.service.annotations`                   | Additional custom annotations for MySQL secondary service                                                           | `{}`                |
 | `secondary.service.sessionAffinity`               | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                | `None`              |
 | `secondary.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                         | `{}`                |
+| `secondary.service.headless.annotations`          | Additional custom annotations for headless MySQL secondary service.                                                 | `{}`                |
 | `secondary.pdb.create`                            | Enable/disable a Pod Disruption Budget creation for MySQL secondary pods                                            | `false`             |
 | `secondary.pdb.minAvailable`                      | Minimum number/percentage of MySQL secondary pods that should remain scheduled                                      | `1`                 |
 | `secondary.pdb.maxUnavailable`                    | Maximum number/percentage of MySQL secondary pods that may be made unavailable                                      | `""`                |
