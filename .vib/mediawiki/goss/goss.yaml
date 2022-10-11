@@ -31,6 +31,6 @@ command:
     exec: env
     exit-status: 0
     stdout:
-      - /MARIADB_DATABASE.*{{ .Vars.mariadb.auth.database }}/
-      - /MARIADB_USER.*{{ .Vars.mariadb.auth.username }}/
-      - /MARIADB_PASSWORD.*{{ .Vars.mariadb.auth.password }}/
+      - /MEDIAWIKI_DATABASE_NAME.*{{ .Vars.mariadb.auth.database }}/
+      - /MEDIAWIKI_DATABASE_USER.*{{ .Vars.mariadb.auth.username }}/
+      - /MEDIAWIKI_DATABASE_PASSWORD.*{{ .Vars.mariadb.auth.password }}/
