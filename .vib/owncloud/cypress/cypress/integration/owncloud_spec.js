@@ -11,12 +11,12 @@ it('allows creating a folder, then upload and then download a file ', () => {
     cy.get('span').contains(`${folder.newFolder.name}.${random}`).click();
     cy.get('.new').click();
     cy.get('[data-action="upload"]').click();
+    const fileToUpload = 'file_to_upload.json';
     cy.get('[type="file"]').selectFile(
-      'cypress/fixtures/file_to_upload.json',
-      { force: true }
+      `cypress/fixtures/${fileToUpload}`, { force: true }
     );
-    cy.contains('file_to_upload').should('be.visible');
-    cy.get('[href*="file_to_upload"]').within(() => {
+    cy.contains(fileToUpload).should('be.visible');
+    cy.get(`[href*="${fileToUpload}"]`).within(() => {
       cy.get('[data-action="Share"]').click();
     });
     // Create a public link and try to download the file
@@ -29,9 +29,13 @@ it('allows creating a folder, then upload and then download a file ', () => {
       .then((link) => {
         cy.request({
           url: `${link}/download`,
+          json: true,
         }).then((response) => {
-          expect(response.body).to.contain('testJson')
-        })
+            const downloadedFile = response.body
+            cy.fixture(fileToUpload).then((uploadedFile) => {
+              expect(uploadedFile).to.contain(downloadedFile);
+            });
+          })
       });
   });
 });
