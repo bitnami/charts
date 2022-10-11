@@ -20,20 +20,20 @@ it('allows creating a folder and uploading a file ', () => {
     cy.get('[href*="file_to_upload"]').within(() => {
       cy.get('[data-action="Share"]').click();
     });
-    cy.get('[class="permalink"]').click();
-    cy.get('.detailFileInfoContainer').within(() => {
-      cy.get('input')
-        .invoke('val')
-        .should('contain', 'vmware')
-        .then((link) => {
-          cy.request({
-            method: 'GET',
-            url: link,
-            form: true,
-          }).then((response) => {
-              expect(response.status).to.eq(200);
-            });
-        });
-    });
+    // Create a public link and try to download the file
+    cy.contains('Public Links').click();
+    cy.contains('Create public link').click();
+    cy.get('button').contains('Share').click();
+    cy.get('.linkText')
+      .invoke('val')
+      .should('contain', 'vmware')
+      .then((link) => {
+        cy.request({
+          url: `${link}/download`,
+        }).then((response) => {
+          const mime = response.body
+          expect(response.body).to.contain('testJson')
+        })
+      });
   });
 });
