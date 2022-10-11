@@ -200,6 +200,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `supervisor.enabled`                                         | Deploy Supervisor                                                                                                        | `true`          |
 | `supervisor.replicaCount`                                    | Number of Supervisor replicas to deploy                                                                                  | `1`             |
 | `supervisor.containerPorts.https`                            | Supervisor HTTP container port                                                                                           | `8443`          |
+| `supervisor.deployAPIService`                                | Deploy the APIService objects                                                                                            | `true`          |
 | `supervisor.configuration`                                   | Supervisor pinniped.yaml configuration file                                                                              | `""`            |
 | `supervisor.livenessProbe.enabled`                           | Enable livenessProbe on Supervisor containers                                                                            | `true`          |
 | `supervisor.livenessProbe.initialDelaySeconds`               | Initial delay seconds for livenessProbe                                                                                  | `10`            |
