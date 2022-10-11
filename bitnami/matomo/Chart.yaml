@@ -1,7 +1,7 @@
 annotations:
   category: Analytics
 apiVersion: v2
-appVersion: 4.11.0
+appVersion: 4.12.0
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
@@ -30,4 +30,4 @@ name: matomo
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/matomo
   - https://www.matomo.org/
-version: 0.2.8
+version: 0.2.9
