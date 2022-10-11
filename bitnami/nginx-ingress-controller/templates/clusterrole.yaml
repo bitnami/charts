@@ -20,6 +20,16 @@ rules:
       - nodes
       - pods
       - secrets
+    {{- if not .Values.scope.enabled }}
+      - namespaces
+    {{- end}}
+    verbs:
+      - list
+      - watch
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
     verbs:
       - list
       - watch
@@ -81,10 +91,11 @@ rules:
       - list
       - watch
   - apiGroups:
-    - coordination.k8s.io
+      - discovery.k8s.io
     resources:
-      - leases
+      - endpointslices
     verbs:
       - list
       - watch
+      - get
 {{- end }}

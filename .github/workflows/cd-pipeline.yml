@@ -14,6 +14,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/discourse/**'
       - 'bitnami/dokuwiki/**'
       - 'bitnami/drupal/**'
+      - 'bitnami/ejbca/**'
       - 'bitnami/elasticsearch/**'
       - 'bitnami/etcd/**'
       - 'bitnami/external-dns/**'
@@ -21,6 +22,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/geode/**'
       - 'bitnami/ghost/**'
       - 'bitnami/grafana-loki/**'
+      - 'bitnami/grafana-operator/**'
       - 'bitnami/grafana/**'
       - 'bitnami/haproxy/**'
       - 'bitnami/haproxy-intel/**'
@@ -59,8 +61,10 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/phpmyadmin/**'
       - 'bitnami/pinniped/**'
       - 'bitnami/postgresql/**'
+      - 'bitnami/postgresql-ha/**'
       - 'bitnami/prestashop/**'
       - 'bitnami/pytorch/**'
+      - 'bitnami/rabbitmq-cluster-operator/**'
       - 'bitnami/rabbitmq/**'
       - 'bitnami/redis-cluster/**'
       - 'bitnami/redis/**'
@@ -168,7 +172,8 @@ jobs:
       - name: Install and configure aws-cli and helm
         run: |
           # AWS CLI
-          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y awscli
+          export DEBIAN_FRONTEND=noninteractive
+          sudo apt-get update && sudo apt-get install -y awscli
           aws configure set region us-east-1
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}

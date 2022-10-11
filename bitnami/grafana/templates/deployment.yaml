@@ -217,7 +217,9 @@ spec:
             - name: dashboard
               containerPort: {{ .Values.grafana.containerPorts.grafana }}
               protocol: TCP
-          {{- if .Values.grafana.livenessProbe.enabled }}
+          {{- if .Values.grafana.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.grafana.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: {{ .Values.grafana.livenessProbe.path }}
@@ -228,10 +230,10 @@ spec:
             timeoutSeconds: {{ .Values.grafana.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.grafana.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.grafana.livenessProbe.failureThreshold }}
-          {{- else if .Values.grafana.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.grafana.readinessProbe.enabled }}
+          {{- if .Values.grafana.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.grafana.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
               path: {{ .Values.grafana.readinessProbe.path }}
@@ -242,10 +244,10 @@ spec:
             timeoutSeconds: {{ .Values.grafana.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.grafana.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.grafana.readinessProbe.failureThreshold }}
-          {{- else if .Values.grafana.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.grafana.startupProbe.enabled }}
+          {{- if .Values.grafana.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.grafana.startupProbe.enabled }}
           startupProbe:
             httpGet:
               path: {{ .Values.grafana.startupProbe.path }}
@@ -256,8 +258,6 @@ spec:
             timeoutSeconds: {{ .Values.grafana.startupProbe.timeoutSeconds }}
             successThreshold: {{ .Values.grafana.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.grafana.startupProbe.failureThreshold }}
-          {{- else if .Values.grafana.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.grafana.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.lifecycleHooks "context" $) | nindent 12 }}

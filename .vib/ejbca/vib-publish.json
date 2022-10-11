@@ -22,11 +22,11 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/ejbca"
         },
-        "runtime_parameters": "ImVqYmNhQWRtaW5QYXNzd29yZCI6ICJCaXRuYW1pMTIzNCIKImVqYmNhQWRtaW5Vc2VybmFtZSI6ICJzdXBlcmFkbWluIgoic2VydmljZSI6CiAgInBvcnRzIjoKICAgICJodHRwIjogODAKICAidHlwZSI6ICJMb2FkQmFsYW5jZXIi",
+        "runtime_parameters": "ZWpiY2FBZG1pblVzZXJuYW1lOiBiaXRuYW1pVGVzdAplamJjYUFkbWluUGFzc3dvcmQ6ICJDb21wbGljYXRlZFBhc3N3b3JkMTIzITQiCmVqYmNhQ0E6CiAgbmFtZTogTWFuYWdlbWVudFRlc3RDQQogIGJhc2VETjogIlVJRD1jLTFDQ1htUEFzTldtWnVEdFFROEZIbDd0Y1ZkakNpTlRILE89RXhhbXBsZUNBLEM9U0UiCnBvZFNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgZnNHcm91cDogMTAwMgpjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIHJ1bkFzVXNlcjogMTAwMgpjb250YWluZXJQb3J0czoKICBodHRwOiA4MDgxCiAgaHR0cHM6IDg0NDMKc2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGh0dHA6IDgwCiAgICBodHRwczogODQ0NAogIGFkdmVydGlzZWRIdHRwc1BvcnQ6IDg0NDQKbWFyaWFkYjoKICBlbmFibGVkOiB0cnVlCiAgYXV0aDoKICAgIGRhdGFiYXNlOiBiaXRuYW1pX2VqYmNhX3Rlc3QKICAgIHVzZXJuYW1lOiBibl9lamJjYV90ZXN0CiAgICBwYXNzd29yZDogYm5fZWpiY2FfcGFzc190ZXN0",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
-            "name": "S4"
+            "name": "M4"
           }
         }
       },
@@ -34,6 +34,28 @@
         {
           "action_id": "health-check",
           "params": {
+            "endpoint": "lb-ejbca-http",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/ejbca/goss"
+            },
+            "remote": {
+              "workload": "deploy-ejbca"
+            },
+            "vars_file": "vars.yaml"
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/ejbca/cypress"
+            },
             "endpoint": "lb-ejbca-http",
             "app_protocol": "HTTP"
           }

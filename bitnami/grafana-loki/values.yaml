@@ -72,7 +72,7 @@ loki:
   image:
     registry: docker.io
     repository: bitnami/grafana-loki
-    tag: 2.6.1-debian-11-r18
+    tag: 2.6.1-debian-11-r30
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -586,7 +586,7 @@ gateway:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.23.1-debian-11-r18
+    tag: 1.23.1-debian-11-r32
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -3250,7 +3250,7 @@ promtail:
   image:
     registry: docker.io
     repository: bitnami/promtail
-    tag: 2.6.1-debian-11-r17
+    tag: 2.6.1-debian-11-r29
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -3665,7 +3665,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r32
+    tag: 11-debian-11-r40
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -3787,7 +3787,7 @@ memcachedchunks:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.17-debian-11-r3
+    tag: 1.6.17-debian-11-r14
     digest: ""
   ## @param memcachedchunks.nameOverride override the subchart name
   ##
@@ -3828,7 +3828,7 @@ memcachedfrontend:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.17-debian-11-r3
+    tag: 1.6.17-debian-11-r14
     digest: ""
   ## @param memcachedfrontend.architecture Memcached architecture
   ##
@@ -3870,7 +3870,7 @@ memcachedindexqueries:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.17-debian-11-r3
+    tag: 1.6.17-debian-11-r14
     digest: ""
   ## @param memcachedindexqueries.architecture Memcached architecture
   ##
@@ -3911,7 +3911,7 @@ memcachedindexwrites:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.17-debian-11-r3
+    tag: 1.6.17-debian-11-r14
     digest: ""
   ## @param memcachedindexwrites.architecture Memcached architecture
   ##

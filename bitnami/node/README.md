@@ -7,12 +7,12 @@ Node.js is a runtime environment built on V8 JavaScript engine. Its event-driven
 [Overview of Node.js](http://nodejs.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/node
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/node
 ```
 
 ## Introduction
@@ -35,8 +35,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/node
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/node
 ```
 
 These commands deploy Node.js on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation. Also includes support for MariaDB chart out of the box.
@@ -261,7 +261,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set repository=https://github.com/jbianquetti-nami/simple-node-app.git,replicaCount=2 \
-    bitnami/node
+    my-repo/node
 ```
 
 The above command clones the remote git repository to the `/app/` directory  of the container. Additionally it sets the number of `replicaCount` to `2`.
@@ -269,7 +269,7 @@ The above command clones the remote git repository to the `/app/` directory  of 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/node
+$ helm install my-release -f values.yaml my-repo/node
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

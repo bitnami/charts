@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/cassandra
-  tag: 4.0.6-debian-11-r2
+  tag: 4.0.6-debian-11-r11
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -425,6 +425,19 @@ containerPorts:
   jmx: 7199
   cql: 9042
 
+## Cassandra ports to be exposed as hostPort
+## If hostNetwork is false, only the ports specified here will be exposed (or not if set to an empty string)
+## @param hostPorts.intra Intra Port on the Host
+## @param hostPorts.tls TLS Port on the Host
+## @param hostPorts.jmx JMX Port on the Host
+## @param hostPorts.cql CQL Port on the Host
+##
+hostPorts:
+  intra: ""
+  tls: ""
+  jmx: ""
+  cql: ""
+
 ## @section RBAC parameters
 ##
 
@@ -591,7 +604,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r32
+    tag: 11-debian-11-r37
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -660,7 +673,7 @@ metrics:
     registry: docker.io
     pullPolicy: IfNotPresent
     repository: bitnami/cassandra-exporter
-    tag: 2.3.8-debian-11-r34
+    tag: 2.3.8-debian-11-r43
     digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -769,6 +782,15 @@ metrics:
   containerPorts:
     http: 8080
     jmx: 5555
+
+  ## Metrics ports to be exposed as hostPort
+  ## If hostNetwork is false, only the ports specified here will be exposed (or not if set to an empty string)
+  ## @param metrics.hostPorts.http HTTP Port on the Host
+  ## @param metrics.hostPorts.jmx JMX Port on the Host
+  ##
+  hostPorts:
+    http: ""
+    jmx: ""
 
   ## @param metrics.configuration [string] Configure Cassandra-exporter with a custom config.yml file
   ## ref: https://github.com/criteo/cassandra_exporter/blob/master/config.yml
