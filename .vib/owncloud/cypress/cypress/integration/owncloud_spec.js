@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 import { random } from '../support/utils';
 
-it('allows creating a folder and uploading a file ', () => {
+it('allows creating a folder, then upload and then download a file ', () => {
   cy.login();
   cy.get('.new').click();
   cy.contains('Folder').click();
@@ -9,7 +9,6 @@ it('allows creating a folder and uploading a file ', () => {
     cy.get('[value="New folder"]').type(`${folder.newFolder.name}.${random}`);
     cy.contains('Create').click();
     cy.get('span').contains(`${folder.newFolder.name}.${random}`).click();
-    cy.contains('No files in here');
     cy.get('.new').click();
     cy.get('[data-action="upload"]').click();
     cy.get('[type="file"]').selectFile(
@@ -31,7 +30,6 @@ it('allows creating a folder and uploading a file ', () => {
         cy.request({
           url: `${link}/download`,
         }).then((response) => {
-          const mime = response.body
           expect(response.body).to.contain('testJson')
         })
       });
