@@ -1,7 +1,7 @@
 annotations:
   category: Analytics
 apiVersion: v2
-appVersion: 8.4.2
+appVersion: 8.4.3
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -25,4 +25,4 @@ name: kibana
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/kibana
   - https://www.elastic.co/products/kibana
-version: 10.2.5
+version: 10.2.6
