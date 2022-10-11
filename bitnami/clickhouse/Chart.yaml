@@ -1,7 +1,7 @@
 annotations:
   category: Database
 apiVersion: v2
-appVersion: 22.8.6
+appVersion: 22.9.3
 dependencies:
   - condition: zookeeper.enabled
     name: zookeeper
@@ -25,4 +25,4 @@ name: clickhouse
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/clickhouse
   - https://github.com/ClickHouse/ClickHouse
-version: 0.2.3
+version: 1.0.0
