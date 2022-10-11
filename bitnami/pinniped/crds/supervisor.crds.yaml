@@ -1,3 +1,4 @@
+---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -6,7 +7,7 @@ metadata:
   creationTimestamp: null
   name: federationdomains.config.supervisor.pinniped.dev
   labels:
-    app: pinniped-supervisor
+    app: pinniped-concierge
 spec:
   group: config.supervisor.pinniped.dev
   names:
@@ -34,10 +35,14 @@ spec:
         description: FederationDomain describes the configuration of an OIDC provider.
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
             type: string
           metadata:
             type: object
@@ -45,14 +50,41 @@ spec:
             description: Spec of the OIDC provider.
             properties:
               issuer:
-                description: "Issuer is the OIDC Provider's issuer, per the OIDC Discovery Metadata document, as well as the identifier that it will use for the iss claim in issued JWTs. This field will also be used as the base URL for any endpoints used by the OIDC Provider (e.g., if your issuer is https://example.com/foo, then your authorization endpoint will look like https://example.com/foo/some/path/to/auth/endpoint). \n See https://openid.net/specs/openid-connect-discovery-1_0.html#rfc.section.3 for more information."
+                description: "Issuer is the OIDC Provider's issuer, per the OIDC Discovery
+                  Metadata document, as well as the identifier that it will use for
+                  the iss claim in issued JWTs. This field will also be used as the
+                  base URL for any endpoints used by the OIDC Provider (e.g., if your
+                  issuer is https://example.com/foo, then your authorization endpoint
+                  will look like https://example.com/foo/some/path/to/auth/endpoint).
+                  \n See https://openid.net/specs/openid-connect-discovery-1_0.html#rfc.section.3
+                  for more information."
                 minLength: 1
                 type: string
               tls:
-                description: TLS configures how this FederationDomain is served over Transport Layer Security (TLS).
+                description: TLS configures how this FederationDomain is served over
+                  Transport Layer Security (TLS).
                 properties:
                   secretName:
-                    description: "SecretName is an optional name of a Secret in the same namespace, of type `kubernetes.io/tls`, which contains the TLS serving certificate for the HTTPS endpoints served by this FederationDomain. When provided, the TLS Secret named here must contain keys named `tls.crt` and `tls.key` that contain the certificate and private key to use for TLS. \n Server Name Indication (SNI) is an extension to the Transport Layer Security (TLS) supported by all major browsers. \n SecretName is required if you would like to use different TLS certificates for issuers of different hostnames. SNI requests do not include port numbers, so all issuers with the same DNS hostname must use the same SecretName value even if they have different port numbers. \n SecretName is not required when you would like to use only the HTTP endpoints (e.g. when the HTTP listener is configured to listen on loopback interfaces or UNIX domain sockets for traffic from a service mesh sidecar). It is also not required when you would like all requests to this OIDC Provider's HTTPS endpoints to use the default TLS certificate, which is configured elsewhere. \n When your Issuer URL's host is an IP address, then this field is ignored. SNI does not work for IP addresses."
+                    description: "SecretName is an optional name of a Secret in the
+                      same namespace, of type `kubernetes.io/tls`, which contains
+                      the TLS serving certificate for the HTTPS endpoints served by
+                      this FederationDomain. When provided, the TLS Secret named here
+                      must contain keys named `tls.crt` and `tls.key` that contain
+                      the certificate and private key to use for TLS. \n Server Name
+                      Indication (SNI) is an extension to the Transport Layer Security
+                      (TLS) supported by all major browsers. \n SecretName is required
+                      if you would like to use different TLS certificates for issuers
+                      of different hostnames. SNI requests do not include port numbers,
+                      so all issuers with the same DNS hostname must use the same
+                      SecretName value even if they have different port numbers. \n
+                      SecretName is not required when you would like to use only the
+                      HTTP endpoints (e.g. when the HTTP listener is configured to
+                      listen on loopback interfaces or UNIX domain sockets for traffic
+                      from a service mesh sidecar). It is also not required when you
+                      would like all requests to this OIDC Provider's HTTPS endpoints
+                      to use the default TLS certificate, which is configured elsewhere.
+                      \n When your Issuer URL's host is an IP address, then this field
+                      is ignored. SNI does not work for IP addresses."
                     type: string
                 type: object
             required:
@@ -62,46 +94,62 @@ spec:
             description: Status of the OIDC provider.
             properties:
               lastUpdateTime:
-                description: LastUpdateTime holds the time at which the Status was last updated. It is a pointer to get around some undesirable behavior with respect to the empty metav1.Time value (see https://github.com/kubernetes/kubernetes/issues/86811).
+                description: LastUpdateTime holds the time at which the Status was
+                  last updated. It is a pointer to get around some undesirable behavior
+                  with respect to the empty metav1.Time value (see https://github.com/kubernetes/kubernetes/issues/86811).
                 format: date-time
                 type: string
               message:
                 description: Message provides human-readable details about the Status.
                 type: string
               secrets:
-                description: Secrets contains information about this OIDC Provider's secrets.
+                description: Secrets contains information about this OIDC Provider's
+                  secrets.
                 properties:
                   jwks:
-                    description: JWKS holds the name of the corev1.Secret in which this OIDC Provider's signing/verification keys are stored. If it is empty, then the signing/verification keys are either unknown or they don't exist.
+                    description: JWKS holds the name of the corev1.Secret in which
+                      this OIDC Provider's signing/verification keys are stored. If
+                      it is empty, then the signing/verification keys are either unknown
+                      or they don't exist.
                     properties:
                       name:
-                        description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names TODO: Add other useful fields. apiVersion, kind, uid?'
+                        description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                          TODO: Add other useful fields. apiVersion, kind, uid?'
                         type: string
                     type: object
                   stateEncryptionKey:
-                    description: StateSigningKey holds the name of the corev1.Secret in which this OIDC Provider's key for encrypting state parameters is stored.
+                    description: StateSigningKey holds the name of the corev1.Secret
+                      in which this OIDC Provider's key for encrypting state parameters
+                      is stored.
                     properties:
                       name:
-                        description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names TODO: Add other useful fields. apiVersion, kind, uid?'
+                        description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                          TODO: Add other useful fields. apiVersion, kind, uid?'
                         type: string
                     type: object
                   stateSigningKey:
-                    description: StateSigningKey holds the name of the corev1.Secret in which this OIDC Provider's key for signing state parameters is stored.
+                    description: StateSigningKey holds the name of the corev1.Secret
+                      in which this OIDC Provider's key for signing state parameters
+                      is stored.
                     properties:
                       name:
-                        description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names TODO: Add other useful fields. apiVersion, kind, uid?'
+                        description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                          TODO: Add other useful fields. apiVersion, kind, uid?'
                         type: string
                     type: object
                   tokenSigningKey:
-                    description: TokenSigningKey holds the name of the corev1.Secret in which this OIDC Provider's key for signing tokens is stored.
+                    description: TokenSigningKey holds the name of the corev1.Secret
+                      in which this OIDC Provider's key for signing tokens is stored.
                     properties:
                       name:
-                        description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names TODO: Add other useful fields. apiVersion, kind, uid?'
+                        description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                          TODO: Add other useful fields. apiVersion, kind, uid?'
                         type: string
                     type: object
                 type: object
               status:
-                description: Status holds an enum that describes the state of this OIDC Provider. Note that this Status can represent success or failure.
+                description: Status holds an enum that describes the state of this
+                  OIDC Provider. Note that this Status can represent success or failure.
                 enum:
                 - Success
                 - Duplicate
@@ -129,9 +177,232 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
+  name: oidcclients.config.supervisor.pinniped.dev
+  labels:
+    app: pinniped-concierge
+spec:
+  group: config.supervisor.pinniped.dev
+  names:
+    categories:
+    - pinniped
+    kind: OIDCClient
+    listKind: OIDCClientList
+    plural: oidcclients
+    singular: oidcclient
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .spec.allowedScopes[?(@ == "pinniped:request-audience")]
+      name: Privileged Scopes
+      type: string
+    - jsonPath: .status.totalClientSecrets
+      name: Client Secrets
+      type: integer
+    - jsonPath: .status.phase
+      name: Status
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: OIDCClient describes the configuration of an OIDC client.
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: Spec of the OIDC client.
+            properties:
+              allowedGrantTypes:
+                description: "allowedGrantTypes is a list of the allowed grant_type
+                  param values that should be accepted during OIDC flows with this
+                  client. \n Must only contain the following values: - authorization_code:
+                  allows the client to perform the authorization code grant flow,
+                  i.e. allows the webapp to authenticate users. This grant must always
+                  be listed. - refresh_token: allows the client to perform refresh
+                  grants for the user to extend the user's session. This grant must
+                  be listed if allowedScopes lists offline_access. - urn:ietf:params:oauth:grant-type:token-exchange:
+                  allows the client to perform RFC8693 token exchange, which is a
+                  step in the process to be able to get a cluster credential for the
+                  user. This grant must be listed if allowedScopes lists pinniped:request-audience."
+                items:
+                  enum:
+                  - authorization_code
+                  - refresh_token
+                  - urn:ietf:params:oauth:grant-type:token-exchange
+                  type: string
+                minItems: 1
+                type: array
+                x-kubernetes-list-type: set
+              allowedRedirectURIs:
+                description: allowedRedirectURIs is a list of the allowed redirect_uri
+                  param values that should be accepted during OIDC flows with this
+                  client. Any other uris will be rejected. Must be a URI with the
+                  https scheme, unless the hostname is 127.0.0.1 or ::1 which may
+                  use the http scheme. Port numbers are not required for 127.0.0.1
+                  or ::1 and are ignored when checking for a matching redirect_uri.
+                items:
+                  pattern: ^https://.+|^http://(127\.0\.0\.1|\[::1\])(:\d+)?/
+                  type: string
+                minItems: 1
+                type: array
+                x-kubernetes-list-type: set
+              allowedScopes:
+                description: "allowedScopes is a list of the allowed scopes param
+                  values that should be accepted during OIDC flows with this client.
+                  \n Must only contain the following values: - openid: The client
+                  is allowed to request ID tokens. ID tokens only include the required
+                  claims by default (iss, sub, aud, exp, iat). This scope must always
+                  be listed. - offline_access: The client is allowed to request an
+                  initial refresh token during the authorization code grant flow.
+                  This scope must be listed if allowedGrantTypes lists refresh_token.
+                  - pinniped:request-audience: The client is allowed to request a
+                  new audience value during a RFC8693 token exchange, which is a step
+                  in the process to be able to get a cluster credential for the user.
+                  openid, username and groups scopes must be listed when this scope
+                  is present. This scope must be listed if allowedGrantTypes lists
+                  urn:ietf:params:oauth:grant-type:token-exchange. - username: The
+                  client is allowed to request that ID tokens contain the user's username.
+                  Without the username scope being requested and allowed, the ID token
+                  will not contain the user's username. - groups: The client is allowed
+                  to request that ID tokens contain the user's group membership, if
+                  their group membership is discoverable by the Supervisor. Without
+                  the groups scope being requested and allowed, the ID token will
+                  not contain groups."
+                items:
+                  enum:
+                  - openid
+                  - offline_access
+                  - username
+                  - groups
+                  - pinniped:request-audience
+                  type: string
+                minItems: 1
+                type: array
+                x-kubernetes-list-type: set
+            required:
+            - allowedGrantTypes
+            - allowedRedirectURIs
+            - allowedScopes
+            type: object
+          status:
+            description: Status of the OIDC client.
+            properties:
+              conditions:
+                description: conditions represent the observations of an OIDCClient's
+                  current state.
+                items:
+                  description: Condition status of a resource (mirrored from the metav1.Condition
+                    type added in Kubernetes 1.19). In a future API version we can
+                    switch to using the upstream type. See https://github.com/kubernetes/apimachinery/blob/v0.19.0/pkg/apis/meta/v1/types.go#L1353-L1413.
+                  properties:
+                    lastTransitionTime:
+                      description: lastTransitionTime is the last time the condition
+                        transitioned from one status to another. This should be when
+                        the underlying condition changed.  If that is not known, then
+                        using the time when the API field changed is acceptable.
+                      format: date-time
+                      type: string
+                    message:
+                      description: message is a human readable message indicating
+                        details about the transition. This may be an empty string.
+                      maxLength: 32768
+                      type: string
+                    observedGeneration:
+                      description: observedGeneration represents the .metadata.generation
+                        that the condition was set based upon. For instance, if .metadata.generation
+                        is currently 12, but the .status.conditions[x].observedGeneration
+                        is 9, the condition is out of date with respect to the current
+                        state of the instance.
+                      format: int64
+                      minimum: 0
+                      type: integer
+                    reason:
+                      description: reason contains a programmatic identifier indicating
+                        the reason for the condition's last transition. Producers
+                        of specific condition types may define expected values and
+                        meanings for this field, and whether the values are considered
+                        a guaranteed API. The value should be a CamelCase string.
+                        This field may not be empty.
+                      maxLength: 1024
+                      minLength: 1
+                      pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
+                      type: string
+                    status:
+                      description: status of the condition, one of True, False, Unknown.
+                      enum:
+                      - "True"
+                      - "False"
+                      - Unknown
+                      type: string
+                    type:
+                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
+                        --- Many .condition.type values are consistent across resources
+                        like Available, but because arbitrary conditions can be useful
+                        (see .node.status.conditions), the ability to deconflict is
+                        important. The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      maxLength: 316
+                      pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - message
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
+                x-kubernetes-list-map-keys:
+                - type
+                x-kubernetes-list-type: map
+              phase:
+                default: Pending
+                description: phase summarizes the overall status of the OIDCClient.
+                enum:
+                - Pending
+                - Ready
+                - Error
+                type: string
+              totalClientSecrets:
+                description: totalClientSecrets is the current number of client secrets
+                  that are detected for this OIDCClient.
+                format: int32
+                type: integer
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.8.0
+  creationTimestamp: null
   name: activedirectoryidentityproviders.idp.supervisor.pinniped.dev
   labels:
-    app: pinniped-supervisor
+    app: pinniped-concierge
 spec:
   group: idp.supervisor.pinniped.dev
   names:
@@ -158,13 +429,18 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: ActiveDirectoryIdentityProvider describes the configuration of an upstream Microsoft Active Directory identity provider.
+        description: ActiveDirectoryIdentityProvider describes the configuration of
+          an upstream Microsoft Active Directory identity provider.
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
             type: string
           metadata:
             type: object
@@ -172,64 +448,160 @@ spec:
             description: Spec for configuring the identity provider.
             properties:
               bind:
-                description: Bind contains the configuration for how to provide access credentials during an initial bind to the ActiveDirectory server to be allowed to perform searches and binds to validate a user's credentials during a user's authentication attempt.
+                description: Bind contains the configuration for how to provide access
+                  credentials during an initial bind to the ActiveDirectory server
+                  to be allowed to perform searches and binds to validate a user's
+                  credentials during a user's authentication attempt.
                 properties:
                   secretName:
-                    description: SecretName contains the name of a namespace-local Secret object that provides the username and password for an Active Directory bind user. This account will be used to perform LDAP searches. The Secret should be of type "kubernetes.io/basic-auth" which includes "username" and "password" keys. The username value should be the full dn (distinguished name) of your bind account, e.g. "cn=bind-account,ou=users,dc=example,dc=com". The password must be non-empty.
+                    description: SecretName contains the name of a namespace-local
+                      Secret object that provides the username and password for an
+                      Active Directory bind user. This account will be used to perform
+                      LDAP searches. The Secret should be of type "kubernetes.io/basic-auth"
+                      which includes "username" and "password" keys. The username
+                      value should be the full dn (distinguished name) of your bind
+                      account, e.g. "cn=bind-account,ou=users,dc=example,dc=com".
+                      The password must be non-empty.
                     minLength: 1
                     type: string
                 required:
                 - secretName
                 type: object
               groupSearch:
-                description: GroupSearch contains the configuration for searching for a user's group membership in ActiveDirectory.
+                description: GroupSearch contains the configuration for searching
+                  for a user's group membership in ActiveDirectory.
                 properties:
                   attributes:
-                    description: Attributes specifies how the group's information should be read from each ActiveDirectory entry which was found as the result of the group search.
+                    description: Attributes specifies how the group's information
+                      should be read from each ActiveDirectory entry which was found
+                      as the result of the group search.
                     properties:
                       groupName:
-                        description: GroupName specifies the name of the attribute in the Active Directory entries whose value shall become a group name in the user's list of groups after a successful authentication. The value of this field is case-sensitive and must match the case of the attribute name returned by the ActiveDirectory server in the user's entry. E.g. "cn" for common name. Distinguished names can be used by specifying lower-case "dn". Optional. When not specified, this defaults to a custom field that looks like "sAMAccountName@domain", where domain is constructed from the domain components of the group DN.
+                        description: GroupName specifies the name of the attribute
+                          in the Active Directory entries whose value shall become
+                          a group name in the user's list of groups after a successful
+                          authentication. The value of this field is case-sensitive
+                          and must match the case of the attribute name returned by
+                          the ActiveDirectory server in the user's entry. E.g. "cn"
+                          for common name. Distinguished names can be used by specifying
+                          lower-case "dn". Optional. When not specified, this defaults
+                          to a custom field that looks like "sAMAccountName@domain",
+                          where domain is constructed from the domain components of
+                          the group DN.
                         type: string
                     type: object
                   base:
-                    description: Base is the dn (distinguished name) that should be used as the search base when searching for groups. E.g. "ou=groups,dc=example,dc=com". Optional, when not specified it will be based on the result of a query for the defaultNamingContext (see https://docs.microsoft.com/en-us/windows/win32/adschema/rootdse). The default behavior searches your entire domain for groups. It may make sense to specify a subtree as a search base if you wish to exclude some groups for security reasons or to make searches faster.
+                    description: Base is the dn (distinguished name) that should be
+                      used as the search base when searching for groups. E.g. "ou=groups,dc=example,dc=com".
+                      Optional, when not specified it will be based on the result
+                      of a query for the defaultNamingContext (see https://docs.microsoft.com/en-us/windows/win32/adschema/rootdse).
+                      The default behavior searches your entire domain for groups.
+                      It may make sense to specify a subtree as a search base if you
+                      wish to exclude some groups for security reasons or to make
+                      searches faster.
                     type: string
                   filter:
-                    description: Filter is the ActiveDirectory search filter which should be applied when searching for groups for a user. The pattern "{}" must occur in the filter at least once and will be dynamically replaced by the dn (distinguished name) of the user entry found as a result of the user search. E.g. "member={}" or "&(objectClass=groupOfNames)(member={})". For more information about ActiveDirectory filters, see https://ldap.com/ldap-filters. Note that the dn (distinguished name) is not an attribute of an entry, so "dn={}" cannot be used. Optional. When not specified, the default will act as if the filter were specified as "(&(objectClass=group)(member:1.2.840.113556.1.4.1941:={})". This searches nested groups by default. Note that nested group search can be slow for some Active Directory servers. To disable it, you can set the filter to "(&(objectClass=group)(member={})"
+                    description: Filter is the ActiveDirectory search filter which
+                      should be applied when searching for groups for a user. The
+                      pattern "{}" must occur in the filter at least once and will
+                      be dynamically replaced by the dn (distinguished name) of the
+                      user entry found as a result of the user search. E.g. "member={}"
+                      or "&(objectClass=groupOfNames)(member={})". For more information
+                      about ActiveDirectory filters, see https://ldap.com/ldap-filters.
+                      Note that the dn (distinguished name) is not an attribute of
+                      an entry, so "dn={}" cannot be used. Optional. When not specified,
+                      the default will act as if the filter were specified as "(&(objectClass=group)(member:1.2.840.113556.1.4.1941:={})".
+                      This searches nested groups by default. Note that nested group
+                      search can be slow for some Active Directory servers. To disable
+                      it, you can set the filter to "(&(objectClass=group)(member={})"
                     type: string
                   skipGroupRefresh:
-                    description: "The user's group membership is refreshed as they interact with the supervisor to obtain new credentials (as their old credentials expire).  This allows group membership changes to be quickly reflected into Kubernetes clusters.  Since group membership is often used to bind authorization policies, it is important to keep the groups observed in Kubernetes clusters in-sync with the identity provider. \n In some environments, frequent group membership queries may result in a significant performance impact on the identity provider and/or the supervisor. The best approach to handle performance impacts is to tweak the group query to be more performant, for example by disabling nested group search or by using a more targeted group search base. \n If the group search query cannot be made performant and you are willing to have group memberships remain static for approximately a day, then set skipGroupRefresh to true.  This is an insecure configuration as authorization policies that are bound to group membership will not notice if a user has been removed from a particular group until their next login. \n This is an experimental feature that may be removed or significantly altered in the future.  Consumers of this configuration should carefully read all release notes before upgrading to ensure that the meaning of this field has not changed."
+                    description: "The user's group membership is refreshed as they
+                      interact with the supervisor to obtain new credentials (as their
+                      old credentials expire).  This allows group membership changes
+                      to be quickly reflected into Kubernetes clusters.  Since group
+                      membership is often used to bind authorization policies, it
+                      is important to keep the groups observed in Kubernetes clusters
+                      in-sync with the identity provider. \n In some environments,
+                      frequent group membership queries may result in a significant
+                      performance impact on the identity provider and/or the supervisor.
+                      The best approach to handle performance impacts is to tweak
+                      the group query to be more performant, for example by disabling
+                      nested group search or by using a more targeted group search
+                      base. \n If the group search query cannot be made performant
+                      and you are willing to have group memberships remain static
+                      for approximately a day, then set skipGroupRefresh to true.
+                      \ This is an insecure configuration as authorization policies
+                      that are bound to group membership will not notice if a user
+                      has been removed from a particular group until their next login.
+                      \n This is an experimental feature that may be removed or significantly
+                      altered in the future.  Consumers of this configuration should
+                      carefully read all release notes before upgrading to ensure
+                      that the meaning of this field has not changed."
                     type: boolean
                 type: object
               host:
-                description: 'Host is the hostname of this Active Directory identity provider, i.e., where to connect. For example: ldap.example.com:636.'
+                description: 'Host is the hostname of this Active Directory identity
+                  provider, i.e., where to connect. For example: ldap.example.com:636.'
                 minLength: 1
                 type: string
               tls:
-                description: TLS contains the connection settings for how to establish the connection to the Host.
+                description: TLS contains the connection settings for how to establish
+                  the connection to the Host.
                 properties:
                   certificateAuthorityData:
-                    description: X.509 Certificate Authority (base64-encoded PEM bundle). If omitted, a default set of system roots will be trusted.
+                    description: X.509 Certificate Authority (base64-encoded PEM bundle).
+                      If omitted, a default set of system roots will be trusted.
                     type: string
                 type: object
               userSearch:
-                description: UserSearch contains the configuration for searching for a user by name in Active Directory.
+                description: UserSearch contains the configuration for searching for
+                  a user by name in Active Directory.
                 properties:
                   attributes:
-                    description: Attributes specifies how the user's information should be read from the ActiveDirectory entry which was found as the result of the user search.
+                    description: Attributes specifies how the user's information should
+                      be read from the ActiveDirectory entry which was found as the
+                      result of the user search.
                     properties:
                       uid:
-                        description: UID specifies the name of the attribute in the ActiveDirectory entry which whose value shall be used to uniquely identify the user within this ActiveDirectory provider after a successful authentication. Optional, when empty this defaults to "objectGUID".
+                        description: UID specifies the name of the attribute in the
+                          ActiveDirectory entry which whose value shall be used to
+                          uniquely identify the user within this ActiveDirectory provider
+                          after a successful authentication. Optional, when empty
+                          this defaults to "objectGUID".
                         type: string
                       username:
-                        description: Username specifies the name of the attribute in Active Directory entry whose value shall become the username of the user after a successful authentication. Optional, when empty this defaults to "userPrincipalName".
+                        description: Username specifies the name of the attribute
+                          in Active Directory entry whose value shall become the username
+                          of the user after a successful authentication. Optional,
+                          when empty this defaults to "userPrincipalName".
                         type: string
                     type: object
                   base:
-                    description: Base is the dn (distinguished name) that should be used as the search base when searching for users. E.g. "ou=users,dc=example,dc=com". Optional, when not specified it will be based on the result of a query for the defaultNamingContext (see https://docs.microsoft.com/en-us/windows/win32/adschema/rootdse). The default behavior searches your entire domain for users. It may make sense to specify a subtree as a search base if you wish to exclude some users or to make searches faster.
+                    description: Base is the dn (distinguished name) that should be
+                      used as the search base when searching for users. E.g. "ou=users,dc=example,dc=com".
+                      Optional, when not specified it will be based on the result
+                      of a query for the defaultNamingContext (see https://docs.microsoft.com/en-us/windows/win32/adschema/rootdse).
+                      The default behavior searches your entire domain for users.
+                      It may make sense to specify a subtree as a search base if you
+                      wish to exclude some users or to make searches faster.
                     type: string
                   filter:
-                    description: Filter is the search filter which should be applied when searching for users. The pattern "{}" must occur in the filter at least once and will be dynamically replaced by the username for which the search is being run. E.g. "mail={}" or "&(objectClass=person)(uid={})". For more information about LDAP filters, see https://ldap.com/ldap-filters. Note that the dn (distinguished name) is not an attribute of an entry, so "dn={}" cannot be used. Optional. When not specified, the default will be '(&(objectClass=person)(!(objectClass=computer))(!(showInAdvancedViewOnly=TRUE))(|(sAMAccountName={}")(mail={})(userPrincipalName={})(sAMAccountType=805306368))' This means that the user is a person, is not a computer, the sAMAccountType is for a normal user account, and is not shown in advanced view only (which would likely mean its a system created service account with advanced permissions). Also, either the sAMAccountName, the userPrincipalName, or the mail attribute matches the input username.
+                    description: Filter is the search filter which should be applied
+                      when searching for users. The pattern "{}" must occur in the
+                      filter at least once and will be dynamically replaced by the
+                      username for which the search is being run. E.g. "mail={}" or
+                      "&(objectClass=person)(uid={})". For more information about
+                      LDAP filters, see https://ldap.com/ldap-filters. Note that the
+                      dn (distinguished name) is not an attribute of an entry, so
+                      "dn={}" cannot be used. Optional. When not specified, the default
+                      will be '(&(objectClass=person)(!(objectClass=computer))(!(showInAdvancedViewOnly=TRUE))(|(sAMAccountName={}")(mail={})(userPrincipalName={})(sAMAccountType=805306368))'
+                      This means that the user is a person, is not a computer, the
+                      sAMAccountType is for a normal user account, and is not shown
+                      in advanced view only (which would likely mean its a system
+                      created service account with advanced permissions). Also, either
+                      the sAMAccountName, the userPrincipalName, or the mail attribute
+                      matches the input username.
                     type: string
                 type: object
             required:
@@ -239,25 +611,41 @@ spec:
             description: Status of the identity provider.
             properties:
               conditions:
-                description: Represents the observations of an identity provider's current state.
+                description: Represents the observations of an identity provider's
+                  current state.
                 items:
-                  description: Condition status of a resource (mirrored from the metav1.Condition type added in Kubernetes 1.19). In a future API version we can switch to using the upstream type. See https://github.com/kubernetes/apimachinery/blob/v0.19.0/pkg/apis/meta/v1/types.go#L1353-L1413.
+                  description: Condition status of a resource (mirrored from the metav1.Condition
+                    type added in Kubernetes 1.19). In a future API version we can
+                    switch to using the upstream type. See https://github.com/kubernetes/apimachinery/blob/v0.19.0/pkg/apis/meta/v1/types.go#L1353-L1413.
                   properties:
                     lastTransitionTime:
-                      description: lastTransitionTime is the last time the condition transitioned from one status to another. This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.
+                      description: lastTransitionTime is the last time the condition
+                        transitioned from one status to another. This should be when
+                        the underlying condition changed.  If that is not known, then
+                        using the time when the API field changed is acceptable.
                       format: date-time
                       type: string
                     message:
-                      description: message is a human readable message indicating details about the transition. This may be an empty string.
+                      description: message is a human readable message indicating
+                        details about the transition. This may be an empty string.
                       maxLength: 32768
                       type: string
                     observedGeneration:
-                      description: observedGeneration represents the .metadata.generation that the condition was set based upon. For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date with respect to the current state of the instance.
+                      description: observedGeneration represents the .metadata.generation
+                        that the condition was set based upon. For instance, if .metadata.generation
+                        is currently 12, but the .status.conditions[x].observedGeneration
+                        is 9, the condition is out of date with respect to the current
+                        state of the instance.
                       format: int64
                       minimum: 0
                       type: integer
                     reason:
-                      description: reason contains a programmatic identifier indicating the reason for the condition's last transition. Producers of specific condition types may define expected values and meanings for this field, and whether the values are considered a guaranteed API. The value should be a CamelCase string. This field may not be empty.
+                      description: reason contains a programmatic identifier indicating
+                        the reason for the condition's last transition. Producers
+                        of specific condition types may define expected values and
+                        meanings for this field, and whether the values are considered
+                        a guaranteed API. The value should be a CamelCase string.
+                        This field may not be empty.
                       maxLength: 1024
                       minLength: 1
                       pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
@@ -270,7 +658,11 @@ spec:
                       - Unknown
                       type: string
                     type:
-                      description: type of condition in CamelCase or in foo.example.com/CamelCase. --- Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be useful (see .node.status.conditions), the ability to deconflict is important. The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
+                        --- Many .condition.type values are consistent across resources
+                        like Available, but because arbitrary conditions can be useful
+                        (see .node.status.conditions), the ability to deconflict is
+                        important. The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
                       maxLength: 316
                       pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                       type: string
@@ -316,7 +708,7 @@ metadata:
   creationTimestamp: null
   name: ldapidentityproviders.idp.supervisor.pinniped.dev
   labels:
-    app: pinniped-supervisor
+    app: pinniped-concierge
 spec:
   group: idp.supervisor.pinniped.dev
   names:
@@ -343,13 +735,18 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: LDAPIdentityProvider describes the configuration of an upstream Lightweight Directory Access Protocol (LDAP) identity provider.
+        description: LDAPIdentityProvider describes the configuration of an upstream
+          Lightweight Directory Access Protocol (LDAP) identity provider.
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
             type: string
           metadata:
             type: object
@@ -357,67 +754,157 @@ spec:
             description: Spec for configuring the identity provider.
             properties:
               bind:
-                description: Bind contains the configuration for how to provide access credentials during an initial bind to the LDAP server to be allowed to perform searches and binds to validate a user's credentials during a user's authentication attempt.
+                description: Bind contains the configuration for how to provide access
+                  credentials during an initial bind to the LDAP server to be allowed
+                  to perform searches and binds to validate a user's credentials during
+                  a user's authentication attempt.
                 properties:
                   secretName:
-                    description: SecretName contains the name of a namespace-local Secret object that provides the username and password for an LDAP bind user. This account will be used to perform LDAP searches. The Secret should be of type "kubernetes.io/basic-auth" which includes "username" and "password" keys. The username value should be the full dn (distinguished name) of your bind account, e.g. "cn=bind-account,ou=users,dc=example,dc=com". The password must be non-empty.
+                    description: SecretName contains the name of a namespace-local
+                      Secret object that provides the username and password for an
+                      LDAP bind user. This account will be used to perform LDAP searches.
+                      The Secret should be of type "kubernetes.io/basic-auth" which
+                      includes "username" and "password" keys. The username value
+                      should be the full dn (distinguished name) of your bind account,
+                      e.g. "cn=bind-account,ou=users,dc=example,dc=com". The password
+                      must be non-empty.
                     minLength: 1
                     type: string
                 required:
                 - secretName
                 type: object
               groupSearch:
-                description: GroupSearch contains the configuration for searching for a user's group membership in the LDAP provider.
+                description: GroupSearch contains the configuration for searching
+                  for a user's group membership in the LDAP provider.
                 properties:
                   attributes:
-                    description: Attributes specifies how the group's information should be read from each LDAP entry which was found as the result of the group search.
+                    description: Attributes specifies how the group's information
+                      should be read from each LDAP entry which was found as the result
+                      of the group search.
                     properties:
                       groupName:
-                        description: GroupName specifies the name of the attribute in the LDAP entries whose value shall become a group name in the user's list of groups after a successful authentication. The value of this field is case-sensitive and must match the case of the attribute name returned by the LDAP server in the user's entry. E.g. "cn" for common name. Distinguished names can be used by specifying lower-case "dn". Optional. When not specified, the default will act as if the GroupName were specified as "dn" (distinguished name).
+                        description: GroupName specifies the name of the attribute
+                          in the LDAP entries whose value shall become a group name
+                          in the user's list of groups after a successful authentication.
+                          The value of this field is case-sensitive and must match
+                          the case of the attribute name returned by the LDAP server
+                          in the user's entry. E.g. "cn" for common name. Distinguished
+                          names can be used by specifying lower-case "dn". Optional.
+                          When not specified, the default will act as if the GroupName
+                          were specified as "dn" (distinguished name).
                         type: string
                     type: object
                   base:
-                    description: Base is the dn (distinguished name) that should be used as the search base when searching for groups. E.g. "ou=groups,dc=example,dc=com". When not specified, no group search will be performed and authenticated users will not belong to any groups from the LDAP provider. Also, when not specified, the values of Filter and Attributes are ignored.
+                    description: Base is the dn (distinguished name) that should be
+                      used as the search base when searching for groups. E.g. "ou=groups,dc=example,dc=com".
+                      When not specified, no group search will be performed and authenticated
+                      users will not belong to any groups from the LDAP provider.
+                      Also, when not specified, the values of Filter and Attributes
+                      are ignored.
                     type: string
                   filter:
-                    description: Filter is the LDAP search filter which should be applied when searching for groups for a user. The pattern "{}" must occur in the filter at least once and will be dynamically replaced by the dn (distinguished name) of the user entry found as a result of the user search. E.g. "member={}" or "&(objectClass=groupOfNames)(member={})". For more information about LDAP filters, see https://ldap.com/ldap-filters. Note that the dn (distinguished name) is not an attribute of an entry, so "dn={}" cannot be used. Optional. When not specified, the default will act as if the Filter were specified as "member={}".
+                    description: Filter is the LDAP search filter which should be
+                      applied when searching for groups for a user. The pattern "{}"
+                      must occur in the filter at least once and will be dynamically
+                      replaced by the dn (distinguished name) of the user entry found
+                      as a result of the user search. E.g. "member={}" or "&(objectClass=groupOfNames)(member={})".
+                      For more information about LDAP filters, see https://ldap.com/ldap-filters.
+                      Note that the dn (distinguished name) is not an attribute of
+                      an entry, so "dn={}" cannot be used. Optional. When not specified,
+                      the default will act as if the Filter were specified as "member={}".
                     type: string
                   skipGroupRefresh:
-                    description: "The user's group membership is refreshed as they interact with the supervisor to obtain new credentials (as their old credentials expire).  This allows group membership changes to be quickly reflected into Kubernetes clusters.  Since group membership is often used to bind authorization policies, it is important to keep the groups observed in Kubernetes clusters in-sync with the identity provider. \n In some environments, frequent group membership queries may result in a significant performance impact on the identity provider and/or the supervisor. The best approach to handle performance impacts is to tweak the group query to be more performant, for example by disabling nested group search or by using a more targeted group search base. \n If the group search query cannot be made performant and you are willing to have group memberships remain static for approximately a day, then set skipGroupRefresh to true.  This is an insecure configuration as authorization policies that are bound to group membership will not notice if a user has been removed from a particular group until their next login. \n This is an experimental feature that may be removed or significantly altered in the future.  Consumers of this configuration should carefully read all release notes before upgrading to ensure that the meaning of this field has not changed."
+                    description: "The user's group membership is refreshed as they
+                      interact with the supervisor to obtain new credentials (as their
+                      old credentials expire).  This allows group membership changes
+                      to be quickly reflected into Kubernetes clusters.  Since group
+                      membership is often used to bind authorization policies, it
+                      is important to keep the groups observed in Kubernetes clusters
+                      in-sync with the identity provider. \n In some environments,
+                      frequent group membership queries may result in a significant
+                      performance impact on the identity provider and/or the supervisor.
+                      The best approach to handle performance impacts is to tweak
+                      the group query to be more performant, for example by disabling
+                      nested group search or by using a more targeted group search
+                      base. \n If the group search query cannot be made performant
+                      and you are willing to have group memberships remain static
+                      for approximately a day, then set skipGroupRefresh to true.
+                      \ This is an insecure configuration as authorization policies
+                      that are bound to group membership will not notice if a user
+                      has been removed from a particular group until their next login.
+                      \n This is an experimental feature that may be removed or significantly
+                      altered in the future.  Consumers of this configuration should
+                      carefully read all release notes before upgrading to ensure
+                      that the meaning of this field has not changed."
                     type: boolean
                 type: object
               host:
-                description: 'Host is the hostname of this LDAP identity provider, i.e., where to connect. For example: ldap.example.com:636.'
+                description: 'Host is the hostname of this LDAP identity provider,
+                  i.e., where to connect. For example: ldap.example.com:636.'
                 minLength: 1
                 type: string
               tls:
-                description: TLS contains the connection settings for how to establish the connection to the Host.
+                description: TLS contains the connection settings for how to establish
+                  the connection to the Host.
                 properties:
                   certificateAuthorityData:
-                    description: X.509 Certificate Authority (base64-encoded PEM bundle). If omitted, a default set of system roots will be trusted.
+                    description: X.509 Certificate Authority (base64-encoded PEM bundle).
+                      If omitted, a default set of system roots will be trusted.
                     type: string
                 type: object
               userSearch:
-                description: UserSearch contains the configuration for searching for a user by name in the LDAP provider.
+                description: UserSearch contains the configuration for searching for
+                  a user by name in the LDAP provider.
                 properties:
                   attributes:
-                    description: Attributes specifies how the user's information should be read from the LDAP entry which was found as the result of the user search.
+                    description: Attributes specifies how the user's information should
+                      be read from the LDAP entry which was found as the result of
+                      the user search.
                     properties:
                       uid:
-                        description: UID specifies the name of the attribute in the LDAP entry which whose value shall be used to uniquely identify the user within this LDAP provider after a successful authentication. E.g. "uidNumber" or "objectGUID". The value of this field is case-sensitive and must match the case of the attribute name returned by the LDAP server in the user's entry. Distinguished names can be used by specifying lower-case "dn".
+                        description: UID specifies the name of the attribute in the
+                          LDAP entry which whose value shall be used to uniquely identify
+                          the user within this LDAP provider after a successful authentication.
+                          E.g. "uidNumber" or "objectGUID". The value of this field
+                          is case-sensitive and must match the case of the attribute
+                          name returned by the LDAP server in the user's entry. Distinguished
+                          names can be used by specifying lower-case "dn".
                         minLength: 1
                         type: string
                       username:
-                        description: Username specifies the name of the attribute in the LDAP entry whose value shall become the username of the user after a successful authentication. This would typically be the same attribute name used in the user search filter, although it can be different. E.g. "mail" or "uid" or "userPrincipalName". The value of this field is case-sensitive and must match the case of the attribute name returned by the LDAP server in the user's entry. Distinguished names can be used by specifying lower-case "dn". When this field is set to "dn" then the LDAPIdentityProviderUserSearch's Filter field cannot be blank, since the default value of "dn={}" would not work.
+                        description: Username specifies the name of the attribute
+                          in the LDAP entry whose value shall become the username
+                          of the user after a successful authentication. This would
+                          typically be the same attribute name used in the user search
+                          filter, although it can be different. E.g. "mail" or "uid"
+                          or "userPrincipalName". The value of this field is case-sensitive
+                          and must match the case of the attribute name returned by
+                          the LDAP server in the user's entry. Distinguished names
+                          can be used by specifying lower-case "dn". When this field
+                          is set to "dn" then the LDAPIdentityProviderUserSearch's
+                          Filter field cannot be blank, since the default value of
+                          "dn={}" would not work.
                         minLength: 1
                         type: string
                     type: object
                   base:
-                    description: Base is the dn (distinguished name) that should be used as the search base when searching for users. E.g. "ou=users,dc=example,dc=com".
+                    description: Base is the dn (distinguished name) that should be
+                      used as the search base when searching for users. E.g. "ou=users,dc=example,dc=com".
                     minLength: 1
                     type: string
                   filter:
-                    description: Filter is the LDAP search filter which should be applied when searching for users. The pattern "{}" must occur in the filter at least once and will be dynamically replaced by the username for which the search is being run. E.g. "mail={}" or "&(objectClass=person)(uid={})". For more information about LDAP filters, see https://ldap.com/ldap-filters. Note that the dn (distinguished name) is not an attribute of an entry, so "dn={}" cannot be used. Optional. When not specified, the default will act as if the Filter were specified as the value from Attributes.Username appended by "={}". When the Attributes.Username is set to "dn" then the Filter must be explicitly specified, since the default value of "dn={}" would not work.
+                    description: Filter is the LDAP search filter which should be
+                      applied when searching for users. The pattern "{}" must occur
+                      in the filter at least once and will be dynamically replaced
+                      by the username for which the search is being run. E.g. "mail={}"
+                      or "&(objectClass=person)(uid={})". For more information about
+                      LDAP filters, see https://ldap.com/ldap-filters. Note that the
+                      dn (distinguished name) is not an attribute of an entry, so
+                      "dn={}" cannot be used. Optional. When not specified, the default
+                      will act as if the Filter were specified as the value from Attributes.Username
+                      appended by "={}". When the Attributes.Username is set to "dn"
+                      then the Filter must be explicitly specified, since the default
+                      value of "dn={}" would not work.
                     type: string
                 type: object
             required:
@@ -427,25 +914,41 @@ spec:
             description: Status of the identity provider.
             properties:
               conditions:
-                description: Represents the observations of an identity provider's current state.
+                description: Represents the observations of an identity provider's
+                  current state.
                 items:
-                  description: Condition status of a resource (mirrored from the metav1.Condition type added in Kubernetes 1.19). In a future API version we can switch to using the upstream type. See https://github.com/kubernetes/apimachinery/blob/v0.19.0/pkg/apis/meta/v1/types.go#L1353-L1413.
+                  description: Condition status of a resource (mirrored from the metav1.Condition
+                    type added in Kubernetes 1.19). In a future API version we can
+                    switch to using the upstream type. See https://github.com/kubernetes/apimachinery/blob/v0.19.0/pkg/apis/meta/v1/types.go#L1353-L1413.
                   properties:
                     lastTransitionTime:
-                      description: lastTransitionTime is the last time the condition transitioned from one status to another. This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.
+                      description: lastTransitionTime is the last time the condition
+                        transitioned from one status to another. This should be when
+                        the underlying condition changed.  If that is not known, then
+                        using the time when the API field changed is acceptable.
                       format: date-time
                       type: string
                     message:
-                      description: message is a human readable message indicating details about the transition. This may be an empty string.
+                      description: message is a human readable message indicating
+                        details about the transition. This may be an empty string.
                       maxLength: 32768
                       type: string
                     observedGeneration:
-                      description: observedGeneration represents the .metadata.generation that the condition was set based upon. For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date with respect to the current state of the instance.
+                      description: observedGeneration represents the .metadata.generation
+                        that the condition was set based upon. For instance, if .metadata.generation
+                        is currently 12, but the .status.conditions[x].observedGeneration
+                        is 9, the condition is out of date with respect to the current
+                        state of the instance.
                       format: int64
                       minimum: 0
                       type: integer
                     reason:
-                      description: reason contains a programmatic identifier indicating the reason for the condition's last transition. Producers of specific condition types may define expected values and meanings for this field, and whether the values are considered a guaranteed API. The value should be a CamelCase string. This field may not be empty.
+                      description: reason contains a programmatic identifier indicating
+                        the reason for the condition's last transition. Producers
+                        of specific condition types may define expected values and
+                        meanings for this field, and whether the values are considered
+                        a guaranteed API. The value should be a CamelCase string.
+                        This field may not be empty.
                       maxLength: 1024
                       minLength: 1
                       pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
@@ -458,7 +961,11 @@ spec:
                       - Unknown
                       type: string
                     type:
-                      description: type of condition in CamelCase or in foo.example.com/CamelCase. --- Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be useful (see .node.status.conditions), the ability to deconflict is important. The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
+                        --- Many .condition.type values are consistent across resources
+                        like Available, but because arbitrary conditions can be useful
+                        (see .node.status.conditions), the ability to deconflict is
+                        important. The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
                       maxLength: 316
                       pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                       type: string
@@ -504,7 +1011,7 @@ metadata:
   creationTimestamp: null
   name: oidcidentityproviders.idp.supervisor.pinniped.dev
   labels:
-    app: pinniped-supervisor
+    app: pinniped-concierge
 spec:
   group: idp.supervisor.pinniped.dev
   names:
@@ -531,13 +1038,18 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: OIDCIdentityProvider describes the configuration of an upstream OpenID Connect identity provider.
+        description: OIDCIdentityProvider describes the configuration of an upstream
+          OpenID Connect identity provider.
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
             type: string
           metadata:
             type: object
@@ -545,12 +1057,42 @@ spec:
             description: Spec for configuring the identity provider.
             properties:
               authorizationConfig:
-                description: AuthorizationConfig holds information about how to form the OAuth2 authorization request parameters to be used with this OIDC identity provider.
+                description: AuthorizationConfig holds information about how to form
+                  the OAuth2 authorization request parameters to be used with this
+                  OIDC identity provider.
                 properties:
                   additionalAuthorizeParameters:
-                    description: additionalAuthorizeParameters are extra query parameters that should be included in the authorize request to your OIDC provider in the authorization request during an OIDC Authorization Code Flow. By default, no extra parameters are sent. The standard parameters that will be sent are "response_type", "scope", "client_id", "state", "nonce", "code_challenge", "code_challenge_method", and "redirect_uri". These parameters cannot be included in this setting. Additionally, the "hd" parameter cannot be included in this setting at this time. The "hd" parameter is used by Google's OIDC provider to provide a hint as to which "hosted domain" the user should use during login. However, Pinniped does not yet support validating the hosted domain in the resulting ID token, so it is not yet safe to use this feature of Google's OIDC provider with Pinniped. This setting does not influence the parameters sent to the token endpoint in the Resource Owner Password Credentials Grant. The Pinniped Supervisor requires that your OIDC provider returns refresh tokens to the Supervisor from the authorization flows. Some OIDC providers may require a certain value for the "prompt" parameter in order to properly request refresh tokens. See the documentation of your OIDC provider's authorization endpoint for its requirements for what to include in the request in order to receive a refresh token in the response, if anything. If your provider requires the prompt parameter to request a refresh token, then include it here. Also note that most providers also require a certain scope to be requested in order to receive refresh tokens. See the additionalScopes setting for more information about using scopes to request refresh tokens.
+                    description: additionalAuthorizeParameters are extra query parameters
+                      that should be included in the authorize request to your OIDC
+                      provider in the authorization request during an OIDC Authorization
+                      Code Flow. By default, no extra parameters are sent. The standard
+                      parameters that will be sent are "response_type", "scope", "client_id",
+                      "state", "nonce", "code_challenge", "code_challenge_method",
+                      and "redirect_uri". These parameters cannot be included in this
+                      setting. Additionally, the "hd" parameter cannot be included
+                      in this setting at this time. The "hd" parameter is used by
+                      Google's OIDC provider to provide a hint as to which "hosted
+                      domain" the user should use during login. However, Pinniped
+                      does not yet support validating the hosted domain in the resulting
+                      ID token, so it is not yet safe to use this feature of Google's
+                      OIDC provider with Pinniped. This setting does not influence
+                      the parameters sent to the token endpoint in the Resource Owner
+                      Password Credentials Grant. The Pinniped Supervisor requires
+                      that your OIDC provider returns refresh tokens to the Supervisor
+                      from the authorization flows. Some OIDC providers may require
+                      a certain value for the "prompt" parameter in order to properly
+                      request refresh tokens. See the documentation of your OIDC provider's
+                      authorization endpoint for its requirements for what to include
+                      in the request in order to receive a refresh token in the response,
+                      if anything. If your provider requires the prompt parameter
+                      to request a refresh token, then include it here. Also note
+                      that most providers also require a certain scope to be requested
+                      in order to receive refresh tokens. See the additionalScopes
+                      setting for more information about using scopes to request refresh
+                      tokens.
                     items:
-                      description: Parameter is a key/value pair which represents a parameter in an HTTP request.
+                      description: Parameter is a key/value pair which represents
+                        a parameter in an HTTP request.
                       properties:
                         name:
                           description: The name of the parameter. Required.
@@ -567,43 +1109,131 @@ spec:
                     - name
                     x-kubernetes-list-type: map
                   additionalScopes:
-                    description: 'additionalScopes are the additional scopes that will be requested from your OIDC provider in the authorization request during an OIDC Authorization Code Flow and in the token request during a Resource Owner Password Credentials Grant. Note that the "openid" scope will always be requested regardless of the value in this setting, since it is always required according to the OIDC spec. By default, when this field is not set, the Supervisor will request the following scopes: "openid", "offline_access", "email", and "profile". See https://openid.net/specs/openid-connect-core-1_0.html#ScopeClaims for a description of the "profile" and "email" scopes. See https://openid.net/specs/openid-connect-core-1_0.html#OfflineAccess for a description of the "offline_access" scope. This default value may change in future versions of Pinniped as the standard evolves, or as common patterns used by providers who implement the standard in the ecosystem evolve. By setting this list to anything other than an empty list, you are overriding the default value, so you may wish to include some of "offline_access", "email", and "profile" in your override list. If you do not want any of these scopes to be requested, you may set this list to contain only "openid". Some OIDC providers may also require a scope to get access to the user''s group membership, in which case you may wish to include it in this list. Sometimes the scope to request the user''s group membership is called "groups", but unfortunately this is not specified in the OIDC standard. Generally speaking, you should include any scopes required to cause the appropriate claims to be the returned by your OIDC provider in the ID token or userinfo endpoint results for those claims which you would like to use in the oidcClaims settings to determine the usernames and group memberships of your Kubernetes users. See your OIDC provider''s documentation for more information about what scopes are available to request claims. Additionally, the Pinniped Supervisor requires that your OIDC provider returns refresh tokens to the Supervisor from these authorization flows. For most OIDC providers, the scope required to receive refresh tokens will be "offline_access". See the documentation of your OIDC provider''s authorization and token endpoints for its requirements for what to include in the request in order to receive a refresh token in the response, if anything. Note that it may be safe to send "offline_access" even to providers which do not require it, since the provider may ignore scopes that it does not understand or require (see https://datatracker.ietf.org/doc/html/rfc6749#section-3.3). In the unusual case that you must avoid sending the "offline_access" scope, then you must override the default value of this setting. This is required if your OIDC provider will reject the request when it includes "offline_access" (e.g. GitLab''s OIDC provider).'
+                    description: 'additionalScopes are the additional scopes that
+                      will be requested from your OIDC provider in the authorization
+                      request during an OIDC Authorization Code Flow and in the token
+                      request during a Resource Owner Password Credentials Grant.
+                      Note that the "openid" scope will always be requested regardless
+                      of the value in this setting, since it is always required according
+                      to the OIDC spec. By default, when this field is not set, the
+                      Supervisor will request the following scopes: "openid", "offline_access",
+                      "email", and "profile". See https://openid.net/specs/openid-connect-core-1_0.html#ScopeClaims
+                      for a description of the "profile" and "email" scopes. See https://openid.net/specs/openid-connect-core-1_0.html#OfflineAccess
+                      for a description of the "offline_access" scope. This default
+                      value may change in future versions of Pinniped as the standard
+                      evolves, or as common patterns used by providers who implement
+                      the standard in the ecosystem evolve. By setting this list to
+                      anything other than an empty list, you are overriding the default
+                      value, so you may wish to include some of "offline_access",
+                      "email", and "profile" in your override list. If you do not
+                      want any of these scopes to be requested, you may set this list
+                      to contain only "openid". Some OIDC providers may also require
+                      a scope to get access to the user''s group membership, in which
+                      case you may wish to include it in this list. Sometimes the
+                      scope to request the user''s group membership is called "groups",
+                      but unfortunately this is not specified in the OIDC standard.
+                      Generally speaking, you should include any scopes required to
+                      cause the appropriate claims to be the returned by your OIDC
+                      provider in the ID token or userinfo endpoint results for those
+                      claims which you would like to use in the oidcClaims settings
+                      to determine the usernames and group memberships of your Kubernetes
+                      users. See your OIDC provider''s documentation for more information
+                      about what scopes are available to request claims. Additionally,
+                      the Pinniped Supervisor requires that your OIDC provider returns
+                      refresh tokens to the Supervisor from these authorization flows.
+                      For most OIDC providers, the scope required to receive refresh
+                      tokens will be "offline_access". See the documentation of your
+                      OIDC provider''s authorization and token endpoints for its requirements
+                      for what to include in the request in order to receive a refresh
+                      token in the response, if anything. Note that it may be safe
+                      to send "offline_access" even to providers which do not require
+                      it, since the provider may ignore scopes that it does not understand
+                      or require (see https://datatracker.ietf.org/doc/html/rfc6749#section-3.3).
+                      In the unusual case that you must avoid sending the "offline_access"
+                      scope, then you must override the default value of this setting.
+                      This is required if your OIDC provider will reject the request
+                      when it includes "offline_access" (e.g. GitLab''s OIDC provider).'
                     items:
                       type: string
                     type: array
                   allowPasswordGrant:
-                    description: allowPasswordGrant, when true, will allow the use of OAuth 2.0's Resource Owner Password Credentials Grant (see https://datatracker.ietf.org/doc/html/rfc6749#section-4.3) to authenticate to the OIDC provider using a username and password without a web browser, in addition to the usual browser-based OIDC Authorization Code Flow. The Resource Owner Password Credentials Grant is not officially part of the OIDC specification, so it may not be supported by your OIDC provider. If your OIDC provider supports returning ID tokens from a Resource Owner Password Credentials Grant token request, then you can choose to set this field to true. This will allow end users to choose to present their username and password to the kubectl CLI (using the Pinniped plugin) to authenticate to the cluster, without using a web browser to log in as is customary in OIDC Authorization Code Flow. This may be convenient for users, especially for identities from your OIDC provider which are not intended to represent a human actor, such as service accounts performing actions in a CI/CD environment. Even if your OIDC provider supports it, you may wish to disable this behavior by setting this field to false when you prefer to only allow users of this OIDCIdentityProvider to log in via the browser-based OIDC Authorization Code Flow. Using the Resource Owner Password Credentials Grant means that the Pinniped CLI and Pinniped Supervisor will directly handle your end users' passwords (similar to LDAPIdentityProvider), and you will not be able to require multi-factor authentication or use the other web-based login features of your OIDC provider during Resource Owner Password Credentials Grant logins. allowPasswordGrant defaults to false.
+                    description: allowPasswordGrant, when true, will allow the use
+                      of OAuth 2.0's Resource Owner Password Credentials Grant (see
+                      https://datatracker.ietf.org/doc/html/rfc6749#section-4.3) to
+                      authenticate to the OIDC provider using a username and password
+                      without a web browser, in addition to the usual browser-based
+                      OIDC Authorization Code Flow. The Resource Owner Password Credentials
+                      Grant is not officially part of the OIDC specification, so it
+                      may not be supported by your OIDC provider. If your OIDC provider
+                      supports returning ID tokens from a Resource Owner Password
+                      Credentials Grant token request, then you can choose to set
+                      this field to true. This will allow end users to choose to present
+                      their username and password to the kubectl CLI (using the Pinniped
+                      plugin) to authenticate to the cluster, without using a web
+                      browser to log in as is customary in OIDC Authorization Code
+                      Flow. This may be convenient for users, especially for identities
+                      from your OIDC provider which are not intended to represent
+                      a human actor, such as service accounts performing actions in
+                      a CI/CD environment. Even if your OIDC provider supports it,
+                      you may wish to disable this behavior by setting this field
+                      to false when you prefer to only allow users of this OIDCIdentityProvider
+                      to log in via the browser-based OIDC Authorization Code Flow.
+                      Using the Resource Owner Password Credentials Grant means that
+                      the Pinniped CLI and Pinniped Supervisor will directly handle
+                      your end users' passwords (similar to LDAPIdentityProvider),
+                      and you will not be able to require multi-factor authentication
+                      or use the other web-based login features of your OIDC provider
+                      during Resource Owner Password Credentials Grant logins. allowPasswordGrant
+                      defaults to false.
                     type: boolean
                 type: object
               claims:
-                description: Claims provides the names of token claims that will be used when inspecting an identity from this OIDC identity provider.
+                description: Claims provides the names of token claims that will be
+                  used when inspecting an identity from this OIDC identity provider.
                 properties:
                   groups:
-                    description: Groups provides the name of the ID token claim or userinfo endpoint response claim that will be used to ascertain the groups to which an identity belongs. By default, the identities will not include any group memberships when this setting is not configured.
+                    description: Groups provides the name of the ID token claim or
+                      userinfo endpoint response claim that will be used to ascertain
+                      the groups to which an identity belongs. By default, the identities
+                      will not include any group memberships when this setting is
+                      not configured.
                     type: string
                   username:
-                    description: Username provides the name of the ID token claim or userinfo endpoint response claim that will be used to ascertain an identity's username. When not set, the username will be an automatically constructed unique string which will include the issuer URL of your OIDC provider along with the value of the "sub" (subject) claim from the ID token.
+                    description: Username provides the name of the ID token claim
+                      or userinfo endpoint response claim that will be used to ascertain
+                      an identity's username. When not set, the username will be an
+                      automatically constructed unique string which will include the
+                      issuer URL of your OIDC provider along with the value of the
+                      "sub" (subject) claim from the ID token.
                     type: string
                 type: object
               client:
-                description: OIDCClient contains OIDC client information to be used used with this OIDC identity provider.
+                description: OIDCClient contains OIDC client information to be used
+                  used with this OIDC identity provider.
                 properties:
                   secretName:
-                    description: SecretName contains the name of a namespace-local Secret object that provides the clientID and clientSecret for an OIDC client. If only the SecretName is specified in an OIDCClient struct, then it is expected that the Secret is of type "secrets.pinniped.dev/oidc-client" with keys "clientID" and "clientSecret".
+                    description: SecretName contains the name of a namespace-local
+                      Secret object that provides the clientID and clientSecret for
+                      an OIDC client. If only the SecretName is specified in an OIDCClient
+                      struct, then it is expected that the Secret is of type "secrets.pinniped.dev/oidc-client"
+                      with keys "clientID" and "clientSecret".
                     type: string
                 required:
                 - secretName
                 type: object
               issuer:
-                description: Issuer is the issuer URL of this OIDC identity provider, i.e., where to fetch /.well-known/openid-configuration.
+                description: Issuer is the issuer URL of this OIDC identity provider,
+                  i.e., where to fetch /.well-known/openid-configuration.
                 minLength: 1
                 pattern: ^https://
                 type: string
               tls:
-                description: TLS configuration for discovery/JWKS requests to the issuer.
+                description: TLS configuration for discovery/JWKS requests to the
+                  issuer.
                 properties:
                   certificateAuthorityData:
-                    description: X.509 Certificate Authority (base64-encoded PEM bundle). If omitted, a default set of system roots will be trusted.
+                    description: X.509 Certificate Authority (base64-encoded PEM bundle).
+                      If omitted, a default set of system roots will be trusted.
                     type: string
                 type: object
             required:
@@ -614,25 +1244,41 @@ spec:
             description: Status of the identity provider.
             properties:
               conditions:
-                description: Represents the observations of an identity provider's current state.
+                description: Represents the observations of an identity provider's
+                  current state.
                 items:
-                  description: Condition status of a resource (mirrored from the metav1.Condition type added in Kubernetes 1.19). In a future API version we can switch to using the upstream type. See https://github.com/kubernetes/apimachinery/blob/v0.19.0/pkg/apis/meta/v1/types.go#L1353-L1413.
+                  description: Condition status of a resource (mirrored from the metav1.Condition
+                    type added in Kubernetes 1.19). In a future API version we can
+                    switch to using the upstream type. See https://github.com/kubernetes/apimachinery/blob/v0.19.0/pkg/apis/meta/v1/types.go#L1353-L1413.
                   properties:
                     lastTransitionTime:
-                      description: lastTransitionTime is the last time the condition transitioned from one status to another. This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.
+                      description: lastTransitionTime is the last time the condition
+                        transitioned from one status to another. This should be when
+                        the underlying condition changed.  If that is not known, then
+                        using the time when the API field changed is acceptable.
                       format: date-time
                       type: string
                     message:
-                      description: message is a human readable message indicating details about the transition. This may be an empty string.
+                      description: message is a human readable message indicating
+                        details about the transition. This may be an empty string.
                       maxLength: 32768
                       type: string
                     observedGeneration:
-                      description: observedGeneration represents the .metadata.generation that the condition was set based upon. For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date with respect to the current state of the instance.
+                      description: observedGeneration represents the .metadata.generation
+                        that the condition was set based upon. For instance, if .metadata.generation
+                        is currently 12, but the .status.conditions[x].observedGeneration
+                        is 9, the condition is out of date with respect to the current
+                        state of the instance.
                       format: int64
                       minimum: 0
                       type: integer
                     reason:
-                      description: reason contains a programmatic identifier indicating the reason for the condition's last transition. Producers of specific condition types may define expected values and meanings for this field, and whether the values are considered a guaranteed API. The value should be a CamelCase string. This field may not be empty.
+                      description: reason contains a programmatic identifier indicating
+                        the reason for the condition's last transition. Producers
+                        of specific condition types may define expected values and
+                        meanings for this field, and whether the values are considered
+                        a guaranteed API. The value should be a CamelCase string.
+                        This field may not be empty.
                       maxLength: 1024
                       minLength: 1
                       pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
@@ -645,7 +1291,11 @@ spec:
                       - Unknown
                       type: string
                     type:
-                      description: type of condition in CamelCase or in foo.example.com/CamelCase. --- Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be useful (see .node.status.conditions), the ability to deconflict is important. The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
+                        --- Many .condition.type values are consistent across resources
+                        like Available, but because arbitrary conditions can be useful
+                        (see .node.status.conditions), the ability to deconflict is
+                        important. The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
                       maxLength: 316
                       pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                       type: string
