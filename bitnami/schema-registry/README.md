@@ -413,6 +413,10 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 
 ## Upgrading
 
+### To 6.0.0
+
+This major updates the Kafka subchart to it newest major, 19.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/kafka#to-1900).
+
 ### To 4.0.0
 
 This version bump the version of charts used as dependency in a major. Kafka from 12.X.X to 18.X.X ([here](https://github.com/bitnami/charts/tree/master/bitnami/kafka#to-1800) you can see the changes introduced in this version).
