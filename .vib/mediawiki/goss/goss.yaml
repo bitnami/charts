@@ -16,6 +16,7 @@ file:
     {{ end }}
 http:
   https://mediawiki:{{ .Vars.service.ports.https }}:
+    ## Only checking for status code 301 to avoid the automatic redirect to the domain.
     status: 301
     no-follow-redirects: true
     allow-insecure: true
@@ -30,6 +31,6 @@ command:
     exec: env
     exit-status: 0
     stdout:
-      - /{{ .Vars.mariadb.auth.database }}/
-      - /{{ .Vars.mariadb.auth.username }}/
-      - /{{ .Vars.mariadb.auth.password }}/
+      - /MARIADB_DATABASE.*{{ .Vars.mariadb.auth.database }}/
+      - /MARIADB_USER.*{{ .Vars.mariadb.auth.username }}/
+      - /MARIADB_PASSWORD.*{{ .Vars.mariadb.auth.password }}/
