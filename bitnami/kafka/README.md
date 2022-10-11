@@ -838,6 +838,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 19.0.0
+
+This major updates Kafka to its newest version, 3.3.x. For more information, please refer to [kafka upgrade notes](https://kafka.apache.org/33/documentation.html#upgrade).
+
 ### To 18.0.0
 
 This major updates the Zookeeper subchart to it newest major, 10.0.0. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper#to-1000).
