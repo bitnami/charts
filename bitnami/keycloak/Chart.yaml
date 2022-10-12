@@ -1,7 +1,7 @@
 annotations:
   category: DeveloperTools
 apiVersion: v2
-appVersion: 19.0.2
+appVersion: 19.0.3
 dependencies:
   - condition: postgresql.enabled
     name: postgresql
@@ -26,4 +26,4 @@ name: keycloak
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/keycloak
   - https://github.com/keycloak/keycloak
-version: 10.1.4
+version: 10.1.5
