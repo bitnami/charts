@@ -408,21 +408,29 @@ spec:
               containerPort: {{ .Values.containerPorts.intra | default "7000" }}
               {{- if .Values.hostNetwork }}
               hostPort: {{ .Values.containerPorts.intra }}
+              {{- else if .Values.hostPorts.intra }}
+              hostPort: {{ .Values.hostPorts.intra }}
               {{- end }}
             - name: tls
               containerPort: {{ .Values.containerPorts.tls | default "7001" }}
               {{- if .Values.hostNetwork }}
               hostPort: {{ .Values.containerPorts.tls }}
+              {{- else if .Values.hostPorts.tls }}
+              hostPort: {{ .Values.hostPorts.tls }}
               {{- end }}
             - name: jmx
               containerPort: {{ .Values.containerPorts.jmx | default "7199" }}
               {{- if .Values.hostNetwork }}
               hostPort: {{ .Values.containerPorts.jmx }}
+              {{- else if .Values.hostPorts.jmx }}
+              hostPort: {{ .Values.hostPorts.jmx }}
               {{- end }}
             - name: cql
               containerPort: {{ .Values.containerPorts.cql | default "9042" }}
               {{- if .Values.hostNetwork }}
               hostPort: {{ .Values.containerPorts.cql }}
+              {{- else if .Values.hostPorts.cql }}
+              hostPort: {{ .Values.hostPorts.cql }}
               {{- end }}
           {{- if .Values.resources }}
           resources: {{ toYaml .Values.resources | nindent 12 }}
@@ -466,12 +474,16 @@ spec:
               containerPort: {{ .Values.metrics.containerPorts.http | default "8080" }}
               {{- if .Values.hostNetwork }}
               hostPort: {{ .Values.metrics.containerPorts.http }}
+              {{- else if .Values.metrics.hostPorts.http }}
+              hostPort: {{ .Values.metrics.hostPorts.http }}
               {{- end }}
               protocol: TCP
             - name: jmx
               containerPort: {{ .Values.metrics.containerPorts.jmx | default "5555" }}
               {{- if .Values.hostNetwork }}
               hostPort: {{ .Values.metrics.containerPorts.jmx }}
+              {{- else if .Values.metrics.hostPorts.jmx }}
+              hostPort: {{ .Values.metrics.hostPorts.jmx }}
               {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}

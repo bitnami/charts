@@ -51,7 +51,7 @@ instance. Please login using the following credentials:
 phpMyAdmin has not been configure to point to a specific database. Please provide the db host,
 username and password at log in or upgrade the release with a specific database:
 
-$ helm upgrade {{ .Release.Name }} bitnami/phpmyadmin --set db.host=mydb
+$ helm upgrade {{ .Release.Name }} my-repo/phpmyadmin --set db.host=mydb
 
 {{- end }}
 

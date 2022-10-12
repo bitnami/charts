@@ -7,12 +7,12 @@ Confluent Schema Registry provides a RESTful interface by adding a serving layer
 [Overview of Confluent Schema Registry](https://www.confluent.io)
 
 
-                           
+
 ## TL;DR
 
 ```bash
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install my-release bitnami/schema-registry
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/schema-registry
 ```
 
 ## Introduction
@@ -33,8 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```bash
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install my-release bitnami/schema-registry
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/schema-registry
 ```
 
 These commands deploy Schema Registry on the Kubernetes cluster with the default configuration. The [parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -258,7 +258,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```bash
 helm install my-release \
   --set replicaCount=2 \
-    bitnami/schema-registry
+    my-repo/schema-registry
 ```
 
 The above command installs Schema Registry chart with 2 replicas.
@@ -266,7 +266,7 @@ The above command installs Schema Registry chart with 2 replicas.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-helm install my-release -f values.yaml bitnami/schema-registry
+helm install my-release -f values.yaml my-repo/schema-registry
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -412,6 +412,10 @@ For each host indicated at `ingress.extraHosts`, please indicate a `name`, `path
 For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
 
 ## Upgrading
+
+### To 6.0.0
+
+This major updates the Kafka subchart to it newest major, 19.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/kafka#to-1900).
 
 ### To 4.0.0
 

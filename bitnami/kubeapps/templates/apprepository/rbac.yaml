@@ -222,7 +222,7 @@ apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
   name: {{ printf "kubeapps:%s:global-repos-read" .Release.Namespace | quote }}
-  namespace: {{ include "kubeapps.globalReposNamespace" . | quote }}
+  namespace: {{ include "kubeapps.helmGlobalPackagingNamespace" . | quote }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole

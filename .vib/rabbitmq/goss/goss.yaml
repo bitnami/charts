@@ -1,31 +1,46 @@
-command:
-  rabbmitmqctl-version:
-    exec: rabbitmqctl version | grep --quiet $APP_VERSION
-    exit-status: 0
-    stderr: [ ]
-    timeout: 20000
-  rabbitmqctl-add-vhost:
-    exec: rabbitmqctl add_vhost test-host
-    exit-status: 0
-    stderr: [ ]
-    stdout:
-      - 'Adding vhost'
-    timeout: 20000  
-  rabbitmqctl-list-global-params:
-    exec: rabbitmqctl list_global_parameters
-    exit-status: 0
-    stderr: [ ]
-    stdout:
-      - 'Listing global runtime parameters'
-    timeout: 20000
-  user-id-test:
-    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
-    exit-status: 0
-    stdout: []
-    stderr: []    
+addr:
+  tcp://rabbitmq:{{ .Vars.service.ports.amqp }}:
+    reachable: true
+  tcp://rabbitmq:{{ .Vars.service.ports.epmd }}:
+    reachable: true
+  tcp://rabbitmq:{{ .Vars.service.ports.dist }}:
+    reachable: true
 file:
-  /opt/bitnami/rabbitmq/etc/rabbitmq/rabbitmq.conf:
-    mode: "0644"
-    filetype: file
+  {{ .Vars.persistence.mountPath }}:
     exists: true
-    group: root
+    filetype: symlink
+    mode: "0777"
+    owner: root
+  /bitnami/rabbitmq/conf:
+    exists: true
+    filetype: directory
+    mode: "3777"
+    owner: root
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
+    filetype: directory
+    mode: "3777"
+command:
+  {{- $nodes := .Vars.replicaCount }}
+  rabbitmqctl-cluster-status:
+    exec: rabbitmqctl cluster_status
+    exit-status: 0
+    stdout:
+    {{ range $e, $i := until $nodes }}
+      - /rabbitmq-{{ $i }}.rabbitmq-headless/
+    {{ end }}
+  rabbitmqctl-replication-check:
+    {{- $vhost := printf "vhost_%s" (randAlpha 5) }}
+    exec: rabbitmqctl add_vhost {{ $vhost }} && sleep 2 {{ range $e, $i := until $nodes }} && rabbitmqctl --node rabbit@rabbitmq-{{ $i }} list_vhosts | grep -q {{ $vhost }} {{ end }}
+    exit-status: 0
+  rabbitmq-plugins-enabled:
+    exec: rabbitmq-plugins list --enabled
+    exit-status: 0
+    stdout:
+      - {{ .Vars.extraPlugins }}
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+    - uid={{ .Vars.containerSecurityContext.runAsUser }}
+    - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/

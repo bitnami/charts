@@ -64,7 +64,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kiam
-  tag: 4.2.0-debian-11-r33
+  tag: 4.2.0-debian-11-r44
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

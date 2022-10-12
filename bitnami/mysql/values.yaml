@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mysql
-  tag: 8.0.30-debian-11-r15
+  tag: 8.0.31-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -491,6 +491,13 @@ primary:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+    ## Headless service properties
+    ##
+    headless:
+      ## @param primary.service.headless.annotations Additional custom annotations for headless MySQL primary service.
+      ##
+      annotations: {}
+
   ## MySQL primary Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
@@ -848,6 +855,13 @@ secondary:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+    ## Headless service properties
+    ##
+    headless:
+      ## @param secondary.service.headless.annotations Additional custom annotations for headless MySQL secondary service.
+      ##
+      annotations: {}
+
   ## MySQL secondary Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
@@ -954,7 +968,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r32
+    tag: 11-debian-11-r40
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -987,7 +1001,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.14.0-debian-11-r33
+    tag: 0.14.0-debian-11-r46
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

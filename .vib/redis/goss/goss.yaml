@@ -1,0 +1,56 @@
+{{- $auth := printf "REDISCLI_AUTH=%s" .Vars.auth.password }}
+{{- $master_endpoint := printf "-h redis-master -p %d" .Vars.master.service.ports.redis }}
+{{- $replicas_endpoint := printf "-h redis-replicas -p %d" .Vars.replica.service.ports.redis }}
+{{- $replicas := .Vars.replica.replicaCount }}
+command:
+  {{- $key := printf "key_%s" (randAlpha 5) }}
+  {{- $value := printf "value_%s" (randAlpha 5) }}
+  redis-set-key-value-pairs:
+    exec: export {{ $auth }} && redis-cli {{ $master_endpoint }} SET {{ $key }} {{ $value }} {{ range $e, $i := until $replicas }} && redis-cli -h redis-replicas-{{ $i }}.redis-headless -p {{ $.Vars.replica.containerPorts.redis }} GET {{ $key }} | grep -q {{ $value }}{{ end }}
+    exit-status: 0
+  {{ range $command := .Vars.master.disableCommands }}
+  redis-disabled-{{ $command }}:
+    exec: {{ $auth }} redis-cli {{ $master_endpoint }} {{ $command }}
+    exit-status: 0
+    stdout:
+      - ERR unknown command
+  {{ end }}
+  redis-master-role:
+    exec: {{ $auth }} redis-cli {{ $master_endpoint }} ROLE
+    exit-status: 0
+    stdout:
+      - master
+      {{ range $e, $i := until $replicas }}
+      - redis-replicas-{{ $i }}
+      {{ end }}
+  redis-replicas-role:
+    exec: {{ $auth }} redis-cli {{ $replicas_endpoint }} ROLE
+    exit-status: 0
+    stdout:
+      - slave
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+    - uid={{ .Vars.master.containerSecurityContext.runAsUser }}
+    - /groups=.*{{ .Vars.master.podSecurityContext.fsGroup }}/
+file:
+  {{ .Vars.master.persistence.path }}:
+    filetype: directory
+    exists: true
+    mode: "2775"
+    owner: root
+  /opt/bitnami/redis/mounted-etc:
+    exists: true
+    mode: "2777"
+    filetype: directory
+    owner: root
+  /opt/bitnami/redis/etc:
+    filetype: directory
+    exists: true
+    mode: "2777"
+    owner: root
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
+    filetype: directory
+    mode: "3777"

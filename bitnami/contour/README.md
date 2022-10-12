@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/contour
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/contour
 ```
 
 ## Introduction
@@ -34,8 +34,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/contour
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/contour
 ```
 
 These commands deploy contour on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -424,7 +424,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set envoy.readinessProbe.successThreshold=5 \
-    bitnami/contour
+    my-repo/contour
 ```
 
 The above command sets the `envoy.readinessProbe.successThreshold` to `5`.
@@ -617,7 +617,7 @@ $ kubectl delete tlscertificatedelegations.projectcontour.io
 Upgrade the Contour chart with the release name `my-release`:
 
 ```console
-$ helm upgrade my-release bitnami/contour
+$ helm upgrade my-release my-repo/contour
 ```
 
 If you made a backup earlier, restore the objects:

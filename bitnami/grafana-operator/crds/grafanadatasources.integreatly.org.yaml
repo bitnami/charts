@@ -1,7 +1,9 @@
-# !kustomize build https://github.com/grafana-operator/grafana-operator/tree/v4.6.0/config/crd
+# !kustomize build https://github.com/grafana-operator/grafana-operator/tree/v4.7.0/config/crd
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.6.2
   name: grafanadatasources.integreatly.org
 spec:
   group: integreatly.org
@@ -13,408 +15,397 @@ spec:
   preserveUnknownFields: false
   scope: Namespaced
   versions:
-  - name: v1alpha1
-    schema:
-      openAPIV3Schema:
-        description: GrafanaDataSource is the Schema for the grafanadatasources API
-        properties:
-          apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-            type: string
-          kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-            type: string
-          metadata:
-            type: object
-          spec:
-            description: GrafanaDataSourceSpec defines the desired state of GrafanaDataSource
-            properties:
-              datasources:
-                items:
-                  properties:
-                    access:
-                      type: string
-                    basicAuth:
-                      type: boolean
-                    basicAuthPassword:
-                      type: string
-                    basicAuthUser:
-                      type: string
-                    customJsonData:
-                      description: CustomJsonData will be used in place of jsonData,
-                        if present, and supports arbitrary JSON, not just those of
-                        official datasources
-                      type: object
-                      x-kubernetes-preserve-unknown-fields: true
-                    customSecureJsonData:
-                      description: SecureCustomJsonData will be used in place of secureJsonData,
-                        if present, and supports arbitrary JSON, not just those of
-                        official datasources
-                      type: object
-                      x-kubernetes-preserve-unknown-fields: true
-                    database:
-                      type: string
-                    editable:
-                      type: boolean
-                    isDefault:
-                      type: boolean
-                    jsonData:
-                      description: GrafanaDataSourceJsonData contains the most common
-                        json options See https://grafana.com/docs/administration/provisioning/#datasources
-                      properties:
-                        addCorsHeader:
-                          description: Useful fields for clickhouse datasource See
-                            https://github.com/Vertamedia/clickhouse-grafana/tree/master/dist/README.md#configure-the-datasource-with-provisioning
-                            See https://github.com/Vertamedia/clickhouse-grafana/tree/master/src/datasource.ts#L44
-                          type: boolean
-                        alertmanagerUid:
-                          description: AlertManagerUID if null use the internal grafana
-                            alertmanager
-                          type: string
-                        allowInfraExplore:
-                          type: boolean
-                        apiToken:
-                          type: string
-                        appInsightsAppId:
-                          description: Fields for Azure data sources
-                          type: string
-                        assumeRoleArn:
-                          type: string
-                        authType:
-                          type: string
-                        authenticationType:
-                          type: string
-                        azureLogAnalyticsSameAs:
-                          type: string
-                        clientEmail:
-                          type: string
-                        clientId:
-                          type: string
-                        cloudName:
-                          type: string
-                        clusterUrl:
-                          type: string
-                        connMaxLifetime:
-                          type: integer
-                        customMetricsNamespaces:
-                          type: string
-                        customQueryParameters:
-                          description: Fields for Prometheus data sources
-                          type: string
-                        defaultBucket:
-                          type: string
-                        defaultDatabase:
-                          type: string
-                        defaultProject:
-                          type: string
-                        defaultRegion:
-                          type: string
-                        derivedFields:
-                          items:
+    - name: v1alpha1
+      schema:
+        openAPIV3Schema:
+          description: GrafanaDataSource is the Schema for the grafanadatasources API
+          properties:
+            apiVersion:
+              description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+              type: string
+            kind:
+              description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: GrafanaDataSourceSpec defines the desired state of GrafanaDataSource
+              properties:
+                datasources:
+                  items:
+                    properties:
+                      access:
+                        type: string
+                      basicAuth:
+                        type: boolean
+                      basicAuthPassword:
+                        type: string
+                      basicAuthUser:
+                        type: string
+                      customJsonData:
+                        description: CustomJsonData will be used in place of jsonData, if present, and supports arbitrary JSON, not just those of official datasources
+                        type: object
+                        x-kubernetes-preserve-unknown-fields: true
+                      customSecureJsonData:
+                        description: SecureCustomJsonData will be used in place of secureJsonData, if present, and supports arbitrary JSON, not just those of official datasources
+                        type: object
+                        x-kubernetes-preserve-unknown-fields: true
+                      database:
+                        type: string
+                      editable:
+                        type: boolean
+                      isDefault:
+                        type: boolean
+                      jsonData:
+                        description: GrafanaDataSourceJsonData contains the most common json options See https://grafana.com/docs/administration/provisioning/#datasources
+                        properties:
+                          addCorsHeader:
+                            description: Useful fields for clickhouse datasource See https://github.com/Vertamedia/clickhouse-grafana/tree/master/dist/README.md#configure-the-datasource-with-provisioning See https://github.com/Vertamedia/clickhouse-grafana/tree/master/src/datasource.ts#L44
+                            type: boolean
+                          alertmanagerUid:
+                            description: AlertManagerUID if null use the internal grafana alertmanager
+                            type: string
+                          allowInfraExplore:
+                            type: boolean
+                          apiToken:
+                            type: string
+                          appInsightsAppId:
+                            description: Fields for Azure data sources
+                            type: string
+                          assumeRoleArn:
+                            type: string
+                          authType:
+                            type: string
+                          authenticationType:
+                            type: string
+                          azureLogAnalyticsSameAs:
+                            type: string
+                          clientEmail:
+                            type: string
+                          clientId:
+                            type: string
+                          cloudName:
+                            type: string
+                          clusterUrl:
+                            type: string
+                          connMaxLifetime:
+                            type: integer
+                          customMetricsNamespaces:
+                            type: string
+                          customQueryParameters:
+                            description: Fields for Prometheus data sources
+                            type: string
+                          defaultBucket:
+                            type: string
+                          defaultDatabase:
+                            type: string
+                          defaultProject:
+                            type: string
+                          defaultRegion:
+                            type: string
+                          derivedFields:
+                            items:
+                              properties:
+                                datasourceUid:
+                                  type: string
+                                matcherRegex:
+                                  type: string
+                                name:
+                                  type: string
+                                url:
+                                  type: string
+                              type: object
+                            type: array
+                          encrypt:
+                            type: string
+                          esVersion:
+                            anyOf:
+                              - type: integer
+                              - type: string
+                            x-kubernetes-int-or-string: true
+                          exemplarTraceIdDestinations:
+                            items:
+                              properties:
+                                datasourceUid:
+                                  type: string
+                                name:
+                                  type: string
+                                url:
+                                  type: string
+                                urlDisplayLabel:
+                                  type: string
+                              type: object
+                            type: array
+                          githubUrl:
+                            description: Fields for Github data sources
+                            type: string
+                          graphiteVersion:
+                            type: string
+                          httpHeaderName1:
+                            description: Custom HTTP headers for datasources See https://grafana.com/docs/grafana/latest/administration/provisioning/#datasources
+                            type: string
+                          httpHeaderName2:
+                            type: string
+                          httpHeaderName3:
+                            type: string
+                          httpHeaderName4:
+                            type: string
+                          httpHeaderName5:
+                            type: string
+                          httpHeaderName6:
+                            type: string
+                          httpHeaderName7:
+                            type: string
+                          httpHeaderName8:
+                            type: string
+                          httpHeaderName9:
+                            type: string
+                          httpMethod:
+                            type: string
+                          httpMode:
+                            description: Fields for InfluxDB data sources
+                            type: string
+                          implementation:
+                            description: Fields for Alertmanager data sources
+                            type: string
+                          interval:
+                            type: string
+                          logAnalyticsClientId:
+                            type: string
+                          logAnalyticsDefaultWorkspace:
+                            type: string
+                          logAnalyticsSubscriptionId:
+                            type: string
+                          logAnalyticsTenantId:
+                            type: string
+                          logLevelField:
+                            type: string
+                          logMessageField:
+                            type: string
+                          manageAlerts:
+                            description: ManageAlerts turns on alert management from UI
+                            type: boolean
+                          maxIdleConns:
+                            type: integer
+                          maxLines:
+                            description: Fields for Loki data sources
+                            type: integer
+                          maxOpenConns:
+                            type: integer
+                          nodeGraph:
+                            properties:
+                              enabled:
+                                type: boolean
+                            type: object
+                          oauthPassThru:
+                            type: boolean
+                          organization:
+                            type: string
+                          port:
+                            type: integer
+                          postgresVersion:
+                            type: integer
+                          queryTimeout:
+                            type: string
+                          search:
+                            properties:
+                              hide:
+                                type: boolean
+                            type: object
+                          server:
+                            description: Fields for Grafana Clickhouse data sources
+                            type: string
+                          serviceMap:
                             properties:
                               datasourceUid:
                                 type: string
-                              matcherRegex:
-                                type: string
-                              name:
-                                type: string
-                              url:
-                                type: string
                             type: object
-                          type: array
-                        encrypt:
-                          type: string
-                        esVersion:
-                          anyOf:
-                          - type: integer
-                          - type: string
-                          x-kubernetes-int-or-string: true
-                        exemplarTraceIdDestinations:
-                          items:
+                          showOffline:
+                            type: boolean
+                          sigV4AssumeRoleArn:
+                            type: string
+                          sigV4Auth:
+                            description: Fields for AWS Prometheus data sources
+                            type: boolean
+                          sigV4AuthType:
+                            type: string
+                          sigV4ExternalId:
+                            type: string
+                          sigV4Profile:
+                            type: string
+                          sigV4Region:
+                            type: string
+                          sslmode:
+                            type: string
+                          subscriptionId:
+                            type: string
+                          tenantId:
+                            type: string
+                          timeField:
+                            type: string
+                          timeInterval:
+                            type: string
+                          timeout:
+                            description: HTTP Request timeout in seconds. Overrides dataproxy.timeout option
+                            type: integer
+                          timescaledb:
+                            type: boolean
+                          timezone:
+                            description: Extra field for MySQL data source
+                            type: string
+                          tlsAuth:
+                            type: boolean
+                          tlsAuthWithCACert:
+                            type: boolean
+                          tlsSkipVerify:
+                            type: boolean
+                          tokenUri:
+                            description: Fields for Stackdriver data sources
+                            type: string
+                          tracesToLogs:
+                            description: Fields for tracing data sources
                             properties:
                               datasourceUid:
                                 type: string
-                              name:
+                              filterBySpanID:
+                                type: boolean
+                              filterByTraceID:
+                                type: boolean
+                              lokiSearch:
+                                type: boolean
+                              spanEndTimeShift:
                                 type: string
-                              url:
+                              spanStartTimeShift:
                                 type: string
-                              urlDisplayLabel:
-                                type: string
+                              tags:
+                                items:
+                                  type: string
+                                type: array
                             type: object
-                          type: array
-                        githubUrl:
-                          description: Fields for Github data sources
-                          type: string
-                        graphiteVersion:
-                          type: string
-                        httpHeaderName1:
-                          description: Custom HTTP headers for datasources See https://grafana.com/docs/grafana/latest/administration/provisioning/#datasources
-                          type: string
-                        httpHeaderName2:
-                          type: string
-                        httpHeaderName3:
-                          type: string
-                        httpHeaderName4:
-                          type: string
-                        httpHeaderName5:
-                          type: string
-                        httpHeaderName6:
-                          type: string
-                        httpHeaderName7:
-                          type: string
-                        httpHeaderName8:
-                          type: string
-                        httpHeaderName9:
-                          type: string
-                        httpMethod:
-                          type: string
-                        httpMode:
-                          description: Fields for InfluxDB data sources
-                          type: string
-                        implementation:
-                          description: Fields for Alertmanager data sources
-                          type: string
-                        interval:
-                          type: string
-                        logAnalyticsClientId:
-                          type: string
-                        logAnalyticsDefaultWorkspace:
-                          type: string
-                        logAnalyticsSubscriptionId:
-                          type: string
-                        logAnalyticsTenantId:
-                          type: string
-                        logLevelField:
-                          type: string
-                        logMessageField:
-                          type: string
-                        manageAlerts:
-                          description: ManageAlerts turns on alert management from
-                            UI
-                          type: boolean
-                        maxIdleConns:
-                          type: integer
-                        maxLines:
-                          description: Fields for Loki data sources
-                          type: integer
-                        maxOpenConns:
-                          type: integer
-                        nodeGraph:
-                          properties:
-                            enabled:
-                              type: boolean
-                          type: object
-                        oauthPassThru:
-                          type: boolean
-                        organization:
-                          type: string
-                        port:
-                          type: integer
-                        postgresVersion:
-                          type: integer
-                        queryTimeout:
-                          type: string
-                        search:
-                          properties:
-                            hide:
-                              type: boolean
-                          type: object
-                        server:
-                          description: Fields for Grafana Clickhouse data sources
-                          type: string
-                        serviceMap:
-                          properties:
-                            datasourceUid:
-                              type: string
-                          type: object
-                        showOffline:
-                          type: boolean
-                        sigV4AssumeRoleArn:
-                          type: string
-                        sigV4Auth:
-                          description: Fields for AWS Prometheus data sources
-                          type: boolean
-                        sigV4AuthType:
-                          type: string
-                        sigV4ExternalId:
-                          type: string
-                        sigV4Profile:
-                          type: string
-                        sigV4Region:
-                          type: string
-                        sslmode:
-                          type: string
-                        subscriptionId:
-                          type: string
-                        tenantId:
-                          type: string
-                        timeField:
-                          type: string
-                        timeInterval:
-                          type: string
-                        timescaledb:
-                          type: boolean
-                        timezone:
-                          description: Extra field for MySQL data source
-                          type: string
-                        tlsAuth:
-                          type: boolean
-                        tlsAuthWithCACert:
-                          type: boolean
-                        tlsSkipVerify:
-                          type: boolean
-                        tokenUri:
-                          description: Fields for Stackdriver data sources
-                          type: string
-                        tracesToLogs:
-                          description: Fields for tracing data sources
-                          properties:
-                            datasourceUid:
-                              type: string
-                            filterBySpanID:
-                              type: boolean
-                            filterByTraceID:
-                              type: boolean
-                            lokiSearch:
-                              type: boolean
-                            spanEndTimeShift:
-                              type: string
-                            spanStartTimeShift:
-                              type: string
-                            tags:
-                              items:
-                                type: string
-                              type: array
-                          type: object
-                        tsdbResolution:
-                          type: string
-                        tsdbVersion:
-                          type: string
-                        url:
-                          description: Fields for Instana data sources See https://github.com/instana/instana-grafana-datasource/blob/main/provisioning/datasources/datasource.yml
-                          type: string
-                        usePOST:
-                          type: boolean
-                        useProxy:
-                          type: boolean
-                        useYandexCloudAuthorization:
-                          type: boolean
-                        username:
-                          type: string
-                        version:
-                          type: string
-                        xHeaderKey:
-                          type: string
-                        xHeaderUser:
-                          type: string
-                      type: object
-                    name:
-                      type: string
-                    orgId:
-                      type: integer
-                    password:
-                      type: string
-                    secureJsonData:
-                      description: GrafanaDataSourceSecureJsonData contains the most
-                        common secure json options See https://grafana.com/docs/administration/provisioning/#datasources
-                      properties:
-                        accessKey:
-                          type: string
-                        accessToken:
-                          description: Fields for Github data sources
-                          type: string
-                        appInsightsApiKey:
-                          type: string
-                        basicAuthPassword:
-                          type: string
-                        clientSecret:
-                          description: Fields for Azure data sources
-                          type: string
-                        httpHeaderValue1:
-                          description: Custom HTTP headers for datasources See https://grafana.com/docs/grafana/latest/administration/provisioning/#datasources
-                          type: string
-                        httpHeaderValue2:
-                          type: string
-                        httpHeaderValue3:
-                          type: string
-                        httpHeaderValue4:
-                          type: string
-                        httpHeaderValue5:
-                          type: string
-                        httpHeaderValue6:
-                          type: string
-                        httpHeaderValue7:
-                          type: string
-                        httpHeaderValue8:
-                          type: string
-                        httpHeaderValue9:
-                          type: string
-                        logAnalyticsClientSecret:
-                          type: string
-                        password:
-                          type: string
-                        privateKey:
-                          description: Fields for Stackdriver data sources
-                          type: string
-                        secretKey:
-                          type: string
-                        sigV4AccessKey:
-                          description: Fields for AWS data sources
-                          type: string
-                        sigV4SecretKey:
-                          type: string
-                        tlsCACert:
-                          type: string
-                        tlsClientCert:
-                          type: string
-                        tlsClientKey:
-                          type: string
-                        token:
-                          description: Fields for InfluxDB data sources
-                          type: string
-                      type: object
-                    type:
-                      type: string
-                    uid:
-                      type: string
-                    url:
-                      type: string
-                    user:
-                      type: string
-                    version:
-                      type: integer
-                    withCredentials:
-                      type: boolean
-                  required:
-                  - name
-                  - type
-                  type: object
-                type: array
-              name:
-                type: string
-            required:
-            - datasources
-            - name
-            type: object
-          status:
-            properties:
-              message:
-                type: string
-              phase:
-                type: string
-            required:
-            - message
-            - phase
-            type: object
-        type: object
-    served: true
-    storage: true
-    subresources:
-      status: {}
+                          tsdbResolution:
+                            type: string
+                          tsdbVersion:
+                            type: string
+                          url:
+                            description: Fields for Instana data sources See https://github.com/instana/instana-grafana-datasource/blob/main/provisioning/datasources/datasource.yml
+                            type: string
+                          usePOST:
+                            type: boolean
+                          useProxy:
+                            type: boolean
+                          useYandexCloudAuthorization:
+                            type: boolean
+                          username:
+                            type: string
+                          version:
+                            type: string
+                          xHeaderKey:
+                            type: string
+                          xHeaderUser:
+                            type: string
+                        type: object
+                      name:
+                        type: string
+                      orgId:
+                        type: integer
+                      password:
+                        type: string
+                      secureJsonData:
+                        description: GrafanaDataSourceSecureJsonData contains the most common secure json options See https://grafana.com/docs/administration/provisioning/#datasources
+                        properties:
+                          accessKey:
+                            type: string
+                          accessToken:
+                            description: Fields for Github data sources
+                            type: string
+                          appInsightsApiKey:
+                            type: string
+                          basicAuthPassword:
+                            type: string
+                          clientSecret:
+                            description: Fields for Azure data sources
+                            type: string
+                          httpHeaderValue1:
+                            description: Custom HTTP headers for datasources See https://grafana.com/docs/grafana/latest/administration/provisioning/#datasources
+                            type: string
+                          httpHeaderValue2:
+                            type: string
+                          httpHeaderValue3:
+                            type: string
+                          httpHeaderValue4:
+                            type: string
+                          httpHeaderValue5:
+                            type: string
+                          httpHeaderValue6:
+                            type: string
+                          httpHeaderValue7:
+                            type: string
+                          httpHeaderValue8:
+                            type: string
+                          httpHeaderValue9:
+                            type: string
+                          logAnalyticsClientSecret:
+                            type: string
+                          password:
+                            type: string
+                          privateKey:
+                            description: Fields for Stackdriver data sources
+                            type: string
+                          secretKey:
+                            type: string
+                          sigV4AccessKey:
+                            description: Fields for AWS data sources
+                            type: string
+                          sigV4SecretKey:
+                            type: string
+                          tlsCACert:
+                            type: string
+                          tlsClientCert:
+                            type: string
+                          tlsClientKey:
+                            type: string
+                          token:
+                            description: Fields for InfluxDB data sources
+                            type: string
+                        type: object
+                      type:
+                        type: string
+                      uid:
+                        type: string
+                      url:
+                        type: string
+                      user:
+                        type: string
+                      version:
+                        type: integer
+                      withCredentials:
+                        type: boolean
+                    required:
+                      - name
+                      - type
+                    type: object
+                  type: array
+                name:
+                  type: string
+              required:
+                - datasources
+                - name
+              type: object
+            status:
+              properties:
+                message:
+                  type: string
+                phase:
+                  type: string
+              required:
+                - message
+                - phase
+              type: object
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
 status:
   acceptedNames:
     kind: ""

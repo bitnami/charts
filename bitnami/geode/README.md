@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/geode
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/geode
 ```
 
 ## Introduction
@@ -32,7 +32,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release bitnami/geode
+helm install my-release my-repo/geode
 ```
 
 The command deploys geode on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------- |
 | `image.registry`                         | Apache Geode image registry                                                                                  | `docker.io`                                                 |
 | `image.repository`                       | Apache Geode image repository                                                                                | `bitnami/geode`                                             |
-| `image.tag`                              | Apache Geode image tag (immutable tags are recommended)                                                      | `1.15.0-debian-11-r17`                                      |
+| `image.tag`                              | Apache Geode image tag (immutable tags are recommended)                                                      | `1.15.0-debian-11-r35`                                      |
 | `image.digest`                           | Apache Geode image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                                        |
 | `image.pullPolicy`                       | Apache Geode image pull policy                                                                               | `IfNotPresent`                                              |
 | `image.pullSecrets`                      | Apache Geode image pull secrets                                                                              | `[]`                                                        |
@@ -313,7 +313,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r24`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r40`      |
 | `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -330,7 +330,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                               | Expose Apache Geode metrics                                                                                     | `false`              |
 | `metrics.image.registry`                        | Bitnami HAProxy image registry                                                                                  | `docker.io`          |
 | `metrics.image.repository`                      | Bitnami HAProxy image repository                                                                                | `bitnami/haproxy`    |
-| `metrics.image.tag`                             | Bitnami HAProxy image tag (immutable tags are recommended)                                                      | `2.6.2-debian-11-r9` |
+| `metrics.image.tag`                             | Bitnami HAProxy image tag (immutable tags are recommended)                                                      | `2.6.6-debian-11-r6` |
 | `metrics.image.digest`                          | Bitnami HAProxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
 | `metrics.image.pullPolicy`                      | Bitnami HAProxy image pull policy                                                                               | `IfNotPresent`       |
 | `metrics.image.pullSecrets`                     | Bitnami HAProxy image pull secrets                                                                              | `[]`                 |
@@ -386,7 +386,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 helm install my-release \
     --set auth.username=admin \
     --set auth.password=password \
-    bitnami/geode
+    my-repo/geode
 ```
 
 The above command sets the credentials to access Locator nodes to `admin` and `password` respectively.
@@ -394,7 +394,7 @@ The above command sets the credentials to access Locator nodes to `admin` and `p
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml bitnami/geode
+helm install my-release -f values.yaml my-repo/geode
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

@@ -17,6 +17,7 @@ jobs:
       author: ${{ steps.get-issue-step.outputs.author }}
       type: ${{ steps.get-issue-step.outputs.type }}
       draft: ${{ steps.get-issue-step.outputs.draft }}
+      number: ${{ steps.get-issue-step.outputs.number }}
     steps:
       - name: Get issue info
         id: get-issue-step
@@ -26,6 +27,7 @@ jobs:
           author="$(echo $issue_info | jq -r '.user.login')"
           pull_request="$(echo $issue_info | jq -r '.pull_request')"
           draft="$(echo $issue_info | jq -r '.draft' | sed -r "s|null|false|g")"
+          number="$(echo $issue_info | jq -r '.number')"
           type="pull_request"
           if [[ "${pull_request}" == "null" ]]; then
             type="issue"
@@ -34,6 +36,7 @@ jobs:
           echo "::set-output name=author::${author}"
           echo "::set-output name=type::${type}"
           echo "::set-output name=draft::${draft}"
+          echo "::set-output name=number::${number}"
   label-card:
     runs-on: ubuntu-latest
     needs:
@@ -63,14 +66,27 @@ jobs:
           remove-labels: on-hold, in-progress, triage, solved
       - name: Verify labeling
         # Only if moved into bitnami column and the PR is ready for review
+        # This step uses a github-script to add the label intentionally.
+        # Consecutive calls to andymckay/labeler@1.0.4 can remove previous assigned labels, see https://github.com/andymckay/labeler/issues/40
         if: |
           github.event.project_card.column_id == env.BITNAMI_COLUMN_ID &&
           needs.get-issue.outputs.type == 'pull_request' && needs.get-issue.outputs.draft == 'false'
-        uses: andymckay/labeler@1.0.4
+        uses: actions/github-script@v6
         with:
-          add-labels: verify
           # Required to trigger CI workflow
-          repo-token: ${{ secrets.BITNAMI_BOT_TOKEN }}
+          github-token: ${{ secrets.BITNAMI_BOT_TOKEN }}
+          script: |
+            try {
+              await github.rest.issues.addLabels({
+                owner: context.payload.repository.owner.login,
+                repo: context.payload.repository.name,
+                issue_number: ${{ needs.get-issue.outputs.number }},
+                labels: ['verify']
+              })
+              core.info(`Updated labels in ${{ needs.get-issue.outputs.number }}. Added: 'verify'`)
+            } catch (error) {
+              core.setFailed(error.message)
+            }
       - name: Build Maintenance labeling
         if: ${{ github.event.project_card.column_id == env.BUILD_MAINTENANCE_COLUMN_ID }}
         uses: andymckay/labeler@1.0.4

@@ -7,12 +7,12 @@ WordPress is the world's most popular blogging and content management platform. 
 [Overview of WordPress](http://www.wordpress.org)
 
 
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/wordpress
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/wordpress
 ```
 
 ## Introduction
@@ -35,7 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release bitnami/wordpress
+helm install my-release my-repo/wordpress
 ```
 
 The command deploys WordPress on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -390,7 +390,7 @@ helm install my-release \
   --set wordpressUsername=admin \
   --set wordpressPassword=password \
   --set mariadb.auth.rootPassword=secretpassword \
-    bitnami/wordpress
+    my-repo/wordpress
 ```
 
 The above command sets the WordPress administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
@@ -400,7 +400,7 @@ The above command sets the WordPress administrator account username and password
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml bitnami/wordpress
+helm install my-release -f values.yaml my-repo/wordpress
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -579,13 +579,13 @@ $ export MARIADB_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=wordpress,a
 Upgrade your release (maintaining the version) disabling MariaDB and scaling WordPress replicas to 0:
 
 ```console
-$ helm upgrade wordpress bitnami/wordpress --set wordpressPassword=$WORDPRESS_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 9.6.4
+$ helm upgrade wordpress my-repo/wordpress --set wordpressPassword=$WORDPRESS_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 9.6.4
 ```
 
 Finally, upgrade you release to `10.0.0` reusing the existing PVC, and enabling back MariaDB:
 
 ```console
-$ helm upgrade wordpress bitnami/wordpress --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set wordpressPassword=$WORDPRESS_PASSWORD
+$ helm upgrade wordpress my-repo/wordpress --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set wordpressPassword=$WORDPRESS_PASSWORD
 ```
 
 You should see the lines below in MariaDB container logs:

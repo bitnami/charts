@@ -11,8 +11,8 @@ Disclaimer: Redis is a registered trademark of Redis Ltd. Any rights therein are
 ## TL;DR
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/redis
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/redis
 ```
 
 ## Introduction
@@ -47,7 +47,7 @@ The main features of each chart are the following:
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install my-release bitnami/redis
+$ helm install my-release my-repo/redis
 ```
 
 The command deploys Redis&reg; on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -99,7 +99,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ---------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`    | Redis&reg; image registry                                                                                  | `docker.io`          |
 | `image.repository`  | Redis&reg; image repository                                                                                | `bitnami/redis`      |
-| `image.tag`         | Redis&reg; image tag (immutable tags are recommended)                                                      | `7.0.5-debian-11-r0` |
+| `image.tag`         | Redis&reg; image tag (immutable tags are recommended)                                                      | `7.0.5-debian-11-r7` |
 | `image.digest`      | Redis&reg; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
 | `image.pullPolicy`  | Redis&reg; image pull policy                                                                               | `IfNotPresent`       |
 | `image.pullSecrets` | Redis&reg; image pull secrets                                                                              | `[]`                 |
@@ -330,7 +330,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.enabled`                            | Use Redis&reg; Sentinel on Redis&reg; pods.                                                                                                 | `false`                  |
 | `sentinel.image.registry`                     | Redis&reg; Sentinel image registry                                                                                                          | `docker.io`              |
 | `sentinel.image.repository`                   | Redis&reg; Sentinel image repository                                                                                                        | `bitnami/redis-sentinel` |
-| `sentinel.image.tag`                          | Redis&reg; Sentinel image tag (immutable tags are recommended)                                                                              | `7.0.4-debian-11-r22`    |
+| `sentinel.image.tag`                          | Redis&reg; Sentinel image tag (immutable tags are recommended)                                                                              | `7.0.5-debian-11-r6`     |
 | `sentinel.image.digest`                       | Redis&reg; Sentinel image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                     |
 | `sentinel.image.pullPolicy`                   | Redis&reg; Sentinel image pull policy                                                                                                       | `IfNotPresent`           |
 | `sentinel.image.pullSecrets`                  | Redis&reg; Sentinel image pull secrets                                                                                                      | `[]`                     |
@@ -444,7 +444,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a sidecar prometheus exporter to expose Redis&reg; metrics                                                    | `false`                  |
 | `metrics.image.registry`                     | Redis&reg; Exporter image registry                                                                                  | `docker.io`              |
 | `metrics.image.repository`                   | Redis&reg; Exporter image repository                                                                                | `bitnami/redis-exporter` |
-| `metrics.image.tag`                          | Redis&reg; Exporter image tag (immutable tags are recommended)                                                      | `1.44.0-debian-11-r8`    |
+| `metrics.image.tag`                          | Redis&reg; Exporter image tag (immutable tags are recommended)                                                      | `1.44.0-debian-11-r16`   |
 | `metrics.image.digest`                       | Redis&reg; Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
 | `metrics.image.pullPolicy`                   | Redis&reg; Exporter image pull policy                                                                               | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                  | Redis&reg; Exporter image pull secrets                                                                              | `[]`                     |
@@ -489,7 +489,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r37`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r40`      |
 | `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -499,7 +499,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctl.enabled`                                       | Enable init container to modify Kernel settings                                                               | `false`                 |
 | `sysctl.image.registry`                                | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `sysctl.image.repository`                              | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `sysctl.image.tag`                                     | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r37`      |
+| `sysctl.image.tag`                                     | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r40`      |
 | `sysctl.image.digest`                                  | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `sysctl.image.pullPolicy`                              | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `sysctl.image.pullSecrets`                             | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -524,7 +524,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```bash
 $ helm install my-release \
   --set auth.password=secretpassword \
-    bitnami/redis
+    my-repo/redis
 ```
 
 The above command sets the Redis&reg; server password to `secretpassword`.
@@ -534,7 +534,7 @@ The above command sets the Redis&reg; server password to `secretpassword`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/redis
+$ helm install my-release -f values.yaml my-repo/redis
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -693,7 +693,7 @@ By default, the chart mounts a [Persistent Volume](https://kubernetes.io/docs/co
 3. Install the chart
 
 ```bash
-$ helm install my-release --set master.persistence.existingClaim=PVC_NAME bitnami/redis
+$ helm install my-release --set master.persistence.existingClaim=PVC_NAME my-repo/redis
 ```
 
 ## Backup and restore
@@ -769,7 +769,7 @@ Backwards compatibility is not guaranteed. To upgrade to `14.0.0`, install a new
 - Reuse the PVC used to hold the master data on your previous release. To do so, use the `master.persistence.existingClaim` parameter. The following example assumes that the release name is `redis`:
 
 ```bash
-$ helm install redis bitnami/redis --set auth.password=[PASSWORD] --set master.persistence.existingClaim=[EXISTING_PVC]
+$ helm install redis my-repo/redis --set auth.password=[PASSWORD] --set master.persistence.existingClaim=[EXISTING_PVC]
 ```
 
 | Note: you need to substitute the placeholder _[EXISTING_PVC]_ with the name of the PVC used on your previous release, and _[PASSWORD]_ with the password used in your previous release.
@@ -841,14 +841,14 @@ This version causes a change in the Redis&reg; Master StatefulSet definition, so
 - Recommended: Create a clone of the Redis&reg; Master PVC (for example, using projects like [this one](https://github.com/edseymour/pvc-transfer)). Then launch a fresh release reusing this cloned PVC.
 
    ```
-   helm install my-release bitnami/redis --set persistence.existingClaim=<NEW PVC>
+   helm install my-release my-repo/redis --set persistence.existingClaim=<NEW PVC>
    ```
 
 - Alternative (not recommended, do at your own risk): `helm delete --purge` does not remove the PVC assigned to the Redis&reg; Master StatefulSet. As a consequence, the following commands can be done to upgrade the release
 
    ```
    helm delete --purge <RELEASE>
-   helm install <RELEASE> bitnami/redis
+   helm install <RELEASE> my-repo/redis
    ```
 
 Previous versions of the chart were not using persistence in the slaves, so this upgrade would add it to them. Another important change is that no values are inherited from master to slaves. For example, in 6.0.0 `slaves.readinessProbe.periodSeconds`, if empty, would be set to `master.readinessProbe.periodSeconds`. This approach lacked transparency and was difficult to maintain. From now on, all the slave parameters must be configured just as it is done with the masters.
