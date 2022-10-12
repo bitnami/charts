@@ -1,7 +1,7 @@
 annotations:
   category: Analytics
 apiVersion: v2
-appVersion: 8.4.2
+appVersion: 8.4.3
 dependencies:
   - condition: global.kibanaEnabled
     name: kibana
@@ -25,4 +25,4 @@ name: elasticsearch
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/elasticsearch
   - https://www.elastic.co/products/elasticsearch
-version: 19.4.3
+version: 19.4.4
