@@ -13,7 +13,7 @@ dependencies:
     version: 2.x.x
 description: Parse is a platform that enables users to add a scalable and powerful backend to launch a full-featured app for iOS, Android, JavaScript, Windows, Unity, and more.
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/parse
+home: https://github.com/bitnami/charts/tree/main/bitnami/parse
 icon: https://bitnami.com/assets/stacks/parse/img/parse-stack-220x234.png
 keywords:
   - parse

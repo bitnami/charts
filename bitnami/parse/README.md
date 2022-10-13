@@ -427,7 +427,7 @@ extraDeploy: |-
 
 This chart allows you to set your custom affinity using the `XXX.affinity` paremeter(s). Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
@@ -437,7 +437,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 19.0.0
 
-This major updates the MongoDB&reg; subchart to its newest major, [13.0.0](https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-1300). No major issues are expected during the upgrade.
+This major updates the MongoDB&reg; subchart to its newest major, [13.0.0](https://github.com/bitnami/charts/tree/main/bitnami/mongodb#to-1300). No major issues are expected during the upgrade.
 
 ### To 18.0.0
 
@@ -457,7 +457,7 @@ Affected values:
 
 Also MongoDB&reg; subchart container images were updated to 5.0.x and it can affect compatibility with older versions of MongoDB&reg;.
 
-- https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-1200
+- https://github.com/bitnami/charts/tree/main/bitnami/mongodb#to-1200
 
 ### To 16.0.0
 
@@ -503,13 +503,13 @@ This version standardizes the way of defining Ingress rules. When configuring a 
 
 MongoDB&reg; subchart container images were updated to 4.4.x and it can affect compatibility with older versions of MongoDB&reg;.
 
-- https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-900
+- https://github.com/bitnami/charts/tree/main/bitnami/mongodb#to-900
 
 ### To 11.0.0
 
 Backwards compatibility is not guaranteed since breaking changes were included in MongoDB&reg; subchart. More information in the link below:
 
-- https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-800
+- https://github.com/bitnami/charts/tree/main/bitnami/mongodb#to-800
 
 ### To 10.0.0
 

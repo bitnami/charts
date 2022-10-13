@@ -14,7 +14,7 @@ dependencies:
     version: 2.x.x
 description: Node.js is a runtime environment built on V8 JavaScript engine. Its event-driven, non-blocking I/O model enables the development of fast, scalable, and data-intensive server applications.
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/node
+home: https://github.com/bitnami/charts/tree/main/bitnami/node
 icon: https://bitnami.com/assets/stacks/nodejs/img/nodejs-stack-220x234.png
 keywords:
   - node

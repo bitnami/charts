@@ -599,7 +599,7 @@ volumePermissions:
 ## @section Database Parameters
 
 ## MySQL chart configuration
-## ref: https://github.com/bitnami/charts/blob/master/bitnami/mysql/values.yaml
+## ref: https://github.com/bitnami/charts/blob/main/bitnami/mysql/values.yaml
 ##
 mysql:
   ## @param mysql.enabled Deploy a MySQL server to satisfy the applications database requirements
