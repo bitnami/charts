@@ -1073,23 +1073,24 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 
 ### Metrics parameters
 
-| Name                                       | Description                                                                                  | Value   |
-| ------------------------------------------ | -------------------------------------------------------------------------------------------- | ------- |
-| `metrics.enabled`                          | Enable the export of Prometheus metrics                                                      | `false` |
-| `metrics.serviceMonitor.enabled`           | Specify if a ServiceMonitor will be deployed for Prometheus Operator                         | `false` |
-| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                     | `""`    |
-| `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                          | `{}`    |
-| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in Prometheus             | `""`    |
-| `metrics.serviceMonitor.interval`          | How frequently to scrape metrics                                                             | `""`    |
-| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                      | `""`    |
-| `metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                                     | `[]`    |
-| `metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                                   | `[]`    |
-| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                          | `{}`    |
-| `metrics.prometheusRule.default.create`    | would create all default prometheus alerts                                                   | `true`  |
-| `metrics.prometheusRule.default.disabled`  | disable one specific prometheus alert rule                                                   | `{}`    |
-| `metrics.prometheusRule.namespace`         | Namespace in which the PrometheusRule CRD is created                                         | `""`    |
-| `metrics.prometheusRule.additionalLabels`  | Additional labels for the prometheusRule                                                     | `{}`    |
-| `metrics.prometheusRule.groups`            | Prometheus Rule Groups for Thanos components  (also requires `metrics.enabled` to be `true`) | `[]`    |
+| Name                                       | Description                                                                                            | Value   |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ------- |
+| `metrics.enabled`                          | Enable the export of Prometheus metrics                                                                | `false` |
+| `metrics.serviceMonitor.enabled`           | Specify if a ServiceMonitor will be deployed for Prometheus Operator                                   | `false` |
+| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                               | `""`    |
+| `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                                    | `{}`    |
+| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in Prometheus                       | `""`    |
+| `metrics.serviceMonitor.interval`          | How frequently to scrape metrics                                                                       | `""`    |
+| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                | `""`    |
+| `metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                                               | `[]`    |
+| `metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                                             | `[]`    |
+| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                    | `{}`    |
+| `metrics.prometheusRule.enabled`           | If `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true`) | `false` |
+| `metrics.prometheusRule.default.create`    | would create all default prometheus alerts                                                             | `false` |
+| `metrics.prometheusRule.default.disabled`  | disable one specific prometheus alert rule                                                             | `{}`    |
+| `metrics.prometheusRule.namespace`         | Namespace in which the PrometheusRule CRD is created                                                   | `""`    |
+| `metrics.prometheusRule.additionalLabels`  | Additional labels for the prometheusRule                                                               | `{}`    |
+| `metrics.prometheusRule.groups`            | Prometheus Rule Groups for Thanos components                                                           | `[]`    |
 
 
 ### Volume Permissions parameters
