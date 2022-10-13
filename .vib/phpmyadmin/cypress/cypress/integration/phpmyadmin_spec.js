@@ -8,7 +8,7 @@ it('allows creating a database and a table', () => {
     cy.get('#text_create_db').type(`${td.databaseName}.${random}`, {
       force: true,
     });
-    cy.get('input').contains('Create').click({ force: true });
+    cy.contains('input', 'Create').click({ force: true });
     cy.get('[name="table"]').type(`${td.tableName}.${random}`);
     cy.get('[name="num_fields"]').clear().type(td.columnNumber);
     cy.get('[type="submit"]').click();
