@@ -7,7 +7,7 @@ MediaWiki is the free and open source wiki software that powers Wikipedia. Used 
 [Overview of MediaWiki](http://www.mediawiki.org/wiki/MediaWiki)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -78,34 +78,34 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Mediawiki parameters
 
-| Name                 | Description                                                                                                                                        | Value                  |
-| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `image.registry`     | MediaWiki image registry                                                                                                                           | `docker.io`            |
-| `image.repository`   | MediaWiki image repository                                                                                                                         | `bitnami/mediawiki`    |
-| `image.tag`          | MediaWiki image tag (immutable tags are recommended)                                                                                               | `1.38.2-debian-11-r30` |
-| `image.digest`       | MediaWiki image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                          | `""`                   |
-| `image.pullPolicy`   | Image pull policy                                                                                                                                  | `IfNotPresent`         |
-| `image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                   | `[]`                   |
-| `image.debug`        | Enable MediaWiki image debug mode                                                                                                                  | `false`                |
-| `hostAliases`        | Deployment pod host aliases                                                                                                                        | `[]`                   |
-| `mediawikiUser`      | User of the application                                                                                                                            | `user`                 |
-| `mediawikiPassword`  | Application password                                                                                                                               | `""`                   |
-| `mediawikiSecret`    | Existing `Secret` containing the password for the `mediawikiUser` user; must contain the key `mediawiki-password` and optional key `smtp-password` | `""`                   |
-| `mediawikiEmail`     | Admin email                                                                                                                                        | `user@example.com`     |
-| `mediawikiName`      | Name for the wiki                                                                                                                                  | `My Wiki`              |
-| `mediawikiHost`      | Mediawiki host to create application URLs                                                                                                          | `""`                   |
-| `allowEmptyPassword` | Allow DB blank passwords                                                                                                                           | `yes`                  |
-| `smtpHost`           | SMTP host                                                                                                                                          | `""`                   |
-| `smtpPort`           | SMTP port                                                                                                                                          | `""`                   |
-| `smtpHostID`         | SMTP host ID                                                                                                                                       | `""`                   |
-| `smtpUser`           | SMTP user                                                                                                                                          | `""`                   |
-| `smtpPassword`       | SMTP password                                                                                                                                      | `""`                   |
-| `command`            | Override default container command (useful when using custom images)                                                                               | `[]`                   |
-| `args`               | Override default container args (useful when using custom images)                                                                                  | `[]`                   |
-| `lifecycleHooks`     | for the Mediawiki container(s) to automate configuration before or after startup                                                                   | `{}`                   |
-| `extraEnvVars`       | Extra environment variables to be set on Mediawki container                                                                                        | `[]`                   |
-| `extraEnvVarsCM`     | Name of existing ConfigMap containing extra env vars                                                                                               | `""`                   |
-| `extraEnvVarsSecret` | Name of existing Secret containing extra env vars                                                                                                  | `""`                   |
+| Name                 | Description                                                                                                                                        | Value                 |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `image.registry`     | MediaWiki image registry                                                                                                                           | `docker.io`           |
+| `image.repository`   | MediaWiki image repository                                                                                                                         | `bitnami/mediawiki`   |
+| `image.tag`          | MediaWiki image tag (immutable tags are recommended)                                                                                               | `1.38.4-debian-11-r6` |
+| `image.digest`       | MediaWiki image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                          | `""`                  |
+| `image.pullPolicy`   | Image pull policy                                                                                                                                  | `IfNotPresent`        |
+| `image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                   | `[]`                  |
+| `image.debug`        | Enable MediaWiki image debug mode                                                                                                                  | `false`               |
+| `hostAliases`        | Deployment pod host aliases                                                                                                                        | `[]`                  |
+| `mediawikiUser`      | User of the application                                                                                                                            | `user`                |
+| `mediawikiPassword`  | Application password                                                                                                                               | `""`                  |
+| `mediawikiSecret`    | Existing `Secret` containing the password for the `mediawikiUser` user; must contain the key `mediawiki-password` and optional key `smtp-password` | `""`                  |
+| `mediawikiEmail`     | Admin email                                                                                                                                        | `user@example.com`    |
+| `mediawikiName`      | Name for the wiki                                                                                                                                  | `My Wiki`             |
+| `mediawikiHost`      | Mediawiki host to create application URLs                                                                                                          | `""`                  |
+| `allowEmptyPassword` | Allow DB blank passwords                                                                                                                           | `yes`                 |
+| `smtpHost`           | SMTP host                                                                                                                                          | `""`                  |
+| `smtpPort`           | SMTP port                                                                                                                                          | `""`                  |
+| `smtpHostID`         | SMTP host ID                                                                                                                                       | `""`                  |
+| `smtpUser`           | SMTP user                                                                                                                                          | `""`                  |
+| `smtpPassword`       | SMTP password                                                                                                                                      | `""`                  |
+| `command`            | Override default container command (useful when using custom images)                                                                               | `[]`                  |
+| `args`               | Override default container args (useful when using custom images)                                                                                  | `[]`                  |
+| `lifecycleHooks`     | for the Mediawiki container(s) to automate configuration before or after startup                                                                   | `{}`                  |
+| `extraEnvVars`       | Extra environment variables to be set on Mediawki container                                                                                        | `[]`                  |
+| `extraEnvVarsCM`     | Name of existing ConfigMap containing extra env vars                                                                                               | `""`                  |
+| `extraEnvVarsSecret` | Name of existing Secret containing extra env vars                                                                                                  | `""`                  |
 
 
 ### Mediawiki deployment parameters
@@ -238,7 +238,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                                                            | `false`                   |
 | `metrics.image.registry`                   | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`                 | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                                                      | `0.11.0-debian-11-r39`    |
+| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                                                      | `0.11.0-debian-11-r50`    |
 | `metrics.image.digest`                     | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`                 | Image pull policy                                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                | `[]`                      |

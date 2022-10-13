@@ -383,10 +383,18 @@ data:
     done
 
     echo "" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
+    {{- if not (contains "sentinel announce-hostnames" .Values.sentinel.configuration) }}
     echo "sentinel announce-hostnames yes" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
+    {{- end }}
+    {{- if not (contains "sentinel resolve-hostnames" .Values.sentinel.configuration) }}
     echo "sentinel resolve-hostnames yes" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
+    {{- end }}
+    {{- if not (contains "sentinel announce-port" .Values.sentinel.configuration) }}
     echo "sentinel announce-port $SERVPORT" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
+    {{- end }}
+    {{- if not (contains "sentinel announce-ip" .Values.sentinel.configuration) }}
     echo "sentinel announce-ip $(get_full_hostname "$HOSTNAME")" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
+    {{- end }}
 
     {{- if .Values.tls.enabled }}
     ARGS=("--port" "0")

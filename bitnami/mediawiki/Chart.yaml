@@ -1,7 +1,7 @@
 annotations:
   category: Wiki
 apiVersion: v2
-appVersion: 1.38.2
+appVersion: 1.38.4
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
@@ -32,4 +32,4 @@ name: mediawiki
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/mediawiki
   - https://www.mediawiki.org/
-version: 14.3.5
+version: 14.3.7

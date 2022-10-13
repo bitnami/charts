@@ -7,7 +7,7 @@ Elasticsearch is a distributed search and analytics engine. It is used for web s
 [Overview of Elasticsearch](https://www.elastic.co/products/elasticsearch)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -109,7 +109,7 @@ $ helm delete --purge my-release
 | `initContainers`                           | Add additional init containers to the all elasticsearch node pod(s)                                                                                 | `[]`                           |
 | `image.registry`                           | Elasticsearch image registry                                                                                                                        | `docker.io`                    |
 | `image.repository`                         | Elasticsearch image repository                                                                                                                      | `bitnami/elasticsearch`        |
-| `image.tag`                                | Elasticsearch image tag (immutable tags are recommended)                                                                                            | `8.4.2-debian-11-r0`           |
+| `image.tag`                                | Elasticsearch image tag (immutable tags are recommended)                                                                                            | `8.4.3-debian-11-r2`           |
 | `image.digest`                             | Elasticsearch image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                       | `""`                           |
 | `image.pullPolicy`                         | Elasticsearch image pull policy                                                                                                                     | `IfNotPresent`                 |
 | `image.pullSecrets`                        | Elasticsearch image pull secrets                                                                                                                    | `[]`                           |
@@ -531,7 +531,7 @@ $ helm delete --purge my-release
 | `metrics.fullnameOverride`                      | String to fully override common.names.fullname                                                                                 | `""`                             |
 | `metrics.image.registry`                        | Metrics exporter image registry                                                                                                | `docker.io`                      |
 | `metrics.image.repository`                      | Metrics exporter image repository                                                                                              | `bitnami/elasticsearch-exporter` |
-| `metrics.image.tag`                             | Metrics exporter image tag                                                                                                     | `1.5.0-debian-11-r21`            |
+| `metrics.image.tag`                             | Metrics exporter image tag                                                                                                     | `1.5.0-debian-11-r27`            |
 | `metrics.image.digest`                          | Metrics exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag               | `""`                             |
 | `metrics.image.pullPolicy`                      | Metrics exporter image pull policy                                                                                             | `IfNotPresent`                   |
 | `metrics.image.pullSecrets`                     | Metrics exporter image pull secrets                                                                                            | `[]`                             |
@@ -613,7 +613,7 @@ $ helm delete --purge my-release
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r37`      |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r41`      |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                    |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Init container volume-permissions image pull secrets                                                                                                      | `[]`                    |
@@ -622,7 +622,7 @@ $ helm delete --purge my-release
 | `sysctlImage.enabled`                  | Enable kernel settings modifier image                                                                                                                     | `true`                  |
 | `sysctlImage.registry`                 | Kernel settings modifier image registry                                                                                                                   | `docker.io`             |
 | `sysctlImage.repository`               | Kernel settings modifier image repository                                                                                                                 | `bitnami/bitnami-shell` |
-| `sysctlImage.tag`                      | Kernel settings modifier image tag                                                                                                                        | `11-debian-11-r37`      |
+| `sysctlImage.tag`                      | Kernel settings modifier image tag                                                                                                                        | `11-debian-11-r41`      |
 | `sysctlImage.digest`                   | Kernel settings modifier image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                  | `""`                    |
 | `sysctlImage.pullPolicy`               | Kernel settings modifier image pull policy                                                                                                                | `IfNotPresent`          |
 | `sysctlImage.pullSecrets`              | Kernel settings modifier image pull secrets                                                                                                               | `[]`                    |

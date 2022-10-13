@@ -343,7 +343,7 @@ spec:
               value: {{ template "redis.tlsCACert" . }}
             {{- if .Values.tls.dhParamsFilename }}
             - name:  REDIS_SENTINEL_TLS_DH_PARAMS_FILE
-              value: {{ template "redis.tls.dhParamsFilename" . }}
+              value: {{ template "redis.tlsDHParams" . }}
             {{- end }}
             {{- else }}
             - name: REDIS_SENTINEL_PORT

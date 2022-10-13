@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/mediawiki"
         },
-        "runtime_parameters": "bWVkaWF3aWtpVXNlcjogdXNlcgptZWRpYXdpa2lQYXNzd29yZDogQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0Cm1lZGlhd2lraUVtYWlsOiB1c2VyQGV4YW1wbGUuY29tCm1lZGlhd2lraUhvc3Q6IGJpdG5hbWktbWVkaWF3aWtpLm15CnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCiAgcG9ydHM6CiAgICBodHRwOiA4MA==",
+        "runtime_parameters": "bWVkaWF3aWtpSG9zdDogdm13YXJlLW1lZGlhd2lraS5teQptZWRpYXdpa2lVc2VyOiB0ZXN0X3VzZXIKbWVkaWF3aWtpUGFzc3dvcmQ6IENvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNApwZXJzaXN0ZW5jZToKICBlbmFibGVkOiB0cnVlCmhvc3RBbGlhc2VzOgogIC0gaXA6IDEyNy4wLjAuMQogICAgaG9zdG5hbWVzOgogICAgICAtIHN0YXR1cy50ZXN0aG9zdApjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIHJ1bkFzVXNlcjogMTAwMgpwb2RTZWN1cml0eUNvbnRleHQ6CiAgZnNHcm91cDogMTAwMgogIGVuYWJsZWQ6IHRydWUKc2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGh0dHA6IDgwCiAgICBodHRwczogNDQ0Cm1hcmlhZGI6CiAgZW5hYmxlZDogdHJ1ZQogIGF1dGg6CiAgICBkYXRhYmFzZTogdGVzdF9kYl9kYXRhYmFzZQogICAgdXNlcm5hbWU6IHRlc3RfZGJfdXNlcgogICAgcGFzc3dvcmQ6IHRlc3RfZGJfcGFzc3dvcmQK",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -44,6 +44,7 @@
             "resources": {
               "path": "/.vib/mediawiki/goss"
             },
+            "vars_file": "vars.yaml",
             "remote": {
               "workload": "deploy-mediawiki"
             }
@@ -58,7 +59,7 @@
             "endpoint": "lb-mediawiki-http",
             "app_protocol": "HTTP",
             "env": {
-              "username": "user",
+              "username": "test_user",
               "password": "ComplicatedPassword123!4"
             }
           }

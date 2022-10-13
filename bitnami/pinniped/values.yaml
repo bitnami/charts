@@ -57,7 +57,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/pinniped
-  tag: 0.19.0-scratch-r0
+  tag: 0.20.0-scratch-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -472,13 +472,16 @@ supervisor:
   ##
   containerPorts:
     https: 8443
-
+  ## @param supervisor.deployAPIService Deploy the APIService objects
+  ##
+  deployAPIService: true
   ## @param supervisor.configuration [string] Supervisor pinniped.yaml configuration file
   ##
   configuration: |
     apiGroupSuffix: pinniped.dev
     names:
       defaultTLSCertificateSecret: {{ printf "%s-%s" (include "pinniped.supervisor.fullname" .) "default-tls-certificate" | trunc 63 | trimSuffix "-" }}
+      apiService: {{ template "pinniped.supervisor.api.fullname" . }}
     labels: {"app.kubernetes.io/part-of":"pinniped", "app.kubernetes.io/component": "supervisor", "app.kubernetes.io/instance": "{{ .Release.Name }}"}
     insecureAcceptExternalUnencryptedHttpRequests: false
 

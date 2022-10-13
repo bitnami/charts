@@ -77,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraDeploy`       | Array of extra objects to deploy with the release                                                        | `[]`                |
 | `image.registry`    | Pinniped image registry                                                                                  | `docker.io`         |
 | `image.repository`  | Pinniped image repository                                                                                | `bitnami/pinniped`  |
-| `image.tag`         | Pinniped image tag (immutable tags are recommended)                                                      | `0.19.0-scratch-r0` |
+| `image.tag`         | Pinniped image tag (immutable tags are recommended)                                                      | `0.20.0-scratch-r0` |
 | `image.digest`      | Pinniped image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                |
 | `image.pullPolicy`  | Pinniped image pull policy                                                                               | `IfNotPresent`      |
 | `image.pullSecrets` | Pinniped image pull secrets                                                                              | `[]`                |
@@ -200,6 +200,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `supervisor.enabled`                                         | Deploy Supervisor                                                                                                        | `true`          |
 | `supervisor.replicaCount`                                    | Number of Supervisor replicas to deploy                                                                                  | `1`             |
 | `supervisor.containerPorts.https`                            | Supervisor HTTP container port                                                                                           | `8443`          |
+| `supervisor.deployAPIService`                                | Deploy the APIService objects                                                                                            | `true`          |
 | `supervisor.configuration`                                   | Supervisor pinniped.yaml configuration file                                                                              | `""`            |
 | `supervisor.livenessProbe.enabled`                           | Enable livenessProbe on Supervisor containers                                                                            | `true`          |
 | `supervisor.livenessProbe.initialDelaySeconds`               | Initial delay seconds for livenessProbe                                                                                  | `10`            |
@@ -362,6 +363,12 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## Upgrading
+
+### To 0.4.0
+
+This version updates Pinniped to its newest version, 0.20.x. For more information, please refer to [the release notes](https://github.com/vmware-tanzu/pinniped/releases/tag/v0.20.0).
 
 ## License
 

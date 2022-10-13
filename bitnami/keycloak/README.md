@@ -7,7 +7,7 @@ Keycloak is a high performance Java-based identity and access management solutio
 [Overview of Keycloak](https://www.keycloak.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                 | Keycloak image registry                                                                                                      | `docker.io`           |
 | `image.repository`               | Keycloak image repository                                                                                                    | `bitnami/keycloak`    |
-| `image.tag`                      | Keycloak image tag (immutable tags are recommended)                                                                          | `19.0.2-debian-11-r7` |
+| `image.tag`                      | Keycloak image tag (immutable tags are recommended)                                                                          | `19.0.3-debian-11-r2` |
 | `image.digest`                   | Keycloak image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                     | `""`                  |
 | `image.pullPolicy`               | Keycloak image pull policy                                                                                                   | `IfNotPresent`        |
 | `image.pullSecrets`              | Specify docker-registry secret names as an array                                                                             | `[]`                  |
@@ -275,7 +275,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `keycloakConfigCli.enabled`                               | Whether to enable keycloak-config-cli job                                                                                     | `false`                       |
 | `keycloakConfigCli.image.registry`                        | keycloak-config-cli container image registry                                                                                  | `docker.io`                   |
 | `keycloakConfigCli.image.repository`                      | keycloak-config-cli container image repository                                                                                | `bitnami/keycloak-config-cli` |
-| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                                                       | `5.3.1-debian-11-r21`         |
+| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                                                       | `5.3.1-debian-11-r23`         |
 | `keycloakConfigCli.image.digest`                          | keycloak-config-cli container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                          |
 | `keycloakConfigCli.image.pullPolicy`                      | keycloak-config-cli container image pull policy                                                                               | `IfNotPresent`                |
 | `keycloakConfigCli.image.pullSecrets`                     | keycloak-config-cli container image pull secrets                                                                              | `[]`                          |

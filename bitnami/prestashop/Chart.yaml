@@ -29,4 +29,4 @@ name: prestashop
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/prestashop
   - https://prestashop.com/
-version: 15.3.4
+version: 15.3.5

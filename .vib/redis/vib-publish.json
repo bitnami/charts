@@ -55,9 +55,9 @@
             },
             "remote": {
               "workload": "sts-redis-master"
-            }
-          },
-          "vars_file": "vars.yaml"
+            },
+            "vars_file": "vars.yaml"
+          }
         }
       ]
     },
