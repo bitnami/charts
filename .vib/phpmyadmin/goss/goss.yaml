@@ -1,40 +1,22 @@
-command: 
-  which-myswl:
-    exec: which mysql
-    exit-status: 0
-    stdout:
-    - "/opt/bitnami/mysql/bin/mysql"
-    stderr: []
-    timeout: 0 
-  user-id:
-    exec: id -a
-    exit-status: 0
-    stdout:
-    - "uid=1001"
-    stderr: []
-    timeout: 0    
 file:
-  /opt/bitnami/apache/conf:
-    mode: "0775"
-    filetype: directory
+  /etc/hosts:
     exists: true
-    group: root
-  /opt/bitnami/phpmyadmin:
-    mode: "0775"
-    filetype: directory
-    exists: true
-    group: root
-  /opt/bitnami/php/etc/php.ini:
-    mode: "0664"
     filetype: file
     contains:
-      - ;xdebug.client_port = 9000
-    exists: true
-    group: root 
-  /opt/bitnami/phpmyadmin/config.inc.php:
-    mode: "0664"
-    filetype: file
-    contains:
-      - phpmyadmin-mariadb
-    exists: true
-    group: root    
+    {{ range .Vars.hostAliases }}
+    {{ $ip := .ip }}
+    {{ range $host := .hostnames }}
+      - /{{ $ip }}.*{{ $host }}/
+    {{ end }}
+    {{ end }}
+http:
+  https://phpmyadmin:{{ .Vars.service.ports.https }}:
+    status: 200
+    allow-insecure: true
+command:
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+      - uid={{ .Vars.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
