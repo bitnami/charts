@@ -328,7 +328,6 @@ designate:
   ## @param designate.regionName When using the Designate provider, specify the OpenStack region name. (optional)
   ## @param designate.userDomainName When using the Designate provider, specify the OpenStack user domain name. (optional)
   ## @param designate.projectName When using the Designate provider, specify the OpenStack project name. (optional)
-  ## @param designate.username When using the Designate provider, specify the OpenStack authentication username. (optional)
   ## e.g:
   ##   username: "someuser"
   ##   password: "p@55w0rd"
