@@ -7,8 +7,8 @@ on: # rebuild any PRs and main branch changes
       - synchronize
       - labeled
     branches:
-      - master
-      - bitnami:master
+      - main
+      - bitnami:main
 permissions:
   issues: write
   pull-requests: write
