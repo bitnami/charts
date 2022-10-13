@@ -19,6 +19,6 @@ Cypress.Commands.add(
     cy.contains('Log in');
     cy.get('#input_username').type(username);
     cy.get('#input_password').type(password);
-    cy.get('input').contains('Log in').click();
+    cy.contains('input', 'Log in').click();
   }
 );
