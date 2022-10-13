@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 7.8.2
+appVersion: 7.8.3
 dependencies:
   - condition: postgresql.enabled
     name: postgresql
@@ -30,4 +30,4 @@ name: concourse
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/concourse
   - https://github.com/concourse/concourse
-version: 1.5.2
+version: 1.5.3
