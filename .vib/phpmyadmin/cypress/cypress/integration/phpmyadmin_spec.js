@@ -14,7 +14,7 @@ it('allows creating a database and a table', () => {
     cy.get('[type="submit"]').click();
     cy.get('#field_0_1').type(`${td.columnName}.${random}`);
     cy.get('.btn-primary').click();
-    cy.visit('index.php');
+    cy.visit('/index.php');
     cy.contains(`${td.databaseName}.${random}`).scrollIntoView().click({force: true});
     cy.contains(`${td.tableName}.${random}`).click({force: true});
     cy.contains('.table-responsive-md', `${td.columnName}.${random}`);
