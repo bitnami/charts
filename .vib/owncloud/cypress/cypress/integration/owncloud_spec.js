@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 import { random } from '../support/utils';
 
-it('allows creating a folder, then upload and then download a file ', () => {
+it('allows creating a folder, uploading a file to it, and downloading said file ', () => {
   cy.login();
   cy.get('.new').click();
   cy.contains('Folder').click();
