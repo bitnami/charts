@@ -535,6 +535,7 @@ $ helm delete --purge my-release
 | `metrics.image.digest`                          | Metrics exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag               | `""`                             |
 | `metrics.image.pullPolicy`                      | Metrics exporter image pull policy                                                                                             | `IfNotPresent`                   |
 | `metrics.image.pullSecrets`                     | Metrics exporter image pull secrets                                                                                            | `[]`                             |
+| `metrics.annotations`                           | Annotations for metrics                                                                                                        | `{}`                             |
 | `metrics.extraArgs`                             | Extra arguments to add to the default exporter command                                                                         | `[]`                             |
 | `metrics.hostAliases`                           | Add deployment host aliases                                                                                                    | `[]`                             |
 | `metrics.schedulerName`                         | Name of the k8s scheduler (other than default)                                                                                 | `""`                             |
