@@ -69,9 +69,9 @@ Return the etcd configuration configmap
 */}}
 {{- define "etcd.configmapName" -}}
 {{- if .Values.existingConfigmap -}}
-    {{- printf "%s" (tpl .Values.existingConfigmap $) -}}
+    {{- printf "%s" (tpl .Values.existingConfigmap $) | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-    {{- printf "%s-configuration" (include "common.names.fullname" .) -}}
+    {{- printf "%s-configuration" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 
@@ -89,7 +89,7 @@ Return the secret with etcd credentials
 */}}
 {{- define "etcd.secretName" -}}
     {{- if .Values.auth.rbac.existingSecret -}}
-        {{- printf "%s" .Values.auth.rbac.existingSecret -}}
+        {{- printf "%s" .Values.auth.rbac.existingSecret | trunc 63 | trimSuffix "-" -}}
     {{- else -}}
         {{- printf "%s" (include "common.names.fullname" .) -}}
     {{- end -}}
@@ -120,9 +120,9 @@ Return the secret with etcd token private key
 */}}
 {{- define "etcd.token.secretName" -}}
     {{- if .Values.auth.token.privateKey.existingSecret -}}
-        {{- printf "%s" .Values.auth.token.privateKey.existingSecret -}}
+        {{- printf "%s" .Values.auth.token.privateKey.existingSecret | trunc 63 | trimSuffix "-" -}}
     {{- else -}}
-        {{- printf "%s-jwt-token" (include "common.names.fullname" .) -}}
+        {{- printf "%s-jwt-token" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
     {{- end -}}
 {{- end -}}
 
@@ -131,11 +131,11 @@ Return the proper Disaster Recovery PVC name
 */}}
 {{- define "etcd.disasterRecovery.pvc.name" -}}
 {{- if .Values.disasterRecovery.pvc.existingClaim -}}
-    {{- printf "%s" (tpl .Values.disasterRecovery.pvc.existingClaim $) -}}
+    {{- printf "%s" (tpl .Values.disasterRecovery.pvc.existingClaim $) | trunc 63 | trimSuffix "-" -}}
 {{- else if .Values.startFromSnapshot.existingClaim -}}
-    {{- printf "%s" (tpl .Values.startFromSnapshot.existingClaim $) -}}
+    {{- printf "%s" (tpl .Values.startFromSnapshot.existingClaim $) | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-    {{- printf "%s-snapshotter" (include "common.names.fullname" .) }}
+    {{- printf "%s-snapshotter" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
 {{- end -}}
 {{- end -}}
 
@@ -144,9 +144,9 @@ Return the proper Disaster Recovery PVC name
  */}}
 {{- define "etcd.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-{{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{ default (include "common.names.fullname" .) .Values.serviceAccount.name | trunc 63 | trimSuffix "-" }}
 {{- else -}}
-{{ default "default" .Values.serviceAccount.name }}
+{{ default "default" .Values.serviceAccount.name | trunc 63 | trimSuffix "-" }}
 {{- end -}}
 {{- end -}}
 
@@ -195,7 +195,7 @@ etcd: disasterRecovery
 
 {{- define "etcd.token.jwtToken" -}}
 {{- if (include "etcd.token.createSecret" .) -}}
-{{- $jwtToken := lookup "v1" "Secret" .Release.Namespace (printf "%s-jwt-token" (include "common.names.fullname" .)) -}}
+{{- $jwtToken := lookup "v1" "Secret" .Release.Namespace (printf "%s-jwt-token" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" ) -}}
 {{- if $jwtToken -}}
 {{ index $jwtToken "data" "jwt-token.pem" | b64dec }}
 {{- else -}}
