@@ -1,9 +1,9 @@
 dependencies:
 - name: mongodb
   repository: https://charts.bitnami.com/bitnami
-  version: 13.1.2
+  version: 13.1.5
 - name: common
   repository: https://charts.bitnami.com/bitnami
-  version: 2.0.1
-digest: sha256:622456145fc57d2b59f87ddfbcda9508cbbe33465de63945b8aada557d6917a7
-generated: "2022-09-04T00:43:26.753755204Z"
+  version: 2.0.3
+digest: sha256:da630631898fdd9d899f3b6a05f374422c787ebc295e639e3f164b0875244c3d
+generated: "2022-09-21T02:06:22.226665645Z"

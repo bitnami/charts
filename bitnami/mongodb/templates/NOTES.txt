@@ -55,7 +55,7 @@ IPs for MongoDB&reg; nodes. To complete your deployment follow the steps below:
 
 3. Upgrade you chart:
 
-    helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+    helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} my-repo/{{ .Chart.Name }} \
       --set mongodb.replicaCount={{ $replicaCount }} \
       --set mongodb.externalAccess.enabled=true \
       {{- range $i, $e := until $replicaCount }}

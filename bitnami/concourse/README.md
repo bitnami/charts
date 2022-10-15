@@ -11,8 +11,8 @@ Concourse is an automation system written in Go. It is most commonly used for CI
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/concourse
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/concourse
 ```
 
 ## Introduction
@@ -35,7 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release bitnami/concourse
+helm install my-release my-repo/concourse
 ```
 
 The command deploys concourse on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -81,28 +81,28 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common Concourse Parameters
 
-| Name                            | Description                                                                                                                            | Value                 |
-| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`                | image registry                                                                                                                         | `docker.io`           |
-| `image.repository`              | image repository                                                                                                                       | `bitnami/concourse`   |
-| `image.tag`                     | image tag (immutable tags are recommended)                                                                                             | `7.8.2-debian-11-r10` |
-| `image.digest`                  | image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                        | `""`                  |
-| `image.pullPolicy`              | image pull policy                                                                                                                      | `IfNotPresent`        |
-| `image.pullSecrets`             | image pull secrets                                                                                                                     | `[]`                  |
-| `secrets.localAuth.enabled`     | the use of local authentication (basic auth).                                                                                          | `true`                |
-| `secrets.localUsers`            | List of `username:password` or `username:bcrypted_password` combinations for all your local concourse users. Auto-generated if not set | `""`                  |
-| `secrets.teamAuthorizedKeys`    | Array of team names and public keys for team external workers                                                                          | `[]`                  |
-| `secrets.conjurAccount`         | Account for Conjur auth provider.                                                                                                      | `""`                  |
-| `secrets.conjurAuthnLogin`      | Host username for Conjur auth provider.                                                                                                | `""`                  |
-| `secrets.conjurAuthnApiKey`     | API key for host used for Conjur auth provider. Either API key or token file can be used, but not both.                                | `""`                  |
-| `secrets.conjurAuthnTokenFile`  | Token file used for Conjur auth provider if running in Kubernetes or IAM. Either token file or API key can be used, but not both.      | `""`                  |
-| `secrets.conjurCACert`          | CA Certificate to specify if conjur instance is deployed with a self-signed cert                                                       | `""`                  |
-| `secrets.hostKey`               | Concourse Host Keys.                                                                                                                   | `""`                  |
-| `secrets.hostKeyPub`            | Concourse Host Keys.                                                                                                                   | `""`                  |
-| `secrets.sessionSigningKey`     | Concourse Session Signing Keys.                                                                                                        | `""`                  |
-| `secrets.workerKey`             | Concourse Worker Keys.                                                                                                                 | `""`                  |
-| `secrets.workerKeyPub`          | Concourse Worker Keys.                                                                                                                 | `""`                  |
-| `secrets.workerAdditionalCerts` | Additional certificates to add to the worker nodes                                                                                     | `""`                  |
+| Name                            | Description                                                                                                                            | Value                |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
+| `image.registry`                | image registry                                                                                                                         | `docker.io`          |
+| `image.repository`              | image repository                                                                                                                       | `bitnami/concourse`  |
+| `image.tag`                     | image tag (immutable tags are recommended)                                                                                             | `7.8.3-debian-11-r0` |
+| `image.digest`                  | image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                        | `""`                 |
+| `image.pullPolicy`              | image pull policy                                                                                                                      | `IfNotPresent`       |
+| `image.pullSecrets`             | image pull secrets                                                                                                                     | `[]`                 |
+| `secrets.localAuth.enabled`     | the use of local authentication (basic auth).                                                                                          | `true`               |
+| `secrets.localUsers`            | List of `username:password` or `username:bcrypted_password` combinations for all your local concourse users. Auto-generated if not set | `""`                 |
+| `secrets.teamAuthorizedKeys`    | Array of team names and public keys for team external workers                                                                          | `[]`                 |
+| `secrets.conjurAccount`         | Account for Conjur auth provider.                                                                                                      | `""`                 |
+| `secrets.conjurAuthnLogin`      | Host username for Conjur auth provider.                                                                                                | `""`                 |
+| `secrets.conjurAuthnApiKey`     | API key for host used for Conjur auth provider. Either API key or token file can be used, but not both.                                | `""`                 |
+| `secrets.conjurAuthnTokenFile`  | Token file used for Conjur auth provider if running in Kubernetes or IAM. Either token file or API key can be used, but not both.      | `""`                 |
+| `secrets.conjurCACert`          | CA Certificate to specify if conjur instance is deployed with a self-signed cert                                                       | `""`                 |
+| `secrets.hostKey`               | Concourse Host Keys.                                                                                                                   | `""`                 |
+| `secrets.hostKeyPub`            | Concourse Host Keys.                                                                                                                   | `""`                 |
+| `secrets.sessionSigningKey`     | Concourse Session Signing Keys.                                                                                                        | `""`                 |
+| `secrets.workerKey`             | Concourse Worker Keys.                                                                                                                 | `""`                 |
+| `secrets.workerKeyPub`          | Concourse Worker Keys.                                                                                                                 | `""`                 |
+| `secrets.workerAdditionalCerts` | Additional certificates to add to the worker nodes                                                                                     | `""`                 |
 
 
 ### Concourse Web parameters
@@ -362,7 +362,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r23`      |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r41`      |
 | `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`                    |
@@ -407,7 +407,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set secrets.localUsers=admin:password \
-    bitnami/concourse
+    my-repo/concourse
 ```
 
 The above command sets the Concourse account username and password to `admin` and `password` respectively.
@@ -417,7 +417,7 @@ The above command sets the Concourse account username and password to `admin` an
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml bitnami/concourse
+helm install my-release -f values.yaml my-repo/concourse
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

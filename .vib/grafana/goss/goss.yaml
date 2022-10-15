@@ -1,28 +1,21 @@
-command:
-  grafanacli:
-    exec: grafana-cli -h
-    exit-status: 0
-    stderr: [ ]
-    timeout: 20000
-  grafana-cli-data-migration:
-    exec: grafana-cli admin data-migration encrypt-datasource-passwords
-    exit-status: 0
-    stdout:
-      - "All datasources secrets are already encrypted"
-    stderr: [ ]
-    timeout: 20000    
 file:
-  /opt/bitnami/grafana/conf/ldap.toml:
-    mode: "0644"
-    filetype: file
-    exists: true
-    group: root
   /opt/bitnami/grafana/data:
     filetype: directory
     exists: true
-  /opt/bitnami/grafana/data/plugins/grafana-kubernetes-app:
+    mode: "2775"
+  /opt/bitnami/grafana/data/plugins/{{ .Vars.plugins }}:
     filetype: directory
     exists: true
-  /opt/bitnami/grafana/conf/provisioning:
-    filetype: directory
-    exists: true
+    mode: "2755"
+command:
+  grafana-cli-data-migration:
+    exec: cd /opt/bitnami/grafana && grafana-cli admin data-migration encrypt-datasource-passwords
+    exit-status: 0
+    stdout:
+      - /datasources.*already encrypted/
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+    - uid={{ .Vars.containerSecurityContext.runAsUser }}
+    - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/

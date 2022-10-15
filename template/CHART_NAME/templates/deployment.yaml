@@ -130,23 +130,23 @@ spec:
             - name: https
               containerPort: {{ .Values.%%MAIN_OBJECT_BLOCK%%.containerPorts.https }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.%%MAIN_OBJECT_BLOCK%%.livenessProbe.enabled }}
+          {{- if .Values.%%MAIN_OBJECT_BLOCK%%.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.%%MAIN_OBJECT_BLOCK%%.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.%%MAIN_OBJECT_BLOCK%%.livenessProbe "enabled") "context" $) | nindent 12 }}
             %%httpGet || command || etc%%
-          {{- else if .Values.%%MAIN_OBJECT_BLOCK%%.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.%%MAIN_OBJECT_BLOCK%%.readinessProbe.enabled }}
+          {{- if .Values.%%MAIN_OBJECT_BLOCK%%.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.%%MAIN_OBJECT_BLOCK%%.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.%%MAIN_OBJECT_BLOCK%%.readinessProbe "enabled") "context" $) | nindent 12 }}
             %%httpGet || command || etc%%
-          {{- else if .Values.%%MAIN_OBJECT_BLOCK%%.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.%%MAIN_OBJECT_BLOCK%%.startupProbe.enabled }}
+          {{- if .Values.%%MAIN_OBJECT_BLOCK%%.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.%%MAIN_OBJECT_BLOCK%%.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.%%MAIN_OBJECT_BLOCK%%.startupProbe "enabled") "context" $) | nindent 12 }}
             %%httpGet || command || etc%%
-          {{- else if .Values.%%MAIN_OBJECT_BLOCK%%.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.%%MAIN_OBJECT_BLOCK%%.lifecycleHooks }}

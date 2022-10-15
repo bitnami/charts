@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-  helm repo add bitnami https://charts.bitnami.com/bitnami
-  helm install my-release bitnami/kiam
+  helm repo add my-repo https://charts.bitnami.com/bitnami
+  helm install my-release my-repo/kiam
 ```
 
 > NOTE: KIAM has been designed to work on a Kubernetes cluster deployed on top of AWS, although it is possible to deploy it in other environments.
@@ -35,8 +35,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/kiam
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/kiam
 ```
 
 These commands deploy a kiam application on the Kubernetes cluster in the default configuration.
@@ -357,7 +357,7 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```bash
-helm install my-release --set server.resourceType=deployment bitnami/kiam
+helm install my-release --set server.resourceType=deployment my-repo/kiam
 ```
 
 The above command sets the server nodes to be deployed as Deployment objects.
@@ -365,7 +365,7 @@ The above command sets the server nodes to be deployed as Deployment objects.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/kiam
+$ helm install my-release -f values.yaml my-repo/kiam
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

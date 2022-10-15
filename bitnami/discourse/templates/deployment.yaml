@@ -167,7 +167,9 @@ spec:
               containerPort: {{ .Values.discourse.containerPorts.http }}
               protocol: TCP
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.discourse.livenessProbe.enabled }}
+          {{- if .Values.discourse.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.discourse.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.discourse.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /srv/status
@@ -177,10 +179,10 @@ spec:
             timeoutSeconds: {{ .Values.discourse.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.discourse.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.discourse.livenessProbe.failureThreshold }}
-          {{- else if .Values.discourse.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.discourse.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.discourse.readinessProbe.enabled }}
+          {{- if .Values.discourse.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.discourse.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.discourse.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
               path: /srv/status
@@ -190,15 +192,13 @@ spec:
             timeoutSeconds: {{ .Values.discourse.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.discourse.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.discourse.readinessProbe.failureThreshold }}
-          {{- else if .Values.discourse.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.discourse.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.discourse.startupProbe.enabled }}
+          {{- if .Values.discourse.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.discourse.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.discourse.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.discourse.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http
-          {{- else if .Values.discourse.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.discourse.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.discourse.lifecycleHooks }}
@@ -272,7 +272,9 @@ spec:
                 name: {{ .Values.sidekiq.extraEnvVarsSecret }}
             {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.sidekiq.livenessProbe.enabled }}
+          {{- if .Values.sidekiq.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.sidekiq.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.sidekiq.livenessProbe.enabled }}
           livenessProbe:
             exec:
               command: ["/bin/sh", "-c", "pgrep -f ^sidekiq"]
@@ -281,10 +283,10 @@ spec:
             timeoutSeconds: {{ .Values.sidekiq.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.sidekiq.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.sidekiq.livenessProbe.failureThreshold }}
-          {{- else if .Values.sidekiq.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.sidekiq.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.sidekiq.readinessProbe.enabled }}
+          {{- if .Values.sidekiq.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.sidekiq.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.sidekiq.readinessProbe.enabled }}
           readinessProbe:
             exec:
               command: ["/bin/sh", "-c", "pgrep -f ^sidekiq"]
@@ -293,15 +295,13 @@ spec:
             timeoutSeconds: {{ .Values.sidekiq.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.sidekiq.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.sidekiq.readinessProbe.failureThreshold }}
-          {{- else if .Values.sidekiq.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.sidekiq.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.sidekiq.startupProbe.enabled }}
+          {{- if .Values.sidekiq.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.sidekiq.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.sidekiq.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.sidekiq.startupProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command: ["/bin/sh", "-c", "pgrep -f ^sidekiq"]
-          {{- else if .Values.sidekiq.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.sidekiq.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.sidekiq.resources }}

@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/nats
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/nats
 ```
 
 ## Introduction
@@ -31,7 +31,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install my-release bitnami/nats
+$ helm install my-release my-repo/nats
 ```
 
 The command deploys NATS on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------ | ----------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`         | NATS image registry                                                                                   | `docker.io`          |
 | `image.repository`       | NATS image repository                                                                                 | `bitnami/nats`       |
-| `image.tag`              | NATS image tag (immutable tags are recommended)                                                       | `2.9.0-debian-11-r2` |
+| `image.tag`              | NATS image tag (immutable tags are recommended)                                                       | `2.9.3-debian-11-r0` |
 | `image.digest`           | NATS image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag  | `""`                 |
 | `image.pullPolicy`       | NATS image pull policy                                                                                | `IfNotPresent`       |
 | `image.pullSecrets`      | NATS image pull secrets                                                                               | `[]`                 |
@@ -218,7 +218,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Enable Prometheus metrics via exporter side-car                                                        | `false`                 |
 | `metrics.image.registry`                   | Prometheus metrics exporter image registry                                                             | `docker.io`             |
 | `metrics.image.repository`                 | Prometheus metrics exporter image repository                                                           | `bitnami/nats-exporter` |
-| `metrics.image.tag`                        | Prometheus metrics exporter image tag (immutable tags are recommended)                                 | `0.10.0-debian-11-r7`   |
+| `metrics.image.tag`                        | Prometheus metrics exporter image tag (immutable tags are recommended)                                 | `0.10.0-debian-11-r18`  |
 | `metrics.image.digest`                     | Petete image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `metrics.image.pullPolicy`                 | Prometheus metrics image pull policy                                                                   | `IfNotPresent`          |
 | `metrics.image.pullSecrets`                | Prometheus metrics image pull secrets                                                                  | `[]`                    |
@@ -255,7 +255,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```bash
 $ helm install my-release \
   --set auth.enabled=true,auth.user=my-user,auth.password=T0pS3cr3t \
-    bitnami/nats
+    my-repo/nats
 ```
 
 The above command enables NATS client authentication with `my-user` as user and `T0pS3cr3t` as password credentials.
@@ -265,7 +265,7 @@ The above command enables NATS client authentication with `my-user` as user and 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/nats
+$ helm install my-release -f values.yaml my-repo/nats
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -318,7 +318,7 @@ NATS version 2.0.0 has renamed the server binary filename from `gnatsd` to `nats
 however, it is still possible to use the chart to deploy NATS version 1.x.x using the `natsFilename` property.
 
 ```bash
-helm install nats-v1 --set natsFilename=gnatsd --set image.tag=1.4.1 bitnami/nats
+helm install nats-v1 --set natsFilename=gnatsd --set image.tag=1.4.1 my-repo/nats
 ```
 
 ### To 7.0.0

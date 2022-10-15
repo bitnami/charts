@@ -6,12 +6,6 @@ command:
       - "/opt/bitnami/ghost/bin/ghost"
     stderr: [ ]
     timeout: 40000
-  ghost-version-ok:
-    exec: ghost version | grep --quiet "$APP_VERSION"
-    exit-status: 0
-    stdout: [ ]
-    stderr: [ ]
-    timeout: 40000
 file:
   /opt/bitnami/ghost/content:
     filetype: symlink

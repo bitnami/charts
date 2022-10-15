@@ -7,12 +7,12 @@ Moodle(TM) LMS is an open source online Learning Management System widely used a
 [Overview of Bitnami LMS powered by Moodle&trade; LMS](http://moodle.org/)
 
 Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide commercial license of any of these products. This listing has an open source license. Moodle(TM) LMS is run and maintained by Moodle HQ, that is a completely and separate project from Bitnami.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/moodle
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/moodle
 ```
 
 ## Introduction
@@ -35,7 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install my-release bitnami/moodle
+$ helm install my-release my-repo/moodle
 ```
 
 The command deploys Moodle&trade; on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -77,94 +77,95 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Moodle&trade; parameters
 
-| Name                                    | Description                                                                                                           | Value                |
-| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------------------- |
-| `image.registry`                        | Moodle image registry                                                                                                 | `docker.io`          |
-| `image.repository`                      | Moodle image repository                                                                                               | `bitnami/moodle`     |
-| `image.tag`                             | Moodle image tag (immutable tags are recommended)                                                                     | `4.0.4-debian-11-r2` |
-| `image.digest`                          | Moodle image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                 |
-| `image.pullPolicy`                      | Moodle image pull policy                                                                                              | `IfNotPresent`       |
-| `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                      | `[]`                 |
-| `image.debug`                           | Specify if debug logs should be enabled                                                                               | `false`              |
-| `replicaCount`                          | Number of Moodle replicas (requires ReadWriteMany PVC support)                                                        | `1`                  |
-| `moodleSkipInstall`                     | Skip Moodle&trade; installation wizard. Useful for migrations and restoring from SQL dump                             | `false`              |
-| `moodleSiteName`                        | Site name                                                                                                             | `""`                 |
-| `moodleUsername`                        | User of the application                                                                                               | `user`               |
-| `moodlePassword`                        | Application password                                                                                                  | `""`                 |
-| `moodleEmail`                           | Admin email                                                                                                           | `user@example.com`   |
-| `allowEmptyPassword`                    | Allow DB blank passwords                                                                                              | `true`               |
-| `command`                               | Override default container command (useful when using custom images)                                                  | `[]`                 |
-| `args`                                  | Override default container args (useful when using custom images)                                                     | `[]`                 |
-| `updateStrategy.type`                   | Update strategy - only really applicable for deployments with RWO PVs attached                                        | `RollingUpdate`      |
-| `extraEnvVars`                          | An array to add extra env vars                                                                                        | `[]`                 |
-| `extraEnvVarsCM`                        | ConfigMap with extra environment variables                                                                            | `""`                 |
-| `extraEnvVarsSecret`                    | Secret with extra environment variables (in case of sensitive data)                                                   | `""`                 |
-| `extraVolumes`                          | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`    | `[]`                 |
-| `extraVolumeMounts`                     | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `[]`                 |
-| `initContainers`                        | Extra init containers to add to the deployment                                                                        | `[]`                 |
-| `sidecars`                              | Extra sidecar containers to add to the deployment                                                                     | `[]`                 |
-| `hostAliases`                           | Moodle&trade; pods host aliases                                                                                       | `[]`                 |
-| `tolerations`                           | Tolerations for pod assignment                                                                                        | `[]`                 |
-| `priorityClassName`                     | Moodle&trade; pods' priorityClassName                                                                                 | `""`                 |
-| `schedulerName`                         | Name of the k8s scheduler (other than default)                                                                        | `""`                 |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                                                        | `[]`                 |
-| `existingSecret`                        | Name of a secret with the application password                                                                        | `""`                 |
-| `smtpHost`                              | SMTP host                                                                                                             | `""`                 |
-| `smtpPort`                              | SMTP port                                                                                                             | `""`                 |
-| `smtpUser`                              | SMTP user                                                                                                             | `""`                 |
-| `smtpPassword`                          | SMTP password                                                                                                         | `""`                 |
-| `smtpProtocol`                          | SMTP Protocol (options: ssl,tls, nil)                                                                                 | `""`                 |
-| `containerPorts`                        | Container ports                                                                                                       | `{}`                 |
-| `sessionAffinity`                       | Control where client requests go, to the same pod or round-robin                                                      | `None`               |
-| `persistence.enabled`                   | Enable persistence using PVC                                                                                          | `true`               |
-| `persistence.customStorageClass`        | Create a custom storage class                                                                                         | `{}`                 |
-| `persistence.storageClass`              | PVC Storage Class for Moodle                                                                                          | `""`                 |
-| `persistence.accessModes`               | PVC Access Mode for Moodle                                                                                            | `["ReadWriteOnce"]`  |
-| `persistence.size`                      | PVC Storage Request for Moodle                                                                                        | `8Gi`                |
-| `persistence.existingClaim`             | An Existing PVC name                                                                                                  | `""`                 |
-| `persistence.hostPath`                  | Host mount path for Moodle                                                                                            | `""`                 |
-| `persistence.annotations`               | Persistent Volume Claim annotations                                                                                   | `{}`                 |
-| `podAffinityPreset`                     | Pod affinity preset                                                                                                   | `""`                 |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset                                                                                              | `soft`               |
-| `nodeAffinityPreset.type`               | Node affinity type                                                                                                    | `""`                 |
-| `nodeAffinityPreset.key`                | Node label key to match                                                                                               | `""`                 |
-| `nodeAffinityPreset.values`             | Node label values to match                                                                                            | `[]`                 |
-| `affinity`                              | Map of node/pod affinities                                                                                            | `{}`                 |
-| `nodeSelector`                          | Node labels for pod assignment                                                                                        | `{}`                 |
-| `resources.requests`                    | CPU/Memory resource requests                                                                                          | `{}`                 |
-| `resources.limits`                      | CPU/Memory resource limits                                                                                            | `{}`                 |
-| `podSecurityContext.enabled`            | Enable Moodle&trade; pods' Security Context                                                                           | `true`               |
-| `podSecurityContext.fsGroup`            | Moodle&trade; pods' group ID                                                                                          | `1001`               |
-| `containerSecurityContext.enabled`      | Enable Moodle&trade; containers' Security Context                                                                     | `true`               |
-| `containerSecurityContext.runAsUser`    | Moodle&trade; containers' Security Context runAsUser                                                                  | `1001`               |
-| `containerSecurityContext.runAsNonRoot` | Moodle&trade; containers' Security Context runAsNonRoot                                                               | `true`               |
-| `startupProbe.enabled`                  | Enable startupProbe                                                                                                   | `false`              |
-| `startupProbe.path`                     | Request path for startupProbe                                                                                         | `/login/index.php`   |
-| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                | `30`                 |
-| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                       | `10`                 |
-| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                      | `5`                  |
-| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                    | `60`                 |
-| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                    | `1`                  |
-| `livenessProbe.enabled`                 | Enable livenessProbe                                                                                                  | `true`               |
-| `livenessProbe.path`                    | Request path for livenessProbe                                                                                        | `/login/index.php`   |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                               | `600`                |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                      | `10`                 |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                     | `5`                  |
-| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                   | `6`                  |
-| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                   | `1`                  |
-| `readinessProbe.enabled`                | Enable readinessProbe                                                                                                 | `true`               |
-| `readinessProbe.path`                   | Request path for readinessProbe                                                                                       | `/login/index.php`   |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                              | `30`                 |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                     | `5`                  |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                    | `3`                  |
-| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                  | `6`                  |
-| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                                  | `1`                  |
-| `customStartupProbe`                    | Override default startup probe                                                                                        | `{}`                 |
-| `customLivenessProbe`                   | Override default liveness probe                                                                                       | `{}`                 |
-| `customReadinessProbe`                  | Override default readiness probe                                                                                      | `{}`                 |
-| `lifecycleHooks`                        | LifecycleHook to set additional configuration at startup Evaluated as a template                                      | `""`                 |
-| `podAnnotations`                        | Pod annotations                                                                                                       | `{}`                 |
-| `podLabels`                             | Add additional labels to the pod (evaluated as a template)                                                            | `{}`                 |
+| Name                                    | Description                                                                                                           | Value                 |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `image.registry`                        | Moodle image registry                                                                                                 | `docker.io`           |
+| `image.repository`                      | Moodle image repository                                                                                               | `bitnami/moodle`      |
+| `image.tag`                             | Moodle image tag (immutable tags are recommended)                                                                     | `4.0.4-debian-11-r10` |
+| `image.digest`                          | Moodle image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                  |
+| `image.pullPolicy`                      | Moodle image pull policy                                                                                              | `IfNotPresent`        |
+| `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                      | `[]`                  |
+| `image.debug`                           | Specify if debug logs should be enabled                                                                               | `false`               |
+| `replicaCount`                          | Number of Moodle replicas (requires ReadWriteMany PVC support)                                                        | `1`                   |
+| `moodleSkipInstall`                     | Skip Moodle&trade; installation wizard. Useful for migrations and restoring from SQL dump                             | `false`               |
+| `moodleSiteName`                        | Site name                                                                                                             | `""`                  |
+| `moodleLang`                            | Site language                                                                                                         | `""`                  |
+| `moodleUsername`                        | User of the application                                                                                               | `user`                |
+| `moodlePassword`                        | Application password                                                                                                  | `""`                  |
+| `moodleEmail`                           | Admin email                                                                                                           | `user@example.com`    |
+| `allowEmptyPassword`                    | Allow DB blank passwords                                                                                              | `true`                |
+| `command`                               | Override default container command (useful when using custom images)                                                  | `[]`                  |
+| `args`                                  | Override default container args (useful when using custom images)                                                     | `[]`                  |
+| `updateStrategy.type`                   | Update strategy - only really applicable for deployments with RWO PVs attached                                        | `RollingUpdate`       |
+| `extraEnvVars`                          | An array to add extra env vars                                                                                        | `[]`                  |
+| `extraEnvVarsCM`                        | ConfigMap with extra environment variables                                                                            | `""`                  |
+| `extraEnvVarsSecret`                    | Secret with extra environment variables (in case of sensitive data)                                                   | `""`                  |
+| `extraVolumes`                          | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`    | `[]`                  |
+| `extraVolumeMounts`                     | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `[]`                  |
+| `initContainers`                        | Extra init containers to add to the deployment                                                                        | `[]`                  |
+| `sidecars`                              | Extra sidecar containers to add to the deployment                                                                     | `[]`                  |
+| `hostAliases`                           | Moodle&trade; pods host aliases                                                                                       | `[]`                  |
+| `tolerations`                           | Tolerations for pod assignment                                                                                        | `[]`                  |
+| `priorityClassName`                     | Moodle&trade; pods' priorityClassName                                                                                 | `""`                  |
+| `schedulerName`                         | Name of the k8s scheduler (other than default)                                                                        | `""`                  |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                                                        | `[]`                  |
+| `existingSecret`                        | Name of a secret with the application password                                                                        | `""`                  |
+| `smtpHost`                              | SMTP host                                                                                                             | `""`                  |
+| `smtpPort`                              | SMTP port                                                                                                             | `""`                  |
+| `smtpUser`                              | SMTP user                                                                                                             | `""`                  |
+| `smtpPassword`                          | SMTP password                                                                                                         | `""`                  |
+| `smtpProtocol`                          | SMTP Protocol (options: ssl,tls, nil)                                                                                 | `""`                  |
+| `containerPorts`                        | Container ports                                                                                                       | `{}`                  |
+| `sessionAffinity`                       | Control where client requests go, to the same pod or round-robin                                                      | `None`                |
+| `persistence.enabled`                   | Enable persistence using PVC                                                                                          | `true`                |
+| `persistence.customStorageClass`        | Create a custom storage class                                                                                         | `{}`                  |
+| `persistence.storageClass`              | PVC Storage Class for Moodle                                                                                          | `""`                  |
+| `persistence.accessModes`               | PVC Access Mode for Moodle                                                                                            | `["ReadWriteOnce"]`   |
+| `persistence.size`                      | PVC Storage Request for Moodle                                                                                        | `8Gi`                 |
+| `persistence.existingClaim`             | An Existing PVC name                                                                                                  | `""`                  |
+| `persistence.hostPath`                  | Host mount path for Moodle                                                                                            | `""`                  |
+| `persistence.annotations`               | Persistent Volume Claim annotations                                                                                   | `{}`                  |
+| `podAffinityPreset`                     | Pod affinity preset                                                                                                   | `""`                  |
+| `podAntiAffinityPreset`                 | Pod anti-affinity preset                                                                                              | `soft`                |
+| `nodeAffinityPreset.type`               | Node affinity type                                                                                                    | `""`                  |
+| `nodeAffinityPreset.key`                | Node label key to match                                                                                               | `""`                  |
+| `nodeAffinityPreset.values`             | Node label values to match                                                                                            | `[]`                  |
+| `affinity`                              | Map of node/pod affinities                                                                                            | `{}`                  |
+| `nodeSelector`                          | Node labels for pod assignment                                                                                        | `{}`                  |
+| `resources.requests`                    | CPU/Memory resource requests                                                                                          | `{}`                  |
+| `resources.limits`                      | CPU/Memory resource limits                                                                                            | `{}`                  |
+| `podSecurityContext.enabled`            | Enable Moodle&trade; pods' Security Context                                                                           | `true`                |
+| `podSecurityContext.fsGroup`            | Moodle&trade; pods' group ID                                                                                          | `1001`                |
+| `containerSecurityContext.enabled`      | Enable Moodle&trade; containers' Security Context                                                                     | `true`                |
+| `containerSecurityContext.runAsUser`    | Moodle&trade; containers' Security Context runAsUser                                                                  | `1001`                |
+| `containerSecurityContext.runAsNonRoot` | Moodle&trade; containers' Security Context runAsNonRoot                                                               | `true`                |
+| `startupProbe.enabled`                  | Enable startupProbe                                                                                                   | `false`               |
+| `startupProbe.path`                     | Request path for startupProbe                                                                                         | `/login/index.php`    |
+| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                | `30`                  |
+| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                       | `10`                  |
+| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                      | `5`                   |
+| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                    | `60`                  |
+| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                    | `1`                   |
+| `livenessProbe.enabled`                 | Enable livenessProbe                                                                                                  | `true`                |
+| `livenessProbe.path`                    | Request path for livenessProbe                                                                                        | `/login/index.php`    |
+| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                               | `600`                 |
+| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                      | `10`                  |
+| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                     | `5`                   |
+| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                   | `6`                   |
+| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                   | `1`                   |
+| `readinessProbe.enabled`                | Enable readinessProbe                                                                                                 | `true`                |
+| `readinessProbe.path`                   | Request path for readinessProbe                                                                                       | `/login/index.php`    |
+| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                              | `30`                  |
+| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                     | `5`                   |
+| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                    | `3`                   |
+| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                  | `6`                   |
+| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                                  | `1`                   |
+| `customStartupProbe`                    | Override default startup probe                                                                                        | `{}`                  |
+| `customLivenessProbe`                   | Override default liveness probe                                                                                       | `{}`                  |
+| `customReadinessProbe`                  | Override default readiness probe                                                                                      | `{}`                  |
+| `lifecycleHooks`                        | LifecycleHook to set additional configuration at startup Evaluated as a template                                      | `""`                  |
+| `podAnnotations`                        | Pod annotations                                                                                                       | `{}`                  |
+| `podLabels`                             | Add additional labels to the pod (evaluated as a template)                                                            | `{}`                  |
 
 
 ### Traffic Exposure Parameters
@@ -231,7 +232,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                                        | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `11-debian-11-r34`      |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `11-debian-11-r37`      |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                    |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
@@ -246,7 +247,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                                                            | `false`                   |
 | `metrics.image.registry`                   | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`                 | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                                                      | `0.11.0-debian-11-r39`    |
+| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                                                      | `0.11.0-debian-11-r45`    |
 | `metrics.image.digest`                     | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`                 | Apache exporter image pull policy                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                | `[]`                      |
@@ -281,7 +282,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret with extra environment variables                                                                           | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                                                                        | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image repository                                                                                | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)                                                      | `11-debian-11-r34`                       |
+| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)                                                      | `11-debian-11-r37`                       |
 | `certificates.image.digest`                          | Container sidecar image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                              | `[]`                                     |
@@ -315,7 +316,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set moodleUsername=admin,moodlePassword=password,mariadb.auth.rootPassword=secretpassword \
-    bitnami/moodle
+    my-repo/moodle
 ```
 
 The above command sets the Moodle&trade; administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
@@ -325,7 +326,7 @@ The above command sets the Moodle&trade; administrator account username and pass
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/moodle
+$ helm install my-release -f values.yaml my-repo/moodle
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -462,13 +463,13 @@ export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=moo
 Upgrade your release (maintaining the version) disabling MariaDB and scaling Moodle&trade; replicas to 0:
 
 ```console
-$ helm upgrade moodle bitnami/moodle --set moodlePassword=$MOODLE_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.1.6
+$ helm upgrade moodle my-repo/moodle --set moodlePassword=$MOODLE_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.1.6
 ```
 
 Finally, upgrade you release to 9.0.0 reusing the existing PVC, and enabling back MariaDB:
 
 ```console
-$ helm upgrade moodle bitnami/moodle --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set moodlePassword=$MOODLE_PASSWORD
+$ helm upgrade moodle my-repo/moodle --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set moodlePassword=$MOODLE_PASSWORD
 ```
 
 You should see the lines below in MariaDB container logs:

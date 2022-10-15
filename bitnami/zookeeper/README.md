@@ -7,12 +7,12 @@ Apache ZooKeeper provides a reliable, centralized register of configuration data
 [Overview of Apache ZooKeeper](https://zookeeper.apache.org)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/zookeeper
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/zookeeper
 ```
 
 ## Introduction
@@ -32,8 +32,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/zookeeper
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/zookeeper
 ```
 
 These commands deploy ZooKeeper on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -84,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`              | ZooKeeper image registry                                                                                                   | `docker.io`             |
 | `image.repository`            | ZooKeeper image repository                                                                                                 | `bitnami/zookeeper`     |
-| `image.tag`                   | ZooKeeper image tag (immutable tags are recommended)                                                                       | `3.8.0-debian-11-r30`   |
+| `image.tag`                   | ZooKeeper image tag (immutable tags are recommended)                                                                       | `3.8.0-debian-11-r36`   |
 | `image.digest`                | ZooKeeper image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                  | `""`                    |
 | `image.pullPolicy`            | ZooKeeper image pull policy                                                                                                | `IfNotPresent`          |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                                                                           | `[]`                    |
@@ -128,69 +128,70 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Statefulset parameters
 
-| Name                                    | Description                                                                                                                                                                                       | Value           |
-| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
-| `replicaCount`                          | Number of ZooKeeper nodes                                                                                                                                                                         | `1`             |
-| `containerPorts.client`                 | ZooKeeper client container port                                                                                                                                                                   | `2181`          |
-| `containerPorts.tls`                    | ZooKeeper TLS container port                                                                                                                                                                      | `3181`          |
-| `containerPorts.follower`               | ZooKeeper follower container port                                                                                                                                                                 | `2888`          |
-| `containerPorts.election`               | ZooKeeper election container port                                                                                                                                                                 | `3888`          |
-| `livenessProbe.enabled`                 | Enable livenessProbe on ZooKeeper containers                                                                                                                                                      | `true`          |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                                                                                                           | `30`            |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                                                                                                  | `10`            |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                                                                                                 | `5`             |
-| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                                                                                               | `6`             |
-| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                                                                                               | `1`             |
-| `livenessProbe.probeCommandTimeout`     | Probe command timeout for livenessProbe                                                                                                                                                           | `2`             |
-| `readinessProbe.enabled`                | Enable readinessProbe on ZooKeeper containers                                                                                                                                                     | `true`          |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                                                                                                          | `5`             |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                                                                                                 | `10`            |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                                                                                                | `5`             |
-| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                                                                                              | `6`             |
-| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                                                                                                              | `1`             |
-| `readinessProbe.probeCommandTimeout`    | Probe command timeout for readinessProbe                                                                                                                                                          | `2`             |
-| `startupProbe.enabled`                  | Enable startupProbe on ZooKeeper containers                                                                                                                                                       | `false`         |
-| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                                                                                            | `30`            |
-| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                                                                                                   | `10`            |
-| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                                                                                                  | `1`             |
-| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                                                                                                | `15`            |
-| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                                                                                                | `1`             |
-| `customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                                                                                                               | `{}`            |
-| `customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                                                                                                              | `{}`            |
-| `customStartupProbe`                    | Custom startupProbe that overrides the default one                                                                                                                                                | `{}`            |
-| `lifecycleHooks`                        | for the ZooKeeper container(s) to automate configuration before or after startup                                                                                                                  | `{}`            |
-| `resources.limits`                      | The resources limits for the ZooKeeper containers                                                                                                                                                 | `{}`            |
-| `resources.requests.memory`             | The requested memory for the ZooKeeper containers                                                                                                                                                 | `256Mi`         |
-| `resources.requests.cpu`                | The requested cpu for the ZooKeeper containers                                                                                                                                                    | `250m`          |
-| `podSecurityContext.enabled`            | Enabled ZooKeeper pods' Security Context                                                                                                                                                          | `true`          |
-| `podSecurityContext.fsGroup`            | Set ZooKeeper pod's Security Context fsGroup                                                                                                                                                      | `1001`          |
-| `containerSecurityContext.enabled`      | Enabled ZooKeeper containers' Security Context                                                                                                                                                    | `true`          |
-| `containerSecurityContext.runAsUser`    | Set ZooKeeper containers' Security Context runAsUser                                                                                                                                              | `1001`          |
-| `containerSecurityContext.runAsNonRoot` | Set ZooKeeper containers' Security Context runAsNonRoot                                                                                                                                           | `true`          |
-| `hostAliases`                           | ZooKeeper pods host aliases                                                                                                                                                                       | `[]`            |
-| `podLabels`                             | Extra labels for ZooKeeper pods                                                                                                                                                                   | `{}`            |
-| `podAnnotations`                        | Annotations for ZooKeeper pods                                                                                                                                                                    | `{}`            |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                               | `""`            |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                          | `soft`          |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                         | `""`            |
-| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                                                                                                                             | `""`            |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                                                                                                                         | `[]`            |
-| `affinity`                              | Affinity for pod assignment                                                                                                                                                                       | `{}`            |
-| `nodeSelector`                          | Node labels for pod assignment                                                                                                                                                                    | `{}`            |
-| `tolerations`                           | Tolerations for pod assignment                                                                                                                                                                    | `[]`            |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                                                          | `[]`            |
-| `podManagementPolicy`                   | StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: `OrderedReady` and `Parallel` | `Parallel`      |
-| `priorityClassName`                     | Name of the existing priority class to be used by ZooKeeper pods, priority class needs to be created beforehand                                                                                   | `""`            |
-| `schedulerName`                         | Kubernetes pod scheduler registry                                                                                                                                                                 | `""`            |
-| `updateStrategy.type`                   | ZooKeeper statefulset strategy type                                                                                                                                                               | `RollingUpdate` |
-| `updateStrategy.rollingUpdate`          | ZooKeeper statefulset rolling update configuration parameters                                                                                                                                     | `{}`            |
-| `extraVolumes`                          | Optionally specify extra list of additional volumes for the ZooKeeper pod(s)                                                                                                                      | `[]`            |
-| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the ZooKeeper container(s)                                                                                                           | `[]`            |
-| `sidecars`                              | Add additional sidecar containers to the ZooKeeper pod(s)                                                                                                                                         | `[]`            |
-| `initContainers`                        | Add additional init containers to the ZooKeeper pod(s)                                                                                                                                            | `[]`            |
-| `pdb.create`                            | Deploy a pdb object for the ZooKeeper pod                                                                                                                                                         | `false`         |
-| `pdb.minAvailable`                      | Minimum available ZooKeeper replicas                                                                                                                                                              | `""`            |
-| `pdb.maxUnavailable`                    | Maximum unavailable ZooKeeper replicas                                                                                                                                                            | `1`             |
+| Name                                                | Description                                                                                                                                                                                       | Value           |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `replicaCount`                                      | Number of ZooKeeper nodes                                                                                                                                                                         | `1`             |
+| `containerPorts.client`                             | ZooKeeper client container port                                                                                                                                                                   | `2181`          |
+| `containerPorts.tls`                                | ZooKeeper TLS container port                                                                                                                                                                      | `3181`          |
+| `containerPorts.follower`                           | ZooKeeper follower container port                                                                                                                                                                 | `2888`          |
+| `containerPorts.election`                           | ZooKeeper election container port                                                                                                                                                                 | `3888`          |
+| `livenessProbe.enabled`                             | Enable livenessProbe on ZooKeeper containers                                                                                                                                                      | `true`          |
+| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                           | `30`            |
+| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                                                                                  | `10`            |
+| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                                                                                 | `5`             |
+| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                                                                                               | `6`             |
+| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                                                                                               | `1`             |
+| `livenessProbe.probeCommandTimeout`                 | Probe command timeout for livenessProbe                                                                                                                                                           | `2`             |
+| `readinessProbe.enabled`                            | Enable readinessProbe on ZooKeeper containers                                                                                                                                                     | `true`          |
+| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                                                                                          | `5`             |
+| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                                                                                                 | `10`            |
+| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                                                                                                | `5`             |
+| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                                                                                              | `6`             |
+| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                                                                                              | `1`             |
+| `readinessProbe.probeCommandTimeout`                | Probe command timeout for readinessProbe                                                                                                                                                          | `2`             |
+| `startupProbe.enabled`                              | Enable startupProbe on ZooKeeper containers                                                                                                                                                       | `false`         |
+| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                                                                                            | `30`            |
+| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                                                                                                   | `10`            |
+| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                                                                                                  | `1`             |
+| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                                                                                                | `15`            |
+| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                                                                                                | `1`             |
+| `customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                               | `{}`            |
+| `customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                              | `{}`            |
+| `customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                | `{}`            |
+| `lifecycleHooks`                                    | for the ZooKeeper container(s) to automate configuration before or after startup                                                                                                                  | `{}`            |
+| `resources.limits`                                  | The resources limits for the ZooKeeper containers                                                                                                                                                 | `{}`            |
+| `resources.requests.memory`                         | The requested memory for the ZooKeeper containers                                                                                                                                                 | `256Mi`         |
+| `resources.requests.cpu`                            | The requested cpu for the ZooKeeper containers                                                                                                                                                    | `250m`          |
+| `podSecurityContext.enabled`                        | Enabled ZooKeeper pods' Security Context                                                                                                                                                          | `true`          |
+| `podSecurityContext.fsGroup`                        | Set ZooKeeper pod's Security Context fsGroup                                                                                                                                                      | `1001`          |
+| `containerSecurityContext.enabled`                  | Enabled ZooKeeper containers' Security Context                                                                                                                                                    | `true`          |
+| `containerSecurityContext.runAsUser`                | Set ZooKeeper containers' Security Context runAsUser                                                                                                                                              | `1001`          |
+| `containerSecurityContext.runAsNonRoot`             | Set ZooKeeper containers' Security Context runAsNonRoot                                                                                                                                           | `true`          |
+| `containerSecurityContext.allowPrivilegeEscalation` | Force the child process to be run as nonprivilege                                                                                                                                                 | `false`         |
+| `hostAliases`                                       | ZooKeeper pods host aliases                                                                                                                                                                       | `[]`            |
+| `podLabels`                                         | Extra labels for ZooKeeper pods                                                                                                                                                                   | `{}`            |
+| `podAnnotations`                                    | Annotations for ZooKeeper pods                                                                                                                                                                    | `{}`            |
+| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                               | `""`            |
+| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                          | `soft`          |
+| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                         | `""`            |
+| `nodeAffinityPreset.key`                            | Node label key to match Ignored if `affinity` is set.                                                                                                                                             | `""`            |
+| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set.                                                                                                                                         | `[]`            |
+| `affinity`                                          | Affinity for pod assignment                                                                                                                                                                       | `{}`            |
+| `nodeSelector`                                      | Node labels for pod assignment                                                                                                                                                                    | `{}`            |
+| `tolerations`                                       | Tolerations for pod assignment                                                                                                                                                                    | `[]`            |
+| `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                                                          | `[]`            |
+| `podManagementPolicy`                               | StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: `OrderedReady` and `Parallel` | `Parallel`      |
+| `priorityClassName`                                 | Name of the existing priority class to be used by ZooKeeper pods, priority class needs to be created beforehand                                                                                   | `""`            |
+| `schedulerName`                                     | Kubernetes pod scheduler registry                                                                                                                                                                 | `""`            |
+| `updateStrategy.type`                               | ZooKeeper statefulset strategy type                                                                                                                                                               | `RollingUpdate` |
+| `updateStrategy.rollingUpdate`                      | ZooKeeper statefulset rolling update configuration parameters                                                                                                                                     | `{}`            |
+| `extraVolumes`                                      | Optionally specify extra list of additional volumes for the ZooKeeper pod(s)                                                                                                                      | `[]`            |
+| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the ZooKeeper container(s)                                                                                                           | `[]`            |
+| `sidecars`                                          | Add additional sidecar containers to the ZooKeeper pod(s)                                                                                                                                         | `[]`            |
+| `initContainers`                                    | Add additional init containers to the ZooKeeper pod(s)                                                                                                                                            | `[]`            |
+| `pdb.create`                                        | Deploy a pdb object for the ZooKeeper pod                                                                                                                                                         | `false`         |
+| `pdb.minAvailable`                                  | Minimum available ZooKeeper replicas                                                                                                                                                              | `""`            |
+| `pdb.maxUnavailable`                                | Maximum unavailable ZooKeeper replicas                                                                                                                                                            | `1`             |
 
 
 ### Traffic Exposure parameters
@@ -252,7 +253,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r27`      |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r35`      |
 | `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`                    |
@@ -325,7 +326,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set auth.clientUser=newUser \
-    bitnami/zookeeper
+    my-repo/zookeeper
 ```
 
 The above command sets the ZooKeeper user to `newUser`.
@@ -335,7 +336,7 @@ The above command sets the ZooKeeper user to `newUser`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/zookeeper
+$ helm install my-release -f values.yaml my-repo/zookeeper
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

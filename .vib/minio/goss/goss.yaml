@@ -1,43 +1,36 @@
+http:
+  http://localhost:{{ .Vars.containerPorts.console }}:
+    status: 200
 command:
-  mc-version-development:
-    exec: mc --version
-    exit-status: 0
-    stdout:
-      - "DEVELOPMENT"
-    stderr: [ ]
-    timeout: 20000 
+  {{- $auth := printf "'%s' '%s'" .Vars.auth.rootUser .Vars.auth.rootPassword }}
+  {{- $minio_cfg_name := printf "minio%s" (randAlpha 5) }}
+  {{- $minio_bucket := printf "bucket%s" (randAlpha 5 | toLower) }}
+  {{- $minio_endpoint := printf "http://minio:%d" .Vars.service.ports.api }}
   mc-make-bucket:
-    exec: mc mb test
+    exec: mc config host add {{ $minio_cfg_name }} {{ $minio_endpoint }} {{ $auth }} && mc mb {{ $minio_cfg_name }}/{{ $minio_bucket }} && mc ls {{ $minio_cfg_name }}
     exit-status: 0
     stdout:
-      - "Bucket created successfully `test`."
-    stderr: [ ]
-    timeout: 20000    
+      - "{{ $minio_bucket }}/"
   mc-list-buckets:
-    exec: mc ls
+    exec: mc admin info local
     exit-status: 0
     stdout:
-      - "bin"
-      - "licenses"
-    stderr: [ ]
-    timeout: 20000 
-  mc-ls-play:
-    exec: mc ls play
-    exit-status: 0
-    stderr: [ ]
-    timeout: 20000  
-  which-minio:
-    exec: which minio
+      - /Network.*OK/
+      - /Drives.*OK/
+  check-user-info:
+    exec: id
     exit-status: 0
     stdout:
-      - "/opt/bitnami/minio/bin/minio"
-    stderr: [ ]
-    timeout: 20000                
+    - uid={{ .Vars.containerSecurityContext.runAsUser }}
+    - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
+
 file:
-  /data:
+  {{ .Vars.persistence.mountPath }}:
     filetype: directory
     exists: true
-  /opt/bitnami/minio-client/bin/mc:
-    filetype: file
-    exists: true
-    group: root    
+    mode: "2775"
+    owner: root
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
+    filetype: directory
+    mode: "3777"

@@ -172,7 +172,9 @@ spec:
           {{- if .Values.proxy.resources }}
           resources: {{- toYaml .Values.proxy.resources | nindent 12 }}
           {{- end }}
-          {{- if .Values.proxy.livenessProbe.enabled }}
+          {{- if .Values.proxy.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.proxy.livenessProbe.enabled }}
           livenessProbe:
             tcpSocket:
               port: {{ .Values.proxy.port }}
@@ -181,10 +183,10 @@ spec:
             timeoutSeconds: {{ .Values.proxy.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.proxy.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.proxy.livenessProbe.failureThreshold }}
-          {{- else if .Values.proxy.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.proxy.readinessProbe.enabled }}
+          {{- if .Values.proxy.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.proxy.readinessProbe.enabled }}
           readinessProbe:
             tcpSocket:
               port: {{ .Values.proxy.port }}
@@ -193,10 +195,10 @@ spec:
             timeoutSeconds: {{ .Values.proxy.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.proxy.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.proxy.readinessProbe.failureThreshold }}
-          {{- else if .Values.proxy.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.proxy.startupProbe.enabled }}
+          {{- if .Values.proxy.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.proxy.startupProbe.enabled }}
           startupProbe:
             tcpSocket:
               port: {{ .Values.proxy.port }}
@@ -205,8 +207,6 @@ spec:
             timeoutSeconds: {{ .Values.proxy.startupProbe.timeoutSeconds }}
             successThreshold: {{ .Values.proxy.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.proxy.startupProbe.failureThreshold }}
-          {{- else if .Values.proxy.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if .Values.proxy.preprocessor }}

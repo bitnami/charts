@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/sonarqube
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/sonarqube
 ```
 
 ## Introduction
@@ -33,7 +33,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install my-release bitnami/sonarqube
+$ helm install my-release my-repo/sonarqube
 ```
 
 The command deploys SonarQube on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -79,15 +79,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### SonarQube Image parameters
 
-| Name                | Description                                                                                               | Value                |
-| ------------------- | --------------------------------------------------------------------------------------------------------- | -------------------- |
-| `image.registry`    | SonarQube image registry                                                                                  | `docker.io`          |
-| `image.repository`  | SonarQube image repository                                                                                | `bitnami/sonarqube`  |
-| `image.tag`         | SonarQube image tag (immutable tags are recommended)                                                      | `9.6.1-debian-11-r0` |
-| `image.digest`      | SonarQube image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
-| `image.pullPolicy`  | SonarQube image pull policy                                                                               | `IfNotPresent`       |
-| `image.pullSecrets` | SonarQube image pull secrets                                                                              | `[]`                 |
-| `image.debug`       | Enable SonarQube image debug mode                                                                         | `false`              |
+| Name                | Description                                                                                               | Value                 |
+| ------------------- | --------------------------------------------------------------------------------------------------------- | --------------------- |
+| `image.registry`    | SonarQube image registry                                                                                  | `docker.io`           |
+| `image.repository`  | SonarQube image repository                                                                                | `bitnami/sonarqube`   |
+| `image.tag`         | SonarQube image tag (immutable tags are recommended)                                                      | `9.6.1-debian-11-r15` |
+| `image.digest`      | SonarQube image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
+| `image.pullPolicy`  | SonarQube image pull policy                                                                               | `IfNotPresent`        |
+| `image.pullSecrets` | SonarQube image pull secrets                                                                              | `[]`                  |
+| `image.debug`       | Enable SonarQube image debug mode                                                                         | `false`               |
 
 
 ### SonarQube Configuration parameters
@@ -236,7 +236,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r30`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r41`      |
 | `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -252,7 +252,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctl.enabled`            | Enable kernel settings modifier image                                                                         | `true`                  |
 | `sysctl.image.registry`     | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `sysctl.image.repository`   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `sysctl.image.tag`          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r30`      |
+| `sysctl.image.tag`          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r41`      |
 | `sysctl.image.digest`       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `sysctl.image.pullPolicy`   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `sysctl.image.pullSecrets`  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -283,7 +283,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.jmx.enabled`                               | Whether or not to expose JMX metrics to Prometheus                                                           | `false`                |
 | `metrics.jmx.image.registry`                        | JMX exporter image registry                                                                                  | `docker.io`            |
 | `metrics.jmx.image.repository`                      | JMX exporter image repository                                                                                | `bitnami/jmx-exporter` |
-| `metrics.jmx.image.tag`                             | JMX exporter image tag (immutable tags are recommended)                                                      | `0.17.0-debian-11-r30` |
+| `metrics.jmx.image.tag`                             | JMX exporter image tag (immutable tags are recommended)                                                      | `0.17.2-debian-11-r7`  |
 | `metrics.jmx.image.digest`                          | JMX exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `metrics.jmx.image.pullPolicy`                      | JMX exporter image pull policy                                                                               | `IfNotPresent`         |
 | `metrics.jmx.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                             | `[]`                   |
@@ -347,7 +347,7 @@ $ helm install my-release \
   --set sonarqubeUsername=admin \
   --set sonarqubePassword=password \
   --set postgresql.auth.password=secretpassword \
-    bitnami/sonarqube
+    my-repo/sonarqube
 ```
 
 The above command sets the sonarqube administrator account username and password to `admin` and `password` respectively. Additionally, it sets the PostgreSQL `postgres` user password to `secretpassword`.
@@ -357,7 +357,7 @@ The above command sets the sonarqube administrator account username and password
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/sonarqube
+$ helm install my-release -f values.yaml my-repo/sonarqube
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

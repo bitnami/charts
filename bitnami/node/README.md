@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/node
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/node
 ```
 
 ## Introduction
@@ -35,8 +35,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/node
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/node
 ```
 
 These commands deploy Node.js on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation. Also includes support for MariaDB chart out of the box.
@@ -108,7 +108,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------- |
 | `image.registry`                              | NodeJS image registry                                                                                                    | `docker.io`            |
 | `image.repository`                            | NodeJS image repository                                                                                                  | `bitnami/node`         |
-| `image.tag`                                   | NodeJS image tag (immutable tags are recommended)                                                                        | `16.17.0-debian-11-r0` |
+| `image.tag`                                   | NodeJS image tag (immutable tags are recommended)                                                                        | `16.18.0-debian-11-r0` |
 | `image.digest`                                | NodeJS image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                   | `""`                   |
 | `image.pullPolicy`                            | NodeJS image pull policy                                                                                                 | `IfNotPresent`         |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                         | `[]`                   |
@@ -182,7 +182,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------ | --------------------------------------------------------------------------------------------------- | -------------------------------------------- |
 | `git.image.registry`           | Git image registry                                                                                  | `docker.io`                                  |
 | `git.image.repository`         | Git image repository                                                                                | `bitnami/git`                                |
-| `git.image.tag`                | Git image tag (immutable tags are recommended)                                                      | `2.37.2-debian-11-r1`                        |
+| `git.image.tag`                | Git image tag (immutable tags are recommended)                                                      | `2.38.0-debian-11-r2`                        |
 | `git.image.digest`             | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                         |
 | `git.image.pullPolicy`         | Git image pull policy                                                                               | `IfNotPresent`                               |
 | `git.image.pullSecrets`        | Specify docker-registry secret names as an array                                                    | `[]`                                         |
@@ -200,7 +200,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory                                                       | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r26`      |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r41`      |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
@@ -261,7 +261,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set repository=https://github.com/jbianquetti-nami/simple-node-app.git,replicaCount=2 \
-    bitnami/node
+    my-repo/node
 ```
 
 The above command clones the remote git repository to the `/app/` directory  of the container. Additionally it sets the number of `replicaCount` to `2`.
@@ -269,7 +269,7 @@ The above command clones the remote git repository to the `/app/` directory  of 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/node
+$ helm install my-release -f values.yaml my-repo/node
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

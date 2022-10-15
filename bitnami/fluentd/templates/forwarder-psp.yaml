@@ -30,7 +30,7 @@ spec:
     - 'downwardAPI'
     - 'hostPath'
     - 'persistentVolumeClaim'
-  hostNetwork: false
+  hostNetwork: {{ .Values.forwarder.hostNetwork }}
   hostIPC: false
   hostPID: false
   runAsUser:

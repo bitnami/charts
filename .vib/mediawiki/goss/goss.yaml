@@ -1,28 +1,36 @@
 file:
-  /opt/bitnami/mediawiki/cache:
+  /bitnami/mediawiki:
     exists: true
     filetype: directory
-    mode: "0775"
-    owner: daemon
-    group: root
-  /opt/bitnami/mediawiki/images:
-    filetype: symlink
-    linked-to: /bitnami/mediawiki/images
+    mode: "2775"
+    owner: root
+  /etc/hosts:
     exists: true
-  /bitnami/mediawiki/LocalSettings.php:
-    mode: "0644"
     filetype: file
-    exists: true
-# Checks the user running the container is non-root
+    contains:
+    {{ range .Vars.hostAliases }}
+    {{ $ip := .ip }}
+    {{ range $host := .hostnames }}
+      - /{{ $ip }}.*{{ $host }}/
+    {{ end }}
+    {{ end }}
+http:
+  https://mediawiki:{{ .Vars.service.ports.https }}:
+    ## Only checking for status code 301 to avoid the automatic redirect to the domain.
+    status: 301
+    no-follow-redirects: true
+    allow-insecure: true
 command:
-  user-id-test:
-    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
-    exit-status: 0
-    stdout: []
-    stderr: []
-  which-php:
-    exec: which php
+  check-user-info:
+    exec: id
     exit-status: 0
     stdout:
-    - "/opt/bitnami/php/bin/php"
-    stderr: []
+      - uid={{ .Vars.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
+  check-db-credentials:
+    exec: env
+    exit-status: 0
+    stdout:
+      - /MEDIAWIKI_DATABASE_NAME.*{{ .Vars.mariadb.auth.database }}/
+      - /MEDIAWIKI_DATABASE_USER.*{{ .Vars.mariadb.auth.username }}/
+      - /MEDIAWIKI_DATABASE_PASSWORD.*{{ .Vars.mariadb.auth.password }}/

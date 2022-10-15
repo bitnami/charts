@@ -106,8 +106,8 @@ rules:
       - create
       - get
       - list
-      - watch
       - patch
+      - watch
   - apiGroups:
       - ""
     resources:
@@ -166,6 +166,26 @@ rules:
       - integreatly.org
     resources:
       - grafanadatasources/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - integreatly.org
+    resources:
+      - grafanafolders
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - integreatly.org
+    resources:
+      - grafanafolders/status
     verbs:
       - get
       - patch

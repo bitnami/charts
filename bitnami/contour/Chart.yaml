@@ -17,8 +17,6 @@ keywords:
   - envoy
   - contour
 maintainers:
-  - name: cellebyte
-    url: https://github.com/Cellebyte
   - name: Bitnami
     url: https://github.com/bitnami/charts
 name: contour
@@ -27,4 +25,4 @@ sources:
   - https://github.com/envoyproxy/envoy
   - https://github.com/bitnami/containers/tree/main/bitnami/contour
   - https://projectcontour.io
-version: 9.1.2
+version: 9.1.6

@@ -53,6 +53,9 @@ spec:
       {{- if .Values.dex.schedulerName }}
       schedulerName: {{ .Values.dex.schedulerName }}
       {{- end }}
+      {{- if .Values.dex.shareProcessNamespace }}
+      shareProcessNamespace: {{ .Values.dex.shareProcessNamespace }}
+      {{- end }}
       {{- if .Values.dex.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.controller.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
@@ -160,7 +163,9 @@ spec:
           {{- if .Values.dex.resources }}
           resources: {{- toYaml .Values.dex.resources | nindent 12 }}
           {{- end }}
-          {{- if .Values.dex.startupProbe.enabled }}
+          {{- if .Values.dex.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dex.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.dex.startupProbe.enabled }}
           startupProbe:
             httpGet:
               path: /healthz
@@ -170,10 +175,10 @@ spec:
             timeoutSeconds: {{ .Values.dex.startupProbe.timeoutSeconds }}
             successThreshold: {{ .Values.dex.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.dex.startupProbe.failureThreshold }}
-          {{- else if .Values.dex.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dex.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.dex.livenessProbe.enabled }}
+          {{- if .Values.dex.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dex.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.dex.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /healthz
@@ -183,10 +188,10 @@ spec:
             timeoutSeconds: {{ .Values.dex.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.dex.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.dex.livenessProbe.failureThreshold }}
-          {{- else if .Values.dex.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dex.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.dex.readinessProbe.enabled }}
+          {{- if .Values.dex.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dex.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.dex.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
               path: /healthz
@@ -196,8 +201,6 @@ spec:
             timeoutSeconds: {{ .Values.dex.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.dex.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.dex.readinessProbe.failureThreshold }}
-          {{- else if .Values.dex.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dex.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: static-files

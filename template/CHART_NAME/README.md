@@ -1,3 +1,5 @@
+<!--- app-name: %%CHART_NAME%% -->
+
 # %%CHART_NAME%%
 
 %%DESCRIPTION%% (check existing examples)
@@ -5,8 +7,8 @@
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/%%CHART_NAME%%
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/%%CHART_NAME%%
 ```
 
 ## Introduction
@@ -25,7 +27,7 @@ $ helm install my-release bitnami/%%CHART_NAME%%
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release bitnami/%%CHART_NAME%%
+helm install my-release my-repo/%%CHART_NAME%%
 ```
 
 The command deploys %%CHART_NAME%% on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -55,7 +57,7 @@ helm install my-release \
   --set %%CHART_NAME%%Username=admin \
   --set %%CHART_NAME%%Password=password \
   --set mariadb.auth.rootPassword=secretpassword \
-    bitnami/%%CHART_NAME%%
+    my-repo/%%CHART_NAME%%
 ```
 
 The above command sets the %%CHART_NAME%% administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
@@ -65,7 +67,7 @@ The above command sets the %%CHART_NAME%% administrator account username and pas
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml bitnami/%%CHART_NAME%%
+helm install my-release -f values.yaml my-repo/%%CHART_NAME%%
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

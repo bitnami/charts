@@ -1,0 +1,22 @@
+{{- if and .Values.metrics.enabled .Values.metrics.googlePodMonitor.enabled }}
+apiVersion: monitoring.googleapis.com/v1
+kind: PodMonitoring
+metadata:
+  name: {{ template "external-dns.fullname" . }}
+  namespace: {{ default .Release.Namespace .Values.metrics.googlePodMonitor.namespace | quote }}
+  labels: {{ include "external-dns.labels" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+spec:
+  endpoints:
+    - port: http
+      {{- with .Values.metrics.googlePodMonitor.endpoint }}
+      path: {{ . }}
+      {{- end }}
+      {{- with .Values.metrics.googlePodMonitor.interval }}
+      interval: {{ . }}
+      {{- end }}
+  selector:
+    matchLabels: {{ include "external-dns.matchLabels" . | nindent 6 }}
+{{- end }}

@@ -24,4 +24,4 @@ name: pytorch
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/pytorch
   - https://pytorch.org/
-version: 2.5.2
+version: 2.5.6

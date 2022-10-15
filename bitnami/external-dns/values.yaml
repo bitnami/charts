@@ -60,7 +60,7 @@ watchReleaseNamespace: false
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.12.2-debian-11-r14
+  tag: 0.12.2-debian-11-r22
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -102,7 +102,7 @@ sources:
   # - contour-httpproxy
 ## @param provider DNS provider where the DNS records will be created.
 ## Available providers are:
-## - alibabacloud, aws, azure, azure-private-dns, cloudflare, coredns, designate, digitalocean, google, hetzner, infoblox, linode, rfc2136, transip, oci
+## - akamai, alibabacloud, aws, azure, azure-private-dns, cloudflare, coredns, designate, digitalocean, google, hetzner, infoblox, linode, rfc2136, transip, oci
 ##
 provider: aws
 ## @param initContainers Attach additional init containers to the pod (evaluated as a template)
@@ -138,6 +138,25 @@ publishHostIP: false
 ## @param serviceTypeFilter The service types to take care about (default: all, options: ClusterIP, NodePort, LoadBalancer, ExternalName)
 ##
 serviceTypeFilter: []
+## Akamai configuration to be set via arguments/env. variables
+##
+akamai:
+  ## @param akamai.host Hostname to use for EdgeGrid auth
+  ##
+  host: ""
+  ## @param akamai.accessToken Access Token to use for EdgeGrid auth
+  ##
+  accessToken: ""
+  ## @param akamai.clientToken Client Token to use for EdgeGrid auth
+  ##
+  clientToken: ""
+  ## @param akamai.clientSecret When using the Akamai provider, `AKAMAI_CLIENT_SECRET` to set (optional)
+  ##
+  clientSecret: ""
+  ## @param akamai.secretName Use an existing secret with key "akamai_api_seret" defined.
+  ## This ignores akamai.clientSecret
+  ##
+  secretName: ""
 ## Alibaba cloud configuration to be set via arguments/env. variables
 ## These will be added to /etc/kubernetes/alibaba-cloud.json via secret
 ##
@@ -1010,3 +1029,18 @@ metrics:
     ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
     ##
     jobLabel: ""
+  ## Google Managed Prometheus PodMonitor configuration
+  ##
+  googlePodMonitor:
+    ## @param metrics.googlePodMonitor.enabled Create Google Managed Prometheus PodMonitoring object
+    ##
+    enabled: false
+    ## @param metrics.googlePodMonitor.namespace Namespace in which PodMonitoring created
+    ##
+    namespace: ""
+    ## @param metrics.googlePodMonitor.interval Interval at which metrics should be scraped by Google Managed Prometheus
+    ##
+    interval: "60s"
+    ## @param  metrics.googlePodMonitor.endpoint The endpoint for Google Managed Prometheus scraping the metrics
+    ##
+    endpoint: /metrics
