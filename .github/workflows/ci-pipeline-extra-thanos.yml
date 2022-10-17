@@ -7,7 +7,7 @@ on: # rebuild any PRs and main branch changes
       - synchronize
       - labeled
     branches:
-      - master
+      - main
     paths:
       - 'bitnami/thanos/*'
 env:

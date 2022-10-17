@@ -3,7 +3,7 @@ name: '[Support] Update README metadata'
 on:
   pull_request_target:
     branches:
-      - master
+      - main
     paths:
       - 'bitnami/*/values.yaml'
 permissions:
