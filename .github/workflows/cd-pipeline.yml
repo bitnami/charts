@@ -240,7 +240,7 @@ jobs:
     steps:
       - name: Notify in Slack channel
         if: ${{ needs.vib-publish.result != 'success' || needs.update-index.result != 'success' }}
-        uses: slackapi/slack-github-action@v1.19.0
+        uses: slackapi/slack-github-action@v1.23.0
         with:
           channel-id: ${{ secrets.CD_SLACK_CHANNEL_ID }}
           payload: |
