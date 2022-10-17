@@ -93,7 +93,7 @@ jobs:
       )
     name: VIB Verify
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         name: Checkout Repository
         with:
           ref: ${{ github.event.pull_request.head.ref }}
