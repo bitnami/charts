@@ -1234,9 +1234,11 @@ The loki configuration file `loki.yaml` is shared across the different component
 ## Persistence
 
 ### Limitation
+
 This chart does not function fully when using local filesystem as a persistence store. When using a local filesystem as a persistence store, querying will not be possible (or limited to the ingesters' in-memory caches). For a fully functional deployment of this helm chart, an object storage backend is required.
 
 ### Data
+
 The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitnami/grafana-loki) image stores the grafana-loki `ingester` data at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
 
 ### Additional environment variables
