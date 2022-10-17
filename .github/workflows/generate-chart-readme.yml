@@ -14,14 +14,14 @@ jobs:
 
     steps:
       - name: Checkout bitnami-labs/readme-generator-for-helm
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: 'bitnami-labs/readme-generator-for-helm'
           ref: '1af12881436b1f58f0643d733fd5196b4a11caa8'
           path: readme-generator-for-helm
 
       - name: Cache node modules
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-node-modules
         with:
@@ -35,7 +35,7 @@ jobs:
         run: cd readme-generator-for-helm && npm install
 
       - name: Checkout bitnami/charts
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
