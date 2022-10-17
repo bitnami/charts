@@ -46,7 +46,7 @@ spec:
     - name: https
       port: {{ .Values.supervisor.service.ports.https }}
       protocol: TCP
-      targetPort: {{ .Values.supervisor.service.ports.aggregatedapiserver }}
+      targetPort: {{ .Values.supervisor.service.ports.aggregatedAPIServer }}
       {{- if and (or (eq .Values.supervisor.service.type "NodePort") (eq .Values.supervisor.service.type "LoadBalancer")) (not (empty .Values.supervisor.service.nodePorts.https)) }}
       nodePort: {{ .Values.supervisor.service.nodePorts.https }}
       {{- else if eq .Values.supervisor.service.type "ClusterIP" }}
