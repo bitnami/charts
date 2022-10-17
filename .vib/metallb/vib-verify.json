@@ -15,6 +15,47 @@
           "action_id": "helm-lint"
         }
       ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/metallb"
+        },
+        "runtime_parameters": "ZmlsZToKICAvdmFyL3J1bi9zZWNyZXRzL2t1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQ6CiAgICBleGlzdHM6IHt7IC5WYXJzLmNvbnRyb2xsZXIuc2VydmljZUFjY291bnQuYXV0b21vdW50U2VydmljZUFjY291bnRUb2tlbiB9fQogICAgZmlsZXR5cGU6IGRpcmVjdG9yeQogICAgbW9kZTogIjM3NzciCmNvbW1hbmQ6CiAgY2hlY2stbm8tY2FwYWJpbGl0aWVzOgogICAgZXhlYzogY2F0IC9wcm9jLzEvc3RhdHVzCiAgICBleGl0LXN0YXR1czogMAogICAgc3Rkb3V0OgogICAgLSAiQ2FwSW5oOgkwMDAwMDAwMDAwMDAwMDAwIgogICAgLSAiQ2FwUHJtOgkwMDAwMDAwMDAwMDAwMDAwIgogICAgLSAiQ2FwRWZmOgkwMDAwMDAwMDAwMDAwMDAwIgogICAgLSAiQ2FwQm5kOgkwMDAwMDAwMDAwMDAwMDAwIgogICAgLSAiQ2FwQW1iOgkwMDAwMDAwMDAwMDAwMDAwIgogIGNoZWNrLXVzZXItaW5mbzoKICAgIGV4ZWM6IGlkCiAgICBleGl0LXN0YXR1czogMAogICAgc3Rkb3V0OgogICAgLSB1aWQ9e3sgLlZhcnMuY29udHJvbGxlci5jb250YWluZXJTZWN1cml0eUNvbnRleHQucnVuQXNVc2VyIH19CiAgICAtIC9ncm91cHM9Lip7eyAuVmFycy5jb250cm9sbGVyLnBvZFNlY3VyaXR5Q29udGV4dC5mc0dyb3VwIH19Lwo=",
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/metallb/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}"
+            }
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/metallb/goss"
+            },
+            "vars_file": "vars.yaml",
+            "remote": {
+              "workload": "deploy-metallb-controller"
+            }
+          }
+        }
+      ]
     }
   }
 }
