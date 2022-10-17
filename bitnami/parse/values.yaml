@@ -937,7 +937,7 @@ serviceAccount:
 ##
 
 ## MongoDB&reg; chart configuration
-## https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml
+## https://github.com/bitnami/charts/blob/main/bitnami/mongodb/values.yaml
 ##
 mongodb:
   ## @param mongodb.enabled Enable MongoDB&reg; chart

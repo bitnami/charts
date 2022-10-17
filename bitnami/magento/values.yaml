@@ -474,7 +474,7 @@ networkPolicy:
 ## @section Database parameters
 
 ## MariaDB chart configuration
-## https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
+## https://github.com/bitnami/charts/blob/main/bitnami/mariadb/values.yaml
 ##
 mariadb:
   ## @param mariadb.enabled Whether to deploy a mariadb server to satisfy the applications database requirements.
@@ -568,7 +568,7 @@ externalDatabase:
 ## @section Elasticsearch parameters
 
 ## Elasticsearch chart configuration
-## https://github.com/bitnami/charts/blob/master/bitnami/elasticsearch/values.yaml
+## https://github.com/bitnami/charts/blob/main/bitnami/elasticsearch/values.yaml
 ##
 elasticsearch:
   ## @param elasticsearch.enabled Whether to deploy a elasticsearch server to use as magento's search engine

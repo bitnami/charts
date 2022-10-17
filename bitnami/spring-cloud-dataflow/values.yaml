@@ -1341,7 +1341,7 @@ metrics:
     ##
     metricRelabelings: []
     ## @param metrics.serviceMonitor.selector ServiceMonitor selector labels
-    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ##
     ## selector:
     ##   prometheus: my-prometheus
@@ -1437,7 +1437,7 @@ waitForBackends:
 ## @section Database parameters
 
 ## MariaDB chart configuration
-## https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
+## https://github.com/bitnami/charts/blob/main/bitnami/mariadb/values.yaml
 ##
 mariadb:
   ## @param mariadb.enabled Enable/disable MariaDB chart installation
@@ -1551,7 +1551,7 @@ externalDatabase:
 ## @section RabbitMQ chart parameters
 
 ## RabbitMQ chart configuration
-## https://github.com/bitnami/charts/blob/master/bitnami/rabbitmq/values.yaml
+## https://github.com/bitnami/charts/blob/main/bitnami/rabbitmq/values.yaml
 ##
 rabbitmq:
   ## @param rabbitmq.enabled Enable/disable RabbitMQ chart installation
@@ -1592,7 +1592,7 @@ externalRabbitmq:
 ## @section Kafka chart parameters
 
 ## Kafka chart configuration
-## https://github.com/bitnami/charts/blob/master/bitnami/kafka/values.yaml
+## https://github.com/bitnami/charts/blob/main/bitnami/kafka/values.yaml
 ##
 kafka:
   ## @param kafka.enabled Enable/disable Kafka chart installation
@@ -1605,7 +1605,7 @@ kafka:
   ##
   offsetsTopicReplicationFactor: 1
   ## Zookeeper chart configuration
-  ## https://github.com/bitnami/charts/blob/master/bitnami/zookeeper/values.yaml
+  ## https://github.com/bitnami/charts/blob/main/bitnami/zookeeper/values.yaml
   ## @param kafka.zookeeper.replicaCount Number of Zookeeper replicas
   ##
   zookeeper:

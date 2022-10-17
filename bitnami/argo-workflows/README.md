@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `server.image.registry`                                  | server image registry                                                                                               | `docker.io`                 |
 | `server.image.repository`                                | server image repository                                                                                             | `bitnami/argo-workflow-cli` |
-| `server.image.tag`                                       | server image tag (immutable tags are recommended)                                                                   | `3.3.9-scratch-r2`          |
+| `server.image.tag`                                       | server image tag (immutable tags are recommended)                                                                   | `3.4.1-scratch-r0`          |
 | `server.image.digest`                                    | server image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                        |
 | `server.image.pullPolicy`                                | server image pull policy                                                                                            | `Always`                    |
 | `server.image.pullSecrets`                               | server image pull secrets                                                                                           | `[]`                        |
@@ -186,7 +186,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `controller.image.registry`                                  | controller image registry                                                                                                     | `docker.io`                        |
 | `controller.image.repository`                                | controller image repository                                                                                                   | `bitnami/argo-workflow-controller` |
-| `controller.image.tag`                                       | controller image tag (immutable tags are recommended)                                                                         | `3.3.9-scratch-r1`                 |
+| `controller.image.tag`                                       | controller image tag (immutable tags are recommended)                                                                         | `3.4.0-scratch-r0`                 |
 | `controller.image.digest`                                    | controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                    | `""`                               |
 | `controller.image.pullPolicy`                                | controller image pull policy                                                                                                  | `IfNotPresent`                     |
 | `controller.image.pullSecrets`                               | controller image pull secrets                                                                                                 | `[]`                               |
@@ -292,7 +292,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------- |
 | `executor.image.registry`                                  | executor image registry                                                                                  | `docker.io`                  |
 | `executor.image.repository`                                | executor image repository                                                                                | `bitnami/argo-workflow-exec` |
-| `executor.image.tag`                                       | executor image tag (immutable tags are recommended)                                                      | `3.3.9-debian-11-r5`         |
+| `executor.image.tag`                                       | executor image tag (immutable tags are recommended)                                                      | `3.4.0-debian-11-r2`         |
 | `executor.image.digest`                                    | executor image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
 | `executor.image.pullPolicy`                                | executor image pull policy                                                                               | `Always`                     |
 | `executor.image.pullSecrets`                               | executor image pull secrets                                                                              | `[]`                         |
@@ -431,7 +431,7 @@ externalDatabase.database=bitnami_wordpress
 
 ### Ingress
 
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/master/bitnami/contour) you can utilize the ingress controller to serve your application.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
 
 To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/infrastructure/argo-workflows//configuration/configure-ingress/).
 
@@ -460,7 +460,7 @@ If additional containers are needed in the same pod as argo-workflows (such as a
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 

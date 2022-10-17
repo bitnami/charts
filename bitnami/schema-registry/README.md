@@ -399,7 +399,7 @@ externalKafka.auth.jaas.password=mypassword
 
 ### Ingress
 
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/master/bitnami/contour) you can utilize the ingress controller to serve your Schema Registry.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your Schema Registry.
 
 To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name.
 
@@ -415,11 +415,11 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 
 ### To 6.0.0
 
-This major updates the Kafka subchart to it newest major, 19.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/kafka#to-1900).
+This major updates the Kafka subchart to it newest major, 19.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-1900).
 
 ### To 4.0.0
 
-This version bump the version of charts used as dependency in a major. Kafka from 12.X.X to 18.X.X ([here](https://github.com/bitnami/charts/tree/master/bitnami/kafka#to-1800) you can see the changes introduced in this version).
+This version bump the version of charts used as dependency in a major. Kafka from 12.X.X to 18.X.X ([here](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-1800) you can see the changes introduced in this version).
 
 ### To 3.0.0
 
@@ -434,7 +434,7 @@ Affected values:
 
 ### To 2.0.0
 
-This version bump the version of charts used as dependency in a major. Kafka from 11.X.X to 12.X.X ([here](https://github.com/bitnami/charts/tree/master/bitnami/kafka#to-1220) you can see the changes introduced in this version) and common from 0.X.X to 1.X.X ([here](https://github.com/bitnami/charts/tree/master/bitnami/common#to-100) you can find the changes introduced in this version). Mainly the changes in both subcharts are related to the Helm v2 EOL.
+This version bump the version of charts used as dependency in a major. Kafka from 11.X.X to 12.X.X ([here](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-1220) you can see the changes introduced in this version) and common from 0.X.X to 1.X.X ([here](https://github.com/bitnami/charts/tree/main/bitnami/common#to-100) you can find the changes introduced in this version). Mainly the changes in both subcharts are related to the Helm v2 EOL.
 
 ### To 1.0.0
 

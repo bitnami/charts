@@ -351,7 +351,7 @@ controller:
       ##
       metricRelabelings: []
       ## @param controller.metrics.serviceMonitor.selector ServiceMonitor selector labels
-      ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
       ##
       ## selector:
       ##   prometheus: my-prometheus
@@ -949,7 +949,7 @@ server:
       ##
       metricRelabelings: []
       ## @param server.metrics.serviceMonitor.selector ServiceMonitor selector labels
-      ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
       ##
       ## selector:
       ##   prometheus: my-prometheus
@@ -1553,7 +1553,7 @@ repoServer:
       ##
       metricRelabelings: []
       ## @param repoServer.metrics.serviceMonitor.selector ServiceMonitor selector labels
-      ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
       ##
       ## selector:
       ##   prometheus: my-prometheus
@@ -2012,7 +2012,7 @@ dex:
       ##
       metricRelabelings: []
       ## @param dex.metrics.serviceMonitor.selector ServiceMonitor selector labels
-      ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
       ##
       ## selector:
       ##   prometheus: my-prometheus
