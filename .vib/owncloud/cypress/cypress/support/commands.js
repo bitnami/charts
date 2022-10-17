@@ -26,7 +26,7 @@ Cypress.Commands.add(
     cy.get('#password').type(password);
     cy.get('#submit').click();
     cy.get('body').then(($body) => {
-      if ($body.text().includes('A safe home')) {
+      if ($body.find('#closeWizard').length) {
         cy.get('#closeWizard').click();
       }
     });

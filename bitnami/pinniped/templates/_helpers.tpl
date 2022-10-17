@@ -107,6 +107,20 @@ Return the proper Supervisor fullname
 {{- end -}}
 
 {{/*
+Return the proper Supervisor fullname (with ns)
+*/}}
+{{- define "pinniped.supervisor.fullname.namespace" -}}
+{{- printf "%s-%s-%s" (include "common.names.fullname" .) "supervisor" (include "common.names.namespace" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Return the proper Supervisor API fullname
+*/}}
+{{- define "pinniped.supervisor.api.fullname" -}}
+{{- printf "%s-%s" (include "pinniped.supervisor.fullname" .) "api" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Get the Pinniped Supervisor configuration configmap.
 */}}
 {{- define "pinniped.supervisor.configmapName" -}}

@@ -30,4 +30,4 @@ sources:
   - https://github.com/argoproj/argo-cd/
   - https://github.com/bitnami/containers/tree/main/bitnami/dex
   - https://github.com/dexidp/dex
-version: 4.2.3
+version: 4.2.4

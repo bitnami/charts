@@ -1,3 +1,4 @@
+---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -11,129 +12,164 @@ spec:
   group: authentication.concierge.pinniped.dev
   names:
     categories:
-      - pinniped
-      - pinniped-authenticator
-      - pinniped-authenticators
+    - pinniped
+    - pinniped-authenticator
+    - pinniped-authenticators
     kind: JWTAuthenticator
     listKind: JWTAuthenticatorList
     plural: jwtauthenticators
     singular: jwtauthenticator
   scope: Cluster
   versions:
-    - additionalPrinterColumns:
-        - jsonPath: .spec.issuer
-          name: Issuer
-          type: string
-        - jsonPath: .spec.audience
-          name: Audience
-          type: string
-        - jsonPath: .metadata.creationTimestamp
-          name: Age
-          type: date
-      name: v1alpha1
-      schema:
-        openAPIV3Schema:
-          description: "JWTAuthenticator describes the configuration of a JWT authenticator. \n Upon receiving a signed JWT, a JWTAuthenticator will performs some validation on it (e.g., valid signature, existence of claims, etc.) and extract the username and groups from the token."
-          properties:
-            apiVersion:
-              description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-              type: string
-            kind:
-              description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-              type: string
-            metadata:
-              type: object
-            spec:
-              description: Spec for configuring the authenticator.
-              properties:
-                audience:
-                  description: Audience is the required value of the "aud" JWT claim.
-                  minLength: 1
-                  type: string
-                claims:
-                  description: Claims allows customization of the claims that will be mapped to user identity for Kubernetes access.
+  - additionalPrinterColumns:
+    - jsonPath: .spec.issuer
+      name: Issuer
+      type: string
+    - jsonPath: .spec.audience
+      name: Audience
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: "JWTAuthenticator describes the configuration of a JWT authenticator.
+          \n Upon receiving a signed JWT, a JWTAuthenticator will performs some validation
+          on it (e.g., valid signature, existence of claims, etc.) and extract the
+          username and groups from the token."
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: Spec for configuring the authenticator.
+            properties:
+              audience:
+                description: Audience is the required value of the "aud" JWT claim.
+                minLength: 1
+                type: string
+              claims:
+                description: Claims allows customization of the claims that will be
+                  mapped to user identity for Kubernetes access.
+                properties:
+                  groups:
+                    description: Groups is the name of the claim which should be read
+                      to extract the user's group membership from the JWT token. When
+                      not specified, it will default to "groups".
+                    type: string
+                  username:
+                    description: Username is the name of the claim which should be
+                      read to extract the username from the JWT token. When not specified,
+                      it will default to "username".
+                    type: string
+                type: object
+              issuer:
+                description: Issuer is the OIDC issuer URL that will be used to discover
+                  public signing keys. Issuer is also used to validate the "iss" JWT
+                  claim.
+                minLength: 1
+                pattern: ^https://
+                type: string
+              tls:
+                description: TLS configuration for communicating with the OIDC provider.
+                properties:
+                  certificateAuthorityData:
+                    description: X.509 Certificate Authority (base64-encoded PEM bundle).
+                      If omitted, a default set of system roots will be trusted.
+                    type: string
+                type: object
+            required:
+            - audience
+            - issuer
+            type: object
+          status:
+            description: Status of the authenticator.
+            properties:
+              conditions:
+                description: Represents the observations of the authenticator's current
+                  state.
+                items:
+                  description: Condition status of a resource (mirrored from the metav1.Condition
+                    type added in Kubernetes 1.19). In a future API version we can
+                    switch to using the upstream type. See https://github.com/kubernetes/apimachinery/blob/v0.19.0/pkg/apis/meta/v1/types.go#L1353-L1413.
                   properties:
-                    groups:
-                      description: Groups is the name of the claim which should be read to extract the user's group membership from the JWT token. When not specified, it will default to "groups".
+                    lastTransitionTime:
+                      description: lastTransitionTime is the last time the condition
+                        transitioned from one status to another. This should be when
+                        the underlying condition changed.  If that is not known, then
+                        using the time when the API field changed is acceptable.
+                      format: date-time
                       type: string
-                    username:
-                      description: Username is the name of the claim which should be read to extract the username from the JWT token. When not specified, it will default to "username".
+                    message:
+                      description: message is a human readable message indicating
+                        details about the transition. This may be an empty string.
+                      maxLength: 32768
                       type: string
+                    observedGeneration:
+                      description: observedGeneration represents the .metadata.generation
+                        that the condition was set based upon. For instance, if .metadata.generation
+                        is currently 12, but the .status.conditions[x].observedGeneration
+                        is 9, the condition is out of date with respect to the current
+                        state of the instance.
+                      format: int64
+                      minimum: 0
+                      type: integer
+                    reason:
+                      description: reason contains a programmatic identifier indicating
+                        the reason for the condition's last transition. Producers
+                        of specific condition types may define expected values and
+                        meanings for this field, and whether the values are considered
+                        a guaranteed API. The value should be a CamelCase string.
+                        This field may not be empty.
+                      maxLength: 1024
+                      minLength: 1
+                      pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
+                      type: string
+                    status:
+                      description: status of the condition, one of True, False, Unknown.
+                      enum:
+                      - "True"
+                      - "False"
+                      - Unknown
+                      type: string
+                    type:
+                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
+                        --- Many .condition.type values are consistent across resources
+                        like Available, but because arbitrary conditions can be useful
+                        (see .node.status.conditions), the ability to deconflict is
+                        important. The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      maxLength: 316
+                      pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - message
+                  - reason
+                  - status
+                  - type
                   type: object
-                issuer:
-                  description: Issuer is the OIDC issuer URL that will be used to discover public signing keys. Issuer is also used to validate the "iss" JWT claim.
-                  minLength: 1
-                  pattern: ^https://
-                  type: string
-                tls:
-                  description: TLS configuration for communicating with the OIDC provider.
-                  properties:
-                    certificateAuthorityData:
-                      description: X.509 Certificate Authority (base64-encoded PEM bundle). If omitted, a default set of system roots will be trusted.
-                      type: string
-                  type: object
-              required:
-                - audience
-                - issuer
-              type: object
-            status:
-              description: Status of the authenticator.
-              properties:
-                conditions:
-                  description: Represents the observations of the authenticator's current state.
-                  items:
-                    description: Condition status of a resource (mirrored from the metav1.Condition type added in Kubernetes 1.19). In a future API version we can switch to using the upstream type. See https://github.com/kubernetes/apimachinery/blob/v0.19.0/pkg/apis/meta/v1/types.go#L1353-L1413.
-                    properties:
-                      lastTransitionTime:
-                        description: lastTransitionTime is the last time the condition transitioned from one status to another. This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.
-                        format: date-time
-                        type: string
-                      message:
-                        description: message is a human readable message indicating details about the transition. This may be an empty string.
-                        maxLength: 32768
-                        type: string
-                      observedGeneration:
-                        description: observedGeneration represents the .metadata.generation that the condition was set based upon. For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date with respect to the current state of the instance.
-                        format: int64
-                        minimum: 0
-                        type: integer
-                      reason:
-                        description: reason contains a programmatic identifier indicating the reason for the condition's last transition. Producers of specific condition types may define expected values and meanings for this field, and whether the values are considered a guaranteed API. The value should be a CamelCase string. This field may not be empty.
-                        maxLength: 1024
-                        minLength: 1
-                        pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
-                        type: string
-                      status:
-                        description: status of the condition, one of True, False, Unknown.
-                        enum:
-                          - "True"
-                          - "False"
-                          - Unknown
-                        type: string
-                      type:
-                        description: type of condition in CamelCase or in foo.example.com/CamelCase. --- Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be useful (see .node.status.conditions), the ability to deconflict is important. The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
-                        maxLength: 316
-                        pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
-                        type: string
-                    required:
-                      - lastTransitionTime
-                      - message
-                      - reason
-                      - status
-                      - type
-                    type: object
-                  type: array
-                  x-kubernetes-list-map-keys:
-                    - type
-                  x-kubernetes-list-type: map
-              type: object
-          required:
-            - spec
-          type: object
-      served: true
-      storage: true
-      subresources:
-        status: {}
+                type: array
+                x-kubernetes-list-map-keys:
+                - type
+                x-kubernetes-list-type: map
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
 status:
   acceptedNames:
     kind: ""
@@ -154,111 +190,137 @@ spec:
   group: authentication.concierge.pinniped.dev
   names:
     categories:
-      - pinniped
-      - pinniped-authenticator
-      - pinniped-authenticators
+    - pinniped
+    - pinniped-authenticator
+    - pinniped-authenticators
     kind: WebhookAuthenticator
     listKind: WebhookAuthenticatorList
     plural: webhookauthenticators
     singular: webhookauthenticator
   scope: Cluster
   versions:
-    - additionalPrinterColumns:
-        - jsonPath: .spec.endpoint
-          name: Endpoint
-          type: string
-        - jsonPath: .metadata.creationTimestamp
-          name: Age
-          type: date
-      name: v1alpha1
-      schema:
-        openAPIV3Schema:
-          description: WebhookAuthenticator describes the configuration of a webhook authenticator.
-          properties:
-            apiVersion:
-              description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-              type: string
-            kind:
-              description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-              type: string
-            metadata:
-              type: object
-            spec:
-              description: Spec for configuring the authenticator.
-              properties:
-                endpoint:
-                  description: Webhook server endpoint URL.
-                  minLength: 1
-                  pattern: ^https://
-                  type: string
-                tls:
-                  description: TLS configuration.
+  - additionalPrinterColumns:
+    - jsonPath: .spec.endpoint
+      name: Endpoint
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: WebhookAuthenticator describes the configuration of a webhook
+          authenticator.
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: Spec for configuring the authenticator.
+            properties:
+              endpoint:
+                description: Webhook server endpoint URL.
+                minLength: 1
+                pattern: ^https://
+                type: string
+              tls:
+                description: TLS configuration.
+                properties:
+                  certificateAuthorityData:
+                    description: X.509 Certificate Authority (base64-encoded PEM bundle).
+                      If omitted, a default set of system roots will be trusted.
+                    type: string
+                type: object
+            required:
+            - endpoint
+            type: object
+          status:
+            description: Status of the authenticator.
+            properties:
+              conditions:
+                description: Represents the observations of the authenticator's current
+                  state.
+                items:
+                  description: Condition status of a resource (mirrored from the metav1.Condition
+                    type added in Kubernetes 1.19). In a future API version we can
+                    switch to using the upstream type. See https://github.com/kubernetes/apimachinery/blob/v0.19.0/pkg/apis/meta/v1/types.go#L1353-L1413.
                   properties:
-                    certificateAuthorityData:
-                      description: X.509 Certificate Authority (base64-encoded PEM bundle). If omitted, a default set of system roots will be trusted.
+                    lastTransitionTime:
+                      description: lastTransitionTime is the last time the condition
+                        transitioned from one status to another. This should be when
+                        the underlying condition changed.  If that is not known, then
+                        using the time when the API field changed is acceptable.
+                      format: date-time
                       type: string
+                    message:
+                      description: message is a human readable message indicating
+                        details about the transition. This may be an empty string.
+                      maxLength: 32768
+                      type: string
+                    observedGeneration:
+                      description: observedGeneration represents the .metadata.generation
+                        that the condition was set based upon. For instance, if .metadata.generation
+                        is currently 12, but the .status.conditions[x].observedGeneration
+                        is 9, the condition is out of date with respect to the current
+                        state of the instance.
+                      format: int64
+                      minimum: 0
+                      type: integer
+                    reason:
+                      description: reason contains a programmatic identifier indicating
+                        the reason for the condition's last transition. Producers
+                        of specific condition types may define expected values and
+                        meanings for this field, and whether the values are considered
+                        a guaranteed API. The value should be a CamelCase string.
+                        This field may not be empty.
+                      maxLength: 1024
+                      minLength: 1
+                      pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
+                      type: string
+                    status:
+                      description: status of the condition, one of True, False, Unknown.
+                      enum:
+                      - "True"
+                      - "False"
+                      - Unknown
+                      type: string
+                    type:
+                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
+                        --- Many .condition.type values are consistent across resources
+                        like Available, but because arbitrary conditions can be useful
+                        (see .node.status.conditions), the ability to deconflict is
+                        important. The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      maxLength: 316
+                      pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - message
+                  - reason
+                  - status
+                  - type
                   type: object
-              required:
-                - endpoint
-              type: object
-            status:
-              description: Status of the authenticator.
-              properties:
-                conditions:
-                  description: Represents the observations of the authenticator's current state.
-                  items:
-                    description: Condition status of a resource (mirrored from the metav1.Condition type added in Kubernetes 1.19). In a future API version we can switch to using the upstream type. See https://github.com/kubernetes/apimachinery/blob/v0.19.0/pkg/apis/meta/v1/types.go#L1353-L1413.
-                    properties:
-                      lastTransitionTime:
-                        description: lastTransitionTime is the last time the condition transitioned from one status to another. This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.
-                        format: date-time
-                        type: string
-                      message:
-                        description: message is a human readable message indicating details about the transition. This may be an empty string.
-                        maxLength: 32768
-                        type: string
-                      observedGeneration:
-                        description: observedGeneration represents the .metadata.generation that the condition was set based upon. For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date with respect to the current state of the instance.
-                        format: int64
-                        minimum: 0
-                        type: integer
-                      reason:
-                        description: reason contains a programmatic identifier indicating the reason for the condition's last transition. Producers of specific condition types may define expected values and meanings for this field, and whether the values are considered a guaranteed API. The value should be a CamelCase string. This field may not be empty.
-                        maxLength: 1024
-                        minLength: 1
-                        pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
-                        type: string
-                      status:
-                        description: status of the condition, one of True, False, Unknown.
-                        enum:
-                          - "True"
-                          - "False"
-                          - Unknown
-                        type: string
-                      type:
-                        description: type of condition in CamelCase or in foo.example.com/CamelCase. --- Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be useful (see .node.status.conditions), the ability to deconflict is important. The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
-                        maxLength: 316
-                        pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
-                        type: string
-                    required:
-                      - lastTransitionTime
-                      - message
-                      - reason
-                      - status
-                      - type
-                    type: object
-                  type: array
-                  x-kubernetes-list-map-keys:
-                    - type
-                  x-kubernetes-list-type: map
-              type: object
-          required:
-            - spec
-          type: object
-      served: true
-      storage: true
-      subresources:
-        status: {}
+                type: array
+                x-kubernetes-list-map-keys:
+                - type
+                x-kubernetes-list-type: map
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
 status:
   acceptedNames:
     kind: ""
@@ -279,198 +341,234 @@ spec:
   group: config.concierge.pinniped.dev
   names:
     categories:
-      - pinniped
+    - pinniped
     kind: CredentialIssuer
     listKind: CredentialIssuerList
     plural: credentialissuers
     singular: credentialissuer
   scope: Cluster
   versions:
-    - additionalPrinterColumns:
-        - jsonPath: .spec.impersonationProxy.mode
-          name: ProxyMode
-          type: string
-        - jsonPath: .status.strategies[?(@.status == "Success")].type
-          name: DefaultStrategy
-          type: string
-        - jsonPath: .metadata.creationTimestamp
-          name: Age
-          type: date
-      name: v1alpha1
-      schema:
-        openAPIV3Schema:
-          description: CredentialIssuer describes the configuration and status of the Pinniped Concierge credential issuer.
-          properties:
-            apiVersion:
-              description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-              type: string
-            kind:
-              description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-              type: string
-            metadata:
-              type: object
-            spec:
-              description: Spec describes the intended configuration of the Concierge.
-              properties:
-                impersonationProxy:
-                  description: ImpersonationProxy describes the intended configuration of the Concierge impersonation proxy.
-                  properties:
-                    externalEndpoint:
-                      description: "ExternalEndpoint describes the HTTPS endpoint where the proxy will be exposed. If not set, the proxy will be served using the external name of the LoadBalancer service or the cluster service DNS name. \n This field must be non-empty when spec.impersonationProxy.service.type is \"None\"."
-                      type: string
-                    mode:
-                      description: 'Mode configures whether the impersonation proxy should be started: - "disabled" explicitly disables the impersonation proxy. This is the default. - "enabled" explicitly enables the impersonation proxy. - "auto" enables or disables the impersonation proxy based upon the cluster in which it is running.'
-                      enum:
-                        - auto
-                        - enabled
-                        - disabled
-                      type: string
-                    service:
-                      default:
-                        type: LoadBalancer
-                      description: Service describes the configuration of the Service provisioned to expose the impersonation proxy to clients.
-                      properties:
-                        annotations:
-                          additionalProperties:
-                            type: string
-                          description: Annotations specifies zero or more key/value pairs to set as annotations on the provisioned Service.
-                          type: object
-                        loadBalancerIP:
-                          description: LoadBalancerIP specifies the IP address to set in the spec.loadBalancerIP field of the provisioned Service. This is not supported on all cloud providers.
-                          maxLength: 255
-                          minLength: 1
-                          type: string
-                        type:
-                          default: LoadBalancer
-                          description: "Type specifies the type of Service to provision for the impersonation proxy. \n If the type is \"None\", then the \"spec.impersonationProxy.externalEndpoint\" field must be set to a non-empty value so that the Concierge can properly advertise the endpoint in the CredentialIssuer's status."
-                          enum:
-                            - LoadBalancer
-                            - ClusterIP
-                            - None
-                          type: string
-                      type: object
-                  required:
-                    - mode
-                    - service
-                  type: object
-              required:
-                - impersonationProxy
-              type: object
-            status:
-              description: CredentialIssuerStatus describes the status of the Concierge.
-              properties:
-                kubeConfigInfo:
-                  description: Information needed to form a valid Pinniped-based kubeconfig using this credential issuer. This field is deprecated and will be removed in a future version.
-                  properties:
-                    certificateAuthorityData:
-                      description: The K8s API server CA bundle.
-                      minLength: 1
-                      type: string
-                    server:
-                      description: The K8s API server URL.
-                      minLength: 1
-                      pattern: ^https://|^http://
-                      type: string
-                  required:
-                    - certificateAuthorityData
-                    - server
-                  type: object
-                strategies:
-                  description: List of integration strategies that were attempted by Pinniped.
-                  items:
-                    description: CredentialIssuerStrategy describes the status of an integration strategy that was attempted by Pinniped.
+  - additionalPrinterColumns:
+    - jsonPath: .spec.impersonationProxy.mode
+      name: ProxyMode
+      type: string
+    - jsonPath: .status.strategies[?(@.status == "Success")].type
+      name: DefaultStrategy
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: CredentialIssuer describes the configuration and status of the
+          Pinniped Concierge credential issuer.
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: Spec describes the intended configuration of the Concierge.
+            properties:
+              impersonationProxy:
+                description: ImpersonationProxy describes the intended configuration
+                  of the Concierge impersonation proxy.
+                properties:
+                  externalEndpoint:
+                    description: "ExternalEndpoint describes the HTTPS endpoint where
+                      the proxy will be exposed. If not set, the proxy will be served
+                      using the external name of the LoadBalancer service or the cluster
+                      service DNS name. \n This field must be non-empty when spec.impersonationProxy.service.type
+                      is \"None\"."
+                    type: string
+                  mode:
+                    description: 'Mode configures whether the impersonation proxy
+                      should be started: - "disabled" explicitly disables the impersonation
+                      proxy. This is the default. - "enabled" explicitly enables the
+                      impersonation proxy. - "auto" enables or disables the impersonation
+                      proxy based upon the cluster in which it is running.'
+                    enum:
+                    - auto
+                    - enabled
+                    - disabled
+                    type: string
+                  service:
+                    default:
+                      type: LoadBalancer
+                    description: Service describes the configuration of the Service
+                      provisioned to expose the impersonation proxy to clients.
                     properties:
-                      frontend:
-                        description: Frontend describes how clients can connect using this strategy.
-                        properties:
-                          impersonationProxyInfo:
-                            description: ImpersonationProxyInfo describes the parameters for the impersonation proxy on this Concierge. This field is only set when Type is "ImpersonationProxy".
-                            properties:
-                              certificateAuthorityData:
-                                description: CertificateAuthorityData is the base64-encoded PEM CA bundle of the impersonation proxy.
-                                minLength: 1
-                                type: string
-                              endpoint:
-                                description: Endpoint is the HTTPS endpoint of the impersonation proxy.
-                                minLength: 1
-                                pattern: ^https://
-                                type: string
-                            required:
-                              - certificateAuthorityData
-                              - endpoint
-                            type: object
-                          tokenCredentialRequestInfo:
-                            description: TokenCredentialRequestAPIInfo describes the parameters for the TokenCredentialRequest API on this Concierge. This field is only set when Type is "TokenCredentialRequestAPI".
-                            properties:
-                              certificateAuthorityData:
-                                description: CertificateAuthorityData is the base64-encoded Kubernetes API server CA bundle.
-                                minLength: 1
-                                type: string
-                              server:
-                                description: Server is the Kubernetes API server URL.
-                                minLength: 1
-                                pattern: ^https://|^http://
-                                type: string
-                            required:
-                              - certificateAuthorityData
-                              - server
-                            type: object
-                          type:
-                            description: Type describes which frontend mechanism clients can use with a strategy.
-                            enum:
-                              - TokenCredentialRequestAPI
-                              - ImpersonationProxy
-                            type: string
-                        required:
-                          - type
+                      annotations:
+                        additionalProperties:
+                          type: string
+                        description: Annotations specifies zero or more key/value
+                          pairs to set as annotations on the provisioned Service.
                         type: object
-                      lastUpdateTime:
-                        description: When the status was last checked.
-                        format: date-time
-                        type: string
-                      message:
-                        description: Human-readable description of the current status.
+                      loadBalancerIP:
+                        description: LoadBalancerIP specifies the IP address to set
+                          in the spec.loadBalancerIP field of the provisioned Service.
+                          This is not supported on all cloud providers.
+                        maxLength: 255
                         minLength: 1
                         type: string
-                      reason:
-                        description: Reason for the current status.
-                        enum:
-                          - Listening
-                          - Pending
-                          - Disabled
-                          - ErrorDuringSetup
-                          - CouldNotFetchKey
-                          - CouldNotGetClusterInfo
-                          - FetchedKey
-                        type: string
-                      status:
-                        description: Status of the attempted integration strategy.
-                        enum:
-                          - Success
-                          - Error
-                        type: string
                       type:
-                        description: Type of integration attempted.
+                        default: LoadBalancer
+                        description: "Type specifies the type of Service to provision
+                          for the impersonation proxy. \n If the type is \"None\",
+                          then the \"spec.impersonationProxy.externalEndpoint\" field
+                          must be set to a non-empty value so that the Concierge can
+                          properly advertise the endpoint in the CredentialIssuer's
+                          status."
                         enum:
-                          - KubeClusterSigningCertificate
-                          - ImpersonationProxy
+                        - LoadBalancer
+                        - ClusterIP
+                        - None
                         type: string
-                    required:
-                      - lastUpdateTime
-                      - message
-                      - reason
-                      - status
-                      - type
                     type: object
-                  type: array
-              required:
-                - strategies
-              type: object
-          type: object
-      served: true
-      storage: true
-      subresources:
-        status: {}
+                required:
+                - mode
+                - service
+                type: object
+            required:
+            - impersonationProxy
+            type: object
+          status:
+            description: CredentialIssuerStatus describes the status of the Concierge.
+            properties:
+              kubeConfigInfo:
+                description: Information needed to form a valid Pinniped-based kubeconfig
+                  using this credential issuer. This field is deprecated and will
+                  be removed in a future version.
+                properties:
+                  certificateAuthorityData:
+                    description: The K8s API server CA bundle.
+                    minLength: 1
+                    type: string
+                  server:
+                    description: The K8s API server URL.
+                    minLength: 1
+                    pattern: ^https://|^http://
+                    type: string
+                required:
+                - certificateAuthorityData
+                - server
+                type: object
+              strategies:
+                description: List of integration strategies that were attempted by
+                  Pinniped.
+                items:
+                  description: CredentialIssuerStrategy describes the status of an
+                    integration strategy that was attempted by Pinniped.
+                  properties:
+                    frontend:
+                      description: Frontend describes how clients can connect using
+                        this strategy.
+                      properties:
+                        impersonationProxyInfo:
+                          description: ImpersonationProxyInfo describes the parameters
+                            for the impersonation proxy on this Concierge. This field
+                            is only set when Type is "ImpersonationProxy".
+                          properties:
+                            certificateAuthorityData:
+                              description: CertificateAuthorityData is the base64-encoded
+                                PEM CA bundle of the impersonation proxy.
+                              minLength: 1
+                              type: string
+                            endpoint:
+                              description: Endpoint is the HTTPS endpoint of the impersonation
+                                proxy.
+                              minLength: 1
+                              pattern: ^https://
+                              type: string
+                          required:
+                          - certificateAuthorityData
+                          - endpoint
+                          type: object
+                        tokenCredentialRequestInfo:
+                          description: TokenCredentialRequestAPIInfo describes the
+                            parameters for the TokenCredentialRequest API on this
+                            Concierge. This field is only set when Type is "TokenCredentialRequestAPI".
+                          properties:
+                            certificateAuthorityData:
+                              description: CertificateAuthorityData is the base64-encoded
+                                Kubernetes API server CA bundle.
+                              minLength: 1
+                              type: string
+                            server:
+                              description: Server is the Kubernetes API server URL.
+                              minLength: 1
+                              pattern: ^https://|^http://
+                              type: string
+                          required:
+                          - certificateAuthorityData
+                          - server
+                          type: object
+                        type:
+                          description: Type describes which frontend mechanism clients
+                            can use with a strategy.
+                          enum:
+                          - TokenCredentialRequestAPI
+                          - ImpersonationProxy
+                          type: string
+                      required:
+                      - type
+                      type: object
+                    lastUpdateTime:
+                      description: When the status was last checked.
+                      format: date-time
+                      type: string
+                    message:
+                      description: Human-readable description of the current status.
+                      minLength: 1
+                      type: string
+                    reason:
+                      description: Reason for the current status.
+                      enum:
+                      - Listening
+                      - Pending
+                      - Disabled
+                      - ErrorDuringSetup
+                      - CouldNotFetchKey
+                      - CouldNotGetClusterInfo
+                      - FetchedKey
+                      type: string
+                    status:
+                      description: Status of the attempted integration strategy.
+                      enum:
+                      - Success
+                      - Error
+                      type: string
+                    type:
+                      description: Type of integration attempted.
+                      enum:
+                      - KubeClusterSigningCertificate
+                      - ImpersonationProxy
+                      type: string
+                  required:
+                  - lastUpdateTime
+                  - message
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
+            required:
+            - strategies
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
 status:
   acceptedNames:
     kind: ""
