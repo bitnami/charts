@@ -4,9 +4,9 @@ dependencies:
   version: 11.3.3
 - name: elasticsearch
   repository: https://charts.bitnami.com/bitnami
-  version: 19.4.3
+  version: 19.4.4
 - name: common
   repository: https://charts.bitnami.com/bitnami
   version: 2.0.3
-digest: sha256:a77bb6d461e21e486d139d9030023c174ef850e44bd05dd4dcc048b11a8cbaf8
-generated: "2022-10-13T03:07:32.909962566Z"
+digest: sha256:99bac8867c035483bc67410a8a080ce82d0e781c8964c6ed3406c2baf4fe0950
+generated: "2022-10-17T10:51:36.893120561Z"
