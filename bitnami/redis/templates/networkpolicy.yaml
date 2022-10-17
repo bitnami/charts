@@ -55,7 +55,7 @@ spec:
         {{- if or .Values.networkPolicy.ingressNSMatchLabels .Values.networkPolicy.ingressNSPodMatchLabels }}
         - namespaceSelector:
             matchLabels:
-              {{- if or .Values.networkPolicy.ingressNSMatchLabels }}
+              {{- if .Values.networkPolicy.ingressNSMatchLabels }}
                 {{- range $key, $value := .Values.networkPolicy.ingressNSMatchLabels }}
                 {{ $key | quote }}: {{ $value | quote }}
                 {{- end }}
