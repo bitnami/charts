@@ -8,7 +8,7 @@ The tests described here are _deployment_ tests since their goal is to verify th
 * The core asset features work properly when deployed
 * There are no regression bugs
 
-Before writing any test scenario, understand the primary purpose of the chart. Take a look at [the documentation about the chart under test](https://github.com/bitnami/charts/tree/master/bitnami) as well as the [docker image documentation](https://github.com/bitnami?q=docker&type=all&language=&sort=). This will give you a solid base for creating valuable test scenarios.
+Before writing any test scenario, understand the primary purpose of the chart. Take a look at [the documentation about the chart under test](https://github.com/bitnami/charts/tree/main/bitnami) as well as the [docker image documentation](https://github.com/bitnami?q=docker&type=all&language=&sort=). This will give you a solid base for creating valuable test scenarios.
 
 ## Common test cases
 

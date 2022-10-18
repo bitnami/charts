@@ -175,7 +175,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           path: ~/artifacts
-      # If we perform a checkout of the master branch, we will find conflicts with the submodules
+      # If we perform a checkout of the main branch, we will find conflicts with the submodules
       - uses: actions/checkout@v3
         with:
           ref: 'index'
