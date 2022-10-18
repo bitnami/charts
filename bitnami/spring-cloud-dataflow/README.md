@@ -7,7 +7,7 @@ Spring Cloud Data Flow is a microservices-based toolkit for building streaming a
 [Overview of Spring Cloud Data Flow](https://github.com/spring-cloud/spring-cloud-dataflow)
 
 
-                           
+
 ## TL;DR
 
 ```bash
@@ -670,7 +670,7 @@ If you enabled RabbitMQ chart to be used as the messaging solution for Skipper t
 
 ### To 14.0.0
 
-This major updates the RabbitMQ subchart to its newest major, 11.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/rabbitmq#to-1100) you can find more information about the changes introduced in that version.
+This major updates the RabbitMQ subchart to its newest major, 11.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq#to-1100) you can find more information about the changes introduced in that version.
 
 ### To 13.0.0
 
