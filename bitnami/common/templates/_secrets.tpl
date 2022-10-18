@@ -93,7 +93,7 @@ The order in which this function returns a secret password:
 {{- $secretData := (lookup "v1" "Secret" $.context.Release.Namespace .secret).data }}
 {{- if $secretData }}
   {{- if hasKey $secretData .key }}
-    {{- $password = index $secretData .key }}
+    {{- $password = index $secretData .key | quote }}
   {{- else }}
     {{- printf "\nPASSWORDS ERROR: The secret \"%s\" does not contain the key \"%s\"\n" .secret .key | fail -}}
   {{- end -}}
