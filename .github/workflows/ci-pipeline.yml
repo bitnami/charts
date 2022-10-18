@@ -143,7 +143,7 @@ jobs:
       # Approved by the 'github-actions' user; a PR can't be approved by its author
       - name: PR approval
         if: ${{ needs.vib-verify.result == 'success' }}
-        uses: hmarr/auto-approve-action@v2.4.0
+        uses: hmarr/auto-approve-action@v3.0.0
         with:
           pull-request-number: ${{ github.event.number }}
       # If the CI did not succeed ('VIB Verify' failed or skipped),
