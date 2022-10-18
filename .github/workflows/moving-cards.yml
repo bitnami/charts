@@ -66,27 +66,14 @@ jobs:
           remove-labels: on-hold, in-progress, triage, solved
       - name: Verify labeling
         # Only if moved into bitnami column and the PR is ready for review
-        # This step uses a github-script to add the label intentionally.
-        # Consecutive calls to fmulero/labeler@1.0.5 can remove previous assigned labels, see https://github.com/fmulero/labeler/pulls/2
+        # Consecutive calls were fixed in fmulero/labeler@1.0.5, see https://github.com/fmulero/labeler/pull/2
         if: |
           github.event.project_card.column_id == env.BITNAMI_COLUMN_ID &&
           needs.get-issue.outputs.type == 'pull_request' && needs.get-issue.outputs.draft == 'false'
-        uses: actions/github-script@v6
+        uses: fmulero/labeler@1.0.5
         with:
-          # Required to trigger CI workflow
-          github-token: ${{ secrets.BITNAMI_BOT_TOKEN }}
-          script: |
-            try {
-              await github.rest.issues.addLabels({
-                owner: context.payload.repository.owner.login,
-                repo: context.payload.repository.name,
-                issue_number: ${{ needs.get-issue.outputs.number }},
-                labels: ['verify']
-              })
-              core.info(`Updated labels in ${{ needs.get-issue.outputs.number }}. Added: 'verify'`)
-            } catch (error) {
-              core.setFailed(error.message)
-            }
+          repo-token: ${{ secrets.BITNAMI_BOT_TOKEN }}
+          add-labels: verify
       - name: Build Maintenance labeling
         if: ${{ github.event.project_card.column_id == env.BUILD_MAINTENANCE_COLUMN_ID }}
         uses: fmulero/labeler@1.0.5
