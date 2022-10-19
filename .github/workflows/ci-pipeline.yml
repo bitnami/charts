@@ -115,7 +115,6 @@ jobs:
         with:
           pipeline: ${{ needs.get-chart.outputs.chart }}/vib-verify.json
           verification-mode: ${{ steps.get-asset-vib-config.outputs.verification_mode }}
-          retry-count: 6
         env:
           # Target-Platform used by default
           VIB_ENV_TARGET_PLATFORM: ${{ secrets.VIB_ENV_TARGET_PLATFORM }}

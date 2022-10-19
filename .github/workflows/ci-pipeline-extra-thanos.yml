@@ -32,6 +32,5 @@ jobs:
       - uses: vmware-labs/vmware-image-builder-action@main
         with:
           pipeline: thanos/bucketweb/vib-verify.json
-          retry-count: 6
         env:
           VIB_ENV_TARGET_PLATFORM: ${{ secrets.VIB_ENV_TARGET_PLATFORM }}
