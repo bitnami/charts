@@ -491,6 +491,9 @@ data:
     [[ -f "$REDIS_PASSWORD_FILE" ]] && export REDISCLI_AUTH="$(< "${REDIS_PASSWORD_FILE}")"
 
     if ! failover_finished; then
+        echo "I am the master pod and you are stopping me. Stopping client connections"
+        # if I am the master, issue a command to failover once and then wait for the failover to finish
+        run_redis_command CLIENT PAUSE "{{ mul (sub .Values.sentinel.terminationGracePeriodSeconds 10) 1000 }}" WRITE
         echo "Waiting for sentinel to run failover for up to {{ sub .Values.sentinel.terminationGracePeriodSeconds 10 }}s"
         retry_while "failover_finished" "{{ sub .Values.sentinel.terminationGracePeriodSeconds 10 }}" 1
     else
