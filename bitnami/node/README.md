@@ -108,7 +108,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------- |
 | `image.registry`                              | NodeJS image registry                                                                                                    | `docker.io`            |
 | `image.repository`                            | NodeJS image repository                                                                                                  | `bitnami/node`         |
-| `image.tag`                                   | NodeJS image tag (immutable tags are recommended)                                                                        | `16.17.1-debian-11-r0` |
+| `image.tag`                                   | NodeJS image tag (immutable tags are recommended)                                                                        | `16.18.0-debian-11-r0` |
 | `image.digest`                                | NodeJS image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                   | `""`                   |
 | `image.pullPolicy`                            | NodeJS image pull policy                                                                                                 | `IfNotPresent`         |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                         | `[]`                   |
@@ -182,7 +182,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------ | --------------------------------------------------------------------------------------------------- | -------------------------------------------- |
 | `git.image.registry`           | Git image registry                                                                                  | `docker.io`                                  |
 | `git.image.repository`         | Git image repository                                                                                | `bitnami/git`                                |
-| `git.image.tag`                | Git image tag (immutable tags are recommended)                                                      | `2.37.3-debian-11-r8`                        |
+| `git.image.tag`                | Git image tag (immutable tags are recommended)                                                      | `2.38.0-debian-11-r2`                        |
 | `git.image.digest`             | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                         |
 | `git.image.pullPolicy`         | Git image pull policy                                                                               | `IfNotPresent`                               |
 | `git.image.pullSecrets`        | Specify docker-registry secret names as an array                                                    | `[]`                                         |
@@ -200,7 +200,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory                                                       | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r37`      |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r41`      |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
@@ -409,7 +409,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 19.0.0
 
-This major updates the MongoDB&reg; subchart to its newest major, [13.0.0](https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-1300). No major issues are expected during the upgrade.
+This major updates the MongoDB&reg; subchart to its newest major, [13.0.0](https://github.com/bitnami/charts/tree/main/bitnami/mongodb#to-1300). No major issues are expected during the upgrade.
 
 ### To 18.0.0
 
@@ -425,7 +425,7 @@ Affected values:
 
 Also MongoDB&reg; subchart container images were updated to 5.0.x and it can affect compatibility with older versions of MongoDB&reg;.
 
-- https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-1200
+- https://github.com/bitnami/charts/tree/main/bitnami/mongodb#to-1200
 
 ### To 17.0.0
 
@@ -447,7 +447,7 @@ This version standardizes the way of defining Ingress rules. When configuring a 
 - Move dependency information from the *requirements.yaml* to the *Chart.yaml*
 - After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
-- MongoDB&reg; dependency version was bumped to a new major version `10.X.X`. Check [MongoDB&reg; Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-1000) for more information.
+- MongoDB&reg; dependency version was bumped to a new major version `10.X.X`. Check [MongoDB&reg; Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/mongodb#to-1000) for more information.
 - Inclusion of the`bitnami/common` library chart and standardization to include common features found on other charts.
 - `securityContext.*` is deprecated in favor of `podSecurityContext` and `containerSecurityContext`.
 - `replicas` is deprecated in favor of `replicaCount`.
@@ -468,13 +468,13 @@ This version standardizes the way of defining Ingress rules. When configuring a 
 
 MongoDB&reg; subchart container images were updated to 4.4.x and it can affect compatibility with older versions of MongoDB&reg;.
 
-- https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-900
+- https://github.com/bitnami/charts/tree/main/bitnami/mongodb#to-900
 
 ### To 12.0.0
 
 Backwards compatibility is not guaranteed since breaking changes were included in MongoDB&reg; subchart. More information in the link below:
 
-- https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-800
+- https://github.com/bitnami/charts/tree/main/bitnami/mongodb#to-800
 
 ### To 7.0.0
 

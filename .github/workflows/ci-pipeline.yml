@@ -7,8 +7,8 @@ on: # rebuild any PRs and main branch changes
       - synchronize
       - labeled
     branches:
-      - master
-      - bitnami:master
+      - main
+      - bitnami:main
 permissions:
   issues: write
   pull-requests: write
@@ -75,7 +75,7 @@ jobs:
       - id: show-error
         name: Show error
         if: ${{ steps.get-chart.outputs.result == 'fail' }}
-        uses: actions/github-script@v3
+        uses: actions/github-script@v6
         with:
           script: |
             core.setFailed('${{ steps.get-chart.outputs.error }}')
@@ -93,15 +93,28 @@ jobs:
       )
     name: VIB Verify
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         name: Checkout Repository
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
+      - id: get-asset-vib-config
+        name: Get asset-specific configuration for VIB action
+        run: |
+          config_file=".vib/${{ needs.get-chart.outputs.chart }}/vib-action.config"
+
+          # Supported configuration customizations and default values
+          verification_mode="PARALLEL"
+
+          if [[ -f $config_file ]]; then
+            verification_mode="$(cat $config_file | grep 'verification-mode' | cut -d'=' -f2)"
+          fi
+          echo "::set-output name=verification_mode::${verification_mode}"
       - uses: vmware-labs/vmware-image-builder-action@main
         name: Verify ${{ needs.get-chart.outputs.chart }}
         with:
           pipeline: ${{ needs.get-chart.outputs.chart }}/vib-verify.json
+          verification-mode: ${{ steps.get-asset-vib-config.outputs.verification_mode }}
         env:
           # Target-Platform used by default
           VIB_ENV_TARGET_PLATFORM: ${{ secrets.VIB_ENV_TARGET_PLATFORM }}
@@ -130,7 +143,7 @@ jobs:
       # Approved by the 'github-actions' user; a PR can't be approved by its author
       - name: PR approval
         if: ${{ needs.vib-verify.result == 'success' }}
-        uses: hmarr/auto-approve-action@v2.4.0
+        uses: hmarr/auto-approve-action@v3.0.0
         with:
           pull-request-number: ${{ github.event.number }}
       # If the CI did not succeed ('VIB Verify' failed or skipped),

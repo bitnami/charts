@@ -31,4 +31,4 @@ maintainers:
 name: kubeapps
 sources:
   - https://github.com/vmware-tanzu/kubeapps
-version: 11.0.0
+version: 11.0.1

@@ -31,7 +31,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.10.8-debian-11-r4
+  tag: 3.11.2-debian-11-r0
   digest: ""
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
@@ -1060,6 +1060,8 @@ ingress:
   ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
   ##
   ingressClassName: ""
+  ## @param ingress.existingSecret It is you own the certificate as secret.
+  existingSecret: ""
 
 ## Network Policy configuration
 ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
@@ -1152,7 +1154,7 @@ metrics:
     ##
     path: ""
     ## @param metrics.serviceMonitor.selector ServiceMonitor selector labels
-    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ##
     ## selector:
     ##   prometheus: my-prometheus
@@ -1260,7 +1262,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r38
+    tag: 11-debian-11-r43
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
