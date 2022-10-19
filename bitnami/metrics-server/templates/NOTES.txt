@@ -42,7 +42,7 @@ Option A:
 
   You complete your metrics-server release by running:
 
-  helm upgrade --namespace {{ include "common.names.namespace" . }} {{ .Release.Name }} bitnami/metrics-server \
+  helm upgrade --namespace {{ include "common.names.namespace" . }} {{ .Release.Name }} my-repo/metrics-server \
     --set apiService.create=true
 
 Option B:

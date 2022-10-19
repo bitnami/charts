@@ -17,6 +17,7 @@ jobs:
       author: ${{ steps.get-issue-step.outputs.author }}
       type: ${{ steps.get-issue-step.outputs.type }}
       draft: ${{ steps.get-issue-step.outputs.draft }}
+      number: ${{ steps.get-issue-step.outputs.number }}
     steps:
       - name: Get issue info
         id: get-issue-step
@@ -26,6 +27,7 @@ jobs:
           author="$(echo $issue_info | jq -r '.user.login')"
           pull_request="$(echo $issue_info | jq -r '.pull_request')"
           draft="$(echo $issue_info | jq -r '.draft' | sed -r "s|null|false|g")"
+          number="$(echo $issue_info | jq -r '.number')"
           type="pull_request"
           if [[ "${pull_request}" == "null" ]]; then
             type="issue"
@@ -34,6 +36,7 @@ jobs:
           echo "::set-output name=author::${author}"
           echo "::set-output name=type::${type}"
           echo "::set-output name=draft::${draft}"
+          echo "::set-output name=number::${number}"
   label-card:
     runs-on: ubuntu-latest
     needs:
@@ -44,50 +47,50 @@ jobs:
         with:
           fetch-depth: 1
       - name: Load .env file
-        uses: xom9ikk/dotenv@v1.0.2
+        uses: xom9ikk/dotenv@v2
         with:
           path: .github/workflows/
       # Now handling the needed labeling
       - name: Triage labeling
         # Only if moved into triage
         if: ${{ github.event.project_card.column_id == env.TRIAGE_COLUMN_ID }}
-        uses: andymckay/labeler@1.0.4
+        uses: fmulero/labeler@1.0.5
         with:
           add-labels: triage
           remove-labels: on-hold, in-progress, solved
       - name: From Bitnami labeling
         if: ${{ github.event.project_card.column_id == env.BITNAMI_COLUMN_ID }}
-        uses: andymckay/labeler@1.0.4
+        uses: fmulero/labeler@1.0.5
         with:
           add-labels: ${{ (needs.get-issue.outputs.author == 'bitnami-bot' && needs.get-issue.outputs.type == 'pull_request') && 'automated, auto-merge' || 'bitnami' }}
           remove-labels: on-hold, in-progress, triage, solved
       - name: Verify labeling
         # Only if moved into bitnami column and the PR is ready for review
+        # Consecutive calls were fixed in fmulero/labeler@1.0.5, see https://github.com/fmulero/labeler/pull/2
         if: |
           github.event.project_card.column_id == env.BITNAMI_COLUMN_ID &&
           needs.get-issue.outputs.type == 'pull_request' && needs.get-issue.outputs.draft == 'false'
-        uses: andymckay/labeler@1.0.4
+        uses: fmulero/labeler@1.0.5
         with:
-          add-labels: verify
-          # Required to trigger CI workflow
           repo-token: ${{ secrets.BITNAMI_BOT_TOKEN }}
+          add-labels: verify
       - name: Build Maintenance labeling
         if: ${{ github.event.project_card.column_id == env.BUILD_MAINTENANCE_COLUMN_ID }}
-        uses: andymckay/labeler@1.0.4
+        uses: fmulero/labeler@1.0.5
         with:
           add-labels: review-required
           remove-labels: auto-merge
       - name: On hold labeling
         # Only if moved into on hold
         if: ${{ github.event.project_card.column_id == env.ON_HOLD_COLUMN_ID  }}
-        uses: andymckay/labeler@1.0.4
+        uses: fmulero/labeler@1.0.5
         with:
           add-labels: on-hold
           remove-labels: triage, in-progress, solved
       - name: In progress labeling
         # Only if moved into In progress
         if: ${{ github.event.project_card.column_id == env.IN_PROGRESS_COLUMN_ID  }}
-        uses: andymckay/labeler@1.0.4
+        uses: fmulero/labeler@1.0.5
         with:
           add-labels: in-progress
           remove-labels: on-hold, triage, solved
@@ -96,7 +99,7 @@ jobs:
         if: |
           github.event.project_card.column_id == env.SOLVED_COLUMN_ID &&
           (needs.get-issue.outputs.author != 'bitnami-bot')
-        uses: andymckay/labeler@1.0.4
+        uses: fmulero/labeler@1.0.5
         with:
           add-labels: solved
           # Triage is not on the list to know how many issues/PRs are solved
@@ -115,7 +118,7 @@ jobs:
         with:
           fetch-depth: 1
       - name: Load .env file
-        uses: xom9ikk/dotenv@v1.0.2
+        uses: xom9ikk/dotenv@v2
         with:
           path: .github/workflows/
       - name: Assign to a person to work on it

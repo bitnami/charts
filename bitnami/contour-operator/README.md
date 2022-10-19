@@ -7,12 +7,12 @@ The Contour Operator extends the Kubernetes API to create, configure and manage 
 [Overview of Contour Operator](https://github.com/projectcontour/contour-operator)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/contour-operator
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/contour-operator
 ```
 
 ## Introduction
@@ -33,7 +33,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release bitnami/contour-operator
+helm install my-release my-repo/contour-operator
 ```
 
 The command deploys the Contour Operator on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -155,18 +155,18 @@ This solution allows to easily deploy multiple Contour instances compared to the
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------- |
 | `image.registry`                                  | Contour Operator image registry                                                                                          | `docker.io`                |
 | `image.repository`                                | Contour Operator image repository                                                                                        | `bitnami/contour-operator` |
-| `image.tag`                                       | Contour Operator image tag (immutable tags are recommended)                                                              | `1.22.0-scratch-r2`        |
+| `image.tag`                                       | Contour Operator image tag (immutable tags are recommended)                                                              | `1.22.1-scratch-r2`        |
 | `image.digest`                                    | Contour Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag         | `""`                       |
 | `image.pullPolicy`                                | Contour Operator image pull policy                                                                                       | `IfNotPresent`             |
 | `image.pullSecrets`                               | Contour Operator image pull secrets                                                                                      | `[]`                       |
 | `contourImage.registry`                           | Contour Image registry                                                                                                   | `docker.io`                |
 | `contourImage.repository`                         | Contour Image repository                                                                                                 | `bitnami/contour`          |
-| `contourImage.tag`                                | Contour Image tag (immutable tags are recommended)                                                                       | `1.22.0-debian-11-r3`      |
+| `contourImage.tag`                                | Contour Image tag (immutable tags are recommended)                                                                       | `1.22.1-debian-11-r10`     |
 | `contourImage.digest`                             | Contour image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                  | `""`                       |
 | `contourImage.pullSecrets`                        | Contour Image pull secrets                                                                                               | `[]`                       |
 | `envoyImage.registry`                             | Envoy Image registry                                                                                                     | `docker.io`                |
 | `envoyImage.repository`                           | Envoy Image repository                                                                                                   | `bitnami/envoy`            |
-| `envoyImage.tag`                                  | Envoy Image tag (immutable tags are recommended)                                                                         | `1.23.0-debian-11-r7`      |
+| `envoyImage.tag`                                  | Envoy Image tag (immutable tags are recommended)                                                                         | `1.23.1-debian-11-r12`     |
 | `envoyImage.digest`                               | Envoy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                    | `""`                       |
 | `envoyImage.pullSecrets`                          | Envoy Image pull secrets                                                                                                 | `[]`                       |
 | `replicaCount`                                    | Number of Contour Operator replicas to deploy                                                                            | `1`                        |
@@ -272,7 +272,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set livenessProbe.enabled=false \
-    bitnami/contour-operator
+    my-repo/contour-operator
 ```
 
 The above command disables the Operator liveness probes.
@@ -280,7 +280,7 @@ The above command disables the Operator liveness probes.
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml bitnami/contour-operator
+helm install my-release -f values.yaml my-repo/contour-operator
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -343,7 +343,7 @@ If additional containers are needed in the same pod as contour-operator (such as
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ### Deploying extra resources
 

@@ -7,12 +7,12 @@ Apache Kafka is a distributed streaming platform designed to build real-time pip
 [Overview of Apache Kafka](http://kafka.apache.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install my-release bitnami/kafka
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/kafka
 ```
 
 ## Introduction
@@ -32,8 +32,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install my-release bitnami/kafka
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/kafka
 ```
 
 These commands deploy Kafka on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -83,7 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
 | `image.registry`                                  | Kafka image registry                                                                                                                                                                | `docker.io`                         |
 | `image.repository`                                | Kafka image repository                                                                                                                                                              | `bitnami/kafka`                     |
-| `image.tag`                                       | Kafka image tag (immutable tags are recommended)                                                                                                                                    | `3.2.3-debian-11-r1`                |
+| `image.tag`                                       | Kafka image tag (immutable tags are recommended)                                                                                                                                    | `3.3.1-debian-11-r1`                |
 | `image.digest`                                    | Kafka image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                               | `""`                                |
 | `image.pullPolicy`                                | Kafka image pull policy                                                                                                                                                             | `IfNotPresent`                      |
 | `image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                                                                                    | `[]`                                |
@@ -254,7 +254,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalAccess.autoDiscovery.enabled`            | Enable using an init container to auto-detect external IPs/ports by querying the K8s API                   | `false`               |
 | `externalAccess.autoDiscovery.image.registry`     | Init container auto-discovery image registry                                                               | `docker.io`           |
 | `externalAccess.autoDiscovery.image.repository`   | Init container auto-discovery image repository                                                             | `bitnami/kubectl`     |
-| `externalAccess.autoDiscovery.image.tag`          | Init container auto-discovery image tag (immutable tags are recommended)                                   | `1.25.1-debian-11-r1` |
+| `externalAccess.autoDiscovery.image.tag`          | Init container auto-discovery image tag (immutable tags are recommended)                                   | `1.25.2-debian-11-r6` |
 | `externalAccess.autoDiscovery.image.digest`       | Petete image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag     | `""`                  |
 | `externalAccess.autoDiscovery.image.pullPolicy`   | Init container auto-discovery image pull policy                                                            | `IfNotPresent`        |
 | `externalAccess.autoDiscovery.image.pullSecrets`  | Init container auto-discovery image pull secrets                                                           | `[]`                  |
@@ -310,7 +310,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r37`      |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r40`      |
 | `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`                    |
@@ -337,7 +337,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.kafka.enabled`                                     | Whether or not to create a standalone Kafka exporter to expose Kafka metrics                                                     | `false`                                                                                 |
 | `metrics.kafka.image.registry`                              | Kafka exporter image registry                                                                                                    | `docker.io`                                                                             |
 | `metrics.kafka.image.repository`                            | Kafka exporter image repository                                                                                                  | `bitnami/kafka-exporter`                                                                |
-| `metrics.kafka.image.tag`                                   | Kafka exporter image tag (immutable tags are recommended)                                                                        | `1.6.0-debian-11-r10`                                                                   |
+| `metrics.kafka.image.tag`                                   | Kafka exporter image tag (immutable tags are recommended)                                                                        | `1.6.0-debian-11-r17`                                                                   |
 | `metrics.kafka.image.digest`                                | Kafka exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                   | `""`                                                                                    |
 | `metrics.kafka.image.pullPolicy`                            | Kafka exporter image pull policy                                                                                                 | `IfNotPresent`                                                                          |
 | `metrics.kafka.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                 | `[]`                                                                                    |
@@ -385,7 +385,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.jmx.enabled`                                       | Whether or not to expose JMX metrics to Prometheus                                                                               | `false`                                                                                 |
 | `metrics.jmx.image.registry`                                | JMX exporter image registry                                                                                                      | `docker.io`                                                                             |
 | `metrics.jmx.image.repository`                              | JMX exporter image repository                                                                                                    | `bitnami/jmx-exporter`                                                                  |
-| `metrics.jmx.image.tag`                                     | JMX exporter image tag (immutable tags are recommended)                                                                          | `0.17.1-debian-11-r3`                                                                   |
+| `metrics.jmx.image.tag`                                     | JMX exporter image tag (immutable tags are recommended)                                                                          | `0.17.2-debian-11-r6`                                                                   |
 | `metrics.jmx.image.digest`                                  | JMX exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                     | `""`                                                                                    |
 | `metrics.jmx.image.pullPolicy`                              | JMX exporter image pull policy                                                                                                   | `IfNotPresent`                                                                          |
 | `metrics.jmx.image.pullSecrets`                             | Specify docker-registry secret names as an array                                                                                 | `[]`                                                                                    |
@@ -491,7 +491,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set replicaCount=3 \
-  bitnami/kafka
+  my-repo/kafka
 ```
 
 The above command deploys Kafka with 3 brokers (replicas).
@@ -499,7 +499,7 @@ The above command deploys Kafka with 3 brokers (replicas).
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml bitnami/kafka
+helm install my-release -f values.yaml my-repo/kafka
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -735,7 +735,7 @@ sidecars:
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ### Deploying extra resources
 
@@ -838,13 +838,17 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 19.0.0
+
+This major updates Kafka to its newest version, 3.3.x. For more information, please refer to [kafka upgrade notes](https://kafka.apache.org/33/documentation.html#upgrade).
+
 ### To 18.0.0
 
-This major updates the Zookeeper subchart to it newest major, 10.0.0. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper#to-1000).
+This major updates the Zookeeper subchart to it newest major, 10.0.0. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/zookeeper#to-1000).
 
 ### To 16.0.0
 
-This major updates the Zookeeper subchart to it newest major, 9.0.0. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper#to-900).
+This major updates the Zookeeper subchart to it newest major, 9.0.0. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/zookeeper#to-900).
 
 ### To 15.0.0
 
@@ -889,11 +893,11 @@ See [PR#7114](https://github.com/bitnami/charts/pull/7114) for more info about t
 
 ### To 13.0.0
 
-This major updates the Zookeeper subchart to it newest major, 7.0.0, which renames all TLS-related settings. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper#to-700).
+This major updates the Zookeeper subchart to it newest major, 7.0.0, which renames all TLS-related settings. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/zookeeper#to-700).
 
 ### To 12.2.0
 
-This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### To 12.0.0
 
@@ -988,8 +992,8 @@ Backwards compatibility is not guaranteed when Kafka metrics are enabled, unless
 Use the workaround below to upgrade from versions previous to 7.0.0. The following example assumes that the release name is kafka:
 
 ```console
-helm upgrade kafka bitnami/kafka --version 6.1.8 --set metrics.kafka.enabled=false
-helm upgrade kafka bitnami/kafka --version 7.0.0 --set metrics.kafka.enabled=true
+helm upgrade kafka my-repo/kafka --version 6.1.8 --set metrics.kafka.enabled=false
+helm upgrade kafka my-repo/kafka --version 7.0.0 --set metrics.kafka.enabled=true
 ```
 
 ### To 2.0.0

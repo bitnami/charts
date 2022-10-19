@@ -7,12 +7,12 @@ HashiCorp Consul is a tool for discovering and configuring services in your infr
 [Overview of HashiCorp Consul](https://consul.io)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/consul
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/consul
 ```
 
 ## Introduction
@@ -32,8 +32,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/consul
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/consul
 ```
 
 These commands deploy HashiCorp Consul on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -267,7 +267,7 @@ $ helm delete --purge my-release
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release --set domain=consul-domain,gossipKey=secretkey bitnami/consul
+$ helm install my-release --set domain=consul-domain,gossipKey=secretkey my-repo/consul
 ```
 
 The above command sets the HashiCorp Consul domain to `consul-domain` and sets the gossip key to `secretkey`.
@@ -277,7 +277,7 @@ The above command sets the HashiCorp Consul domain to `consul-domain` and sets t
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/consul
+$ helm install my-release -f values.yaml my-repo/consul
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -387,7 +387,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ### Sidecars and Init Containers
 
@@ -477,7 +477,7 @@ Affected values:
   - `updateStrategy.type` is renamed to `updateStrategy`.
   - `configmap` is renamed to `configuration`.
 - Chart labels were adapted to follow the [Helm charts standard labels](https://helm.sh/docs/chart_best_practices/labels/#standard-labels).
-- This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+- This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### To 7.0.0
 
@@ -487,7 +487,7 @@ The field `podManagementPolicy` can't be updated in a StatefulSet, so you need t
 
 ```console
 $ kubectl delete statefulset consul
-$ helm upgrade <DEPLOYMENT_NAME> bitnami/consul
+$ helm upgrade <DEPLOYMENT_NAME> my-repo/consul
 ```
 
 ### To 6.0.0
@@ -499,13 +499,13 @@ This release updates the Bitnami Consul container to `1.6.1-debian-9-r6`, which 
 Consul container was moved to a non-root approach. There shouldn't be any issue when upgrading since the corresponding `securityContext` is enabled by default. Both the container image and the chart can be upgraded by running the command below:
 
 ```
-$ helm upgrade my-release bitnami/consul
+$ helm upgrade my-release my-repo/consul
 ```
 
 If you use a previous container image (previous to **1.4.0-r16**) disable the `securityContext` by running the command below:
 
 ```
-$ helm upgrade my-release bitnami/consul --set securityContext.enabled=false,image.tag=XXX
+$ helm upgrade my-release my-repo/consul --set securityContext.enabled=false,image.tag=XXX
 ```
 
 ### To 2.0.0

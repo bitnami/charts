@@ -7,12 +7,12 @@ Prometheus Operator provides easy monitoring definitions for Kubernetes services
 [Overview of Prometheus Operator](https://github.com/coreos/prometheus-operator)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/kube-prometheus
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/kube-prometheus
 ```
 
 ## Introduction
@@ -41,13 +41,13 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 Add the `bitnami` charts repo to Helm:
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 ```
 
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install my-release bitnami/kube-prometheus
+$ helm install my-release my-repo/kube-prometheus
 ```
 
 The command deploys kube-prometheus on the Kubernetes cluster in the default configuration. The [configuration](#configuration-and-installation-details) section lists the parameters that can be configured during installation.
@@ -702,7 +702,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 $ helm install my-release \
   --set operator.logLevel=debug \
   --set prometheus.replicaCount=5 \
-    bitnami/kube-prometheus
+    my-repo/kube-prometheus
 ```
 
 The above command sets the Prometheus Operator `logLevel` to `debug`. Additionally it sets the `prometheus.replicaCount` to `5`.
@@ -710,7 +710,7 @@ The above command sets the Prometheus Operator `logLevel` to `debug`. Additional
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/kube-prometheus
+$ helm install my-release -f values.yaml my-repo/kube-prometheus
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -749,7 +749,7 @@ Refer to the [chart documentation on customizing alert configurations](https://d
 
 This chart allows setting custom Pod affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
@@ -758,12 +758,12 @@ Find more information about how to deal with common errors related to Bitnami's 
 ## Upgrading
 
 ```bash
-$ helm upgrade my-release bitnami/kube-prometheus
+$ helm upgrade my-release my-repo/kube-prometheus
 ```
 
 ### To 8.0.0
 
-This major updates the kube-state-metrics subchart to its newest major, 3.0.0, and the node-exporter subchart to its newest major, 3.0.0. Both releases contains name changes to a few of its values. For more information, please refer to [kube-state-metrics upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/kube-state-metrics#to-300) and [node-exporter upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/node-exporter#to-300).
+This major updates the kube-state-metrics subchart to its newest major, 3.0.0, and the node-exporter subchart to its newest major, 3.0.0. Both releases contains name changes to a few of its values. For more information, please refer to [kube-state-metrics upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kube-state-metrics#to-300) and [node-exporter upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/node-exporter#to-300).
 
 ### To 7.0.0
 
@@ -831,7 +831,7 @@ If you use [Strategic Merge Patch](https://github.com/prometheus-operator/promet
 
 ### To 5.0.0
 
-This major updates the kube-state-metrics subchart to it newest major, 2.0.0, which contains name changes to a few of its values. For more information on this subchart's major, please refer to [kube-state-metrics upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/kube-state-metrics#to-200).
+This major updates the kube-state-metrics subchart to it newest major, 2.0.0, which contains name changes to a few of its values. For more information on this subchart's major, please refer to [kube-state-metrics upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kube-state-metrics#to-200).
 
 ### To 4.4.0
 
@@ -881,7 +881,7 @@ To upgrade from version 2.0.0, previously remove the Thanos sidecar svc to avoid
 
 ```bash
 $ kubectl delete svc my-relase-kube-prometheus-prometheus-thanos
-$ helm upgrade my-release --set prometheus.thanos.create=true bitnami/kube-prometheus
+$ helm upgrade my-release --set prometheus.thanos.create=true my-repo/kube-prometheus
 ```
 
 ### To 2.0.0
@@ -894,7 +894,7 @@ $ helm upgrade my-release --set prometheus.thanos.create=true bitnami/kube-prome
 
 - The chart was renamed to `kube-prometheus` to be more accurate with the actual capabilities of the chart: it does not just deploy the Prometheus operator, it deploys an entire cluster monitoring stack, that includes other components (e.g. NodeExporter or Kube State metrics). Find more information about the reasons behind this decision at [#3490](https://github.com/bitnami/charts/issues/3490).
 - New CRDs were added and some existing ones were updated.
-- This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+- This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 > Note: There is no backwards compatibility due to the above mentioned changes. It's necessary to install a new release of the chart, and migrate the existing TSDB data to the new Prometheus instances.
 

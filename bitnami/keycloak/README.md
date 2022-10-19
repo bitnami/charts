@@ -7,12 +7,12 @@ Keycloak is a high performance Java-based identity and access management solutio
 [Overview of Keycloak](https://www.keycloak.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-  helm repo add bitnami https://charts.bitnami.com/bitnami
-  helm install my-release bitnami/keycloak
+  helm repo add my-repo https://charts.bitnami.com/bitnami
+  helm install my-release my-repo/keycloak
 ```
 
 ## Introduction
@@ -33,8 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/keycloak
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/keycloak
 ```
 
 These commands deploy a Keycloak application on the Kubernetes cluster in the default configuration.
@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                 | Keycloak image registry                                                                                                      | `docker.io`           |
 | `image.repository`               | Keycloak image repository                                                                                                    | `bitnami/keycloak`    |
-| `image.tag`                      | Keycloak image tag (immutable tags are recommended)                                                                          | `19.0.2-debian-11-r0` |
+| `image.tag`                      | Keycloak image tag (immutable tags are recommended)                                                                          | `19.0.3-debian-11-r2` |
 | `image.digest`                   | Keycloak image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                     | `""`                  |
 | `image.pullPolicy`               | Keycloak image pull policy                                                                                                   | `IfNotPresent`        |
 | `image.pullSecrets`              | Specify docker-registry secret names as an array                                                                             | `[]`                  |
@@ -275,7 +275,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `keycloakConfigCli.enabled`                               | Whether to enable keycloak-config-cli job                                                                                     | `false`                       |
 | `keycloakConfigCli.image.registry`                        | keycloak-config-cli container image registry                                                                                  | `docker.io`                   |
 | `keycloakConfigCli.image.repository`                      | keycloak-config-cli container image repository                                                                                | `bitnami/keycloak-config-cli` |
-| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                                                       | `5.3.1-debian-11-r14`         |
+| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                                                       | `5.3.1-debian-11-r23`         |
 | `keycloakConfigCli.image.digest`                          | keycloak-config-cli container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                          |
 | `keycloakConfigCli.image.pullPolicy`                      | keycloak-config-cli container image pull policy                                                                               | `IfNotPresent`                |
 | `keycloakConfigCli.image.pullSecrets`                     | keycloak-config-cli container image pull secrets                                                                              | `[]`                          |
@@ -294,6 +294,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `keycloakConfigCli.podLabels`                             | Pod extra labels                                                                                                              | `{}`                          |
 | `keycloakConfigCli.podAnnotations`                        | Annotations for job pod                                                                                                       | `{}`                          |
 | `keycloakConfigCli.extraEnvVars`                          | Additional environment variables to set                                                                                       | `[]`                          |
+| `keycloakConfigCli.podTolerations`                        | Tolerations for job pod assignment                                                                                            | `[]`                          |
 | `keycloakConfigCli.extraEnvVarsCM`                        | ConfigMap with extra environment variables                                                                                    | `""`                          |
 | `keycloakConfigCli.extraEnvVarsSecret`                    | Secret with extra environment variables                                                                                       | `""`                          |
 | `keycloakConfigCli.extraVolumes`                          | Extra volumes to add to the job                                                                                               | `[]`                          |
@@ -340,7 +341,7 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```bash
-helm install my-release --set auth.adminPassword=secretpassword bitnami/keycloak
+helm install my-release --set auth.adminPassword=secretpassword my-repo/keycloak
 ```
 
 The above command sets the Keycloak administrator password to `secretpassword`.
@@ -350,7 +351,7 @@ The above command sets the Keycloak administrator password to `secretpassword`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/keycloak
+$ helm install my-release -f values.yaml my-repo/keycloak
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -407,11 +408,11 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ### Configure Ingress
 
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/master/bitnami/contour) you can utilize the ingress controller to serve your application.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
 
 To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/keycloak/configuration/configure-ingress/).
 

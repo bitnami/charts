@@ -7,12 +7,12 @@ SuiteCRM is a completely open source, enterprise-grade Customer Relationship Man
 [Overview of SuiteCRM](http://www.suitecrm.com/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/suitecrm
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/suitecrm
 ```
 
 ## Introduction
@@ -21,7 +21,7 @@ This chart bootstraps a [SuiteCRM](https://github.com/bitnami/containers/tree/ma
 
 SuiteCRM is a software fork of the popular customer relationship management (CRM) system SugarCRM.
 
-It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the SuiteCRM application.
+It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/main/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the SuiteCRM application.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -37,7 +37,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install my-release bitnami/suitecrm
+$ helm install my-release my-repo/suitecrm
 ```
 
 The command deploys SuiteCRM on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -83,7 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                        | SuiteCRM image registry                                                                                  | `docker.io`            |
 | `image.repository`                      | SuiteCRM image repository                                                                                | `bitnami/suitecrm`     |
-| `image.tag`                             | SuiteCRM image tag (immutable tags are recommended)                                                      | `7.12.7-debian-11-r12` |
+| `image.tag`                             | SuiteCRM image tag (immutable tags are recommended)                                                      | `7.12.7-debian-11-r19` |
 | `image.digest`                          | SuiteCRM image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `image.pullPolicy`                      | SuiteCRM image pull policy                                                                               | `IfNotPresent`         |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                         | `[]`                   |
@@ -207,7 +207,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                                        | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r34`      |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r40`      |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                    |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
@@ -254,7 +254,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                                                            | `false`                   |
 | `metrics.image.registry`                   | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`                 | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                                                      | `0.11.0-debian-11-r39`    |
+| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                                                      | `0.11.0-debian-11-r50`    |
 | `metrics.image.digest`                     | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`                 | Image pull policy                                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                | `[]`                      |
@@ -289,7 +289,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret containing extra environment variables (in case of sensitive data)                                         | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                                                                        | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image repository                                                                                | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)                                                      | `11-debian-11-r34`                       |
+| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)                                                      | `11-debian-11-r40`                       |
 | `certificates.image.digest`                          | Container sidecar image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                              | `[]`                                     |
@@ -337,7 +337,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set suitecrmUsername=admin,suitecrmPassword=password,mariadb.auth.rootPassword=secretpassword \
-    bitnami/suitecrm
+    my-repo/suitecrm
 ```
 
 The above command sets the SuiteCRM administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
@@ -347,7 +347,7 @@ The above command sets the SuiteCRM administrator account username and password 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/suitecrm
+$ helm install my-release -f values.yaml my-repo/suitecrm
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -382,7 +382,7 @@ If you configure the `image` value to one in a private registry, you will need t
 
 This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Persistence
 
@@ -398,7 +398,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 1. Install the chart
 
     ```bash
-    $ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/suitecrm
+    $ helm install my-release --set persistence.existingClaim=PVC_NAME my-repo/suitecrm
     ```
 
 ### Host path
@@ -414,7 +414,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 1. Install the chart
 
     ```bash
-    $ helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT bitnami/suitecrm
+    $ helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT my-repo/suitecrm
     ```
 
     This will mount the `suitecrm-data` volume into the `hostPath` directory. The site data will be persisted if the mount path contains valid data, else the site data will be initialized at first launch.
@@ -440,7 +440,7 @@ Affected values:
 - `service.httpsPort` was deprecated. We recommend using `service.ports.https` instead.
 - `ingress.hosts` was renamed as `ingress.extraHosts`.
 
-Additionally updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-1000) for more information.
+Additionally updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/mariadb#to-1000) for more information.
 
 ### To 9.0.0
 
@@ -477,7 +477,7 @@ Please read the update notes carefully.
 
 **2. Updated MariaDB dependency version**
 
-In this major the MariaDB dependency version was also bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-800) for more information.
+In this major the MariaDB dependency version was also bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/mariadb#to-800) for more information.
 
 **3. Migration of the SuiteCRM image to non-root **
 
@@ -502,19 +502,19 @@ export SUITECRM_PASSWORD=$(kubectl get secret --namespace default suitecrm -o js
 export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default suitecrm-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
 export MARIADB_PASSWORD=$(kubectl get secret --namespace default suitecrm-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
 export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=suitecrm -o jsonpath="{.items[0].metadata.name}")
-\```
+```
 
 Upgrade your release (maintaining the version) disabling MariaDB and scaling SuiteCRM replicas to 0:
 
 ```console
-$ helm upgrade suitecrm bitnami/suitecrm --set suitecrmPassword=$SUITECRM_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.0.26
-\```
+$ helm upgrade suitecrm my-repo/suitecrm --set suitecrmPassword=$SUITECRM_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.0.26
+```
 
 Finally, upgrade your release to `9.0.0` reusing the existing PVC, and enabling back MariaDB:
 
 ```console
-$ helm upgrade suitecrm bitnami/suitecrm --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set suitecrmPassword=$SUITECRM_PASSWORD --set containerSecurityContext.runAsUser=0 --set podSecurityContext.fsGroup=0
-\```
+$ helm upgrade suitecrm my-repo/suitecrm --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set suitecrmPassword=$SUITECRM_PASSWORD --set containerSecurityContext.runAsUser=0 --set podSecurityContext.fsGroup=0
+```
 
 You should see the lines below in MariaDB container logs:
 

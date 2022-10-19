@@ -1,10 +1,10 @@
 {
   "env": {
-    "username": "user",
+    "username": "test_user",
     "password": "ComplicatedPassword123!4"
   },
   "hosts": {
-    "bitnami-mediawiki.my": "{{ TARGET_IP }}"
+    "vmware-mediawiki.my": "{{ TARGET_IP }}"
   },
   "defaultCommandTimeout": 30000
 }

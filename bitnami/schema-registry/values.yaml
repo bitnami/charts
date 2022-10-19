@@ -624,7 +624,7 @@ serviceAccount:
 ##
 ## Kafka chart configuration
 ## For information about these parameters, refer to:
-##   https://github.com/bitnami/charts/blob/master/bitnami/kafka/values.yaml
+##   https://github.com/bitnami/charts/blob/main/bitnami/kafka/values.yaml
 ##
 kafka:
   ## @param kafka.enabled Enable/disable Kafka chart installation
@@ -707,7 +707,7 @@ kafka:
   ##
   ## Zookeeper chart configuration
   ## For information about these parameters, refer to:
-  ##   https://github.com/bitnami/charts/blob/master/bitnami/zookeeper/values.yaml
+  ##   https://github.com/bitnami/charts/blob/main/bitnami/zookeeper/values.yaml
   ##
   zookeeper:
     ## @param kafka.zookeeper.enabled Enable/disable Zookeeper chart installation

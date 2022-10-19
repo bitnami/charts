@@ -1,9 +1,9 @@
 dependencies:
 - name: minio
   repository: https://charts.bitnami.com/bitnami
-  version: 11.10.3
+  version: 11.10.4
 - name: common
   repository: https://charts.bitnami.com/bitnami
   version: 2.0.3
-digest: sha256:b902c1094839e82b56f08f8a11052b84a749adb885460c728568ca2a179c8c2e
-generated: "2022-09-30T11:34:48.409618+02:00"
+digest: sha256:522679c63354caa51d3de6a607cc5d59ca3f1d24bbf9bbcb9733b22be6b8fcb8
+generated: "2022-10-07T05:18:49.454485431Z"

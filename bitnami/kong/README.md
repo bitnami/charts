@@ -7,12 +7,12 @@ Kong is an open source Microservice API gateway and platform designed for managi
 [Overview of Kong](https://konghq.com/kong-community-edition/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-  helm repo add bitnami https://charts.bitnami.com/bitnami
-  helm install my-release bitnami/kong
+  helm repo add my-repo https://charts.bitnami.com/bitnami
+  helm install my-release my-repo/kong
 ```
 
 ## Introduction
@@ -34,8 +34,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-  helm repo add bitnami https://charts.bitnami.com/bitnami
-  helm install my-release bitnami/kong
+  helm repo add my-repo https://charts.bitnami.com/bitnami
+  helm install my-release my-repo/kong
 ```
 
 These commands deploy kong on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -353,7 +353,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
   helm install my-release \
-  --set service.exposeAdmin=true bitnami/kong
+  --set service.exposeAdmin=true my-repo/kong
 ```
 
 The above command exposes the Kong admin ports inside the Kong service.
@@ -361,7 +361,7 @@ The above command exposes the Kong admin ports inside the Kong service.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-  helm install my-release -f values.yaml bitnami/kong
+  helm install my-release -f values.yaml my-repo/kong
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -381,13 +381,13 @@ The Bitnami Kong chart allows setting two database backends: PostgreSQL or Cassa
 - Deploy the PostgreSQL sub-chart (default)
 
 ```console
-  helm install my-release bitnami/kong
+  helm install my-release my-repo/kong
 ```
 
 - Use an external PostgreSQL database
 
 ```console
-  helm install my-release bitnami/kong \
+  helm install my-release my-repo/kong \
     --set postgresql.enabled=false \
     --set postgresql.external.host=_HOST_OF_YOUR_POSTGRESQL_INSTALLATION_ \
     --set postgresql.external.password=_PASSWORD_OF_YOUR_POSTGRESQL_INSTALLATION_ \
@@ -397,7 +397,7 @@ The Bitnami Kong chart allows setting two database backends: PostgreSQL or Cassa
 - Deploy the Cassandra sub-chart
 
 ```console
-  helm install my-release bitnami/kong \
+  helm install my-release my-repo/kong \
     --set database=cassandra \
     --set postgresql.enabled=false \
     --set cassandra.enabled=true
@@ -406,7 +406,7 @@ The Bitnami Kong chart allows setting two database backends: PostgreSQL or Cassa
 - Use an existing Cassandra installation
 
 ```console
-  helm install my-release bitnami/kong \
+  helm install my-release my-repo/kong \
     --set database=cassandra \
     --set postgresql.enabled=false \
     --set cassandra.enabled=false \
@@ -508,7 +508,7 @@ extraDeploy:
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
@@ -519,7 +519,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 It's necessary to specify the existing passwords while performing a upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `postgresql.postgresqlPassword` or `cassandra.password` parameters when upgrading the chart:
 
 ```bash
-$ helm upgrade my-release bitnami/kong \
+$ helm upgrade my-release my-repo/kong \
     --set database=postgresql
     --set postgresql.enabled=true
     --set
@@ -536,7 +536,7 @@ No issues are expected during the upgrade.
 
 ### To 5.0.0
 
-The `cassandra` sub-chart was upgraded to `9.x.x`. Several values of the sub-chart were changed, so please check the [upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/cassandra#to-900).
+The `cassandra` sub-chart was upgraded to `9.x.x`. Several values of the sub-chart were changed, so please check the [upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/cassandra#to-900).
 
 No issues are expected during the upgrade.
 
@@ -582,7 +582,7 @@ $ kubectl delete statefulsets.apps kong-postgresql --cascade=false
 ##### Upgrade the chart release
 
 ```console
-$ helm upgrade kong bitnami/kong \
+$ helm upgrade kong my-repo/kong \
     --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
     --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
 ```
@@ -609,7 +609,7 @@ postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
 
 ### To 4.0.0
 
-This major updates the Cassandra subchart to its newest major, 4.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/cassandra#to-800) you can find more information about the changes introduced in those versions.
+This major updates the Cassandra subchart to its newest major, 4.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/cassandra#to-800) you can find more information about the changes introduced in those versions.
 
 ### To 2.0.0
 
@@ -617,9 +617,9 @@ PostgreSQL and Cassandra dependencies versions were bumped to new major versions
 
 In order to properly migrate your data to this new version:
 
-* If you were using PostgreSQL as your database, please refer to the [PostgreSQL Upgrade Notes](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#900).
+* If you were using PostgreSQL as your database, please refer to the [PostgreSQL Upgrade Notes](https://github.com/bitnami/charts/tree/main/bitnami/postgresql#900).
 
-* If you were using Cassandra as your database, please refer to the [Cassandra Upgrade Notes](https://github.com/bitnami/charts/tree/master/bitnami/cassandra#to-600).
+* If you were using Cassandra as your database, please refer to the [Cassandra Upgrade Notes](https://github.com/bitnami/charts/tree/main/bitnami/cassandra#to-600).
 
 ## License
 

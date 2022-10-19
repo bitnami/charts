@@ -15,10 +15,9 @@ for (const command of ['click', 'type', 'selectFile']) {
 Cypress.Commands.add(
   'login',
   (username = Cypress.env('username'), password = Cypress.env('password')) => {
-    cy.clearCookies();
     cy.visit('/login');
     cy.get('input#accessKey').type(username);
     cy.get('input#secretKey').type(password);
-    cy.get('button[type="submit"]').click();
+    cy.get('[type="submit"]').click();
   }
 );

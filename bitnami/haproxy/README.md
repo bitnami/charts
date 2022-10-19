@@ -7,12 +7,12 @@ HAProxy is a TCP proxy and a HTTP reverse proxy. It supports SSL termination and
 [Overview of HAProxy](http://www.haproxy.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/haproxy
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/haproxy
 ```
 
 ## Introduction
@@ -35,7 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release bitnami/haproxy
+helm install my-release my-repo/haproxy
 ```
 
 The command deploys haproxy on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -191,7 +191,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set service.type=LoadBalancer \
-    bitnami/haproxy
+    my-repo/haproxy
 ```
 
 The above command sets the HAProxy service type as LoadBalancer.
@@ -201,7 +201,7 @@ The above command sets the HAProxy service type as LoadBalancer.
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml bitnami/haproxy
+helm install my-release -f values.yaml my-repo/haproxy
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -245,7 +245,7 @@ Refer to the chart documentation for more information on, and examples of, confi
 
 This chart allows you to set custom Pod affinity using the `affinity` parameter. Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 

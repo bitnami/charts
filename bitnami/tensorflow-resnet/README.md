@@ -7,12 +7,12 @@ TensorFlow ResNet is a client utility for use with TensorFlow Serving and ResNet
 [Overview of TensorFlow ResNet](https://github.com/tensorflow/models/tree/master/official/resnet)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/tensorflow-resnet
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/tensorflow-resnet
 ```
 
 ## Introduction
@@ -31,8 +31,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/tensorflow-resnet
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/tensorflow-resnet
 ```
 
 These commands deploy Tensorflow Serving ResNet model on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -85,13 +85,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ---------------------------- |
 | `server.image.registry`                 | TensorFlow Serving image registry                                                                                  | `docker.io`                  |
 | `server.image.repository`               | TensorFlow Serving image repository                                                                                | `bitnami/tensorflow-serving` |
-| `server.image.tag`                      | TensorFlow Serving Image tag (immutable tags are recommended)                                                      | `2.9.1-debian-11-r12`        |
+| `server.image.tag`                      | TensorFlow Serving Image tag (immutable tags are recommended)                                                      | `2.10.0-debian-11-r10`       |
 | `server.image.digest`                   | TensorFlow Serving image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
 | `server.image.pullPolicy`               | TensorFlow Serving image pull policy                                                                               | `IfNotPresent`               |
 | `server.image.pullSecrets`              | Specify docker-registry secret names as an array                                                                   | `[]`                         |
 | `client.image.registry`                 | TensorFlow ResNet image registry                                                                                   | `docker.io`                  |
 | `client.image.repository`               | TensorFlow ResNet image repository                                                                                 | `bitnami/tensorflow-resnet`  |
-| `client.image.tag`                      | TensorFlow ResNet image tag (immutable tags are recommended)                                                       | `2.9.1-debian-11-r11`        |
+| `client.image.tag`                      | TensorFlow ResNet image tag (immutable tags are recommended)                                                       | `2.10.0-debian-11-r11`       |
 | `client.image.digest`                   | TensorFlow ResNet image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag  | `""`                         |
 | `client.image.pullPolicy`               | TensorFlow ResNet image pull policy                                                                                | `IfNotPresent`               |
 | `client.image.pullSecrets`              | Specify docker-registry secret names as an array                                                                   | `[]`                         |
@@ -171,13 +171,13 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release bitnami/tensorflow-resnet --set imagePullPolicy=Always
+$ helm install my-release my-repo/tensorflow-resnet --set imagePullPolicy=Always
 ```
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/tensorflow-resnet
+$ helm install my-release -f values.yaml my-repo/tensorflow-resnet
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -194,7 +194,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 This chart allows you to set custom Pod affinity using the `affinity` parameter. Find more information about Pod's affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use any of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, you can use any of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
@@ -210,7 +210,7 @@ As a result, the pretrained model served by this Chart was updated to [Imagenet 
 
 ### To 3.1.0
 
-This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### To 3.0.0
 
@@ -226,7 +226,7 @@ Use the workaround below to upgrade from versions previous to 2.0.0. The followi
 
 ```console
 $ kubectl delete deployment  tensorflow-resnet --cascade=false
-$ helm upgrade tensorflow-resnet bitnami/tensorflow-resnet
+$ helm upgrade tensorflow-resnet my-repo/tensorflow-resnet
 $ kubectl delete rs "$(kubectl get rs -l app=tensorflow-resnet -o jsonpath='{.items[0].metadata.name}')"
 ```
 

@@ -7,12 +7,12 @@ Apache Spark is a high-performance engine for large-scale computing tasks, such 
 [Overview of Apache Spark](https://spark.apache.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/spark
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/spark
 ```
 
 ## Introduction
@@ -33,8 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/spark
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/spark
 ```
 
 These commands deploy Apache Spark on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -88,7 +88,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ----------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`    | Spark image registry                                                                                  | `docker.io`           |
 | `image.repository`  | Spark image repository                                                                                | `bitnami/spark`       |
-| `image.tag`         | Spark image tag (immutable tags are recommended)                                                      | `3.3.0-debian-11-r30` |
+| `image.tag`         | Spark image tag (immutable tags are recommended)                                                      | `3.3.0-debian-11-r40` |
 | `image.digest`      | Spark image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`  | Spark image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                                                      | `[]`                  |
@@ -337,7 +337,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install my-release \
-  --set master.webPort=8081 bitnami/spark
+  --set master.webPort=8081 my-repo/spark
 ```
 
 The above command sets the spark master web port to `8081`.
@@ -345,7 +345,7 @@ The above command sets the spark master web port to `8081`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/spark
+$ helm install my-release -f values.yaml my-repo/spark
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -432,7 +432,7 @@ Refer to the [chart documentation for more details on configuring security and a
 
 This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
@@ -466,7 +466,7 @@ This version standardizes the way of defining Ingress rules. When configuring a 
 
 ### To 3.0.0
 
-- This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+- This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 - Spark container images are updated to use Hadoop `3.2.x`: [Notable Changes: 3.0.0-debian-10-r44](https://github.com/bitnami/containers/tree/main/bitnami/spark#300-debian-10-r44)
 

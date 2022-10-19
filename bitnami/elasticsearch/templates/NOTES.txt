@@ -39,7 +39,7 @@ APP VERSION: {{ .Chart.AppVersion }}
     As an alternative, you can specify "sysctlImage.enabled=true" to use a
     privileged initContainer to change those settings in the Kernel:
 
-      helm upgrade --namespace {{ include "common.names.namespace" . }} {{ .Release.Name }} bitnami/elasticsearch --set sysctlImage.enabled=true
+      helm upgrade --namespace {{ include "common.names.namespace" . }} {{ .Release.Name }} my-repo/elasticsearch --set sysctlImage.enabled=true
 
     Note that this requires the ability to run privileged containers, which is likely not
     the case on many secure clusters. To cover this use case, you can also set some parameters

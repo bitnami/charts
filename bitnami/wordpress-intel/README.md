@@ -11,15 +11,15 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/wordpress-intel
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/wordpress-intel
 ```
 
 ## Introduction
 
 This chart bootstraps a [WordPress Intel](https://github.com/bitnami/containers/tree/main/bitnami/wordpress-intel) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the WordPress application, and the [Bitnami Memcached chart](https://github.com/bitnami/charts/tree/master/bitnami/memcached) that can be used to cache database queries.
+It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/main/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the WordPress application, and the [Bitnami Memcached chart](https://github.com/bitnami/charts/tree/main/bitnami/memcached) that can be used to cache database queries.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -43,7 +43,7 @@ It requires a 3rd gen Xeon Scalable Processor (Ice Lake) to get a breakthrough p
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release bitnami/wordpress
+helm install my-release my-repo/wordpress
 ```
 
 The command deploys WordPress on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -93,7 +93,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`    | WordPress image registry                                                                                  | `docker.io`               |
 | `image.repository`  | WordPress image repository                                                                                | `bitnami/wordpress-intel` |
-| `image.tag`         | WordPress image tag (immutable tags are recommended)                                                      | `6.0.2-debian-11-r12`     |
+| `image.tag`         | WordPress image tag (immutable tags are recommended)                                                      | `6.0.3-debian-11-r0`      |
 | `image.digest`      | WordPress image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `image.pullPolicy`  | WordPress image pull policy                                                                               | `IfNotPresent`            |
 | `image.pullSecrets` | WordPress image pull secrets                                                                              | `[]`                      |
@@ -242,7 +242,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r37`      |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r42`      |
 | `volumePermissions.image.digest`              | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -273,7 +273,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.port`                            | NGINX Container Status Port scraped by Prometheus Exporter                                                                | `""`                     |
 | `metrics.image.registry`                  | NGINX Prometheus exporter image registry                                                                                  | `docker.io`              |
 | `metrics.image.repository`                | NGINX Prometheus exporter image repository                                                                                | `bitnami/nginx-exporter` |
-| `metrics.image.tag`                       | NGINX Prometheus exporter image tag (immutable tags are recommended)                                                      | `0.11.0-debian-11-r5`    |
+| `metrics.image.tag`                       | NGINX Prometheus exporter image tag (immutable tags are recommended)                                                      | `0.11.0-debian-11-r11`   |
 | `metrics.image.digest`                    | NGINX Prometheus exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
 | `metrics.image.pullPolicy`                | NGINX Prometheus exporter image pull policy                                                                               | `IfNotPresent`           |
 | `metrics.image.pullSecrets`               | Specify docker-registry secret names as an array                                                                          | `[]`                     |
@@ -346,7 +346,7 @@ helm install my-release \
   --set wordpressUsername=admin \
   --set wordpressPassword=password \
   --set mariadb.auth.rootPassword=secretpassword \
-    bitnami/wordpress
+    my-repo/wordpress
 ```
 
 The above command sets the WordPress administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
@@ -356,7 +356,7 @@ The above command sets the WordPress administrator account username and password
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml bitnami/wordpress
+helm install my-release -f values.yaml my-repo/wordpress
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -448,7 +448,7 @@ If additional containers are needed in the same pod as WordPress (such as additi
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 

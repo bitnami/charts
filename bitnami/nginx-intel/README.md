@@ -7,12 +7,12 @@ NGINX Open Source for Intel is a lightweight server, combined with cryptography 
 [Overview of NGINX Open Source for Intel](https://github.com/intel/asynch_mode_nginx)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/nginx-intel
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/nginx-intel
 ```
 
 ## Introduction
@@ -41,8 +41,8 @@ It requires a 3rd gen Xeon Scalable Processor (Ice Lake) to get a breakthrough p
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/nginx-intel
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/nginx-intel
 ```
 
 These commands deploy NGINX Open Source on the Kubernetes cluster in the default configuration.
@@ -284,7 +284,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```bash
 $ helm install my-release \
   --set imagePullPolicy=Always \
-    bitnami/nginx-intel
+    my-repo/nginx-intel
 ```
 
 The above command sets the `imagePullPolicy` to `Always`.
@@ -292,7 +292,7 @@ The above command sets the `imagePullPolicy` to `Always`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/nginx-intel
+$ helm install my-release -f values.yaml my-repo/nginx-intel
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -361,7 +361,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinity) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinity) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ### Deploying extra resources
 
@@ -369,7 +369,7 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 
 ### Ingress
 
-This chart provides support for ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/master/bitnami/contour) you can utilize the ingress controller to serve your application.
+This chart provides support for ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
 
 To enable ingress integration, please set `ingress.enabled` to `true`.
 

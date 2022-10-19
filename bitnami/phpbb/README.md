@@ -7,19 +7,19 @@ phpBB is a popular bulletin board that features robust messaging capabilities su
 [Overview of phpBB](http://www.phpbb.com)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/phpbb
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/phpbb
 ```
 
 ## Introduction
 
 This chart bootstraps a [phpBB](https://github.com/bitnami/containers/tree/main/bitnami/phpbb) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the phpBB application.
+It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/main/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the phpBB application.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -35,7 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install my-release bitnami/phpbb
+$ helm install my-release my-repo/phpbb
 ```
 
 The command deploys phpBB on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`                        | phpBB image registry                                                                                                                                      | `docker.io`             |
 | `image.repository`                      | phpBB image repository                                                                                                                                    | `bitnami/phpbb`         |
-| `image.tag`                             | phpBB image tag (immutable tags are recommended)                                                                                                          | `3.3.8-debian-11-r26`   |
+| `image.tag`                             | phpBB image tag (immutable tags are recommended)                                                                                                          | `3.3.8-debian-11-r35`   |
 | `image.digest`                          | phpBB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                     | `""`                    |
 | `image.pullPolicy`                      | phpBB image pull policy                                                                                                                                   | `IfNotPresent`          |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
@@ -110,7 +110,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`             | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`      | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`    | Init container volume-permissions image repository                                                                                                        | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`           | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `11-debian-11-r34`      |
+| `volumePermissions.image.tag`           | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `11-debian-11-r40`      |
 | `volumePermissions.image.digest`        | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                    |
 | `volumePermissions.image.pullPolicy`    | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`   | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
@@ -235,7 +235,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`           | Start a side-car prometheus exporter                                                                            | `false`                   |
 | `metrics.image.registry`    | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`  | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag (immutable tags are recommended)                                                      | `0.11.0-debian-11-r39`    |
+| `metrics.image.tag`         | Apache exporter image tag (immutable tags are recommended)                                                      | `0.11.0-debian-11-r50`    |
 | `metrics.image.digest`      | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`  | Image pull policy                                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array                                                                | `[]`                      |
@@ -271,7 +271,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set phpbbUsername=admin,phpbbPassword=password,mariadb.mariadbRootPassword=secretpassword \
-    bitnami/phpbb
+    my-repo/phpbb
 ```
 
 The above command sets the phpBB administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
@@ -281,7 +281,7 @@ The above command sets the phpBB administrator account username and password to 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/phpbb
+$ helm install my-release -f values.yaml my-repo/phpbb
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -369,7 +369,7 @@ Affected values:
 - `service.port` was deprecated. We recommend using `service.ports.http` instead.
 - `service.httpsPort` was deprecated. We recommend using `service.ports.https` instead.
 
-Additionally updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-1000) for more information.
+Additionally updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/mariadb#to-1000) for more information.
 
 ### To 10.0.0
 
@@ -409,7 +409,7 @@ Please read the update notes carefully.
 
 **2. Updated MariaDB dependency version**
 
-In this major the MariaDB dependency version was also bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-800) for more information.
+In this major the MariaDB dependency version was also bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/mariadb#to-800) for more information.
 
 To upgrade to `9.0.0`, it should be done reusing the PVCs used to hold both the MariaDB and phpBB data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `phpbb`):
 
@@ -427,13 +427,13 @@ export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=php
 Upgrade your release (maintaining the version) disabling MariaDB and scaling phpBB replicas to 0:
 
 ```console
-$ helm upgrade phpbb bitnami/phpbb --set phpbbPassword=$PHPBB_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.0.5
+$ helm upgrade phpbb my-repo/phpbb --set phpbbPassword=$PHPBB_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.0.5
 ```
 
 Finally, upgrade you release to 9.0.0 reusing the existing PVC, and enabling back MariaDB:
 
 ```console
-$ helm upgrade phpbb bitnami/phpbb --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set phpbbPassword=$PHPBB_PASSWORD
+$ helm upgrade phpbb my-repo/phpbb --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set phpbbPassword=$PHPBB_PASSWORD
 ```
 
 You should see the lines below in MariaDB container logs:

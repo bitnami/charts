@@ -7,12 +7,12 @@ ExternalDNS is a Kubernetes addon that configures public DNS servers with inform
 [Overview of ExternalDNS](https://github.com/kubernetes-incubator/external-dns)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/external-dns
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/external-dns
 ```
 
 ## Introduction
@@ -31,7 +31,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install my-release bitnami/external-dns
+$ helm install my-release my-repo/external-dns
 ```
 
 The command deploys ExternalDNS on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -339,13 +339,13 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install my-release \
-  --set provider=aws bitnami/external-dns
+  --set provider=aws my-repo/external-dns
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/external-dns
+$ helm install my-release -f values.yaml my-repo/external-dns
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -362,7 +362,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ### Using IRSA
 If you are deploying to AWS EKS and you want to leverage [IRSA](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html). You will need to override `fsGroup` and `runAsUser` with `65534`(nfsnobody) and `0` respectively. Otherwise service account token will not be properly mounted.
@@ -389,7 +389,7 @@ $ helm install my-release \
   --set aws.zoneType=public \
   --set txtOwnerId=HOSTED_ZONE_IDENTIFIER \
   --set domainFilters[0]=HOSTED_ZONE_NAME \
-  bitnami/external-dns
+  my-repo/external-dns
 ```
 
 ## Troubleshooting
@@ -417,7 +417,7 @@ helm upgrade my-release -f my-values.yaml
 
 ### To 4.3.0
 
-This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated thechart dependencies before executing any upgrade.
+This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated thechart dependencies before executing any upgrade.
 
 ### To 4.0.0
 
@@ -455,7 +455,7 @@ Use the workaround below to upgrade from versions previous to 1.0.0. The followi
 
 ```console
 $ kubectl delete deployment my-release-external-dns
-$ helm upgrade my-release bitnami/external-dns
+$ helm upgrade my-release my-repo/external-dns
 ```
 
 Other mayor changes included in this major version are:

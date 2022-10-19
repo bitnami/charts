@@ -11,7 +11,7 @@ APP VERSION: {{ .Chart.AppVersion }}
 
 Complete your Kibana deployment by running:
 
-  helm upgrade --namespace {{ include "common.names.namespace" . }} {{ .Release.Name }} bitnami/kibana \
+  helm upgrade --namespace {{ include "common.names.namespace" . }} {{ .Release.Name }} my-repo/kibana \
     --set elasticsearch.hosts[0]=YOUR_ES_HOST,elasticsearch.port=YOUR_ES_PORT
 
 Replacing "YOUR_ES_HOST" and "YOUR_ES_PORT" placeholders by the proper values of your Elasticsearch deployment.

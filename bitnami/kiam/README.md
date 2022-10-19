@@ -7,12 +7,12 @@ kiam is a proxy that captures AWS Metadata API requests. It allows AWS IAM roles
 [Overview of Kiam](https://github.com/uswitch/kiam)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-  helm repo add bitnami https://charts.bitnami.com/bitnami
-  helm install my-release bitnami/kiam
+  helm repo add my-repo https://charts.bitnami.com/bitnami
+  helm install my-release my-repo/kiam
 ```
 
 > NOTE: KIAM has been designed to work on a Kubernetes cluster deployed on top of AWS, although it is possible to deploy it in other environments.
@@ -35,8 +35,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/kiam
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/kiam
 ```
 
 These commands deploy a kiam application on the Kubernetes cluster in the default configuration.
@@ -357,7 +357,7 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```bash
-helm install my-release --set server.resourceType=deployment bitnami/kiam
+helm install my-release --set server.resourceType=deployment my-repo/kiam
 ```
 
 The above command sets the server nodes to be deployed as Deployment objects.
@@ -365,7 +365,7 @@ The above command sets the server nodes to be deployed as Deployment objects.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/kiam
+$ helm install my-release -f values.yaml my-repo/kiam
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -405,7 +405,7 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 
 This chart allows you to set your custom affinity using the `server.affinity` and `agent.affinity` parameters. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `server.podAffinityPreset`, `agent.podAffinityPreset`, `server.podAntiAffinityPreset`, `agent.podAntiAffinityPreset`, or `server.nodeAffinityPreset` and `agent.nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `server.podAffinityPreset`, `agent.podAffinityPreset`, `server.podAntiAffinityPreset`, `agent.podAntiAffinityPreset`, or `server.nodeAffinityPreset` and `agent.nodeAffinityPreset` parameters.
 
 ### Configure TLS Secrets
 

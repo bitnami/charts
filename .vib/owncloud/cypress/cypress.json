@@ -4,11 +4,8 @@
   "viewportWidth": 1200,
   "viewportHeight": 860,
   "env": {
-    "username": "user",
-    "password": "ComplicatedPassword123!4",
-    "smtpHost": "smtptesthost",
-    "smtpUser": "smtpUser",
-    "owncloudEmail": "test@example.com"
+    "username": "test_user",
+    "password": "ComplicatedPassword123!4"
   },
   "hosts": {
     "vmware-owncloud.my": "{{ TARGET_IP }}"

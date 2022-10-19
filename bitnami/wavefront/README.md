@@ -7,12 +7,13 @@ Wavefront is a high-performance streaming analytics platform for monitoring and 
 [Overview of Wavefront](https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes)
 
 
-                           
+
 ## TL;DR
 
 ```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ kubectl create namespace wavefront
-$ helm install my-release bitnami/wavefront --namespace wavefront \
+$ helm install my-release my-repo/wavefront --namespace wavefront \
     --set clusterName=<K8s-CLUSTER-NAME> \
     --set wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
     --set wavefront.token=<YOUR_API_TOKEN>
@@ -37,8 +38,9 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release` (if not already done, create a `wavefront` namespace):
 
 ```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ kubectl create namespace wavefront
-$ helm install my-release bitnami/wavefront --namespace wavefront \
+$ helm install my-release my-repo/wavefront --namespace wavefront \
     --set clusterName=<K8s-CLUSTER-NAME> \
     --set wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
     --set wavefront.token=<YOUR_API_TOKEN>
@@ -279,7 +281,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```bash
 $ helm install my-release \
   --set proxy.replicaCount=3 \
-    bitnami/wavefront
+    my-repo/wavefront
 ```
 
 The above command sets 3 proxy replicas.
@@ -287,7 +289,7 @@ The above command sets 3 proxy replicas.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/wavefront
+$ helm install my-release -f values.yaml my-repo/wavefront
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -332,7 +334,7 @@ Alternatively, use a ConfigMap or a Secret with the environment variables. To do
 
 This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
@@ -342,11 +344,11 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 4.0.0
 
-This major updates the kube-state-metrics subchart to it newest major, 3.0.0, which renames several of its values. For more information on this subchart's major, please refer to [kube-state-metrics upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/kube-state-metrics#to-300).
+This major updates the kube-state-metrics subchart to it newest major, 3.0.0, which renames several of its values. For more information on this subchart's major, please refer to [kube-state-metrics upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kube-state-metrics#to-300).
 
 ### To 3.0.0
 
-This major updates the kube-state-metrics subchart to it newest major, 2.0.0, which contains name changes to a few of its values. For more information on this subchart's major, please refer to [kube-state-metrics upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/kube-state-metrics#to-200).
+This major updates the kube-state-metrics subchart to it newest major, 2.0.0, which contains name changes to a few of its values. For more information on this subchart's major, please refer to [kube-state-metrics upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kube-state-metrics#to-200).
 
 ### To 2.0.0
 

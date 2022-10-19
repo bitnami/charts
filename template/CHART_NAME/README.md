@@ -7,8 +7,8 @@
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/%%CHART_NAME%%
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/%%CHART_NAME%%
 ```
 
 ## Introduction
@@ -27,7 +27,7 @@ $ helm install my-release bitnami/%%CHART_NAME%%
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release bitnami/%%CHART_NAME%%
+helm install my-release my-repo/%%CHART_NAME%%
 ```
 
 The command deploys %%CHART_NAME%% on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -57,7 +57,7 @@ helm install my-release \
   --set %%CHART_NAME%%Username=admin \
   --set %%CHART_NAME%%Password=password \
   --set mariadb.auth.rootPassword=secretpassword \
-    bitnami/%%CHART_NAME%%
+    my-repo/%%CHART_NAME%%
 ```
 
 The above command sets the %%CHART_NAME%% administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
@@ -67,7 +67,7 @@ The above command sets the %%CHART_NAME%% administrator account username and pas
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml bitnami/%%CHART_NAME%%
+helm install my-release -f values.yaml my-repo/%%CHART_NAME%%
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -99,7 +99,7 @@ externalDatabase.port=3306
 
 %%IF NEEDED%%
 
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/master/bitnami/contour) you can utilize the ingress controller to serve your application.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
 
 To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/%%CHART_NAME%%/configuration/configure-use-ingress/).
 
@@ -134,7 +134,7 @@ If additional containers are needed in the same pod as %%CHART_NAME%% (such as a
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 

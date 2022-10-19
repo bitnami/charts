@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/minio"
         },
-        "runtime_parameters": "YXV0aDoKICByb290VXNlcjogdGVzdF9hZG1pbgogIHJvb3RQYXNzd29yZDogQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0CnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCiAgcG9ydHM6CiAgICBjb25zb2xlOiA4MA==",
+        "runtime_parameters": "bW9kZTogc3RhbmRhbG9uZQphdXRoOgogIHJvb3RVc2VyOiB0ZXN0X2FkbWluCiAgcm9vdFBhc3N3b3JkOiBDb21wbGljYXRlZFBhc3N3b3JkMTIzITQKY29udGFpbmVyUG9ydHM6CiAgYXBpOiA5MDAwCiAgY29uc29sZTogOTAwMwpwb2RTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIGZzR3JvdXA6IDEwMDIKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBydW5Bc1VzZXI6IDEwMDIKc2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGFwaTogOTAwMgogICAgY29uc29sZTogODAKcGVyc2lzdGVuY2U6CiAgZW5hYmxlZDogdHJ1ZQogIG1vdW50UGF0aDogL2RhdGEKc2VydmljZUFjY291bnQ6CiAgY3JlYXRlOiB0cnVlCiAgYXV0b21vdW50U2VydmljZUFjY291bnRUb2tlbjogdHJ1ZQ==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -44,6 +44,7 @@
             "resources": {
               "path": "/.vib/minio/goss"
             },
+            "vars_file": "vars.yaml",
             "remote": {
               "workload": "deploy-minio"
             }

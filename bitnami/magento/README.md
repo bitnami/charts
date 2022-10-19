@@ -11,15 +11,15 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/magento
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/magento
 ```
 
 ## Introduction
 
 This chart bootstraps a [Magento](https://github.com/bitnami/containers/tree/main/bitnami/magento) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment as a database for the Magento application.
+It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/main/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment as a database for the Magento application.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -35,7 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install my-release bitnami/magento
+$ helm install my-release my-repo/magento
 ```
 
 The command deploys Magento on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                        | Magento image registry                                                                                               | `docker.io`           |
 | `image.repository`                      | Magento image repository                                                                                             | `bitnami/magento`     |
-| `image.tag`                             | Magento image tag (immutable tags are recommended)                                                                   | `2.4.5-debian-11-r12` |
+| `image.tag`                             | Magento image tag (immutable tags are recommended)                                                                   | `2.4.5-debian-11-r23` |
 | `image.digest`                          | Magento image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                  |
 | `image.pullPolicy`                      | Magento image pull policy                                                                                            | `IfNotPresent`        |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                     | `[]`                  |
@@ -188,30 +188,30 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Database parameters
 
-| Name                                        | Description                                                                                             | Value                  |
-| ------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements.                   | `true`                 |
-| `mariadb.image.registry`                    | MariaDB image registry                                                                                  | `docker.io`            |
-| `mariadb.image.repository`                  | MariaDB image repository                                                                                | `bitnami/mariadb`      |
-| `mariadb.image.tag`                         | MariaDB image tag (immutable tags are recommended)                                                      | `10.4.26-debian-11-r8` |
-| `mariadb.image.digest`                      | MariaDB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
-| `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                                     | `standalone`           |
-| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                                    | `""`                   |
-| `mariadb.auth.database`                     | Database name to create                                                                                 | `bitnami_magento`      |
-| `mariadb.auth.username`                     | Database user to create                                                                                 | `bn_magento`           |
-| `mariadb.auth.password`                     | Password for the database                                                                               | `""`                   |
-| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                                   | `true`                 |
-| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                                         | `""`                   |
-| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                                 | `["ReadWriteOnce"]`    |
-| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                                         | `8Gi`                  |
-| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production)                | `""`                   |
-| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                                | `""`                   |
-| `externalDatabase.host`                     | Host of the existing database                                                                           | `""`                   |
-| `externalDatabase.port`                     | Port of the existing database                                                                           | `3306`                 |
-| `externalDatabase.user`                     | Existing username in the external db                                                                    | `bn_magento`           |
-| `externalDatabase.password`                 | Password for the above username                                                                         | `""`                   |
-| `externalDatabase.database`                 | Name of the existing database                                                                           | `bitnami_magento`      |
-| `externalDatabase.existingSecret`           | Name of an existing secret resource containing the DB password                                          | `""`                   |
+| Name                                        | Description                                                                                             | Value                   |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements.                   | `true`                  |
+| `mariadb.image.registry`                    | MariaDB image registry                                                                                  | `docker.io`             |
+| `mariadb.image.repository`                  | MariaDB image repository                                                                                | `bitnami/mariadb`       |
+| `mariadb.image.tag`                         | MariaDB image tag (immutable tags are recommended)                                                      | `10.4.26-debian-11-r20` |
+| `mariadb.image.digest`                      | MariaDB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                                     | `standalone`            |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                                    | `""`                    |
+| `mariadb.auth.database`                     | Database name to create                                                                                 | `bitnami_magento`       |
+| `mariadb.auth.username`                     | Database user to create                                                                                 | `bn_magento`            |
+| `mariadb.auth.password`                     | Password for the database                                                                               | `""`                    |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                                   | `true`                  |
+| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                                         | `""`                    |
+| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                                 | `["ReadWriteOnce"]`     |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                                         | `8Gi`                   |
+| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production)                | `""`                    |
+| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                                | `""`                    |
+| `externalDatabase.host`                     | Host of the existing database                                                                           | `""`                    |
+| `externalDatabase.port`                     | Port of the existing database                                                                           | `3306`                  |
+| `externalDatabase.user`                     | Existing username in the external db                                                                    | `bn_magento`            |
+| `externalDatabase.password`                 | Password for the above username                                                                         | `""`                    |
+| `externalDatabase.database`                 | Name of the existing database                                                                           | `bitnami_magento`       |
+| `externalDatabase.existingSecret`           | Name of an existing secret resource containing the DB password                                          | `""`                    |
 
 
 ### Elasticsearch parameters
@@ -221,7 +221,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `elasticsearch.enabled`                   | Whether to deploy a elasticsearch server to use as magento's search engine                                    | `true`                  |
 | `elasticsearch.image.registry`            | Elasticsearch image registry                                                                                  | `docker.io`             |
 | `elasticsearch.image.repository`          | Elasticsearch image repository                                                                                | `bitnami/elasticsearch` |
-| `elasticsearch.image.tag`                 | Elasticsearch image tag (immutable tags are recommended)                                                      | `7.17.6-debian-11-r7`   |
+| `elasticsearch.image.tag`                 | Elasticsearch image tag (immutable tags are recommended)                                                      | `7.17.6-debian-11-r18`  |
 | `elasticsearch.image.digest`              | Elasticsearch image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `elasticsearch.sysctlImage.enabled`       | Enable kernel settings modifier image for Elasticsearch                                                       | `true`                  |
 | `elasticsearch.master.replicaCount`       | Desired number of Elasticsearch master-eligible nodes                                                         | `1`                     |
@@ -255,7 +255,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                                        | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `11-debian-11-r34`      |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `11-debian-11-r42`      |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                    |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
@@ -303,7 +303,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`             | Start a side-car prometheus exporter                                                                            | `false`                   |
 | `metrics.image.registry`      | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`    | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`           | Apache exporter image tag (immutable tags are recommended)                                                      | `0.11.0-debian-11-r39`    |
+| `metrics.image.tag`           | Apache exporter image tag (immutable tags are recommended)                                                      | `0.11.0-debian-11-r52`    |
 | `metrics.image.digest`        | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`    | Image pull policy                                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets`   | Specify docker-registry secret names as an array                                                                | `[]`                      |
@@ -332,7 +332,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                      | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                                                                        | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image                                                                                           | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)                                                      | `11-debian-11-r34`                       |
+| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)                                                      | `11-debian-11-r42`                       |
 | `certificates.image.digest`                          | Container sidecar image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                              | `[]`                                     |
@@ -370,7 +370,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set magentoUsername=admin,magentoPassword=password,mariadb.auth.rootPassword=secretpassword \
-    bitnami/magento
+    my-repo/magento
 ```
 
 The above command sets the Magento administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
@@ -380,7 +380,7 @@ The above command sets the Magento administrator account username and password t
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/magento
+$ helm install my-release -f values.yaml my-repo/magento
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -413,7 +413,7 @@ If you configure the `image` value to one in a private registry, you will need t
 
 ### Ingress
 
-This chart provides support for ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/master/bitnami/contour) you can utilize the ingress controller to serve your application.
+This chart provides support for ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
 
 To enable ingress integration, please set `ingress.enabled` to `true`.
 
@@ -539,7 +539,7 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Persistence
 
@@ -555,7 +555,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 1. Install the chart
 
     ```bash
-    $ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/magento
+    $ helm install my-release --set persistence.existingClaim=PVC_NAME my-repo/magento
     ```
 
 ### Host path
@@ -571,7 +571,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 1. Install the chart
 
     ```bash
-    $ helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT bitnami/magento
+    $ helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT my-repo/magento
     ```
 
     This will mount the `magento-data` volume into the `hostPath` directory. The site data will be persisted if the mount path contains valid data, else the site data will be initialized at first launch.
@@ -601,15 +601,15 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### 21.0.0
 
-This major updates the Elasticsearch subchart to its newest major, 19.0.0, which removes support for elasticsearch-curator. Check [Elasticsearch Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch#to-1900) for more information.
+This major updates the Elasticsearch subchart to its newest major, 19.0.0, which removes support for elasticsearch-curator. Check [Elasticsearch Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/elasticsearch#to-1900) for more information.
 
 ### 19.0.0
 
-This major updates the Elasticsearch subchart to its newest major, 17.0.0, which adds support for X-pack security features such as SSL/TLS encryption and password protection. Check [Elasticsearch Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch#to-1700) for more information.
+This major updates the Elasticsearch subchart to its newest major, 17.0.0, which adds support for X-pack security features such as SSL/TLS encryption and password protection. Check [Elasticsearch Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/elasticsearch#to-1700) for more information.
 
 ### 18.0.0
 
-Elasticsearch dependency version was bumped to a new major version changing the license of some of its components to the [Elastic License](https://www.elastic.co/licensing/elastic-license) that is not currently accepted as an Open Source license by the Open Source Initiative (OSI). Check [Elasticsearch Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch#to-1500) for more information.
+Elasticsearch dependency version was bumped to a new major version changing the license of some of its components to the [Elastic License](https://www.elastic.co/licensing/elastic-license) that is not currently accepted as an Open Source license by the Open Source Initiative (OSI). Check [Elasticsearch Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/elasticsearch#to-1500) for more information.
 
 Regular upgrade is compatible from previous versions.
 
@@ -627,7 +627,7 @@ This upgrade adapts the chart to the latest Bitnami good practices. Check the Pa
 
 - Lots of new parameters were added, including SMTP configuration, for using existing DBs (`magentoSkipInstall`), configuring security context, etc.
 - Some parameters were renamed or disappeared in favor of new ones in this major version. For example, `persistence.magento.*` parameters were deprecated in favor of `persistence.*`.
-- This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+- This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 **2. Migration of the Magento image to non-root**
 
@@ -648,7 +648,7 @@ This version updates the docker image to `2.3.5-debian-10-r57` version. That ver
 
 Several changes were introduced that can break backwards compatibility:
 
-- This version includes a new major version of the ElasticSearch chart bundled as dependency. You can find the release notes of the new ElasticSearch major version in [this section](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch#1200) of the ES README.
+- This version includes a new major version of the ElasticSearch chart bundled as dependency. You can find the release notes of the new ElasticSearch major version in [this section](https://github.com/bitnami/charts/tree/main/bitnami/elasticsearch#1200) of the ES README.
 - Labels are adapted to follow the Helm charts best practices.
 
 ### 9.0.0
@@ -668,8 +668,8 @@ You can disable the initContainer using the `elasticsearch.sysctlImage.enabled=f
 
 This major release renames several values in this chart and adds missing features, in order to get aligned with the rest of the assets in the Bitnami charts repository.
 
-Additionally, it updates both the [Elasticsearch](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch) and the [MariaDB](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) subcharts to their latest major versions, 18.0.0 and 10.0.0 respectively, where similar changes have been also performed.
-Check [Elasticsearch Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1800) and [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-1000) for more information.
+Additionally, it updates both the [Elasticsearch](https://github.com/bitnami/charts/tree/main/bitnami/elasticsearch) and the [MariaDB](https://github.com/bitnami/charts/tree/main/bitnami/mariadb) subcharts to their latest major versions, 18.0.0 and 10.0.0 respectively, where similar changes have been also performed.
+Check [Elasticsearch Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/redis#to-1800) and [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/mariadb#to-1000) for more information.
 
 The following values have been renamed:
 
@@ -689,7 +689,7 @@ For the Elasticsearch 14.0.0 sub-chart update, when enabling Kibana and configur
 ### To 16.0.0
 
 - Chart labels were adapted to follow the [Helm charts standard labels](https://helm.sh/docs/chart_best_practices/labels/#standard-labels).
-- This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+- This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 Consequences:
 
@@ -701,7 +701,7 @@ $ export APP_PASSWORD=$(kubectl get secret --namespace default magento -o jsonpa
 $ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default magento-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
 $ export MARIADB_PASSWORD=$(kubectl get secret --namespace default magento-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
 $ kubectl delete deployments.apps magento
-$ helm upgrade magento bitnami/magento --set magentoHost=$APP_HOST,magentoPassword=$APP_PASSWORD,mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD
+$ helm upgrade magento my-repo/magento --set magentoHost=$APP_HOST,magentoPassword=$APP_PASSWORD,mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD
 ```
 
 ### To 15.0.0
@@ -738,7 +738,7 @@ Please read the update notes carefully.
 
 **2. Updated MariaDB dependency version**
 
-In this major the MariaDB and Elasticsearch dependency versions were also bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-800) for more information. Although it is using the latest `bitnami/mariadb` chart, given Magento `2.4` [current limitations](https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements.html#database), the container image of MariaDB has been bumped to `10.4.x` instead of using the latest `10.5.x`.
+In this major the MariaDB and Elasticsearch dependency versions were also bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/mariadb#to-800) for more information. Although it is using the latest `bitnami/mariadb` chart, given Magento `2.4` [current limitations](https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements.html#database), the container image of MariaDB has been bumped to `10.4.x` instead of using the latest `10.5.x`.
 
 To upgrade to `15.0.0`, it should be done reusing the PVCs used to hold data from MariaDB, Elasticsearch and Magento data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `magento` and that a `rootUser.password` was defined for MariaDB in `values.yaml` when the chart was first installed):
 
@@ -764,7 +764,7 @@ $ kubectl delete statefulsets.apps magento-mariadb --cascade=false
 Now the upgrade works:
 
 ```console
-$ helm upgrade magento bitnami/magento --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set magentoPassword=$MAGENTO_PASSWORD --set magentoHost=$MAGENTO_HOST
+$ helm upgrade magento my-repo/magento --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set magentoPassword=$MAGENTO_PASSWORD --set magentoHost=$MAGENTO_HOST
 ```
 
 You will have to delete the existing MariaDB pod and the new statefulset is going to create a new one

@@ -3,20 +3,17 @@ on:
   schedule:
     # Hourly
     - cron: '0 * * * *'
-
 permissions:
   issues: write
   pull-requests: write
-  repository-projects: write
-
 jobs:
   stale:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/stale@v4
+      - uses: actions/stale@v5
         with:
           any-of-labels: 'solved'
           stale-issue-label: 'solved'
           days-before-stale: 0
           days-before-close: 0
-          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          repo-token: ${{ secrets.BITNAMI_BOT_TOKEN }}

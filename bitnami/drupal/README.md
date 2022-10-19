@@ -7,19 +7,19 @@ Drupal is one of the most versatile open source content management systems in th
 [Overview of Drupal](http://drupal.org)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/drupal
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/drupal
 ```
 
 ## Introduction
 
 This chart bootstraps a [Drupal](https://github.com/bitnami/containers/tree/main/bitnami/drupal) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment as a database for the Drupal application.
+It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/main/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment as a database for the Drupal application.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -35,7 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install my-release bitnami/drupal
+$ helm install my-release my-repo/drupal
 ```
 
 The command deploys Drupal on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                              | Drupal image registry                                                                                                  | `docker.io`          |
 | `image.repository`                            | Drupal Image name                                                                                                      | `bitnami/drupal`     |
-| `image.tag`                                   | Drupal Image tag                                                                                                       | `9.4.7-debian-11-r1` |
+| `image.tag`                                   | Drupal Image tag                                                                                                       | `9.4.8-debian-11-r3` |
 | `image.digest`                                | Drupal image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                 | `""`                 |
 | `image.pullPolicy`                            | Drupal image pull policy                                                                                               | `IfNotPresent`       |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                       | `[]`                 |
@@ -233,7 +233,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r37`      |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r39`      |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                    |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
@@ -248,7 +248,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a exporter side-car                                                                                       | `false`                   |
 | `metrics.image.registry`                   | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`                 | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache exporter image tag                                                                                       | `0.11.0-debian-11-r45`    |
+| `metrics.image.tag`                        | Apache exporter image tag                                                                                       | `0.11.0-debian-11-r49`    |
 | `metrics.image.digest`                     | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`                 | Image pull policy                                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                | `[]`                      |
@@ -293,7 +293,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                      | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                                                                        | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image                                                                                           | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag                                                                                       | `11-debian-11-r37`                       |
+| `certificates.image.tag`                             | Container sidecar image tag                                                                                       | `11-debian-11-r39`                       |
 | `certificates.image.digest`                          | Container sidecar image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                              | `[]`                                     |
@@ -327,7 +327,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set drupalUsername=admin,drupalPassword=password,mariadb.auth.rootPassword=secretpassword \
-    bitnami/drupal
+    my-repo/drupal
 ```
 
 The above command sets the Drupal administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
@@ -337,7 +337,7 @@ The above command sets the Drupal administrator account username and password to
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/drupal
+$ helm install my-release -f values.yaml my-repo/drupal
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -372,7 +372,7 @@ imagePullSecrets:
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Persistence
 
@@ -388,7 +388,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 1. Install the chart
 
 ```bash
-$ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/drupal
+$ helm install my-release --set persistence.existingClaim=PVC_NAME my-repo/drupal
 ```
 
 ### Host path
@@ -404,7 +404,7 @@ $ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/drupa
 1. Install the chart
 
     ```bash
-    $ helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT bitnami/drupal
+    $ helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT my-repo/drupal
     ```
 
     This will mount the `drupal-data` volume into the `hostPath` directory. The site data will be persisted if the mount path contains valid data, else the site data will be initialized at first launch.
@@ -456,7 +456,7 @@ Additionally also updates the MariaDB subchart to it newest major, 10.0.0, which
 
 ### To 9.0.0
 
-MariaDB dependency version was bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-800) for more information.
+MariaDB dependency version was bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/mariadb#to-800) for more information.
 
 To upgrade to `9.0.0`, you have two alternatives:
 
@@ -477,13 +477,13 @@ export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=dru
 Upgrade your release (maintaining the version) disabling MariaDB and scaling Drupal replicas to 0:
 
 ```console
-$ helm upgrade drupal bitnami/drupal --set drupalPassword=$DRUPAL_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.2.1
+$ helm upgrade drupal my-repo/drupal --set drupalPassword=$DRUPAL_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.2.1
 ```
 
 Finally, upgrade you release to 9.0.0 reusing the existing PVC, and enabling back MariaDB:
 
 ```console
-$ helm upgrade drupal bitnami/drupal --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set drupalPassword=$DRUPAL_PASSWORD
+$ helm upgrade drupal my-repo/drupal --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set drupalPassword=$DRUPAL_PASSWORD
 ```
 
 You should see the lines below in MariaDB container logs:
