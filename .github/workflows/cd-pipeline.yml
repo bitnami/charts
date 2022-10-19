@@ -160,7 +160,6 @@ jobs:
           pipeline: ${{ needs.get-chart.outputs.chart }}/vib-publish.json
           config: charts/.vib/
           verification-mode: ${{ steps.get-asset-vib-config.outputs.verification_mode }}
-          retry-count: 6
         env:
           VIB_ENV_TARGET_PLATFORM: ${{ secrets.VIB_ENV_TARGET_PLATFORM }}
           VIB_ENV_ALTERNATIVE_TARGET_PLATFORM: ${{ secrets.VIB_ENV_ALTERNATIVE_TARGET_PLATFORM }}
