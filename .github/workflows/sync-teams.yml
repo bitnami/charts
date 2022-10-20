@@ -16,7 +16,7 @@ jobs:
           token: ${{ secrets.BITNAMI_BOT_TOKEN }}
           fetch-depth: 1
       - name: Load .env file
-        uses: xom9ikk/dotenv@v1.0.2
+        uses: xom9ikk/dotenv@v2
         with:
           path: .github/workflows/
       - name: Updating members of the Bitnami team
