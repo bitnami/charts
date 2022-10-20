@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/nginx-ingress-controller"
         },
-        "runtime_parameters": "InNlcnZpY2UiOgogICJwb3J0cyI6IAogICAgImh0dHAiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciIK",
+        "runtime_parameters": "aW5ncmVzc0NsYXNzUmVzb3VyY2U6CiAgbmFtZTogbmdpbngKICBlbmFibGVkOiB0cnVlCiAgZGVmYXVsdDogZmFsc2UKICBjb250cm9sbGVyQ2xhc3M6ICJrOHMuaW8vaW5ncmVzcy1uZ2lueCIKa2luZDogRGVwbG95bWVudApwb2RTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIGZzR3JvdXA6IDEwMDIKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBydW5Bc1VzZXI6IDEwMDIKICBjYXBhYmlsaXRpZXM6CiAgICBkcm9wOiBbIkFMTCJdCiAgICBhZGQ6IFsiTkVUX0JJTkRfU0VSVklDRSJdCmRlZmF1bHRCYWNrZW5kOgogIGVuYWJsZWQ6IHRydWUKICBjb250YWluZXJQb3J0OiA4MDgwCiAgc2VydmVyQmxvY2tDb25maWc6IHwtCiAgICBsb2NhdGlvbiAvaGVhbHRoeiB7CiAgICAgIHJldHVybiAyMDA7CiAgICB9CiAgICBsb2NhdGlvbiAvIHsKICAgICAgcmV0dXJuIDQwNDsKICAgIH0Kc2VydmljZToKICBwb3J0czogCiAgICBodHRwOiA4MAogICAgaHR0cHM6IDQ0NAogIHR5cGU6IExvYWRCYWxhbmNlcgpzZXJ2aWNlQWNjb3VudDoKICBjcmVhdGU6IHRydWUKICBhdXRvbW91bnRTZXJ2aWNlQWNjb3VudFRva2VuOiB0cnVlCg==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
           "size": {
@@ -36,6 +36,31 @@
           "params": {
             "endpoint": "lb-nginx-ingress-controller-http",
             "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/nginx-ingress-controller/goss"
+            },
+            "remote": {
+              "workload": "deploy-nginx-ingress-controller"
+            },
+            "vars_file": "vars.yaml"
+          }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/nginx-ingress-controller/ginkgo"
+
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}"
+            }
           }
         }
       ]

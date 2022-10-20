@@ -1,0 +1,11 @@
+podSecurityContext:
+  fsGroup: 1002
+containerSecurityContext:
+  runAsUser: 1002
+  capabilities:
+    add: cap_net_bind_service
+service:
+  ports:
+    https: 444
+serviceAccount:
+  automountServiceAccountToken: true
