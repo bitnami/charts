@@ -117,5 +117,6 @@ data:
     {{- end }}
     cat "/certs-${ID}/tls.crt" "/certs-${ID}/tls.key" > "/certs/mongodb.pem"
     cp "/certs-${ID}/ca.crt" "/certs/mongodb-ca-cert"
+    chmod 0600 /certs/mongodb-ca-cert /certs/mongodb.pem
     {{- end }}
   {{- end }}
