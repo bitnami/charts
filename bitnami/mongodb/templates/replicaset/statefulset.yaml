@@ -517,7 +517,7 @@ spec:
         {{- range $index, $secret := .Values.tls.replicaset.existingSecrets }}
         - name: mongodb-certs-{{ $index }}
           secret:
-            secretName: {{ tpl $secret $ }}
+            secretName: {{ include "common.tplvalues.render" ( dict "value" $secret "context" $) }}
             defaultMode: 256
         {{- end }}
         {{- end }}
