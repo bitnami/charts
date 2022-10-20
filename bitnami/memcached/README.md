@@ -91,6 +91,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.enabled`       | Enable Memcached authentication                                                                           | `false`                |
 | `auth.username`      | Memcached admin user                                                                                      | `""`                   |
 | `auth.password`      | Memcached admin password                                                                                  | `""`                   |
+| `auth.existingPasswordSecret`      | Existing secret with Memcached credentials (must contain a value for `memcached-password` key)                                                   | `""`                   |
 | `command`            | Override default container command (useful when using custom images)                                      | `[]`                   |
 | `args`               | Override default container args (useful when using custom images)                                         | `[]`                   |
 | `extraEnvVars`       | Array with extra environment variables to add to Memcached nodes                                          | `[]`                   |
