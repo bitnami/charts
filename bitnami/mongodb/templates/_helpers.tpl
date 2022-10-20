@@ -403,9 +403,9 @@ mongodb: tls.replicaset.existingSecrets
 Validate values of MongoDB&reg; - Number of hidden secrets must be the same than number of hidden nodes.
 */}}
 {{- define "mongodb.validateValues.hidden.existingSecrets" -}}
-{{- if and .Values.tls.enabled (eq (include "mongodb.hidden.enabled" .) "true") (not (empty .Values.tls.hidden.existingSecrets)) }}
+{{- if and .Values.tls.enabled (include "mongodb.hidden.enabled" .) (not (empty .Values.tls.hidden.existingSecrets)) }}
 {{- $nbSecrets := len .Values.tls.hidden.existingSecrets -}}
-{{- if not (eq $nbSecrets (int .Values.replicaCount)) }}
+{{- if not (eq $nbSecrets (int .Values.hidden.replicaCount)) }}
 mongodb: tls.hidden.existingSecrets
     tls.hidden.existingSecrets Number of secrets and number of hidden nodes must be the same.
 {{- end -}}

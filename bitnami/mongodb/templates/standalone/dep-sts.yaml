@@ -443,7 +443,7 @@ spec:
         {{- else }}
         - name: mongodb-certs-0
           secret:
-            secretName: {{ .Values.tls.standalone.existingSecret }}
+            secretName: {{ include "common.tplvalues.render" ( dict "value" .Values.tls.standalone.existingSecret "context" $) }}
             defaultMode: 256
         {{- end }}
         {{- end }}
