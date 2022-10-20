@@ -7,8 +7,8 @@ on: # rebuild any PRs and main branch changes
       - synchronize
       - labeled
     branches:
-      - master
-      - bitnami:master
+      - main
+      - bitnami:main
 permissions:
   issues: write
   pull-requests: write
@@ -75,7 +75,7 @@ jobs:
       - id: show-error
         name: Show error
         if: ${{ steps.get-chart.outputs.result == 'fail' }}
-        uses: actions/github-script@v3
+        uses: actions/github-script@v6
         with:
           script: |
             core.setFailed('${{ steps.get-chart.outputs.error }}')
@@ -93,7 +93,7 @@ jobs:
       )
     name: VIB Verify
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         name: Checkout Repository
         with:
           ref: ${{ github.event.pull_request.head.ref }}
@@ -143,7 +143,7 @@ jobs:
       # Approved by the 'github-actions' user; a PR can't be approved by its author
       - name: PR approval
         if: ${{ needs.vib-verify.result == 'success' }}
-        uses: hmarr/auto-approve-action@v2.4.0
+        uses: hmarr/auto-approve-action@v3.0.0
         with:
           pull-request-number: ${{ github.event.number }}
       # If the CI did not succeed ('VIB Verify' failed or skipped),

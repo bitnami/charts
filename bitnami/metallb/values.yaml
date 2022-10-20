@@ -98,7 +98,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/metallb-controller
-    tag: 0.13.6-debian-11-r1
+    tag: 0.13.7-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -426,7 +426,7 @@ controller:
       ##
       relabelings: []
       ## @param controller.metrics.serviceMonitor.selector ServiceMonitor selector labels
-      ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
       ##
       ## selector:
       ##   prometheus: my-prometheus
@@ -455,7 +455,7 @@ speaker:
   image:
     registry: docker.io
     repository: bitnami/metallb-speaker
-    tag: 0.13.6-debian-11-r0
+    tag: 0.13.6-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -781,7 +781,7 @@ speaker:
       ##
       relabelings: []
       ## @param speaker.metrics.serviceMonitor.selector ServiceMonitor selector labels
-      ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
       ##
       ## selector:
       ##   prometheus: my-prometheus

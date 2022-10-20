@@ -74,7 +74,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 19.0.3-debian-11-r2
+  tag: 19.0.3-debian-11-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -768,7 +768,7 @@ metrics:
     ##
     labels: {}
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
-    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ##
     selector: {}
     ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
@@ -831,7 +831,7 @@ keycloakConfigCli:
   image:
     registry: docker.io
     repository: bitnami/keycloak-config-cli
-    tag: 5.3.1-debian-11-r23
+    tag: 5.3.1-debian-11-r24
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -907,6 +907,10 @@ keycloakConfigCli:
   ##   - name: FOO
   ##     value: "bar"
   ##
+  ## @param keycloakConfigCli.podTolerations Tolerations for job pod assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  podTolerations: []
   extraEnvVars: []
   ## @param keycloakConfigCli.extraEnvVarsCM ConfigMap with extra environment variables
   ##
@@ -965,7 +969,7 @@ keycloakConfigCli:
 ## @section Database parameters
 
 ## PostgreSQL chart configuration
-## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
+## ref: https://github.com/bitnami/charts/blob/main/bitnami/postgresql/values.yaml
 ## @param postgresql.enabled Switch to enable or disable the PostgreSQL helm chart
 ## @param postgresql.auth.username Name for a custom user to create
 ## @param postgresql.auth.password Password for the custom user to create

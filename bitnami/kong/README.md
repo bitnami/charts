@@ -7,7 +7,7 @@ Kong is an open source Microservice API gateway and platform designed for managi
 [Overview of Kong](https://konghq.com/kong-community-edition/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -508,7 +508,7 @@ extraDeploy:
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
@@ -536,7 +536,7 @@ No issues are expected during the upgrade.
 
 ### To 5.0.0
 
-The `cassandra` sub-chart was upgraded to `9.x.x`. Several values of the sub-chart were changed, so please check the [upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/cassandra#to-900).
+The `cassandra` sub-chart was upgraded to `9.x.x`. Several values of the sub-chart were changed, so please check the [upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/cassandra#to-900).
 
 No issues are expected during the upgrade.
 
@@ -609,7 +609,7 @@ postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
 
 ### To 4.0.0
 
-This major updates the Cassandra subchart to its newest major, 4.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/cassandra#to-800) you can find more information about the changes introduced in those versions.
+This major updates the Cassandra subchart to its newest major, 4.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/cassandra#to-800) you can find more information about the changes introduced in those versions.
 
 ### To 2.0.0
 
@@ -617,9 +617,9 @@ PostgreSQL and Cassandra dependencies versions were bumped to new major versions
 
 In order to properly migrate your data to this new version:
 
-* If you were using PostgreSQL as your database, please refer to the [PostgreSQL Upgrade Notes](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#900).
+* If you were using PostgreSQL as your database, please refer to the [PostgreSQL Upgrade Notes](https://github.com/bitnami/charts/tree/main/bitnami/postgresql#900).
 
-* If you were using Cassandra as your database, please refer to the [Cassandra Upgrade Notes](https://github.com/bitnami/charts/tree/master/bitnami/cassandra#to-600).
+* If you were using Cassandra as your database, please refer to the [Cassandra Upgrade Notes](https://github.com/bitnami/charts/tree/main/bitnami/cassandra#to-600).
 
 ## License
 

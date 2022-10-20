@@ -14,7 +14,7 @@ jobs:
       - name: Repo checkout
         uses: actions/checkout@v3
       - name: Load .env file
-        uses: xom9ikk/dotenv@v1.0.2
+        uses: xom9ikk/dotenv@v2
         with:
           path: .github/workflows/
       - name: Move into From Build Maintenance

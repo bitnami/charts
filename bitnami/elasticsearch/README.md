@@ -7,7 +7,7 @@ Elasticsearch is a distributed search and analytics engine. It is used for web s
 [Overview of Elasticsearch](https://www.elastic.co/products/elasticsearch)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -799,7 +799,7 @@ initContainers:
 
 This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Persistence
 
@@ -860,7 +860,7 @@ The following values have been modified:
 
 ### To 17.0.0
 
-This version bumps in a major the version of the Kibana Helm Chart bundled as dependecy, [here](https://github.com/bitnami/charts/tree/master/bitnami/kibana#to-900) you can see the changes implemented in this Kibana major version.
+This version bumps in a major the version of the Kibana Helm Chart bundled as dependecy, [here](https://github.com/bitnami/charts/tree/main/bitnami/kibana#to-900) you can see the changes implemented in this Kibana major version.
 
 ### To 16.0.0
 
@@ -942,7 +942,7 @@ In [4dfac075aacf74405e31ae5b27df4369e84eb0b0](https://github.com/bitnami/charts/
 
 ### To 7.4.0
 
-This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### To 7.0.0
 

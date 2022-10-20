@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
 | `image.registry`                                  | Sealed Secrets image registry                                                                                            | `docker.io`              |
 | `image.repository`                                | Sealed Secrets image repository                                                                                          | `bitnami/sealed-secrets` |
-| `image.tag`                                       | Sealed Secrets image tag (immutable tags are recommended)                                                                | `0.19.0-scratch-r0`      |
+| `image.tag`                                       | Sealed Secrets image tag (immutable tags are recommended)                                                                | `0.19.1-scratch-r0`      |
 | `image.digest`                                    | Sealed Secrets image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag           | `""`                     |
 | `image.pullPolicy`                                | Sealed Secrets image pull policy                                                                                         | `IfNotPresent`           |
 | `image.pullSecrets`                               | Sealed Secrets image pull secrets                                                                                        | `[]`                     |
@@ -253,7 +253,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Ingress
 
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/master/bitnami/contour) you can utilize the ingress controller to serve your application.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
 
 To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/sealed-secrets/configuration/configure-use-ingress/).
 
@@ -269,7 +269,7 @@ If additional containers are needed in the same pod as Sealed Secrets (such as a
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
