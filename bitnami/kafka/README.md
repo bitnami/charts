@@ -614,6 +614,12 @@ allowEveryoneIfNoAclFound=false
 superUsers=User:admin
 ```
 
+If you are using Kafka ACLs, you might encounter in kafka-authorizer.log the following event: `[...] Principal = User:ANONYMOUS is Allowed Operation [...]`. 
+
+By setting the following parameter: `auth.clientProtocol=mtls`, it will set the configuration in Kafka to `ssl.client.auth=required`. This option will require the clients to authenticate to Kafka brokers.
+
+As result, we will be able to see in kafka-authorizer.log the events specific Subject: `[...] Principal = User:CN=kafka,OU=...,O=...,L=...,C=..,ST=... is [...]`.
+
 If you also enable exposing metrics using the Kafka exporter, and you are using `sasl_tls`, `tls`, or `mtls` authentication protocols, you need to mount the CA certificated used to sign the brokers certificates in the exporter so it can validate the Kafka brokers. To do so, create a secret containing the CA, and set the `metrics.certificatesSecret` parameter. As an alternative, you can skip TLS validation using extra flags:
 
 ```console
