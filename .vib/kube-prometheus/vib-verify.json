@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/kube-prometheus"
         },
-        "runtime_parameters": "Im9wZXJhdG9yIjoKICAiY3VzdG9tUmVzb3VyY2VEZWxldGVQb2xpY3kiOiAiYmVmb3JlLWhvb2stY3JlYXRpb24iCiJwcm9tZXRoZXVzIjoKICAic2VydmljZSI6CiAgICAidHlwZSI6ICJMb2FkQmFsYW5jZXIiCiAgICAicG9ydHMiOiAKICAgICAgImh0dHAiOiA4MAo=",
+        "runtime_parameters": "b3BlcmF0b3I6CiAgc2VydmljZUFjY291bnQ6CiAgICBjcmVhdGU6IHRydWUKICAgIGF1dG9tb3VudFNlcnZpY2VBY2NvdW50VG9rZW46IHRydWUKICBwb2RTZWN1cml0eUNvbnRleHQ6CiAgICBlbmFibGVkOiB0cnVlCiAgICBydW5Bc1VzZXI6IDEwMDIKICAgIGZzR3JvdXA6IDEwMDIKICBrdWJlbGV0U2VydmljZToKICAgIGVuYWJsZWQ6IHRydWUKICBzZXJ2aWNlOgogICAgcG9ydHM6CiAgICAgIGh0dHA6IDgwODEKICBjdXN0b21SZXNvdXJjZURlbGV0ZVBvbGljeTogYmVmb3JlLWhvb2stY3JlYXRpb24KcHJvbWV0aGV1czoKICBlbmFibGVkOiB0cnVlCiAgcmVwbGljYUNvdW50OiAyCiAgc2VydmljZToKICAgIHR5cGU6IExvYWRCYWxhbmNlcgogICAgcG9ydHM6IAogICAgICBodHRwOiA4MAphbGVydG1hbmFnZXI6CiAgZW5hYmxlZDogdHJ1ZQogIHJlcGxpY2FDb3VudDogMgogIHNlcnZpY2U6CiAgICBwb3J0czoKICAgICAgaHR0cDogOTA5NApleHBvcnRlcnM6CiAgbm9kZS1leHBvcnRlcjoKICAgIGVuYWJsZWQ6IHRydWUKICBrdWJlLXN0YXRlLW1ldHJpY3M6CiAgICBlbmFibGVkOiB0cnVlCiAgICByZXBsaWNhQ291bnQ6IDEKa3ViZWxldDoKICBlbmFibGVkOiB0cnVl",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -36,6 +36,28 @@
           "params": {
             "endpoint": "lb-kube-prometheus-prometheus-http",
             "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/kube-prometheus/cypress"
+            },
+            "endpoint": "lb-kube-prometheus-prometheus-http",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/kube-prometheus/goss"
+            },
+            "remote": {
+              "workload": "deploy-kube-prometheus-operator"
+            },
+            "vars_file": "vars.yaml"
           }
         }
       ]

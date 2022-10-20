@@ -33,6 +33,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/kafka/**'
       - 'bitnami/keycloak/**'
       - 'bitnami/kibana/**'
+      - 'bitnami/kube-prometheus/**'
       - 'bitnami/logstash/**'
       - 'bitnami/magento/**'
       - 'bitnami/mariadb-galera/**'
