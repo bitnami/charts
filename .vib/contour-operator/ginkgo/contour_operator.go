@@ -15,7 +15,7 @@ import (
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 )
 
-var _ = Describe("Contour Operator", func() {
+var _ = Describe("Contour Operator:", func() {
 	var netclient netcv1.NetworkingV1Interface
 	var coreclient cv1.CoreV1Interface
 	var ctx context.Context
@@ -26,7 +26,7 @@ var _ = Describe("Contour Operator", func() {
 		ctx = context.Background()
 	})
 
-	Context("resources data", func() {
+	Context("When both operator and testing resources are deployed", func() {
 		var podLogs, responseBody []string
 		var controllerPods v1.PodList
 		var ingresses netv1.IngressList
@@ -39,7 +39,7 @@ var _ = Describe("Contour Operator", func() {
 			responseBody = getResponseBodyOrDie(ctx, "http://"+ingresses.Items[0].Status.LoadBalancer.Ingress[0].IP)
 		})
 
-		It("checks the operator manages the contour resource", func() {
+		It("the operator manages the contour resource", func() {
 			Expect(containsString(podLogs, *contourName)).To(BeTrue())
 		})
 		It("the ingress' asigned IP resolves to the testing deployment", func() {
