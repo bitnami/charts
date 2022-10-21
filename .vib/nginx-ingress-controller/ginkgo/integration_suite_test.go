@@ -10,10 +10,8 @@ import (
 	"testing"
 
 	v1 "k8s.io/api/core/v1"
-	netv1 "k8s.io/api/networking/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	cv1 "k8s.io/client-go/kubernetes/typed/core/v1"
-	netcv1 "k8s.io/client-go/kubernetes/typed/networking/v1"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 
@@ -28,6 +26,7 @@ const APP_NAME = "NGINX Ingress Controller"
 
 var kubeconfig = flag.String("kubeconfig", "", "absolute path to the kubeconfig file")
 var namespace = flag.String("namespace", "", "namespace where the resources are deployed")
+var ingressName = flag.String("ingress-name", "", "resource name of the testing ingress")
 
 func clusterConfigOrDie() *rest.Config {
 	var config *rest.Config
@@ -45,32 +44,6 @@ func clusterConfigOrDie() *rest.Config {
 	return config
 }
 
-func createIngressOrDie(ctx context.Context, c netcv1.NetworkingV1Interface, namespace string, name string, ingressClassName string, ingressRuleHost string, ingressRuleValue netv1.IngressRuleValue) netv1.Ingress {
-	ingress := &netv1.Ingress{
-		ObjectMeta: metav1.ObjectMeta{
-			Namespace: namespace,
-			Name:      name,
-		},
-		Spec: netv1.IngressSpec{
-			IngressClassName: &ingressClassName,
-			Rules: []netv1.IngressRule{
-				{
-					Host:             ingressRuleHost,
-					IngressRuleValue: ingressRuleValue,
-				},
-			},
-		},
-	}
-
-	result, err := c.Ingresses(namespace).Create(ctx, ingress, metav1.CreateOptions{})
-	if err != nil {
-		panic(err.Error())
-	}
-	fmt.Printf("Created ingress %q.\n", result.GetObjectMeta().GetName())
-
-	return *result
-}
-
 func getPodsByLabelOrDie(ctx context.Context, c cv1.PodsGetter, namespace string, selector string) v1.PodList {
 
 	output, err := c.Pods(namespace).List(ctx, metav1.ListOptions{
@@ -86,7 +59,7 @@ func getPodsByLabelOrDie(ctx context.Context, c cv1.PodsGetter, namespace string
 
 func getPodLogsOrDie(ctx context.Context, c cv1.PodsGetter, namespace, podName, container string) []string {
 	var output []string
-	tailLines := int64(5)
+	tailLines := int64(50)
 
 	readCloser, err := c.Pods(namespace).GetLogs(podName, &v1.PodLogOptions{
 		Container: container,
@@ -138,6 +111,9 @@ func containsString(haystack []string, needle string) bool {
 func CheckRequirements() {
 	if *namespace == "" {
 		panic(fmt.Sprintf("The namespace where %s is deployed must be provided. Use the '--namespace' flag", APP_NAME))
+	}
+	if *ingressName == "" {
+		panic("The resource name of the testing ingress. Use the '--ingress-name' flag")
 	}
 }
 

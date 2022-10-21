@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/nginx-ingress-controller"
         },
-        "runtime_parameters": "aW5ncmVzc0NsYXNzUmVzb3VyY2U6CiAgbmFtZTogbmdpbngKICBlbmFibGVkOiB0cnVlCiAgZGVmYXVsdDogZmFsc2UKICBjb250cm9sbGVyQ2xhc3M6ICJrOHMuaW8vaW5ncmVzcy1uZ2lueCIKa2luZDogRGVwbG95bWVudApwb2RTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIGZzR3JvdXA6IDEwMDIKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBydW5Bc1VzZXI6IDEwMDIKICBjYXBhYmlsaXRpZXM6CiAgICBkcm9wOiBbIkFMTCJdCiAgICBhZGQ6IFsiTkVUX0JJTkRfU0VSVklDRSJdCmRlZmF1bHRCYWNrZW5kOgogIGVuYWJsZWQ6IHRydWUKICBjb250YWluZXJQb3J0OiA4MDgwCiAgc2VydmVyQmxvY2tDb25maWc6IHwtCiAgICBsb2NhdGlvbiAvaGVhbHRoeiB7CiAgICAgIHJldHVybiAyMDA7CiAgICB9CiAgICBsb2NhdGlvbiAvIHsKICAgICAgcmV0dXJuIDQwNDsKICAgIH0Kc2VydmljZToKICBwb3J0czogCiAgICBodHRwOiA4MAogICAgaHR0cHM6IDQ0NAogIHR5cGU6IExvYWRCYWxhbmNlcgpzZXJ2aWNlQWNjb3VudDoKICBjcmVhdGU6IHRydWUKICBhdXRvbW91bnRTZXJ2aWNlQWNjb3VudFRva2VuOiB0cnVlCg==",
+        "runtime_parameters": "aW5ncmVzc0NsYXNzUmVzb3VyY2U6CiAgbmFtZTogbmdpbngKICBlbmFibGVkOiB0cnVlCiAgZGVmYXVsdDogZmFsc2UKICBjb250cm9sbGVyQ2xhc3M6ICJrOHMuaW8vaW5ncmVzcy1uZ2lueCIKa2luZDogRGVwbG95bWVudApwb2RTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIGZzR3JvdXA6IDEwMDIKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBydW5Bc1VzZXI6IDEwMDIKICBjYXBhYmlsaXRpZXM6CiAgICBkcm9wOiBbIkFMTCJdCiAgICBhZGQ6IFsiTkVUX0JJTkRfU0VSVklDRSJdCmRlZmF1bHRCYWNrZW5kOgogIGVuYWJsZWQ6IHRydWUKICBjb250YWluZXJQb3J0OiA4MDgwCiAgc2VydmVyQmxvY2tDb25maWc6IHwtCiAgICBsb2NhdGlvbiAvaGVhbHRoeiB7CiAgICAgIHJldHVybiAyMDA7CiAgICB9CiAgICBsb2NhdGlvbiAvIHsKICAgICAgcmV0dXJuIDQwNDsKICAgIH0Kc2VydmljZToKICBwb3J0czogCiAgICBodHRwOiA4MAogICAgaHR0cHM6IDQ0NAogIHR5cGU6IExvYWRCYWxhbmNlcgpzZXJ2aWNlQWNjb3VudDoKICBjcmVhdGU6IHRydWUKICBhdXRvbW91bnRTZXJ2aWNlQWNjb3VudFRva2VuOiB0cnVlCmV4dHJhRGVwbG95OgotIGFwaVZlcnNpb246IG5ldHdvcmtpbmcuazhzLmlvL3YxCiAga2luZDogSW5ncmVzcwogIG1ldGFkYXRhOgogICAgbmFtZTogbmljLXZpYi10ZXN0CiAgICBuYW1lc3BhY2U6IGRlZmF1bHQKICBzcGVjOgogICAgaW5ncmVzc0NsYXNzTmFtZTogbmdpbngKICAgIHJ1bGVzOgogICAgICAtIGhvc3Q6IHd3dy5leGFtcGxlLmNvbQogICAgICAgIGh0dHA6CiAgICAgICAgICBwYXRoczoKICAgICAgICAgICAgLSBiYWNrZW5kOgogICAgICAgICAgICAgICAgc2VydmljZToKICAgICAgICAgICAgICAgICAgbmFtZTogZXhhbXBsZS1zZXJ2aWNlCiAgICAgICAgICAgICAgICAgIHBvcnQ6CiAgICAgICAgICAgICAgICAgICAgbnVtYmVyOiA4MAogICAgICAgICAgICAgIHBhdGg6IC8KICAgICAgICAgICAgICBwYXRoVHlwZTogUHJlZml4",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
           "size": {
@@ -59,7 +59,8 @@
             },
             "params": {
               "kubeconfig": "{{kubeconfig}}",
-              "namespace": "{{namespace}}"
+              "namespace": "{{namespace}}",
+              "ingress-name": "nic-vib-test"
             }
           }
         }
