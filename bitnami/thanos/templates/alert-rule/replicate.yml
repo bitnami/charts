@@ -1,7 +1,7 @@
 {{- /*
 Generated from https://github.com/thanos-io/thanos/blob/main/examples/alerts/alerts.md
 */ -}}
-{{- if  and .Values.metrics.enabled (or .Values.metrics.prometheusRule.default.create .Values.metrics.prometheusRule.default.replicate ) }}
+{{- if and .Values.metrics.enabled (or .Values.metrics.prometheusRule.default.create .Values.metrics.prometheusRule.default.replicate ) }}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
@@ -21,12 +21,12 @@ spec:
   groups:
   - name: thanos-bucket-replicate
     rules:
-{{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosBucketReplicateErrorRate | default false) }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosBucketReplicateErrorRate | default false) }}
     - alert: ThanosBucketReplicateErrorRate
       annotations:
-{{- if .Values.commonAnnotations }}
-{{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
-{{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
         description: Thanos Replicate is failing to run, {{`{{`}} $value | humanize {{`}}`}}% of attempts failed.
         runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosbucketreplicateerrorrate
         summary: Thanos Replicate is failing to run.
@@ -39,16 +39,16 @@ spec:
       for: 5m
       labels:
         severity: critical
-{{- if .Values.metrics.prometheusRule.additionalLabels }}
-{{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
-{{- end }}
-{{- end }}
-{{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosBucketReplicateRunLatency | default false) }}
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosBucketReplicateRunLatency | default false) }}
     - alert: ThanosBucketReplicateRunLatency
       annotations:
-{{- if .Values.commonAnnotations }}
-{{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
-{{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
         description: Thanos Replicate {{`{{`}} $labels.job {{`}}`}} has a 99th percentile latency of {{`{{`}} $value {{`}}`}} seconds for the replicate operations.
         runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosbucketreplicaterunlatency
         summary: Thanos Replicate has a high latency for replicate operations.
@@ -61,8 +61,8 @@ spec:
       for: 5m
       labels:
         severity: critical
-{{- if .Values.metrics.prometheusRule.additionalLabels }}
-{{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
-{{- end }}
-{{- end }}
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- end }}
+    {{- end }}
 {{- end }}

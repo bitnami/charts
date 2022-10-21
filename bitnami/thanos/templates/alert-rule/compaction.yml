@@ -1,7 +1,7 @@
 {{- /*
 Generated from https://github.com/thanos-io/thanos/blob/main/examples/alerts/alerts.md
 */ -}}
-{{- if  and .Values.metrics.enabled (or .Values.metrics.prometheusRule.default.create .Values.metrics.prometheusRule.default.compaction ) }}
+{{- if and .Values.metrics.enabled (or .Values.metrics.prometheusRule.default.create .Values.metrics.prometheusRule.default.compaction ) }}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
@@ -21,12 +21,12 @@ spec:
   groups:
   - name: thanos-compact
     rules:
-{{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosCompactMultipleRunning | default false) }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosCompactMultipleRunning | default false) }}
     - alert: ThanosCompactMultipleRunning
       annotations:
-{{- if .Values.commonAnnotations }}
-{{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
-{{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
         description: No more than one Thanos Compact instance should be running at once. There are {{`{{`}} $value {{`}}`}} instances running.
         runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanoscompactmultiplerunning
         summary: Thanos Compact has multiple instances running.
@@ -34,16 +34,16 @@ spec:
       for: 5m
       labels:
         severity: warning
-{{- if .Values.metrics.prometheusRule.additionalLabels }}
-{{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
-{{- end }}
-{{- end }}
-{{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosCompactHalted | default false) }}
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosCompactHalted | default false) }}
     - alert: ThanosCompactHalted
       annotations:
-{{- if .Values.commonAnnotations }}
-{{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
-{{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
         description: Thanos Compact {{`{{`}} $labels.job {{`}}`}} has failed to run and now is halted.
         runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanoscompacthalted
         summary: Thanos Compact has failed to run and is now halted.
@@ -51,16 +51,16 @@ spec:
       for: 5m
       labels:
         severity: warning
-{{- if .Values.metrics.prometheusRule.additionalLabels }}
-{{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
-{{- end }}
-{{- end }}
-{{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosCompactHighCompactionFailures | default false) }}
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosCompactHighCompactionFailures | default false) }}
     - alert: ThanosCompactHighCompactionFailures
       annotations:
-{{- if .Values.commonAnnotations }}
-{{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
-{{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
         description: Thanos Compact {{`{{`}} $labels.job {{`}}`}} is failing to execute {{`{{`}} $value | humanize {{`}}`}}% of compactions.
         runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanoscompacthighcompactionfailures
         summary: Thanos Compact is failing to execute compactions.
@@ -74,16 +74,16 @@ spec:
       for: 15m
       labels:
         severity: warning
-{{- if .Values.metrics.prometheusRule.additionalLabels }}
-{{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
-{{- end }}
-{{- end }}
-{{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosCompactBucketHighOperationFailures | default false) }}
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosCompactBucketHighOperationFailures | default false) }}
     - alert: ThanosCompactBucketHighOperationFailures
       annotations:
-{{- if .Values.commonAnnotations }}
-{{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
-{{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
         description: Thanos Compact {{`{{`}} $labels.job {{`}}`}} Bucket is failing to execute {{`{{`}} $value | humanize {{`}}`}}% of operations.
         runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanoscompactbuckethighoperationfailures
         summary: Thanos Compact Bucket is having a high number of operation failures.
@@ -97,24 +97,24 @@ spec:
       for: 15m
       labels:
         severity: warning
-{{- if .Values.metrics.prometheusRule.additionalLabels }}
-{{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
-{{- end }}
-{{- end }}
-{{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosCompactHasNotRun | default false) }}
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosCompactHasNotRun | default false) }}
     - alert: ThanosCompactHasNotRun
       annotations:
-{{- if .Values.commonAnnotations }}
-{{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
-{{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
         description: Thanos Compact {{`{{`}} $labels.job {{`}}`}} has not uploaded anything for 24 hours.
         runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanoscompacthasnotrun
         summary: Thanos Compact has not uploaded anything for last 24 hours.
       expr: (time() - max by (job) (max_over_time(thanos_objstore_bucket_last_successful_upload_time{job=~".*thanos-compact.*"}[24h]))) / 60 / 60 > 24
       labels:
         severity: warning
-{{- if .Values.metrics.prometheusRule.additionalLabels }}
-{{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
-{{- end }}
-{{- end }}
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- end }}
+    {{- end }}
 {{- end }}

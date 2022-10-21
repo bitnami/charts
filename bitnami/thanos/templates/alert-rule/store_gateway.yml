@@ -1,7 +1,7 @@
 {{- /*
 Generated from https://github.com/thanos-io/thanos/blob/main/examples/alerts/alerts.md
 */ -}}
-{{- if  and .Values.metrics.enabled (or .Values.metrics.prometheusRule.default.create .Values.metrics.prometheusRule.default.store_gateway ) }}
+{{- if and .Values.metrics.enabled (or .Values.metrics.prometheusRule.default.create .Values.metrics.prometheusRule.default.store_gateway ) }}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
@@ -21,12 +21,12 @@ spec:
   groups:
   - name: thanos-store
     rules:
-{{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosStoreGrpcErrorRate | default false) }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosStoreGrpcErrorRate | default false) }}
     - alert: ThanosStoreGrpcErrorRate
       annotations:
-{{- if .Values.commonAnnotations }}
-{{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
-{{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
         description: Thanos Store {{`{{`}} $labels.job {{`}}`}} is failing to handle {`{{`}} $value | humanize {{`}}`}}% of requests.
         runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosstoregrpcerrorrate
         summary: Thanos Store is failing to handle qrpcd requests.
@@ -40,16 +40,16 @@ spec:
       for: 5m
       labels:
         severity: warning
-{{- if .Values.metrics.prometheusRule.additionalLabels }}
-{{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
-{{- end }}
-{{- end }}
-{{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosStoreSeriesGateLatencyHigh | default false) }}
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosStoreSeriesGateLatencyHigh | default false) }}
     - alert: ThanosStoreSeriesGateLatencyHigh
       annotations:
-{{- if .Values.commonAnnotations }}
-{{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
-{{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
         description: Thanos Store {{`{{`}} $labels.job} {{`}}`}} has a 99th percentile latency of {{`{{`}} $value {{`}}`}} seconds for store series gate requests.
         runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosstoreseriesgatelatencyhigh
         summary: Thanos Store has high latency for store series gate requests.
@@ -62,16 +62,16 @@ spec:
       for: 10m
       labels:
         severity: warning
-{{- if .Values.metrics.prometheusRule.additionalLabels }}
-{{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
-{{- end }}
-{{- end }}
-{{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosStoreBucketHighOperationFailures | default false) }}
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosStoreBucketHighOperationFailures | default false) }}
     - alert: ThanosStoreBucketHighOperationFailures
       annotations:
-{{- if .Values.commonAnnotations }}
-{{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
-{{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
         description: Thanos Store {{`{{`}} $labels.job {{`}}`}} Bucket is failing to execute {{`{{`}} $value | humanize {{`}}`}}% of operations.
         runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosstorebuckethighoperationfailures
         summary: Thanos Store Bucket is failing to execute operations.
@@ -85,16 +85,16 @@ spec:
       for: 15m
       labels:
         severity: warning
-{{- if .Values.metrics.prometheusRule.additionalLabels }}
-{{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
-{{- end }}
-{{- end }}
-{{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosStoreObjstoreOperationLatencyHigh | default false) }}
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosStoreObjstoreOperationLatencyHigh | default false) }}
     - alert: ThanosStoreObjstoreOperationLatencyHigh
       annotations:
-{{- if .Values.commonAnnotations }}
-{{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
-{{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
         description: Thanos Store {{`{{`}} $labels.job {{`}}`}} Bucket has a 99th percentile latency of {{`{{`}} $value {{`}}`}} seconds for the bucket operations.
         runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosstoreobjstoreoperationlatencyhigh
         summary: Thanos Store is having high latency for bucket operations.
@@ -107,8 +107,8 @@ spec:
       for: 10m
       labels:
         severity: warning
-{{- if .Values.metrics.prometheusRule.additionalLabels }}
-{{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
-{{- end }}
-{{- end }}
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- end }}
+    {{- end }}
 {{- end }}

@@ -1,7 +1,7 @@
 {{- /*
 Generated from https://github.com/thanos-io/thanos/blob/main/examples/alerts/alerts.md
 */ -}}
-{{- if  and .Values.metrics.enabled (or .Values.metrics.prometheusRule.default.create .Values.metrics.prometheusRule.default.ruler ) }}
+{{- if and .Values.metrics.enabled (or .Values.metrics.prometheusRule.default.create .Values.metrics.prometheusRule.default.ruler ) }}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
@@ -21,12 +21,12 @@ spec:
   groups:
   - name: thanos-rule
     rules:
-{{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosRuleQueueIsDroppingAlerts | default false) }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosRuleQueueIsDroppingAlerts | default false) }}
     - alert: ThanosRuleQueueIsDroppingAlerts
       annotations:
-{{- if .Values.commonAnnotations }}
-{{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
-{{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
         description: Thanos Rule {{`{{`}} $labels.instance {{`}}`}} is failing to queue alerts.
         runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosrulequeueisdroppingalerts
         summary: Thanos Rule is failing to queue alerts.
@@ -35,16 +35,16 @@ spec:
       for: 5m
       labels:
         severity: critical
-{{- if .Values.metrics.prometheusRule.additionalLabels }}
-{{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
-{{- end }}
-{{- end }}
-{{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosRuleSenderIsFailingAlerts | default false) }}
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosRuleSenderIsFailingAlerts | default false) }}
     - alert: ThanosRuleSenderIsFailingAlerts
       annotations:
-{{- if .Values.commonAnnotations }}
-{{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
-{{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
         description: Thanos Rule {{`{{`}} $labels.instance {{`}}`}} is failing to send alerts to alertmanager.
         runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosrulesenderisfailingalerts
         summary: Thanos Rule is failing to send alerts to alertmanager.
@@ -53,16 +53,16 @@ spec:
       for: 5m
       labels:
         severity: critical
-{{- if .Values.metrics.prometheusRule.additionalLabels }}
-{{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
-{{- end }}
-{{- end }}
-{{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosRuleHighRuleEvaluationFailures | default false) }}
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosRuleHighRuleEvaluationFailures | default false) }}
     - alert: ThanosRuleHighRuleEvaluationFailures
       annotations:
-{{- if .Values.commonAnnotations }}
-{{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
-{{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
         description: Thanos Rule {{`{{`}} $labels.instance {{`}}`}} is failing to evaluate rules.
         runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosrulehighruleevaluationfailures
         summary: Thanos Rule is failing to evaluate rules.
@@ -76,16 +76,16 @@ spec:
       for: 5m
       labels:
         severity: critical
-{{- if .Values.metrics.prometheusRule.additionalLabels }}
-{{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
-{{- end }}
-{{- end }}
-{{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosRuleHighRuleEvaluationWarnings | default false) }}
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosRuleHighRuleEvaluationWarnings | default false) }}
     - alert: ThanosRuleHighRuleEvaluationWarnings
       annotations:
-{{- if .Values.commonAnnotations }}
-{{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
-{{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
         description: Thanos Rule {{`{{`}} $labels.instance {{`}}`}} has high number of evaluation warnings.
         runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosrulehighruleevaluationwarnings
         summary: Thanos Rule has high number of evaluation warnings.
@@ -94,16 +94,16 @@ spec:
       for: 15m
       labels:
         severity: info
-{{- if .Values.metrics.prometheusRule.additionalLabels }}
-{{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
-{{- end }}
-{{- end }}
-{{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosRuleRuleEvaluationLatencyHigh | default false) }}
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosRuleRuleEvaluationLatencyHigh | default false) }}
     - alert: ThanosRuleRuleEvaluationLatencyHigh
       annotations:
-{{- if .Values.commonAnnotations }}
-{{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
-{{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
         description: Thanos Rule {{`{{`}} $labels.instance {{`}}`}} has higher evaluation latency than interval for {{`{{`}} $labels.rule_group {{`}}`}}.
         runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosruleruleevaluationlatencyhigh
         summary: Thanos Rule has high rule evaluation latency.
@@ -116,16 +116,16 @@ spec:
       for: 5m
       labels:
         severity: warning
-{{- if .Values.metrics.prometheusRule.additionalLabels }}
-{{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
-{{- end }}
-{{- end }}
-{{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosRuleGrpcErrorRate | default false) }}        
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosRuleGrpcErrorRate | default false) }}
     - alert: ThanosRuleGrpcErrorRate
       annotations:
-{{- if .Values.commonAnnotations }}
-{{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
-{{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
         description: Thanos Rule {{`{{`}} $labels.job {{`}}`}} is failing to handle {{`{{`}} $value | humanize {{`}}`}}% of requests.
         runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosrulegrpcerrorrate
         summary: Thanos Rule is failing to handle grpc requests.
@@ -139,16 +139,16 @@ spec:
       for: 5m
       labels:
         severity: warning
-{{- if .Values.metrics.prometheusRule.additionalLabels }}
-{{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
-{{- end }}
-{{- end }}
-{{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosRuleConfigReloadFailure | default false) }}
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosRuleConfigReloadFailure | default false) }}
     - alert: ThanosRuleConfigReloadFailure
       annotations:
-{{- if .Values.commonAnnotations }}
-{{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
-{{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
         description: Thanos Rule {{`{{`}} $labels.job {{`}}`}} has not been able to reload its configuration.
         runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosruleconfigreloadfailure
         summary: Thanos Rule has not been able to reload configuration.
@@ -156,16 +156,16 @@ spec:
       for: 5m
       labels:
         severity: info
-{{- if .Values.metrics.prometheusRule.additionalLabels }}
-{{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
-{{- end }}
-{{- end }}
-{{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosRuleQueryHighDNSFailures | default false) }}
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosRuleQueryHighDNSFailures | default false) }}
     - alert: ThanosRuleQueryHighDNSFailures
       annotations:
-{{- if .Values.commonAnnotations }}
-{{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
-{{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
         description: Thanos Rule {{`{{`}} $labels.job {{`}}`}} has {{`{{`}} $value | humanize{{`}}`}}% of failing DNS queries for query endpoints.
         runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosrulequeryhighdnsfailures
         summary: Thanos Rule is having high number of DNS failures.
@@ -179,16 +179,16 @@ spec:
       for: 15m
       labels:
         severity: warning
-{{- if .Values.metrics.prometheusRule.additionalLabels }}
-{{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
-{{- end }}
-{{- end }}
-{{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosRuleAlertmanagerHighDNSFailures | default false) }}
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosRuleAlertmanagerHighDNSFailures | default false) }}
     - alert: ThanosRuleAlertmanagerHighDNSFailures
       annotations:
-{{- if .Values.commonAnnotations }}
-{{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
-{{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
         description: Thanos Rule {{`{{`}} $labels.instance{{`}}`}} has {{`{{`}} $value | humanize {{`}}`}}% of failing DNS queries for Alertmanager endpoints.
         runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosrulealertmanagerhighdnsfailures
         summary: Thanos Rule is having high number of DNS failures.
@@ -202,16 +202,16 @@ spec:
       for: 15m
       labels:
         severity: warning
-{{- if .Values.metrics.prometheusRule.additionalLabels }}
-{{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
-{{- end }}
-{{- end }}
-{{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosRuleNoEvaluationFor10Intervals | default false) }}
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosRuleNoEvaluationFor10Intervals | default false) }}
     - alert: ThanosRuleNoEvaluationFor10Intervals
       annotations:
-{{- if .Values.commonAnnotations }}
-{{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
-{{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
         description: Thanos Rule {{`{{`}} $labels.job {{`}}`}} has rule groups that did not evaluate for at least 10x of their expected interval.
         runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosrulenoevaluationfor10intervals
         summary: Thanos Rule has rule groups that did not evaluate for 10 intervals.
@@ -222,16 +222,16 @@ spec:
       for: 5m
       labels:
         severity: info
-{{- if .Values.metrics.prometheusRule.additionalLabels }}
-{{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
-{{- end }}
-{{- end }}
-{{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosNoRuleEvaluations | default false) }}
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosNoRuleEvaluations | default false) }}
     - alert: ThanosNoRuleEvaluations
       annotations:
-{{- if .Values.commonAnnotations }}
-{{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
-{{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
         description: Thanos Rule {{`{{`}} $labels.instance {{`}}`}} did not perform any rule evaluations in the past 10 minutes.
         runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosnoruleevaluations
         summary: Thanos Rule did not perform any rule evaluations.
@@ -242,8 +242,8 @@ spec:
       for: 5m
       labels:
         severity: critical
-{{- if .Values.metrics.prometheusRule.additionalLabels }}
-{{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
-{{- end }}
-{{- end }}
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- end }}
+    {{- end }}
 {{- end }}
