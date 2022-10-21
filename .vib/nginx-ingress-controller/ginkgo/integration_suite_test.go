@@ -57,7 +57,7 @@ func getPodsByLabelOrDie(ctx context.Context, c cv1.PodsGetter, namespace string
 	return *output
 }
 
-func getPodLogsOrDie(ctx context.Context, c cv1.PodsGetter, namespace, podName, container string) []string {
+func getContainerLogsOrDie(ctx context.Context, c cv1.PodsGetter, namespace, podName, container string) []string {
 	var output []string
 	tailLines := int64(50)
 

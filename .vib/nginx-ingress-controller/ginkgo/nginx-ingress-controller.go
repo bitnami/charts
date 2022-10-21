@@ -24,16 +24,16 @@ var _ = Describe("NGINX Ingress Controller", func() {
 
 	Context("Testing ingress", func() {
 		var controllerPods v1.PodList
-		var podLogs []string
+		var containerLogs []string
 
 		BeforeEach(func() {
 			controllerPods = getPodsByLabelOrDie(ctx, coreclient, *namespace, "app.kubernetes.io/component=controller")
-			podLogs = getPodLogsOrDie(ctx, coreclient, *namespace, controllerPods.Items[0].GetName(), "controller")
+			containerLogs = getContainerLogsOrDie(ctx, coreclient, *namespace, controllerPods.Items[0].GetName(), "controller")
 		})
 
 		It("is managed by nginx-ingress-controller", func() {
-			var loggedString = "Found valid IngressClass\" ingress=\"default/" + *ingressName
-			Expect(containsString(podLogs, loggedString)).To(BeTrue())
+			var toCheck = "Found valid IngressClass\" ingress=\"default/" + *ingressName
+			Expect(containsString(containerLogs, toCheck)).To(BeTrue())
 		})
 	})
 })
