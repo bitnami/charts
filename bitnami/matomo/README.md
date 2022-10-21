@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                        | Matomo image registry                                                                                                 | `docker.io`           |
 | `image.repository`                      | Matomo Image name                                                                                                     | `bitnami/matomo`      |
-| `image.tag`                             | Matomo Image tag                                                                                                      | `4.12.1-debian-11-r0` |
+| `image.tag`                             | Matomo Image tag                                                                                                      | `4.12.2-debian-11-r0` |
 | `image.digest`                          | Matomo image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                  |
 | `image.pullPolicy`                      | Matomo image pull policy                                                                                              | `IfNotPresent`        |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                      | `[]`                  |
