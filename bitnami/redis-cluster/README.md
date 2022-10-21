@@ -162,6 +162,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                                    | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the container                                                                                                              | `{}`                    |
 | `volumePermissions.resources.requests`        | The requested resources for the container                                                                                                           | `{}`                    |
+| `volumePermissions.containerSecurityContext.enabled`          | Enable Containers' Security Context                                                                                                              | `true`                    |
+| `volumePermissions.containerSecurityContext.runAsUser`          | User ID for the containers.                                                                                                              | `0`                    |
+| `volumePermissions.containerSecurityContext.privileged`        | Run container as privileged                                                                                                           | `false`                    |
 | `podSecurityPolicy.create`                    | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later         | `false`                 |
 
 
@@ -329,6 +332,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctlImage.pullPolicy`         | sysctlImage Init container pull policy                                                                               | `IfNotPresent`          |
 | `sysctlImage.pullSecrets`        | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `sysctlImage.mountHostSys`       | Mount the host `/sys` folder to `/host-sys`                                                                          | `false`                 |
+| `sysctlImage.containerSecurityContext.enabled`          | Enable Containers' Security Context                                                                                                              | `true`                    |
+| `sysctlImage.containerSecurityContext.runAsUser`          | User ID for the containers.                                                                                                              | `0`                    |
+| `sysctlImage.containerSecurityContext.privileged`        | Run container as privileged                                                                                                           | `true`                    |
 | `sysctlImage.resources.limits`   | The resources limits for the container                                                                               | `{}`                    |
 | `sysctlImage.resources.requests` | The requested resources for the container                                                                            | `{}`                    |
 
