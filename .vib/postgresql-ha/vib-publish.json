@@ -34,7 +34,7 @@
         {
           "action_id": "health-check",
           "params": {
-            "endpoint": "lb-postgresql-ha-psql-ha-pgpool-postgresql"
+            "endpoint": "lb-postgresql-ha-pgpool-postgresql"
           }
         },
         {
