@@ -2,7 +2,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ printf "%s-controller" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   {{- if .Values.controller.metrics.serviceMonitor.namespace }}
   namespace: {{ .Values.controller.metrics.serviceMonitor.namespace | quote }}
   {{- else }}
