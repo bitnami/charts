@@ -707,10 +707,22 @@ metrics:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param metrics.resources Metrics exporter resource requests and limits
+  ## Metrics exporter containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param metrics.resources.requests [object] The requested resources for the metrics exporter container
+  ## @param metrics.resources.limits The resources limits for the container for the metrics exporter container
   ##
-  resources: {}
+  resources: 
+    ## Example:
+    ## limits:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    limits: {}
+    ## Examples:
+    ## requests:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    requests: {}
   ## @param metrics.podAnnotations [object] Metrics exporter pod annotations
   ##
   podAnnotations:

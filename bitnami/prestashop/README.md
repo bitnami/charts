@@ -255,7 +255,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.image.digest`      | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`  | Apache exporter image pull policy                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array                                                                | `[]`                      |
-| `metrics.resources`         | Metrics exporter resource requests and limits                                                                   | `{}`                      |
+| `metrics.resources.limits`   | The resources limits for the metrics exporter container                                                                                                                    | `{}`                    |
+| `metrics.resources.requests` | The requested resources for the metrics exporter container                                                                                                                 | `{}`                    |
 | `metrics.podAnnotations`    | Metrics exporter pod annotations                                                                                | `{}`                      |
 
 
