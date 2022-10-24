@@ -2,12 +2,14 @@ package integration
 
 import (
 	"context"
+	"fmt"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
 	v1 "k8s.io/api/core/v1"
 	netv1 "k8s.io/api/networking/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	cv1 "k8s.io/client-go/kubernetes/typed/core/v1"
 	netcv1 "k8s.io/client-go/kubernetes/typed/networking/v1"
 
@@ -27,20 +29,24 @@ var _ = Describe("Contour Operator:", func() {
 	})
 
 	Context("When both operator and testing resources are deployed", func() {
-		var podLogs, responseBody []string
+		var containerLogs, responseBody []string
 		var controllerPods v1.PodList
-		var ingresses netv1.IngressList
+		var ingress *netv1.Ingress
+		var err error
 
 		BeforeEach(func() {
 			controllerPods = getPodsByLabelOrDie(ctx, coreclient, *namespace, "app.kubernetes.io/component=contour-operator")
-			podLogs = getPodLogsOrDie(ctx, coreclient, *namespace, controllerPods.Items[0].GetName(), "contour-operator")
+			containerLogs = getContainerLogsOrDie(ctx, coreclient, *namespace, controllerPods.Items[0].GetName(), "contour-operator")
 
-			ingresses = getIngressesByLabelOrDie(ctx, netclient, *namespace, "app=kuard")
-			responseBody = getResponseBodyOrDie(ctx, "http://"+ingresses.Items[0].Status.LoadBalancer.Ingress[0].IP)
+			ingress, err = netclient.Ingresses(*namespace).Get(ctx, *ingressName, metav1.GetOptions{})
+			if err != nil {
+				panic(fmt.Sprintf("There was an error retrieving the %q Ingress resource: %q", *ingressName, err))
+			}
+			responseBody = getResponseBodyOrDie(ctx, "http://"+ingress.Status.LoadBalancer.Ingress[0].IP)
 		})
 
 		It("the operator manages the contour resource", func() {
-			Expect(containsString(podLogs, *contourName)).To(BeTrue())
+			Expect(containsString(containerLogs, *contourName)).To(BeTrue())
 		})
 		It("the ingress' asigned IP resolves to the testing deployment", func() {
 			Expect(containsString(responseBody, "kuard")).To(BeTrue())

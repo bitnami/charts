@@ -41,7 +41,8 @@
             "params": {
               "kubeconfig": "{{kubeconfig}}",
               "namespace": "{{namespace}}",
-              "contour-crd-name": "contour-crd-vib"
+              "contour-crd-name": "contour-crd-vib",
+              "ingress-name": "contour-op-vib-test"
             }
           }
         }

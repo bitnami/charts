@@ -11,10 +11,8 @@ import (
 	"testing"
 
 	v1 "k8s.io/api/core/v1"
-	netv1 "k8s.io/api/networking/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	cv1 "k8s.io/client-go/kubernetes/typed/core/v1"
-	netcv1 "k8s.io/client-go/kubernetes/typed/networking/v1"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 
@@ -30,6 +28,7 @@ const APP_NAME = "Contour"
 var kubeconfig = flag.String("kubeconfig", "", "absolute path to the kubeconfig file")
 var namespace = flag.String("namespace", "", "namespace where the resources are deployed")
 var contourName = flag.String("contour-crd-name", "", "name of the contour resource")
+var ingressName = flag.String("ingress-name", "", "resource name of the testing ingress")
 
 func clusterConfigOrDie() *rest.Config {
 	var config *rest.Config
@@ -47,33 +46,20 @@ func clusterConfigOrDie() *rest.Config {
 	return config
 }
 
-func getIngressesByLabelOrDie(ctx context.Context, c netcv1.NetworkingV1Interface, namespace string, selector string) netv1.IngressList {
-
-	output, err := c.Ingresses(namespace).List(ctx, metav1.ListOptions{
-		LabelSelector: selector,
-	})
-	if err != nil {
-		panic(err.Error())
-	}
-	fmt.Printf("Obtained list of ingresses with label %q\n", selector)
-
-	return *output
-}
-
 func getPodsByLabelOrDie(ctx context.Context, c cv1.PodsGetter, namespace string, selector string) v1.PodList {
 
 	output, err := c.Pods(namespace).List(ctx, metav1.ListOptions{
 		LabelSelector: selector,
 	})
 	if err != nil {
-		panic(err.Error())
+		panic(fmt.Sprintf("There was an error retrieving the list of pods with label %q: %q", selector, err))
 	}
 	fmt.Printf("Obtained list of pods with label %q\n", selector)
 
 	return *output
 }
 
-func getPodLogsOrDie(ctx context.Context, c cv1.PodsGetter, namespace, podName, container string) []string {
+func getContainerLogsOrDie(ctx context.Context, c cv1.PodsGetter, namespace, podName, container string) []string {
 	var output []string
 	tailLines := int64(50)
 
@@ -83,7 +69,7 @@ func getPodLogsOrDie(ctx context.Context, c cv1.PodsGetter, namespace, podName, 
 		TailLines: &tailLines,
 	}).Stream(ctx)
 	if err != nil {
-		panic(err.Error())
+		panic(fmt.Sprintf("There was an error retrieving the %q container's logs for the %q pod: %q", container, podName, err))
 	}
 	fmt.Printf("Obtained %q pod's logs\n", podName)
 
@@ -105,7 +91,7 @@ func getResponseBodyOrDie(ctx context.Context, address string) []string {
 
 	resp, err := client.Get(address)
 	if err != nil {
-		panic(err.Error())
+		panic(fmt.Sprintf("There was an error during the GET request: %q", err))
 	}
 	defer resp.Body.Close()
 
@@ -152,6 +138,9 @@ func CheckRequirements() {
 	}
 	if *contourName == "" {
 		panic("The name of the contour resource. Use the '--ingress-name' flag")
+	}
+	if *ingressName == "" {
+		panic("The resource name of the testing ingress. Use the '--ingress-name' flag")
 	}
 }
 
