@@ -472,6 +472,9 @@ spec:
           command:
             - java
           args:
+            {{- if .Values.metrics.jmx.extraJavaArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.metrics.jmx.extraJavaArgs "context" $ ) | nindent 12 }}
+            {{- end }}
             - -XX:+UnlockExperimentalVMOptions
             - -XX:+UseCGroupMemoryLimitForHeap
             - -XX:MaxRAMFraction=1
