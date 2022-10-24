@@ -265,7 +265,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.enabled`           | Create PrometheusRule Resource for scraping metrics using PrometheusOperator                                              | `false` |
 | `metrics.prometheusRule.namespace`         | Namespace which Prometheus is running in                                                                                  | `""`    |
 | `metrics.prometheusRule.labels`            | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                     | `{}`    |
-| `metrics.prometheusRule.groups`            | Groups, containing the alert rules.                                                                                       | `{}`    |
+| `metrics.prometheusRule.groups`            | Groups, containing the alert rules.                                                                                       | `[]`    |
 
 
 ### keycloak-config-cli parameters
