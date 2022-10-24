@@ -1,14 +1,10 @@
 package integration
 
 import (
-	"context"
 	"flag"
 	"fmt"
 	"testing"
 
-	netv1 "k8s.io/api/networking/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	netcv1 "k8s.io/client-go/kubernetes/typed/networking/v1"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 
@@ -39,19 +35,6 @@ func clusterConfigOrDie() *rest.Config {
 	}
 
 	return config
-}
-
-func getIngressesByLabelOrDie(ctx context.Context, c netcv1.NetworkingV1Interface, namespace string, selector string) netv1.IngressList {
-
-	output, err := c.Ingresses(namespace).List(ctx, metav1.ListOptions{
-		LabelSelector: selector,
-	})
-	if err != nil {
-		panic(err.Error())
-	}
-	fmt.Printf("Obtained list of ingresses with label %q\n", selector)
-
-	return *output
 }
 
 func CheckRequirements() {

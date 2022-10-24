@@ -2,18 +2,20 @@ package integration
 
 import (
 	"context"
+	"fmt"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
 	netv1 "k8s.io/api/networking/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	netcv1 "k8s.io/client-go/kubernetes/typed/networking/v1"
 
 	// For client auth plugins
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 )
 
-var _ = Describe("Contour", func() {
+var _ = Describe("Contour:", func() {
 	var netclient netcv1.NetworkingV1Interface
 	var ctx context.Context
 
@@ -23,14 +25,18 @@ var _ = Describe("Contour", func() {
 	})
 
 	Context("Testing ingress", func() {
-		var ingresses netv1.IngressList
+		var ingress *netv1.Ingress
+		var err error
 
 		BeforeEach(func() {
-			ingresses = getIngressesByLabelOrDie(ctx, netclient, *namespace, "app=kuard")
+			ingress, err = netclient.Ingresses(*namespace).Get(ctx, *ingressName, metav1.GetOptions{})
+			if err != nil {
+				panic(fmt.Sprintf("There was an error retrieving the %q Ingress resource: %q", *ingressName, err))
+			}
 		})
 
 		It("is managed by contour", func() {
-			Expect(*ingresses.Items[0].Spec.IngressClassName).To(Equal("contour"))
+			Expect(*ingress.Spec.IngressClassName).To(Equal("contour"))
 		})
 	})
 })
