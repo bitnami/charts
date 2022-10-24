@@ -41,7 +41,7 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "grafana-loki.gateway.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
   {{- if or (and .Values.gateway.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.gateway.ingress.annotations )) .Values.gateway.ingress.selfSigned)) .Values.gateway.ingress.extraTls }}
   tls:
