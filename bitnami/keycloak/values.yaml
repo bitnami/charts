@@ -107,7 +107,7 @@ auth:
   existingSecret: ""
   ## @param auth.passwordSecretKey Key where the Keycloak admin password is being stored inside the existing secret.
   ##
-  passwordSecretKey:
+  passwordSecretKey: ""
 
 ## HTTPS settings
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/keycloak#tls-encryption
