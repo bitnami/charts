@@ -38,7 +38,6 @@ data:
   {{- end }}
   KEYCLOAK_SPI_TRUSTSTORE_FILE: {{ printf "/opt/bitnami/keycloak/certs/%s" .Values.tls.truststoreFilename }}
   {{- end }}
-  {{- end }}
   {{- if .Values.cache.enabled }}
   KEYCLOAK_CACHE_TYPE: "ispn"
   KEYCLOAK_CACHE_STACK: "kubernetes"
