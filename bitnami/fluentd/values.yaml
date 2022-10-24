@@ -191,9 +191,11 @@ forwarder:
         </parse>
       </source>
       # enrich with kubernetes metadata
+      {{- if or .Values.forwarder.serviceAccount.create .Values.forwarder.serviceAccount.name }}
       <filter kubernetes.**>
         @type kubernetes_metadata
       </filter>
+      {{- end }}
     fluentd-output.conf: |
       # Throw the healthcheck to the standard output instead of forwarding it
       <match fluentd.healthcheck>

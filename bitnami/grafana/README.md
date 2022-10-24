@@ -7,7 +7,7 @@ Grafana is an open source metric analytics and visualization suite for visualizi
 [Overview of Grafana](https://grafana.com/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -164,7 +164,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
 | `image.registry`                   | Grafana image registry                                                                                                                               | `docker.io`                       |
 | `image.repository`                 | Grafana image repository                                                                                                                             | `bitnami/grafana`                 |
-| `image.tag`                        | Grafana image tag (immutable tags are recommended)                                                                                                   | `9.1.7-debian-11-r0`              |
+| `image.tag`                        | Grafana image tag (immutable tags are recommended)                                                                                                   | `9.2.1-debian-11-r0`              |
 | `image.digest`                     | Grafana image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                              | `""`                              |
 | `image.pullPolicy`                 | Grafana image pull policy                                                                                                                            | `IfNotPresent`                    |
 | `image.pullSecrets`                | Grafana image pull secrets                                                                                                                           | `[]`                              |
@@ -368,7 +368,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `imageRenderer.enabled`                                  | Enable using a remote rendering service to render PNG images                                                                              | `false`                          |
 | `imageRenderer.image.registry`                           | Grafana Image Renderer image registry                                                                                                     | `docker.io`                      |
 | `imageRenderer.image.repository`                         | Grafana Image Renderer image repository                                                                                                   | `bitnami/grafana-image-renderer` |
-| `imageRenderer.image.tag`                                | Grafana Image Renderer image tag (immutable tags are recommended)                                                                         | `3.6.1-debian-11-r10`            |
+| `imageRenderer.image.tag`                                | Grafana Image Renderer image tag (immutable tags are recommended)                                                                         | `3.6.1-debian-11-r16`            |
 | `imageRenderer.image.digest`                             | Grafana Image Renderer image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                    | `""`                             |
 | `imageRenderer.image.pullPolicy`                         | Grafana Image Renderer image pull policy                                                                                                  | `IfNotPresent`                   |
 | `imageRenderer.image.pullSecrets`                        | Grafana image Renderer pull secrets                                                                                                       | `[]`                             |
@@ -388,7 +388,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `imageRenderer.nodeAffinityPreset.type`                  | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                 | `""`                             |
 | `imageRenderer.nodeAffinityPreset.key`                   | Node label key to match Ignored if `affinity` is set.                                                                                     | `""`                             |
 | `imageRenderer.nodeAffinityPreset.values`                | Node label values to match. Ignored if `affinity` is set.                                                                                 | `[]`                             |
-| `imageRenderer.extraEnvVars`                             | Array containing extra env vars to configure Grafana                                                                                      | `{}`                             |
+| `imageRenderer.extraEnvVars`                             | Array containing extra env vars to configure Grafana                                                                                      | `[]`                             |
 | `imageRenderer.affinity`                                 | Affinity for pod assignment                                                                                                               | `{}`                             |
 | `imageRenderer.resources.limits`                         | The resources limits for Grafana containers                                                                                               | `{}`                             |
 | `imageRenderer.resources.requests`                       | The requested resources for Grafana containers                                                                                            | `{}`                             |
@@ -443,7 +443,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r38`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r43`      |
 | `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
