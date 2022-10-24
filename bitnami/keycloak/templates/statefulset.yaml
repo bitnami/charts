@@ -111,7 +111,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "keycloak.secretName" . }}
-                  key: "admin-password"
+                  key: {{ include "keycloak.secretKey" . }}
             - name: KEYCLOAK_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:

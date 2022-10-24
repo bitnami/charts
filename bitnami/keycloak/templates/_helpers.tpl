@@ -202,6 +202,18 @@ Return the secret containing Keycloak HTTPS/TLS certificates
 {{/*
 Return the secret containing Keycloak HTTPS/TLS certificates
 */}}
+{{- define "keycloak.secretKey" -}}
+{{- $secretName := .Values.auth.existingSecret -}}
+{{- if and $secretName .Values.auth.passwordSecretKey -}}
+    {{- printf "%s" .Values.auth.passwordSecretKey -}}
+{{- else -}}
+    {{- print "admin-password" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the secret containing Keycloak HTTPS/TLS certificates
+*/}}
 {{- define "keycloak.tlsSecretName" -}}
 {{- $secretName := .Values.tls.existingSecret -}}
 {{- if $secretName -}}
