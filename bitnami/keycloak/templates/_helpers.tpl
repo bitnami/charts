@@ -119,9 +119,9 @@ Return the Database database name
 Return the Database user
 */}}
 {{- define "keycloak.databaseUser" -}}
-{{- if .Values.postgresql.enabled }}
-    {{- if .Values.global.postgresql }}
-        {{- if .Values.global.postgresql.auth }}
+{{- if .Values.postgresql.enabled -}}
+    {{- if .Values.global.postgresql -}}
+        {{- if .Values.global.postgresql.auth -}}
             {{- coalesce .Values.global.postgresql.auth.username .Values.postgresql.auth.username -}}
         {{- else -}}
             {{- .Values.postgresql.auth.username -}}
@@ -138,10 +138,10 @@ Return the Database user
 Return the Database encrypted password
 */}}
 {{- define "keycloak.databaseSecretName" -}}
-{{- if .Values.postgresql.enabled }}
-    {{- if .Values.global.postgresql }}
-        {{- if .Values.global.postgresql.auth }}
-            {{- if .Values.global.postgresql.auth.existingSecret }}
+{{- if .Values.postgresql.enabled -}}
+    {{- if .Values.global.postgresql -}}
+        {{- if .Values.global.postgresql.auth -}}
+            {{- if .Values.global.postgresql.auth.existingSecret -}}
                 {{- tpl .Values.global.postgresql.auth.existingSecret $ -}}
             {{- else -}}
                 {{- default (include "keycloak.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
@@ -184,6 +184,18 @@ Return the Keycloak initdb scripts configmap
     {{- printf "%s" .Values.initdbScriptsConfigMap -}}
 {{- else -}}
     {{- printf "%s-init-scripts" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the secret containing Keycloak HTTPS/TLS certificates
+*/}}
+{{- define "keycloak.secretName" -}}
+{{- $secretName := .Values.auth.existingSecret -}}
+{{- if $secretName -}}
+    {{- printf "%s" (tpl $secretName $) -}}
+{{- else -}}
+    {{- printf "%s" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 

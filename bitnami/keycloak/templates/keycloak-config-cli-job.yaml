@@ -73,13 +73,8 @@ spec:
             - name: KEYCLOAK_PASSWORD
               valueFrom:
                 secretKeyRef:
-                {{- if .Values.auth.existingSecretPerPassword }}
-                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecretPerPassword.adminPassword "context" $) }}
-                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecretPerPassword "key" "adminPassword") }}
-                {{- else }}
-                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecret "context" $) }}
-                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecret "key" "admin-password") }}
-                {{- end }}
+                  name: {{ include "keycloak.secretName" . }}
+                  key: "admin-password"
             {{- if or .Values.keycloakConfigCli.configuration .Values.keycloakConfigCli.existingConfigmap }}
             - name: IMPORT_FILES_LOCATIONS
               value: /config/*
