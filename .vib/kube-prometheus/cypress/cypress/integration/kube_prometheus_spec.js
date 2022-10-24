@@ -1,19 +1,36 @@
 /// <reference types="cypress" />
 
-it('allows executing a query and displaying response data', () => {
-  const query = 'alertmanager_alerts';
+it('allows executing a query and displaying response data for each deployment', () => {
+  const deployments = Cypress.env('deployments');
 
   cy.visit(`/graph`);
-  cy.get('[role="textbox"]').type(query);
-  cy.contains('Execute').click();
-  cy.contains('.data-table', `${query}{container="alertmanager"`)
+  Object.keys(deployments).forEach((podName, i) => {
+    const query = Object.values(deployments)[i].query;
+
+    cy.get('[role="textbox"]').clear().type(query);
+    cy.contains('Execute').click({force: true});
+    cy.contains('.data-table', `container="${podName}"`)
+  })
 });
 
-it('allows checking targets status', () => {
-  const pods = Cypress.env('pods');
+it('allows executing a query and displaying response data for each service monitor', () => {
+  const monitors = Cypress.env('monitors');
 
-  Object.keys(pods).forEach((podName, i) => {
-    const podData = Object.values(pods)[i];
+  cy.visit(`/graph`);
+  Object.keys(monitors).forEach((jobName, i) => {
+    const query = Object.values(monitors)[i].query;
+
+    cy.get('[role="textbox"]').clear().type(query);
+    cy.contains('Execute').click();
+    cy.contains('.data-table', `job="${jobName}"`)
+  })
+});
+
+it('checks targets status', () => {
+  const targets = Cypress.env('targets');
+
+  Object.keys(targets).forEach((podName, i) => {
+    const podData = Object.values(targets)[i];
 
     cy.visit(`/targets?search=${podName}`);
     cy.contains(`${podData.replicaCount}/${podData.replicaCount} up`);
