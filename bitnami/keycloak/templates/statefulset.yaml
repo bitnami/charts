@@ -207,8 +207,13 @@ spec:
               subPath: keycloak.conf
             {{- end }}
             {{- if .Values.tls.enabled }}
-            - name: shared-certs
+            - name: certificates
               mountPath: /opt/bitnami/keycloak/certs
+              readOnly: true
+            {{- end }}
+            {{- if .Values.spi.existingSecret }}
+            - name: spi-certificates
+              mountPath: /opt/bitnami/keycloak/spi-certs
               readOnly: true
             {{- end }}
             {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
@@ -232,8 +237,12 @@ spec:
           secret:
             secretName: {{ include "keycloak.tlsSecretName" . }}
             defaultMode: 420
-        - name: shared-certs
-          emptyDir: {}
+        {{- end }}
+        {{- if .Values.spi.existingSecret }}
+        - name: spi-certificates
+          secret:
+            secretName: {{ .Values.spi.existingSecret }}
+            defaultMode: 420
         {{- end }}
         {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
         - name: custom-init-scripts
