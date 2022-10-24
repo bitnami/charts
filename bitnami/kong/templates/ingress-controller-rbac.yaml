@@ -159,6 +159,14 @@ rules:
       - patch
       - update
   - apiGroups:
+    - configuration.konghq.com
+    resources:
+      - ingressclassparameterses
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
       - configuration.konghq.com
     resources:
       - kongclusterplugins
