@@ -20,6 +20,7 @@ data:
   KEYCLOAK_DATABASE_PORT: {{ include "keycloak.databasePort" . }}
   KEYCLOAK_DATABASE_NAME: {{ include "keycloak.databaseName" . | quote }}
   KEYCLOAK_DATABASE_USER: {{ include "keycloak.databaseUser" . | quote }}
+  KEYCLOAK_PRODUCTION:  {{ ternary "true" "false" .Values.production | quote }}
   KEYCLOAK_ENABLE_HTTPS: {{ ternary "true" "false" .Values.tls.enabled | quote }}
   {{- if .Values.tls.enabled }}
   KEYCLOAK_HTTPS_PORT: {{ .Values.containerPorts.https | quote }}
@@ -32,7 +33,9 @@ data:
   {{- end }}
   {{- end }}
   {{- if .Values.spi.existingSecret }}
-  KEYCLOAK_SPI_TRUSTSTORE_FILE_HOSTNAME_VERIFICATION_POLICY: {{ .Values.spi.hostnameVerificationPolicy }}
+  {{- if .Values.spi.hostnameVerificationPolicy }}
+  KEYCLOAK_SPI_TRUSTSTORE_FILE_HOSTNAME_VERIFICATION_POLICY: {{ .Values.spi.hostnameVerificationPolicy | quote }}
+  {{- end }}
   KEYCLOAK_SPI_TRUSTSTORE_FILE: {{ printf "/opt/bitnami/keycloak/certs/%s" .Values.tls.truststoreFilename }}
   {{- end }}
   {{- end }}
