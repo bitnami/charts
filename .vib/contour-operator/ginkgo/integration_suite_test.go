@@ -23,7 +23,7 @@ import (
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 )
 
-const APP_NAME = "Contour"
+const APP_NAME = "Contour Operator"
 
 var kubeconfig = flag.String("kubeconfig", "", "absolute path to the kubeconfig file")
 var namespace = flag.String("namespace", "", "namespace where the resources are deployed")
@@ -137,10 +137,10 @@ func CheckRequirements() {
 		panic(fmt.Sprintf("The namespace where %s is deployed must be provided. Use the '--namespace' flag", APP_NAME))
 	}
 	if *contourName == "" {
-		panic("The name of the contour resource. Use the '--ingress-name' flag")
+		panic("The name of the contour resource must be provided. Use the '--ingress-name' flag")
 	}
 	if *ingressName == "" {
-		panic("The resource name of the testing ingress. Use the '--ingress-name' flag")
+		panic("The resource name of the testing ingress must be provided. Use the '--ingress-name' flag")
 	}
 }
 

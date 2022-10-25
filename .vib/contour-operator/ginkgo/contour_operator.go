@@ -31,22 +31,32 @@ var _ = Describe("Contour Operator:", func() {
 	Context("When both operator and testing resources are deployed", func() {
 		var containerLogs, responseBody []string
 		var controllerPods v1.PodList
-		var ingress *netv1.Ingress
+		var testingIngress *netv1.Ingress
+		var envoySvc *v1.Service
 		var err error
+		const contourNs = "projectcontour"
 
 		BeforeEach(func() {
+			envoySvc, err = coreclient.Services(contourNs).Get(ctx, "envoy", metav1.GetOptions{})
+			if err != nil {
+				panic(fmt.Sprintf("There was an error retrieving the envoy service: %q", err))
+			}
+
 			controllerPods = getPodsByLabelOrDie(ctx, coreclient, *namespace, "app.kubernetes.io/component=contour-operator")
 			containerLogs = getContainerLogsOrDie(ctx, coreclient, *namespace, controllerPods.Items[0].GetName(), "contour-operator")
 
-			ingress, err = netclient.Ingresses(*namespace).Get(ctx, *ingressName, metav1.GetOptions{})
+			testingIngress, err = netclient.Ingresses(*namespace).Get(ctx, *ingressName, metav1.GetOptions{})
 			if err != nil {
 				panic(fmt.Sprintf("There was an error retrieving the %q Ingress resource: %q", *ingressName, err))
 			}
-			responseBody = getResponseBodyOrDie(ctx, "http://"+ingress.Status.LoadBalancer.Ingress[0].IP)
+			responseBody = getResponseBodyOrDie(ctx, "http://"+testingIngress.Status.LoadBalancer.Ingress[0].IP)
 		})
 
 		It("the operator manages the contour resource", func() {
 			Expect(containsString(containerLogs, *contourName)).To(BeTrue())
+		})
+		It("the ingress' asigned IP is the same as the one used by the envoy service", func() {
+			Expect(testingIngress.Status.LoadBalancer.Ingress[0].IP).To(Equal(envoySvc.Status.LoadBalancer.Ingress[0].IP))
 		})
 		It("the ingress' asigned IP resolves to the testing deployment", func() {
 			Expect(containsString(responseBody, "kuard")).To(BeTrue())
