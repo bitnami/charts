@@ -4,9 +4,9 @@ dependencies:
   version: 11.9.11
 - name: common
   repository: https://charts.bitnami.com/bitnami
-  version: 2.0.3
+  version: 2.0.4
 - name: cassandra
   repository: https://charts.bitnami.com/bitnami
-  version: 9.7.2
-digest: sha256:18c31f0eef386012c096c4a7fe2699fcfe8b6cee89c548d5ac94850a9ceb8465
-generated: "2022-10-21T22:55:21.43602692Z"
+  version: 9.7.3
+digest: sha256:42e2267cbc5069b0477afff2dcb5ba1beddbb4f5d6099a4f8bb7ac5cf431db9b
+generated: "2022-10-25T02:51:38.483292323Z"
