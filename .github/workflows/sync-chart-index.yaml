@@ -16,5 +16,4 @@ jobs:
     - name: Upload to S3
       run: |
         s3cmd put --region=${{ secrets.AWS_REGION }} --access_key=${{ secrets.AWS_ACCESS_KEY_ID }} --secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }} --follow-symlinks bitnami/index.yaml s3://${{ secrets.AWS_S3_BUCKET }}/bitnami/
-        s3cmd put --region=${{ secrets.AWS_REGION }} --access_key=${{ secrets.AWS_ACCESS_KEY_ID }} --secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }} --follow-symlinks bitnami/index.html s3://${{ secrets.AWS_S3_BUCKET }}/bitnami/
         s3cmd put --region=${{ secrets.AWS_REGION }} --access_key=${{ secrets.AWS_ACCESS_KEY_ID }} --secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }} --follow-symlinks bitnami/index.html s3://${{ secrets.AWS_S3_BUCKET }}/
