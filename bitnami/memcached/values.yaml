@@ -104,6 +104,9 @@ auth:
   ## @param auth.password Memcached admin password
   ##
   password: ""
+  ## @param auth.existingPasswordSecret Existing secret with Memcached credentials (must contain a value for `memcached-password` key)
+  ##
+  existingPasswordSecret: ""
 ## @param command Override default container command (useful when using custom images)
 ##
 command: []
