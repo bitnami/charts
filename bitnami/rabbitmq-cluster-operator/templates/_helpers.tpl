@@ -136,3 +136,22 @@ Create the name of the service account to use (Messaging Topology Operator)
     {{ default "default" .Values.msgTopologyOperator.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
+
+{{- define "rmqco.buildImageArray" -}}
+images: {{- .Chart.Annotations.images | nindent 2 }}
+{{- end -}}
+
+{{- define "rmqco.getImage" -}}
+{{- $imageArray := include "rmqco.buildImageArray" .context | fromYaml -}}
+{{- $expectedName := .name -}}
+{{ $found := false }}
+{{- range $image := $imageArray.images -}}
+    {{- if (eq $image.name $expectedName) -}}
+        {{- printf "%s" $image.image -}}
+        {{- $found = true -}}
+    {{- end -}}
+{{- end -}}
+{{- if not $found -}}
+    {{- fail (printf "Image %s does not exist" $expectedName) -}}
+{{- end -}}
+{{- end -}}

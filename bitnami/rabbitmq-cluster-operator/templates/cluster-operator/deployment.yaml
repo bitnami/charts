@@ -72,7 +72,7 @@ spec:
         {{- end }}
       containers:
         - name: rabbitmq-cluster-operator
-          image: {{ template "rmqco.clusterOperator.image" . }}
+          image: {{ include "rmqco.getImage" (dict "name" "rabbitmq-cluster-operator" "context" $) }}
           imagePullPolicy: {{ .Values.clusterOperator.image.pullPolicy }}
           {{- if .Values.clusterOperator.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.clusterOperator.containerSecurityContext "enabled" | toYaml | nindent 12 }}
@@ -95,9 +95,9 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: DEFAULT_RABBITMQ_IMAGE
-              value: {{ include "rmqco.rabbitmq.image" . }}
+              value: {{ include "rmqco.getImage" (dict "name" "rabbitmq" "context" $) }}
             - name: DEFAULT_USER_UPDATER_IMAGE
-              value: {{ include "rmqco.defaultCredentialUpdater.image" . }}
+              value: {{ include "rmqco.getImage" (dict "name" "rmq-default-credential-updater" "context" $) }}
             {{- if (include "rmqco.imagePullSecrets.string" .) }}
             - name: DEFAULT_IMAGE_PULL_SECRETS
               value: {{ include "rmqco.imagePullSecrets.string" . | quote }}

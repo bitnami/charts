@@ -72,7 +72,7 @@ spec:
         {{- end }}
       containers:
         - name: rabbitmq-cluster-operator
-          image: {{ template "rmqco.msgTopologyOperator.image" . }}
+          image: {{ include "rmqco.getImage" (dict "name" "rmq-messaging-topology-operator" "context" $) }}
           imagePullPolicy: {{ .Values.msgTopologyOperator.image.pullPolicy }}
           {{- if .Values.msgTopologyOperator.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.msgTopologyOperator.containerSecurityContext "enabled" | toYaml | nindent 12 }}

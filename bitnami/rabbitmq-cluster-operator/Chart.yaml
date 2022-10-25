@@ -1,7 +1,16 @@
 annotations:
   category: Infrastructure
+  images: |
+    - name: rabbitmq
+      image: docker.io/bitnami/rabbitmq:3.10.8-debian-11-r0
+    - name: rmq-default-credential-updater
+      image: docker.io/bitnami/rmq-default-credential-updater:1.0.2-scratch-r9
+    - name: rabbitmq-cluster-operator
+      image: docker.io/bitnami/rabbitmq-cluster-operator:2.0.0-scratch-r0
+    - name: rmq-messaging-topology-operator
+      image: docker.io/bitnami/rmq-messaging-topology-operator:1.8.0-scratch-r2
 apiVersion: v2
-appVersion: 2.0.0
+appVersion: 3.0.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
