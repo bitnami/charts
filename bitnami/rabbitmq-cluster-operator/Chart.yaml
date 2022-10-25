@@ -10,7 +10,7 @@ annotations:
     - name: rmq-messaging-topology-operator
       image: docker.io/bitnami/rmq-messaging-topology-operator:1.8.0-scratch-r2
 apiVersion: v2
-appVersion: 3.0.0
+appVersion: 2.0.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -35,4 +35,4 @@ name: rabbitmq-cluster-operator
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq-cluster-operator
   - https://github.com/rabbitmq/cluster-operator
-version: 3.1.0
+version: 4.0.0
