@@ -188,7 +188,7 @@ Return the Keycloak initdb scripts configmap
 {{- end -}}
 
 {{/*
-Return the secret containing Keycloak HTTPS/TLS certificates
+Return the secret containing the Keycloak admin password
 */}}
 {{- define "keycloak.secretName" -}}
 {{- $secretName := .Values.auth.existingSecret -}}
@@ -200,7 +200,7 @@ Return the secret containing Keycloak HTTPS/TLS certificates
 {{- end -}}
 
 {{/*
-Return the secret containing Keycloak HTTPS/TLS certificates
+Return the secret key that contains the Keycloak admin password
 */}}
 {{- define "keycloak.secretKey" -}}
 {{- $secretName := .Values.auth.existingSecret -}}
@@ -224,7 +224,7 @@ Return the secret containing Keycloak HTTPS/TLS certificates
 {{- end -}}
 
 {{/*
-Return the secret containing Keycloak HTTPS/TLS certificates
+Return the secret containing Keycloak HTTPS/TLS keystore and truststore passwords
 */}}
 {{- define "keycloak.tlsPasswordsSecretName" -}}
 {{- $secretName := .Values.tls.passwordsSecret -}}
