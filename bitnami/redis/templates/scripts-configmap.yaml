@@ -478,7 +478,7 @@ data:
         if is_boolean_yes "$REDIS_TLS_ENABLED"; then
             redis-cli -h 127.0.0.1 -p "$REDIS_TLS_PORT" --tls --cert "$REDIS_TLS_CERT_FILE" --key "$REDIS_TLS_KEY_FILE" --cacert "$REDIS_TLS_CA_FILE" "$@"
         else
-            redis-cli -h 127.0.0.1 -p ${REDIS_PORT} "$@"
+            redis-cli -h 127.0.0.1 -p "$REDIS_PORT" "$@"
         fi
     }
     failover_finished() {
@@ -491,10 +491,11 @@ data:
     [[ -f "$REDIS_PASSWORD_FILE" ]] && export REDISCLI_AUTH="$(< "${REDIS_PASSWORD_FILE}")"
 
     if ! failover_finished; then
-        echo "I am the master pod and you are stopping me. Stopping client connections"
+        echo "I am the master pod and you are stopping me."
+        echo "Stopping client connections"
         # Stopping client write connections to avoid data loss
         run_redis_command CLIENT PAUSE "{{ mul (sub .Values.sentinel.terminationGracePeriodSeconds 10) 1000 }}" WRITE
-        # if I am the master, issue a command to failover once and then wait for the failover to finish
+        # Waiting for the failover to finish
         echo "Waiting for sentinel to run failover for up to {{ sub .Values.sentinel.terminationGracePeriodSeconds 10 }}s"
         retry_while "failover_finished" "{{ sub .Values.sentinel.terminationGracePeriodSeconds 10 }}" 1
     else
