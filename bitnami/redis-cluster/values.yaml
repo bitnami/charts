@@ -348,6 +348,15 @@ volumePermissions:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## Containers Security Context
+  ## @param volumePermissions.containerSecurityContext.enabled Enable Containers' Security Context
+  ## @param volumePermissions.containerSecurityContext.runAsUser User ID for the containers.
+  ## @param volumePermissions.containerSecurityContext.privileged Run container as privileged
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 0
+    privileged: false
   ## Container resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param volumePermissions.resources.limits The resources limits for the container
@@ -975,6 +984,15 @@ sysctlImage:
   ## @param sysctlImage.mountHostSys Mount the host `/sys` folder to `/host-sys`
   ##
   mountHostSys: false
+  ## Containers Security Context
+  ## @param sysctlImage.containerSecurityContext.enabled Enable Containers' Security Context
+  ## @param sysctlImage.containerSecurityContext.runAsUser User ID for the containers.
+  ## @param sysctlImage.containerSecurityContext.privileged Run privileged as privileged
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 0
+    privileged: true
   ## Container resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param sysctlImage.resources.limits The resources limits for the container
