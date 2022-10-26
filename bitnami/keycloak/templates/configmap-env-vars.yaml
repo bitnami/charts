@@ -41,7 +41,12 @@ data:
   {{- end }}
   {{- if .Values.cache.enabled }}
   KEYCLOAK_CACHE_TYPE: "ispn"
-  KEYCLOAK_CACHE_STACK: "kubernetes"
+  {{- if .Values.cache.stackName }}
+  KEYCLOAK_CACHE_STACK: {{ .Values.cache.stackName | quote }} 
+  {{- end }}
+  {{- if .Values.cache.stackFile }}
+  KEYCLOAK_CACHE_CONFIG_FILE: {{ .Values.cache.stackFile | quote }} 
+  {{- end }}
   JAVA_OPTS_APPEND: {{ printf "-Djgroups.dns.query=%s-headless.%s.svc.%s" (include "common.names.fullname" .) (include "common.names.namespace" .) .Values.clusterDomain | quote }}
   {{- else }}
   KEYCLOAK_CACHE_TYPE: "local"
