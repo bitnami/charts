@@ -32,11 +32,11 @@ jobs:
           if [[ "${pull_request}" == "null" ]]; then
             type="issue"
           fi
-          echo "::set-output name=assignees::${assignees}"
-          echo "::set-output name=author::${author}"
-          echo "::set-output name=type::${type}"
-          echo "::set-output name=draft::${draft}"
-          echo "::set-output name=number::${number}"
+          echo "assignees=${assignees}" >> $GITHUB_OUTPUT
+          echo "author=${author}" >> $GITHUB_OUTPUT
+          echo "type=${type}" >> $GITHUB_OUTPUT
+          echo "draft=${draft}" >> $GITHUB_OUTPUT
+          echo "number=${number}" >> $GITHUB_OUTPUT
   label-card:
     runs-on: ubuntu-latest
     needs:
