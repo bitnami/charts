@@ -7,7 +7,7 @@ Confluent Schema Registry provides a RESTful interface by adding a serving layer
 [Overview of Confluent Schema Registry](https://www.confluent.io)
 
 
-
+                           
 ## TL;DR
 
 ```bash
