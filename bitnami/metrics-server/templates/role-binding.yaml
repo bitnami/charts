@@ -17,6 +17,6 @@ roleRef:
   name: extension-apiserver-authentication-reader
 subjects:
   - kind: ServiceAccount
-    name: {{ template "common.names.fullname" . }}
+    name: {{ template "metrics-server.serviceAccountName" . }}
     namespace: {{ include "common.names.namespace" . | quote }}
 {{- end -}}
