@@ -246,17 +246,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                        | Description                                                                                                     | Value                     |
-| --------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| `metrics.enabled`           | Start a side-car prometheus exporter                                                                            | `false`                   |
-| `metrics.image.registry`    | Apache exporter image registry                                                                                  | `docker.io`               |
-| `metrics.image.repository`  | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag (immutable tags are recommended)                                                      | `0.11.0-debian-11-r50`    |
-| `metrics.image.digest`      | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
-| `metrics.image.pullPolicy`  | Apache exporter image pull policy                                                                               | `IfNotPresent`            |
-| `metrics.image.pullSecrets` | Specify docker-registry secret names as an array                                                                | `[]`                      |
-| `metrics.resources`         | Metrics exporter resource requests and limits                                                                   | `{}`                      |
-| `metrics.podAnnotations`    | Metrics exporter pod annotations                                                                                | `{}`                      |
+| Name                         | Description                                                                                                     | Value                     |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `metrics.enabled`            | Start a side-car prometheus exporter                                                                            | `false`                   |
+| `metrics.image.registry`     | Apache exporter image registry                                                                                  | `docker.io`               |
+| `metrics.image.repository`   | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
+| `metrics.image.tag`          | Apache exporter image tag (immutable tags are recommended)                                                      | `0.11.0-debian-11-r50`    |
+| `metrics.image.digest`       | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
+| `metrics.image.pullPolicy`   | Apache exporter image pull policy                                                                               | `IfNotPresent`            |
+| `metrics.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                | `[]`                      |
+| `metrics.resources.requests` | The requested resources for the metrics exporter container                                                      | `{}`                      |
+| `metrics.resources.limits`   | The resources limits for the container for the metrics exporter container                                       | `{}`                      |
+| `metrics.podAnnotations`     | Metrics exporter pod annotations                                                                                | `{}`                      |
 
 
 ### Certificate injection parameters

@@ -1421,7 +1421,7 @@ singleuser:
   ## @param singleuser.extraEnvVars Extra environment variables that should be set for the user pods
   ## ref: https://zero-to-jupyterhub.readthedocs.io/en/latest/resources/reference.html#singleuser-extraenv
   ##
-  extraEnvVars: {}
+  extraEnvVars: []
   ## @param singleuser.containerPort Single User container port
   ##
   containerPort: 8888
