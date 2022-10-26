@@ -141,9 +141,9 @@ Params:
 {{- $defaultValue := required "\n'common.secrets.lookup': Argument 'defaultValue' missing or empty" .defaultValue -}}
 {{- $secretData := (lookup "v1" "Secret" $.context.Release.Namespace .secret).data -}}
 {{- if and $secretData (hasKey $secretData .key) -}}
-  {{- $value = index $secretData .key | quote -}}
+  {{- $value = index $secretData .key -}}
 {{- else -}}
-  {{- $value = $defaultValue | toString | b64enc | quote -}}
+  {{- $value = $defaultValue | toString | b64enc -}}
 {{- end -}}
 {{- printf "%s" $value -}}
 {{- end -}}
