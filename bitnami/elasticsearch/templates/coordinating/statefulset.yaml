@@ -6,8 +6,10 @@ metadata:
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: coordinating-only
+    {{- if .Values.useIstioLabels }}
     ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
     app: coordinating-only
+    {{- end }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -36,8 +38,10 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: coordinating-only
+        {{- if .Values.useIstioLabels }}
         ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
         app: coordinating-only
+        {{- end }}
         {{- if .Values.coordinating.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.podLabels "context" $) | nindent 8 }}
         {{- end }}
@@ -158,7 +162,7 @@ spec:
             - name: ELASTICSEARCH_MINIMUM_MASTER_NODES
               value: {{ add (div (ternary .Values.master.autoscaling.minReplicas .Values.master.replicaCount .Values.master.autoscaling.enabled) 2) 1 | quote }}
             - name: ELASTICSEARCH_ADVERTISED_HOSTNAME
-              value: "$(MY_POD_NAME).{{ (include "elasticsearch.coordinating.servicename" .)}}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"                 
+              value: "$(MY_POD_NAME).{{ (include "elasticsearch.coordinating.servicename" .)}}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
             {{- if .Values.plugins }}
             - name: ELASTICSEARCH_PLUGINS
               value: {{ .Values.plugins | quote }}
