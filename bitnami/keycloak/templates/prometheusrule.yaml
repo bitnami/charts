@@ -2,7 +2,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: {{ template "keycloak.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   namespace: {{ default (include "common.names.namespace" .) .Values.metrics.prometheusRule.namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: keycloak
