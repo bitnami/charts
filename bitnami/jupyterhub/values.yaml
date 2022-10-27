@@ -1602,6 +1602,10 @@ auxiliaryImage:
 ##
 postgresql:
   enabled: true
+  image:
+    registry: docker.io
+    repository: bitnami/postgresql
+    tag: 15.0.0-debian-11-r0
   auth:
     username: bn_jupyterhub
     password: ""
