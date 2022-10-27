@@ -23,6 +23,10 @@ file:
     filetype: directory
     mode: "3777"
 command:
+  {{- $password := .Vars.server.secret.argocdServerAdminPassword }}
+  check-argocd-cli:
+    exec: argocd login argo-cd-server --insecure --username admin --password {{ $password }}
+    exit-status: 0
   check-no-capabilities:
     exec: cat /proc/1/status
     exit-status: 0

@@ -1,4 +1,6 @@
 server:
+  secret:
+    argocdServerAdminPassword: ComplicatedPassword123!4
   podSecurityContext:
     fsGroup: 1002
   containerSecurityContext:
