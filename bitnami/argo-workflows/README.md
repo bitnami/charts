@@ -33,7 +33,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release my-repo/argo-workflowss
+helm install my-release my-repo/argo-workflows
 ```
 
 The command deploys Argo Workflows on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
