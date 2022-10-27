@@ -16,10 +16,15 @@ Cypress.Commands.add(
   'login',
   (username = Cypress.env('username'), password = Cypress.env('password')) => {
     cy.visit('/login');
+
+    // Checking for UI elements before and after login avoids race-condition errors
     cy.get('.login__box');
+
     cy.contains('Username').type(username);
     cy.contains('Password').type(password);
     cy.contains('Sign In').click();
+
+    cy.contains('Log out');
   }
 );
 

@@ -13,12 +13,15 @@ it('allows deploying a healthy app for a new project', () => {
     cy.contains('Edit').click();
     cy.contains('ADD DESTINATION').click();
     cy.contains('Save').click();
+    // Checking the edit button is visible again ensures the changes are properly saved
+    cy.contains('Edit').should('be.visible');
   });
 
   cy.contains('div', 'SOURCE REPOSITORIES').within(() => {
     cy.contains('Edit').click();
     cy.contains('ADD SOURCE').click();
     cy.contains('Save').click();
+    cy.contains('Edit').should('be.visible');
   });
 
   cy.visit('/applications');
@@ -47,12 +50,18 @@ it('allows deploying a healthy app for a new project', () => {
     cy.get('[qe-id="applications-list-button-create"]').click();
 
     cy.get('.applications-list').within(() => {
-      cy.contains(`${applications.newApplication.name}-${random}`).click();
+      cy.contains(`${applications.newApplication.name}-${random}`);
     });
+
+    // Accessing via URL avoids several UI-related cypress errors.
+    cy.visit(
+      `/applications/${applications.newApplication.name}-${random}?view=tree&resource=&deploy=all`
+    );
   });
-  cy.contains('Sync').click();
-  cy.get('[qe-id="application-sync-panel-button-synchronize"]').click({
-    force: true,
+  cy.get('[qe-id="application-sync-panel-button-synchronize"]')
+    .should('be.visible')
+    .click({ force: true });
+  cy.get('[class*="application-status-panel"]').within(() => {
+    cy.get('[title="Healthy"]');
   });
-  cy.get('[title="Healthy"]');
 });
