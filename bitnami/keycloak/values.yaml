@@ -781,7 +781,7 @@ metrics:
     ## @param metrics.prometheusRule.groups Groups, containing the alert rules.
     ## Example:
     ##   groups:
-    ##     default:
+    ##     - name: Keycloak
     ##       rules:
     ##         - alert: KeycloakInstanceNotAvailable
     ##           annotations:
@@ -791,7 +791,7 @@ metrics:
     ##           for: 5m
     ##           labels:
     ##             severity: critical
-    groups: {}
+    groups: []
 
 ## @section keycloak-config-cli parameters
 
