@@ -46,9 +46,9 @@ func clusterConfigOrDie() *rest.Config {
 	return config
 }
 
-func getPodsByLabelOrDie(ctx context.Context, c cv1.PodsGetter, namespace string, selector string) v1.PodList {
+func getPodsByLabelOrDie(ctx context.Context, c cv1.PodsGetter, selector string) v1.PodList {
 
-	output, err := c.Pods(namespace).List(ctx, metav1.ListOptions{
+	output, err := c.Pods(*namespace).List(ctx, metav1.ListOptions{
 		LabelSelector: selector,
 	})
 	if err != nil {
@@ -59,11 +59,11 @@ func getPodsByLabelOrDie(ctx context.Context, c cv1.PodsGetter, namespace string
 	return *output
 }
 
-func getContainerLogsOrDie(ctx context.Context, c cv1.PodsGetter, namespace, podName, container string) []string {
+func getContainerLogsOrDie(ctx context.Context, c cv1.PodsGetter, podName string, container string) []string {
 	var output []string
 	tailLines := int64(50)
 
-	readCloser, err := c.Pods(namespace).GetLogs(podName, &v1.PodLogOptions{
+	readCloser, err := c.Pods(*namespace).GetLogs(podName, &v1.PodLogOptions{
 		Container: container,
 		Follow:    false,
 		TailLines: &tailLines,

@@ -42,8 +42,8 @@ var _ = Describe("Contour Operator:", func() {
 				panic(fmt.Sprintf("There was an error retrieving the envoy service: %q", err))
 			}
 
-			controllerPods = getPodsByLabelOrDie(ctx, coreclient, *namespace, "app.kubernetes.io/component=contour-operator")
-			containerLogs = getContainerLogsOrDie(ctx, coreclient, *namespace, controllerPods.Items[0].GetName(), "contour-operator")
+			controllerPods = getPodsByLabelOrDie(ctx, coreclient, "app.kubernetes.io/component=contour-operator")
+			containerLogs = getContainerLogsOrDie(ctx, coreclient, controllerPods.Items[0].GetName(), "contour-operator")
 
 			testingIngress, err = netclient.Ingresses(*namespace).Get(ctx, *ingressName, metav1.GetOptions{})
 			if err != nil {
