@@ -22,7 +22,7 @@ it('allows deploying a healthy app for a new project', () => {
   });
 
   cy.visit('/applications');
-  cy.get('[qe-id="applications-list-button-new-app"]').click({force: true});
+  cy.get('[qe-id="applications-list-button-new-app"]').click({ force: true });
   cy.fixture('applications').then((applications) => {
     cy.get('[qeid="application-create-field-app-name"]').type(
       `${applications.newApplication.name}-${random}`
@@ -51,6 +51,8 @@ it('allows deploying a healthy app for a new project', () => {
     });
   });
   cy.contains('Sync').click();
-  cy.get('[qe-id="application-sync-panel-button-synchronize"]').click({force: true});
+  cy.get('[qe-id="application-sync-panel-button-synchronize"]').click({
+    force: true,
+  });
   cy.get('[title="Healthy"]');
 });
