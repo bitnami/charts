@@ -1,8 +1,13 @@
 package integration
 
 import (
+	"bufio"
+	"context"
 	"flag"
 	"fmt"
+	"io"
+	"net/http"
+	"strings"
 	"testing"
 
 	"k8s.io/client-go/rest"
@@ -37,12 +42,59 @@ func clusterConfigOrDie() *rest.Config {
 	return config
 }
 
+func getResponseBodyOrDie(ctx context.Context, address string) []string {
+	var output []string
+	var client http.Client
+
+	resp, err := client.Get(address)
+	if err != nil {
+		panic(fmt.Sprintf("There was an error during the GET request: %q", err))
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusOK {
+		scanner := bufio.NewScanner(interruptableReader{ctx, resp.Body})
+		for scanner.Scan() {
+			output = append(output, scanner.Text())
+		}
+		if scanner.Err() != nil {
+			panic(scanner.Err())
+		}
+	}
+	return output
+}
+
+type interruptableReader struct {
+	ctx context.Context
+	r   io.Reader
+}
+
+func (r interruptableReader) Read(p []byte) (int, error) {
+	if err := r.ctx.Err(); err != nil {
+		return 0, err
+	}
+	n, err := r.r.Read(p)
+	if err != nil {
+		return n, err
+	}
+	return n, r.ctx.Err()
+}
+
+func containsString(haystack []string, needle string) bool {
+	for _, s := range haystack {
+		if strings.Contains(s, needle) {
+			return true
+		}
+	}
+	return false
+}
+
 func CheckRequirements() {
 	if *namespace == "" {
 		panic(fmt.Sprintf("The namespace where %s is deployed must be provided. Use the '--namespace' flag", APP_NAME))
 	}
 	if *ingressName == "" {
-		panic("The resource name of the testing ingress. Use the '--ingress-name' flag")
+		panic("The resource name of the testing ingress must be provided. Use the '--ingress-name' flag")
 	}
 }
 

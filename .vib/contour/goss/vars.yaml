@@ -7,8 +7,8 @@ contour:
     runAsUser: 1002
   service:
     ports:
-      xds: 8001
+      xds: 8002
 envoy:
   service:
     ports:
-      http: 80
+      https: 444

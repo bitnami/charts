@@ -7,8 +7,10 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
+	v1 "k8s.io/api/core/v1"
 	netv1 "k8s.io/api/networking/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	cv1 "k8s.io/client-go/kubernetes/typed/core/v1"
 	netcv1 "k8s.io/client-go/kubernetes/typed/networking/v1"
 
 	// For client auth plugins
@@ -17,26 +19,39 @@ import (
 
 var _ = Describe("Contour:", func() {
 	var netclient netcv1.NetworkingV1Interface
+	var coreclient cv1.CoreV1Interface
 	var ctx context.Context
 
 	BeforeEach(func() {
 		netclient = netcv1.NewForConfigOrDie(clusterConfigOrDie())
+		coreclient = cv1.NewForConfigOrDie(clusterConfigOrDie())
 		ctx = context.Background()
 	})
 
-	Context("Testing ingress", func() {
-		var ingress *netv1.Ingress
+	Context("The testing ingress", func() {
+		var responseBody []string
+		var testingIngress *netv1.Ingress
+		var envoySvc *v1.Service
 		var err error
 
 		BeforeEach(func() {
-			ingress, err = netclient.Ingresses(*namespace).Get(ctx, *ingressName, metav1.GetOptions{})
+			testingIngress, err = netclient.Ingresses(*namespace).Get(ctx, *ingressName, metav1.GetOptions{})
 			if err != nil {
 				panic(fmt.Sprintf("There was an error retrieving the %q Ingress resource: %q", *ingressName, err))
 			}
+			responseBody = getResponseBodyOrDie(ctx, "http://"+testingIngress.Status.LoadBalancer.Ingress[0].IP)
+
+			envoySvc, err = coreclient.Services(*namespace).Get(ctx, "contour-envoy", metav1.GetOptions{})
+			if err != nil {
+				panic(fmt.Sprintf("There was an error retrieving the envoy service: %q", err))
+			}
 		})
 
-		It("is managed by contour", func() {
-			Expect(*ingress.Spec.IngressClassName).To(Equal("contour"))
+		It("asigned IP is the same as the one used by the envoy service", func() {
+			Expect(testingIngress.Status.LoadBalancer.Ingress[0].IP).To(Equal(envoySvc.Status.LoadBalancer.Ingress[0].IP))
+		})
+		It("asigned IP resolves to the testing deployment", func() {
+			Expect(containsString(responseBody, "kuard")).To(BeTrue())
 		})
 	})
 })

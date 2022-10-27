@@ -1,10 +1,9 @@
 http:
-  # Using kuard as backend following official doc
-  # https://projectcontour.io/getting-started/#test-it-out
-  http://contour-envoy:{{ .Vars.envoy.service.ports.http }}:
+  http://contour-envoy:{{ .Vars.envoy.service.ports.https }}:
     status: 200
-    body:
-    - kuard
+addr:
+  tcp://contour:{{ .Vars.contour.service.ports.xds }}:
+    reachable: true
 file:
   /certs:
     exists: true
