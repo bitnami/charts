@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 import { random } from '../support/utils';
 
-it('allows installing an application', () => {
+it('allows installing/uninstalling an application and inviting new users', () => {
   cy.login();
   cy.get('[title="Home Menu"]').click();
   cy.contains('a', 'Apps').click();
@@ -9,10 +9,7 @@ it('allows installing an application', () => {
     cy.get('button[name="button_immediate_install"]').click();
   });
   cy.reload();
-});
 
-it('allows inviting new users', () => {
-  cy.login();
   cy.get('[title="Home Menu"]').click();
   cy.contains('Settings').click();
   cy.fixture('users').then((user) => {
@@ -22,13 +19,11 @@ it('allows inviting new users', () => {
       cy.contains(`${random}.${user.newUser.email}`);
     });
   });
-});
 
-it('allows uninstalling an application', () => {
-  cy.login();
   cy.get('[title="Home Menu"]').click();
   cy.contains('a', 'Apps').click();
   cy.get('[role="searchbox"]').type('Discuss {enter}');
+  cy.contains('1-1');
   cy.contains('[role="article"]', 'Discuss').within(() => {
     cy.get('button[class*="dropdown-toggle"]').click({ force: true });
   });
