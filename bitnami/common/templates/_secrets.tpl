@@ -136,7 +136,6 @@ Params:
 
 */}}
 {{- define "common.secrets.lookup" -}}
-
 {{- $value := "" -}}
 {{- $defaultValue := required "\n'common.secrets.lookup': Argument 'defaultValue' missing or empty" .defaultValue -}}
 {{- $secretData := (lookup "v1" "Secret" $.context.Release.Namespace .secret).data -}}
