@@ -104,6 +104,15 @@ spec:
             {{- if .Values.configuration.htpasswdFile.enabled }}
             - --htpasswd-file=/bitnami/oauth2-proxy/conf/htpasswd/users.txt
             {{- end }}
+            {{- if .Values.configuration.redirectUrl }}
+            - --redirect-url={{.Values.configuration.redirectUrl}}
+            {{- end }}
+            {{- if .Values.configuration.oidcIssuerUrl }}
+            - --oidc-issuer-url={{.Values.configuration.oidcIssuerUrl}}
+            {{- end }}
+            {{- if .Values.configuration.whiteList }}
+            - --whitelist-domain={{.Values.configuration.whiteList | quote}}
+            {{- end }}
             {{- if .Values.extraArgs }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.extraArgs "context" $ ) | nindent 12 }}
             {{- end }}
