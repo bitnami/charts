@@ -28,8 +28,8 @@ jobs:
         run: |
           author="${{ github.event.issue != null && github.event.issue.user.login || github.event.pull_request.user.login }}"
           number="${{ github.event_name != 'issues' && github.event.number || github.event.issue.number }}"
-          echo "::set-output name=author::${author}"
-          echo "::set-output name=number::${number}"
+          echo "author=${author}" >> $GITHUB_OUTPUT
+          echo "number=${number}" >> $GITHUB_OUTPUT
       - name: Send to the board
         uses: peter-evans/create-or-update-project-card@v2
         with:
