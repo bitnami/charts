@@ -5,8 +5,4 @@ serviceAccount:
 podSecurityContext:
   fsGroup: 1002
 containerSecurityContext:
-  capabilities:
-    add: []
-    drop:
-      - ALL
   runAsUser: 1002

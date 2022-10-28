@@ -39,14 +39,13 @@ var _ = Describe("Kubernetes Event Exporter:", func() {
 		})
 
 		Describe("the exporter logs", func() {
-			var pattern, podLabel string
-			var containsPattern bool
-
 			It("shows its kubernetes events", func() {
-				pattern = "msg=.*Created container kuard-" + *namespace
-				podLabel = "app.kubernetes.io/name=kubernetes-event-exporter"
-				containsPattern, _ = retry("containerLogsContainPattern", 5, 2*time.Second, func() (bool, error) {
-					return containerLogsContainPattern(ctx, coreclient, podLabel, "event-exporter", pattern)
+				pattern := "msg=.*Created container kuard-" + *namespace
+				podLabel := "app.kubernetes.io/name=kubernetes-event-exporter"
+				containerName := "event-exporter"
+
+				containsPattern, _ := retry("containerLogsContainPattern", 5, 2*time.Second, func() (bool, error) {
+					return containerLogsContainPattern(ctx, coreclient, podLabel, containerName, pattern)
 				})
 				Expect(containsPattern).To(BeTrue())
 			})
