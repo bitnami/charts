@@ -137,7 +137,7 @@ func CheckRequirements() {
 		panic(fmt.Sprintf("The namespace where %s is deployed must be provided. Use the '--namespace' flag", APP_NAME))
 	}
 	if *contourName == "" {
-		panic("The name of the contour resource must be provided. Use the '--ingress-name' flag")
+		panic("The name of the contour resource must be provided. Use the '--contour-crd-name' flag")
 	}
 	if *ingressName == "" {
 		panic("The resource name of the testing ingress must be provided. Use the '--ingress-name' flag")
