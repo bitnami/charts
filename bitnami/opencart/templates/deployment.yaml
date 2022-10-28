@@ -189,7 +189,7 @@ spec:
             - name: OPENCART_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "common.names.fullname" . }}
+                  name: {{ include "opencart.secretName" . }}
                   key: opencart-password
             - name: OPENCART_EMAIL
               value: {{ .Values.opencartEmail | quote }}
@@ -209,7 +209,7 @@ spec:
             - name: SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "common.names.fullname" . }}
+                  name: {{ include "opencart.secretName" . }}
                   key: smtp-password
             {{- end }}
             {{- if .Values.smtpProtocol }}
