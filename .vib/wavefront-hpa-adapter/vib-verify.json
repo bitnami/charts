@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/wavefront-hpa-adapter"
         },
-        "runtime_parameters": "InNlcnZpY2UiOgogICJwb3J0cyI6CiAgICAiaHR0cHMiOiA0NDMKICAidHlwZSI6ICJMb2FkQmFsYW5jZXIiCiJ3YXZlZnJvbnQiOgogICJ0b2tlbiI6ICJmYWtlIgogICJ1cmwiOiAiaHR0cHM6Ly9mYWtlLndhdmVmcm9udC5jb20i",
+        "runtime_parameters": "Y29udGFpbmVyUG9ydHM6CiAgaHR0cHM6IDY0NDQKd2F2ZWZyb250OgogIHVybDogaHR0cHM6Ly9mYWtlLndhdmVmcm9udC5jb20KICB0b2tlbjogRkFLRV9BUElfVE9LRU4Kc2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGh0dHBzOiA0NDMKcmJhYzoKICBjcmVhdGU6IHRydWUKYXBpU2VydmljZToKICBjcmVhdGU6IHRydQpleHRyYURlcGxveToKLSBhcGlWZXJzaW9uOiBhdXRvc2NhbGluZy92MmJldGExCiAga2luZDogSG9yaXpvbnRhbFBvZEF1dG9zY2FsZXIKICBtZXRhZGF0YToKICAgIG5hbWU6IHZpYi1ocGEtY3VzdG9tLW1ldHJpY3MKICBzcGVjOgogICAgbWluUmVwbGljYXM6IDEKICAgIG1heFJlcGxpY2FzOiA1CiAgICBtZXRyaWNzOgogICAgLSB0eXBlOiBFeHRlcm5hbAogICAgICBleHRlcm5hbDoKICAgICAgICBtZXRyaWNOYW1lOiB2aWIudm0uY3B1CiAgICAgICAgdGFyZ2V0QXZlcmFnZVZhbHVlOiAxODAwbQogICAgc2NhbGVUYXJnZXRSZWY6CiAgICAgIGFwaVZlcnNpb246IGFwcHMvdjEKICAgICAga2luZDogRGVwbG95bWVudAogICAgICBuYW1lOiB3YXZlZnJvbnQtaHBhLWFkYXB0ZXI=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -36,6 +36,21 @@
           "params": {
             "endpoint": "lb-wavefront-hpa-adapter-https",
             "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/wavefront-hpa-adapter/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "servingPort": "6444",
+              "wavefrontURL": "https://fake.wavefront.com",
+              "externalMetric": "vib.vm.cpu"
+            }
           }
         }
       ]
