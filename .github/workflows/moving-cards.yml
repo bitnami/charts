@@ -23,7 +23,7 @@ jobs:
         id: get-issue-step
         run: |
           issue_info=$(curl -s --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' -X GET -G "${{ github.event.project_card.content_url }}" )
-          assignees="$(echo $issue_info | jq -r '.assignees')"
+          assignees="$(echo $issue_info | jq -cr '.assignees')"
           author="$(echo $issue_info | jq -r '.user.login')"
           pull_request="$(echo $issue_info | jq -r '.pull_request')"
           draft="$(echo $issue_info | jq -r '.draft' | sed -r "s|null|false|g")"
