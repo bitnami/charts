@@ -173,9 +173,26 @@ extraVolumes: []
 ##
 extraVolumeMounts: []
 
- ## ServiceAccount for Logstash
- ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
- ##
+
+## Autoscaling for Logstash
+## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+##
+## @param autoscaling.enabled Enable Logstash statefulset autoscaling
+## @param autoscaling.minReplicas Logstash statefulset autoscaling minimum number of replicas
+## @param autoscaling.maxReplicas Logstash statefulset autoscaling maximum number of replicas
+## @param autoscaling.targetCPU Logstash statefulset autoscaling target CPU percentage
+## @param autoscaling.targetMemory Logstash statefulset autoscaling target CPU memory
+##
+autoscaling:
+  enabled: false
+  minReplicas: 3
+  maxReplicas: 6
+  targetCPU: 50
+  targetMemory: 50
+
+## ServiceAccount for Logstash
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
 serviceAccount:
   ## @param serviceAccount.create Enable creation of ServiceAccount for Logstash pods
   ##
