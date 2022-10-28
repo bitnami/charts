@@ -7,7 +7,7 @@ Odoo is an open source ERP and CRM platform, formerly known as OpenERP, that can
 [Overview of Odoo](https://www.odoo.com/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`    | Args to override all containers in the the statefulset                                               | `["infinity"]`               |
 | `image.registry`         | Odoo image registry                                                                                  | `docker.io`                  |
 | `image.repository`       | Odoo image repository                                                                                | `bitnami/odoo`               |
-| `image.tag`              | Odoo image tag (immutable tags are recommended)                                                      | `15.0.20221010-debian-11-r0` |
+| `image.tag`              | Odoo image tag (immutable tags are recommended)                                                      | `16.0.20221015-debian-11-r0` |
 | `image.digest`           | Odoo image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
 | `image.pullPolicy`       | Odoo image pull policy                                                                               | `IfNotPresent`               |
 | `image.pullSecrets`      | Odoo image pull secrets                                                                              | `[]`                         |
@@ -373,6 +373,12 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 23.0.0
+
+This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1200) you can find more information about the changes introduced in that version.
+
+### To any previous version
 
 Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/apps/odoo/administration/upgrade/).
 

@@ -5,7 +5,7 @@
  */}}
 {{- define "metallb.controller.serviceAccountName" -}}
 {{- if .Values.controller.serviceAccount.create -}}
-    {{ default (include "common.names.fullname" .) .Values.controller.serviceAccount.name }}
+    {{ default (printf "%s-controller" (include "common.names.fullname" .)) .Values.controller.serviceAccount.name | trunc 63 | trimSuffix "-" }}
 {{- else -}}
     {{ default "default" .Values.controller.serviceAccount.name }}
 {{- end -}}
@@ -16,7 +16,7 @@
  */}}
 {{- define "metallb.speaker.serviceAccountName" -}}
 {{- if .Values.speaker.serviceAccount.create -}}
-    {{ default (include "common.names.fullname" .) .Values.speaker.serviceAccount.name }}
+    {{ default (printf "%s-speaker" (include "common.names.fullname" .)) .Values.speaker.serviceAccount.name | trunc 63 | trimSuffix "-" }}
 {{- else -}}
     {{ default "default" .Values.speaker.serviceAccount.name }}
 {{- end -}}

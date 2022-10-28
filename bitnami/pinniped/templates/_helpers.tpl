@@ -34,7 +34,7 @@ Return the proper Concierge fullname (with ns)
 Return the proper Concierge API fullname
 */}}
 {{- define "pinniped.concierge.api.fullname" -}}
-{{- printf "%s-%s" (include "pinniped.concierge.fullname" .) "api" | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" (include "pinniped.concierge.fullname.namespace" .) "api" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
