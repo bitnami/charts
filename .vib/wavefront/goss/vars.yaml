@@ -1,0 +1,8 @@
+serviceAccount:
+  automountServiceAccountToken: true
+proxy:
+  containerSecurityContext:
+    runAsUser: 1002
+  podSecurityContext:
+    fsGroup: 1002
+  port: 2878

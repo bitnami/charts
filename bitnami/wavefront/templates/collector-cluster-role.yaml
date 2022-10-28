@@ -2,7 +2,7 @@
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ printf "%s-collector" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-collector" (include "common.names.fullname.namespace" .) }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: collector
@@ -50,7 +50,7 @@ rules:
   - apiGroups:
       - policy
     resourceNames:
-      - {{ template "common.names.fullname" . }}
+      - {{ template "common.names.fullname.namespace" . }}
     resources:
       - podsecuritypolicies
     verbs:
