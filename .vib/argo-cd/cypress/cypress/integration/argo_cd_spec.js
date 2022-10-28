@@ -50,18 +50,13 @@ it('allows deploying a healthy app for a new project', () => {
     cy.get('[qe-id="applications-list-button-create"]').click();
 
     cy.get('.applications-list').within(() => {
-      cy.contains(`${applications.newApplication.name}-${random}`);
+      cy.contains(`${applications.newApplication.name}-${random}`).click();
     });
-
-    // Accessing via URL avoids several UI-related cypress errors.
-    cy.visit(
-      `/applications/${applications.newApplication.name}-${random}?view=tree&resource=&deploy=all`
-    );
   });
-  cy.get('[qe-id="application-sync-panel-button-synchronize"]')
-    .should('be.visible')
-    .click({ force: true });
-  cy.get('[class*="application-status-panel"]').within(() => {
-    cy.get('[title="Healthy"]');
+  cy.get('i[class*="fa-sync"]').click();
+  cy.get('[qe-id="application-sync-panel-button-synchronize"]').click();
+  cy.contains('Succeeded a few seconds ago');
+  cy.get('[class*="application-details__status-panel"]').within(() => {
+    cy.get('[title="Healthy"]', {timeout: 60000});
   });
 });
