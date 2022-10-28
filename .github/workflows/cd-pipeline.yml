@@ -8,6 +8,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/apache/**'
       - 'bitnami/aspnet-core/**'
       - 'bitnami/cassandra/**'
+      - 'bitnami/cert-manager/**'
       - 'bitnami/clickhouse/**'
       - 'bitnami/concourse/**'
       - 'bitnami/consul/**'
