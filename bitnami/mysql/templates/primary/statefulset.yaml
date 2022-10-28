@@ -236,6 +236,9 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /bitnami/mysql
+              {{- if .Values.primary.persistence.subPath }}
+              subPath: {{ .Values.primary.persistence.subPath }}
+              {{- end }}
             {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
             - name: custom-init-scripts
               mountPath: /docker-entrypoint-initdb.d
