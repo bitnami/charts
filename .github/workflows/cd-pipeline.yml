@@ -11,6 +11,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/clickhouse/**'
       - 'bitnami/concourse/**'
       - 'bitnami/consul/**'
+      - 'bitnami/contour-operator/**'
       - 'bitnami/contour/**'
       - 'bitnami/discourse/**'
       - 'bitnami/dokuwiki/**'
