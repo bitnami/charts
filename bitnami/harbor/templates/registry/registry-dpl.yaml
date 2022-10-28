@@ -213,9 +213,11 @@ spec:
             {{- include "harbor.caBundleVolumeMount" . | nindent 12 }}
             {{- end }}
             {{- if and .Values.persistence.enabled (eq .Values.persistence.imageChartStorage.type "gcs") }}
+            {{- if .Values.persistence.imageChartStorage.gcs.encodedkey }}
             - name: gcs-key
               mountPath: /etc/registry/gcs-key.json
               subPath: gcs-key.json
+            {{- end }}
             {{- end }}
             {{- if .Values.persistence.imageChartStorage.caBundleSecret }}
             - name: storage-service-ca
@@ -348,9 +350,11 @@ spec:
             {{- include "harbor.caBundleVolumeMount" . | nindent 12 }}
             {{- end }}
             {{- if and .Values.persistence.enabled (eq .Values.persistence.imageChartStorage.type "gcs") }}
+            {{- if .Values.persistence.imageChartStorage.gcs.encodedkey }}
             - name: gcs-key
               mountPath: /etc/registry/gcs-key.json
               subPath: gcs-key.json
+            {{- end }}
             {{- end }}
             {{- if .Values.registry.controller.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.registry.controller.extraVolumeMounts "context" $) | nindent 12 }}
@@ -391,12 +395,14 @@ spec:
         {{- include "harbor.caBundleVolume" . | nindent 8 }}
         {{- end }}
         {{- if and .Values.persistence.enabled (eq .Values.persistence.imageChartStorage.type "gcs") }}
+        {{- if .Values.persistence.imageChartStorage.gcs.encodedkey }}
         - name: gcs-key
           secret:
             secretName: {{ include "harbor.registry" . }}
             items:
               - key: GCS_KEY_DATA
                 path: gcs-key.json
+        {{- end }}
         {{- end }}
         {{- if .Values.persistence.imageChartStorage.caBundleSecret }}
         - name: storage-service-ca
