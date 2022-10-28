@@ -107,7 +107,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ### MySQL Primary parameters
 
 | Name                                            | Description                                                                                                     | Value               |
-| ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------- |
+| ----------------------------------------------- |-----------------------------------------------------------------------------------------------------------------| ------------------- |
 | `primary.name`                                  | Name of the primary database (eg primary, master, leader, ...)                                                  | `primary`           |
 | `primary.command`                               | Override default container command on MySQL Primary container(s) (useful when using custom images)              | `[]`                |
 | `primary.args`                                  | Override default container args on MySQL Primary container(s) (useful when using custom images)                 | `[]`                |
@@ -164,6 +164,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for MySQL primary containers                                  | `""`                |
 | `primary.persistence.enabled`                   | Enable persistence on MySQL primary replicas using a `PersistentVolumeClaim`. If false, use emptyDir            | `true`              |
 | `primary.persistence.existingClaim`             | Name of an existing `PersistentVolumeClaim` for MySQL primary replicas                                          | `""`                |
+| `primary.persistence.subPath`                   | The name of a volume's sub path to mount for persistence                                                        | `""`                |
 | `primary.persistence.storageClass`              | MySQL primary persistent volume storage Class                                                                   | `""`                |
 | `primary.persistence.annotations`               | MySQL primary persistent volume claim annotations                                                               | `{}`                |
 | `primary.persistence.accessModes`               | MySQL primary persistent volume access Modes                                                                    | `["ReadWriteOnce"]` |
