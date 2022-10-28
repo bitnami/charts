@@ -675,6 +675,10 @@ $ helm upgrade my-release my-repo/postgresql-ha \
 
 > Note: As general rule, it is always wise to do a backup before the upgrading procedures.
 
+### To 10.0.0
+
+This major version changes the default PostgreSQL image from 14.x to 15.x. Follow the [official instructions](https://www.postgresql.org/docs/15/upgrading.html) to upgrade to 15.x.
+
 ### To 9.0.0
 
 This chart major version updates the PostgreSQL image's version to the latest major, `v14`, as well as standarizes the templates and values. These changes can be sumarised in the following:
