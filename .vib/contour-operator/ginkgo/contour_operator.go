@@ -7,7 +7,6 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
-	v1 "k8s.io/api/core/v1"
 	netv1 "k8s.io/api/networking/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	cv1 "k8s.io/client-go/kubernetes/typed/core/v1"
@@ -29,36 +28,34 @@ var _ = Describe("Contour Operator:", func() {
 	})
 
 	Context("When both operator and testing resources are deployed", func() {
-		var containerLogs, responseBody []string
-		var controllerPods v1.PodList
 		var testingIngress *netv1.Ingress
-		var envoySvc *v1.Service
-		var err error
 		const contourNs = "projectcontour"
+		var err error
 
 		BeforeEach(func() {
-			envoySvc, err = coreclient.Services(contourNs).Get(ctx, "envoy", metav1.GetOptions{})
-			if err != nil {
-				panic(fmt.Sprintf("There was an error retrieving the envoy service: %q", err))
-			}
-
-			controllerPods = getPodsByLabelOrDie(ctx, coreclient, "app.kubernetes.io/component=contour-operator")
-			containerLogs = getContainerLogsOrDie(ctx, coreclient, controllerPods.Items[0].GetName(), "contour-operator")
-
 			testingIngress, err = netclient.Ingresses(*namespace).Get(ctx, *ingressName, metav1.GetOptions{})
 			if err != nil {
 				panic(fmt.Sprintf("There was an error retrieving the %q Ingress resource: %q", *ingressName, err))
 			}
-			responseBody = getResponseBodyOrDie(ctx, "http://"+testingIngress.Status.LoadBalancer.Ingress[0].IP)
 		})
 
 		It("the operator manages the contour resource", func() {
+			controllerPods := getPodsByLabelOrDie(ctx, coreclient, "app.kubernetes.io/component=contour-operator")
+			containerLogs := getContainerLogsOrDie(ctx, coreclient, controllerPods.Items[0].GetName(), "contour-operator")
+
 			Expect(containsString(containerLogs, *contourName)).To(BeTrue())
 		})
 		It("the ingress' asigned IP is the same as the one used by the envoy service", func() {
+			envoySvc, err := coreclient.Services(contourNs).Get(ctx, "envoy", metav1.GetOptions{})
+			if err != nil {
+				panic(fmt.Sprintf("There was an error retrieving the envoy service: %q", err))
+			}
+
 			Expect(testingIngress.Status.LoadBalancer.Ingress[0].IP).To(Equal(envoySvc.Status.LoadBalancer.Ingress[0].IP))
 		})
 		It("the ingress' asigned IP resolves to the testing deployment", func() {
+			responseBody := getResponseBodyOrDie(ctx, "http://"+testingIngress.Status.LoadBalancer.Ingress[0].IP)
+
 			Expect(containsString(responseBody, "kuard")).To(BeTrue())
 		})
 	})
