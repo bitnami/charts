@@ -1,0 +1,17 @@
+containerSecurityContext:
+  runAsUser: 1002
+kong:
+  containerPorts:
+    proxyHttp: 8000
+    proxyHttps: 8443
+    adminHttp: 8001
+    adminHttps: 8444
+service:
+  ports:
+    proxyHttps: 8443
+    adminHttps: 8444
+postgresql:
+  auth:
+    username: kong
+    password: ""
+    database: kong

@@ -549,7 +549,7 @@ ingress:
 ## @section Database parameters
 
 ## MariaDB chart configuration
-## https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
+## https://github.com/bitnami/charts/blob/main/bitnami/mariadb/values.yaml
 ##
 mariadb:
   ## @param mariadb.enabled Whether to deploy a mariadb server to satisfy the applications database requirements
@@ -715,7 +715,7 @@ metrics:
     type: ClusterIP
     ## @param metrics.service.ports.metrics Drupal exporter service port
     ##
-    ports: 
+    ports:
       metrics: 9117
     ## @param metrics.service.externalTrafficPolicy Drupal exporter service external traffic policy
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip

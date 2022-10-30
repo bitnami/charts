@@ -10,7 +10,7 @@ dependencies:
   - condition: postgresql.enabled
     name: postgresql
     repository: https://charts.bitnami.com/bitnami
-    version: 11.x.x
+    version: 12.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -18,7 +18,7 @@ dependencies:
     version: 2.x.x
 description: Harbor is an open source trusted cloud-native registry to store, sign, and scan content. It adds functionalities like security, identity, and management to the open source Docker distribution.
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/harbor
+home: https://github.com/bitnami/charts/tree/main/bitnami/harbor
 icon: https://bitnami.com/assets/stacks/harbor-core/img/harbor-core-stack-220x234.png
 keywords:
   - docker
@@ -36,4 +36,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/harbor-registry
   - https://github.com/bitnami/containers/tree/main/bitnami/harbor-registryctl
   - https://goharbor.io/
-version: 15.2.5
+version: 16.0.0

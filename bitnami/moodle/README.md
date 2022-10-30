@@ -19,7 +19,7 @@ $ helm install my-release my-repo/moodle
 
 This chart bootstraps a [Moodle&trade;](https://github.com/bitnami/containers/tree/main/bitnami/moodle) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the Moodle&trade; application.
+It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/main/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the Moodle&trade; application.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -414,7 +414,7 @@ Affected values:
 - `service.port` was deprecated. We recommend using `service.ports.http` instead.
 - `service.httpsPort` was deprecated. We recommend using `service.ports.https` instead.
 
-Additionally updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-1000) for more information.
+Additionally updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/mariadb#to-1000) for more information.
 
 ### To 11.0.0
 
@@ -445,7 +445,7 @@ This version standardizes the way of defining Ingress rules. When configuring a 
 
 ### To 9.0.0
 
-MariaDB dependency version was bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-800) for more information.
+MariaDB dependency version was bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/mariadb#to-800) for more information.
 
 To upgrade to `9.0.0`, it should be done reusing the PVCs used to hold both the MariaDB and Moodle&trade; data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `moodle`):
 

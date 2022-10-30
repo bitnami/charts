@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------ | ----------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`         | NATS image registry                                                                                   | `docker.io`          |
 | `image.repository`       | NATS image repository                                                                                 | `bitnami/nats`       |
-| `image.tag`              | NATS image tag (immutable tags are recommended)                                                       | `2.9.3-debian-11-r0` |
+| `image.tag`              | NATS image tag (immutable tags are recommended)                                                       | `2.9.4-debian-11-r0` |
 | `image.digest`           | NATS image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag  | `""`                 |
 | `image.pullPolicy`       | NATS image pull policy                                                                                | `IfNotPresent`       |
 | `image.pullSecrets`      | NATS image pull secrets                                                                               | `[]`                 |
@@ -218,7 +218,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Enable Prometheus metrics via exporter side-car                                                        | `false`                 |
 | `metrics.image.registry`                   | Prometheus metrics exporter image registry                                                             | `docker.io`             |
 | `metrics.image.repository`                 | Prometheus metrics exporter image repository                                                           | `bitnami/nats-exporter` |
-| `metrics.image.tag`                        | Prometheus metrics exporter image tag (immutable tags are recommended)                                 | `0.10.0-debian-11-r18`  |
+| `metrics.image.tag`                        | Prometheus metrics exporter image tag (immutable tags are recommended)                                 | `0.10.0-debian-11-r23`  |
 | `metrics.image.digest`                     | Petete image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `metrics.image.pullPolicy`                 | Prometheus metrics image pull policy                                                                   | `IfNotPresent`          |
 | `metrics.image.pullSecrets`                | Prometheus metrics image pull secrets                                                                  | `[]`                    |
@@ -304,7 +304,7 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 
 This chart allows you to set custom Pod affinity using the `affinity` parameter. Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
@@ -344,7 +344,7 @@ Consequences:
   - `securityContext.*` is deprecated in favor of `podSecurityContext` and `containerSecurityContext`.
 - Ingress configuration was adapted to follow the Helm charts best practices.
 - Chart labels were also adapted to follow the [Helm charts standard labels](https://helm.sh/docs/chart_best_practices/labels/#standard-labels).
-- This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+- This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 Consequences:
 

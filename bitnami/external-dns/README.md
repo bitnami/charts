@@ -7,7 +7,7 @@ ExternalDNS is a Kubernetes addon that configures public DNS servers with inform
 [Overview of ExternalDNS](https://github.com/kubernetes-incubator/external-dns)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -78,7 +78,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                              | ExternalDNS image registry                                                                                                                                                   | `docker.io`               |
 | `image.repository`                            | ExternalDNS image repository                                                                                                                                                 | `bitnami/external-dns`    |
-| `image.tag`                                   | ExternalDNS Image tag (immutable tags are recommended)                                                                                                                       | `0.12.2-debian-11-r22`    |
+| `image.tag`                                   | ExternalDNS Image tag (immutable tags are recommended)                                                                                                                       | `0.13.1-debian-11-r0`     |
 | `image.digest`                                | ExternalDNS image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                  | `""`                      |
 | `image.pullPolicy`                            | ExternalDNS image pull policy                                                                                                                                                | `IfNotPresent`            |
 | `image.pullSecrets`                           | ExternalDNS image pull secrets                                                                                                                                               | `[]`                      |
@@ -147,11 +147,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `coredns.etcdTLS.keyFilename`                 | When using the CoreDNS provider, specify private key PEM file name from the `coredns.etcdTLS.secretName`                                                                     | `key.pem`                 |
 | `designate.username`                          | When using the Designate provider, specify the OpenStack authentication username. (optional)                                                                                 | `""`                      |
 | `designate.password`                          | When using the Designate provider, specify the OpenStack authentication password. (optional)                                                                                 | `""`                      |
+| `designate.applicationCredentialId`           | When using the Designate provider, specify the OpenStack authentication application credential ID. This conflicts with `designate.username`. (optional)                      | `""`                      |
+| `designate.applicationCredentialSecret`       | When using the Designate provider, specify the OpenStack authentication application credential ID. This conflicts with `designate.password`. (optional)                      | `""`                      |
 | `designate.authUrl`                           | When using the Designate provider, specify the OpenStack authentication Url. (optional)                                                                                      | `""`                      |
 | `designate.regionName`                        | When using the Designate provider, specify the OpenStack region name. (optional)                                                                                             | `""`                      |
 | `designate.userDomainName`                    | When using the Designate provider, specify the OpenStack user domain name. (optional)                                                                                        | `""`                      |
 | `designate.projectName`                       | When using the Designate provider, specify the OpenStack project name. (optional)                                                                                            | `""`                      |
-| `designate.username`                          | When using the Designate provider, specify the OpenStack authentication username. (optional)                                                                                 | `""`                      |
+| `designate.authType`                          | When using the Designate provider, specify the OpenStack auth type. (optional)                                                                                               | `""`                      |
 | `designate.customCAHostPath`                  | When using the Designate provider, use a CA file already on the host to validate Openstack APIs.  This conflicts with `designate.customCA.enabled`                           | `""`                      |
 | `designate.customCA.enabled`                  | When using the Designate provider, enable a custom CA (optional)                                                                                                             | `false`                   |
 | `designate.customCA.content`                  | When using the Designate provider, set the content of the custom CA                                                                                                          | `""`                      |
@@ -362,7 +364,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ### Using IRSA
 If you are deploying to AWS EKS and you want to leverage [IRSA](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html). You will need to override `fsGroup` and `runAsUser` with `65534`(nfsnobody) and `0` respectively. Otherwise service account token will not be properly mounted.
@@ -417,7 +419,7 @@ helm upgrade my-release -f my-values.yaml
 
 ### To 4.3.0
 
-This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated thechart dependencies before executing any upgrade.
+This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated thechart dependencies before executing any upgrade.
 
 ### To 4.0.0
 

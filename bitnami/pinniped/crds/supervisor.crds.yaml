@@ -7,7 +7,7 @@ metadata:
   creationTimestamp: null
   name: federationdomains.config.supervisor.pinniped.dev
   labels:
-    app: pinniped-concierge
+    app: pinniped-supervisor
 spec:
   group: config.supervisor.pinniped.dev
   names:
@@ -179,7 +179,7 @@ metadata:
   creationTimestamp: null
   name: oidcclients.config.supervisor.pinniped.dev
   labels:
-    app: pinniped-concierge
+    app: pinniped-supervisor
 spec:
   group: config.supervisor.pinniped.dev
   names:
@@ -402,7 +402,7 @@ metadata:
   creationTimestamp: null
   name: activedirectoryidentityproviders.idp.supervisor.pinniped.dev
   labels:
-    app: pinniped-concierge
+    app: pinniped-supervisor
 spec:
   group: idp.supervisor.pinniped.dev
   names:
@@ -708,7 +708,7 @@ metadata:
   creationTimestamp: null
   name: ldapidentityproviders.idp.supervisor.pinniped.dev
   labels:
-    app: pinniped-concierge
+    app: pinniped-supervisor
 spec:
   group: idp.supervisor.pinniped.dev
   names:
@@ -1011,7 +1011,7 @@ metadata:
   creationTimestamp: null
   name: oidcidentityproviders.idp.supervisor.pinniped.dev
   labels:
-    app: pinniped-concierge
+    app: pinniped-supervisor
 spec:
   group: idp.supervisor.pinniped.dev
   names:

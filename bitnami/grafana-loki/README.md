@@ -2,12 +2,12 @@
 
 # Grafana Loki packaged by Bitnami
 
-Grafana Loki is a horizontally scalable, highly available, and multi-tenant log aggregation system. It provides real-time long tailing and full persistence to object storage. 
+Grafana Loki is a horizontally scalable, highly available, and multi-tenant log aggregation system. It provides real-time long tailing and full persistence to object storage.
 
 [Overview of Grafana Loki](https://grafana.com/oss/loki/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -1233,6 +1233,12 @@ The loki configuration file `loki.yaml` is shared across the different component
 
 ## Persistence
 
+### Limitation
+
+This chart does not function fully when using local filesystem as a persistence store. When using a local filesystem as a persistence store, querying will not be possible (or limited to the ingesters' in-memory caches). For a fully functional deployment of this helm chart, an object storage backend is required.
+
+### Data
+
 The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitnami/grafana-loki) image stores the grafana-loki `ingester` data at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
 
 ### Additional environment variables
@@ -1281,7 +1287,7 @@ If additional containers are needed in the same pod as grafana-loki (such as add
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters inside each of the subsections: `distributor`, `compactor`, `ingester`, `querier`, `queryFrontend` and `vulture`.
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters inside each of the subsections: `distributor`, `compactor`, `ingester`, `querier`, `queryFrontend` and `vulture`.
 
 ### External cache support
 

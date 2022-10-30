@@ -34,7 +34,7 @@
         {
           "action_id": "health-check",
           "params": {
-            "endpoint": "lb-parse-dasboard-http-dashboard"
+            "endpoint": "lb-parse-dashboard-http-dashboard"
           }
         },
         {

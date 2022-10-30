@@ -10,7 +10,7 @@ dependencies:
     version: 2.x.x
 description: Prometheus exporter for hardware and OS metrics exposed by UNIX kernels, with pluggable metric collectors.
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/node-exporter
+home: https://github.com/bitnami/charts/tree/main/bitnami/node-exporter
 icon: https://bitnami.com/assets/stacks/node-exporter/img/node-exporter-stack-220x234.png
 keywords:
   - prometheus
@@ -24,4 +24,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/node-exporter
   - https://github.com/prometheus/node_exporter
   - https://prometheus.io/
-version: 3.2.1
+version: 3.2.2
