@@ -10,7 +10,7 @@ dependencies:
     version: 2.x.x
 description: Apache HTTP Server is an open-source HTTP server. The goal of this project is to provide a secure, efficient and extensible server that provides HTTP services in sync with the current HTTP standards.
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/apache
+home: https://github.com/bitnami/charts/tree/main/bitnami/apache
 icon: https://bitnami.com/assets/stacks/apache/img/apache-stack-220x234.png
 keywords:
   - apache
@@ -26,4 +26,4 @@ name: apache
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/apache
   - https://httpd.apache.org
-version: 9.2.5
+version: 9.2.6

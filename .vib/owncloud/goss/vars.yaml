@@ -1,0 +1,16 @@
+mariadb:
+  auth:
+    database: test_db_name
+    username: test_db_user
+    password: test_db_password
+podSecurityContext:
+  fsGroup: 1002
+containerSecurityContext:
+  runAsUser: 1002
+service:
+  ports:
+    https: 8444
+hostAliases:
+  - ip: 127.0.0.1
+    hostnames:
+      - status.testhost

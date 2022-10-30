@@ -51,7 +51,7 @@ spec:
     {{- if and .Values.healthIngress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.healthIngress.annotations )) .Values.healthIngress.selfSigned) }}
     - hosts:
         - {{ .Values.healthIngress.hostname | quote }}
-      secretName: {{ printf "%s-health-tls" .Values.healthIngress.hostname }}
+      secretName: {{ printf "%s-health-tls" .Values.healthIngress.hostname | trunc 63 | trimSuffix "-" }}
     {{- end }}
     {{- if .Values.healthIngress.extraTls }}
     {{- include "common.tplvalues.render" (dict "value" .Values.healthIngress.extraTls "context" $) | nindent 4 }}

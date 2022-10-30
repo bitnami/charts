@@ -8,7 +8,7 @@ Usage:
 Params:
   - existingSecret - ExistingSecret/String - Optional. The path to the existing secrets in the values.yaml given by the user
     to be used instead of the default one. Allows for it to be of type String (just the secret name) for backwards compatibility.
-    +info: https://github.com/bitnami/charts/tree/master/bitnami/common#existingsecret
+    +info: https://github.com/bitnami/charts/tree/main/bitnami/common#existingsecret
   - defaultNameSuffix - String - Optional. It is used only if we have several secrets in the same deployment.
   - context - Dict - Required. The context for the template evaluation.
 */}}
@@ -41,7 +41,7 @@ Usage:
 Params:
   - existingSecret - ExistingSecret/String - Optional. The path to the existing secrets in the values.yaml given by the user
     to be used instead of the default one. Allows for it to be of type String (just the secret name) for backwards compatibility.
-    +info: https://github.com/bitnami/charts/tree/master/bitnami/common#existingsecret
+    +info: https://github.com/bitnami/charts/tree/main/bitnami/common#existingsecret
   - key - String - Required. Name of the key in the secret.
 */}}
 {{- define "common.secrets.key" -}}
@@ -93,7 +93,7 @@ The order in which this function returns a secret password:
 {{- $secretData := (lookup "v1" "Secret" $.context.Release.Namespace .secret).data }}
 {{- if $secretData }}
   {{- if hasKey $secretData .key }}
-    {{- $password = index $secretData .key }}
+    {{- $password = index $secretData .key | quote }}
   {{- else }}
     {{- printf "\nPASSWORDS ERROR: The secret \"%s\" does not contain the key \"%s\"\n" .secret .key | fail -}}
   {{- end -}}
@@ -120,6 +120,31 @@ The order in which this function returns a secret password:
   {{- end }}
 {{- end -}}
 {{- printf "%s" $password -}}
+{{- end -}}
+
+{{/*
+Reuses the value from an existing secret, otherwise sets its value to a default value.
+
+Usage:
+{{ include "common.secrets.lookup" (dict "secret" "secret-name" "key" "keyName" "defaultValue" .Values.myValue "context" $) }}
+
+Params:
+  - secret - String - Required - Name of the 'Secret' resource where the password is stored.
+  - key - String - Required - Name of the key in the secret.
+  - defaultValue - String - Required - The path to the validating value in the values.yaml, e.g: "mysql.password". Will pick first parameter with a defined value.
+  - context - Context - Required - Parent context.
+
+*/}}
+{{- define "common.secrets.lookup" -}}
+{{- $value := "" -}}
+{{- $defaultValue := required "\n'common.secrets.lookup': Argument 'defaultValue' missing or empty" .defaultValue -}}
+{{- $secretData := (lookup "v1" "Secret" $.context.Release.Namespace .secret).data -}}
+{{- if and $secretData (hasKey $secretData .key) -}}
+  {{- $value = index $secretData .key -}}
+{{- else -}}
+  {{- $value = $defaultValue | toString | b64enc -}}
+{{- end -}}
+{{- printf "%s" $value -}}
 {{- end -}}
 
 {{/*
