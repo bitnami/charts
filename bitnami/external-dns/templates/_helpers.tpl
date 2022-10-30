@@ -126,6 +126,8 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "designate") (or .Values.designate.username .Values.designate.password) -}}
     {{- true -}}
+{{- else if and (eq .Values.provider "designate") (or .Values.designate.applicationCredentialId .Values.designate.applicationCredentialSecret) -}}
+    {{- true -}}
 {{- else if and (eq .Values.provider "digitalocean") .Values.digitalocean.apiToken (not .Values.digitalocean.secretName) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "google") .Values.google.serviceAccountKey (not .Values.google.serviceAccountSecret) -}}

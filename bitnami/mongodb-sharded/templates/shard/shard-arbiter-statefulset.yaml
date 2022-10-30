@@ -71,7 +71,7 @@ spec:
       priorityClassName: {{ $.Values.shardsvr.arbiter.priorityClassName | quote }}
       {{- end }}
       {{- if $.Values.shardsvr.arbiter.topologySpreadConstraints }}
-      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.topologySpreadConstraints "context" .) | nindent 8 }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       {{- if $.Values.shardsvr.arbiter.podSecurityContext.enabled }}
       securityContext: {{- omit $.Values.shardsvr.arbiter.podSecurityContext "enabled" | toYaml | nindent 8 }}

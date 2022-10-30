@@ -69,7 +69,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.15.2-debian-11-r14
+  tag: 1.15.2-debian-11-r24
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -191,9 +191,11 @@ forwarder:
         </parse>
       </source>
       # enrich with kubernetes metadata
+      {{- if or .Values.forwarder.serviceAccount.create .Values.forwarder.serviceAccount.name }}
       <filter kubernetes.**>
         @type kubernetes_metadata
       </filter>
+      {{- end }}
     fluentd-output.conf: |
       # Throw the healthcheck to the standard output instead of forwarding it
       <match fluentd.healthcheck>
@@ -1335,7 +1337,7 @@ metrics:
     ##
     metricRelabelings: []
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
-    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ## e.g:
     ## selector:
     ##   prometheus: my-prometheus

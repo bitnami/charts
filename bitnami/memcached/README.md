@@ -7,7 +7,7 @@ Memcached is an high-performance, distributed memory object caching system, gene
 [Overview of Memcached](http://memcached.org)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -78,24 +78,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Memcached parameters
 
-| Name                 | Description                                                                                               | Value                  |
-| -------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `image.registry`     | Memcached image registry                                                                                  | `docker.io`            |
-| `image.repository`   | Memcached image repository                                                                                | `bitnami/memcached`    |
-| `image.tag`          | Memcached image tag (immutable tags are recommended)                                                      | `1.6.17-debian-11-r15` |
-| `image.digest`       | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
-| `image.pullPolicy`   | Memcached image pull policy                                                                               | `IfNotPresent`         |
-| `image.pullSecrets`  | Specify docker-registry secret names as an array                                                          | `[]`                   |
-| `image.debug`        | Specify if debug values should be set                                                                     | `false`                |
-| `architecture`       | Memcached architecture. Allowed values: standalone or high-availability                                   | `standalone`           |
-| `auth.enabled`       | Enable Memcached authentication                                                                           | `false`                |
-| `auth.username`      | Memcached admin user                                                                                      | `""`                   |
-| `auth.password`      | Memcached admin password                                                                                  | `""`                   |
-| `command`            | Override default container command (useful when using custom images)                                      | `[]`                   |
-| `args`               | Override default container args (useful when using custom images)                                         | `[]`                   |
-| `extraEnvVars`       | Array with extra environment variables to add to Memcached nodes                                          | `[]`                   |
-| `extraEnvVarsCM`     | Name of existing ConfigMap containing extra env vars for Memcached nodes                                  | `""`                   |
-| `extraEnvVarsSecret` | Name of existing Secret containing extra env vars for Memcached nodes                                     | `""`                   |
+| Name                          | Description                                                                                               | Value                  |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `image.registry`              | Memcached image registry                                                                                  | `docker.io`            |
+| `image.repository`            | Memcached image repository                                                                                | `bitnami/memcached`    |
+| `image.tag`                   | Memcached image tag (immutable tags are recommended)                                                      | `1.6.17-debian-11-r15` |
+| `image.digest`                | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `image.pullPolicy`            | Memcached image pull policy                                                                               | `IfNotPresent`         |
+| `image.pullSecrets`           | Specify docker-registry secret names as an array                                                          | `[]`                   |
+| `image.debug`                 | Specify if debug values should be set                                                                     | `false`                |
+| `architecture`                | Memcached architecture. Allowed values: standalone or high-availability                                   | `standalone`           |
+| `auth.enabled`                | Enable Memcached authentication                                                                           | `false`                |
+| `auth.username`               | Memcached admin user                                                                                      | `""`                   |
+| `auth.password`               | Memcached admin password                                                                                  | `""`                   |
+| `auth.existingPasswordSecret` | Existing secret with Memcached credentials (must contain a value for `memcached-password` key)            | `""`                   |
+| `command`                     | Override default container command (useful when using custom images)                                      | `[]`                   |
+| `args`                        | Override default container args (useful when using custom images)                                         | `[]`                   |
+| `extraEnvVars`                | Array with extra environment variables to add to Memcached nodes                                          | `[]`                   |
+| `extraEnvVarsCM`              | Name of existing ConfigMap containing extra env vars for Memcached nodes                                  | `""`                   |
+| `extraEnvVarsSecret`          | Name of existing Secret containing extra env vars for Memcached nodes                                     | `""`                   |
 
 
 ### Deployment/Statefulset parameters
@@ -308,7 +309,7 @@ Refer to the chart documentation for more information on, and examples of, confi
 
 This chart allows you to set your custom affinity using the `affinity` parameter(s). Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Persistence
 
@@ -342,7 +343,7 @@ Some affected values are:
 
 ### To 5.3.0
 
-This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### To 5.0.0
 
