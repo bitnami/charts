@@ -36,6 +36,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/keycloak/**'
       - 'bitnami/kibana/**'
       - 'bitnami/kong/**'
+      - 'bitnami/kubernetes-event-exporter/**'
       - 'bitnami/logstash/**'
       - 'bitnami/magento/**'
       - 'bitnami/mariadb-galera/**'
