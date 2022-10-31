@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/cassandra
-  tag: 4.0.6-debian-11-r12
+  tag: 4.0.7-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -604,7 +604,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r40
+    tag: 11-debian-11-r44
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -673,7 +673,7 @@ metrics:
     registry: docker.io
     pullPolicy: IfNotPresent
     repository: bitnami/cassandra-exporter
-    tag: 2.3.8-debian-11-r47
+    tag: 2.3.8-debian-11-r51
     digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -748,7 +748,7 @@ metrics:
     ##
     scrapeTimeout: ""
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
-    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ## e.g:
     ## selector:
     ##   prometheus: my-prometheus
@@ -808,10 +808,10 @@ metrics:
       # To get intuition of what is done by cassandra when something is called you can look in cassandra
       # https://github.com/apache/cassandra/tree/trunk/src/java/org/apache/cassandra/metrics
       # Please avoid to scrape frequently those calls that are iterating over all sstables
-      
+
       # Unaccessible metrics (not enough privilege)
       - java:lang:memorypool:.*usagethreshold.*
-      
+
       # Leaf attributes not interesting for us but that are presents in many path
       - .*:999thpercentile
       - .*:95thpercentile
@@ -823,30 +823,30 @@ metrics:
       - .*:meanrate
       - .*:mean
       - .*:min
-      
+
       # Path present in many metrics but uninterresting
       - .*:viewlockacquiretime:.*
       - .*:viewreadtime:.*
       - .*:cas[a-z]+latency:.*
       - .*:colupdatetimedeltahistogram:.*
-      
+
       # Mostly for RPC, do not scrap them
       - org:apache:cassandra:db:.*
-      
+
       # columnfamily is an alias for Table metrics
       # https://github.com/apache/cassandra/blob/8b3a60b9a7dbefeecc06bace617279612ec7092d/src/java/org/apache/cassandra/metrics/TableMetrics.java#L162
       - org:apache:cassandra:metrics:columnfamily:.*
-      
+
       # Should we export metrics for system keyspaces/tables ?
       - org:apache:cassandra:metrics:[^:]+:system[^:]*:.*
-      
+
       # Don't scrap us
       - com:criteo:nosql:cassandra:exporter:.*
-    
+
     maxScrapFrequencyInSec:
       50:
         - .*
-    
+
       # Refresh those metrics only every hour as it is costly for cassandra to retrieve them
       3600:
         - .*:snapshotssize:.*

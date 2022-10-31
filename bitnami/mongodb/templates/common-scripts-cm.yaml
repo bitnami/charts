@@ -12,6 +12,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
+  {{- $fullname := include "mongodb.fullname" . }}
   startup-probe.sh: |
     #!/bin/bash
     {{- if .Values.tls.enabled }}
@@ -43,6 +44,7 @@ data:
   {{- if .Values.tls.enabled }}
   generate-certs.sh: |
     #!/bin/bash
+    {{- if (include "mongodb.autoGenerateCerts" .) }}
     additional_ips=()
     additional_names=()
     while getopts "i:n:s:" flag
@@ -101,4 +103,20 @@ data:
     shopt -s extglob
     rm -rf !(mongodb-ca-cert|mongodb.pem|CAs|openssl.cnf)
     chmod 0600 mongodb-ca-cert mongodb.pem
+    {{- else }}
+    {{- if eq .Values.architecture "standalone" }}
+      ID="0"
+    {{- else }}
+    if [[ "$MY_POD_NAME" =~ "arbiter-0"$ ]]; then
+      ID="0"
+    elif [[ "$MY_POD_NAME" =~ "hidden-"[0-9]{1,}$ ]]; then
+      ID="${MY_POD_NAME#"{{ printf "%s-hidden-" $fullname }}"}"
+    else
+      ID="${MY_POD_NAME#"{{ $fullname }}-"}"
+    fi
+    {{- end }}
+    cat "/certs-${ID}/tls.crt" "/certs-${ID}/tls.key" > "/certs/mongodb.pem"
+    cp "/certs-${ID}/ca.crt" "/certs/mongodb-ca-cert"
+    chmod 0600 /certs/mongodb-ca-cert /certs/mongodb.pem
+    {{- end }}
   {{- end }}

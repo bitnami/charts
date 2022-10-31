@@ -19,7 +19,7 @@ global:
 
 ## @section HAProxy chart parameters
 ## Parameters for the bitnami/haproxy chart deployed by this chart
-## For a full list, see: https://github.com/bitnami/charts/tree/master/bitnami/haproxy
+## For a full list, see: https://github.com/bitnami/charts/tree/main/bitnami/haproxy
 ## Note that parameters from the bitnami/haproxy chart should be prefixed with 'haproxy.'
 ##
 
@@ -34,7 +34,7 @@ haproxy:
   image:
     registry: docker.io
     repository: bitnami/haproxy-intel
-    tag: 2.6.6-debian-11-r0
+    tag: 2.6.6-debian-11-r10
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/owncloud"
         },
-        "runtime_parameters": "b3duY2xvdWRIb3N0OiB2bXdhcmUtb3duY2xvdWQubXkKb3duY2xvdWRVc2VybmFtZTogdXNlcgpvd25jbG91ZFBhc3N3b3JkOiBDb21wbGljYXRlZFBhc3N3b3JkMTIzITQKb3duY2xvdWRFbWFpbDogdGVzdEBleGFtcGxlLmNvbQpzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgaHR0cDogODAKc210cEhvc3Q6IHNtdHB0ZXN0aG9zdApzbXRwUG9ydDogOTgyMQpzbXRwVXNlcjogc210cFVzZXIKc210cFBhc3N3b3JkOiBzbXRwQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0",
+        "runtime_parameters": "b3duY2xvdWRIb3N0OiB2bXdhcmUtb3duY2xvdWQubXkKb3duY2xvdWRVc2VybmFtZTogdGVzdF91c2VyCm93bmNsb3VkUGFzc3dvcmQ6IENvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNApzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgaHR0cDogODAKICAgIGh0dHBzOiA4NDQ0Cm1hcmlhZGI6CiAgZW5hYmxlZDogdHJ1ZQogIGF1dGg6CiAgICBkYXRhYmFzZTogdGVzdF9kYl9uYW1lCiAgICB1c2VybmFtZTogdGVzdF9kYl91c2VyCiAgICBwYXNzd29yZDogdGVzdF9kYl9wYXNzd29yZApwb2RTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIGZzR3JvdXA6IDEwMDIKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBydW5Bc1VzZXI6IDEwMDIKY29udGFpbmVyUG9ydHM6CiAgaHR0cDogODA4MQogIGh0dHBzOiA4NDQ0Cmhvc3RBbGlhc2VzOgogIC0gaXA6IDEyNy4wLjAuMQogICAgaG9zdG5hbWVzOgogICAgICAtIHN0YXR1cy50ZXN0aG9zdA==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -46,7 +46,8 @@
             },
             "remote": {
               "workload": "deploy-owncloud"
-            }
+            },
+            "vars_file": "vars.yaml"
           }
         },
         {
@@ -58,7 +59,7 @@
             "endpoint": "lb-owncloud-http",
             "app_protocol": "HTTP",
             "env": {
-              "username": "user",
+              "username": "test_user",
               "password": "ComplicatedPassword123!4"
             }
           }

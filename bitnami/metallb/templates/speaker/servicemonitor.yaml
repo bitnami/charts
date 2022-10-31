@@ -2,7 +2,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ printf "%s-speaker" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-speaker" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   {{- if .Values.speaker.metrics.serviceMonitor.namespace }}
   namespace: {{ .Values.speaker.metrics.serviceMonitor.namespace | quote }}
   {{- else }}
