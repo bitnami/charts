@@ -7,7 +7,7 @@ Wavefront is a high-performance streaming analytics platform for monitoring and 
 [Overview of Wavefront](https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes)
 
 
-
+                           
 ## TL;DR
 
 ```console
