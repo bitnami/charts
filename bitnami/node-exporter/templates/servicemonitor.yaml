@@ -11,10 +11,10 @@ metadata:
     {{- if .Values.serviceMonitor.labels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.serviceMonitor.labels "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- if .Values.commonAnnotations }}
   annotations:
-    {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- end }}
 spec:
   {{- if .Values.serviceMonitor.jobLabel }}
   jobLabel: {{ .Values.serviceMonitor.jobLabel }}

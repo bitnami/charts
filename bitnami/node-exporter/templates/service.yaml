@@ -3,6 +3,7 @@ kind: Service
 metadata:
   name: {{ template "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
+  {{- if or .Values.service.addPrometheusScrapeAnnotation .Values.service.annotations .Values.commonAnnotations }}
   annotations:
     {{- if .Values.service.addPrometheusScrapeAnnotation }}
     prometheus.io/scrape: "true"
@@ -13,6 +14,7 @@ metadata:
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- end }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}

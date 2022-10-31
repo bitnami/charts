@@ -7,7 +7,7 @@ JupyterHub brings the power of notebooks to groups of users. It gives users acce
 [Overview of JupyterHub](https://jupyter.org/hub)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -579,6 +579,12 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 3.0.0
+
+This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1200) you can find more information about the changes introduced in that version.
+
+### To any previous version
 
 Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/administration/upgrade/).
 
