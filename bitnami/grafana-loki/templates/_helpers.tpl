@@ -165,7 +165,7 @@ Create the name of the service account to use
 */}}
 {{- define "grafana-loki.promtail.serviceAccountName" -}}
 {{- if .Values.promtail.serviceAccount.create -}}
-    {{ default (printf "%s" (include "common.names.fullname" .)) .Values.promtail.serviceAccount.name }}
+    {{ default (printf "%s" (include "grafana-loki.promtail.fullname" .)) .Values.promtail.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.promtail.serviceAccount.name }}
 {{- end -}}
