@@ -495,6 +495,8 @@ data:
         echo "Stopping client connections"
         # Stopping client write connections to avoid data loss
         run_redis_command CLIENT PAUSE "{{ mul (sub .Values.sentinel.terminationGracePeriodSeconds 10) 1000 }}" WRITE
+        # Running failover command
+        run_redis_command FAILOVER TIMEOUT "{{ mul (sub .Values.sentinel.terminationGracePeriodSeconds 10) 1000 }}"
         # Waiting for the failover to finish
         echo "Waiting for sentinel to run failover for up to {{ sub .Values.sentinel.terminationGracePeriodSeconds 10 }}s"
         retry_while "failover_finished" "{{ sub .Values.sentinel.terminationGracePeriodSeconds 10 }}" 1
