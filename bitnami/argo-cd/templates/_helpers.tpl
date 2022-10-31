@@ -41,14 +41,14 @@ Return the proper service name for Argo CD controller adding the working namespa
 {{- end -}}
 
 {{/*
-Return the proper service name for Argo CD server adding the working namespace
+Return the proper service name for Argo CD server
 */}}
 {{- define "argocd.server" -}}
   {{- printf "%s-server" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
 {{- end -}}
 
 {{/*
-Return the proper service name for Argo CD server
+Return the proper service name for Argo CD server adding the working namespace
 */}}
 {{- define "argocd.namespace.server" -}}
   {{- printf "%s-server" (include "common.names.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
