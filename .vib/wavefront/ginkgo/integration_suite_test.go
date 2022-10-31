@@ -88,14 +88,18 @@ func getPodsByLabelOrDie(ctx context.Context, c cv1.PodsGetter, selector string)
 }
 
 func containerLogsContains(ctx context.Context, c cv1.PodsGetter, podLabel string, containerName string, entries []string) (res bool, err error) {
-	var k8seePods v1.PodList
+	var pods v1.PodList
 	var containerLogs []string
 
-	k8seePods = getPodsByLabelOrDie(ctx, c, podLabel)
-	containerLogs = getContainerLogsOrDie(ctx, c, k8seePods.Items[0].GetName(), containerName)
+	pods = getPodsByLabelOrDie(ctx, c, podLabel)
+	containerLogs = getContainerLogsOrDie(ctx, c, pods.Items[0].GetName(), containerName)
 
 	for _, pattern := range entries {
 		res, err = containsPattern(containerLogs, pattern)
+
+		if !res {
+			return res, err
+		}
 	}
 
 	return res, err
@@ -155,16 +159,16 @@ func retry(name string, attempts int, sleep time.Duration, f func() (bool, error
 
 func CheckRequirements() {
 	if *namespace == "" {
-		panic(fmt.Sprintf("The namespace where %s is deployed must be provided. Use the '--namespace' flag", APP_NAME))
+		panic(fmt.Sprintf("The namespace where %s is deployed must be provided. Use the '--namespace' flag\n", APP_NAME))
 	}
 	if *proxyPort == "" {
-		panic(fmt.Sprintf("The port number the proxy will listen on for metrics must be provided. Use the '--namespace' flag"))
+		panic(fmt.Sprintln("The port number the proxy will listen on for metrics must be provided. Use the '--proxy-port' flag"))
 	}
 	if *clusterName == "" {
-		panic(fmt.Sprintf("The unique name of the cluster must be provided. Use the '--proxy-port' flag"))
+		panic(fmt.Sprintln("The unique name of the cluster must be provided. Use the '--cluster-name' flag"))
 	}
 	if *collectionInterval == "" {
-		panic(fmt.Sprintf("The metrics collection interval must be provided. Use the '--collection-interval' flag"))
+		panic(fmt.Sprintln("The metrics collection interval must be provided. Use the '--collection-interval' flag"))
 	}
 }
 
