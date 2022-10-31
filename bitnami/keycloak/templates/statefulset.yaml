@@ -131,7 +131,7 @@ spec:
                   name: {{ include "keycloak.tlsPasswordsSecretName" . }}
                   key: "tls-truststore-password"
             {{- end }}
-            {{- if and .Values.spi.existingSecret (or .Values.spi.truststorePassword .Values.spi.passwordsSecret) -}}
+            {{- if and .Values.spi.existingSecret (or .Values.spi.truststorePassword .Values.spi.passwordsSecret) }}
             - name: KEYCLOAK_SPI_TRUSTSTORE_PASSWORD
               valueFrom:
                 secretKeyRef:
