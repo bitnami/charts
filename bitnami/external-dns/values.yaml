@@ -462,7 +462,7 @@ linode:
 ns1:
   ## @param ns1.minTTL When using the ns1 provider, specify minimal TTL, as an integer, for records
   ##
-  minTTL: 10
+  minTTL: 300
   ## @param ns1.apiKey When using the ns1 provider, specify the API key to use
   ##
   apiKey: ""
