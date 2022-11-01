@@ -272,4 +272,24 @@ rules:
       - get
       - patch
       - update
+  - apiGroups:
+      - rabbitmq.com
+    resources:
+      - topicpermissions
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - rabbitmq.com
+    resources:
+      - topicpermissions/status
+    verbs:
+      - get
+      - patch
+      - update
 {{- end }}
