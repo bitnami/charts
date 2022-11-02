@@ -249,6 +249,10 @@ replicaCount: 1
 containerPorts:
   http: 8080
   https: 8443
+## @param extraContainerPorts Optionally specify extra list of additional port-mappings for Keycloak container
+##
+extraContainerPorts: []
+
 ## Keycloak pods' SecurityContext
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled Keycloak pods' Security Context
@@ -500,6 +504,9 @@ service:
   ## @param service.extraPorts Extra port to expose on Keycloak service
   ##
   extraPorts: []
+  ## @param service.extraHeadlessPorts Extra ports to expose on Keycloak headless service
+  ##
+  extraHeadlessPorts: []
 
 ## Keycloak ingress parameters
 ## ref: https://kubernetes.io/docs/user-guide/ingress/
@@ -993,9 +1000,13 @@ externalDatabase:
 ## ref: https://www.keycloak.org/server/caching
 ## @param cache.enabled Switch to enable or disable the keycloak distributed cache for kubernetes.
 ## NOTE: Set to false to use 'local' cache (only supported when replicaCount=1).
+## @param cache.stackName Set infinispan cache stack to use
+## @param cache.stackFile Set infinispan cache stack filename to use
 ##
 cache:
   enabled: true
+  stackName: kubernetes
+  stackFile: ""
 
 ## @section Keycloak Logging parameters
 
