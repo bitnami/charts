@@ -1,0 +1,31 @@
+annotations:
+  category: PHP framework
+apiVersion: v2
+appVersion: 9.3.9
+dependencies:
+  - condition: mariadb.enabled
+    name: mariadb
+    repository: https://charts.bitnami.com/bitnami
+    version: 11.x.x
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 2.x.x
+description: Laravel is an open source PHP framework for web application development.
+home: https://github.com/bitnami/charts/tree/main/bitnami/laravel
+icon: https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg
+keywords:
+  - application
+  - http
+  - php
+  - web
+  - laravel
+maintainers:
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
+name: laravel
+sources:
+  - https://github.com/bitnami/containers/tree/main/bitnami/laravel
+  - https://github.com/laravel/laravel
+version: 0.0.1
