@@ -408,12 +408,10 @@ priorityClassName: ""
 ##
 schedulerName: ""
 ## @param updateStrategy.type ZooKeeper statefulset strategy type
-## @param updateStrategy.rollingUpdate ZooKeeper statefulset rolling update configuration parameters
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
 ##
 updateStrategy:
   type: RollingUpdate
-  rollingUpdate: {}
 ## @param extraVolumes Optionally specify extra list of additional volumes for the ZooKeeper pod(s)
 ## Example Use Case: mount certificates to enable TLS
 ## e.g:
