@@ -130,6 +130,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replicaCount`                          | Number of Keycloak replicas to deploy                                                                                    | `1`             |
 | `containerPorts.http`                   | Keycloak HTTP container port                                                                                             | `8080`          |
 | `containerPorts.https`                  | Keycloak HTTPS container port                                                                                            | `8443`          |
+| `extraContainerPorts`                   | Optionally specify extra list of additional port-mappings for Keycloak container                                         | `[]`            |
 | `podSecurityContext.enabled`            | Enabled Keycloak pods' Security Context                                                                                  | `true`          |
 | `podSecurityContext.fsGroup`            | Set Keycloak pod's Security Context fsGroup                                                                              | `1001`          |
 | `containerSecurityContext.enabled`      | Enabled Keycloak containers' Security Context                                                                            | `true`          |
@@ -200,6 +201,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                             | `Cluster`                |
 | `service.annotations`              | Additional custom annotations for Keycloak service                                                                               | `{}`                     |
 | `service.extraPorts`               | Extra port to expose on Keycloak service                                                                                         | `[]`                     |
+| `service.extraHeadlessPorts`       | Extra ports to expose on Keycloak headless service                                                                               | `[]`                     |
 | `ingress.enabled`                  | Enable ingress record generation for Keycloak                                                                                    | `false`                  |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
@@ -330,9 +332,11 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Keycloak Cache parameters
 
-| Name            | Description                                                                | Value  |
-| --------------- | -------------------------------------------------------------------------- | ------ |
-| `cache.enabled` | Switch to enable or disable the keycloak distributed cache for kubernetes. | `true` |
+| Name              | Description                                                                | Value        |
+| ----------------- | -------------------------------------------------------------------------- | ------------ |
+| `cache.enabled`   | Switch to enable or disable the keycloak distributed cache for kubernetes. | `true`       |
+| `cache.stackName` | Set infinispan cache stack to use                                          | `kubernetes` |
+| `cache.stackFile` | Set infinispan cache stack filename to use                                 | `""`         |
 
 
 ### Keycloak Logging parameters

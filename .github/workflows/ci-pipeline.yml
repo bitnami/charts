@@ -140,7 +140,7 @@ jobs:
     steps:
       - name: Enable auto-merge feature
         if: ${{ needs.vib-verify.result == 'success' }}
-        uses: reitermarkus/automerge@v2.1.2
+        uses: reitermarkus/automerge@v2.2.0
         with:
           # Necessary to trigger CD workflow
           token: ${{ secrets.BITNAMI_BOT_TOKEN }}
