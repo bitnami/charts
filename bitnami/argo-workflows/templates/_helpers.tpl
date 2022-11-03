@@ -20,17 +20,31 @@ Return the proper executor image name
 {{- end -}}
 
 {{/*
-Return the proper service name for Argo Workflows server
+Return the proper resource name for Argo Workflows server
 */}}
 {{- define "argo-workflows.server.fullname" -}}
   {{- printf "%s-server" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
 {{- end -}}
 
 {{/*
-Return the proper service name for Argo Workflows controller
+Return the proper resource name for Argo Workflows server including the chart's release namespace
+*/}}
+{{- define "argo-workflows.server.fullname.namespace" -}}
+  {{- printf "%s-server" (include "common.names.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
+{{- end -}}
+
+{{/*
+Return the proper resource name for Argo Workflows controller
 */}}
 {{- define "argo-workflows.controller.fullname" -}}
   {{- printf "%s-controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+{{- end -}}
+
+{{/*
+Return the proper resource name for Argo Workflows controller including the chart's release namespace
+*/}}
+{{- define "argo-workflows.controller.fullname.namespace" -}}
+  {{- printf "%s-controller" (include "common.names.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
 {{- end -}}
 
 {{/*

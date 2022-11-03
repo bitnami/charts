@@ -2,7 +2,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ include "common.names.fullname" . }}-view
+  name: {{ include "common.names.fullname.namespace" . }}-view
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     rbac.authorization.k8s.io/aggregate-to-view: "true"
@@ -36,7 +36,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ include "common.names.fullname" . }}-edit
+  name: {{ include "common.names.fullname.namespace" . }}-edit
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     rbac.authorization.k8s.io/aggregate-to-edit: "true"
@@ -75,7 +75,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ include "common.names.fullname" . }}-admin
+  name: {{ include "common.names.fullname.namespace" . }}-admin
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     rbac.authorization.k8s.io/aggregate-to-admin: "true"
