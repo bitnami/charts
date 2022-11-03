@@ -252,6 +252,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for MySQL secondary containers                                 | `""`                |
 | `secondary.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for MySQL secondary containers                                    | `""`                |
 | `secondary.persistence.enabled`                   | Enable persistence on MySQL secondary replicas using a `PersistentVolumeClaim`                                      | `true`              |
+| `secondary.persistence.existingClaim`             | Name of an existing `PersistentVolumeClaim` for MySQL secondary replicas                                            | `""`                |
+| `secondary.persistence.subPath`                   | The name of a volume's sub path to mount for persistence                                                            | `""`                |
 | `secondary.persistence.storageClass`              | MySQL secondary persistent volume storage Class                                                                     | `""`                |
 | `secondary.persistence.annotations`               | MySQL secondary persistent volume claim annotations                                                                 | `{}`                |
 | `secondary.persistence.accessModes`               | MySQL secondary persistent volume access Modes                                                                      | `["ReadWriteOnce"]` |
