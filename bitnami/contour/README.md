@@ -166,6 +166,7 @@ $ helm uninstall my-release
 | `contour.service.clusterIP`                                   | Contour service Cluster IP                                                                                                         | `""`                   |
 | `contour.service.loadBalancerIP`                              | Contour service Load Balancer IP                                                                                                   | `""`                   |
 | `contour.service.loadBalancerSourceRanges`                    | Contour service Load Balancer sources                                                                                              | `[]`                   |
+| `contour.service.loadBalancerClass`                           | Contour service Load Balancer Class                                                                                                | `""`                   |
 | `contour.service.externalTrafficPolicy`                       | Contour service external traffic policy                                                                                            | `Cluster`              |
 | `contour.service.annotations`                                 | Additional custom annotations for Contour service                                                                                  | `{}`                   |
 | `contour.service.extraPorts`                                  | Extra port to expose on Contour service                                                                                            | `[]`                   |
@@ -274,6 +275,7 @@ $ helm uninstall my-release
 | `envoy.service.externalIPs`                         | Envoy service external IP addresses                                                                                   | `[]`                   |
 | `envoy.service.loadBalancerIP`                      | IP address to assign to load balancer (if supported)                                                                  | `""`                   |
 | `envoy.service.loadBalancerSourceRanges`            | List of IP CIDRs allowed access to load balancer (if supported)                                                       | `[]`                   |
+| `envoy.service.loadBalancerClass`                   | Envoy service Load Balancer Class                                                                                     | `""`                   |
 | `envoy.service.ipFamilyPolicy`                      | , support SingleStack, PreferDualStack and RequireDualStack                                                           | `""`                   |
 | `envoy.service.annotations`                         | Annotations for Envoy service                                                                                         | `{}`                   |
 | `envoy.service.ports.http`                          | Sets service http port                                                                                                | `80`                   |
