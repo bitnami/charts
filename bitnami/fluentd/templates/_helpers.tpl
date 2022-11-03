@@ -31,7 +31,7 @@ Create the name of the forwarder service account to use
 */}}
 {{- define "fluentd.forwarder.serviceAccountName" -}}
 {{- if .Values.forwarder.serviceAccount.create -}}
-    {{ default (printf "%s-forwarder" (include "common.names.fullname" .)) .Values.forwarder.serviceAccount.name }}
+    {{ default (printf "%s-forwarder" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" ) .Values.forwarder.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.forwarder.serviceAccount.name }}
 {{- end -}}
@@ -42,7 +42,7 @@ Create the name of the aggregator service account to use
 */}}
 {{- define "fluentd.aggregator.serviceAccountName" -}}
 {{- if .Values.aggregator.serviceAccount.create -}}
-    {{ default (printf "%s-aggregator" (include "common.names.fullname" .)) .Values.aggregator.serviceAccount.name }}
+    {{ default (printf "%s-aggregator" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" ) .Values.aggregator.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.aggregator.serviceAccount.name }}
 {{- end -}}
@@ -140,7 +140,7 @@ Get the forwarder configmap name.
 {{- if .Values.forwarder.configMap -}}
     {{- printf "%s" (tpl .Values.forwarder.configMap $) -}}
 {{- else -}}
-    {{- printf "%s-forwarder-cm" (include "common.names.fullname" . ) -}}
+    {{- printf "%s-forwarder-cm" (include "common.names.fullname" . ) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 
@@ -151,7 +151,7 @@ Get the aggregator configmap name.
 {{- if .Values.aggregator.configMap -}}
     {{- printf "%s" (tpl .Values.aggregator.configMap $) -}}
 {{- else -}}
-    {{- printf "%s-aggregator-cm" (include "common.names.fullname" . ) -}}
+    {{- printf "%s-aggregator-cm" (include "common.names.fullname" . ) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 
@@ -162,7 +162,7 @@ Get the certificates secret name.
 {{- if .Values.tls.forwarder.existingSecret -}}
     {{- printf "%s" (tpl .Values.tls.forwarder.existingSecret $) -}}
 {{- else -}}
-    {{- printf "%s-fwd-crt" (include "common.names.fullname" . ) -}}
+    {{- printf "%s-fwd-crt" (include "common.names.fullname" . ) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 
@@ -173,7 +173,7 @@ Get the certificates secret name.
 {{- if .Values.tls.aggregator.existingSecret -}}
     {{- printf "%s" (tpl .Values.tls.aggregator.existingSecret $) -}}
 {{- else -}}
-    {{- printf "%s-agg-crt" (include "common.names.fullname" . ) -}}
+    {{- printf "%s-agg-crt" (include "common.names.fullname" . ) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 
@@ -190,12 +190,12 @@ Return true if a TLS secret object should be created
 Get the initialization forwarder scripts volume name.
 */}}
 {{- define "fluentd.forwarder.initScripts" -}}
-{{- printf "%s-forwarder-init-scripts" (include "common.names.fullname" .) -}}
+{{- printf "%s-forwarder-init-scripts" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Get the initialization aggregator scripts volume name.
 */}}
 {{- define "fluentd.aggregator.initScripts" -}}
-{{- printf "%s-aggregator-init-scripts" (include "common.names.fullname" .) -}}
+{{- printf "%s-aggregator-init-scripts" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
