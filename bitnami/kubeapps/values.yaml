@@ -508,6 +508,9 @@ frontend:
 ## Dashboard parameters
 ##
 dashboard:
+  ## @param dashboard.enabled Specifies whether Kubeapps Dashboard should be deployed or not
+  ##
+  enabled: true
   ## Bitnami Kubeapps Dashboard image
   ## ref: https://hub.docker.com/r/bitnami/kubeapps-dashboard/
   ## @param dashboard.image.registry Dashboard image registry
@@ -711,11 +714,11 @@ dashboard:
   ## @param dashboard.args Override default container args (useful when using custom images)
   ##
   args: []
-  ## @param dashboard.podLabels Extra labels for Dasbhoard pods
+  ## @param dashboard.podLabels Extra labels for Dashboard pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-  ## @param dashboard.podAnnotations Annotations for Dasbhoard pods
+  ## @param dashboard.podAnnotations Annotations for Dashboard pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
@@ -773,13 +776,13 @@ dashboard:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param dashboard.extraVolumes Optionally specify extra list of additional volumes for Dasbhoard pods
+  ## @param dashboard.extraVolumes Optionally specify extra list of additional volumes for Dashboard pods
   ##
   extraVolumes: []
-  ## @param dashboard.extraVolumeMounts Optionally specify extra list of additional volumeMounts for Dasbhoard container(s)
+  ## @param dashboard.extraVolumeMounts Optionally specify extra list of additional volumeMounts for Dashboard container(s)
   ##
   extraVolumeMounts: []
-  ## @param dashboard.sidecars Add additional sidecar containers to the Dasbhoard pod
+  ## @param dashboard.sidecars Add additional sidecar containers to the Dashboard pod
   ## e.g:
   ## sidecars:
   ##   - name: your-image-name
@@ -790,7 +793,7 @@ dashboard:
   ##         containerPort: 1234
   ##
   sidecars: []
-  ## @param dashboard.initContainers Add additional init containers to the Dasbhoard pods
+  ## @param dashboard.initContainers Add additional init containers to the Dashboard pods
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
   ## initContainers:
@@ -800,14 +803,14 @@ dashboard:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-  ## Dasbhoard service parameters
+  ## Dashboard service parameters
   ##
   service:
-    ## @param dashboard.service.ports.http Dasbhoard service HTTP port
+    ## @param dashboard.service.ports.http Dashboard service HTTP port
     ##
     ports:
       http: 8080
-    ## @param dashboard.service.annotations Additional custom annotations for Dasbhoard service
+    ## @param dashboard.service.annotations Additional custom annotations for Dashboard service
     ##
     annotations: {}
 
@@ -1376,10 +1379,6 @@ pinnipedProxy:
     annotations: {}
 ## @section Other Parameters
 
-## @param allowNamespaceDiscovery Allow users to discover available namespaces (only the ones they have access)
-## NOTE: When set to true, Kubeapps creates a ClusterRole to be able to list namespaces.
-##
-allowNamespaceDiscovery: true
 ## @param clusters [array] List of clusters that Kubeapps can target for deployments
 ## When populated with a single cluster (as it is by default), Kubeapps will not allow users to
 ## change the target cluster. When populated with multiple clusters, Kubeapps will present the clusters to
@@ -1414,19 +1413,36 @@ clusters:
   - name: default
     domain: cluster.local
 
-## @skip featureFlags Feature flags (used to switch on development features)
-##
-featureFlags:
-  ## @param featureFlags.operators Enable ingress record generation for Kubeapps
-  ##
-  operators: false
-
 ## RBAC configuration
 ##
 rbac:
   ## @param rbac.create Specifies whether RBAC resources should be created
   ##
   create: true
+
+## @section Feature flags
+##
+## Opt-in features intended for development and advanced use cases.
+## They might be removed in future releases without prior notice.
+featureFlags:
+  ## For a full list of possible ingress annotations, please see
+  apiOnly:
+    ## @param featureFlags.apiOnly.enabled Enable ingress for API operations only. Access to "/" will not be possible, so Dashboard will be unusable.
+    ##
+    enabled: false
+    grpc:
+      ## @param featureFlags.apiOnly.grpc.annotations [object] Specific annotations for the GRPC ingress in API-only mode
+      ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
+      ##
+      annotations:
+        nginx.ingress.kubernetes.io/backend-protocol: GRPC
+  ## @param featureFlags.operators Enable support for Operators in Kubeapps
+  ##
+  operators: false
+  schemaEditor:
+    ## @param featureFlags.schemaEditor.enabled Enable a visual editor for customizing the package schemas
+    ##
+    enabled: false
 
 ## @section Database Parameters
 
@@ -1457,11 +1473,11 @@ postgresql:
   ##
   securityContext:
     enabled: false
-  ## PostreSQL containers' resource requests and limits
+  ## PostgreSQL containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param postgresql.resources.limits The resources limits for the PostreSQL container
-  ## @param postgresql.resources.requests.cpu The requested CPU for the PostreSQL container
-  ## @param postgresql.resources.requests.memory The requested memory for the PostreSQL container
+  ## @param postgresql.resources.limits The resources limits for the PostgreSQL container
+  ## @param postgresql.resources.requests.cpu The requested CPU for the PostgreSQL container
+  ## @param postgresql.resources.requests.memory The requested memory for the PostgreSQL container
   ##
   resources:
     limits: {}

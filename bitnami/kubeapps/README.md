@@ -120,7 +120,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------- | ---------------------- |
 | `frontend.image.registry`                        | NGINX image registry                                                                                  | `docker.io`            |
 | `frontend.image.repository`                      | NGINX image repository                                                                                | `bitnami/nginx`        |
-| `frontend.image.tag`                             | NGINX image tag (immutable tags are recommended)                                                      | `1.23.1-debian-11-r27` |
+| `frontend.image.tag`                             | NGINX image tag (immutable tags are recommended)                                                      | `1.23.1-debian-11-r35` |
 | `frontend.image.digest`                          | NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `frontend.image.pullPolicy`                      | NGINX image pull policy                                                                               | `IfNotPresent`         |
 | `frontend.image.pullSecrets`                     | NGINX image pull secrets                                                                              | `[]`                   |
@@ -202,9 +202,10 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 
 | Name                                              | Description                                                                                               | Value                        |
 | ------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| `dashboard.enabled`                               | Specifies whether Kubeapps Dashboard should be deployed or not                                            | `true`                       |
 | `dashboard.image.registry`                        | Dashboard image registry                                                                                  | `docker.io`                  |
 | `dashboard.image.repository`                      | Dashboard image repository                                                                                | `bitnami/kubeapps-dashboard` |
-| `dashboard.image.tag`                             | Dashboard image tag (immutable tags are recommended)                                                      | `2.5.1-debian-11-r11`        |
+| `dashboard.image.tag`                             | Dashboard image tag (immutable tags are recommended)                                                      | `2.4.6-debian-11-r11`        |
 | `dashboard.image.digest`                          | Dashboard image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
 | `dashboard.image.pullPolicy`                      | Dashboard image pull policy                                                                               | `IfNotPresent`               |
 | `dashboard.image.pullSecrets`                     | Dashboard image pull secrets                                                                              | `[]`                         |
@@ -256,8 +257,8 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `dashboard.lifecycleHooks`                        | Custom lifecycle hooks for Dashboard containers                                                           | `{}`                         |
 | `dashboard.command`                               | Override default container command (useful when using custom images)                                      | `[]`                         |
 | `dashboard.args`                                  | Override default container args (useful when using custom images)                                         | `[]`                         |
-| `dashboard.podLabels`                             | Extra labels for Dasbhoard pods                                                                           | `{}`                         |
-| `dashboard.podAnnotations`                        | Annotations for Dasbhoard pods                                                                            | `{}`                         |
+| `dashboard.podLabels`                             | Extra labels for Dashboard pods                                                                           | `{}`                         |
+| `dashboard.podAnnotations`                        | Annotations for Dashboard pods                                                                            | `{}`                         |
 | `dashboard.podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                       | `""`                         |
 | `dashboard.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                  | `soft`                       |
 | `dashboard.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                 | `""`                         |
@@ -270,12 +271,12 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `dashboard.schedulerName`                         | Name of the k8s scheduler (other than default)                                                            | `""`                         |
 | `dashboard.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                                            | `[]`                         |
 | `dashboard.hostAliases`                           | Custom host aliases for Dashboard pods                                                                    | `[]`                         |
-| `dashboard.extraVolumes`                          | Optionally specify extra list of additional volumes for Dasbhoard pods                                    | `[]`                         |
-| `dashboard.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Dasbhoard container(s)                       | `[]`                         |
-| `dashboard.sidecars`                              | Add additional sidecar containers to the Dasbhoard pod                                                    | `[]`                         |
-| `dashboard.initContainers`                        | Add additional init containers to the Dasbhoard pods                                                      | `[]`                         |
-| `dashboard.service.ports.http`                    | Dasbhoard service HTTP port                                                                               | `8080`                       |
-| `dashboard.service.annotations`                   | Additional custom annotations for Dasbhoard service                                                       | `{}`                         |
+| `dashboard.extraVolumes`                          | Optionally specify extra list of additional volumes for Dashboard pods                                    | `[]`                         |
+| `dashboard.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Dashboard container(s)                       | `[]`                         |
+| `dashboard.sidecars`                              | Add additional sidecar containers to the Dashboard pod                                                    | `[]`                         |
+| `dashboard.initContainers`                        | Add additional init containers to the Dashboard pods                                                      | `[]`                         |
+| `dashboard.service.ports.http`                    | Dashboard service HTTP port                                                                               | `8080`                       |
+| `dashboard.service.annotations`                   | Additional custom annotations for Dashboard service                                                       | `{}`                         |
 
 
 ### AppRepository Controller parameters
@@ -284,13 +285,13 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
 | `apprepository.image.registry`                              | Kubeapps AppRepository Controller image registry                                                                                                                                                         | `docker.io`                                 |
 | `apprepository.image.repository`                            | Kubeapps AppRepository Controller image repository                                                                                                                                                       | `bitnami/kubeapps-apprepository-controller` |
-| `apprepository.image.tag`                                   | Kubeapps AppRepository Controller image tag (immutable tags are recommended)                                                                                                                             | `2.5.1-scratch-r1`                          |
+| `apprepository.image.tag`                                   | Kubeapps AppRepository Controller image tag (immutable tags are recommended)                                                                                                                             | `2.4.6-scratch-r2`                          |
 | `apprepository.image.digest`                                | Kubeapps AppRepository Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                        | `""`                                        |
 | `apprepository.image.pullPolicy`                            | Kubeapps AppRepository Controller image pull policy                                                                                                                                                      | `IfNotPresent`                              |
 | `apprepository.image.pullSecrets`                           | Kubeapps AppRepository Controller image pull secrets                                                                                                                                                     | `[]`                                        |
 | `apprepository.syncImage.registry`                          | Kubeapps Asset Syncer image registry                                                                                                                                                                     | `docker.io`                                 |
 | `apprepository.syncImage.repository`                        | Kubeapps Asset Syncer image repository                                                                                                                                                                   | `bitnami/kubeapps-asset-syncer`             |
-| `apprepository.syncImage.tag`                               | Kubeapps Asset Syncer image tag (immutable tags are recommended)                                                                                                                                         | `2.5.1-scratch-r1`                          |
+| `apprepository.syncImage.tag`                               | Kubeapps Asset Syncer image tag (immutable tags are recommended)                                                                                                                                         | `2.4.6-scratch-r2`                          |
 | `apprepository.syncImage.digest`                            | Kubeapps Asset Syncer image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                    | `""`                                        |
 | `apprepository.syncImage.pullPolicy`                        | Kubeapps Asset Syncer image pull policy                                                                                                                                                                  | `IfNotPresent`                              |
 | `apprepository.syncImage.pullSecrets`                       | Kubeapps Asset Syncer image pull secrets                                                                                                                                                                 | `[]`                                        |
@@ -353,7 +354,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `authProxy.enabled`                               | Specifies whether Kubeapps should configure OAuth login/logout                                               | `false`                |
 | `authProxy.image.registry`                        | OAuth2 Proxy image registry                                                                                  | `docker.io`            |
 | `authProxy.image.repository`                      | OAuth2 Proxy image repository                                                                                | `bitnami/oauth2-proxy` |
-| `authProxy.image.tag`                             | OAuth2 Proxy image tag (immutable tags are recommended)                                                      | `7.3.0-debian-11-r40`  |
+| `authProxy.image.tag`                             | OAuth2 Proxy image tag (immutable tags are recommended)                                                      | `7.3.0-debian-11-r46`  |
 | `authProxy.image.digest`                          | OAuth2 Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `authProxy.image.pullPolicy`                      | OAuth2 Proxy image pull policy                                                                               | `IfNotPresent`         |
 | `authProxy.image.pullSecrets`                     | OAuth2 Proxy image pull secrets                                                                              | `[]`                   |
@@ -393,7 +394,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `pinnipedProxy.enabled`                               | Specifies whether Kubeapps should configure Pinniped Proxy                                                     | `false`                           |
 | `pinnipedProxy.image.registry`                        | Pinniped Proxy image registry                                                                                  | `docker.io`                       |
 | `pinnipedProxy.image.repository`                      | Pinniped Proxy image repository                                                                                | `bitnami/kubeapps-pinniped-proxy` |
-| `pinnipedProxy.image.tag`                             | Pinniped Proxy image tag (immutable tags are recommended)                                                      | `2.5.1-debian-11-r11`             |
+| `pinnipedProxy.image.tag`                             | Pinniped Proxy image tag (immutable tags are recommended)                                                      | `2.4.6-debian-11-r11`             |
 | `pinnipedProxy.image.digest`                          | Pinniped Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                              |
 | `pinnipedProxy.image.pullPolicy`                      | Pinniped Proxy image pull policy                                                                               | `IfNotPresent`                    |
 | `pinnipedProxy.image.pullSecrets`                     | Pinniped Proxy image pull secrets                                                                              | `[]`                              |
@@ -424,12 +425,20 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 
 ### Other Parameters
 
-| Name                      | Description                                                                   | Value   |
-| ------------------------- | ----------------------------------------------------------------------------- | ------- |
-| `allowNamespaceDiscovery` | Allow users to discover available namespaces (only the ones they have access) | `true`  |
-| `clusters`                | List of clusters that Kubeapps can target for deployments                     | `[]`    |
-| `featureFlags.operators`  | Enable ingress record generation for Kubeapps                                 | `false` |
-| `rbac.create`             | Specifies whether RBAC resources should be created                            | `true`  |
+| Name          | Description                                               | Value  |
+| ------------- | --------------------------------------------------------- | ------ |
+| `clusters`    | List of clusters that Kubeapps can target for deployments | `[]`   |
+| `rbac.create` | Specifies whether RBAC resources should be created        | `true` |
+
+
+### Feature flags
+
+| Name                                    | Description                                                                                                | Value   |
+| --------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ------- |
+| `featureFlags.apiOnly.enabled`          | Enable ingress for API operations only. Access to "/" will not be possible, so Dashboard will be unusable. | `false` |
+| `featureFlags.apiOnly.grpc.annotations` | Specific annotations for the GRPC ingress in API-only mode                                                 | `{}`    |
+| `featureFlags.operators`                | Enable support for Operators in Kubeapps                                                                   | `false` |
+| `featureFlags.schemaEditor.enabled`     | Enable a visual editor for customizing the package schemas                                                 | `false` |
 
 
 ### Database Parameters
@@ -443,9 +452,9 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `postgresql.primary.persistence.enabled` | Enable PostgreSQL Primary data persistence using PVC                         | `false`      |
 | `postgresql.architecture`                | PostgreSQL architecture (`standalone` or `replication`)                      | `standalone` |
 | `postgresql.securityContext.enabled`     | Enabled PostgreSQL replicas pods' Security Context                           | `false`      |
-| `postgresql.resources.limits`            | The resources limits for the PostreSQL container                             | `{}`         |
-| `postgresql.resources.requests.cpu`      | The requested CPU for the PostreSQL container                                | `250m`       |
-| `postgresql.resources.requests.memory`   | The requested memory for the PostreSQL container                             | `256Mi`      |
+| `postgresql.resources.limits`            | The resources limits for the PostgreSQL container                            | `{}`         |
+| `postgresql.resources.requests.cpu`      | The requested CPU for the PostgreSQL container                               | `250m`       |
+| `postgresql.resources.requests.memory`   | The requested memory for the PostgreSQL container                            | `256Mi`      |
 
 
 ### kubeappsapis parameters
@@ -469,7 +478,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `kubeappsapis.pluginConfig.resources.packages.v1alpha1.trustedNamespaces.headerPattern`         | Optional header pattern for trusted namespaces                                                                                                                             | `""`                               |
 | `kubeappsapis.image.registry`                                                                   | Kubeapps-APIs image registry                                                                                                                                               | `docker.io`                        |
 | `kubeappsapis.image.repository`                                                                 | Kubeapps-APIs image repository                                                                                                                                             | `bitnami/kubeapps-apis`            |
-| `kubeappsapis.image.tag`                                                                        | Kubeapps-APIs image tag (immutable tags are recommended)                                                                                                                   | `2.5.1-debian-11-r10`              |
+| `kubeappsapis.image.tag`                                                                        | Kubeapps-APIs image tag (immutable tags are recommended)                                                                                                                   | `2.4.6-debian-11-r13`              |
 | `kubeappsapis.image.digest`                                                                     | Kubeapps-APIs image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                              | `""`                               |
 | `kubeappsapis.image.pullPolicy`                                                                 | Kubeapps-APIs image pull policy                                                                                                                                            | `IfNotPresent`                     |
 | `kubeappsapis.image.pullSecrets`                                                                | Kubeapps-APIs image pull secrets                                                                                                                                           | `[]`                               |
@@ -557,6 +566,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `redis.replica.extraFlags`          | Array with additional command line flags for Redis&reg; replicas | `["--maxmemory 200mb","--maxmemory-policy allkeys-lru"]` |
 | `redis.replica.disableCommands`     | Array with commands to deactivate on Redis&reg;                  | `[]`                                                     |
 | `redis.replica.persistence.enabled` | Enable Redis&reg; replica data persistence using PVC             | `false`                                                  |
+
 
 
 ```bash
@@ -730,6 +740,16 @@ helm install kubeapps my-repo/kubeapps \
   --set ingress.enabled=true \
   --set ingress.hostname=example.com \
   --set ingress.annotations."kubernetes\.io/ingress\.class"=nginx # or your preferred ingress controller
+```
+
+If you are using LDAP via Dex with OIDC or you are getting an error message like `upstream sent too big header while reading response header from upstream` it means the cookie size is too big and can't be processed by the Ingress Controller.
+You can work around this problem by setting the following Nginx ingress annotations (look for similar annotations in your preferred Ingress Controller):
+
+```bash
+  # rest of the helm install ... command
+  --set ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-read-timeout"=600
+  --set ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-buffer-size"=8k
+  --set ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-buffers"=4
 ```
 
 #### Serving Kubeapps in a subpath
