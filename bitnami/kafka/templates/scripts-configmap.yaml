@@ -83,7 +83,7 @@ data:
     fi
 
     {{- if eq .Values.brokerRackAssignment "aws-az" }}
-    export KAFKA_CFG_BROKER_RACK=$(curl "http://169.254.169.254/latest/meta-data/placement/availability-zone")
+    export KAFKA_CFG_BROKER_RACK=$(curl "http://169.254.169.254/latest/meta-data/placement/availability-zone-id")
     {{- end }}
 
     {{- if .Values.externalAccess.enabled }}
