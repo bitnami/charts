@@ -131,7 +131,7 @@ spec:
                   name: {{ include "keycloak.tlsPasswordsSecretName" . }}
                   key: "tls-truststore-password"
             {{- end }}
-            {{- if and .Values.spi.existingSecret (or .Values.spi.truststorePassword .Values.spi.passwordsSecret) -}}
+            {{- if and .Values.spi.existingSecret (or .Values.spi.truststorePassword .Values.spi.passwordsSecret) }}
             - name: KEYCLOAK_SPI_TRUSTSTORE_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -173,6 +173,9 @@ spec:
             - name: https
               containerPort: {{ .Values.containerPorts.https }}
               protocol: TCP
+            {{- end }}
+            {{- if .Values.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraContainerPorts "context" $) | nindent 12 }}
             {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.customStartupProbe }}

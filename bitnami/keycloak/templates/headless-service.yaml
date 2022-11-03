@@ -25,6 +25,9 @@ spec:
       protocol: TCP
       targetPort: https
     {{- end }}
+    {{- if .Values.service.extraHeadlessPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.service.extraHeadlessPorts "context" $) | nindent 4 }}
+    {{- end }}
   publishNotReadyAddresses: true
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: keycloak

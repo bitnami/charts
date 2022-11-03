@@ -28,13 +28,13 @@ data:
       redis-cli \
         -h localhost \
 {{- if .Values.tls.enabled }}
-        -p $REDIS_TLS_PORT \
+        -p $REDIS_TLS_PORT_NUMBER \
         --tls \
         --cert {{ template "redis-cluster.tlsCert" . }} \
         --key {{ template "redis-cluster.tlsCertKey" . }} \
         --cacert {{ template "redis-cluster.tlsCACert" . }} \
 {{- else }}
-        -p $REDIS_PORT \
+        -p $REDIS_PORT_NUMBER \
 {{- end }}
         ping
     )
@@ -53,13 +53,13 @@ data:
         redis-cli \
           -h localhost \
   {{- if .Values.tls.enabled }}
-          -p $REDIS_TLS_PORT \
+          -p $REDIS_TLS_PORT_NUMBER \
           --tls \
           --cert {{ template "redis-cluster.tlsCert" . }} \
           --key {{ template "redis-cluster.tlsCertKey" . }} \
           --cacert {{ template "redis-cluster.tlsCACert" . }} \
   {{- else }}
-          -p $REDIS_PORT \
+          -p $REDIS_PORT_NUMBER \
   {{- end }}
           CLUSTER INFO | grep cluster_state | tr -d '[:space:]'
       )
@@ -90,13 +90,13 @@ data:
       redis-cli \
         -h localhost \
 {{- if .Values.tls.enabled }}
-        -p $REDIS_TLS_PORT \
+        -p $REDIS_TLS_PORT_NUMBER \
         --tls \
         --cert {{ template "redis-cluster.tlsCert" . }} \
         --key {{ template "redis-cluster.tlsCertKey" . }} \
         --cacert {{ template "redis-cluster.tlsCACert" . }} \
 {{- else }}
-        -p $REDIS_PORT \
+        -p $REDIS_PORT_NUMBER \
 {{- end }}
         ping
     )
