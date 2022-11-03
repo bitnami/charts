@@ -1,7 +1,7 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ printf "%s-controller" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
@@ -99,7 +99,7 @@ spec:
             - name: METALLB_ML_SECRET_NAME
               value: {{ include "metallb.speaker.secretName" . }}
             - name: METALLB_DEPLOYMENT
-              value: {{ printf "%s-controller" (include "common.names.fullname" .) }}
+              value: {{ printf "%s-controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
             {{- end }}
             {{- if .Values.controller.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.controller.extraEnvVars "context" $) | nindent 12 }}

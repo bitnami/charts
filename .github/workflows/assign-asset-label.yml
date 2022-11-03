@@ -23,13 +23,13 @@ jobs:
           assets=($(echo "$files_changed" | xargs dirname | sed -nr "s|bitnami/([^/]*).*|\1|p" | sort | uniq || true))
 
           if [[ "${#assets[@]}" -ne "1" ]]; then
-            echo "::set-output name=result::skip"
-            echo "::set-output name=message::Label cannot be set, cannot infer a single label from: ${assets[@]}"
-            echo "::set-output name=name::NONE"
+            echo "result=skip" >> $GITHUB_OUTPUT
+            echo "message=Label cannot be set, cannot infer a single label from: ${assets[@]}" >> $GITHUB_OUTPUT
+            echo "name=NONE" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=result::ok"
-            echo "::set-output name=message::Adding label '${assets}'"
-            echo "::set-output name=name::${assets}"
+            echo "result=ok" >> $GITHUB_OUTPUT
+            echo "message=Adding label '${assets}'" >> $GITHUB_OUTPUT
+            echo "name=${assets}" >> $GITHUB_OUTPUT
           fi
       - name: Show messages
         uses: actions/github-script@v6

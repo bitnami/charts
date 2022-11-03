@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ template "keycloak.fullname" . }}-keycloak-config-cli
+  name: {{ template "common.names.fullname" . }}-keycloak-config-cli
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: keycloak-config-cli
@@ -67,19 +67,14 @@ spec:
           {{- end }}
           env:
             - name: KEYCLOAK_URL
-              value: {{ printf "http://%s-headless:%d%s" (include "keycloak.fullname" .) (.Values.containerPorts.http | int) (.Values.httpRelativePath) }}
+              value: {{ printf "http://%s-headless:%d%s" (include "common.names.fullname" .) (.Values.containerPorts.http | int) (.Values.httpRelativePath) }}
             - name: KEYCLOAK_USER
               value: {{ .Values.auth.adminUser | quote }}
             - name: KEYCLOAK_PASSWORD
               valueFrom:
                 secretKeyRef:
-                {{- if .Values.auth.existingSecretPerPassword }}
-                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecretPerPassword.adminPassword "context" $) }}
-                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecretPerPassword "key" "adminPassword") }}
-                {{- else }}
-                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecret "context" $) }}
-                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecret "key" "admin-password") }}
-                {{- end }}
+                  name: {{ include "keycloak.secretName" . }}
+                  key: {{ include "keycloak.secretKey" . }}
             {{- if or .Values.keycloakConfigCli.configuration .Values.keycloakConfigCli.existingConfigmap }}
             - name: IMPORT_FILES_LOCATIONS
               value: /config/*

@@ -2,7 +2,7 @@
 apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ ) }}
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ template "keycloak.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: keycloak
@@ -16,7 +16,7 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
     kind: StatefulSet
-    name: {{ template "keycloak.fullname" . }}
+    name: {{ template "common.names.fullname" . }}
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}
   metrics:

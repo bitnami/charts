@@ -110,7 +110,7 @@ spec:
             {{- end }}
             {{- end }}
             {{- if or (include "thanos.query.createSDConfigmap" .) .Values.query.existingSDConfigmap }}
-            - --store.sd-files=/conf/servicediscovery.yml
+            - --store.sd-files=/conf/sd/servicediscovery.yml
             {{- end }}
             {{- if and .Values.query.dnsDiscovery.enabled .Values.query.dnsDiscovery.sidecarsService .Values.query.dnsDiscovery.sidecarsNamespace }}
             - --endpoint=dnssrv+_grpc._tcp.{{- include "common.tplvalues.render" ( dict "value" .Values.query.dnsDiscovery.sidecarsService "context" $) -}}.{{- include "common.tplvalues.render"  ( dict "value" .Values.query.dnsDiscovery.sidecarsNamespace "context" $) -}}.svc.{{ .Values.clusterDomain }}
@@ -236,8 +236,7 @@ spec:
             {{- end }}
             {{- if or (include "thanos.query.createSDConfigmap" .) .Values.query.existingSDConfigmap }}
             - name: sd-config
-              mountPath: /conf/servicediscovery.yml
-              subPath: servicediscovery.yml
+              mountPath: /conf/sd
             {{- end }}
             {{- if .Values.query.grpc.server.tls.enabled }}
             - name: grpc-server-tls

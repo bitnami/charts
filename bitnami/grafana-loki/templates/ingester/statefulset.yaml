@@ -117,7 +117,7 @@ spec:
           {{- else }}
           args:
             - -target=ingester
-            - -config.file=/bitnami/grafana-loki/conf/loki.yaml
+            - -config.file={{ .Values.loki.dataDir }}/conf/loki.yaml
           {{- end }}
           {{- if .Values.ingester.extraEnvVars }}
           env: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.extraEnvVars "context" $) | nindent 12 }}
@@ -169,7 +169,7 @@ spec:
           {{- end }}
           volumeMounts:
             - name: loki-config
-              mountPath: /bitnami/grafana-loki/conf/loki.yaml
+              mountPath: {{ .Values.loki.dataDir }}/conf/loki.yaml
               subPath: loki.yaml
             - name: data
               mountPath: {{ .Values.loki.dataDir }}

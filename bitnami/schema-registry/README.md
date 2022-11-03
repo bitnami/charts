@@ -7,7 +7,7 @@ Confluent Schema Registry provides a RESTful interface by adding a serving layer
 [Overview of Confluent Schema Registry](https://www.confluent.io)
 
 
-
+                           
 ## TL;DR
 
 ```bash
@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                                | Schema Registry image registry                                                                                  | `docker.io`               |
 | `image.repository`                              | Schema Registry image repository                                                                                | `bitnami/schema-registry` |
-| `image.tag`                                     | Schema Registry image tag (immutable tags are recommended)                                                      | `7.2.2-debian-11-r0`      |
+| `image.tag`                                     | Schema Registry image tag (immutable tags are recommended)                                                      | `7.2.2-debian-11-r11`     |
 | `image.digest`                                  | Schema Registry image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `image.pullPolicy`                              | Schema Registry image pull policy                                                                               | `IfNotPresent`            |
 | `image.pullSecrets`                             | Schema Registry image pull secrets                                                                              | `[]`                      |
