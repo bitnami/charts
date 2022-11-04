@@ -429,6 +429,10 @@ replicaCount: 1
 ## E.g., with `minBrokerId=100` and 3 nodes, IDs will be 100, 101, 102 for brokers 0, 1, and 2, respectively.
 ##
 minBrokerId: 0
+## @param brokerRackAssignment Set Broker Assignment for multi tenant environment Allowed values: `aws-az`
+## ref: https://cwiki.apache.org/confluence/display/KAFKA/KIP-392%3A+Allow+consumers+to+fetch+from+closest+replica
+##
+brokerRackAssignment: ""
 ## @param containerPorts.client Kafka client container port
 ## @param containerPorts.internal Kafka inter-broker container port
 ## @param containerPorts.external Kafka external container port

@@ -363,6 +363,10 @@ contour:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
+    ## @param contour.service.loadBalancerClass Contour service Load Balancer Class
+    ## ref https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
+    ##
+    loadBalancerClass: ""
     ## @param contour.service.externalTrafficPolicy Contour service external traffic policy
     ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
@@ -766,6 +770,10 @@ envoy:
     ## @param envoy.service.loadBalancerSourceRanges [array] List of IP CIDRs allowed access to load balancer (if supported)
     ##
     loadBalancerSourceRanges: []
+    ## @param envoy.service.loadBalancerClass Envoy service Load Balancer Class
+    ## ref https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
+    ##
+    loadBalancerClass: ""
     ## @param envoy.service.ipFamilyPolicy [string], support SingleStack, PreferDualStack and RequireDualStack
     ##
     ipFamilyPolicy: ""

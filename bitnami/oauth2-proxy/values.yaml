@@ -346,6 +346,15 @@ configuration:
     ##
     content: ""
 
+  ## @param configuration.oidcIssuerUrl OpenID Connect issuer URL
+  oidcIssuerUrl: ""
+
+  ## @param configuration.redirectUrl OAuth Redirect URL
+  redirectUrl: ""
+
+  ## @param configuration.whiteList Allowed domains for redirection after authentication. Prefix domain with a . or a *. to allow subdomains
+  whiteList: ""
+
 ## @section OAuth2 Proxy deployment parameters
 ##
 
