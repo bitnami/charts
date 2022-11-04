@@ -1,0 +1,17 @@
+configuration:
+  clientID: vib-tests-id
+  clientSecret: vib-tests-secret
+  cookieSecret: vib-tests-cookie
+  content:
+    - 'email_domains = [ "*" ]'
+    - 'upstreams = [ "file:///dev/null" ]'
+containerPort: 4181
+podSecurityContext:
+  fsGroup: 1002
+containerSecurityContext:
+  runAsUser: 1002
+serviceAccount:
+  automountServiceAccountToken: true
+redis:
+  auth:
+    password: oauth2-vib-password
