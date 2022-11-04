@@ -2,7 +2,7 @@
 apiVersion: integreatly.org/v1alpha1
 kind: Grafana
 metadata:
-  name: {{ include "common.names.fullname" . }}-grafana
+  name: {{ printf "%s-grafana" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
