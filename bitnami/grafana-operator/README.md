@@ -106,7 +106,7 @@ For more information, refer to the [documentation on the differences between the
 | `operator.updateStrategy.type`                               | Set up update strategy for Grafana Operator installation.                                                                                 | `Recreate`                 |
 | `operator.image.registry`                                    | Grafana Operator image registry                                                                                                           | `docker.io`                |
 | `operator.image.repository`                                  | Grafana Operator image name                                                                                                               | `bitnami/grafana-operator` |
-| `operator.image.tag`                                         | Grafana Operator image tag                                                                                                                | `4.2.0-debian-10-r38`      |
+| `operator.image.tag`                                         | Grafana Operator image tag                                                                                                                | `4.2.0-debian-10-r54`      |
 | `operator.image.pullPolicy`                                  | Grafana Operator image pull policy                                                                                                        | `IfNotPresent`             |
 | `operator.image.pullSecrets`                                 | Grafana Operator image pull secrets                                                                                                       | `[]`                       |
 | `operator.leaderElect`                                       | Enables or disables the operator leader Election.                                                                                         | `true`                     |
@@ -186,7 +186,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.enabled`                                           | Enabled the deployment of the Grafana CRD object into the cluster                             | `true`                   |
 | `grafana.image.registry`                                    | Grafana image registry                                                                        | `docker.io`              |
 | `grafana.image.repository`                                  | Grafana image name                                                                            | `bitnami/grafana`        |
-| `grafana.image.tag`                                         | Grafana image tag                                                                             | `8.4.5-debian-10-r1`     |
+| `grafana.image.tag`                                         | Grafana image tag                                                                             | `8.4.6-debian-10-r6`     |
 | `grafana.image.pullSecrets`                                 | Grafana image pull secrets                                                                    | `[]`                     |
 | `grafana.serviceAccount`                                    | Additional service account configuration                                                      | `{}`                     |
 | `grafana.podSecurityContext.enabled`                        | Enable pods security context                                                                  | `true`                   |

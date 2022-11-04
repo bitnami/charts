@@ -119,7 +119,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataplatform.exporter.enabled`                               | Start a prometheus exporter                                                                                      | `true`                          |
 | `dataplatform.exporter.image.registry`                        | dataplatform exporter image registry                                                                             | `docker.io`                     |
 | `dataplatform.exporter.image.repository`                      | dataplatform exporter image repository                                                                           | `bitnami/dataplatform-exporter` |
-| `dataplatform.exporter.image.tag`                             | dataplatform exporter image tag (immutable tags are recommended)                                                 | `1.0.1-scratch-r6`              |
+| `dataplatform.exporter.image.tag`                             | dataplatform exporter image tag (immutable tags are recommended)                                                 | `1.0.1-scratch-r27`             |
 | `dataplatform.exporter.image.pullPolicy`                      | dataplatform exporter image pull policy                                                                          | `IfNotPresent`                  |
 | `dataplatform.exporter.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                 | `[]`                            |
 | `dataplatform.exporter.config`                                | Data Platform Metrics Configuration emitted in Prometheus format                                                 | `""`                            |
@@ -185,7 +185,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataplatform.emitter.enabled`                                | Start Data Platform metrics emitter                                                                              | `true`                          |
 | `dataplatform.emitter.image.registry`                         | Data Platform emitter image registry                                                                             | `docker.io`                     |
 | `dataplatform.emitter.image.repository`                       | Data Platform emitter image repository                                                                           | `bitnami/dataplatform-emitter`  |
-| `dataplatform.emitter.image.tag`                              | Data Platform emitter image tag (immutable tags are recommended)                                                 | `1.0.1-scratch-r8`              |
+| `dataplatform.emitter.image.tag`                              | Data Platform emitter image tag (immutable tags are recommended)                                                 | `1.0.1-scratch-r30`             |
 | `dataplatform.emitter.image.pullPolicy`                       | Data Platform emitter image pull policy                                                                          | `IfNotPresent`                  |
 | `dataplatform.emitter.image.pullSecrets`                      | Specify docker-registry secret names as an array                                                                 | `[]`                            |
 | `dataplatform.emitter.livenessProbe.enabled`                  | Enable livenessProbe                                                                                             | `true`                          |
@@ -343,120 +343,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `wavefront.proxy.resources.requests`                 | The requested resources for the proxy container      | `{}`                                 |
 
 
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
-
-```console
-$ helm install my-release \
-  --set kafka.replicaCount=3 \
-  bitnami/dataplatform-bp1
-```
-
-The above command deploys the data platform with Kafka with 3 nodes (replicas).
-
-Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
-
-```console
-$ helm install my-release -f values.yaml bitnami/dataplatform-bp1
-```
-
-> **Tip**: You can use the default [values.yaml](values.yaml)
-
-### Data Platform Deployment with Observability Framework
-
-In the default deployment, the helm chart deploys the data platform with [Metrics Emitter](https://hub.docker.com/r/bitnami/dataplatform-emitter) and [Prometheus Exporter](https://hub.docker.com/r/bitnami/dataplatform-exporter) which emit the health metrics of the data platform which can be integrated with your observability solution.
-
-- To deploy the data platform with Tanzu Observability Framework with the Wavefront Collector with enabled annotation based discovery feature for all the applications (Kafka/Spark/Elasticsearch/Logstash) in the data platform, make sure that auto discovery `wavefront.collector.discovery.enabled=true` is enabled, It should be enabled by default and specify the 'enabled' parameter using the `--set <component>.metrics.enabled=true` argument to helm install. For Example,
-
-```console
-$ helm install my-release bitnami/dataplatform-bp1 \
-    --set kafka.metrics.kafka.enabled=true \
-    --set kafka.metrics.jmx.enabled=true \
-    --set spark.metrics.enabled=true \
-    --set solr.exporter.enabled=true \
-    --set wavefront.enabled=true \
-    --set wavefront.clusterName=<K8s-CLUSTER-NAME> \
-    --set wavefront.wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
-    --set wavefront.wavefront.token=<YOUR_API_TOKEN>
-```
-> **NOTE**: When the annotation based discovery feature is enabled in the Wavefront Collector, it scrapes metrics from all the pods that have Prometheus annotation enabled.
-
-- To deploy the data platform with Tanzu Observability Framework without the annotation based discovery feature in Wavefront Collector for all the applications (Kafka/Spark/Elasticsearch/Logstash) in the data platform, uncomment the config section in the wavefront deployment from the data platform values.yml file, and specify the 'enable' parameter to 'false' using the `--set wavefront.collector.discovery.enabled=false`  with helm install command, below is an example:
-
-```console
-
-$ helm install my-release bitnami/dataplatform-bp1 \
-    --set kafka.metrics.kafka.enabled=true \
-    --set kafka.metrics.jmx.enabled=true \
-    --set spark.metrics.enabled=true \
-    --set solr.exporter.enabled=true \
-    --set wavefront.enabled=true \
-    --set wavefront.collector.discovery.enabled=false \
-    --set wavefront.clusterName=<K8s-CLUSTER-NAME> \
-    --set wavefront.wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
-    --set wavefront.wavefront.token=<YOUR_API_TOKEN>
-```
-
-### For using an existing Wavefront deployment
-
-- To enable the annotation discovery feature in wavefront for the existing wavefront deployment,  make sure that auto discovery `enableDiscovery: true` and annotation based discovery `discovery.disable_annotation_discovery: false` are enabled in the Wavefront Collector ConfigMap. They should be enabled by default.
-
-- To not use the annotation based discovery feature in wavefront, edit the Wavefront Collector ConfigMap and add the following snippet under discovery plugins. Once done, restart the wavefront collectors DaemonSet.
-
-```console
-$ kubectl edit configmap wavefront-collector-config -n wavefront
-```
-
-Add the below config:
-
-```yaml
-      discovery:
-        enable_runtime_plugins: true
-        plugins:
-        ## auto-discover kafka-exporter
-        - name: kafka-discovery
-          type: prometheus
-          selectors:
-            images:
-              - '*bitnami/kafka-exporter*'
-          port: 9308
-          path: /metrics
-          scheme: http
-
-        ## auto-discover jmx exporter
-        - name: kafka-jmx-discovery
-          type: prometheus
-          selectors:
-            images:
-              - '*bitnami/jmx-exporter*'
-          port: 5556
-          path: /metrics
-          scheme: http
-          prefix: kafkajmx.
-
-        ## auto-discover solr
-        - name: solr-discovery
-          type: prometheus
-          selectors:
-            images:
-              - '*bitnami/solr*'
-          port: 9983
-          path: /metrics
-          scheme: http
-
-        ## auto-discover spark
-        - name: spark-worker-discovery
-          type: prometheus
-          selectors:
-            images:
-              - '*bitnami/spark*'
-          port: 8081
-          path: /metrics/
-          scheme: http
-          prefix: spark.
-
-        ## auto-discover spark
-        - name: spark-master-discovery
-          type: prometheus
           selectors:
             images:
               - '*bitnami/spark*'

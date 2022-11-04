@@ -370,17 +370,17 @@ $ helm uninstall my-release
 
 ### Metrics parameters
 
-| Name                                       | Description                                                                                                                          | Value                    |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
-| `metrics.serviceMonitor.namespace`         | Specify if the servicemonitors will be deployed into a different namespace (blank deploys into same namespace as chart)              | `""`                     |
-| `metrics.serviceMonitor.enabled`           | Specify if a servicemonitor will be deployed for prometheus-operator.                                                                | `false`                  |
-| `metrics.serviceMonitor.jobLabel`          | Specify the jobLabel to use for the prometheus-operator                                                                              | `app.kubernetes.io/name` |
+| Name                                       | Description                                                                                                                         | Value                    |
+| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `metrics.serviceMonitor.namespace`         | Specify if the servicemonitors will be deployed into a different namespace (blank deploys into same namespace as chart)             | `""`                     |
+| `metrics.serviceMonitor.enabled`           | Specify if a servicemonitor will be deployed for prometheus-operator.                                                               | `false`                  |
+| `metrics.serviceMonitor.jobLabel`          | Specify the jobLabel to use for the prometheus-operator                                                                             | `app.kubernetes.io/name` |
 | `metrics.serviceMonitor.interval`          | Specify the scrape interval if not specified use default prometheus scrapeInterval, the Prometheus default scrape interval is used. | `""`                     |
-| `metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics.                                                                                            | `[]`                     |
-| `metrics.serviceMonitor.relabelings`       | Specify general relabeling.                                                                                                          | `[]`                     |
-| `metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                                                                             | `false`                  |
-| `metrics.serviceMonitor.scrapeTimeout`     | The timeout after which the scrape is ended                                                                                          | `""`                     |
-| `metrics.serviceMonitor.selector`          | Specify honorLabels parameter to add the scrape endpoint                                                                             | `{}`                     |
+| `metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics.                                                                                           | `[]`                     |
+| `metrics.serviceMonitor.relabelings`       | Specify general relabeling.                                                                                                         | `[]`                     |
+| `metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                                                                            | `false`                  |
+| `metrics.serviceMonitor.scrapeTimeout`     | The timeout after which the scrape is ended                                                                                         | `""`                     |
+| `metrics.serviceMonitor.selector`          | Specify honorLabels parameter to add the scrape endpoint                                                                            | `{}`                     |
 
 
 ### Other parameters

@@ -78,7 +78,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `image.registry`                       | Nginx Ingress Controller image registry                                                                                                            | `docker.io`                        |
 | `image.repository`                     | Nginx Ingress Controller image repository                                                                                                          | `bitnami/nginx-ingress-controller` |
-| `image.tag`                            | Nginx Ingress Controller image tag (immutable tags are recommended)                                                                                | `1.1.1-debian-10-r0`               |
+| `image.tag`                            | Nginx Ingress Controller image tag (immutable tags are recommended)                                                                                | `1.1.3-debian-10-r19`              |
 | `image.pullPolicy`                     | Nginx Ingress Controller image pull policy                                                                                                         | `IfNotPresent`                     |
 | `image.pullSecrets`                    | Specify docker-registry secret names as an array                                                                                                   | `[]`                               |
 | `containerPorts`                       | Controller container ports to open                                                                                                                 | `{}`                               |
@@ -126,7 +126,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.enabled`                        | Enable Controller pods' Security Context                                                                                                    | `true`         |
 | `podSecurityContext.fsGroup`                        | Group ID for the container filesystem                                                                                                       | `1001`         |
 | `containerSecurityContext.enabled`                  | Enable Controller containers' Security Context                                                                                              | `true`         |
-| `containerSecurityContext.allowPrivilegeEscalation` | Switch to allow privilege escalation on the Controller container                                                                           | `true`         |
+| `containerSecurityContext.allowPrivilegeEscalation` | Switch to allow privilege escalation on the Controller container                                                                            | `true`         |
 | `containerSecurityContext.runAsUser`                | User ID for the Controller container                                                                                                        | `1001`         |
 | `containerSecurityContext.capabilities.drop`        | Linux Kernel capabilities that should be dropped                                                                                            | `[]`           |
 | `containerSecurityContext.capabilities.add`         | Linux Kernel capabilities that should be added                                                                                              | `[]`           |
@@ -185,7 +185,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `defaultBackend.hostAliases`                        | Add deployment host aliases                                                               | `[]`                   |
 | `defaultBackend.image.registry`                     | Default backend image registry                                                            | `docker.io`            |
 | `defaultBackend.image.repository`                   | Default backend image repository                                                          | `bitnami/nginx`        |
-| `defaultBackend.image.tag`                          | Default backend image tag (immutable tags are recommended)                                | `1.21.5-debian-10-r14` |
+| `defaultBackend.image.tag`                          | Default backend image tag (immutable tags are recommended)                                | `1.21.6-debian-10-r81` |
 | `defaultBackend.image.pullPolicy`                   | Image pull policy                                                                         | `IfNotPresent`         |
 | `defaultBackend.image.pullSecrets`                  | Specify docker-registry secret names as an array                                          | `[]`                   |
 | `defaultBackend.extraArgs`                          | Additional command line arguments to pass to Nginx container                              | `{}`                   |
