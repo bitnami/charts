@@ -4136,7 +4136,7 @@ spec:
                               type: string
                             user:
                               description: User to map volume access to Defaults to
-                                serivceaccount user
+                                serviceaccount user
                               type: string
                             volume:
                               description: Volume is a string that references an already

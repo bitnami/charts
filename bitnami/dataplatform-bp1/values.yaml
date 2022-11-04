@@ -83,7 +83,7 @@ dataplatform:
       pullSecrets: []
     ## Configuration file passed to the exporter.
     ## This exporter metrics configuration is used to emit only the health and state metrics configured below.
-    ## In the below config metrics key,name and guage should not be changed.
+    ## In the below config metrics key,name and gauge should not be changed.
     ## @param dataplatform.exporter.config [string] Data Platform Metrics Configuration emitted in Prometheus format
     ##
     config: |

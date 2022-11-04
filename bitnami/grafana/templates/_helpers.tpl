@@ -165,7 +165,7 @@ grafana: config.useGrafanaIniFile config.grafanaIniSecret and config.grafanaIniC
 grafana: ldap.enabled ldap.configuration ldap.configMapName and ldap.secretName
         You must provide the content of your custom ldap.toml file when enabling LDAP (--set ldap.configuration="xxx")
         As an alternative, you can set the name of an existing ConfigMap (--set ldap.configMapName="yyy") or
-        an an existing Secret (--set ldap.secretName="zzz") containging the custom ldap.toml file.
+        an an existing Secret (--set ldap.secretName="zzz") containing the custom ldap.toml file.
 {{- end -}}
 {{- end -}}
 

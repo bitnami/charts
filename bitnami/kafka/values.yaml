@@ -1580,7 +1580,7 @@ zookeeper:
   ## @param zookeeper.replicaCount Number of ZooKeeper nodes
   ##
   replicaCount: 1
-  ## ZooKeeper authenticaiton
+  ## ZooKeeper authentication
   ##
   auth:
     ## @param zookeeper.auth.enabled Enable ZooKeeper auth

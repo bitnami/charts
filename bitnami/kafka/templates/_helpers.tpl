@@ -468,7 +468,7 @@ kafka: .Values.auth.tls.existingSecrets
 {{- if or .Values.auth.tls.keyPasswordSecretKey .Values.auth.tls.keystorePasswordSecretKey .Values.auth.tls.truststorePasswordSecretKey }}
 kafka: auth.tls.keyPasswordSecretKey,auth.tls.keystorePasswordSecretKey,auth.tls.truststorePasswordSecretKey
     auth.tls.keyPasswordSecretKey,auth.tls.keystorePasswordSecretKey,auth.tls.truststorePasswordSecretKey
-    must not be used without passwordsSecret setted.
+    must not be used without passwordsSecret set.
 {{- end -}}
 {{- end -}}
 {{- end -}}

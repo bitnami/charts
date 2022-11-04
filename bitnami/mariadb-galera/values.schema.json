@@ -164,14 +164,14 @@
         "create": {
           "type": "boolean",
           "form": true,
-          "title": "Create a ServiceAcccount",
-          "description": "Specify whether a ServiceAcccount for MariaDB Galera pods should be created"
+          "title": "Create a ServiceAccount",
+          "description": "Specify whether a ServiceAccount for MariaDB Galera pods should be created"
         },
         "name": {
           "type": "string",
           "form": true,
-          "title": "ServiceAcccount name",
-          "description": "ServiceAcccount name to use. Auto-generated if not specified",
+          "title": "ServiceAccount name",
+          "description": "ServiceAccount name to use. Auto-generated if not specified",
           "hidden": {
             "value": false,
             "path": "serviceAccount/create"

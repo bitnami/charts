@@ -134,7 +134,7 @@ spec:
               {{- else }}
               # number of currently deployed redis master nodes
               currentMasterNodesNum="$(( {{ .Values.cluster.update.currentNumberOfNodes }} / (( {{ .Values.cluster.update.currentNumberOfReplicas }} + 1 )) ))"
-              # end postion of new replicas that should be assigned to original redis master nodes
+              # end position of new replicas that should be assigned to original redis master nodes
               slaveNodesEndPos="$(( {{ .Values.cluster.update.currentNumberOfNodes }} + (($REDIS_CLUSTER_REPLICAS - {{ .Values.cluster.update.currentNumberOfReplicas }})) * $currentMasterNodesNum ))"
               for node in $(seq $((1+{{ .Values.cluster.update.currentNumberOfNodes }})) {{ .Values.cluster.nodes }}); do
                 newNodeIndex="$(($node - 1))"

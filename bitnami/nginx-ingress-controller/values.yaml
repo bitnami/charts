@@ -224,7 +224,7 @@ podSecurityContext:
 ## Controller containers' Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enable Controller containers' Security Context
-## @param containerSecurityContext.allowPrivilegeEscalation Switch to allow priviledge escalation on the Controller container
+## @param containerSecurityContext.allowPrivilegeEscalation Switch to allow privilege escalation on the Controller container
 ## @param containerSecurityContext.runAsUser User ID for the Controller container
 ## @param containerSecurityContext.capabilities.drop [array] Linux Kernel capabilities that should be dropped
 ## @param containerSecurityContext.capabilities.add [array] Linux Kernel capabilities that should be added

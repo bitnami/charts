@@ -266,11 +266,11 @@ galera:
   ## @param galera.name Galera cluster name
   ##
   name: galera
-  ## Bootstraping options
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb-galera#bootstraping
+  ## Bootstrapping options
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb-galera#bootstrapping
   ##
   bootstrap:
-    ## @param galera.bootstrap.forceBootstrap Option to force the boostraping from the indicated node in `galera.bootstarp.bootstrapFromNode`
+    ## @param galera.bootstrap.forceBootstrap Option to force the bootstrapping from the indicated node in `galera.bootstarp.bootstrapFromNode`
     ##
     forceBootstrap: false
     ## @param galera.bootstrap.bootstrapFromNode Node to bootstrap from, you will need to change this parameter in case you want to bootstrap from other node

@@ -362,7 +362,7 @@ extraDeploy:
 
 ### To 1.0.0
 
-This version updates the chart to use Contour's latest release, `1.20.1`. Among other features, exisiting CRDs have been syncronised with the official [Contour repository](https://github.com/projectcontour/contour/blob/main/examples/render/contour.yaml)
+This version updates the chart to use Contour's latest release, `1.20.1`. Among other features, existing CRDs have been synchronised with the official [Contour repository](https://github.com/projectcontour/contour/blob/main/examples/render/contour.yaml)
 
 This version bumps the Envoy and Contour container to the ones matching the Contour Operator requirements.
 

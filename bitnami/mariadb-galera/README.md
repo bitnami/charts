@@ -442,13 +442,13 @@ extraContainers:
       memory: 10Mi
 ```
 
-### Bootstraping a node other than 0
+### Bootstrapping a node other than 0
 
 > Note: Some of these procedures can lead to data loss, always make a backup beforehand.
 
-To restart the cluster you need to check the state in which it is after being stopped, also you will need the previous password for the `rootUser` and `mariabackup`, and the deployment name. The value of `safe_to_bootstrap` in `/bitnami/mariadb/data/grastate.dat`, will indicate if it is safe to bootstrap form that node. In the case it is other than node 0, it is needed to choose one and force the bootstraping from it. You will notice that in these cases it is needed to start the nodes in `Parallel` by setting `podManagementPolicy`.
+To restart the cluster you need to check the state in which it is after being stopped, also you will need the previous password for the `rootUser` and `mariabackup`, and the deployment name. The value of `safe_to_bootstrap` in `/bitnami/mariadb/data/grastate.dat`, will indicate if it is safe to bootstrap form that node. In the case it is other than node 0, it is needed to choose one and force the bootstrapping from it. You will notice that in these cases it is needed to start the nodes in `Parallel` by setting `podManagementPolicy`.
 
-#### Checking `safe_to_boostrap`
+#### Checking `safe_to_bootstrap`
 
 First you need to get the name of the persistent volume claims (pvc), for example:
 
@@ -535,7 +535,7 @@ helm install my-release bitnami/mariadb-galera \
 
 #### Remove the forced boostraping
 
-After you have started the cluster by forcing the bootstraping on one of the nodes, you will need to remove the forcing so the node can restart with normality.
+After you have started the cluster by forcing the bootstrapping on one of the nodes, you will need to remove the forcing so the node can restart with normality.
 
 ```
 helm upgrade my-release bitnami/mariadb-galera \
@@ -612,7 +612,7 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 
 ### To 2.0.0
 
-In this version the bootstraping was improved. Now it is possible to indicate a node where to bootstrap from, and force the parameter `safe_to_bootstrap`. This allows to handle situations where the cluster was not cleanly stopped. It should be safe to upgrade from v1 of the chart, but it is wise to create always a backup before performing operations where there is a risk of data loss.
+In this version the bootstrapping was improved. Now it is possible to indicate a node where to bootstrap from, and force the parameter `safe_to_bootstrap`. This allows to handle situations where the cluster was not cleanly stopped. It should be safe to upgrade from v1 of the chart, but it is wise to create always a backup before performing operations where there is a risk of data loss.
 
 ### To 1.0.0
 

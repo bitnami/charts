@@ -1164,7 +1164,7 @@ ingress:
 ## @param metrics.serviceMonitor.namespace Specify if the servicemonitors will be deployed into a different namespace (blank deploys into same namespace as chart)
 ## @param metrics.serviceMonitor.enabled Specify if a servicemonitor will be deployed for prometheus-operator.
 ## @param metrics.serviceMonitor.jobLabel Specify the jobLabel to use for the prometheus-operator
-## @param metrics.serviceMonitor.interval Specify the scrape interval if not specified use default prometheus scrapeIntervall, the Prometheus default scrape interval is used.
+## @param metrics.serviceMonitor.interval Specify the scrape interval if not specified use default prometheus scrapeInterval, the Prometheus default scrape interval is used.
 ## @param metrics.serviceMonitor.metricRelabelings [array] Specify additional relabeling of metrics.
 ## @param metrics.serviceMonitor.relabelings [array] Specify general relabeling.
 ## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint

@@ -799,7 +799,7 @@ rbac:
 
 ## @section Network Policy
 
-## MySQL Nework Policy configuration
+## MySQL Network Policy configuration
 ##
 networkPolicy:
   ## @param networkPolicy.enabled Enable creation of NetworkPolicy resources

@@ -375,7 +375,7 @@ $ helm uninstall my-release
 | `metrics.serviceMonitor.namespace`         | Specify if the servicemonitors will be deployed into a different namespace (blank deploys into same namespace as chart)              | `""`                     |
 | `metrics.serviceMonitor.enabled`           | Specify if a servicemonitor will be deployed for prometheus-operator.                                                                | `false`                  |
 | `metrics.serviceMonitor.jobLabel`          | Specify the jobLabel to use for the prometheus-operator                                                                              | `app.kubernetes.io/name` |
-| `metrics.serviceMonitor.interval`          | Specify the scrape interval if not specified use default prometheus scrapeIntervall, the Prometheus default scrape interval is used. | `""`                     |
+| `metrics.serviceMonitor.interval`          | Specify the scrape interval if not specified use default prometheus scrapeInterval, the Prometheus default scrape interval is used. | `""`                     |
 | `metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics.                                                                                            | `[]`                     |
 | `metrics.serviceMonitor.relabelings`       | Specify general relabeling.                                                                                                          | `[]`                     |
 | `metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                                                                             | `false`                  |
@@ -412,7 +412,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 To configure [Contour](https://projectcontour.io) please look into the configuration section [Contour Configuration](https://projectcontour.io/docs/main/configuration/).
 
-### Example Quickstart Contour Confiuration
+### Example Quickstart Contour Configuration
 
 ```yaml
 configInline:
@@ -536,7 +536,7 @@ Affected values:
 
 This version updates the chart to use Contour's latest release, `1.19.0`. Among other features, this new version introduces support for new kinds of CRDs: `ContourConfiguration` and `ContourDeployment`. For further information on new features, please refer to the [official release notes](https://github.com/projectcontour/contour/releases/tag/v1.19.0) for this version.
 
-Additionally, exisiting CRDs have been syncronised with the official [Contour repository](https://github.com/projectcontour/contour/blob/main/examples/render/contour.yaml)
+Additionally, existing CRDs have been synchronised with the official [Contour repository](https://github.com/projectcontour/contour/blob/main/examples/render/contour.yaml)
 
 **Considerations when upgrading to this version**
 
