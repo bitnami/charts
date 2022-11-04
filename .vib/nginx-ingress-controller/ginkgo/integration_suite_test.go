@@ -6,12 +6,14 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"net/http"
 	"strings"
 	"testing"
+	"time"
 
-	v1 "k8s.io/api/core/v1"
+	netv1 "k8s.io/api/networking/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	cv1 "k8s.io/client-go/kubernetes/typed/core/v1"
+	netcv1 "k8s.io/client-go/kubernetes/typed/networking/v1"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 
@@ -26,7 +28,7 @@ const APP_NAME = "NGINX Ingress Controller"
 
 var kubeconfig = flag.String("kubeconfig", "", "absolute path to the kubeconfig file")
 var namespace = flag.String("namespace", "", "namespace where the resources are deployed")
-var ingressName = flag.String("ingress-name", "", "resource name of the testing ingress")
+var svcName = flag.String("service-name", "", "service name used to serve the kuard deployment")
 
 func clusterConfigOrDie() *rest.Config {
 	var config *rest.Config
@@ -44,43 +46,79 @@ func clusterConfigOrDie() *rest.Config {
 	return config
 }
 
-func getPodsByLabelOrDie(ctx context.Context, c cv1.PodsGetter, namespace string, selector string) v1.PodList {
+func createIngressOrDie(ctx context.Context, c netcv1.NetworkingV1Interface, name string, ingressRuleHost string, ingressRuleValue netv1.IngressRuleValue) {
+	ingressClassName := "nginx"
 
-	output, err := c.Pods(namespace).List(ctx, metav1.ListOptions{
-		LabelSelector: selector,
-	})
+	ingress := &netv1.Ingress{
+		ObjectMeta: metav1.ObjectMeta{
+			Namespace: *namespace,
+			Name:      name,
+		},
+		Spec: netv1.IngressSpec{
+			IngressClassName: &ingressClassName,
+			Rules: []netv1.IngressRule{
+				{
+					Host:             ingressRuleHost,
+					IngressRuleValue: ingressRuleValue,
+				},
+			},
+		},
+	}
+
+	result, err := c.Ingresses(*namespace).Create(ctx, ingress, metav1.CreateOptions{})
 	if err != nil {
 		panic(err.Error())
 	}
-	fmt.Printf("Obtained list of pods with label %q\n", selector)
-
-	return *output
+	fmt.Printf("Created ingress %q.\n", result.GetObjectMeta().GetName())
 }
 
-func getContainerLogsOrDie(ctx context.Context, c cv1.PodsGetter, namespace, podName, container string) []string {
+func getResponseBodyOrDie(ctx context.Context, address string) []string {
 	var output []string
-	tailLines := int64(50)
+	var client http.Client
 
-	readCloser, err := c.Pods(namespace).GetLogs(podName, &v1.PodLogOptions{
-		Container: container,
-		Follow:    false,
-		TailLines: &tailLines,
-	}).Stream(ctx)
+	resp, err := client.Get(address)
 	if err != nil {
-		panic(err.Error())
+		panic(fmt.Sprintf("There was an error during the GET request: %q", err))
 	}
-	fmt.Printf("Obtained %q pod's logs\n", podName)
+	defer resp.Body.Close()
 
-	defer readCloser.Close()
-
-	scanner := bufio.NewScanner(interruptableReader{ctx, readCloser})
-	for scanner.Scan() {
-		output = append(output, scanner.Text())
-	}
-	if scanner.Err() != nil {
-		panic(scanner.Err())
+	if resp.StatusCode == http.StatusOK {
+		scanner := bufio.NewScanner(interruptableReader{ctx, resp.Body})
+		for scanner.Scan() {
+			output = append(output, scanner.Text())
+		}
+		if scanner.Err() != nil {
+			panic(scanner.Err())
+		}
 	}
 	return output
+}
+
+func hasIPAssigned(ctx context.Context, c netcv1.NetworkingV1Interface, resourceName string) (bool, error) {
+	var err error
+
+	ingress, err := c.Ingresses(*namespace).Get(ctx, resourceName, metav1.GetOptions{})
+
+	if len(ingress.Status.LoadBalancer.Ingress) > 0 {
+		return true, err
+	} else {
+		return false, err
+	}
+}
+
+func retry(name string, attempts int, sleep time.Duration, f func() (bool, error)) (res bool, err error) {
+	for i := 0; i < attempts; i++ {
+		fmt.Printf("[retriable] operation %q executing now [attempt %d/%d]\n", name, (i + 1), attempts)
+		res, err = f()
+		if res {
+			fmt.Printf("[retriable] operation %q succedeed [attempt %d/%d]\n", name, (i + 1), attempts)
+			return res, err
+		}
+		fmt.Printf("[retriable] operation %q failed, sleeping for %q now...\n", name, sleep)
+		time.Sleep(sleep)
+	}
+	fmt.Printf("[retriable] operation %q failed [attempt %d/%d]\n", name, attempts, attempts)
+	return res, err
 }
 
 type interruptableReader struct {
@@ -112,8 +150,8 @@ func CheckRequirements() {
 	if *namespace == "" {
 		panic(fmt.Sprintf("The namespace where %s is deployed must be provided. Use the '--namespace' flag", APP_NAME))
 	}
-	if *ingressName == "" {
-		panic("The resource name of the testing ingress. Use the '--ingress-name' flag")
+	if *svcName == "" {
+		panic(fmt.Sprintln("The testing service name used to serve the kuard deployment must be provided. Use the '--service-name' flag"))
 	}
 }
 
