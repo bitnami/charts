@@ -84,7 +84,7 @@ Get the saved objects configmap name.
 Set Elasticsearch Port.
 */}}
 {{- define "kibana.configurationCM" -}}
-{{- .Values.configurationCM | default (printf "%s-conf" (include "common.names.fullname" .)) -}}
+{{- .Values.configurationCM | default (printf "%s-conf" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" ) -}}
 {{- end -}}
 
 {{/*
@@ -187,7 +187,7 @@ Return the secret containing Kibana TLS certificates
 {{- if $secretName -}}
     {{- printf "%s" (tpl $secretName $) -}}
 {{- else -}}
-    {{- printf "%s-crt" (include "common.names.fullname" .) -}}
+    {{- printf "%s-crt" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 

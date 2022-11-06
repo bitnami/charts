@@ -288,13 +288,13 @@ spec:
         {{- if (include "kibana.importSavedObjects" .) }}
         - name: saved-objects-init-scripts
           configMap:
-            name: {{ include "common.names.fullname" . }}-saved-objects
+            name: {{ printf "%s-saved-objects" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
             defaultMode: 0755
         {{- end }}
         {{- if .Values.plugins }}
         - name: plugins-init-scripts
           configMap:
-            name: {{ include "common.names.fullname" . }}-plugins
+            name: {{ printf "%s-plugins" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
             defaultMode: 0755
         {{- end }}
         {{- if .Values.initScriptsCM }}
