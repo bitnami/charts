@@ -536,7 +536,6 @@ persistence:
     ## @param persistence.imageChartStorage.gcs.encodedkey GCS storage type setting: Base64 encoded key
     ## @param persistence.imageChartStorage.gcs.rootdirectory GCS storage type setting: Root directory name
     ## @param persistence.imageChartStorage.gcs.chunksize GCS storage type setting: Chunk size name
-    ## @param persistence.imageChartStorage.gcs.useWorkloadIdentity GCS storage type setting: Use Workload Identity. A boolean to allow the use of workloadidentity in a GKE cluster
     ##
     gcs:
       bucket: bucketname
@@ -545,7 +544,6 @@ persistence:
       encodedkey: base64-encoded-json-key-file
       rootdirectory: ""
       chunksize: ""
-      useWorkloadIdentity: true
     ## Images/charts storage parameters when type is "s3"
     ## ref: https://docs.docker.com/registry/storage-drivers/s3/
     ## @param persistence.imageChartStorage.s3.region S3 storage type setting: Region
