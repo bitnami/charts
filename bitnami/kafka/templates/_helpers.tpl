@@ -280,6 +280,17 @@ Returns the secret name for the Kafka Provisioning client
 {{- end -}}
 
 {{/*
+Create the name of the service account to use for the Kafka Provisioning client 
+*/}}
+{{- define "kafka.provisioning.serviceAccountName" -}}
+{{- if .Values.provisioning.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.provisioning.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.provisioning.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return true if a configmap object should be created
 */}}
 {{- define "kafka.createConfigmap" -}}
