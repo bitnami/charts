@@ -53,7 +53,7 @@ Notice the `Author` and `Signed-off-by` lines match. If they don't your PR will 
 
 1. Changes are manually reviewed by Bitnami team members.
 1. Once the changes are accepted, the PR is verified with a [Static analysis](https://github.com/bitnami/charts/blob/main/TESTING.md#Static-analysis) that includes the lint and the vulnerability checks. If that passes, the Bitnami team will review the changes and trigger the verification and functional tests.
-1. When the PR passes all tests, the PR is merged by the reviewer(s) in the GitHub `master` branch.
+1. When the PR passes all tests, the PR is merged by the reviewer(s) in the GitHub `main` branch.
 1. Then our CI/CD system is going to push the chart to the Helm registry including the recently merged changes and also the latest images and dependencies used by the chart. The changes in the images will be also committed by the CI/CD to the GitHub repository, bumping the chart version again.
 
 ***NOTE***: Please note that, in terms of time, may be a slight difference between the appearance of the code in GitHub and the chart in the registry.
