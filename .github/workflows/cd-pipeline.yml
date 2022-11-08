@@ -39,6 +39,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/kibana/**'
       - 'bitnami/kong/**'
       - 'bitnami/kube-prometheus/**'
+      - 'bitnami/kube-state-metrics/**'
       - 'bitnami/kubernetes-event-exporter/**'
       - 'bitnami/logstash/**'
       - 'bitnami/magento/**'
