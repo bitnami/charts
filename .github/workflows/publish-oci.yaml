@@ -1,0 +1,74 @@
+name: publish oci
+
+env:
+  REGISTRY: docker.io
+  REPOSITORY: chr1slavery
+  DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+
+on:
+  schedule:
+    - cron:  '0 7 * * 1,4'
+    # scheduled at 07:00 every Monday and Thursday
+  workflow_dispatch:  # click the button on Github repo!
+
+permissions:
+  contents: write
+  packages: write
+  id-token: write
+
+
+jobs:
+  publish-oci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Sync upstream changes
+        uses: repo-sync/github-sync@v2
+        with:
+          source_repo: "bitnami/charts"
+          source_branch: "main"
+          destination_branch: "main"
+          github_token: ${{ secrets.WORKFLOW_TOKEN }}
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ env.REPOSITORY }}
+          password: ${{ env.DOCKER_TOKEN }}
+
+      - uses: azure/setup-helm@v3
+        with:
+          version: latest # default is latest (stable)
+          token: ${{ secrets.GITHUB_TOKEN }} # only needed if version is 'latest'
+        id: install
+
+      - name: Install relok8s
+        uses: dsaltares/fetch-gh-release-asset@master
+        with:
+          repo: 'vmware-tanzu/asset-relocation-tool-for-kubernetes'
+          version: 'tags/v0.5.1'
+          file: 'relok8s_0.5.1_linux_x86_64.tar.gz'
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install cosign
+        uses: sigstore/cosign-installer@main
+
+      - name: unpack binary
+        run: |
+          tar -xvf relok8s_0.5.1_linux_x86_64.tar.gz
+          sudo chmod +x relok8s && sudo  mv relok8s /usr/bin/
+
+
+      - name: Push Charts to Registry
+        run: |
+          for pkg in bitnami/*; do
+            if [ -z "${pkg:-}" ]; then
+              break
+            fi
+            bash ${GITHUB_WORKSPACE}/package.sh "${pkg}" $REGISTRY $REPOSITORY $DOCKER_TOKEN
+          done
+
