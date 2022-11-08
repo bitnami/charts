@@ -1,6 +1,7 @@
-addr:
-  tcp://nginx-ingress-controller:{{ .Vars.service.ports.https }}:
-    reachable: true
+http:
+  https://nginx-ingress-controller:{{ .Vars.service.ports.https }}:
+    status: 404
+    allow-insecure: true
 file:
   /var/run/secrets/kubernetes.io/serviceaccount:
     exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}

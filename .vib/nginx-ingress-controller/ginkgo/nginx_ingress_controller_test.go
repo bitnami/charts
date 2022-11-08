@@ -8,7 +8,6 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
-	netv1 "k8s.io/api/networking/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	cv1 "k8s.io/client-go/kubernetes/typed/core/v1"
 	netcv1 "k8s.io/client-go/kubernetes/typed/networking/v1"
@@ -28,32 +27,11 @@ var _ = Describe("NGINX Ingress Controller:", func() {
 		ctx = context.Background()
 	})
 
-	When("a testing ingress is created", func() {
+	When("a testing ingress resource is created", func() {
 		var ingressName, ingressHost string
 		var hasIP bool
 
 		BeforeEach(func() {
-			var pathType netv1.PathType = "Prefix"
-
-			ingressRuleValue := netv1.IngressRuleValue{
-				HTTP: &netv1.HTTPIngressRuleValue{
-					Paths: []netv1.HTTPIngressPath{
-						{
-							Path:     "/",
-							PathType: &pathType,
-							Backend: netv1.IngressBackend{
-								Service: &netv1.IngressServiceBackend{
-									Name: *svcName,
-									Port: netv1.ServiceBackendPort{
-										Number: 80,
-									},
-								},
-							},
-						},
-					},
-				},
-			}
-
 			nicSvc, err := coreclient.Services(*namespace).Get(ctx, "nginx-ingress-controller", metav1.GetOptions{})
 			if err != nil {
 				panic(fmt.Sprintf("There was an error retrieving the nginx ingress controller service: %q", err))
@@ -61,7 +39,7 @@ var _ = Describe("NGINX Ingress Controller:", func() {
 
 			ingressName = "vib-ing-test"
 			ingressHost = nicSvc.Status.LoadBalancer.Ingress[0].IP + ".nip.io"
-			createIngressOrDie(ctx, netclient, ingressName, ingressHost, ingressRuleValue)
+			createIngressOrDie(ctx, netclient, ingressName, ingressHost)
 
 			// Once created, the controller has to assign an IP to the managed ingress
 			hasIP, err = retry("hasIPAssigned", 6, 20*time.Second, func() (bool, error) {

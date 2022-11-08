@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strconv"
 	"strings"
 	"testing"
 	"time"
@@ -29,6 +30,7 @@ const APP_NAME = "NGINX Ingress Controller"
 var kubeconfig = flag.String("kubeconfig", "", "absolute path to the kubeconfig file")
 var namespace = flag.String("namespace", "", "namespace where the resources are deployed")
 var svcName = flag.String("service-name", "", "service name used to serve the kuard deployment")
+var svcPort = flag.String("service-port", "", "service port used to serve the kuard deployment")
 
 func clusterConfigOrDie() *rest.Config {
 	var config *rest.Config
@@ -46,9 +48,34 @@ func clusterConfigOrDie() *rest.Config {
 	return config
 }
 
-func createIngressOrDie(ctx context.Context, c netcv1.NetworkingV1Interface, name string, ingressRuleHost string, ingressRuleValue netv1.IngressRuleValue) {
-	ingressClassName := "nginx"
+func createIngressOrDie(ctx context.Context, c netcv1.NetworkingV1Interface, name string, ingressRuleHost string) {
+	var ingressClassName string = "nginx"
+	var pathType netv1.PathType = "Prefix"
 
+	i, err := strconv.ParseInt(*svcPort, 10, 32)
+	if err != nil {
+		panic(err)
+	}
+	portNumber := int32(i)
+
+	ingressRuleValue := netv1.IngressRuleValue{
+		HTTP: &netv1.HTTPIngressRuleValue{
+			Paths: []netv1.HTTPIngressPath{
+				{
+					Path:     "/",
+					PathType: &pathType,
+					Backend: netv1.IngressBackend{
+						Service: &netv1.IngressServiceBackend{
+							Name: *svcName,
+							Port: netv1.ServiceBackendPort{
+								Number: portNumber,
+							},
+						},
+					},
+				},
+			},
+		},
+	}
 	ingress := &netv1.Ingress{
 		ObjectMeta: metav1.ObjectMeta{
 			Namespace: *namespace,
@@ -99,7 +126,7 @@ func hasIPAssigned(ctx context.Context, c netcv1.NetworkingV1Interface, resource
 
 	ingress, err := c.Ingresses(*namespace).Get(ctx, resourceName, metav1.GetOptions{})
 
-	if len(ingress.Status.LoadBalancer.Ingress) > 0 {
+	if ingress != nil && len(ingress.Status.LoadBalancer.Ingress) > 0 {
 		return true, err
 	} else {
 		return false, err
