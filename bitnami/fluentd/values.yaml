@@ -1288,6 +1288,7 @@ metrics:
     ##
     externalTrafficPolicy: Cluster
     ## @param metrics.service.annotations [object] Annotations for the Prometheus Exporter service service
+    ## If port or path annotation is provided the values will be used to in the prometheus ServiceMonitor CRD.
     ##
     annotations:
       prometheus.io/scrape: "true"
