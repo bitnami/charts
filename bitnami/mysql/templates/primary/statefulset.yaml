@@ -18,8 +18,8 @@ spec:
     matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: primary
   serviceName: {{ include "mysql.primary.fullname" . }}
-  {{- if .Values.primary.updateStrategy }}
-  updateStrategy: {{- toYaml .Values.primary.updateStrategy | nindent 4 }}
+  {{- if .Values.primary.updateStrategy.type }}
+  updateStrategy: {{- toYaml .Values.primary.updateStrategy.type | nindent 4 }}
   {{- end }}
   template:
     metadata:

@@ -19,8 +19,8 @@ spec:
     matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: secondary
   serviceName: {{ include "mysql.secondary.fullname" . }}
-  {{- if .Values.secondary.updateStrategy }}
-  updateStrategy: {{- toYaml .Values.secondary.updateStrategy | nindent 4 }}
+  {{- if .Values.secondary.updateStrategy.type }}
+  updateStrategy: {{- toYaml .Values.secondary.updateStrategy.type | nindent 4 }}
   {{- end }}
   template:
     metadata:
