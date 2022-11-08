@@ -628,6 +628,12 @@ primary:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+    ## Headless service properties
+    ##
+    headless:
+      ## @param primary.service.headless.annotations Additional custom annotations for headless PostgreSQL primary service
+      ##
+      annotations: {}
   ## PostgreSQL Primary persistence configuration
   ##
   persistence:
@@ -959,6 +965,12 @@ readReplicas:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+    ## Headless service properties
+    ##
+    headless:
+      ## @param readReplicas.service.headless.annotations Additional custom annotations for headless PostgreSQL read only service
+      ##
+      annotations: {}
   ## PostgreSQL read only persistence configuration
   ##
   persistence:

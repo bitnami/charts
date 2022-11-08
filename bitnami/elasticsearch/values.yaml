@@ -1768,6 +1768,12 @@ metrics:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## @param metrics.annotations [object] Annotations for metrics
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  annotations:
+    helm.sh/hook: "post-install,post-upgrade"
+    helm.sh/hook-weight: "5"
   ## @param metrics.extraArgs Extra arguments to add to the default exporter command
   ## ref: https://github.com/justwatchcom/elasticsearch_exporter
   ## e.g

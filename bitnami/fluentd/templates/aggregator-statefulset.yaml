@@ -177,7 +177,7 @@ spec:
             - name: fluentd-config
               mountPath: /opt/bitnami/fluentd/conf
             {{- if .Values.aggregator.persistence.enabled }}
-            - name: {{ include "common.names.fullname" . }}-buffer
+            - name: {{ printf "%s-buffer" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
               mountPath: /opt/bitnami/fluentd/logs/buffers
             {{- else }}
             - name: buffer
@@ -244,7 +244,7 @@ spec:
   volumeClaimTemplates:
     {{- if or .Values.aggregator.persistence.enabled }}
     - metadata:
-        name: {{ include "common.names.fullname" . }}-buffer
+        name: {{ printf "%s-buffer" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
         {{- if .Values.aggregator.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.persistence.annotations "context" $) | nindent 10 }}
         {{- end }}

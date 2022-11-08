@@ -36,6 +36,9 @@ spec:
   {{- if .Values.contour.service.sessionAffinityConfig }}
   sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.contour.service.sessionAffinityConfig "context" $) | nindent 4 }}
   {{- end }}
+  {{- if and .Values.contour.service.loadBalancerClass (eq .Values.contour.service.type "LoadBalancer") }}
+  loadBalancerClass: {{ .Values.contour.service.loadBalancerClass }}
+  {{- end }}
   ports:
     - port: {{ .Values.contour.service.ports.xds }}
       name: tcp-xds
