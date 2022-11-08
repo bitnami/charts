@@ -230,7 +230,11 @@ spec:
             {{- end }}
             - name: redis-data
               mountPath: {{ .Values.master.persistence.path }}
+              {{- if .Values.master.persistence.subPath }}
               subPath: {{ .Values.master.persistence.subPath }}
+              {{- else if .Values.master.persistence.subPathExpr }}
+              subPathExpr: {{ .Values.master.persistence.subPathExpr }}
+              {{- end }}
             - name: config
               mountPath: /opt/bitnami/redis/mounted-etc
             - name: redis-tmp-conf
@@ -349,7 +353,11 @@ spec:
           volumeMounts:
             - name: redis-data
               mountPath: {{ .Values.master.persistence.path }}
+              {{- if .Values.master.persistence.subPath }}
               subPath: {{ .Values.master.persistence.subPath }}
+              {{- else if .Values.master.persistence.subPathExpr }}
+              subPathExpr: {{ .Values.master.persistence.subPathExpr }}
+              {{- end }}
         {{- end }}
         {{- if .Values.sysctl.enabled }}
         - name: init-sysctl

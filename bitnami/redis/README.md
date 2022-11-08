@@ -192,6 +192,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.persistence.sizeLimit`                       | Set this to enable a size limit for `emptyDir` volumes.                                               | `""`                     |
 | `master.persistence.path`                            | The path the volume will be mounted at on Redis&reg; master containers                                | `/data`                  |
 | `master.persistence.subPath`                         | The subdirectory of the volume to mount on Redis&reg; master containers                               | `""`                     |
+| `master.persistence.subPathExpr`                     | Used to construct the subPath subdirectory of the volume to mount on Redis&reg; master containers     | `""`                     |
 | `master.persistence.storageClass`                    | Persistent Volume storage class                                                                       | `""`                     |
 | `master.persistence.accessModes`                     | Persistent Volume access modes                                                                        | `["ReadWriteOnce"]`      |
 | `master.persistence.size`                            | Persistent Volume size                                                                                | `8Gi`                    |
@@ -292,6 +293,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.persistence.sizeLimit`                       | Set this to enable a size limit for `emptyDir` volumes.                                                 | `""`                     |
 | `replica.persistence.path`                            | The path the volume will be mounted at on Redis&reg; replicas containers                                | `/data`                  |
 | `replica.persistence.subPath`                         | The subdirectory of the volume to mount on Redis&reg; replicas containers                               | `""`                     |
+| `replica.persistence.subPathExpr`                     | Used to construct the subPath subdirectory of the volume to mount on Redis&reg; replicas containers     | `""`                     |
 | `replica.persistence.storageClass`                    | Persistent Volume storage class                                                                         | `""`                     |
 | `replica.persistence.accessModes`                     | Persistent Volume access modes                                                                          | `["ReadWriteOnce"]`      |
 | `replica.persistence.size`                            | Persistent Volume size                                                                                  | `8Gi`                    |
