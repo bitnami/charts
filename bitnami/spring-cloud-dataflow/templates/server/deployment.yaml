@@ -171,7 +171,11 @@ spec:
               value: 'docker://{{ include "common.images.image" (dict "imageRoot" .Values.server.composedTaskRunner.image) }}'
             {{- range $key, $value := .Values.server.extraEnvVars }}
             - name: {{ $value.name }}
+              {{- if eq $value.name "SPRING_APPLICATION_JSON" }}
+              value: {{ $value.value | toJson | quote }}
+              {{- else }}
               value: "{{ $value.value }}"
+              {{- end }}
             {{- end }}
           {{- if or .Values.server.extraEnvVarsCM .Values.server.extraEnvVarsSecret }}
           envFrom:
