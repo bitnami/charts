@@ -68,7 +68,7 @@ preferredDuringSchedulingIgnoredDuringExecution:
 
 {{/*
 Return a hard podAffinity/podAntiAffinity definition
-{{ include "common.affinities.pods.hard" (dict "component" "FOO" "extraMatchLabels" .Values.extraMatchLabels "context" $) -}}
+{{ include "common.affinities.pods.hard" (dict "component" "FOO" "extraMatchLabels" .Values.extraMatchLabels "topologyKey" "kubernetes.io/hostname" "context" $) -}}
 */}}
 {{- define "common.affinities.pods.hard" -}}
 {{- $component := default "" .component -}}
@@ -82,7 +82,7 @@ requiredDuringSchedulingIgnoredDuringExecution:
         {{- range $key, $value := $extraMatchLabels }}
         {{ $key }}: {{ $value | quote }}
         {{- end }}
-    topologyKey: kubernetes.io/hostname
+    topologyKey: {{ .topologyKey }}
 {{- end -}}
 
 {{/*
