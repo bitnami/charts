@@ -26,7 +26,7 @@ it('allows uploading data', () => {
 
 it('allows creating a dashboard and visualisation', () => {
   cy.visit('app/visualize/');
-  cy.get('[data-test-subj="createVisualizationPromptButton"]').click();
+  cy.get('[data-test-subj="newItemButton"]').click();
   cy.get('[data-test-subj="visType-vega"]').forceClick();
   cy.get('[data-test-subj="visualizeSaveButton"]').forceClick();
   cy.fixture('visualizations').then((visualization) => {
