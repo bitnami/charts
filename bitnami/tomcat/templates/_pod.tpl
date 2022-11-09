@@ -148,9 +148,8 @@ containers:
     {{- end }}
     command:
       - java
-      - -XX:+UnlockExperimentalVMOptions
-      - -XX:+UseCGroupMemoryLimitForHeap
-      - -XX:MaxRAMFraction=1
+    args:
+      - -XX:MaxRAMPercentage=100
       - -XshowSettings:vm
       - -jar
       - jmx_prometheus_httpserver.jar
