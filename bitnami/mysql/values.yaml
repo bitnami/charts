@@ -402,6 +402,9 @@ primary:
     ## NOTE: When it's set the rest of persistence parameters are ignored
     ##
     existingClaim: ""
+    ## @param primary.persistence.subPath The name of a volume's sub path to mount for persistence
+    ##
+    subPath: ""
     ## @param primary.persistence.storageClass MySQL primary persistent volume storage Class
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -766,6 +769,13 @@ secondary:
     ## @param secondary.persistence.enabled Enable persistence on MySQL secondary replicas using a `PersistentVolumeClaim`
     ##
     enabled: true
+    ## @param secondary.persistence.existingClaim Name of an existing `PersistentVolumeClaim` for MySQL secondary replicas
+    ## NOTE: When it's set the rest of persistence parameters are ignored
+    ##
+    existingClaim: ""
+    ## @param secondary.persistence.subPath The name of a volume's sub path to mount for persistence
+    ##
+    subPath: ""
     ## @param secondary.persistence.storageClass MySQL secondary persistent volume storage Class
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
