@@ -1,0 +1,24 @@
+hub:
+  adminUser: test_user
+  password: ComplicatedPassword123!4
+  containerSecurityContext:
+    runAsUser: 1002
+  podSecurityContext:
+    fsGroup: 1002
+  serviceAccount:
+    automountServiceAccountToken: true
+  service:
+    ports:
+      http: 8082
+singleuser:
+  containerSecurityContext:
+    runAsUser: 1002
+  podSecurityContext:
+    fsGroup: 1002
+postgresql:
+  auth:
+    username: bn_vib_jupyterhub
+    database: bitnami_vib_jupyterhub
+  service:
+    ports:
+      postgresql: 5432
