@@ -75,6 +75,10 @@ commonLabels: {}
 ##
 commonAnnotations: {}
 
+## @param topologyKey Pod (anti-)affinity topology key override. Ignored if `affinity` is set.
+## uncoment to override common lib default "kubernetes.io/hostname"
+topologyKey: topology.kubernetes.io/zone
+
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -130,7 +134,7 @@ image:
 schedulerName: ""
 ## @param architecture MongoDB(&reg;) architecture (`standalone` or `replicaset`)
 ##
-architecture: standalone
+architecture: replicaset
 ## @param useStatefulSet Set to true to use a StatefulSet instead of a Deployment (only when `architecture=standalone`)
 ##
 useStatefulSet: false
@@ -441,6 +445,7 @@ podAffinityPreset: ""
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAntiAffinityPreset: soft
+
 ## Node affinity preset
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
 ##
