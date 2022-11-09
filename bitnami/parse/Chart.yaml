@@ -1,7 +1,7 @@
 annotations:
   category: DeveloperTools
 apiVersion: v2
-appVersion: 5.3.0
+appVersion: 5.3.1
 dependencies:
   - name: mongodb
     repository: https://charts.bitnami.com/bitnami
@@ -30,4 +30,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/parse
   - https://github.com/bitnami/containers/tree/main/bitnami/parse-dashboard
   - https://parse.com/
-version: 19.1.8
+version: 19.1.9
