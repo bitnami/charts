@@ -1,6 +1,4 @@
 hub:
-  adminUser: test_user
-  password: ComplicatedPassword123!4
   containerSecurityContext:
     runAsUser: 1002
   podSecurityContext:

@@ -16,6 +16,7 @@ file:
     - postgresql://{{ .Vars.postgresql.auth.username }}@jupyterhub-postgresql:{{ .Vars.postgresql.service.ports.postgresql }}/{{ .Vars.postgresql.auth.database }}
     - /uid.*{{ .Vars.singleuser.containerSecurityContext.runAsUser }}/
     - /fsGid.*{{ .Vars.singleuser.podSecurityContext.fsGroup }}/
+    - /type.*dynamic/
   /var/run/secrets/kubernetes.io/serviceaccount:
     exists: {{ .Vars.hub.serviceAccount.automountServiceAccountToken }}
     filetype: directory
