@@ -57,6 +57,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/mxnet/**'
       - 'bitnami/mysql/**'
       - 'bitnami/nats/**'
+      - 'bitnami/nginx-ingress-controller/**'
       - 'bitnami/nginx-intel/**'
       - 'bitnami/nginx/**'
       - 'bitnami/node-exporter/**'
