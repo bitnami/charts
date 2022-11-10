@@ -10,7 +10,7 @@
                     <bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
                 </box>
                 <textElement />
-                <text><![CDATA[Cherries From Barn with ID sg4y9]]></text>
+                <text><![CDATA[Cherries From Barn with ID]]></text>
             </staticText>
         </band>
     </noData>

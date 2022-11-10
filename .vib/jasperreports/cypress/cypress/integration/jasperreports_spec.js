@@ -9,7 +9,7 @@ it('allows to upload and view a new Report', () => {
     const reportFile = `cypress/fixtures/${reports.newReport.file}`;
     cy.readFile(reportFile).then((data) => {
       const regex = new RegExp(
-        `${reports.newReport.textToRandomize}[a-z0-9_]+`
+        `${reports.newReport.textToRandomize}[a-z0-9_]*`
       );
       const randomizedData = data.replace(
         regex,
