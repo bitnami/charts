@@ -7,7 +7,7 @@ The Contour Operator extends the Kubernetes API to create, configure and manage 
 [Overview of Contour Operator](https://github.com/projectcontour/contour-operator)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -155,18 +155,18 @@ This solution allows to easily deploy multiple Contour instances compared to the
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------- |
 | `image.registry`                                  | Contour Operator image registry                                                                                          | `docker.io`                |
 | `image.repository`                                | Contour Operator image repository                                                                                        | `bitnami/contour-operator` |
-| `image.tag`                                       | Contour Operator image tag (immutable tags are recommended)                                                              | `1.22.1-scratch-r2`        |
+| `image.tag`                                       | Contour Operator image tag (immutable tags are recommended)                                                              | `1.23.0-scratch-r0`        |
 | `image.digest`                                    | Contour Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag         | `""`                       |
 | `image.pullPolicy`                                | Contour Operator image pull policy                                                                                       | `IfNotPresent`             |
 | `image.pullSecrets`                               | Contour Operator image pull secrets                                                                                      | `[]`                       |
 | `contourImage.registry`                           | Contour Image registry                                                                                                   | `docker.io`                |
 | `contourImage.repository`                         | Contour Image repository                                                                                                 | `bitnami/contour`          |
-| `contourImage.tag`                                | Contour Image tag (immutable tags are recommended)                                                                       | `1.22.1-debian-11-r10`     |
+| `contourImage.tag`                                | Contour Image tag (immutable tags are recommended)                                                                       | `1.23.0-debian-11-r0`      |
 | `contourImage.digest`                             | Contour image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                  | `""`                       |
 | `contourImage.pullSecrets`                        | Contour Image pull secrets                                                                                               | `[]`                       |
 | `envoyImage.registry`                             | Envoy Image registry                                                                                                     | `docker.io`                |
 | `envoyImage.repository`                           | Envoy Image repository                                                                                                   | `bitnami/envoy`            |
-| `envoyImage.tag`                                  | Envoy Image tag (immutable tags are recommended)                                                                         | `1.23.1-debian-11-r12`     |
+| `envoyImage.tag`                                  | Envoy Image tag (immutable tags are recommended)                                                                         | `1.24.0-debian-11-r2`      |
 | `envoyImage.digest`                               | Envoy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                    | `""`                       |
 | `envoyImage.pullSecrets`                          | Envoy Image pull secrets                                                                                                 | `[]`                       |
 | `replicaCount`                                    | Number of Contour Operator replicas to deploy                                                                            | `1`                        |

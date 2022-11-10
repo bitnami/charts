@@ -26,9 +26,9 @@ Cypress.Commands.add(
   'login',
   (username = Cypress.env('username'), password = Cypress.env('password')) => {
     cy.visit('/signin');
-    cy.get('#login').type(username);
-    cy.get('#password').type(`${password}{enter}`);
+    cy.get('[data-testid="username"]').should('be.enabled').type(username);
+    cy.get('[data-testid="password"]').should('be.enabled').type(`${password}{enter}`);
     // The login process is not considered as completed until the UI is rendered
-    cy.contains('Logout');
+    cy.get('[data-testid="user-nav"]');
   }
 );
