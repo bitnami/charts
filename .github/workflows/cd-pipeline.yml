@@ -28,6 +28,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/ghost/**'
       - 'bitnami/grafana-loki/**'
       - 'bitnami/grafana-operator/**'
+      - 'bitnami/grafana-tempo/**'
       - 'bitnami/grafana/**'
       - 'bitnami/haproxy/**'
       - 'bitnami/haproxy-intel/**'
