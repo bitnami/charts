@@ -326,7 +326,7 @@ spec:
         - name: opencart-data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ .Values.persistence.existingClaim | default (printf "%s-opencart" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" ) }}
+            claimName: {{ .Values.persistence.existingClaim | default (printf "%s-opencart" (include "common.names.fullname" .) }}
           {{- else }}
           emptyDir: {}
           {{- end }}
