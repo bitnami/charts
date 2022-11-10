@@ -90,6 +90,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/tomcat/**'
       - 'bitnami/wavefront/**'
       - 'bitnami/wavefront-hpa-adapter/**'
+      - 'bitnami/wavefront-prometheus-storage-adapter/**'
       - 'bitnami/wildfly/**'
       - 'bitnami/wordpress/**'
       - 'bitnami/wordpress-intel/**'
