@@ -180,6 +180,9 @@ func CheckRequirements() {
 	if *svcName == "" {
 		panic(fmt.Sprintln("The testing service name used to serve the kuard deployment must be provided. Use the '--service-name' flag"))
 	}
+	if *svcPort == "" {
+		panic(fmt.Sprintln("The testing service port used to serve the kuard deployment must be provided. Use the '--service-port' flag"))
+	}
 }
 
 func TestIntegration(t *testing.T) {
