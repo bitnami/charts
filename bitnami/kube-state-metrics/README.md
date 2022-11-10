@@ -7,7 +7,7 @@ kube-state-metrics is a simple service that listens to the Kubernetes API server
 [Overview of Kube State Metrics](https://github.com/kubernetes/kube-state-metrics)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```bash

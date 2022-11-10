@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 1.22.1
+appVersion: 1.23.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -25,4 +25,4 @@ sources:
   - https://github.com/envoyproxy/envoy
   - https://github.com/bitnami/containers/tree/main/bitnami/contour
   - https://projectcontour.io
-version: 9.2.0
+version: 10.0.0
