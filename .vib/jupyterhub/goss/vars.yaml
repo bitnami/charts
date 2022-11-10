@@ -1,4 +1,6 @@
 hub:
+  containerPorts:
+    http: 8082
   containerSecurityContext:
     runAsUser: 1002
   podSecurityContext:
@@ -8,6 +10,11 @@ hub:
   service:
     ports:
       http: 8082
+proxy:
+  service:
+    api:
+      ports:
+        http: 8000
 singleuser:
   containerSecurityContext:
     runAsUser: 1002

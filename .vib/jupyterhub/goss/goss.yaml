@@ -1,12 +1,21 @@
 http:
   http://jupyterhub-hub:{{ .Vars.hub.service.ports.http }}/hub/health:
     status: 200
+  http://jupyterhub-proxy-api:{{ .Vars.proxy.service.api.ports.http }}:
+    status: 404
 file:
   /etc/jupyterhub:
     exists: true
     filetype: directory
     mode: "0755"
     owner: root
+  /etc/jupyterhub/jupyterhub_config.py:
+    exists: true
+    filetype: file
+    mode: "0644"
+    owner: root
+    contains:
+    - /hub_container_port.*{{ .Vars.hub.containerPorts.http }}/
   /usr/local/etc/jupyterhub/secret/values.yaml:
     exists: true
     filetype: symlink
