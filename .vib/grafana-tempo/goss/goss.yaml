@@ -1,0 +1,21 @@
+addr:
+  tcp://localhost:{{ .Vars.tempo.containerPorts.grpc }}:
+    reachable: true
+file:
+  {{ .Vars.tempo.dataDir }}:
+    exists: true
+    filetype: directory
+    mode: "2777"
+    owner: root
+  /bitnami/grafana-tempo/conf/overrides.yaml:
+    exists: true
+    filetype: file
+    mode: "0644"
+    owner: root
+command:
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+      - uid={{ .Vars.compactor.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.compactor.podSecurityContext.fsGroup }}/

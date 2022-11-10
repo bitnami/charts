@@ -1,0 +1,11 @@
+tempo:
+  dataDir: /bitnami/grafana-tempo/data
+  containerPorts:
+    grpc: 9095
+compactor:
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
