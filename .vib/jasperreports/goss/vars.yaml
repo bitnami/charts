@@ -1,5 +1,3 @@
-containerPorts:
-  http: 8080
 podSecurityContext:
   fsGroup: 1002
 containerSecurityContext:

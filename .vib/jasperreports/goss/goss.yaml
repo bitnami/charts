@@ -1,6 +1,3 @@
-http:
-  http://localhost:{{ .Vars.containerPorts.http }}:
-    status: 200
 command:
   check-user-info:
     exec: id

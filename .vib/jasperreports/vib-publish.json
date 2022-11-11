@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/jasperreports"
         },
-        "runtime_parameters": "amFzcGVycmVwb3J0c1VzZXJuYW1lOiBqYXNwZXJ2aWJhZG1pbgpqYXNwZXJyZXBvcnRzUGFzc3dvcmQ6ICJDb21wbGljYXRlZFBhc3N3b3JkMTIzITQiCmNvbnRhaW5lclBvcnRzOgogIGh0dHA6IDgwODAKcG9kU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBmc0dyb3VwOiAxMDAyCmNvbnRhaW5lclNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgcnVuQXNVc2VyOiAxMDAyCnBlcnNpc3RlbmNlOgogIGVuYWJsZWQ6IHRydWUKc2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGh0dHA6IDgwCm1hcmlhZGI6CiAgZW5hYmxlZDogdHJ1ZQogIGF1dGg6CiAgICBkYXRhYmFzZTogYml0bmFtaV90ZXN0X2phc3BlcnJlcG9ydHMKICAgIHVzZXJuYW1lOiBibl90ZXN0X2phc3BlcnJlcG9ydHMKICAgIHBhc3N3b3JkOiBiaXRuYW1pX3Rlc3RfcGFzc3dvcmQ=",
+        "runtime_parameters": "amFzcGVycmVwb3J0c1VzZXJuYW1lOiBqYXNwZXJ2aWJhZG1pbgpqYXNwZXJyZXBvcnRzUGFzc3dvcmQ6ICJDb21wbGljYXRlZFBhc3N3b3JkMTIzITQiCnBvZFNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgZnNHcm91cDogMTAwMgpjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIHJ1bkFzVXNlcjogMTAwMgpwZXJzaXN0ZW5jZToKICBlbmFibGVkOiB0cnVlCnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCiAgcG9ydHM6CiAgICBodHRwOiA4MAptYXJpYWRiOgogIGVuYWJsZWQ6IHRydWUKICBhdXRoOgogICAgZGF0YWJhc2U6IGJpdG5hbWlfdGVzdF9qYXNwZXJyZXBvcnRzCiAgICB1c2VybmFtZTogYm5fdGVzdF9qYXNwZXJyZXBvcnRzCiAgICBwYXNzd29yZDogYml0bmFtaV90ZXN0X3Bhc3N3b3Jk",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
