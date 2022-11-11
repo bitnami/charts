@@ -324,6 +324,18 @@ schedulerName: ""
 updateStrategy:
   type: RollingUpdate
   rollingUpdate: {}
+
+## Solr Pod Disruption Budget configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+## @param pdb.create Enable a Pod Disruption Budget creation
+## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+##
+pdb:
+  create: false
+  minAvailable: 1
+  maxUnavailable: ""
+
 ## @param extraVolumes Optionally specify extra list of additional volumes for the Solr pod(s)
 ##
 extraVolumes: []
