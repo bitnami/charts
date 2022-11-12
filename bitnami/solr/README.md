@@ -162,6 +162,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `schedulerName`                         | Kubernetes pod scheduler registry                                                                                        | `""`            |
 | `updateStrategy.type`                   | Solr statefulset strategy type                                                                                           | `RollingUpdate` |
 | `updateStrategy.rollingUpdate`          | Solr statefulset rolling update configuration parameters                                                                 | `{}`            |
+| `pdb.create`                            | Enable a Pod Disruption Budget creation                                                                                  | `false`         |
+| `pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled                                                           | `1`             |
+| `pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable                                                           | `""`            |
 | `extraVolumes`                          | Optionally specify extra list of additional volumes for the Solr pod(s)                                                  | `[]`            |
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Solr container(s)                                       | `[]`            |
 | `initContainers`                        | Add init containers to the Solr pod(s)                                                                                   | `[]`            |

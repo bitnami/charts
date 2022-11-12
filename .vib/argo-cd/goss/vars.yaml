@@ -1,0 +1,21 @@
+server:
+  secret:
+    argocdServerAdminPassword: ComplicatedPassword123!4
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 1002
+    capabilities:
+      drop:
+      - all
+  service:
+    ports:
+      http: 81
+  serviceAccount:
+    automountServiceAccountToken: true
+repoServer:
+  service:
+    port: 8080
+controller:
+  service:
+    port: 8083

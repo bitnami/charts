@@ -15,6 +15,38 @@
           "action_id": "helm-lint"
         }
       ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/contour-operator"
+        },
+        "runtime_parameters": "ZXh0cmFEZXBsb3k6Ci0gYXBpVmVyc2lvbjogb3BlcmF0b3IucHJvamVjdGNvbnRvdXIuaW8vdjFhbHBoYTEKICBraW5kOiBDb250b3VyCiAgbWV0YWRhdGE6CiAgICBuYW1lOiBjb250b3VyLWNyZC12aWIKICBzcGVjOiB7fQotIGFwaVZlcnNpb246IGFwcHMvdjEKICBraW5kOiBEZXBsb3ltZW50CiAgbWV0YWRhdGE6CiAgICBsYWJlbHM6CiAgICAgIGFwcDoga3VhcmQKICAgIG5hbWU6IGt1YXJkCiAgc3BlYzoKICAgIHJlcGxpY2FzOiAxCiAgICBzZWxlY3RvcjoKICAgICAgbWF0Y2hMYWJlbHM6CiAgICAgICAgYXBwOiBrdWFyZAogICAgdGVtcGxhdGU6CiAgICAgIG1ldGFkYXRhOgogICAgICAgIGxhYmVsczoKICAgICAgICAgIGFwcDoga3VhcmQKICAgICAgc3BlYzoKICAgICAgICBjb250YWluZXJzOgogICAgICAgIC0gaW1hZ2U6IGdjci5pby9rdWFyLWRlbW8va3VhcmQtYW1kNjQ6MQogICAgICAgICAgbmFtZToga3VhcmQKLSBhcGlWZXJzaW9uOiB2MQogIGtpbmQ6IFNlcnZpY2UKICBtZXRhZGF0YToKICAgIGxhYmVsczoKICAgICAgYXBwOiBrdWFyZAogICAgbmFtZToga3VhcmQKICBzcGVjOgogICAgcG9ydHM6CiAgICAtIHBvcnQ6IDgwCiAgICAgIHByb3RvY29sOiBUQ1AKICAgICAgdGFyZ2V0UG9ydDogODA4MAogICAgc2VsZWN0b3I6CiAgICAgIGFwcDoga3VhcmQKICAgIHNlc3Npb25BZmZpbml0eTogTm9uZQogICAgdHlwZTogQ2x1c3RlcklQCi0gYXBpVmVyc2lvbjogbmV0d29ya2luZy5rOHMuaW8vdjEKICBraW5kOiBJbmdyZXNzCiAgbWV0YWRhdGE6CiAgICBuYW1lOiBjb250b3VyLW9wLXZpYi10ZXN0CiAgICBsYWJlbHM6CiAgICAgIGFwcDoga3VhcmQKICBzcGVjOgogICAgZGVmYXVsdEJhY2tlbmQ6CiAgICAgIHNlcnZpY2U6CiAgICAgICAgbmFtZToga3VhcmQKICAgICAgICBwb3J0OgogICAgICAgICAgbnVtYmVyOiA4MA==",
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/contour-operator/ginkgo"
+
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "contour-crd-name": "contour-crd-vib",
+              "ingress-name": "contour-op-vib-test"
+            }
+          }
+        }
+      ]
     }
   }
 }

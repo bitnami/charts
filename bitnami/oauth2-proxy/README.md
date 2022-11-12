@@ -7,7 +7,7 @@ A reverse proxy and static file server that provides authentication using Provid
 [Overview of OAuth2 Proxy](https://github.com/oauth2-proxy/oauth2-proxy)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -117,7 +117,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------------------------------------------------------------ | ---------------------- |
 | `image.registry`    | OAuth2 Proxy image registry                                                                                  | `docker.io`            |
 | `image.repository`  | OAuth2 Proxy image repository                                                                                | `bitnami/oauth2-proxy` |
-| `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended)                                                      | `7.3.0-debian-11-r23`  |
+| `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended)                                                      | `7.4.0-debian-11-r1`   |
 | `image.digest`      | OAuth2 Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `image.pullPolicy`  | OAuth2 Proxy image pull policy                                                                               | `IfNotPresent`         |
 | `image.pullSecrets` | OAuth2 Proxy image pull secrets                                                                              | `[]`                   |
@@ -125,25 +125,28 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### OAuth2 Proxy configuration parameters
 
-| Name                                                   | Description                                         | Value              |
-| ------------------------------------------------------ | --------------------------------------------------- | ------------------ |
-| `configuration.clientID`                               | OAuth client ID                                     | `XXXXXXX`          |
-| `configuration.clientSecret`                           | OAuth client secret                                 | `XXXXXXXX`         |
-| `configuration.cookieSecret`                           | OAuth cookie secret                                 | `XXXXXXXXXXXXXXXX` |
-| `configuration.existingSecret`                         | Secret with the client ID, secret and cookie secret | `""`               |
-| `configuration.google.enabled`                         | Enable Google service account                       | `false`            |
-| `configuration.google.adminEmail`                      | Google admin email                                  | `""`               |
-| `configuration.google.googleGroup`                     | Restrict logins to members of this google group     | `""`               |
-| `configuration.google.serviceAccountJson`              | Google Service account JSON                         | `""`               |
-| `configuration.google.existingSecret`                  | Existing secret containing Google Service Account   | `""`               |
-| `configuration.content`                                | Default configuration                               | `""`               |
-| `configuration.existingConfigmap`                      | Configmap with the OAuth2 Proxy configuration       | `""`               |
-| `configuration.authenticatedEmailsFile.enabled`        | Enable authenticated emails file                    | `false`            |
-| `configuration.authenticatedEmailsFile.content`        | Restricted access list (one email per line)         | `""`               |
-| `configuration.authenticatedEmailsFile.existingSecret` | Secret with the authenticated emails file           | `""`               |
-| `configuration.htpasswdFile.enabled`                   | Enable htpasswd file                                | `false`            |
-| `configuration.htpasswdFile.existingSecret`            | Existing secret for htpasswd file                   | `""`               |
-| `configuration.htpasswdFile.content`                   | htpasswd file entries (one row per user)            | `""`               |
+| Name                                                   | Description                                                                                              | Value              |
+| ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------- | ------------------ |
+| `configuration.clientID`                               | OAuth client ID                                                                                          | `XXXXXXX`          |
+| `configuration.clientSecret`                           | OAuth client secret                                                                                      | `XXXXXXXX`         |
+| `configuration.cookieSecret`                           | OAuth cookie secret                                                                                      | `XXXXXXXXXXXXXXXX` |
+| `configuration.existingSecret`                         | Secret with the client ID, secret and cookie secret                                                      | `""`               |
+| `configuration.google.enabled`                         | Enable Google service account                                                                            | `false`            |
+| `configuration.google.adminEmail`                      | Google admin email                                                                                       | `""`               |
+| `configuration.google.googleGroup`                     | Restrict logins to members of this google group                                                          | `""`               |
+| `configuration.google.serviceAccountJson`              | Google Service account JSON                                                                              | `""`               |
+| `configuration.google.existingSecret`                  | Existing secret containing Google Service Account                                                        | `""`               |
+| `configuration.content`                                | Default configuration                                                                                    | `""`               |
+| `configuration.existingConfigmap`                      | Configmap with the OAuth2 Proxy configuration                                                            | `""`               |
+| `configuration.authenticatedEmailsFile.enabled`        | Enable authenticated emails file                                                                         | `false`            |
+| `configuration.authenticatedEmailsFile.content`        | Restricted access list (one email per line)                                                              | `""`               |
+| `configuration.authenticatedEmailsFile.existingSecret` | Secret with the authenticated emails file                                                                | `""`               |
+| `configuration.htpasswdFile.enabled`                   | Enable htpasswd file                                                                                     | `false`            |
+| `configuration.htpasswdFile.existingSecret`            | Existing secret for htpasswd file                                                                        | `""`               |
+| `configuration.htpasswdFile.content`                   | htpasswd file entries (one row per user)                                                                 | `""`               |
+| `configuration.oidcIssuerUrl`                          | OpenID Connect issuer URL                                                                                | `""`               |
+| `configuration.redirectUrl`                            | OAuth Redirect URL                                                                                       | `""`               |
+| `configuration.whiteList`                              | Allowed domains for redirection after authentication. Prefix domain with a . or a *. to allow subdomains | `""`               |
 
 
 ### OAuth2 Proxy deployment parameters

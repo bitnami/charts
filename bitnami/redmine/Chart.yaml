@@ -6,7 +6,7 @@ dependencies:
   - condition: postgresql.enabled
     name: postgresql
     repository: https://charts.bitnami.com/bitnami
-    version: 11.x.x
+    version: 12.x.x
   - condition: mariadb.enabled
     name: mariadb
     repository: https://charts.bitnami.com/bitnami
@@ -36,4 +36,4 @@ name: redmine
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/redmine
   - https://www.redmine.org/
-version: 20.3.8
+version: 21.0.1

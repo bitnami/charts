@@ -172,7 +172,7 @@ spec:
             - name: REDIS_TLS_ENABLED
               value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
             {{- if .Values.tls.enabled }}
-            - name: REDIS_TLS_PORT
+            - name: REDIS_TLS_PORT_NUMBER
               value: {{ .Values.redis.containerPorts.redis | quote }}
             - name:  REDIS_TLS_AUTH_CLIENTS
               value: {{ ternary "yes" "no" .Values.tls.authClients | quote }}
@@ -187,7 +187,7 @@ spec:
               value: {{ template "redis-cluster.tlsDHParams" . }}
             {{- end }}
             {{- else }}
-            - name: REDIS_PORT
+            - name: REDIS_PORT_NUMBER
               value: {{ .Values.redis.containerPorts.redis | quote }}
             {{- end }}
             {{- if .Values.redis.extraEnvVars }}

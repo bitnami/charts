@@ -1,12 +1,12 @@
 annotations:
   category: DeveloperTools
 apiVersion: v2
-appVersion: 9.7.0
+appVersion: 9.7.1
 dependencies:
   - condition: postgresql.enabled
     name: postgresql
     repository: https://charts.bitnami.com/bitnami
-    version: 11.x.x
+    version: 12.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -28,4 +28,4 @@ name: sonarqube
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/sonarqube
   - https://github.com/SonarSource/sonarqube
-version: 1.6.4
+version: 2.0.1

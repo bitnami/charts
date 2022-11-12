@@ -1,7 +1,7 @@
 annotations:
   category: CertificateAuthority
 apiVersion: v2
-appVersion: 7.9.0-2
+appVersion: 7.10.0-2
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
@@ -30,4 +30,4 @@ name: ejbca
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/ejbca
   - https://www.ejbca.org/
-version: 6.3.6
+version: 6.3.8

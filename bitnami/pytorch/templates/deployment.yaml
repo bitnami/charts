@@ -209,7 +209,7 @@ spec:
         {{- else if .Files.Glob "files/*" }}
         - name: local-files
           configMap:
-            name: {{ printf "%s-files" (include "common.names.fullname" .) }}
+            name: {{ printf "%s-files" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
         {{- else if .Values.cloneFilesFromGit.enabled }}
         - name: git-cloned-files
           emptyDir: {}

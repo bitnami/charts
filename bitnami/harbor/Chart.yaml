@@ -10,7 +10,7 @@ dependencies:
   - condition: postgresql.enabled
     name: postgresql
     repository: https://charts.bitnami.com/bitnami
-    version: 11.x.x
+    version: 12.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -36,4 +36,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/harbor-registry
   - https://github.com/bitnami/containers/tree/main/bitnami/harbor-registryctl
   - https://goharbor.io/
-version: 15.2.5
+version: 16.0.0

@@ -666,6 +666,10 @@ helm upgrade $RELEASE_NAME my-repo/kubeapps
 
 If you find issues upgrading Kubeapps, check the [troubleshooting](#error-while-upgrading-the-chart) section.
 
+### To 12.0.0
+
+This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1200) you can find more information about the changes introduced in that version.
+
 ## Uninstalling the Chart
 
 To uninstall/delete the `kubeapps` deployment:
