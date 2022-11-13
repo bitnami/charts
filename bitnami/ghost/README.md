@@ -78,15 +78,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Ghost Image parameters
 
-| Name                | Description                                                                                           | Value                 |
-| ------------------- | ----------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`    | Ghost image registry                                                                                  | `docker.io`           |
-| `image.repository`  | Ghost image repository                                                                                | `bitnami/ghost`       |
-| `image.tag`         | Ghost image tag (immutable tags are recommended)                                                      | `5.22.9-debian-11-r1` |
-| `image.digest`      | Ghost image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `image.pullPolicy`  | Ghost image pull policy                                                                               | `IfNotPresent`        |
-| `image.pullSecrets` | Ghost image pull secrets                                                                              | `[]`                  |
-| `image.debug`       | Enable image debug mode                                                                               | `false`               |
+| Name                | Description                                                                                           | Value                  |
+| ------------------- | ----------------------------------------------------------------------------------------------------- | ---------------------- |
+| `image.registry`    | Ghost image registry                                                                                  | `docker.io`            |
+| `image.repository`  | Ghost image repository                                                                                | `bitnami/ghost`        |
+| `image.tag`         | Ghost image tag (immutable tags are recommended)                                                      | `5.22.10-debian-11-r0` |
+| `image.digest`      | Ghost image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `image.pullPolicy`  | Ghost image pull policy                                                                               | `IfNotPresent`         |
+| `image.pullSecrets` | Ghost image pull secrets                                                                              | `[]`                   |
+| `image.debug`       | Enable image debug mode                                                                               | `false`                |
 
 
 ### Ghost Configuration parameters
