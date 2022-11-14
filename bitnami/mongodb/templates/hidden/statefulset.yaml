@@ -35,6 +35,9 @@ spec:
         {{- if .Values.hidden.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.hidden.podLabels "context" $) | nindent 8 }}
         {{- end }}
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- end }}
       {{- if or (include "mongodb.hidden.createConfigmap" .) .Values.hidden.podAnnotations }}
       annotations:
         {{- if (include "mongodb.hidden.createConfigmap" .) }}
