@@ -432,7 +432,7 @@ ingress:
   ##
   annotations: {}
   ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
-  ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+  ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname | trunc 63 | trimSuffix "-" }}`
   ## You can:
   ##   - Use the `ingress.secrets` parameter to create this TLS secret
   ##   - Rely on cert-manager to create it by setting the corresponding annotations
@@ -533,7 +533,7 @@ mgmtIngress:
   ##
   annotations: {}
   ## @param mgmtIngress.tls Enable TLS configuration for the hostname defined at `mgmtIngress.hostname` parameter
-  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.mgmtIngress.hostname }}
+  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.mgmtIngress.hostname | trunc 63 | trimSuffix "-" }}
   ## You can use the mgmtIngress.secrets parameter to create this TLS secret, relay on cert-manager to create it, or
   ## let the chart create self-signed certificates for you
   ##

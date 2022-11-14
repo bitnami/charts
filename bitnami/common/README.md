@@ -43,10 +43,11 @@ The following table lists the helpers available in the library which are scoped 
 
 | Helper identifier             | Description                                          | Expected Input                                 |
 |-------------------------------|------------------------------------------------------|------------------------------------------------|
-| `common.affinities.nodes.soft` | Return a soft nodeAffinity definition                | `dict "key" "FOO" "values" (list "BAR" "BAZ")` |
-| `common.affinities.nodes.hard` | Return a hard nodeAffinity definition                | `dict "key" "FOO" "values" (list "BAR" "BAZ")` |
-| `common.affinities.pods.soft`  | Return a soft podAffinity/podAntiAffinity definition | `dict "component" "FOO" "context" $`           |
-| `common.affinities.pods.hard`  | Return a hard podAffinity/podAntiAffinity definition | `dict "component" "FOO" "context" $`           |
+| `common.affinities.nodes.soft`  | Return a soft nodeAffinity definition                 | `dict "key" "FOO" "values" (list "BAR" "BAZ")`  |
+| `common.affinities.nodes.hard`  | Return a hard nodeAffinity definition                 | `dict "key" "FOO" "values" (list "BAR" "BAZ")`  |
+| `common.affinities.pods.soft`   | Return a soft podAffinity/podAntiAffinity definition  | `dict "component" "FOO" "context" $`            |
+| `common.affinities.pods.hard`   | Return a hard podAffinity/podAntiAffinity definition  | `dict "component" "FOO" "context" $`            |
+| `common.affinities.topologyKey` | Return a topologyKey definition                       | `dict "topologyKey" "FOO"`                      |
 
 ### Capabilities
 

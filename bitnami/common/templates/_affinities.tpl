@@ -46,8 +46,17 @@ Return a nodeAffinity definition
 {{- end -}}
 
 {{/*
+Return a topologyKey definition
+{{ include "common.affinities.topologyKey" (dict "topologyKey" "BAR") -}}
+*/}}
+{{- define "common.affinities.topologyKey" -}}
+{{- $topologyKey := default "kubernetes.io/hostname" .topologyKey -}}
+{{- $topologyKey | indent 1 -}}
+{{- end -}}
+
+{{/*
 Return a soft podAffinity/podAntiAffinity definition
-{{ include "common.affinities.pods.soft" (dict "component" "FOO" "extraMatchLabels" .Values.extraMatchLabels "context" $) -}}
+{{ include "common.affinities.pods.soft" (dict "component" "FOO" "extraMatchLabels" .Values.extraMatchLabels "topologyKey" "BAR" "context" $) -}}
 */}}
 {{- define "common.affinities.pods.soft" -}}
 {{- $component := default "" .component -}}
@@ -62,13 +71,13 @@ preferredDuringSchedulingIgnoredDuringExecution:
           {{- range $key, $value := $extraMatchLabels }}
           {{ $key }}: {{ $value | quote }}
           {{- end }}
-      topologyKey: kubernetes.io/hostname
+      topologyKey:{{ include "common.affinities.topologyKey" .topologyKey }}
     weight: 1
 {{- end -}}
 
 {{/*
 Return a hard podAffinity/podAntiAffinity definition
-{{ include "common.affinities.pods.hard" (dict "component" "FOO" "extraMatchLabels" .Values.extraMatchLabels "context" $) -}}
+{{ include "common.affinities.pods.hard" (dict "component" "FOO" "extraMatchLabels" .Values.extraMatchLabels "topologyKey" "BAR" "context" $) -}}
 */}}
 {{- define "common.affinities.pods.hard" -}}
 {{- $component := default "" .component -}}
@@ -82,7 +91,7 @@ requiredDuringSchedulingIgnoredDuringExecution:
         {{- range $key, $value := $extraMatchLabels }}
         {{ $key }}: {{ $value | quote }}
         {{- end }}
-    topologyKey: kubernetes.io/hostname
+    topologyKey:{{ include "common.affinities.topologyKey" .topologyKey }}
 {{- end -}}
 
 {{/*
