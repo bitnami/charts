@@ -55,6 +55,7 @@ Compile all warnings into a single message, and call fail.
 {{- define "nats.validateValues" -}}
 {{- $messages := list -}}
 {{- $messages := append $messages (include "nats.validateValues.resourceType" .) -}}
+{{- $messages := append $messages (include "nats.validateValues.jetstream" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -69,5 +70,14 @@ Compile all warnings into a single message, and call fail.
 nats: resourceType
     Invalid resourceType selected. Valid values are "deployment" and
     "statefulset". Please set a valid mode (--set resourceType="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of NATS - enabling JetStream requires persistence & statefulsets */}}
+{{- define "nats.validateValues.jetstream" -}}
+{{- if and .Values.jetstream.enabled (or (ne .Values.resourceType "statefulset") (not .Values.persistence.enabled)) -}}
+nats: jetstream
+    Invalid configuration selected. Enabling jetstream requires enabling persistence
+    and using a "statefulset" (--set persistence.enabled=true,resourceType="statefulset")
 {{- end -}}
 {{- end -}}
