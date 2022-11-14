@@ -125,10 +125,11 @@ data:
         proxy_pass {{ include "kubeapps.kubeappsapis.proxy_pass" . -}};
       }
 
+    {{- if .Values.dashboard.enabled }}
       location / {
         # Add the Authorization header if exists
         add_header Authorization $http_authorization;
-
         proxy_pass {{ printf "http://%s:%d" (include "kubeapps.dashboard.fullname" .) (int .Values.dashboard.service.ports.http) }};
       }
+    {{- end }}
     }
