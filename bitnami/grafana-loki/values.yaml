@@ -96,6 +96,9 @@ loki:
     server:
       http_listen_port: {{ .Values.loki.containerPorts.http }}
 
+    common:
+      compactor_address: {{ printf "%s:%s" (include "grafana-loki.compactor.fullname" .) .Values.compactor.service.ports.http }}
+
     distributor:
       ring:
         kvstore:
@@ -198,8 +201,8 @@ loki:
             timeout: 500ms
             update_interval: 1m
           {{- else }}
-          enable_fifocache: true
-          fifocache:
+          embedded-cache:
+            enabled: true
             max_size_items: 1024
             validity: 24h
           {{- end }}
@@ -268,7 +271,7 @@ loki:
 compactor:
   ## @param compactor.enabled Enable Compactor deployment
   ##
-  enabled: false
+  enabled: true
   ## @param compactor.extraEnvVars Array with extra environment variables to add to compactor nodes
   ## e.g:
   ## extraEnvVars:
