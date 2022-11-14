@@ -105,7 +105,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                              | Description                                                                                         | Value               |
 | ------------------------------------------------- | --------------------------------------------------------------------------------------------------- | ------------------- |
-| `compactor.enabled`                               | Enable Compactor deployment                                                                         | `false`             |
+| `compactor.enabled`                               | Enable Compactor deployment                                                                         | `true`              |
 | `compactor.extraEnvVars`                          | Array with extra environment variables to add to compactor nodes                                    | `[]`                |
 | `compactor.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for compactor nodes                            | `""`                |
 | `compactor.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for compactor nodes                               | `""`                |
