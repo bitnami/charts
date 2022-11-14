@@ -132,6 +132,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.podManagementPolicy`                   | podManagementPolicy to manage scaling operation of MariaDB primary pods                                           | `""`                |
 | `primary.topologySpreadConstraints`             | Topology Spread Constraints for MariaDB primary pods assignment                                                   | `[]`                |
 | `primary.priorityClassName`                     | Priority class for MariaDB primary pods assignment                                                                | `""`                |
+| `primary.runtimeClassName`                      | Runtime class for MariaDB primary pods                                                                            | `""`                |
 | `primary.podSecurityContext.enabled`            | Enable security context for MariaDB primary pods                                                                  | `true`              |
 | `primary.podSecurityContext.fsGroup`            | Group ID for the mounted volumes' filesystem                                                                      | `1001`              |
 | `primary.containerSecurityContext.enabled`      | MariaDB primary container securityContext                                                                         | `true`              |
@@ -221,6 +222,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.tolerations`                           | Tolerations for MariaDB secondary pods assignment                                                                     | `[]`                |
 | `secondary.topologySpreadConstraints`             | Topology Spread Constraints for MariaDB secondary pods assignment                                                     | `[]`                |
 | `secondary.priorityClassName`                     | Priority class for MariaDB secondary pods assignment                                                                  | `""`                |
+| `secondary.runtimeClassName`                      | Runtime class for MariaDB secondary pods assignment                                                                   | `""`                |
 | `secondary.schedulerName`                         | Name of the k8s scheduler (other than default)                                                                        | `""`                |
 | `secondary.podManagementPolicy`                   | podManagementPolicy to manage scaling operation of MariaDB secondary pods                                             | `""`                |
 | `secondary.podSecurityContext.enabled`            | Enable security context for MariaDB secondary pods                                                                    | `true`              |
