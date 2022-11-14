@@ -26,6 +26,9 @@ spec:
   {{- if and (eq .Values.service.type "LoadBalancer") .Values.service.loadBalancerIP }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}
+  {{- if and (eq .Values.service.type "LoadBalancer") .Values.service.loadBalancerClass }}
+  loadBalancerClass: {{ .Values.service.loadBalancerClass }}
+  {{- end }}
   {{- if .Values.service.externalIPs }}
   externalIPs: {{ toYaml .Values.service.externalIPs | nindent 4 }}
   {{- end }}

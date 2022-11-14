@@ -107,7 +107,7 @@ spec:
             - --zap-encoder={{ .Values.operator.zapEncoder }}
             {{- end }}
             {{- if .Values.operator.zapLevel }}
-            - --zap-level=True
+            - --zap-log-level={{ .Values.operator.zapLevel }}
             {{- end }}
             {{- if .Values.operator.zapSample }}
             - --zap-sample={{ .Values.operator.zapSample }}

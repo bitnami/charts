@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                      | Apache MXNet (Incubating) image registry                                                                                  | `docker.io`           |
 | `image.repository`                    | Apache MXNet (Incubating) image repository                                                                                | `bitnami/mxnet`       |
-| `image.tag`                           | Apache MXNet (Incubating) image tag (immutable tags are recommended)                                                      | `1.9.1-debian-11-r46` |
+| `image.tag`                           | Apache MXNet (Incubating) image tag (immutable tags are recommended)                                                      | `1.9.1-debian-11-r50` |
 | `image.digest`                        | Apache MXNet (Incubating) image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`                    | Apache MXNet (Incubating) image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                          | `[]`                  |
@@ -377,14 +377,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `git.registry`                         | Git image registry                                                                                                                | `docker.io`             |
 | `git.repository`                       | Git image repository                                                                                                              | `bitnami/git`           |
-| `git.tag`                              | Git image tag (immutable tags are recommended)                                                                                    | `2.38.0-debian-11-r2`   |
+| `git.tag`                              | Git image tag (immutable tags are recommended)                                                                                    | `2.38.1-debian-11-r0`   |
 | `git.digest`                           | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                               | `""`                    |
 | `git.pullPolicy`                       | Git image pull policy                                                                                                             | `IfNotPresent`          |
 | `git.pullSecrets`                      | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory                                                       | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r40`      |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r43`      |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
@@ -544,7 +544,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
@@ -585,7 +585,7 @@ Some parameters disappeared in favor of new ones:
 - `serverExtraEnvVars` and `serverCount` -> deprecated in favor of `server.extraEnvVars` and `server.replicaCount`, respectively.
 - `workerExtraEnvVars` and `workerCount` -> deprecated in favor of `worker.extraEnvVars` and `worker.replicaCount`, respectively.
 
-This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### To 2.0.0
 

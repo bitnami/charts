@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redmine
-  tag: 5.0.3-debian-11-r0
+  tag: 5.0.3-debian-11-r10
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -636,7 +636,7 @@ autoscaling:
 ##
 databaseType: mariadb
 ## MariaDB chart configuration
-## ref: https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
+## ref: https://github.com/bitnami/charts/blob/main/bitnami/mariadb/values.yaml
 ## @param mariadb.enabled Switch to enable or disable the MariaDB helm chart
 ## @param mariadb.auth.rootPassword MariaDB root password
 ## @param mariadb.auth.username MariaDB username
@@ -653,7 +653,7 @@ mariadb:
     existingSecret: ""
   architecture: standalone
 ## PostgreSQL chart configuration
-## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
+## ref: https://github.com/bitnami/charts/blob/main/bitnami/postgresql/values.yaml
 ## @param postgresql.enabled Switch to enable or disable the PostgreSQL helm chart
 ## @param postgresql.auth.username Name for a custom user to create
 ## @param postgresql.auth.password Password for the custom user to create
@@ -942,7 +942,7 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r37
+    tag: 11-debian-11-r47
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

@@ -2,7 +2,7 @@
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ printf "%s:controller" (include "common.names.fullname" .) }}
+  name: {{ printf "%s:controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
@@ -38,7 +38,7 @@ rules:
   - apiGroups:
       - policy
     resourceNames:
-      - {{ printf "%s-controller" (include "common.names.fullname" .) }}
+      - {{ printf "%s-controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
     resources:
       - podsecuritypolicies
     verbs:
@@ -72,7 +72,7 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
-  name: {{ printf "%s-controller" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
@@ -105,7 +105,7 @@ rules:
     resources:
       - deployments
     resourceNames:
-      - {{ printf "%s-controller" (include "common.names.fullname" .) }}
+      - {{ printf "%s-controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
     verbs:
       - get
   - apiGroups:
@@ -178,7 +178,7 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
-  name: {{ printf "%s:controller" (include "common.names.fullname" .) }}
+  name: {{ printf "%s:controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
@@ -195,12 +195,12 @@ subjects:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ printf "%s:controller" (include "common.names.fullname" .) }}
+  name: {{ printf "%s:controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
-  name: {{ printf "%s-controller" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
@@ -217,5 +217,5 @@ subjects:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ printf "%s-controller" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
 {{- end -}}

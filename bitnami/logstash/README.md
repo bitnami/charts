@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `image.registry`                              | Logstash image registry                                                                                                           | `docker.io`              |
 | `image.repository`                            | Logstash image repository                                                                                                         | `bitnami/logstash`       |
-| `image.tag`                                   | Logstash image tag (immutable tags are recommended)                                                                               | `8.4.3-debian-11-r2`     |
+| `image.tag`                                   | Logstash image tag (immutable tags are recommended)                                                                               | `8.5.0-debian-11-r0`     |
 | `image.digest`                                | Logstash image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                          | `""`                     |
 | `image.pullPolicy`                            | Logstash image pull policy                                                                                                        | `IfNotPresent`           |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                  | `[]`                     |
@@ -177,7 +177,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.securityContext.runAsUser` | User ID for the volumePermissions init container                                                                                  | `0`                      |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                  | `docker.io`              |
 | `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell`  |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r41`       |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r47`       |
 | `volumePermissions.image.digest`              | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`           |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                  | `[]`                     |
@@ -275,7 +275,7 @@ extraEnvVarsCM: logstash-configmap
 
 This chart allows you to set custom Pod affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Persistence
 
@@ -318,7 +318,7 @@ This version drops support of including files in the `files/` folder, as it was 
 
 ### To 1.2.0
 
-This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### To 1.0.0
 

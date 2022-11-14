@@ -1,7 +1,7 @@
 annotations:
   category: E-Commerce
 apiVersion: v2
-appVersion: 2.4.5
+appVersion: 2.4.5-p1
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
@@ -20,7 +20,7 @@ dependencies:
     version: 2.x.x
 description: Magento is a powerful open source e-commerce platform. With easy customizations and rich features, it allows retailers to grow their online businesses in a cost-effective way.
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/magento
+home: https://github.com/bitnami/charts/tree/main/bitnami/magento
 icon: https://bitnami.com/assets/stacks/magento/img/magento-stack-220x234.png
 keywords:
   - magento
@@ -35,4 +35,4 @@ name: magento
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/magento
   - https://magento.com/
-version: 21.1.6
+version: 21.1.9

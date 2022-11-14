@@ -103,3 +103,14 @@ memcached: containerSecurityContext.readOnlyRootFilesystem
     Please disable it (--set containerSecurityContext.readOnlyRootFilesystem=false)
 {{- end -}}
 {{- end -}}
+
+{{/*
+Get the password secret.
+*/}}
+{{- define "memcached.secretPasswordName" -}}
+    {{- if .Values.auth.existingPasswordSecret -}}
+        {{- printf "%s" (tpl .Values.auth.existingPasswordSecret $) -}}
+    {{- else -}}
+        {{- printf "%s" (include "common.names.fullname" .) -}}
+    {{- end -}}
+{{- end -}}

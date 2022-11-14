@@ -7,7 +7,7 @@ Apache Solr is an extremely powerful, open source enterprise search platform bui
 [Overview of Apache Solr](http://lucene.apache.org/solr/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -84,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------- | ---------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`                 | Solr image registry                                                                                  | `docker.io`             |
 | `image.repository`               | Solr image repository                                                                                | `bitnami/solr`          |
-| `image.tag`                      | Solr image tag (immutable tags are recommended)                                                      | `9.0.0-debian-11-r40`   |
+| `image.tag`                      | Solr image tag (immutable tags are recommended)                                                      | `9.0.0-debian-11-r48`   |
 | `image.digest`                   | Solr image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `image.pullPolicy`               | image pull policy                                                                                    | `IfNotPresent`          |
 | `image.pullSecrets`              | Specify docker-registry secret names as an array                                                     | `[]`                    |
@@ -162,6 +162,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `schedulerName`                         | Kubernetes pod scheduler registry                                                                                        | `""`            |
 | `updateStrategy.type`                   | Solr statefulset strategy type                                                                                           | `RollingUpdate` |
 | `updateStrategy.rollingUpdate`          | Solr statefulset rolling update configuration parameters                                                                 | `{}`            |
+| `pdb.create`                            | Enable a Pod Disruption Budget creation                                                                                  | `false`         |
+| `pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled                                                           | `1`             |
+| `pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable                                                           | `""`            |
 | `extraVolumes`                          | Optionally specify extra list of additional volumes for the Solr pod(s)                                                  | `[]`            |
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Solr container(s)                                       | `[]`            |
 | `initContainers`                        | Add init containers to the Solr pod(s)                                                                                   | `[]`            |
@@ -220,7 +223,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r37`      |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r44`      |
 | `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`                    |
@@ -402,7 +405,7 @@ Refer to the chart documentation for more information on, and examples of, confi
 
 This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Persistence
 
@@ -431,11 +434,11 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 6.0.0
 
-This major updates the Zookeeper subchart to it newest major, 10.0.0. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper#to-1000).
+This major updates the Zookeeper subchart to it newest major, 10.0.0. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/zookeeper#to-1000).
 
 ### To 4.0.0
 
-This major updates the Zookeeper subchart to it newest major, 9.0.0. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper#to-900).
+This major updates the Zookeeper subchart to it newest major, 9.0.0. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/zookeeper#to-900).
 
 ### To 3.0.0
 
@@ -477,7 +480,7 @@ See [PR#7114](https://github.com/bitnami/charts/pull/7114) for more info about t
 
 ### To 1.0.0
 
-This major updates the Zookeeper subchart to it newest major, 7.0.0, which renames all TLS-related settings. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper#to-700).
+This major updates the Zookeeper subchart to it newest major, 7.0.0, which renames all TLS-related settings. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/zookeeper#to-700).
 
 ## License
 

@@ -19,7 +19,7 @@ $ helm install my-release my-repo/jasperreports
 
 This chart bootstraps a [JasperReports](https://github.com/bitnami/containers/tree/main/bitnami/jasperreports) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which bootstraps a MariaDB deployment required by the JasperReports application.
+It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/main/bitnami/mariadb) which bootstraps a MariaDB deployment required by the JasperReports application.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -319,7 +319,7 @@ initContainers:
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
@@ -341,7 +341,7 @@ Affected values:
 - `service.nodePort` was deprecated, we recommend using `service.nodePorts.http` instead .
 - `containerPort` was deprecated, we recommend using `containerPorts.http` instead.
 
-Additionally updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-1000) for more information.
+Additionally updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/mariadb#to-1000) for more information.
 
 ### To 11.0.0
 
@@ -409,7 +409,7 @@ Please read the update notes carefully.
 
 **2. Updated MariaDB dependency version**
 
-In this major the MariaDB dependency version was also bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-800) for more information.
+In this major the MariaDB dependency version was also bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/mariadb#to-800) for more information.
 
 To upgrade to `9.0.0`, it should be done reusing the PVCs used to hold both the MariaDB and JasperReports data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `jasperreports` and that a `rootUser.password` was defined for MariaDB in `values.yaml` when the chart was first installed):
 

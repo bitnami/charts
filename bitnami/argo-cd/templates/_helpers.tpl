@@ -34,10 +34,24 @@ Return the proper service name for Argo CD controller
 {{- end -}}
 
 {{/*
+Return the proper service name for Argo CD controller adding the working namespace
+*/}}
+{{- define "argocd.namespace.application-controller" -}}
+  {{- printf "%s-app-controller" (include "common.names.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
+{{- end -}}
+
+{{/*
 Return the proper service name for Argo CD server
 */}}
 {{- define "argocd.server" -}}
   {{- printf "%s-server" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+{{- end -}}
+
+{{/*
+Return the proper service name for Argo CD server adding the working namespace
+*/}}
+{{- define "argocd.namespace.server" -}}
+  {{- printf "%s-server" (include "common.names.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
 {{- end -}}
 
 {{/*

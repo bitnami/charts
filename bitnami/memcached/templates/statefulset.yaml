@@ -132,7 +132,7 @@ spec:
             - name: MEMCACHED_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "common.names.fullname" . }}
+                  name: {{ template "memcached.secretPasswordName" . }}
                   key: memcached-password
             {{- end }}
             {{- if .Values.extraEnvVars }}

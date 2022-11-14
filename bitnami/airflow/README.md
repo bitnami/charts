@@ -7,7 +7,7 @@ Apache Airflow is a tool to express and execute workflows as directed acyclic gr
 [Overview of Apache Airflow](https://airflow.apache.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -92,7 +92,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dags.existingConfigmap` | Name of an existing ConfigMap with all the DAGs files you want to load in Airflow                                                                                         | `""`                    |
 | `dags.image.registry`    | Init container load-dags image registry                                                                                                                                   | `docker.io`             |
 | `dags.image.repository`  | Init container load-dags image repository                                                                                                                                 | `bitnami/bitnami-shell` |
-| `dags.image.tag`         | Init container load-dags image tag (immutable tags are recommended)                                                                                                       | `11-debian-11-r34`      |
+| `dags.image.tag`         | Init container load-dags image tag (immutable tags are recommended)                                                                                                       | `11-debian-11-r50`      |
 | `dags.image.digest`      | Init container load-dags image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                  | `""`                    |
 | `dags.image.pullPolicy`  | Init container load-dags image pull policy                                                                                                                                | `IfNotPresent`          |
 | `dags.image.pullSecrets` | Init container load-dags image pull secrets                                                                                                                               | `[]`                    |
@@ -112,7 +112,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------- |
 | `web.image.registry`                        | Airflow image registry                                                                                                   | `docker.io`          |
 | `web.image.repository`                      | Airflow image repository                                                                                                 | `bitnami/airflow`    |
-| `web.image.tag`                             | Airflow image tag (immutable tags are recommended)                                                                       | `2.3.4-debian-11-r7` |
+| `web.image.tag`                             | Airflow image tag (immutable tags are recommended)                                                                       | `2.4.2-debian-11-r6` |
 | `web.image.digest`                          | Airflow image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                  | `""`                 |
 | `web.image.pullPolicy`                      | Airflow image pull policy                                                                                                | `IfNotPresent`       |
 | `web.image.pullSecrets`                     | Airflow image pull secrets                                                                                               | `[]`                 |
@@ -188,7 +188,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------------- |
 | `scheduler.image.registry`                        | Airflow Scheduler image registry                                                                                         | `docker.io`                 |
 | `scheduler.image.repository`                      | Airflow Scheduler image repository                                                                                       | `bitnami/airflow-scheduler` |
-| `scheduler.image.tag`                             | Airflow Scheduler image tag (immutable tags are recommended)                                                             | `2.3.4-debian-11-r5`        |
+| `scheduler.image.tag`                             | Airflow Scheduler image tag (immutable tags are recommended)                                                             | `2.4.2-debian-11-r4`        |
 | `scheduler.image.digest`                          | Airflow Schefuler image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag        | `""`                        |
 | `scheduler.image.pullPolicy`                      | Airflow Scheduler image pull policy                                                                                      | `IfNotPresent`              |
 | `scheduler.image.pullSecrets`                     | Airflow Scheduler image pull secrets                                                                                     | `[]`                        |
@@ -243,7 +243,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
 | `worker.image.registry`                        | Airflow Worker image registry                                                                                            | `docker.io`              |
 | `worker.image.repository`                      | Airflow Worker image repository                                                                                          | `bitnami/airflow-worker` |
-| `worker.image.tag`                             | Airflow Worker image tag (immutable tags are recommended)                                                                | `2.3.4-debian-11-r6`     |
+| `worker.image.tag`                             | Airflow Worker image tag (immutable tags are recommended)                                                                | `2.4.2-debian-11-r4`     |
 | `worker.image.digest`                          | Airflow Worker image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag           | `""`                     |
 | `worker.image.pullPolicy`                      | Airflow Worker image pull policy                                                                                         | `IfNotPresent`           |
 | `worker.image.pullSecrets`                     | Airflow Worker image pull secrets                                                                                        | `[]`                     |
@@ -324,7 +324,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------ | --------------------------------------------------------------------------------------------------- | --------------------- |
 | `git.image.registry`           | Git image registry                                                                                  | `docker.io`           |
 | `git.image.repository`         | Git image repository                                                                                | `bitnami/git`         |
-| `git.image.tag`                | Git image tag (immutable tags are recommended)                                                      | `2.37.3-debian-11-r4` |
+| `git.image.tag`                | Git image tag (immutable tags are recommended)                                                      | `2.38.1-debian-11-r7` |
 | `git.image.digest`             | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `git.image.pullPolicy`         | Git image pull policy                                                                               | `IfNotPresent`        |
 | `git.image.pullSecrets`        | Git image pull secrets                                                                              | `[]`                  |
@@ -420,7 +420,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                               | Whether or not to create a standalone Airflow exporter to expose Airflow metrics                                 | `false`                      |
 | `metrics.image.registry`                        | Airflow exporter image registry                                                                                  | `docker.io`                  |
 | `metrics.image.repository`                      | Airflow exporter image repository                                                                                | `bitnami/airflow-exporter`   |
-| `metrics.image.tag`                             | Airflow exporter image tag (immutable tags are recommended)                                                      | `0.20220314.0-debian-11-r38` |
+| `metrics.image.tag`                             | Airflow exporter image tag (immutable tags are recommended)                                                      | `0.20220314.0-debian-11-r57` |
 | `metrics.image.digest`                          | Airflow exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
 | `metrics.image.pullPolicy`                      | Airflow exporter image pull policy                                                                               | `IfNotPresent`               |
 | `metrics.image.pullSecrets`                     | Airflow exporter image pull secrets                                                                              | `[]`                         |
@@ -614,7 +614,7 @@ This is useful if you plan on using [Bitnami's sealed secrets](https://github.co
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ### Install extra python packages
 
@@ -634,7 +634,7 @@ Celery executor is the default value for this chart with it you can scale out th
 
 #### KubernetesExecutor
 
-The kubernetes executor is introduced in Apache Airflow 1.10.0. The Kubernetes executor will create a new pod for every task instance using the `pod_template.yaml` that you can find [templates/config/configmap.yaml](https://github.com/bitnami/charts/blob/master/bitnami/airflow/templates/config/configmap.yaml), otherwise you can override this template using `worker.podTemplate`. To enable `KubernetesExecutor` set the following parameters.
+The kubernetes executor is introduced in Apache Airflow 1.10.0. The Kubernetes executor will create a new pod for every task instance using the `pod_template.yaml` that you can find [templates/config/configmap.yaml](https://github.com/bitnami/charts/blob/main/bitnami/airflow/templates/config/configmap.yaml), otherwise you can override this template using `worker.podTemplate`. To enable `KubernetesExecutor` set the following parameters.
 
 > NOTE: Redis&reg; is not needed to be deployed when using KubernetesExecutor so you must disable it using `redis.enabled=false`.
 
@@ -692,6 +692,12 @@ The Bitnami Airflow chart relies on the PostgreSQL chart persistence. This means
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 14.0.0
+
+This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1200) you can find more information about the changes introduced in that version.
+
+### To any previous version
 
 Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/infrastructure/apache-airflow/administration/upgrade/).
 

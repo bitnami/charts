@@ -16,7 +16,7 @@ dependencies:
     version: 2.x.x
 description: MediaWiki is the free and open source wiki software that powers Wikipedia. Used by thousands of organizations, it is extremely powerful, scalable software and a feature-rich wiki implementation.
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/mediawiki
+home: https://github.com/bitnami/charts/tree/main/bitnami/mediawiki
 icon: https://bitnami.com/assets/stacks/mediawiki/img/mediawiki-stack-220x234.png
 keywords:
   - mediawiki
@@ -32,4 +32,4 @@ name: mediawiki
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/mediawiki
   - https://www.mediawiki.org/
-version: 14.3.7
+version: 14.3.8

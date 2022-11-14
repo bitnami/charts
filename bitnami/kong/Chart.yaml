@@ -1,12 +1,12 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 3.0.0
+appVersion: 3.0.1
 dependencies:
   - condition: postgresql.enabled
     name: postgresql
     repository: https://charts.bitnami.com/bitnami
-    version: 11.x.x
+    version: 12.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -18,7 +18,7 @@ dependencies:
     version: 9.x.x
 description: Kong is an open source Microservice API gateway and platform designed for managing microservices requests of high-availability, fault-tolerance, and distributed systems.
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/kong
+home: https://github.com/bitnami/charts/tree/main/bitnami/kong
 icon: https://bitnami.com/assets/stacks/kong/img/kong-stack-220x234.png
 keywords:
   - kong
@@ -36,4 +36,4 @@ name: kong
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/kong
   - https://konghq.com/
-version: 7.0.0
+version: 8.0.11

@@ -57,7 +57,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/jasperreports
-  tag: 8.1.0-debian-11-r9
+  tag: 8.1.0-debian-11-r18
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -522,7 +522,7 @@ ingress:
 ##
 
 ## MariaDB chart configuration
-## https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
+## https://github.com/bitnami/charts/blob/main/bitnami/mariadb/values.yaml
 ##
 mariadb:
   ## @param mariadb.enabled Whether to use the MariaDB chart

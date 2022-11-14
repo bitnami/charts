@@ -380,6 +380,20 @@ spec:
                   name: {{ template "external-dns.secretName" . }}
                   key: designate_password
             {{- end }}
+            {{- if .Values.designate.applicationCredentialId }}
+            - name: OS_APPLICATION_CREDENTIAL_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: designate_application_credential_id
+            {{- end }}
+            {{- if .Values.designate.applicationCredentialSecret }}
+            - name: OS_APPLICATION_CREDENTIAL_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: designate_application_credential_secret
+            {{- end }}
             {{- if .Values.designate.authUrl }}
             - name: OS_AUTH_URL
               value: {{ .Values.designate.authUrl }}
@@ -395,6 +409,10 @@ spec:
             {{- if .Values.designate.projectName }}
             - name: OS_PROJECT_NAME
               value: {{ .Values.designate.projectName }}
+            {{- end }}
+            {{- if .Values.designate.authType }}
+            - name: OS_AUTH_TYPE
+              value: {{ .Values.designate.authType }}
             {{- end }}
             {{- end }}
             {{- if and (eq .Values.provider "digitalocean") (or .Values.digitalocean.apiToken .Values.digitalocean.secretName) }}

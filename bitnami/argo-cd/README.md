@@ -76,15 +76,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Argo CD image parameters
 
-| Name                | Description                                                                                             | Value                 |
-| ------------------- | ------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`    | Argo CD image registry                                                                                  | `docker.io`           |
-| `image.repository`  | Argo CD image repository                                                                                | `bitnami/argo-cd`     |
-| `image.tag`         | Argo CD image tag (immutable tags are recommended)                                                      | `2.4.12-debian-11-r0` |
-| `image.digest`      | Argo CD image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `image.pullPolicy`  | Argo CD image pull policy                                                                               | `IfNotPresent`        |
-| `image.pullSecrets` | Argo CD image pull secrets                                                                              | `[]`                  |
-| `image.debug`       | Enable Argo CD image debug mode                                                                         | `false`               |
+| Name                | Description                                                                                             | Value                |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | -------------------- |
+| `image.registry`    | Argo CD image registry                                                                                  | `docker.io`          |
+| `image.repository`  | Argo CD image repository                                                                                | `bitnami/argo-cd`    |
+| `image.tag`         | Argo CD image tag (immutable tags are recommended)                                                      | `2.5.2-debian-11-r1` |
+| `image.digest`      | Argo CD image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
+| `image.pullPolicy`  | Argo CD image pull policy                                                                               | `IfNotPresent`       |
+| `image.pullSecrets` | Argo CD image pull secrets                                                                              | `[]`                 |
+| `image.debug`       | Enable Argo CD image debug mode                                                                         | `false`              |
 
 
 ### Argo CD application controller parameters
@@ -464,7 +464,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | --------------------- |
 | `dex.image.registry`                                    | Dex image registry                                                                                  | `docker.io`           |
 | `dex.image.repository`                                  | Dex image repository                                                                                | `bitnami/dex`         |
-| `dex.image.tag`                                         | Dex image tag (immutable tags are recommended)                                                      | `2.33.1-debian-11-r0` |
+| `dex.image.tag`                                         | Dex image tag (immutable tags are recommended)                                                      | `2.35.3-debian-11-r9` |
 | `dex.image.digest`                                      | Dex image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `dex.image.pullPolicy`                                  | Dex image pull policy                                                                               | `IfNotPresent`        |
 | `dex.image.pullSecrets`                                 | Dex image pull secrets                                                                              | `[]`                  |
@@ -604,7 +604,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r35`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r50`      |
 | `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -620,7 +620,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rbac.create`                             | Specifies whether RBAC resources should be created                                                    | `true`                |
 | `redis.image.registry`                    | Redis image registry                                                                                  | `docker.io`           |
 | `redis.image.repository`                  | Redis image repository                                                                                | `bitnami/redis`       |
-| `redis.image.tag`                         | Redis image tag (immutable tags are recommended)                                                      | `7.0.4-debian-11-r23` |
+| `redis.image.tag`                         | Redis image tag (immutable tags are recommended)                                                      | `7.0.5-debian-11-r17` |
 | `redis.image.digest`                      | Redis image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `redis.image.pullPolicy`                  | Redis image pull policy                                                                               | `IfNotPresent`        |
 | `redis.image.pullSecrets`                 | Redis image pull secrets                                                                              | `[]`                  |
@@ -718,7 +718,7 @@ If additional containers are needed in the same pod as argo-cd (such as addition
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 

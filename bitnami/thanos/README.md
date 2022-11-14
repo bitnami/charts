@@ -7,7 +7,7 @@ Thanos is a highly available metrics system that can be added on top of existing
 [Overview of Thanos](https://thanos.io/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```bash
@@ -77,7 +77,7 @@ This charts allows you install several Thanos components, so you deploy an archi
                                                          +--------------+
 ```
 
-> Note: Components marked with (*) are provided by subchart(s) (such as the [Bitnami MinIO&reg; chart](https://github.com/bitnami/charts/tree/master/bitnami/minio)) or external charts (such as the [Bitnami kube-prometheus chart](https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus)).
+> Note: Components marked with (*) are provided by subchart(s) (such as the [Bitnami MinIO&reg; chart](https://github.com/bitnami/charts/tree/main/bitnami/minio)) or external charts (such as the [Bitnami kube-prometheus chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus)).
 
 Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate-thanos-with-prometheus-and-alertmanager) for detailed instructions to deploy this architecture.
 
@@ -1108,13 +1108,13 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 
 ### MinIO&reg; chart parameters
 
-| Name                      | Description                                                                                                                         | Value    |
-| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| `minio`                   | For full list of MinIO&reg; values configurations please refere [here](https://github.com/bitnami/charts/tree/master/bitnami/minio) |          |
-| `minio.enabled`           | Enable/disable MinIO&reg; chart installation                                                                                        | `false`  |
-| `minio.auth.rootUser`     | MinIO&reg; root username                                                                                                            | `admin`  |
-| `minio.auth.rootPassword` | Password for MinIO&reg; root user                                                                                                   | `""`     |
-| `minio.defaultBuckets`    | Comma, semi-colon or space separated list of MinIO&reg; buckets to create                                                           | `thanos` |
+| Name                      | Description                                                                                                                       | Value    |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `minio`                   | For full list of MinIO&reg; values configurations please refere [here](https://github.com/bitnami/charts/tree/main/bitnami/minio) |          |
+| `minio.enabled`           | Enable/disable MinIO&reg; chart installation                                                                                      | `false`  |
+| `minio.auth.rootUser`     | MinIO&reg; root username                                                                                                          | `admin`  |
+| `minio.auth.rootPassword` | Password for MinIO&reg; root user                                                                                                 | `""`     |
+| `minio.defaultBuckets`    | Comma, semi-colon or space separated list of MinIO&reg; buckets to create                                                         | `thanos` |
 
 
 ### NetWorkPolicy parameters
@@ -1250,7 +1250,7 @@ timePartitioning:
 
 ### Integrate Thanos with Prometheus and Alertmanager
 
-You can integrate Thanos with Prometheus & Alertmanager using this chart and the [Bitnami kube-prometheus chart](https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus) following the steps below:
+You can integrate Thanos with Prometheus & Alertmanager using this chart and the [Bitnami kube-prometheus chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) following the steps below:
 
 > Note: in this example we will use MinIO&reg; (subchart) as the Objstore. Every component will be deployed in the "monitoring" namespace.
 
@@ -1338,7 +1338,7 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 
 This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
@@ -1365,7 +1365,7 @@ The chart was changed to adapt to the common Bitnami chart standards. Now it inc
 
 ### To 7.0.0
 
-This major updates the MinIO&reg; subchart to its newest major, 9.0.0, which updates authentication parameters. Check [MinIO&reg; Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/minio#to-900) for more information.
+This major updates the MinIO&reg; subchart to its newest major, 9.0.0, which updates authentication parameters. Check [MinIO&reg; Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/minio#to-900) for more information.
 This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repositor. Some of the affected values are:
 
 - `XXX.extraEnv` parameters were renamed to `XXX.extraEnvVars`.
@@ -1376,7 +1376,7 @@ This major release renames several values in this chart and adds missing feature
 
 ### To 6.0.0
 
-This major updates the MinIO&reg; subchart to its newest major, 8.0.0, which now has two separated services for MinIO&reg; Console and MinIO&reg; API. Check [MinIO&reg; Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/minio#to-800) for more information.
+This major updates the MinIO&reg; subchart to its newest major, 8.0.0, which now has two separated services for MinIO&reg; Console and MinIO&reg; API. Check [MinIO&reg; Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/minio#to-800) for more information.
 
 ### To 5.4.0
 
@@ -1420,7 +1420,7 @@ This major updates the MinIO subchart to its newest major, 7.0.0, which removes 
 
 ### To 3.3.0
 
-This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### To 3.1.0
 

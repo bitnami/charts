@@ -80,21 +80,21 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### NGINX parameters
 
-| Name                 | Description                                                                                           | Value                  |
-| -------------------- | ----------------------------------------------------------------------------------------------------- | ---------------------- |
-| `image.registry`     | NGINX image registry                                                                                  | `docker.io`            |
-| `image.repository`   | NGINX image repository                                                                                | `bitnami/nginx`        |
-| `image.tag`          | NGINX image tag (immutable tags are recommended)                                                      | `1.23.1-debian-11-r32` |
-| `image.digest`       | NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
-| `image.pullPolicy`   | NGINX image pull policy                                                                               | `IfNotPresent`         |
-| `image.pullSecrets`  | Specify docker-registry secret names as an array                                                      | `[]`                   |
-| `image.debug`        | Set to true if you would like to see extra information on logs                                        | `false`                |
-| `hostAliases`        | Deployment pod host aliases                                                                           | `[]`                   |
-| `command`            | Override default container command (useful when using custom images)                                  | `[]`                   |
-| `args`               | Override default container args (useful when using custom images)                                     | `[]`                   |
-| `extraEnvVars`       | Extra environment variables to be set on NGINX containers                                             | `[]`                   |
-| `extraEnvVarsCM`     | ConfigMap with extra environment variables                                                            | `""`                   |
-| `extraEnvVarsSecret` | Secret with extra environment variables                                                               | `""`                   |
+| Name                 | Description                                                                                           | Value                 |
+| -------------------- | ----------------------------------------------------------------------------------------------------- | --------------------- |
+| `image.registry`     | NGINX image registry                                                                                  | `docker.io`           |
+| `image.repository`   | NGINX image repository                                                                                | `bitnami/nginx`       |
+| `image.tag`          | NGINX image tag (immutable tags are recommended)                                                      | `1.23.2-debian-11-r2` |
+| `image.digest`       | NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
+| `image.pullPolicy`   | NGINX image pull policy                                                                               | `IfNotPresent`        |
+| `image.pullSecrets`  | Specify docker-registry secret names as an array                                                      | `[]`                  |
+| `image.debug`        | Set to true if you would like to see extra information on logs                                        | `false`               |
+| `hostAliases`        | Deployment pod host aliases                                                                           | `[]`                  |
+| `command`            | Override default container command (useful when using custom images)                                  | `[]`                  |
+| `args`               | Override default container args (useful when using custom images)                                     | `[]`                  |
+| `extraEnvVars`       | Extra environment variables to be set on NGINX containers                                             | `[]`                  |
+| `extraEnvVarsCM`     | ConfigMap with extra environment variables                                                            | `""`                  |
+| `extraEnvVarsSecret` | Secret with extra environment variables                                                               | `""`                  |
 
 
 ### NGINX deployment parameters
@@ -179,7 +179,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cloneStaticSiteFromGit.enabled`           | Get the server static content from a Git repository                                                 | `false`               |
 | `cloneStaticSiteFromGit.image.registry`    | Git image registry                                                                                  | `docker.io`           |
 | `cloneStaticSiteFromGit.image.repository`  | Git image repository                                                                                | `bitnami/git`         |
-| `cloneStaticSiteFromGit.image.tag`         | Git image tag (immutable tags are recommended)                                                      | `2.38.0-debian-11-r1` |
+| `cloneStaticSiteFromGit.image.tag`         | Git image tag (immutable tags are recommended)                                                      | `2.38.1-debian-11-r2` |
 | `cloneStaticSiteFromGit.image.digest`      | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `cloneStaticSiteFromGit.image.pullPolicy`  | Git image pull policy                                                                               | `IfNotPresent`        |
 | `cloneStaticSiteFromGit.image.pullSecrets` | Specify docker-registry secret names as an array                                                    | `[]`                  |
@@ -252,7 +252,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.port`                             | NGINX Container Status Port scraped by Prometheus Exporter                                                                                | `""`                     |
 | `metrics.image.registry`                   | NGINX Prometheus exporter image registry                                                                                                  | `docker.io`              |
 | `metrics.image.repository`                 | NGINX Prometheus exporter image repository                                                                                                | `bitnami/nginx-exporter` |
-| `metrics.image.tag`                        | NGINX Prometheus exporter image tag (immutable tags are recommended)                                                                      | `0.11.0-debian-11-r8`    |
+| `metrics.image.tag`                        | NGINX Prometheus exporter image tag (immutable tags are recommended)                                                                      | `0.11.0-debian-11-r13`   |
 | `metrics.image.digest`                     | NGINX Prometheus exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                 | `""`                     |
 | `metrics.image.pullPolicy`                 | NGINX Prometheus exporter image pull policy                                                                                               | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                          | `[]`                     |
@@ -361,7 +361,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinity) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinity) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ### Deploying extra resources
 
@@ -369,7 +369,7 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 
 ### Ingress
 
-This chart provides support for ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/master/bitnami/contour) you can utilize the ingress controller to serve your application.
+This chart provides support for ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
 
 To enable ingress integration, please set `ingress.enabled` to `true`.
 
@@ -433,7 +433,7 @@ On 9 April 2022, security vulnerabilities in the [NGINX LDAP reference implement
 
 ### To 7.0.0
 
-- This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+- This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 - Ingress configuration was also adapted to follow the Helm charts best practices.
 
 > Note: There is no backwards compatibility due to the above mentioned changes. It's necessary to install a new release of the chart, and migrate your existing application to the new NGINX instances.

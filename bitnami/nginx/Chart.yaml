@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 1.23.1
+appVersion: 1.23.2
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -10,7 +10,7 @@ dependencies:
     version: 2.x.x
 description: NGINX Open Source is a web server that can be also used as a reverse proxy, load balancer, and HTTP cache. Recommended for high-demanding sites due to its ability to provide faster content.
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/nginx
+home: https://github.com/bitnami/charts/tree/main/bitnami/nginx
 icon: https://bitnami.com/assets/stacks/nginx/img/nginx-stack-220x234.png
 keywords:
   - nginx
@@ -25,4 +25,4 @@ name: nginx
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/nginx
   - https://www.nginx.org
-version: 13.2.10
+version: 13.2.13

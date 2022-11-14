@@ -92,7 +92,7 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-          - '-config.file=/bitnami/grafana-loki/conf/loki.yaml'
+          - '-config.file={{ .Values.loki.dataDir }}/conf/loki.yaml'
           - -log.level=debug
           - -target=query-scheduler
           {{- end }}
@@ -146,7 +146,7 @@ spec:
           {{- end }}
           volumeMounts:
             - name: loki-config
-              mountPath: /bitnami/grafana-loki/conf/loki.yaml
+              mountPath: {{ .Values.loki.dataDir }}/conf/loki.yaml
               subPath: loki.yaml
           {{- if .Values.queryScheduler.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.extraVolumeMounts "context" $) | nindent 12 }}

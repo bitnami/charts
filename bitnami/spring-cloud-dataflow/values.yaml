@@ -58,7 +58,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-dataflow
-    tag: 2.9.6-debian-11-r0
+    tag: 2.9.6-debian-11-r18
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -90,7 +90,7 @@ server:
     image:
       registry: docker.io
       repository: bitnami/spring-cloud-dataflow-composed-task-runner
-      tag: 2.9.5-debian-11-r10
+      tag: 2.9.6-debian-11-r14
       digest: ""
   ## Spring Cloud Dataflow Server configuration parameters
   ##
@@ -593,7 +593,7 @@ skipper:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-skipper
-    tag: 2.8.6-debian-11-r0
+    tag: 2.8.6-debian-11-r19
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1064,7 +1064,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/prometheus-rsocket-proxy
-    tag: 1.5.0-debian-11-r9
+    tag: 1.5.0-debian-11-r28
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1341,7 +1341,7 @@ metrics:
     ##
     metricRelabelings: []
     ## @param metrics.serviceMonitor.selector ServiceMonitor selector labels
-    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ##
     ## selector:
     ##   prometheus: my-prometheus
@@ -1399,7 +1399,7 @@ waitForBackends:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.25.0-debian-11-r4
+    tag: 1.25.4-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1437,7 +1437,7 @@ waitForBackends:
 ## @section Database parameters
 
 ## MariaDB chart configuration
-## https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
+## https://github.com/bitnami/charts/blob/main/bitnami/mariadb/values.yaml
 ##
 mariadb:
   ## @param mariadb.enabled Enable/disable MariaDB chart installation
@@ -1551,7 +1551,7 @@ externalDatabase:
 ## @section RabbitMQ chart parameters
 
 ## RabbitMQ chart configuration
-## https://github.com/bitnami/charts/blob/master/bitnami/rabbitmq/values.yaml
+## https://github.com/bitnami/charts/blob/main/bitnami/rabbitmq/values.yaml
 ##
 rabbitmq:
   ## @param rabbitmq.enabled Enable/disable RabbitMQ chart installation
@@ -1592,7 +1592,7 @@ externalRabbitmq:
 ## @section Kafka chart parameters
 
 ## Kafka chart configuration
-## https://github.com/bitnami/charts/blob/master/bitnami/kafka/values.yaml
+## https://github.com/bitnami/charts/blob/main/bitnami/kafka/values.yaml
 ##
 kafka:
   ## @param kafka.enabled Enable/disable Kafka chart installation
@@ -1605,7 +1605,7 @@ kafka:
   ##
   offsetsTopicReplicationFactor: 1
   ## Zookeeper chart configuration
-  ## https://github.com/bitnami/charts/blob/master/bitnami/zookeeper/values.yaml
+  ## https://github.com/bitnami/charts/blob/main/bitnami/zookeeper/values.yaml
   ## @param kafka.zookeeper.replicaCount Number of Zookeeper replicas
   ##
   zookeeper:

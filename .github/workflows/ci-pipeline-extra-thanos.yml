@@ -7,7 +7,7 @@ on: # rebuild any PRs and main branch changes
       - synchronize
       - labeled
     branches:
-      - master
+      - main
     paths:
       - 'bitnami/thanos/*'
 env:
@@ -25,11 +25,11 @@ jobs:
     runs-on: ubuntu-latest
     name: Verify BucketWeb on Tanzu Kubernetes Grid
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
-      - uses: vmware-labs/vmware-image-builder-action@main
+      - uses: vmware-labs/vmware-image-builder-action@0.4.11
         with:
           pipeline: thanos/bucketweb/vib-verify.json
         env:

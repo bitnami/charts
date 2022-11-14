@@ -14,7 +14,7 @@ dependencies:
     version: 2.x.x
 description: Apache Kafka is a distributed streaming platform designed to build real-time pipelines and can be used as a message broker or as a replacement for a log aggregation solution for big data applications.
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/kafka
+home: https://github.com/bitnami/charts/tree/main/bitnami/kafka
 icon: https://bitnami.com/assets/stacks/kafka/img/kafka-stack-220x234.png
 keywords:
   - kafka
@@ -29,4 +29,4 @@ name: kafka
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/kafka
   - https://kafka.apache.org/
-version: 19.0.0
+version: 19.1.3

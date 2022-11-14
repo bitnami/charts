@@ -70,7 +70,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/memcached
-  tag: 1.6.17-debian-11-r15
+  tag: 1.6.17-debian-11-r25
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -104,6 +104,9 @@ auth:
   ## @param auth.password Memcached admin password
   ##
   password: ""
+  ## @param auth.existingPasswordSecret Existing secret with Memcached credentials (must contain a value for `memcached-password` key)
+  ##
+  existingPasswordSecret: ""
 ## @param command Override default container command (useful when using custom images)
 ##
 command: []
@@ -506,7 +509,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r40
+    tag: 11-debian-11-r50
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -551,7 +554,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/memcached-exporter
-    tag: 0.10.0-debian-11-r42
+    tag: 0.10.0-debian-11-r51
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -685,7 +688,7 @@ metrics:
     ##
     labels: {}
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
-    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ##
     selector: {}
     ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping

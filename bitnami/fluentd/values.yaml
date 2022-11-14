@@ -69,7 +69,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.15.2-debian-11-r14
+  tag: 1.15.3-debian-11-r1
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -191,9 +191,11 @@ forwarder:
         </parse>
       </source>
       # enrich with kubernetes metadata
+      {{- if or .Values.forwarder.serviceAccount.create .Values.forwarder.serviceAccount.name }}
       <filter kubernetes.**>
         @type kubernetes_metadata
       </filter>
+      {{- end }}
     fluentd-output.conf: |
       # Throw the healthcheck to the standard output instead of forwarding it
       <match fluentd.healthcheck>
@@ -269,7 +271,7 @@ forwarder:
   ##
   extraArgs: ""
   ## @param forwarder.extraEnvVars Extra environment variables to pass to the container
-  ## extraEnv:
+  ## extraEnvVars:
   ##   - name: MY_ENV_VAR
   ##     value: my_value
   ##
@@ -771,7 +773,7 @@ aggregator:
   ##
   extraArgs: ""
   ## @param aggregator.extraEnvVars Extra environment variables to pass to the container
-  ## extraEnv:
+  ## extraEnvVars:
   ##   - name: MY_ENV_VAR
   ##     value: my_value
   ##
@@ -884,7 +886,7 @@ aggregator:
     ##
     annotations: {}
     ## @param aggregator.ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter
-    ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.aggregator.ingress.hostname }}
+    ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.aggregator.ingress.hostname | trunc 63 | trimSuffix "-" }}
     ## You can use the ingress.secrets parameter to create this TLS secret or rely on cert-manager to create it
     ##
     tls: false
@@ -1335,7 +1337,7 @@ metrics:
     ##
     metricRelabelings: []
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
-    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ## e.g:
     ## selector:
     ##   prometheus: my-prometheus

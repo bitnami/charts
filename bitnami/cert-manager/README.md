@@ -1,10 +1,10 @@
-<!--- app-name: Cert Manager -->
+<!--- app-name: cert-manager -->
 
-# Cert Manager packaged by Bitnami
+# cert-manager packaged by Bitnami
 
-Cert Manager is a Kubernetes add-on to automate the management and issuance of TLS certificates from various issuing sources.
+cert-manager is a Kubernetes add-on to automate the management and issuance of TLS certificates from various issuing sources.
 
-[Overview of Cert Manager](https://github.com/jetstack/cert-manager)
+[Overview of cert-manager](https://github.com/jetstack/cert-manager)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
                            
@@ -71,11 +71,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `commonLabels`             | Labels to add to all deployed objects                                                                                                             | `{}`          |
 | `commonAnnotations`        | Annotations to add to all deployed objects                                                                                                        | `{}`          |
 | `extraDeploy`              | Array of extra objects to deploy with the release                                                                                                 | `[]`          |
-| `logLevel`                 | Set up cert manager log level                                                                                                                     | `2`           |
+| `logLevel`                 | Set up cert-manager log level                                                                                                                     | `2`           |
 | `clusterResourceNamespace` | Namespace used to store DNS provider credentials etc. for ClusterIssuer resources. If empty, uses the namespace where the controller is deployed. | `""`          |
 | `leaderElection.namespace` | Namespace which leaderElection works.                                                                                                             | `kube-system` |
-| `installCRDs`              | Flag to install Cert Manager CRDs                                                                                                                 | `false`       |
-| `replicaCount`             | Number of Cert Manager replicas                                                                                                                   | `1`           |
+| `installCRDs`              | Flag to install cert-manager CRDs                                                                                                                 | `false`       |
+| `replicaCount`             | Number of cert-manager replicas                                                                                                                   | `1`           |
 
 
 ### Controller deployment parameters
@@ -85,14 +85,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.replicaCount`                                | Number of Controller replicas                                                                              | `1`                    |
 | `controller.image.registry`                              | Controller image registry                                                                                  | `docker.io`            |
 | `controller.image.repository`                            | Controller image repository                                                                                | `bitnami/cert-manager` |
-| `controller.image.tag`                                   | Controller image tag (immutable tags are recommended)                                                      | `1.9.1-debian-11-r6`   |
+| `controller.image.tag`                                   | Controller image tag (immutable tags are recommended)                                                      | `1.10.0-debian-11-r0`  |
 | `controller.image.digest`                                | Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `controller.image.pullPolicy`                            | Controller image pull policy                                                                               | `IfNotPresent`         |
 | `controller.image.pullSecrets`                           | Controller image pull secrets                                                                              | `[]`                   |
 | `controller.image.debug`                                 | Controller image debug mode                                                                                | `false`                |
 | `controller.acmesolver.image.registry`                   | Controller image registry                                                                                  | `docker.io`            |
 | `controller.acmesolver.image.repository`                 | Controller image repository                                                                                | `bitnami/acmesolver`   |
-| `controller.acmesolver.image.tag`                        | Controller image tag (immutable tags are recommended)                                                      | `1.9.1-debian-11-r8`   |
+| `controller.acmesolver.image.tag`                        | Controller image tag (immutable tags are recommended)                                                      | `1.10.0-debian-11-r0`  |
 | `controller.acmesolver.image.digest`                     | Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `controller.acmesolver.image.pullPolicy`                 | Controller image pull policy                                                                               | `IfNotPresent`         |
 | `controller.acmesolver.image.pullSecrets`                | Controller image pull secrets                                                                              | `[]`                   |
@@ -109,7 +109,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `controller.affinity` is set. Allowed values: `soft` or `hard`       | `""`                   |
 | `controller.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `controller.affinity` is set                                           | `""`                   |
 | `controller.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `controller.affinity` is set                                        | `[]`                   |
-| `controller.affinity`                                    | Affinity for Cert Manager Controller                                                                       | `{}`                   |
+| `controller.affinity`                                    | Affinity for cert-manager Controller                                                                       | `{}`                   |
 | `controller.nodeSelector`                                | Node labels for pod assignment                                                                             | `{}`                   |
 | `controller.containerPort`                               | Controller container port                                                                                  | `9402`                 |
 | `controller.command`                                     | Override Controller default command                                                                        | `[]`                   |
@@ -148,7 +148,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `webhook.replicaCount`                                | Number of Webhook replicas                                                                              | `1`                            |
 | `webhook.image.registry`                              | Webhook image registry                                                                                  | `docker.io`                    |
 | `webhook.image.repository`                            | Webhook image repository                                                                                | `bitnami/cert-manager-webhook` |
-| `webhook.image.tag`                                   | Webhook image tag (immutable tags are recommended)                                                      | `1.9.1-debian-11-r5`           |
+| `webhook.image.tag`                                   | Webhook image tag (immutable tags are recommended)                                                      | `1.9.1-debian-11-r28`          |
 | `webhook.image.digest`                                | Webhook image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                           |
 | `webhook.image.pullPolicy`                            | Webhook image pull policy                                                                               | `IfNotPresent`                 |
 | `webhook.image.pullSecrets`                           | Webhook image pull secrets                                                                              | `[]`                           |
@@ -165,7 +165,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `webhook.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `webhook.affinity` is set. Allowed values: `soft` or `hard`       | `""`                           |
 | `webhook.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `webhook.affinity` is set                                           | `""`                           |
 | `webhook.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `webhook.affinity` is set                                        | `[]`                           |
-| `webhook.affinity`                                    | Affinity for Cert Manager Webhook                                                                       | `{}`                           |
+| `webhook.affinity`                                    | Affinity for cert-manager Webhook                                                                       | `{}`                           |
 | `webhook.nodeSelector`                                | Node labels for pod assignment                                                                          | `{}`                           |
 | `webhook.containerPort`                               | Webhook container port                                                                                  | `10250`                        |
 | `webhook.httpsPort`                                   | Webhook container port                                                                                  | `443`                          |
@@ -215,55 +215,55 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### CAInjector deployment parameters
 
-| Name                                                     | Description                                                                                                | Value                |
-| -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | -------------------- |
-| `cainjector.replicaCount`                                | Number of CAInjector replicas                                                                              | `1`                  |
-| `cainjector.image.registry`                              | CAInjector image registry                                                                                  | `docker.io`          |
-| `cainjector.image.repository`                            | CAInjector image repository                                                                                | `bitnami/cainjector` |
-| `cainjector.image.tag`                                   | CAInjector image tag (immutable tags are recommended)                                                      | `1.9.1-debian-11-r6` |
-| `cainjector.image.digest`                                | CAInjector image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
-| `cainjector.image.pullPolicy`                            | CAInjector image pull policy                                                                               | `IfNotPresent`       |
-| `cainjector.image.pullSecrets`                           | CAInjector image pull secrets                                                                              | `[]`                 |
-| `cainjector.image.debug`                                 | CAInjector image debug mode                                                                                | `false`              |
-| `cainjector.resources.limits`                            | The resources limits for the CAInjector container                                                          | `{}`                 |
-| `cainjector.resources.requests`                          | The requested resources for the CAInjector container                                                       | `{}`                 |
-| `cainjector.podSecurityContext.enabled`                  | Enabled CAInjector pods' Security Context                                                                  | `true`               |
-| `cainjector.podSecurityContext.fsGroup`                  | Set CAInjector pod's Security Context fsGroup                                                              | `1001`               |
-| `cainjector.containerSecurityContext.enabled`            | Enabled CAInjector containers' Security Context                                                            | `true`               |
-| `cainjector.containerSecurityContext.runAsUser`          | Set CAInjector container's Security Context runAsUser                                                      | `1001`               |
-| `cainjector.containerSecurityContext.runAsNonRoot`       | Set CAInjector container's Security Context runAsNonRoot                                                   | `true`               |
-| `cainjector.podAffinityPreset`                           | Pod affinity preset. Ignored if `cainjector.affinity` is set. Allowed values: `soft` or `hard`             | `""`                 |
-| `cainjector.podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `cainjector.affinity` is set. Allowed values: `soft` or `hard`        | `soft`               |
-| `cainjector.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `cainjector.affinity` is set. Allowed values: `soft` or `hard`       | `""`                 |
-| `cainjector.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `cainjector.affinity` is set                                           | `""`                 |
-| `cainjector.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `cainjector.affinity` is set                                        | `[]`                 |
-| `cainjector.affinity`                                    | Affinity for Cert Manager CAInjector                                                                       | `{}`                 |
-| `cainjector.nodeSelector`                                | Node labels for pod assignment                                                                             | `{}`                 |
-| `cainjector.command`                                     | Override CAInjector default command                                                                        | `[]`                 |
-| `cainjector.args`                                        | Override CAInjector default args                                                                           | `[]`                 |
-| `cainjector.priorityClassName`                           | CAInjector pod priority class name                                                                         | `""`                 |
-| `cainjector.runtimeClassName`                            | Name of the runtime class to be used by pod(s)                                                             | `""`                 |
-| `cainjector.schedulerName`                               | Name of the k8s scheduler (other than default)                                                             | `""`                 |
-| `cainjector.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment                                                             | `[]`                 |
-| `cainjector.hostAliases`                                 | Custom host aliases for CAInjector pods                                                                    | `[]`                 |
-| `cainjector.tolerations`                                 | Tolerations for pod assignment                                                                             | `[]`                 |
-| `cainjector.podLabels`                                   | Extra labels for CAInjector pods                                                                           | `{}`                 |
-| `cainjector.podAnnotations`                              | Annotations for CAInjector pods                                                                            | `{}`                 |
-| `cainjector.lifecycleHooks`                              | Add lifecycle hooks to the CAInjector deployment                                                           | `{}`                 |
-| `cainjector.updateStrategy.type`                         | Controller deployment update strategy                                                                      | `RollingUpdate`      |
-| `cainjector.updateStrategy.rollingUpdate`                | Controller deployment rolling update configuration parameters                                              | `{}`                 |
-| `cainjector.extraArgs`                                   | Extra arguments to pass to the CAInjector container                                                        | `[]`                 |
-| `cainjector.extraEnvVars`                                | Add extra environment variables to the CAInjector container                                                | `[]`                 |
-| `cainjector.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars                                                       | `""`                 |
-| `cainjector.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars                                                          | `""`                 |
-| `cainjector.extraVolumes`                                | Optionally specify extra list of additional volumes for CAInjector pods                                    | `[]`                 |
-| `cainjector.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for CAInjector container(s)                       | `[]`                 |
-| `cainjector.initContainers`                              | Add additional init containers to the CAInjector pods                                                      | `[]`                 |
-| `cainjector.sidecars`                                    | Add additional sidecar containers to the CAInjector pod                                                    | `[]`                 |
-| `cainjector.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                       | `true`               |
-| `cainjector.serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                     | `""`                 |
-| `cainjector.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                       | `{}`                 |
-| `cainjector.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                             | `true`               |
+| Name                                                     | Description                                                                                                | Value                 |
+| -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------- |
+| `cainjector.replicaCount`                                | Number of CAInjector replicas                                                                              | `1`                   |
+| `cainjector.image.registry`                              | CAInjector image registry                                                                                  | `docker.io`           |
+| `cainjector.image.repository`                            | CAInjector image repository                                                                                | `bitnami/cainjector`  |
+| `cainjector.image.tag`                                   | CAInjector image tag (immutable tags are recommended)                                                      | `1.10.0-debian-11-r0` |
+| `cainjector.image.digest`                                | CAInjector image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
+| `cainjector.image.pullPolicy`                            | CAInjector image pull policy                                                                               | `IfNotPresent`        |
+| `cainjector.image.pullSecrets`                           | CAInjector image pull secrets                                                                              | `[]`                  |
+| `cainjector.image.debug`                                 | CAInjector image debug mode                                                                                | `false`               |
+| `cainjector.resources.limits`                            | The resources limits for the CAInjector container                                                          | `{}`                  |
+| `cainjector.resources.requests`                          | The requested resources for the CAInjector container                                                       | `{}`                  |
+| `cainjector.podSecurityContext.enabled`                  | Enabled CAInjector pods' Security Context                                                                  | `true`                |
+| `cainjector.podSecurityContext.fsGroup`                  | Set CAInjector pod's Security Context fsGroup                                                              | `1001`                |
+| `cainjector.containerSecurityContext.enabled`            | Enabled CAInjector containers' Security Context                                                            | `true`                |
+| `cainjector.containerSecurityContext.runAsUser`          | Set CAInjector container's Security Context runAsUser                                                      | `1001`                |
+| `cainjector.containerSecurityContext.runAsNonRoot`       | Set CAInjector container's Security Context runAsNonRoot                                                   | `true`                |
+| `cainjector.podAffinityPreset`                           | Pod affinity preset. Ignored if `cainjector.affinity` is set. Allowed values: `soft` or `hard`             | `""`                  |
+| `cainjector.podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `cainjector.affinity` is set. Allowed values: `soft` or `hard`        | `soft`                |
+| `cainjector.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `cainjector.affinity` is set. Allowed values: `soft` or `hard`       | `""`                  |
+| `cainjector.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `cainjector.affinity` is set                                           | `""`                  |
+| `cainjector.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `cainjector.affinity` is set                                        | `[]`                  |
+| `cainjector.affinity`                                    | Affinity for cert-manager CAInjector                                                                       | `{}`                  |
+| `cainjector.nodeSelector`                                | Node labels for pod assignment                                                                             | `{}`                  |
+| `cainjector.command`                                     | Override CAInjector default command                                                                        | `[]`                  |
+| `cainjector.args`                                        | Override CAInjector default args                                                                           | `[]`                  |
+| `cainjector.priorityClassName`                           | CAInjector pod priority class name                                                                         | `""`                  |
+| `cainjector.runtimeClassName`                            | Name of the runtime class to be used by pod(s)                                                             | `""`                  |
+| `cainjector.schedulerName`                               | Name of the k8s scheduler (other than default)                                                             | `""`                  |
+| `cainjector.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment                                                             | `[]`                  |
+| `cainjector.hostAliases`                                 | Custom host aliases for CAInjector pods                                                                    | `[]`                  |
+| `cainjector.tolerations`                                 | Tolerations for pod assignment                                                                             | `[]`                  |
+| `cainjector.podLabels`                                   | Extra labels for CAInjector pods                                                                           | `{}`                  |
+| `cainjector.podAnnotations`                              | Annotations for CAInjector pods                                                                            | `{}`                  |
+| `cainjector.lifecycleHooks`                              | Add lifecycle hooks to the CAInjector deployment                                                           | `{}`                  |
+| `cainjector.updateStrategy.type`                         | Controller deployment update strategy                                                                      | `RollingUpdate`       |
+| `cainjector.updateStrategy.rollingUpdate`                | Controller deployment rolling update configuration parameters                                              | `{}`                  |
+| `cainjector.extraArgs`                                   | Extra arguments to pass to the CAInjector container                                                        | `[]`                  |
+| `cainjector.extraEnvVars`                                | Add extra environment variables to the CAInjector container                                                | `[]`                  |
+| `cainjector.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars                                                       | `""`                  |
+| `cainjector.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars                                                          | `""`                  |
+| `cainjector.extraVolumes`                                | Optionally specify extra list of additional volumes for CAInjector pods                                    | `[]`                  |
+| `cainjector.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for CAInjector container(s)                       | `[]`                  |
+| `cainjector.initContainers`                              | Add additional init containers to the CAInjector pods                                                      | `[]`                  |
+| `cainjector.sidecars`                                    | Add additional sidecar containers to the CAInjector pod                                                    | `[]`                  |
+| `cainjector.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                       | `true`                |
+| `cainjector.serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                     | `""`                  |
+| `cainjector.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                       | `{}`                  |
+| `cainjector.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                             | `true`                |
 
 
 ### Metrics Parameters
@@ -271,7 +271,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                       | Description                                                                       | Value      |
 | ------------------------------------------ | --------------------------------------------------------------------------------- | ---------- |
 | `metrics.enabled`                          | Start metrics                                                                     | `true`     |
-| `metrics.podAnnotations`                   | Annotations for Cert Manager exporter pods                                        | `{}`       |
+| `metrics.podAnnotations`                   | Annotations for cert-manager exporter pods                                        | `{}`       |
 | `metrics.serviceMonitor.path`              | The path which the ServiceMonitor will monitor                                    | `/metrics` |
 | `metrics.serviceMonitor.targetPort`        | The port in which the ServiceMonitor will monitor                                 | `9402`     |
 | `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator      | `false`    |
@@ -331,7 +331,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars and Init Containers
 
-If you have a need for additional containers to run within the same pod as the Cert Manager app (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+If you have a need for additional containers to run within the same pod as the cert-manager app (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
 
 ```yaml
 sidecars:
@@ -363,7 +363,7 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 
 This chart allows you to set your custom affinity using the `controller.affinity`, `cainjector.affinity` or `webhook.affinity` parameters. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can make use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `controller.podAffinityPreset`, `cainjector.podAffinityPreset`, `webhook.podAffinityPreset`, `controller.podAntiAffinityPreset`, `cainjector.podAntiAffinityPreset`, `webhook.podAntiAffinityPreset`, `controller.nodeAffinityPreset`, `cainjector.nodeAffinityPreset` or `webhook.nodeAffinityPreset` parameters.
+As an alternative, you can make use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `controller.podAffinityPreset`, `cainjector.podAffinityPreset`, `webhook.podAffinityPreset`, `controller.podAntiAffinityPreset`, `cainjector.podAntiAffinityPreset`, `webhook.podAntiAffinityPreset`, `controller.nodeAffinityPreset`, `cainjector.nodeAffinityPreset` or `webhook.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
@@ -373,7 +373,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 0.5.0
 
-Exisiting CRDs have been syncronised with the official [Cert Manager repository](https://github.com/cert-manager/cert-manager/tree/master/deploy/crds). Using the templates present in the 1.8.0 tag.
+Exisiting CRDs have been syncronised with the official [cert-manager repository](https://github.com/cert-manager/cert-manager/tree/master/deploy/crds). Using the templates present in the 1.8.0 tag.
 
 ## License
 

@@ -19,7 +19,7 @@ helm install my-release my-repo/postgresql
 
 This chart bootstraps a [PostgreSQL](https://github.com/bitnami/containers/tree/main/bitnami/postgresql) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-For HA, please see [this repo](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha)
+For HA, please see [this repo](https://github.com/bitnami/charts/tree/main/bitnami/postgresql-ha)
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -101,7 +101,7 @@ kubectl delete pvc -l release=my-release
 | ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
 | `image.registry`                         | PostgreSQL image registry                                                                                                                                                                                                                                                                                                                     | `docker.io`                |
 | `image.repository`                       | PostgreSQL image repository                                                                                                                                                                                                                                                                                                                   | `bitnami/postgresql`       |
-| `image.tag`                              | PostgreSQL image tag (immutable tags are recommended)                                                                                                                                                                                                                                                                                         | `14.5.0-debian-11-r24`     |
+| `image.tag`                              | PostgreSQL image tag (immutable tags are recommended)                                                                                                                                                                                                                                                                                         | `15.1.0-debian-11-r0`      |
 | `image.digest`                           | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                                                                                                                    | `""`                       |
 | `image.pullPolicy`                       | PostgreSQL image pull policy                                                                                                                                                                                                                                                                                                                  | `IfNotPresent`             |
 | `image.pullSecrets`                      | Specify image pull secrets                                                                                                                                                                                                                                                                                                                    | `[]`                       |
@@ -249,6 +249,7 @@ kubectl delete pvc -l release=my-release
 | `primary.service.extraPorts`                 | Extra ports to expose in the PostgreSQL primary service                                                                  | `[]`                  |
 | `primary.service.sessionAffinity`            | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                     | `None`                |
 | `primary.service.sessionAffinityConfig`      | Additional settings for the sessionAffinity                                                                              | `{}`                  |
+| `primary.service.headless.annotations`       | Additional custom annotations for headless PostgreSQL primary service                                                    | `{}`                  |
 | `primary.persistence.enabled`                | Enable PostgreSQL Primary data persistence using PVC                                                                     | `true`                |
 | `primary.persistence.existingClaim`          | Name of an existing PVC to use                                                                                           | `""`                  |
 | `primary.persistence.mountPath`              | The path the volume will be mounted at                                                                                   | `/bitnami/postgresql` |
@@ -340,6 +341,7 @@ kubectl delete pvc -l release=my-release
 | `readReplicas.service.extraPorts`                 | Extra ports to expose in the PostgreSQL read only service                                                                | `[]`                  |
 | `readReplicas.service.sessionAffinity`            | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                     | `None`                |
 | `readReplicas.service.sessionAffinityConfig`      | Additional settings for the sessionAffinity                                                                              | `{}`                  |
+| `readReplicas.service.headless.annotations`       | Additional custom annotations for headless PostgreSQL read only service                                                  | `{}`                  |
 | `readReplicas.persistence.enabled`                | Enable PostgreSQL read only data persistence using PVC                                                                   | `true`                |
 | `readReplicas.persistence.existingClaim`          | Name of an existing PVC to use                                                                                           | `""`                  |
 | `readReplicas.persistence.mountPath`              | The path the volume will be mounted at                                                                                   | `/bitnami/postgresql` |
@@ -380,7 +382,7 @@ kubectl delete pvc -l release=my-release
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r38`      |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r50`      |
 | `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`                    |
@@ -409,7 +411,7 @@ kubectl delete pvc -l release=my-release
 | `metrics.enabled`                               | Start a prometheus exporter                                                                                | `false`                     |
 | `metrics.image.registry`                        | PostgreSQL Prometheus Exporter image registry                                                              | `docker.io`                 |
 | `metrics.image.repository`                      | PostgreSQL Prometheus Exporter image repository                                                            | `bitnami/postgres-exporter` |
-| `metrics.image.tag`                             | PostgreSQL Prometheus Exporter image tag (immutable tags are recommended)                                  | `0.11.1-debian-11-r15`      |
+| `metrics.image.tag`                             | PostgreSQL Prometheus Exporter image tag (immutable tags are recommended)                                  | `0.11.1-debian-11-r27`      |
 | `metrics.image.digest`                          | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                        |
 | `metrics.image.pullPolicy`                      | PostgreSQL Prometheus Exporter image pull policy                                                           | `IfNotPresent`              |
 | `metrics.image.pullSecrets`                     | Specify image pull secrets                                                                                 | `[]`                        |
@@ -650,19 +652,27 @@ This label will be displayed in the output of a successful install.
 
 - The Docker Official PostgreSQL image does not support replication. If you pass any replication environment variable, this would be ignored. The only environment variables supported by the Docker Official image are POSTGRES_USER, POSTGRES_DB, POSTGRES_PASSWORD, POSTGRES_INITDB_ARGS, POSTGRES_INITDB_WALDIR and PGDATA. All the remaining environment variables are specific to the Bitnami PostgreSQL image.
 - The Bitnami PostgreSQL image is non-root by default. This requires that you run the pod with `securityContext` and updates the permissions of the volume with an `initContainer`. A key benefit of this configuration is that the pod follows security best practices and is prepared to run on Kubernetes distributions with hard security constraints like OpenShift.
-- For OpenShift, one may either define the runAsUser and fsGroup accordingly, or try this more dynamic option: volumePermissions.securityContext.runAsUser="auto",securityContext.enabled=false,containerSecurityContext.enabled=false,shmVolume.chmod.enabled=false
+- For OpenShift up to 4.10, let set the volume permissions, security context, runAsUser and fsGroup automatically by OpenShift and disable the predefined settings of the helm chart: primary.securityContext.enabled=false,primary.containerSecurityContext.enabled=false,volumePermissions.enabled=false,shmVolume.enabled=false
+- For OpenShift 4.11 and higher, let set OpenShift the runAsUser and fsGroup automatically. Configure the pod and container security context to restrictive defaults and disable the volume permissions setup: primary.
+    podSecurityContext.fsGroup=null,primary.podSecurityContext.seccompProfile.type=RuntimeDefault,primary.containerSecurityContext.runAsUser=null,primary.containerSecurityContext.allowPrivilegeEscalation=false,primary.containerSecurityContext.runAsNonRoot=true,primary.containerSecurityContext.seccompProfile.type=RuntimeDefault,primary.containerSecurityContext.capabilities.drop=['ALL'],volumePermissions.enabled=false,shmVolume.enabled=false
 
 ### Setting Pod's affinity
 
 This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 12.0.0
+
+This major version changes the default PostgreSQL image from 14.x to 15.x. Follow the [official instructions](https://www.postgresql.org/docs/15/upgrading.html) to upgrade to 15.x.
+
+### To any previous version
 
 Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/infrastructure/postgresql/administration/upgrade/).
 

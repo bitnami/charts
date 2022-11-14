@@ -3666,7 +3666,7 @@ exporter:
 ##
 
 ## PostgreSQL chart configuration
-## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
+## ref: https://github.com/bitnami/charts/blob/main/bitnami/postgresql/values.yaml
 ## @param postgresql.enabled Switch to enable or disable the PostgreSQL helm chart
 ## @param postgresql.auth.enablePostgresUser Assign a password to the "postgres" admin user. Otherwise, remote access will be blocked for this user
 ## @param postgresql.auth.postgresPassword Password for the "postgres" admin user
@@ -3746,7 +3746,7 @@ externalDatabase:
 ##
 
 ## Redis&reg; chart configuration
-## ref: https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
+## ref: https://github.com/bitnami/charts/blob/main/bitnami/redis/values.yaml
 ## @param redis.enabled Switch to enable or disable the Redis&reg; helm
 ## @param redis.auth.enabled Enable password authentication
 ## @param redis.auth.password Redis&reg; password
@@ -3826,7 +3826,7 @@ metrics:
     ##
     labels: {}
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
-    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ##
     selector: {}
     ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping

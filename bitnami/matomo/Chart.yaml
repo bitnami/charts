@@ -1,7 +1,7 @@
 annotations:
   category: Analytics
 apiVersion: v2
-appVersion: 4.12.0
+appVersion: 4.12.3
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
@@ -14,7 +14,7 @@ dependencies:
     version: 2.x.x
 description: Matomo, formerly known as Piwik, is a real time web analytics program. It provides detailed reports on website visitors.
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/matomo
+home: https://github.com/bitnami/charts/tree/main/bitnami/matomo
 icon: https://bitnami.com/assets/stacks/matomo/img/matomo-stack-220x234.png
 keywords:
   - matomo
@@ -30,4 +30,4 @@ name: matomo
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/matomo
   - https://www.matomo.org/
-version: 0.2.9
+version: 0.2.13

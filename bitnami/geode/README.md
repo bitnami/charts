@@ -7,7 +7,11 @@ Apache Geode is a data management platform that provides advanced capabilities f
 [Overview of Apache Geode](https://geode.apache.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
+## Chart Deprecation Notice
+
+Apache Geode's chart is longer maintained and is now internally tagged to be deprecated. This chart will no longer be released in our catalog a month after this notice is published, but already released chart will still persist in the registries. Valid to be removed starting on: 12-08-2022
+
 ## TL;DR
 
 ```console
@@ -82,7 +86,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------- |
 | `image.registry`                         | Apache Geode image registry                                                                                  | `docker.io`                                                 |
 | `image.repository`                       | Apache Geode image repository                                                                                | `bitnami/geode`                                             |
-| `image.tag`                              | Apache Geode image tag (immutable tags are recommended)                                                      | `1.15.0-debian-11-r35`                                      |
+| `image.tag`                              | Apache Geode image tag (immutable tags are recommended)                                                      | `1.15.1-debian-11-r0`                                       |
 | `image.digest`                           | Apache Geode image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                                        |
 | `image.pullPolicy`                       | Apache Geode image pull policy                                                                               | `IfNotPresent`                                              |
 | `image.pullSecrets`                      | Apache Geode image pull secrets                                                                              | `[]`                                                        |
@@ -313,7 +317,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r40`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r43`      |
 | `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -330,7 +334,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                               | Expose Apache Geode metrics                                                                                     | `false`              |
 | `metrics.image.registry`                        | Bitnami HAProxy image registry                                                                                  | `docker.io`          |
 | `metrics.image.repository`                      | Bitnami HAProxy image repository                                                                                | `bitnami/haproxy`    |
-| `metrics.image.tag`                             | Bitnami HAProxy image tag (immutable tags are recommended)                                                      | `2.6.6-debian-11-r6` |
+| `metrics.image.tag`                             | Bitnami HAProxy image tag (immutable tags are recommended)                                                      | `2.6.6-debian-11-r9` |
 | `metrics.image.digest`                          | Bitnami HAProxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
 | `metrics.image.pullPolicy`                      | Bitnami HAProxy image pull policy                                                                               | `IfNotPresent`       |
 | `metrics.image.pullSecrets`                     | Bitnami HAProxy image pull secrets                                                                              | `[]`                 |
@@ -450,7 +454,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Ingress
 
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/master/bitnami/contour) you can utilize the ingress controller to serve your application.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
 
 To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/infrastructure/geode/configuration/configure-ingress/).
 
@@ -483,7 +487,7 @@ If additional containers are needed in the same pod as geode (such as additional
 
 This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 > Note: XXX is placeholder you need to replace with the actual component(s).
 

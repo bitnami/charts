@@ -64,7 +64,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kiam
-  tag: 4.2.0-debian-11-r44
+  tag: 4.2.0-debian-11-r54
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -482,7 +482,7 @@ server:
       ##
       scrapeTimeout: ""
       ## @param server.metrics.serviceMonitor.selector metrics service selector
-      ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
       ##
       selector: {}
       ## @param server.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
@@ -902,7 +902,7 @@ agent:
       ##
       scrapeTimeout: ""
       ## @param agent.metrics.serviceMonitor.selector metrics service selector
-      ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
       ##
       selector: {}
       ## @param agent.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor

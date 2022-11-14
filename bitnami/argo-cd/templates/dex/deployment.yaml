@@ -77,8 +77,8 @@ spec:
             - /bin/bash
             - -ec
             - |
-              chown -R {{ .Values.dex.containerSecurityContext.runAsUser }}:{{ .Values.dex.containerSecurityContext.fsGroup }} /shared
-              chown -R {{ .Values.dex.containerSecurityContext.runAsUser }}:{{ .Values.dex.containerSecurityContext.fsGroup }} /tmp
+              chown -R {{ .Values.dex.containerSecurityContext.runAsUser }}:{{ .Values.dex.podSecurityContext.fsGroup }} /shared
+              chown -R {{ .Values.dex.containerSecurityContext.runAsUser }}:{{ .Values.dex.podSecurityContext.fsGroup }} /tmp
           securityContext:
             runAsUser: {{ .Values.volumePermissions.containerSecurityContext.runAsUser }}
           {{- if .Values.volumePermissions.resources }}

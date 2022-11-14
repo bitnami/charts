@@ -145,7 +145,7 @@ spec:
           {{- end }}
           volumeMounts:
             - name: loki-config
-              mountPath: /bitnami/grafana-loki/conf/loki.yaml
+              mountPath: {{ .Values.loki.dataDir }}/conf/loki.yaml
               subPath: loki.yaml
           {{- if .Values.queryFrontend.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.extraVolumeMounts "context" $) | nindent 12 }}

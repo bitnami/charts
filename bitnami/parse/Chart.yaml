@@ -1,7 +1,7 @@
 annotations:
   category: DeveloperTools
 apiVersion: v2
-appVersion: 5.2.7
+appVersion: 5.3.3
 dependencies:
   - name: mongodb
     repository: https://charts.bitnami.com/bitnami
@@ -13,7 +13,7 @@ dependencies:
     version: 2.x.x
 description: Parse is a platform that enables users to add a scalable and powerful backend to launch a full-featured app for iOS, Android, JavaScript, Windows, Unity, and more.
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/parse
+home: https://github.com/bitnami/charts/tree/main/bitnami/parse
 icon: https://bitnami.com/assets/stacks/parse/img/parse-stack-220x234.png
 keywords:
   - parse
@@ -30,4 +30,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/parse
   - https://github.com/bitnami/containers/tree/main/bitnami/parse-dashboard
   - https://parse.com/
-version: 19.1.5
+version: 19.1.10

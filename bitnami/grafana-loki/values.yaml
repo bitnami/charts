@@ -72,7 +72,7 @@ loki:
   image:
     registry: docker.io
     repository: bitnami/grafana-loki
-    tag: 2.6.1-debian-11-r30
+    tag: 2.7.0-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -95,6 +95,9 @@ loki:
 
     server:
       http_listen_port: {{ .Values.loki.containerPorts.http }}
+
+    common:
+      compactor_address: http://{{ include "grafana-loki.compactor.fullname" . }}:{{ .Values.compactor.service.ports.http }}
 
     distributor:
       ring:
@@ -198,8 +201,8 @@ loki:
             timeout: 500ms
             update_interval: 1m
           {{- else }}
-          enable_fifocache: true
-          fifocache:
+          embedded-cache:
+            enabled: true
             max_size_items: 1024
             validity: 24h
           {{- end }}
@@ -268,7 +271,7 @@ loki:
 compactor:
   ## @param compactor.enabled Enable Compactor deployment
   ##
-  enabled: false
+  enabled: true
   ## @param compactor.extraEnvVars Array with extra environment variables to add to compactor nodes
   ## e.g:
   ## extraEnvVars:
@@ -586,7 +589,7 @@ gateway:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.23.1-debian-11-r32
+    tag: 1.23.2-debian-11-r7
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -3250,7 +3253,7 @@ promtail:
   image:
     registry: docker.io
     repository: bitnami/promtail
-    tag: 2.6.1-debian-11-r29
+    tag: 2.7.0-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -3665,7 +3668,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r40
+    tag: 11-debian-11-r50
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -3744,7 +3747,7 @@ metrics:
     ##
     labels: {}
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
-    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ##
     selector: {}
     ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
@@ -3787,7 +3790,7 @@ memcachedchunks:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.17-debian-11-r14
+    tag: 1.6.17-debian-11-r25
     digest: ""
   ## @param memcachedchunks.nameOverride override the subchart name
   ##
@@ -3828,7 +3831,7 @@ memcachedfrontend:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.17-debian-11-r14
+    tag: 1.6.17-debian-11-r25
     digest: ""
   ## @param memcachedfrontend.architecture Memcached architecture
   ##
@@ -3870,7 +3873,7 @@ memcachedindexqueries:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.17-debian-11-r14
+    tag: 1.6.17-debian-11-r25
     digest: ""
   ## @param memcachedindexqueries.architecture Memcached architecture
   ##
@@ -3911,7 +3914,7 @@ memcachedindexwrites:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.17-debian-11-r14
+    tag: 1.6.17-debian-11-r25
     digest: ""
   ## @param memcachedindexwrites.architecture Memcached architecture
   ##

@@ -2,7 +2,7 @@
 apiVersion: {{ include "common.capabilities.cronjob.apiVersion" . }}
 kind: CronJob
 metadata:
-  name: {{ printf "%s-snapshotter" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-snapshotter" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
@@ -80,7 +80,7 @@ spec:
                   value: {{ include "common.names.fullname" . | quote }}
                 {{- $releaseNamespace := .Release.Namespace }}
                 {{- $etcdFullname := include "common.names.fullname" . }}
-                {{- $etcdHeadlessServiceName := printf "%s-%s" $etcdFullname "headless" }}
+                {{- $etcdHeadlessServiceName := (printf "%s-%s" $etcdFullname "headless" | trunc 63 | trimSuffix "-") }}
                 {{- $clusterDomain := .Values.clusterDomain }}
                 - name: ETCD_CLUSTER_DOMAIN
                   value: {{ printf "%s.%s.svc.%s" $etcdHeadlessServiceName $releaseNamespace $clusterDomain | quote }}

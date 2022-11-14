@@ -7,7 +7,7 @@ Spring Cloud Data Flow is a microservices-based toolkit for building streaming a
 [Overview of Spring Cloud Data Flow](https://github.com/spring-cloud/spring-cloud-dataflow)
 
 
-
+                           
 ## TL;DR
 
 ```bash
@@ -78,7 +78,7 @@ helm uninstall my-release
 | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------- |
 | `server.image.registry`                             | Spring Cloud Dataflow image registry                                                                                                       | `docker.io`                                          |
 | `server.image.repository`                           | Spring Cloud Dataflow image repository                                                                                                     | `bitnami/spring-cloud-dataflow`                      |
-| `server.image.tag`                                  | Spring Cloud Dataflow image tag (immutable tags are recommended)                                                                           | `2.9.6-debian-11-r0`                                 |
+| `server.image.tag`                                  | Spring Cloud Dataflow image tag (immutable tags are recommended)                                                                           | `2.9.6-debian-11-r18`                                |
 | `server.image.digest`                               | Spring Cloud Dataflow image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                      | `""`                                                 |
 | `server.image.pullPolicy`                           | Spring Cloud Dataflow image pull policy                                                                                                    | `IfNotPresent`                                       |
 | `server.image.pullSecrets`                          | Specify docker-registry secret names as an array                                                                                           | `[]`                                                 |
@@ -86,7 +86,7 @@ helm uninstall my-release
 | `server.hostAliases`                                | Deployment pod host aliases                                                                                                                | `[]`                                                 |
 | `server.composedTaskRunner.image.registry`          | Spring Cloud Dataflow Composed Task Runner image registry                                                                                  | `docker.io`                                          |
 | `server.composedTaskRunner.image.repository`        | Spring Cloud Dataflow Composed Task Runner image repository                                                                                | `bitnami/spring-cloud-dataflow-composed-task-runner` |
-| `server.composedTaskRunner.image.tag`               | Spring Cloud Dataflow Composed Task Runner image tag (immutable tags are recommended)                                                      | `2.9.5-debian-11-r10`                                |
+| `server.composedTaskRunner.image.tag`               | Spring Cloud Dataflow Composed Task Runner image tag (immutable tags are recommended)                                                      | `2.9.6-debian-11-r14`                                |
 | `server.composedTaskRunner.image.digest`            | Spring Cloud Dataflow Composed Task Runner image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                                 |
 | `server.configuration.streamingEnabled`             | Enables or disables streaming data processing                                                                                              | `true`                                               |
 | `server.configuration.batchEnabled`                 | Enables or disables batch data (tasks and schedules) processing                                                                            | `true`                                               |
@@ -197,7 +197,7 @@ helm uninstall my-release
 | `skipper.hostAliases`                        | Deployment pod host aliases                                                                                          | `[]`                           |
 | `skipper.image.registry`                     | Spring Cloud Skipper image registry                                                                                  | `docker.io`                    |
 | `skipper.image.repository`                   | Spring Cloud Skipper image repository                                                                                | `bitnami/spring-cloud-skipper` |
-| `skipper.image.tag`                          | Spring Cloud Skipper image tag (immutable tags are recommended)                                                      | `2.8.6-debian-11-r0`           |
+| `skipper.image.tag`                          | Spring Cloud Skipper image tag (immutable tags are recommended)                                                      | `2.8.6-debian-11-r19`          |
 | `skipper.image.digest`                       | Spring Cloud Skipper image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                           |
 | `skipper.image.pullPolicy`                   | Spring Cloud Skipper image pull policy                                                                               | `IfNotPresent`                 |
 | `skipper.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                     | `[]`                           |
@@ -321,7 +321,7 @@ helm uninstall my-release
 | `metrics.enabled`                            | Enable Prometheus metrics                                                                                                  | `false`                            |
 | `metrics.image.registry`                     | Prometheus Rsocket Proxy image registry                                                                                    | `docker.io`                        |
 | `metrics.image.repository`                   | Prometheus Rsocket Proxy image repository                                                                                  | `bitnami/prometheus-rsocket-proxy` |
-| `metrics.image.tag`                          | Prometheus Rsocket Proxy image tag (immutable tags are recommended)                                                        | `1.5.0-debian-11-r9`               |
+| `metrics.image.tag`                          | Prometheus Rsocket Proxy image tag (immutable tags are recommended)                                                        | `1.5.0-debian-11-r28`              |
 | `metrics.image.digest`                       | Prometheus Rsocket Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag   | `""`                               |
 | `metrics.image.pullPolicy`                   | Prometheus Rsocket Proxy image pull policy                                                                                 | `IfNotPresent`                     |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                           | `[]`                               |
@@ -399,7 +399,7 @@ helm uninstall my-release
 | `waitForBackends.enabled`            | Wait for the database and other services (such as Kafka or RabbitMQ) used when enabling streaming                               | `true`                |
 | `waitForBackends.image.registry`     | Init container wait-for-backend image registry                                                                                  | `docker.io`           |
 | `waitForBackends.image.repository`   | Init container wait-for-backend image name                                                                                      | `bitnami/kubectl`     |
-| `waitForBackends.image.tag`          | Init container wait-for-backend image tag                                                                                       | `1.25.0-debian-11-r4` |
+| `waitForBackends.image.tag`          | Init container wait-for-backend image tag                                                                                       | `1.25.4-debian-11-r0` |
 | `waitForBackends.image.digest`       | Init container wait-for-backend image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `waitForBackends.image.pullPolicy`   | Init container wait-for-backend image pull policy                                                                               | `IfNotPresent`        |
 | `waitForBackends.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                | `[]`                  |
@@ -479,7 +479,7 @@ Alternatively, a YAML file that specifies the values for the parameters can be p
 helm install my-release -f values.yaml my-repo/spring-cloud-dataflow
 ```
 
-> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/blob/master/bitnami/spring-cloud-dataflow/values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/blob/main/bitnami/spring-cloud-dataflow/values.yaml)
 
 ## Configuration and installation details
 
@@ -658,7 +658,7 @@ In the first two cases, it's needed a certificate and a key. We would expect the
 
 This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
@@ -668,9 +668,13 @@ Find more information about how to deal with common errors related to Bitnami He
 
 If you enabled RabbitMQ chart to be used as the messaging solution for Skipper to manage streaming content, then it's necessary to set the `rabbitmq.auth.password` and `rabbitmq.auth.erlangCookie` parameters when upgrading for readiness/liveness probes to work properly. Inspect the RabbitMQ secret to obtain the password and the Erlang cookie, then you can upgrade your chart using the command below:
 
+### To 14.0.0
+
+This major updates the RabbitMQ subchart to its newest major, 11.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq#to-1100) you can find more information about the changes introduced in that version.
+
 ### To 13.0.0
 
-This major updates the Kafka subchart to it newest major, 19.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/kafka#to-1900).
+This major updates the Kafka subchart to it newest major, 19.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-1900).
 
 ### To 12.0.0
 
@@ -686,7 +690,7 @@ This major updates the Kafka subchart to its newest major, 17.0.0. No major issu
 
 ### To 9.0.0
 
-This major updates the RabbitMQ subchart to its newest major, 9.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/rabbitmq#to-900) you can find more information about the changes introduced in that version.
+This major updates the RabbitMQ subchart to its newest major, 9.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq#to-900) you can find more information about the changes introduced in that version.
 
 ### To 8.0.0
 
@@ -694,11 +698,11 @@ This major release bumps the MariaDB version to 10.6. Follow the [upstream instr
 
 ### To 7.0.0
 
-This major updates the Kafka subchart to its newest major, 16.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/kafka#to-1600) you can find more information about the changes introduced in that version.
+This major updates the Kafka subchart to its newest major, 16.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-1600) you can find more information about the changes introduced in that version.
 
 ### To 6.0.0
 
-This major release updates the Kafka subchart to its newest major `15.x.x`, which contains several changes in the supported values and bumps Kafka major version to `3.x` series (check the [upgrade notes](https://github.com/bitnami/charts/blob/master/bitnami/kafka/README.md#to-1500) to obtain more information).
+This major release updates the Kafka subchart to its newest major `15.x.x`, which contains several changes in the supported values and bumps Kafka major version to `3.x` series (check the [upgrade notes](https://github.com/bitnami/charts/blob/main/bitnami/kafka/README.md#to-1500) to obtain more information).
 
 To upgrade to *6.0.0* from *5.x* using Kafka as messaging solution, it should be done by maintaining the Kafka `2.x` series. To do so, follow the instructions below (the following example assumes that the release name is *scdf* and the release namespace *default*):
 
@@ -731,15 +735,15 @@ Affected values:
 - `server.strategyType` and `skikker.strategyType` have been replaced by `server.updateStrategy` and `skikker.updateStrategy` respectively. While `strategyType` was interpreted as a String, while `updateStrategy` is interpreted as an object.
 - The service account token is now set to automount `false` by default. To change this, set the value `serviceAccount.automountServiceAccountToken` to `true`.
 
-Additionally updates the MariaDB subchart to its newest major, 10.0.0, which contains similar changes. [Here](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-1000) you can find more information about the changes introduced in this version.
+Additionally updates the MariaDB subchart to its newest major, 10.0.0, which contains similar changes. [Here](https://github.com/bitnami/charts/tree/main/bitnami/mariadb#to-1000) you can find more information about the changes introduced in this version.
 
 ### To 4.0.0
 
-This major updates the Kafka subchart its newest major, 14.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/kafka#to-1400) you can find more information about the changes introduced in this version.
+This major updates the Kafka subchart its newest major, 14.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-1400) you can find more information about the changes introduced in this version.
 
 ### To 3.0.0
 
-This major updates the Kafka subchart to its newest major 13.0.0. For more information on this subchart's major, please refer to [kafka upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/kafka#to-1300).
+This major updates the Kafka subchart to its newest major 13.0.0. For more information on this subchart's major, please refer to [kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-1300).
 
 ### To 2.0.0
 
@@ -778,7 +782,7 @@ helm upgrade my-release my-repo/spring-cloud-dataflow --set mariadb.auth.rootPas
 
 ### To 1.0.0
 
-MariaDB dependency version was bumped to a new major version that introduces several incompatibilities. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-800) for more information.
+MariaDB dependency version was bumped to a new major version that introduces several incompatibilities. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/mariadb#to-800) for more information.
 
 To upgrade to `1.0.0`, you will need to reuse the PVC used to hold the MariaDB data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `dataflow`):
 

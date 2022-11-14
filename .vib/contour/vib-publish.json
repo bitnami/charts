@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/contour"
         },
-        "runtime_parameters": "ImNvbnRvdXIiOgogICJzZXJ2aWNlIjoKICAgICJwb3J0cyI6CiAgICAgICJ4ZHMiOiA4MAogICAgInR5cGUiOiAiTG9hZEJhbGFuY2VyIgoiZW52b3kiOgogICJzZXJ2aWNlIjoKICAgICJ0eXBlIjogIk5vZGVQb3J0Ig==",
+        "runtime_parameters": "Y29udG91cjoKICBlbmFibGVkOiB0cnVlCiAgbWFuYWdlQ1JEczogdHJ1ZQogIHNlcnZpY2VBY2NvdW50OgogICAgY3JlYXRlOiB0cnVlCiAgICBhdXRvbW91bnRTZXJ2aWNlQWNjb3VudFRva2VuOiB0cnVlCiAgcG9kU2VjdXJpdHlDb250ZXh0OgogICAgZW5hYmxlZDogdHJ1ZQogICAgZnNHcm91cDogMTAwMgogIGNvbnRhaW5lclNlY3VyaXR5Q29udGV4dDoKICAgIGVuYWJsZWQ6IHRydWUKICAgIHJ1bkFzVXNlcjogMTAwMgogIGNvbnRhaW5lclBvcnRzOgogICAgeGRzOiA4MDAyCiAgc2VydmljZToKICAgIHBvcnRzOgogICAgICB4ZHM6IDgwMDIKICAgIHR5cGU6IENsdXN0ZXJJUAplbnZveToKICBlbmFibGVkOiB0cnVlCiAgY29udGFpbmVyUG9ydHM6CiAgICBodHRwOiA4MDgwCiAgICBodHRwczogODA4MAogIHNlcnZpY2U6CiAgICB0eXBlOiBMb2FkQmFsYW5jZXIKICAgIGV4dGVybmFsVHJhZmZpY1BvbGljeTogTG9jYWwKICAgIHBvcnRzOgogICAgICBodHRwOiA4MAogICAgICBodHRwczogNDQ0CnJiYWM6CiAgY3JlYXRlOiB0cnVlCmV4dHJhRGVwbG95OgotIGFwaVZlcnNpb246IGFwcHMvdjEKICBraW5kOiBEZXBsb3ltZW50CiAgbWV0YWRhdGE6CiAgICBsYWJlbHM6CiAgICAgIGFwcDoga3VhcmQKICAgIG5hbWU6IGt1YXJkCiAgc3BlYzoKICAgIHJlcGxpY2FzOiAxCiAgICBzZWxlY3RvcjoKICAgICAgbWF0Y2hMYWJlbHM6CiAgICAgICAgYXBwOiBrdWFyZAogICAgdGVtcGxhdGU6CiAgICAgIG1ldGFkYXRhOgogICAgICAgIGxhYmVsczoKICAgICAgICAgIGFwcDoga3VhcmQKICAgICAgc3BlYzoKICAgICAgICBjb250YWluZXJzOgogICAgICAgIC0gaW1hZ2U6IGdjci5pby9rdWFyLWRlbW8va3VhcmQtYW1kNjQ6MQogICAgICAgICAgbmFtZToga3VhcmQKLSBhcGlWZXJzaW9uOiB2MQogIGtpbmQ6IFNlcnZpY2UKICBtZXRhZGF0YToKICAgIGxhYmVsczoKICAgICAgYXBwOiBrdWFyZAogICAgbmFtZToga3VhcmQKICBzcGVjOgogICAgcG9ydHM6CiAgICAtIHBvcnQ6IDgwCiAgICAgIHByb3RvY29sOiBUQ1AKICAgICAgdGFyZ2V0UG9ydDogODA4MAogICAgc2VsZWN0b3I6CiAgICAgIGFwcDoga3VhcmQKICAgIHNlc3Npb25BZmZpbml0eTogTm9uZQogICAgdHlwZTogQ2x1c3RlcklQCi0gYXBpVmVyc2lvbjogbmV0d29ya2luZy5rOHMuaW8vdjEKICBraW5kOiBJbmdyZXNzCiAgbWV0YWRhdGE6CiAgICBuYW1lOiBjb250b3VyLXZpYi10ZXN0CiAgICBsYWJlbHM6CiAgICAgIGFwcDoga3VhcmQKICBzcGVjOgogICAgaW5ncmVzc0NsYXNzTmFtZTogY29udG91cgogICAgZGVmYXVsdEJhY2tlbmQ6CiAgICAgIHNlcnZpY2U6CiAgICAgICAgbmFtZToga3VhcmQKICAgICAgICBwb3J0OgogICAgICAgICAgbnVtYmVyOiA4MA==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
           "size": {
@@ -34,7 +34,33 @@
         {
           "action_id": "health-check",
           "params": {
-            "endpoint": "lb-contour-tcp-xds"
+            "endpoint": "lb-contour-envoy-http"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/contour/goss"
+            },
+            "remote": {
+              "workload": "deploy-contour-contour"
+            },
+            "vars_file": "vars.yaml"
+          }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/contour/ginkgo"
+
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "ingress-name": "contour-vib-test"
+            }
           }
         }
       ]

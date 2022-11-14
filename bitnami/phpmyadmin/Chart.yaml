@@ -16,7 +16,7 @@ dependencies:
     version: 2.x.x
 description: phpMyAdmin is a free software tool written in PHP, intended to handle the administration of MySQL over the Web. phpMyAdmin supports a wide range of operations on MySQL and MariaDB.
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/phpmyadmin
+home: https://github.com/bitnami/charts/tree/main/bitnami/phpmyadmin
 icon: https://bitnami.com/assets/stacks/phpmyadmin/img/phpmyadmin-stack-220x234.png
 keywords:
   - mariadb
@@ -29,4 +29,4 @@ name: phpmyadmin
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/phpmyadmin
   - https://www.phpmyadmin.net/
-version: 10.3.5
+version: 10.3.6

@@ -95,9 +95,9 @@ spec:
               newNodeCounter=0
               for nodeIP in $(echo "{{ .Values.cluster.update.newExternalIPs }}" | cut -d [ -f2 | cut -d ] -f 1 ); do
                 {{- if .Values.tls.enabled }}
-                while [[ $(redis-cli -h "$nodeIP" -p "$REDIS_TLS_PORT" --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} ping) != 'PONG' ]]; do
+                while [[ $(redis-cli -h "$nodeIP" -p "$REDIS_TLS_PORT_NUMBER" --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} ping) != 'PONG' ]]; do
                 {{- else }}
-                while [[ $(redis-cli -h "$nodeIP" -p "$REDIS_PORT" ping) != 'PONG' ]]; do
+                while [[ $(redis-cli -h "$nodeIP" -p "$REDIS_PORT_NUMBER" ping) != 'PONG' ]]; do
                 {{- end }}
                   echo "Node $nodeIP not ready, waiting for all the nodes to be ready..."
                   sleep 5
@@ -107,9 +107,9 @@ spec:
                   slave+=("--cluster-slave")
                 fi
                 {{- if .Values.tls.enabled }}
-                while ! redis-cli --cluster --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} add-node "${nodeIP}:${REDIS_TLS_PORT}" "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${REDIS_TLS_PORT}" ${slave[@]}; do
+                while ! redis-cli --cluster --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} add-node "${nodeIP}:${REDIS_TLS_PORT_NUMBER}" "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${REDIS_TLS_PORT_NUMBER}" ${slave[@]}; do
                 {{- else }}
-                while ! redis-cli --cluster add-node "${nodeIP}:${REDIS_PORT}" "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${REDIS_PORT}" ${slave[@]}; do
+                while ! redis-cli --cluster add-node "${nodeIP}:${REDIS_PORT_NUMBER}" "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${REDIS_PORT_NUMBER}" ${slave[@]}; do
                 {{- end }}
                   echo "Add-node ${newNodeIndex} ${newNodeIP} failed, retrying"
                   sleep 5
@@ -118,16 +118,16 @@ spec:
               done
 
               {{- if .Values.tls.enabled }}
-              while ! redis-cli --cluster rebalance --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${REDIS_TLS_PORT}" --cluster-use-empty-masters; do
+              while ! redis-cli --cluster rebalance --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${REDIS_TLS_PORT_NUMBER}" --cluster-use-empty-masters; do
               {{- else }}
-              while ! redis-cli --cluster rebalance "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${REDIS_PORT}" --cluster-use-empty-masters; do
+              while ! redis-cli --cluster rebalance "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${REDIS_PORT_NUMBER}" --cluster-use-empty-masters; do
               {{- end }}
                 echo "Rebalance failed, retrying"
                 sleep 5
                 {{- if .Values.tls.enabled }}
-                redis-cli --cluster fix --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${REDIS_TLS_PORT}"
+                redis-cli --cluster fix --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${REDIS_TLS_PORT_NUMBER}"
                 {{- else }}
-                redis-cli --cluster fix "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${REDIS_PORT}"
+                redis-cli --cluster fix "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${REDIS_PORT_NUMBER}"
                 {{- end }}
               done
 
@@ -140,9 +140,9 @@ spec:
                 newNodeIndex="$(($node - 1))"
                 newNodeIP=$(wait_for_dns_lookup "{{ template "common.names.fullname" . }}-${newNodeIndex}.{{ template "common.names.fullname" . }}-headless" 120 5)
                 {{- if .Values.tls.enabled }}
-                while [[ $(redis-cli -h "$newNodeIP" -p "$REDIS_TLS_PORT" --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} ping) != 'PONG' ]]; do
+                while [[ $(redis-cli -h "$newNodeIP" -p "$REDIS_TLS_PORT_NUMBER" --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} ping) != 'PONG' ]]; do
                 {{- else }}
-                while [[ $(redis-cli -h "$newNodeIP" -p "$REDIS_PORT" ping) != 'PONG' ]]; do
+                while [[ $(redis-cli -h "$newNodeIP" -p "$REDIS_PORT_NUMBER" ping) != 'PONG' ]]; do
                 {{- end }}
                   echo "Node $newNodeIP not ready, waiting for all the nodes to be ready..."
                   newNodeIP=$(wait_for_dns_lookup "{{ template "common.names.fullname" . }}-${newNodeIndex}.{{ template "common.names.fullname" . }}-headless" 120 5)
@@ -155,9 +155,9 @@ spec:
                   slave+=("--cluster-slave")
                 fi
                 {{- if .Values.tls.enabled }}
-                while ! redis-cli --cluster add-node --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} "${newNodeIP}:${REDIS_TLS_PORT}" "${firstNodeIP}:${REDIS_TLS_PORT}" ${slave[@]}; do
+                while ! redis-cli --cluster add-node --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} "${newNodeIP}:${REDIS_TLS_PORT_NUMBER}" "${firstNodeIP}:${REDIS_TLS_PORT_NUMBER}" ${slave[@]}; do
                 {{- else }}
-                while ! redis-cli --cluster add-node "${newNodeIP}:${REDIS_PORT}" "${firstNodeIP}:${REDIS_PORT}" ${slave[@]}; do
+                while ! redis-cli --cluster add-node "${newNodeIP}:${REDIS_PORT_NUMBER}" "${firstNodeIP}:${REDIS_PORT_NUMBER}" ${slave[@]}; do
                 {{- end }}
                   echo "Add-node ${newNodeIndex} ${newNodeIP} failed, retrying"
                   sleep 5
@@ -167,17 +167,17 @@ spec:
               done
 
               {{- if .Values.tls.enabled }}
-              while ! redis-cli --cluster rebalance --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} "${firstNodeIP}:${REDIS_TLS_PORT}" --cluster-use-empty-masters; do
+              while ! redis-cli --cluster rebalance --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} "${firstNodeIP}:${REDIS_TLS_PORT_NUMBER}" --cluster-use-empty-masters; do
               {{- else }}
-              while ! redis-cli --cluster rebalance "${firstNodeIP}:${REDIS_PORT}" --cluster-use-empty-masters; do
+              while ! redis-cli --cluster rebalance "${firstNodeIP}:${REDIS_PORT_NUMBER}" --cluster-use-empty-masters; do
               {{- end }}
                 echo "Rebalance failed, retrying"
                 sleep 5
                 firstNodeIP=$(wait_for_dns_lookup "{{ template "common.names.fullname" . }}-0.{{ template "common.names.fullname" . }}-headless" 120 5)
                 {{- if .Values.tls.enabled }}
-                redis-cli --cluster fix --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} "${firstNodeIP}:${REDIS_TLS_PORT}"
+                redis-cli --cluster fix --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} "${firstNodeIP}:${REDIS_TLS_PORT_NUMBER}"
                 {{- else }}
-                redis-cli --cluster fix "${firstNodeIP}:${REDIS_PORT}"
+                redis-cli --cluster fix "${firstNodeIP}:${REDIS_PORT_NUMBER}"
                 {{- end }}
               done
 
@@ -194,9 +194,9 @@ spec:
               value: {{ template "redis-cluster.tlsCertKey" . }}
             - name:  REDIS_TLS_CA_FILE
               value: {{ template "redis-cluster.tlsCACert" . }}
-            - name: REDIS_TLS_PORT
+            - name: REDIS_TLS_PORT_NUMBER
             {{- else }}
-            - name: REDIS_PORT
+            - name: REDIS_PORT_NUMBER
             {{- end }}
               value: {{ .Values.cluster.externalAccess.service.port | quote }}
             {{- else }}
@@ -207,9 +207,9 @@ spec:
               value: {{ template "redis-cluster.tlsCertKey" . }}
             - name:  REDIS_TLS_CA_FILE
               value: {{ template "redis-cluster.tlsCACert" . }}
-            - name: REDIS_TLS_PORT
+            - name: REDIS_TLS_PORT_NUMBER
             {{- else }}
-            - name: REDIS_PORT
+            - name: REDIS_PORT_NUMBER
             {{- end }}
               value: {{ .Values.redis.containerPorts.redis | quote }}
             {{- end }}

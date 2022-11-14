@@ -17,6 +17,6 @@ roleRef:
   name: {{ template "common.names.fullname.namespace" . }}
 subjects:
   - kind: ServiceAccount
-    name: {{ template "common.names.fullname" . }}
+    name: {{ template "metrics-server.serviceAccountName" . }}
     namespace: {{ include "common.names.namespace" . | quote }}
 {{- end -}}

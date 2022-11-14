@@ -14,7 +14,7 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
-  serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) }}
+  serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   podManagementPolicy: {{ .Values.podManagementPolicy }}
   updateStrategy: {{- include "common.tplvalues.render" (dict "value" .Values.updateStrategy "context" $ ) | nindent 4 }}
   template:
@@ -103,7 +103,7 @@ spec:
         {{- $peerPort := int .Values.containerPorts.peer }}
         {{- $etcdFullname := include "common.names.fullname" . }}
         {{- $releaseNamespace := .Release.Namespace }}
-        {{- $etcdHeadlessServiceName := printf "%s-%s" $etcdFullname "headless" }}
+        {{- $etcdHeadlessServiceName := (printf "%s-%s" $etcdFullname "headless" | trunc 63 | trimSuffix "-") }}
         {{- $clusterDomain := .Values.clusterDomain }}
         {{- $etcdPeerProtocol := include "etcd.peerProtocol" . }}
         {{- $etcdClientProtocol := include "etcd.clientProtocol" . }}

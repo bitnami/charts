@@ -2665,20 +2665,24 @@ ruler:
   dnsDiscovery:
     enabled: true
   ## @param ruler.alertmanagers Alert managers URLs array
+  ## NOTE: This is only used when ruler.alertmanagersConfig is not set
   ##
   alertmanagers: []
   ## @param ruler.alertmanagersConfig Alert managers configuration
+  ## NOTE: This is only used when ruler.alertmanagers is not set
+  ## ref: https://thanos.io/tip/components/rule.md/#alertmanager
   ## e.g:
   ## alertmanagersConfig:
-  ##   - http_config:
-  ##       basic_auth:
-  ##         username: some_user
-  ##         password: some_pass
-  ##     static_configs:
-  ##       - alertmanager.thanos.io
-  ##     scheme: http
-  ##     timeout: 10s
-  ##     api_version: v2
+  ##   alertmanagers:
+  ##     - http_config:
+  ##         basic_auth:
+  ##           username: some_user
+  ##           password: some_pass
+  ##       static_configs:
+  ##         - alertmanager.thanos.io
+  ##       scheme: http
+  ##       timeout: 10s
+  ##       api_version: v2
   ##
   alertmanagersConfig: ""
   ## @param ruler.evalInterval The default evaluation interval to use
@@ -3906,7 +3910,7 @@ metrics:
     ##
     relabelings: []
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
-    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ##
     selector: {}
 
@@ -4037,7 +4041,7 @@ volumePermissions:
     pullSecrets: []
 
 ## @section MinIO&reg; chart parameters
-## @extra minio For full list of MinIO&reg; values configurations please refere [here](https://github.com/bitnami/charts/tree/master/bitnami/minio)
+## @extra minio For full list of MinIO&reg; values configurations please refere [here](https://github.com/bitnami/charts/tree/main/bitnami/minio)
 
 minio:
   ## @param minio.enabled Enable/disable MinIO&reg; chart installation

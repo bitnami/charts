@@ -10,7 +10,7 @@ dependencies:
     version: 2.x.x
 description: MySQL is a fast, reliable, scalable, and easy to use open source relational database system. Designed to handle mission-critical, heavy-load production applications.
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/mysql
+home: https://github.com/bitnami/charts/tree/main/bitnami/mysql
 icon: https://bitnami.com/assets/stacks/mysql/img/mysql-stack-220x234.png
 keywords:
   - mysql
@@ -25,4 +25,4 @@ name: mysql
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/mysql
   - https://mysql.com
-version: 9.4.1
+version: 9.4.3

@@ -326,9 +326,9 @@ false
 
 {{/* Service account name
 Usage:
-{{ include "thanos.serviceAccount.name" (dict "component" "bucketweb" "context" $) }}
+{{ include "thanos.serviceAccountName" (dict "component" "bucketweb" "context" $) }}
 */}}
-{{- define "thanos.serviceAccount.name" -}}
+{{- define "thanos.serviceAccountName" -}}
 {{- $component := index .context.Values .component -}}
 {{- if eq .component "query-frontend" -}}
 {{- $component = index .context.Values "queryFrontend" -}}
@@ -337,7 +337,11 @@ Usage:
 {{- end -}}
 {{- if not (include "thanos.serviceAccount.useExisting" (dict "component" .component "context" .context)) -}}
     {{- if $component.serviceAccount.create -}}
-        {{ default (printf "%s-%s" (include "common.names.fullname" .context) .component) $component.serviceAccount.name }}
+        {{- if eq .context.Values.serviceAccount.name "" -}}
+            {{ default (printf "%s-%s" (include "common.names.fullname" .context) .component) $component.serviceAccount.name }}
+        {{- else -}}
+            {{ default (printf "%s-%s" (.context.Values.serviceAccount.name) .component) $component.serviceAccount.name }}
+        {{- end -}}
     {{- else if .context.Values.serviceAccount.create -}}
         {{ default (include "common.names.fullname" .context) .context.Values.serviceAccount.name  }}
     {{- else -}}

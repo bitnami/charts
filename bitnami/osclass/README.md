@@ -19,7 +19,7 @@ $ helm install my-release my-repo/osclass
 
 This chart bootstraps an [Osclass](https://github.com/bitnami/containers/tree/main/bitnami/osclass) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the Osclass application.
+It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/main/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the Osclass application.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`    | Osclass image registry                                                                                  | `docker.io`           |
 | `image.repository`  | Osclass image repository                                                                                | `bitnami/osclass`     |
-| `image.tag`         | Osclass image tag (immutable tags are recommended)                                                      | `8.0.2-debian-11-r43` |
+| `image.tag`         | Osclass image tag (immutable tags are recommended)                                                      | `8.0.2-debian-11-r53` |
 | `image.digest`      | Osclass image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`  | Osclass image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets` | Osclass image pull secrets                                                                              | `[]`                  |
@@ -154,7 +154,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret with extra environment variables                                                                         | `""`                                     |
 | `certificates.image.registry`                        | Apache Exporter image registry                                                                                  | `docker.io`                              |
 | `certificates.image.repository`                      | Apache Exporter image repository                                                                                | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Apache Exporter image tag (immutable tags are recommended)                                                      | `11-debian-11-r40`                       |
+| `certificates.image.tag`                             | Apache Exporter image tag (immutable tags are recommended)                                                      | `11-debian-11-r50`                       |
 | `certificates.image.digest`                          | Apache Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `certificates.image.pullPolicy`                      | Apache Exporter image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Apache Exporter image pull secrets                                                                              | `[]`                                     |
@@ -252,7 +252,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
 | `volumePermissions.image.registry`         | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`       | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`              | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r40`      |
+| `volumePermissions.image.tag`              | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r50`      |
 | `volumePermissions.image.digest`           | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`       | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`      | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -281,7 +281,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a sidecar prometheus exporter to expose metrics                                                           | `false`                   |
 | `metrics.image.registry`                   | Apache Exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`                 | Apache Exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache Exporter image tag (immutable tags are recommended)                                                      | `0.11.0-debian-11-r50`    |
+| `metrics.image.tag`                        | Apache Exporter image tag (immutable tags are recommended)                                                      | `0.11.0-debian-11-r60`    |
 | `metrics.image.digest`                     | Apache Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`                 | Apache Exporter image pull policy                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Apache Exporter image pull secrets                                                                              | `[]`                      |
@@ -402,7 +402,7 @@ initContainers:
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ### Ingress
 
@@ -434,7 +434,7 @@ Affected values:
 - `service.httpsPort` was deprecated. We recommend using `service.ports.https` instead.
 - `metrics.serviceMonitor.additionalLabels` renamed as `metrics.serviceMonitor.labels`.
 
-Additionally updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-1000) for more information.
+Additionally updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/mariadb#to-1000) for more information.
 
 ### To 10.0.0
 
@@ -454,7 +454,7 @@ This upgrade also adapts the chart to the latest Bitnami good practices. Check t
 ### To 9.0.0
 
 - Chart labels were adapted to follow the [Helm charts standard labels](https://helm.sh/docs/chart_best_practices/labels/#standard-labels).
-- This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+- This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 Consequences:
 
@@ -503,7 +503,7 @@ Please read the update notes carefully.
 
 **2. Updated MariaDB dependency version**
 
-In this major the MariaDB dependency version was also bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-800) for more information.
+In this major the MariaDB dependency version was also bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/mariadb#to-800) for more information.
 
 To upgrade to `8.0.0`, it should be done reusing the PVCs used to hold both the MariaDB and Osclass data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `osclass` and that a `rootUser.password` was defined for MariaDB in `values.yaml` when the chart was first installed):
 

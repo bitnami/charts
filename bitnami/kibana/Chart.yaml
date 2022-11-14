@@ -1,7 +1,7 @@
 annotations:
   category: Analytics
 apiVersion: v2
-appVersion: 8.4.3
+appVersion: 8.5.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -10,7 +10,7 @@ dependencies:
     version: 2.x.x
 description: Kibana is an open source, browser based analytics and search dashboard for Elasticsearch. Kibana strives to be easy to get started with, while also being flexible and powerful.
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/kibana
+home: https://github.com/bitnami/charts/tree/main/bitnami/kibana
 icon: https://bitnami.com/assets/stacks/kibana/img/kibana-stack-220x234.png
 keywords:
   - kibana
@@ -25,4 +25,4 @@ name: kibana
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/kibana
   - https://www.elastic.co/products/kibana
-version: 10.2.6
+version: 10.2.7

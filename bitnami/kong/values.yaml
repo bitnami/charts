@@ -71,7 +71,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kong
-  tag: 3.0.0-debian-11-r0
+  tag: 3.0.1-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -556,7 +556,7 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/kong-ingress-controller
-    tag: 2.7.0-debian-11-r4
+    tag: 2.7.0-debian-11-r14
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -757,7 +757,7 @@ migration:
 ##
 
 ## PostgreSQL chart configuration
-## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
+## ref: https://github.com/bitnami/charts/blob/main/bitnami/postgresql/values.yaml
 ## @param postgresql.enabled Switch to enable or disable the PostgreSQL helm chart
 ## @param postgresql.auth.postgresPassword Password for the "postgres" admin user
 ## @param postgresql.auth.username Name for a custom user to create
@@ -779,7 +779,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 14.5.0-debian-11-r26
+    tag: 14.5.0-debian-11-r42
     digest: ""
   auth:
     username: kong
@@ -812,7 +812,7 @@ postgresql:
 ##
 
 ## Cassandra chart configuration
-## ref: https://github.com/bitnami/charts/blob/master/bitnami/cassandra/values.yaml
+## ref: https://github.com/bitnami/charts/blob/main/bitnami/cassandra/values.yaml
 ## @param cassandra.enabled Switch to enable or disable the Cassandra helm chart
 ## @param cassandra.dbUser.user Cassandra admin user
 ## @param cassandra.dbUser.password Password for `cassandra.dbUser.user`. Randomly generated if empty
@@ -902,7 +902,7 @@ metrics:
     ##
     labels: {}
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
-    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ##
     selector: {}
     ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping

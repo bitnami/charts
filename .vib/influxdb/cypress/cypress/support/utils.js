@@ -6,5 +6,5 @@ export let selectOrg = (org = Cypress.env('org')) => {
   cy.get('[data-testid="user-nav"]').click();
   cy.get('[data-testid="user-nav-item-switch-orgs"]').click();
   cy.contains('li', org).click();
-  cy.contains('Getting Started');
+  cy.contains('Get Started');
 };

@@ -96,7 +96,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `operator.enabled`                                                                    | Deploy Prometheus Operator to the cluster                                                                              | `true`                        |
 | `operator.image.registry`                                                             | Prometheus Operator image registry                                                                                     | `docker.io`                   |
 | `operator.image.repository`                                                           | Prometheus Operator image repository                                                                                   | `bitnami/prometheus-operator` |
-| `operator.image.tag`                                                                  | Prometheus Operator image tag (immutable tags are recommended)                                                         | `0.58.0-debian-11-r8`         |
+| `operator.image.tag`                                                                  | Prometheus Operator image tag (immutable tags are recommended)                                                         | `0.60.1-debian-11-r9`         |
 | `operator.image.digest`                                                               | Prometheus Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag    | `""`                          |
 | `operator.image.pullPolicy`                                                           | Prometheus Operator image pull policy                                                                                  | `IfNotPresent`                |
 | `operator.image.pullSecrets`                                                          | Specify docker-registry secret names as an array                                                                       | `[]`                          |
@@ -211,7 +211,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.enabled`                                                  | Deploy Prometheus to the cluster                                                                                                 | `true`                    |
 | `prometheus.image.registry`                                           | Prometheus image registry                                                                                                        | `docker.io`               |
 | `prometheus.image.repository`                                         | Prometheus image repository                                                                                                      | `bitnami/prometheus`      |
-| `prometheus.image.tag`                                                | Prometheus image tag (immutable tags are recommended)                                                                            | `2.37.0-debian-11-r9`     |
+| `prometheus.image.tag`                                                | Prometheus image tag (immutable tags are recommended)                                                                            | `2.39.1-debian-11-r10`    |
 | `prometheus.image.digest`                                             | Prometheus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                       | `""`                      |
 | `prometheus.image.pullSecrets`                                        | Specify docker-registry secret names as an array                                                                                 | `[]`                      |
 | `prometheus.serviceAccount.create`                                    | Specify whether to create a ServiceAccount for Prometheus                                                                        | `true`                    |
@@ -350,7 +350,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.thanos.create`                                            | Create a Thanos sidecar container                                                                                                | `false`                   |
 | `prometheus.thanos.image.registry`                                    | Thanos image registry                                                                                                            | `docker.io`               |
 | `prometheus.thanos.image.repository`                                  | Thanos image name                                                                                                                | `bitnami/thanos`          |
-| `prometheus.thanos.image.tag`                                         | Thanos image tag                                                                                                                 | `0.27.0-scratch-r7`       |
+| `prometheus.thanos.image.tag`                                         | Thanos image tag                                                                                                                 | `0.28.1-scratch-r0`       |
 | `prometheus.thanos.image.digest`                                      | Thanos image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                           | `""`                      |
 | `prometheus.thanos.image.pullPolicy`                                  | Thanos image pull policy                                                                                                         | `IfNotPresent`            |
 | `prometheus.thanos.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                 | `[]`                      |
@@ -414,7 +414,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `alertmanager.enabled`                                           | Deploy Alertmanager to the cluster                                                                                                                                                                                                                                                                         | `true`                   |
 | `alertmanager.image.registry`                                    | Prometheus image registry                                                                                                                                                                                                                                                                                  | `docker.io`              |
 | `alertmanager.image.repository`                                  | Prometheus image repository                                                                                                                                                                                                                                                                                | `bitnami/alertmanager`   |
-| `alertmanager.image.tag`                                         | Prometheus image tag (immutable tags are recommended)                                                                                                                                                                                                                                                      | `0.24.0-debian-11-r22`   |
+| `alertmanager.image.tag`                                         | Prometheus image tag (immutable tags are recommended)                                                                                                                                                                                                                                                      | `0.24.0-debian-11-r55`   |
 | `alertmanager.image.digest`                                      | Prometheus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                                                                                 | `""`                     |
 | `alertmanager.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                                                                                                                                                                                           | `[]`                     |
 | `alertmanager.serviceAccount.create`                             | Specify whether to create a ServiceAccount for Alertmanager                                                                                                                                                                                                                                                | `true`                   |
@@ -550,7 +550,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `blackboxExporter.image.registry`                              | Blackbox Exporter image registry                                                                                  | `docker.io`                 |
 | `blackboxExporter.image.repository`                            | Blackbox Exporter image repository                                                                                | `bitnami/blackbox-exporter` |
 | `blackboxExporter.image.pullPolicy`                            | Blackbox Exporter image pull policy                                                                               | `IfNotPresent`              |
-| `blackboxExporter.image.tag`                                   | Blackbox Exporter image tag (immutable tags are recommended)                                                      | `0.22.0-debian-11-r0`       |
+| `blackboxExporter.image.tag`                                   | Blackbox Exporter image tag (immutable tags are recommended)                                                      | `0.22.0-debian-11-r32`      |
 | `blackboxExporter.image.digest`                                | Blackbox Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                        |
 | `blackboxExporter.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                  | `[]`                        |
 | `blackboxExporter.extraEnvVars`                                | Array with extra environment variables to add to blackboxExporter nodes                                           | `[]`                        |
@@ -749,7 +749,7 @@ Refer to the [chart documentation on customizing alert configurations](https://d
 
 This chart allows setting custom Pod affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
@@ -763,7 +763,7 @@ $ helm upgrade my-release my-repo/kube-prometheus
 
 ### To 8.0.0
 
-This major updates the kube-state-metrics subchart to its newest major, 3.0.0, and the node-exporter subchart to its newest major, 3.0.0. Both releases contains name changes to a few of its values. For more information, please refer to [kube-state-metrics upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/kube-state-metrics#to-300) and [node-exporter upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/node-exporter#to-300).
+This major updates the kube-state-metrics subchart to its newest major, 3.0.0, and the node-exporter subchart to its newest major, 3.0.0. Both releases contains name changes to a few of its values. For more information, please refer to [kube-state-metrics upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kube-state-metrics#to-300) and [node-exporter upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/node-exporter#to-300).
 
 ### To 7.0.0
 
@@ -831,7 +831,7 @@ If you use [Strategic Merge Patch](https://github.com/prometheus-operator/promet
 
 ### To 5.0.0
 
-This major updates the kube-state-metrics subchart to it newest major, 2.0.0, which contains name changes to a few of its values. For more information on this subchart's major, please refer to [kube-state-metrics upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/kube-state-metrics#to-200).
+This major updates the kube-state-metrics subchart to it newest major, 2.0.0, which contains name changes to a few of its values. For more information on this subchart's major, please refer to [kube-state-metrics upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kube-state-metrics#to-200).
 
 ### To 4.4.0
 
@@ -894,7 +894,7 @@ $ helm upgrade my-release --set prometheus.thanos.create=true my-repo/kube-prome
 
 - The chart was renamed to `kube-prometheus` to be more accurate with the actual capabilities of the chart: it does not just deploy the Prometheus operator, it deploys an entire cluster monitoring stack, that includes other components (e.g. NodeExporter or Kube State metrics). Find more information about the reasons behind this decision at [#3490](https://github.com/bitnami/charts/issues/3490).
 - New CRDs were added and some existing ones were updated.
-- This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+- This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 > Note: There is no backwards compatibility due to the above mentioned changes. It's necessary to install a new release of the chart, and migrate the existing TSDB data to the new Prometheus instances.
 

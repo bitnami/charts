@@ -25,8 +25,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 You can choose any of the two Redis&reg; Helm charts for deploying a Redis&reg; cluster.
 
-1. [Redis&reg; Helm Chart](https://github.com/bitnami/charts/tree/master/bitnami/redis) will deploy a master-replica cluster, with the [option](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-sentinel-configuration-parameters) of enabling using Redis&reg; Sentinel.
-2. [Redis&reg; Cluster Helm Chart](https://github.com/bitnami/charts/tree/master/bitnami/redis-cluster) will deploy a Redis&reg; Cluster topology with sharding.
+1. [Redis&reg; Helm Chart](https://github.com/bitnami/charts/tree/main/bitnami/redis) will deploy a master-replica cluster, with the [option](https://github.com/bitnami/charts/tree/main/bitnami/redis#redis-sentinel-configuration-parameters) of enabling using Redis&reg; Sentinel.
+2. [Redis&reg; Cluster Helm Chart](https://github.com/bitnami/charts/tree/main/bitnami/redis-cluster) will deploy a Redis&reg; Cluster topology with sharding.
 
 The main features of each chart are the following:
 
@@ -95,15 +95,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Redis&reg; Image parameters
 
-| Name                | Description                                                                                                | Value                |
-| ------------------- | ---------------------------------------------------------------------------------------------------------- | -------------------- |
-| `image.registry`    | Redis&reg; image registry                                                                                  | `docker.io`          |
-| `image.repository`  | Redis&reg; image repository                                                                                | `bitnami/redis`      |
-| `image.tag`         | Redis&reg; image tag (immutable tags are recommended)                                                      | `7.0.5-debian-11-r7` |
-| `image.digest`      | Redis&reg; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
-| `image.pullPolicy`  | Redis&reg; image pull policy                                                                               | `IfNotPresent`       |
-| `image.pullSecrets` | Redis&reg; image pull secrets                                                                              | `[]`                 |
-| `image.debug`       | Enable image debug mode                                                                                    | `false`              |
+| Name                | Description                                                                                                | Value                 |
+| ------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------- |
+| `image.registry`    | Redis&reg; image registry                                                                                  | `docker.io`           |
+| `image.repository`  | Redis&reg; image repository                                                                                | `bitnami/redis`       |
+| `image.tag`         | Redis&reg; image tag (immutable tags are recommended)                                                      | `7.0.5-debian-11-r15` |
+| `image.digest`      | Redis&reg; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
+| `image.pullPolicy`  | Redis&reg; image pull policy                                                                               | `IfNotPresent`        |
+| `image.pullSecrets` | Redis&reg; image pull secrets                                                                              | `[]`                  |
+| `image.debug`       | Enable image debug mode                                                                                    | `false`               |
 
 
 ### Redis&reg; common configuration parameters
@@ -192,6 +192,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.persistence.sizeLimit`                       | Set this to enable a size limit for `emptyDir` volumes.                                               | `""`                     |
 | `master.persistence.path`                            | The path the volume will be mounted at on Redis&reg; master containers                                | `/data`                  |
 | `master.persistence.subPath`                         | The subdirectory of the volume to mount on Redis&reg; master containers                               | `""`                     |
+| `master.persistence.subPathExpr`                     | Used to construct the subPath subdirectory of the volume to mount on Redis&reg; master containers     | `""`                     |
 | `master.persistence.storageClass`                    | Persistent Volume storage class                                                                       | `""`                     |
 | `master.persistence.accessModes`                     | Persistent Volume access modes                                                                        | `["ReadWriteOnce"]`      |
 | `master.persistence.size`                            | Persistent Volume size                                                                                | `8Gi`                    |
@@ -292,6 +293,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.persistence.sizeLimit`                       | Set this to enable a size limit for `emptyDir` volumes.                                                 | `""`                     |
 | `replica.persistence.path`                            | The path the volume will be mounted at on Redis&reg; replicas containers                                | `/data`                  |
 | `replica.persistence.subPath`                         | The subdirectory of the volume to mount on Redis&reg; replicas containers                               | `""`                     |
+| `replica.persistence.subPathExpr`                     | Used to construct the subPath subdirectory of the volume to mount on Redis&reg; replicas containers     | `""`                     |
 | `replica.persistence.storageClass`                    | Persistent Volume storage class                                                                         | `""`                     |
 | `replica.persistence.accessModes`                     | Persistent Volume access modes                                                                          | `["ReadWriteOnce"]`      |
 | `replica.persistence.size`                            | Persistent Volume size                                                                                  | `8Gi`                    |
@@ -330,7 +332,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.enabled`                            | Use Redis&reg; Sentinel on Redis&reg; pods.                                                                                                 | `false`                  |
 | `sentinel.image.registry`                     | Redis&reg; Sentinel image registry                                                                                                          | `docker.io`              |
 | `sentinel.image.repository`                   | Redis&reg; Sentinel image repository                                                                                                        | `bitnami/redis-sentinel` |
-| `sentinel.image.tag`                          | Redis&reg; Sentinel image tag (immutable tags are recommended)                                                                              | `7.0.5-debian-11-r6`     |
+| `sentinel.image.tag`                          | Redis&reg; Sentinel image tag (immutable tags are recommended)                                                                              | `7.0.5-debian-11-r14`    |
 | `sentinel.image.digest`                       | Redis&reg; Sentinel image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                     |
 | `sentinel.image.pullPolicy`                   | Redis&reg; Sentinel image pull policy                                                                                                       | `IfNotPresent`           |
 | `sentinel.image.pullSecrets`                  | Redis&reg; Sentinel image pull secrets                                                                                                      | `[]`                     |
@@ -444,7 +446,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a sidecar prometheus exporter to expose Redis&reg; metrics                                                    | `false`                  |
 | `metrics.image.registry`                     | Redis&reg; Exporter image registry                                                                                  | `docker.io`              |
 | `metrics.image.repository`                   | Redis&reg; Exporter image repository                                                                                | `bitnami/redis-exporter` |
-| `metrics.image.tag`                          | Redis&reg; Exporter image tag (immutable tags are recommended)                                                      | `1.44.0-debian-11-r16`   |
+| `metrics.image.tag`                          | Redis&reg; Exporter image tag (immutable tags are recommended)                                                      | `1.45.0-debian-11-r1`    |
 | `metrics.image.digest`                       | Redis&reg; Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
 | `metrics.image.pullPolicy`                   | Redis&reg; Exporter image pull policy                                                                               | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                  | Redis&reg; Exporter image pull secrets                                                                              | `[]`                     |
@@ -489,7 +491,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r40`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r48`      |
 | `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -499,7 +501,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctl.enabled`                                       | Enable init container to modify Kernel settings                                                               | `false`                 |
 | `sysctl.image.registry`                                | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `sysctl.image.repository`                              | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `sysctl.image.tag`                                     | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r40`      |
+| `sysctl.image.tag`                                     | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r48`      |
 | `sysctl.image.digest`                                  | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `sysctl.image.pullPolicy`                              | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `sysctl.image.pullSecrets`                             | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -710,7 +712,7 @@ Refer to the chart documenation for more information on [enabling the network po
 
 This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
@@ -780,7 +782,7 @@ This major version updates the Redis&reg; docker image version used from `6.0` t
 
 ### To 12.3.0
 
-This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### To 12.0.0
 

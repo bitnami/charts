@@ -54,7 +54,7 @@ commonAnnotations: {}
 image:
   registry: docker.io
   repository: bitnami/grafana
-  tag: 9.1.7-debian-11-r0
+  tag: 9.2.4-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -761,7 +761,7 @@ metrics:
     ##
     scrapeTimeout: ""
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
-    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ## e.g:
     ## selector:
     ##   prometheus: my-prometheus
@@ -828,7 +828,7 @@ imageRenderer:
   image:
     registry: docker.io
     repository: bitnami/grafana-image-renderer
-    tag: 3.6.1-debian-11-r10
+    tag: 3.6.1-debian-11-r22
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -924,7 +924,7 @@ imageRenderer:
   ##  - name: GF_DEFAULT_INSTANCE_NAME
   ##    value: my-instance
   ##
-  extraEnvVars: {}
+  extraEnvVars: []
   ## @param imageRenderer.affinity Affinity for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
@@ -1066,7 +1066,7 @@ imageRenderer:
       ##
       metricRelabelings: []
       ## @param imageRenderer.metrics.serviceMonitor.selector ServiceMonitor selector labels
-      ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
       ##
       ## selector:
       ##   prometheus: my-prometheus
@@ -1167,7 +1167,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r38
+    tag: 11-debian-11-r50
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

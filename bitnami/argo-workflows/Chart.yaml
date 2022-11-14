@@ -1,12 +1,12 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 3.4.1
+appVersion: 3.4.3
 dependencies:
   - condition: postgresql.enabled
     name: postgresql
     repository: https://charts.bitnami.com/bitnami
-    version: 11.x.x
+    version: 12.x.x
   - condition: mysql.enabled
     name: mysql
     repository: https://charts.bitnami.com/bitnami
@@ -35,4 +35,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/argo-workflow-controller
   - https://github.com/bitnami/containers/tree/main/bitnami/argo-workflow-exec
   - https://argoproj.github.io/workflows/
-version: 3.0.4
+version: 4.0.1

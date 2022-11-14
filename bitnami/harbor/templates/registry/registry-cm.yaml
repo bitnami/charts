@@ -34,7 +34,9 @@ data:
       {{- else if eq .Values.persistence.imageChartStorage.type "gcs" }}
       gcs:
         bucket: {{ .Values.persistence.imageChartStorage.gcs.bucket }}
+        {{- if .Values.persistence.imageChartStorage.gcs.encodedkey }}
         keyfile: /etc/registry/gcs-key.json
+        {{- end }}
         {{- if .Values.persistence.imageChartStorage.gcs.rootdirectory }}
         rootdirectory: {{ .Values.persistence.imageChartStorage.gcs.rootdirectory }}
         {{- end }}

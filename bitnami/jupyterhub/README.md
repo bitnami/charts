@@ -7,7 +7,7 @@ JupyterHub brings the power of notebooks to groups of users. It gives users acce
 [Overview of JupyterHub](https://jupyter.org/hub)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -215,7 +215,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------------------- |
 | `proxy.image.registry`                        | Proxy image registry                                                                                                     | `docker.io`                       |
 | `proxy.image.repository`                      | Proxy image repository                                                                                                   | `bitnami/configurable-http-proxy` |
-| `proxy.image.tag`                             | Proxy image tag (immutable tags are recommended)                                                                         | `4.5.3-debian-11-r5`              |
+| `proxy.image.tag`                             | Proxy image tag (immutable tags are recommended)                                                                         | `4.5.3-debian-11-r6`              |
 | `proxy.image.digest`                          | Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                    | `""`                              |
 | `proxy.image.pullPolicy`                      | Proxy image pull policy                                                                                                  | `IfNotPresent`                    |
 | `proxy.image.pullSecrets`                     | Proxy image pull secrets                                                                                                 | `[]`                              |
@@ -415,7 +415,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `singleuser.notebookDir`                        | Notebook directory (it will be the same as the PVC volume mount)                                            | `/opt/bitnami/jupyterhub-singleuser` |
 | `singleuser.allowPrivilegeEscalation`           | Controls whether a process can gain more privileges than its parent process                                 | `false`                              |
 | `singleuser.command`                            | Override Single User default command                                                                        | `[]`                                 |
-| `singleuser.extraEnvVars`                       | Extra environment variables that should be set for the user pods                                            | `{}`                                 |
+| `singleuser.extraEnvVars`                       | Extra environment variables that should be set for the user pods                                            | `[]`                                 |
 | `singleuser.containerPort`                      | Single User container port                                                                                  | `8888`                               |
 | `singleuser.resources.limits`                   | The resources limits for the Singleuser containers                                                          | `{}`                                 |
 | `singleuser.resources.requests`                 | The requested resources for the Singleuser containers                                                       | `{}`                                 |
@@ -579,6 +579,12 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 3.0.0
+
+This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1200) you can find more information about the changes introduced in that version.
+
+### To any previous version
 
 Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/administration/upgrade/).
 

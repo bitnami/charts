@@ -85,13 +85,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ---------------------------- |
 | `server.image.registry`                 | TensorFlow Serving image registry                                                                                  | `docker.io`                  |
 | `server.image.repository`               | TensorFlow Serving image repository                                                                                | `bitnami/tensorflow-serving` |
-| `server.image.tag`                      | TensorFlow Serving Image tag (immutable tags are recommended)                                                      | `2.10.0-debian-11-r10`       |
+| `server.image.tag`                      | TensorFlow Serving Image tag (immutable tags are recommended)                                                      | `2.10.0-debian-11-r20`       |
 | `server.image.digest`                   | TensorFlow Serving image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
 | `server.image.pullPolicy`               | TensorFlow Serving image pull policy                                                                               | `IfNotPresent`               |
 | `server.image.pullSecrets`              | Specify docker-registry secret names as an array                                                                   | `[]`                         |
 | `client.image.registry`                 | TensorFlow ResNet image registry                                                                                   | `docker.io`                  |
 | `client.image.repository`               | TensorFlow ResNet image repository                                                                                 | `bitnami/tensorflow-resnet`  |
-| `client.image.tag`                      | TensorFlow ResNet image tag (immutable tags are recommended)                                                       | `2.10.0-debian-11-r11`       |
+| `client.image.tag`                      | TensorFlow ResNet image tag (immutable tags are recommended)                                                       | `2.10.0-debian-11-r20`       |
 | `client.image.digest`                   | TensorFlow ResNet image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag  | `""`                         |
 | `client.image.pullPolicy`               | TensorFlow ResNet image pull policy                                                                                | `IfNotPresent`               |
 | `client.image.pullSecrets`              | Specify docker-registry secret names as an array                                                                   | `[]`                         |
@@ -194,7 +194,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 This chart allows you to set custom Pod affinity using the `affinity` parameter. Find more information about Pod's affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use any of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, you can use any of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
@@ -210,7 +210,7 @@ As a result, the pretrained model served by this Chart was updated to [Imagenet 
 
 ### To 3.1.0
 
-This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### To 3.0.0
 

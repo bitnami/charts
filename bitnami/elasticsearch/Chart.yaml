@@ -1,7 +1,7 @@
 annotations:
   category: Analytics
 apiVersion: v2
-appVersion: 8.4.3
+appVersion: 8.5.0
 dependencies:
   - condition: global.kibanaEnabled
     name: kibana
@@ -14,7 +14,7 @@ dependencies:
     version: 2.x.x
 description: Elasticsearch is a distributed search and analytics engine. It is used for web search, log monitoring, and real-time analytics. Ideal for Big Data applications.
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch
+home: https://github.com/bitnami/charts/tree/main/bitnami/elasticsearch
 icon: https://bitnami.com/assets/stacks/elasticsearch/img/elasticsearch-stack-220x234.png
 keywords:
   - elasticsearch
@@ -25,4 +25,4 @@ name: elasticsearch
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/elasticsearch
   - https://www.elastic.co/products/elasticsearch
-version: 19.4.4
+version: 19.5.0

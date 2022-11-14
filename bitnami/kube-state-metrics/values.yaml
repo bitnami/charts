@@ -98,7 +98,7 @@ serviceAccount:
 image:
   registry: docker.io
   repository: bitnami/kube-state-metrics
-  tag: 2.6.0-debian-11-r12
+  tag: 2.6.0-debian-11-r22
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -484,7 +484,7 @@ serviceMonitor:
   ##
   scrapeTimeout: ""
   ## @param serviceMonitor.selector ServiceMonitor selector labels
-  ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+  ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
   ## e.g:
   ## selector:
   ##   prometheus: my-prometheus
