@@ -155,7 +155,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                     | Sealed Secret service type                                                                            | `ClusterIP`              |
 | `service.ports.http`               | Sealed Secret service HTTP port number                                                                | `8080`                   |
-| `service.ports.name`               | Sealed Secret service HTTP port name                                                                  | `8080`                   |
+| `service.ports.name`               | Sealed Secret service HTTP port name                                                                  | `http`                   |
 | `service.nodePorts.http`           | Node port for HTTP                                                                                    | `""`                     |
 | `service.clusterIP`                | Sealed Secret service Cluster IP                                                                      | `""`                     |
 | `service.loadBalancerIP`           | Sealed Secret service Load Balancer IP                                                                | `""`                     |
