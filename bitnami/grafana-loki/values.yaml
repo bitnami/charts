@@ -97,7 +97,7 @@ loki:
       http_listen_port: {{ .Values.loki.containerPorts.http }}
 
     common:
-      compactor_address: {{ printf "%s:%s" (include "grafana-loki.compactor.fullname" .) .Values.compactor.service.ports.http }}
+      compactor_address: http://{{ include "grafana-loki.compactor.fullname" . }}:{{ .Values.compactor.service.ports.http }}
 
     distributor:
       ring:
