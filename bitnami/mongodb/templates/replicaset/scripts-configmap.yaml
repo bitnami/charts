@@ -75,7 +75,9 @@ data:
     {{- end }}
     {{- else if eq .Values.externalAccess.service.type "NodePort" }}
     ID="${MY_POD_NAME#"{{ $fullname }}-"}"
-    export MONGODB_ADVERTISED_PORT_NUMBER=$(echo '{{ .Values.externalAccess.service.nodePorts }}' | tr -d '[]' | cut -d ' ' -f "$(($ID + 1))")
+    if is_empty_value "$MONGODB_ADVERTISED_PORT_NUMBER"; then
+      export MONGODB_ADVERTISED_PORT_NUMBER=$(echo '{{ .Values.externalAccess.service.nodePorts }}' | tr -d '[]' | cut -d ' ' -f "$(($ID + 1))")
+    fi
     {{- if .Values.externalAccess.service.domain }}
     export MONGODB_ADVERTISED_HOSTNAME={{ .Values.externalAccess.service.domain }}
     {{- else }}
@@ -168,7 +170,9 @@ data:
     {{- end }}
     {{- else if eq .Values.externalAccess.hidden.service.type "NodePort" }}
     ID="${MY_POD_NAME#"{{ $fullname }}-hidden-"}"
-    export MONGODB_ADVERTISED_PORT_NUMBER=$(echo '{{ .Values.externalAccess.hidden.service.nodePorts }}' | tr -d '[]' | cut -d ' ' -f "$(($ID + 1))")
+    if is_empty_value "$MONGODB_ADVERTISED_PORT_NUMBER"; then
+      export MONGODB_ADVERTISED_PORT_NUMBER=$(echo '{{ .Values.externalAccess.service.nodePorts }}' | tr -d '[]' | cut -d ' ' -f "$(($ID + 1))")
+    fi
     {{- if .Values.externalAccess.hidden.service.domain }}
     export MONGODB_ADVERTISED_HOSTNAME={{ .Values.externalAccess.hidden.service.domain }}
     {{- else }}
