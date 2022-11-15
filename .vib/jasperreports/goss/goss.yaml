@@ -1,0 +1,21 @@
+command:
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+      - uid={{ .Vars.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
+file:
+  /opt/bitnami/jasperreports/META-INF/context.xml:
+    exists: true
+    filetype: file
+    mode: '0644'
+    contains:
+      - /mysql.*{{ .Vars.mariadb.auth.database }}/
+      - /username.*{{ .Vars.mariadb.auth.username }}/
+      - /password.*{{ .Vars.mariadb.auth.password }}/
+  /bitnami/jasperreports:
+    exists: true
+    filetype: directory
+    mode: '2775'
+    owner: root
