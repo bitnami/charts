@@ -18,7 +18,7 @@ metadata:
     {{- end }}
 spec:
   scaleTargetRef:
-    apiVersion: apps/v1
+    apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
     kind: StatefulSet
     name: {{ include "common.names.fullname" . }}
   minReplicas: {{ .Values.aggregator.autoscaling.minReplicas }}
