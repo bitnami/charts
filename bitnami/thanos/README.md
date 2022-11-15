@@ -1106,13 +1106,13 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 
 ### MinIO&reg; chart parameters
 
-| Name                      | Description                                                                                                                         | Value    |
-| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| Name                      | Description                                                                                                                       | Value    |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | -------- |
 | `minio`                   | For full list of MinIO&reg; values configurations please refere [here](https://github.com/bitnami/charts/tree/main/bitnami/minio) |          |
-| `minio.enabled`           | Enable/disable MinIO&reg; chart installation                                                                                        | `false`  |
-| `minio.auth.rootUser`     | MinIO&reg; root username                                                                                                            | `admin`  |
-| `minio.auth.rootPassword` | Password for MinIO&reg; root user                                                                                                   | `""`     |
-| `minio.defaultBuckets`    | Comma, semi-colon or space separated list of MinIO&reg; buckets to create                                                           | `thanos` |
+| `minio.enabled`           | Enable/disable MinIO&reg; chart installation                                                                                      | `false`  |
+| `minio.auth.rootUser`     | MinIO&reg; root username                                                                                                          | `admin`  |
+| `minio.auth.rootPassword` | Password for MinIO&reg; root user                                                                                                 | `""`     |
+| `minio.defaultBuckets`    | Comma, semi-colon or space separated list of MinIO&reg; buckets to create                                                         | `thanos` |
 
 
 ### NetWorkPolicy parameters

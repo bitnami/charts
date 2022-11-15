@@ -37,7 +37,7 @@ data:
   {{- if .Values.spi.hostnameVerificationPolicy }}
   KEYCLOAK_SPI_TRUSTSTORE_FILE_HOSTNAME_VERIFICATION_POLICY: {{ .Values.spi.hostnameVerificationPolicy | quote }}
   {{- end }}
-  KEYCLOAK_SPI_TRUSTSTORE_FILE: {{ printf "/opt/bitnami/keycloak/spi-certs/%s" .Values.tls.truststoreFilename }}
+  KEYCLOAK_SPI_TRUSTSTORE_FILE: {{ printf "/opt/bitnami/keycloak/spi-certs/%s" .Values.spi.truststoreFilename }}
   {{- end }}
   {{- if .Values.cache.enabled }}
   KEYCLOAK_CACHE_TYPE: "ispn"
