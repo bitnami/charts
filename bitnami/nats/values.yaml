@@ -82,7 +82,7 @@ image:
   ##
   debug: false
 ## Client Authentication
-## ref: https://github.com/nats-io/gnatsd#authentication
+## ref: https://docs.nats.io/running-a-nats-service/configuration/securing_nats/auth_intro
 ## @param auth.enabled Switch to enable/disable client authentication
 ## @param auth.user Client authentication user
 ## @param auth.password Client authentication password
@@ -104,23 +104,32 @@ auth:
   usersCredentials: []
   noAuthUser: ""
 ## Cluster Configuration
+## ref: https://docs.nats.io/running-a-nats-service/configuration/clustering/cluster_config
 ##
 cluster:
+  ## @param cluster.name Cluster name
+  name: nats
   ## @param cluster.connectRetries Configure number of connect retries for implicit routes, otherwise leave blank
   ##
   connectRetries: ""
   ## Cluster Authentication
-  ## ref: https://github.com/nats-io/gnatsd#authentication
+  ## ref: https://docs.nats.io/running-a-nats-service/configuration/securing_nats/auth_intro
   ## @param cluster.auth.enabled Switch to enable/disable cluster authentication
   ## @param cluster.auth.user Cluster authentication user
   ## @param cluster.auth.password Cluster authentication password
-  ## @param cluster.auth.token Cluster authentication token
   ##
   auth:
     enabled: true
     user: nats_cluster
     password: ""
-    token: ""
+## JetStream Configuration
+## ref: https://docs.nats.io/running-a-nats-service/configuration/resource_management
+## @param jetstream.enabled Switch to enable/disable JetStream
+## @param jetstream.maxMemory Max memory usage for JetStream
+##
+jetstream:
+  enabled: false
+  maxMemory: 1G
 ## Logging parameters
 ## ref: https://github.com/nats-io/gnatsd#command-line-arguments
 ## @param debug.enabled Switch to enable/disable debug on logging
@@ -165,6 +174,9 @@ natsFilename: nats-server
 configuration: |-
   {{- $authPwd := default (include "nats.randomPassword" .) .Values.auth.password -}}
   {{- $clusterAuthPwd := default (include "nats.randomPassword" .) .Values.cluster.auth.password -}}
+  {{- if eq .Values.resourceType "statefulset" }}
+  server_name: $NATS_SERVER_NAME
+  {{- end }}
   listen: 0.0.0.0:{{ .Values.containerPorts.client }}
   http: 0.0.0.0:{{ .Values.containerPorts.monitoring }}
 
@@ -213,16 +225,13 @@ configuration: |-
 
   # Clustering definition
   cluster {
+    name: {{ .Values.cluster.name | quote }}
     listen: 0.0.0.0:{{ .Values.containerPorts.cluster }}
     {{- if .Values.cluster.auth.enabled }}
     # Authorization for cluster connections
     authorization {
-      {{- if .Values.cluster.auth.user }}
       user: {{ .Values.cluster.auth.user | quote }}
       password: {{ $clusterAuthPwd | quote }}
-      {{- else if .Values.cluster.auth.token }}
-      token: {{ .Values.cluster.auth.token | quote }}
-      {{- end }}
       timeout:  1
     }
     {{- end }}
@@ -231,11 +240,7 @@ configuration: |-
     # in their routes definitions from above
     routes = [
       {{- if .Values.cluster.auth.enabled }}
-      {{- if .Values.cluster.auth.user }}
       nats://{{ .Values.cluster.auth.user }}:{{ $clusterAuthPwd }}@{{ include "common.names.fullname" . }}:{{ .Values.service.ports.cluster }}
-      {{- else if .Values.cluster.auth.token }}
-      nats://{{ .Values.cluster.auth.token }}@{{ template "common.names.fullname" . }}:{{ .Values.service.ports.cluster }}
-      {{- end }}
       {{- else }}
       nats://{{ template "common.names.fullname" . }}:{{ .Values.service.ports.cluster }}
       {{- end }}
@@ -245,6 +250,17 @@ configuration: |-
     connect_retries: {{ .Values.cluster.connectRetries }}
     {{- end }}
   }
+
+  {{- if .Values.jetstream.enabled }}
+  # JetStream configuration
+  jetstream: enabled
+  jetstream {
+    store_dir: /data/jetstream
+    max_memory_store: {{ .Values.jetstream.maxMemory }}
+    max_file_store: {{ .Values.persistence.size }}
+  }
+  {{- end }}
+
 ## @param existingSecret The name of an existing Secret with your custom configuration for NATS
 ## NOTE: When it's set the configuration parameter is ignored
 ##
@@ -755,6 +771,41 @@ metrics:
     ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ##
     selector: {}
+
+## @section Persistence parameters
+
+## Enable persistence using Persistent Volume Claims
+## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+persistence:
+  ## @param persistence.enabled Enable NATS data persistence using PVC(s)
+  ##
+  enabled: false
+  ## @param persistence.storageClass PVC Storage Class for NATS data volume
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner
+  ##
+  storageClass: ""
+  ## @param persistence.accessModes PVC Access modes
+  ##
+  accessModes:
+    - ReadWriteOnce
+  ## @param persistence.size PVC Storage Request for NATS data volume
+  ##
+  size: 8Gi
+  ## @param persistence.annotations Annotations for the PVC
+  ##
+  annotations: {}
+  ## @param persistence.selector Selector to match an existing Persistent Volume for NATS's data PVC
+  ## If set, the PVC can't have a PV dynamically provisioned for it
+  ## E.g.
+  ## selector:
+  ##   matchLabels:
+  ##     app: my-app
+  ##
+  selector: {}
 
 ## @section Other parameters
 
