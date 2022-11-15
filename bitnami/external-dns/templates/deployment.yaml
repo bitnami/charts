@@ -219,6 +219,9 @@ spec:
             {{- if .Values.google.project }}
             - --google-project={{ .Values.google.project }}
             {{- end }}
+            {{- if .Values.google.batchChangeSize }}
+            - --google-batch-change-size={{ .Values.google.batchChangeSize }}
+            {{- end }}
             {{- if .Values.google.zoneVisibility }}
             - --google-zone-visibility={{ .Values.google.zoneVisibility }}
             {{- end }}
