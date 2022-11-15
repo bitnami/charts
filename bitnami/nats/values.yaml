@@ -174,7 +174,9 @@ natsFilename: nats-server
 configuration: |-
   {{- $authPwd := default (include "nats.randomPassword" .) .Values.auth.password -}}
   {{- $clusterAuthPwd := default (include "nats.randomPassword" .) .Values.cluster.auth.password -}}
+  {{- if eq .Values.resourceType "statefulset" }}
   server_name: $NATS_SERVER_NAME
+  {{- end }}
   listen: 0.0.0.0:{{ .Values.containerPorts.client }}
   http: 0.0.0.0:{{ .Values.containerPorts.monitoring }}
 
