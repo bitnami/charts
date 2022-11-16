@@ -2,11 +2,7 @@ annotations:
   category: Infrastructure
 apiVersion: v2
 # Please make sure that version and appVersion are always the same.
-<<<<<<< HEAD
-appVersion: 2.1.3
-=======
 appVersion: 2.2.0
->>>>>>> 624c14e71 ([bitnami/common] affinity topologyKey override (#13435))
 description: A Library Helm Chart for grouping common logic between bitnami charts. This chart is not deployable by itself.
 home: https://github.com/bitnami/charts/tree/main/bitnami/common
 icon: https://bitnami.com/downloads/logos/bitnami-mark.png
@@ -24,8 +20,4 @@ sources:
   - https://github.com/bitnami/charts
   - https://www.bitnami.com/
 type: library
-<<<<<<< HEAD
-version: 2.1.3
-=======
 version: 2.2.0
->>>>>>> 624c14e71 ([bitnami/common] affinity topologyKey override (#13435))
