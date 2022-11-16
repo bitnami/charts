@@ -76,8 +76,9 @@ commonLabels: {}
 commonAnnotations: {}
 
 ## @param topologyKey Pod (anti-)affinity topology key override. Ignored if `affinity` is set.
-## uncoment to override common lib default "kubernetes.io/hostname"
-topologyKey: topology.kubernetes.io/zone
+## uncoment following line to override common libs default value - "kubernetes.io/hostname"
+##
+## topologyKey: topology.kubernetes.io/zone
 
 ## Enable diagnostic mode in the deployment
 ##

@@ -7,7 +7,7 @@ dependencies:
     repository: "https://charts.bitnami.com/bitnami"
     tags:
       - bitnami-common
-    version: 2.1.3
+    version: 2.2.x
 description: MongoDB(R) is a relational open source NoSQL database. Easy to use, it stores data in JSON-like documents. Automated scalability and high-performance. Ideal for developing cloud native applications.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/main/bitnami/mongodb
@@ -26,8 +26,4 @@ name: mongodb
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/mongodb
   - https://mongodb.org
-<<<<<<< HEAD
-version: 13.4.2
-=======
-version: 13.4.4
->>>>>>> 1bf577d01312bf9fea657710665f98e8e506c240
+version: 13.4.5
