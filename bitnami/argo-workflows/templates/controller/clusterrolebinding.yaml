@@ -6,7 +6,7 @@ kind: RoleBinding
 kind: ClusterRoleBinding
 {{- end }}
 metadata:
-  name: {{ include "argo-workflows.controller.fullname" . }}
+  name: {{ include "argo-workflows.controller.fullname.namespace" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: argo-workflows
@@ -24,7 +24,7 @@ roleRef:
   {{ else }}
   kind: ClusterRole
   {{- end }}
-  name: {{ include "argo-workflows.controller.fullname" . }}
+  name: {{ include "argo-workflows.controller.fullname.namespace" . }}
 subjects:
   - kind: ServiceAccount
     name: {{ include "argo-workflows.controller.serviceAccountName" . }}
@@ -46,7 +46,7 @@ subjects:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ include "argo-workflows.controller.fullname" . }}-cluster-template
+  name: {{ include "argo-workflows.controller.fullname.namespace" . }}-cluster-template
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
@@ -59,7 +59,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ include "argo-workflows.controller.fullname" . }}-cluster-template
+  name: {{ include "argo-workflows.controller.fullname.namespace" . }}-cluster-template
 subjects:
   - kind: ServiceAccount
     name: {{ include "argo-workflows.controller.serviceAccountName" . }}
