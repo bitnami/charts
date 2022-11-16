@@ -32,6 +32,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/haproxy-intel/**'
       - 'bitnami/harbor/**'
       - 'bitnami/influxdb/**'
+      - 'bitnami/jasperreports/**'
       - 'bitnami/jenkins/**'
       - 'bitnami/joomla/**'
       - 'bitnami/kafka/**'
@@ -57,6 +58,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/mxnet/**'
       - 'bitnami/mysql/**'
       - 'bitnami/nats/**'
+      - 'bitnami/nginx-ingress-controller/**'
       - 'bitnami/nginx-intel/**'
       - 'bitnami/nginx/**'
       - 'bitnami/node-exporter/**'
@@ -89,6 +91,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/tomcat/**'
       - 'bitnami/wavefront/**'
       - 'bitnami/wavefront-hpa-adapter/**'
+      - 'bitnami/wavefront-prometheus-storage-adapter/**'
       - 'bitnami/wildfly/**'
       - 'bitnami/wordpress/**'
       - 'bitnami/wordpress-intel/**'
@@ -166,7 +169,7 @@ jobs:
             verification_mode="$(cat $config_file | grep 'verification-mode' | cut -d'=' -f2)"
           fi
           echo "verification_mode=${verification_mode}" >> $GITHUB_OUTPUT
-      - uses: vmware-labs/vmware-image-builder-action@0.4.7
+      - uses: vmware-labs/vmware-image-builder-action@0.4.11
         name: Verify and publish ${{ needs.get-chart.outputs.chart }}
         with:
           pipeline: ${{ needs.get-chart.outputs.chart }}/vib-publish.json

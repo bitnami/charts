@@ -254,7 +254,7 @@ topologySpreadConstraints: []
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
 schedulerName: ""
-## @param terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+## @param terminationGracePeriodSeconds Seconds the pod needs to terminate gracefully
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
 ##
 terminationGracePeriodSeconds: ""
@@ -311,10 +311,13 @@ service:
   ## @param service.type Sealed Secret service type
   ##
   type: ClusterIP
-  ## @param service.ports.http Sealed Secret service HTTP port
-  ##
   ports:
+    ## @param service.ports.http Sealed Secret service HTTP port number
+    ##  
     http: 8080
+    ## @param service.ports.name Sealed Secret service HTTP port name
+    ##
+    name: http
   ## @param service.nodePorts.http Node port for HTTP
   ## Specify the nodePort value for the LoadBalancer and NodePort service types
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
