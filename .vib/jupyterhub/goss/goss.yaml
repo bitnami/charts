@@ -1,0 +1,39 @@
+http:
+  http://jupyterhub-hub:{{ .Vars.hub.service.ports.http }}/hub/health:
+    status: 200
+  http://jupyterhub-proxy-api:{{ .Vars.proxy.service.api.ports.http }}:
+    status: 404
+file:
+  /etc/jupyterhub:
+    exists: true
+    filetype: directory
+    mode: "0755"
+    owner: root
+  /etc/jupyterhub/jupyterhub_config.py:
+    exists: true
+    filetype: file
+    mode: "0644"
+    owner: root
+    contains:
+    - /hub_container_port.*{{ .Vars.hub.containerPorts.http }}/
+  /usr/local/etc/jupyterhub/secret/values.yaml:
+    exists: true
+    filetype: symlink
+    mode: "0777"
+    owner: root
+    contains:
+    - postgresql://{{ .Vars.postgresql.auth.username }}@jupyterhub-postgresql:{{ .Vars.postgresql.service.ports.postgresql }}/{{ .Vars.postgresql.auth.database }}
+    - /uid.*{{ .Vars.singleuser.containerSecurityContext.runAsUser }}/
+    - /fsGid.*{{ .Vars.singleuser.podSecurityContext.fsGroup }}/
+    - /type.*dynamic/
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    exists: {{ .Vars.hub.serviceAccount.automountServiceAccountToken }}
+    filetype: directory
+    mode: "3777"
+command:
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+    - uid={{ .Vars.hub.containerSecurityContext.runAsUser }}
+    - /groups=.*{{ .Vars.hub.podSecurityContext.fsGroup }}/

@@ -35,6 +35,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/jasperreports/**'
       - 'bitnami/jenkins/**'
       - 'bitnami/joomla/**'
+      - 'bitnami/jupyterhub/**'
       - 'bitnami/kafka/**'
       - 'bitnami/keycloak/**'
       - 'bitnami/kibana/**'
