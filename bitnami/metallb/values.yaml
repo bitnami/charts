@@ -98,7 +98,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/metallb-controller
-    tag: 0.13.7-debian-11-r0
+    tag: 0.13.7-debian-11-r9
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -455,7 +455,7 @@ speaker:
   image:
     registry: docker.io
     repository: bitnami/metallb-speaker
-    tag: 0.13.6-debian-11-r1
+    tag: 0.13.7-debian-11-r8
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
