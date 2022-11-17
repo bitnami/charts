@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ printf "%s-master" (include "common.names.fullname" .) }}
