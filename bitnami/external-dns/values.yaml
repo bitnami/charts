@@ -379,6 +379,9 @@ google:
   ## @param google.project When using the Google provider, specify the Google project (required when provider=google)
   ##
   project: ""
+  ## @param google.batchChangeSize When using the google provider, set the maximum number of changes that will be applied in each batch
+  ##
+  batchChangeSize: 1000
   ## @param google.serviceAccountSecret When using the Google provider, specify the existing secret which contains credentials.json (optional)
   ##
   serviceAccountSecret: ""

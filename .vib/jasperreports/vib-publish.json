@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/jasperreports"
         },
-        "runtime_parameters": "Imphc3BlcnJlcG9ydHNQYXNzd29yZCI6ICJTMzlCS1dqU2toIg==",
+        "runtime_parameters": "amFzcGVycmVwb3J0c1VzZXJuYW1lOiBqYXNwZXJ2aWJhZG1pbgpqYXNwZXJyZXBvcnRzUGFzc3dvcmQ6ICJDb21wbGljYXRlZFBhc3N3b3JkMTIzITQiCnBvZFNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgZnNHcm91cDogMTAwMgpjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIHJ1bkFzVXNlcjogMTAwMgpwZXJzaXN0ZW5jZToKICBlbmFibGVkOiB0cnVlCnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCiAgcG9ydHM6CiAgICBodHRwOiA4MAptYXJpYWRiOgogIGVuYWJsZWQ6IHRydWUKICBhdXRoOgogICAgZGF0YWJhc2U6IGJpdG5hbWlfdGVzdF9qYXNwZXJyZXBvcnRzCiAgICB1c2VybmFtZTogYm5fdGVzdF9qYXNwZXJyZXBvcnRzCiAgICBwYXNzd29yZDogYml0bmFtaV90ZXN0X3Bhc3N3b3Jk",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -36,6 +36,32 @@
           "params": {
             "endpoint": "lb-jasperreports-http",
             "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/jasperreports/goss"
+            },
+            "remote": {
+              "workload": "deploy-jasperreports"
+            },
+            "vars_file": "vars.yaml"
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/jasperreports/cypress"
+            },
+            "endpoint": "lb-jasperreports-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "username": "jaspervibadmin",
+              "password": "ComplicatedPassword123!4"
+            }
           }
         }
       ]
