@@ -42,6 +42,10 @@ commonLabels: {}
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
 schedulerName: ""
+## @param runtimeClassName Name of the Runtime Class for all MariaDB pods
+## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+##
+runtimeClassName: ""
 ## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template)
 ##
 extraDeploy: []
