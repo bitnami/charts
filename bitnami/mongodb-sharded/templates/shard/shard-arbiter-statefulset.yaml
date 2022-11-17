@@ -1,7 +1,7 @@
 {{- if and .Values.shards .Values.shardsvr.arbiter.replicaCount }}
 {{- $replicas := $.Values.shards | int }}
 {{- range $i, $e := until $replicas }}
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ printf "%s-shard%d-arbiter" (include "common.names.fullname" $ ) $i }}
