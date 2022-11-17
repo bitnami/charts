@@ -170,6 +170,9 @@ sidecars: []
 ##    command: ['sh', '-c', 'echo "hello world"']
 ##
 initContainers: []
+## @param useIstioLabels Use this variable to add Istio labels to all pods
+##
+useIstioLabels: true
 
 ## Bitnami Elasticsearch image
 ## @param image.registry Elasticsearch image registry
