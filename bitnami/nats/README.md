@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------ | ----------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`         | NATS image registry                                                                                   | `docker.io`          |
 | `image.repository`       | NATS image repository                                                                                 | `bitnami/nats`       |
-| `image.tag`              | NATS image tag (immutable tags are recommended)                                                       | `2.9.6-debian-11-r0` |
+| `image.tag`              | NATS image tag (immutable tags are recommended)                                                       | `2.9.7-debian-11-r0` |
 | `image.digest`           | NATS image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag  | `""`                 |
 | `image.pullPolicy`       | NATS image pull policy                                                                                | `IfNotPresent`       |
 | `image.pullSecrets`      | NATS image pull secrets                                                                               | `[]`                 |
@@ -220,7 +220,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Enable Prometheus metrics via exporter side-car                                                        | `false`                 |
 | `metrics.image.registry`                   | Prometheus metrics exporter image registry                                                             | `docker.io`             |
 | `metrics.image.repository`                 | Prometheus metrics exporter image repository                                                           | `bitnami/nats-exporter` |
-| `metrics.image.tag`                        | Prometheus metrics exporter image tag (immutable tags are recommended)                                 | `0.10.1-debian-11-r0`   |
+| `metrics.image.tag`                        | Prometheus metrics exporter image tag (immutable tags are recommended)                                 | `0.10.1-debian-11-r4`   |
 | `metrics.image.digest`                     | Petete image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `metrics.image.pullPolicy`                 | Prometheus metrics image pull policy                                                                   | `IfNotPresent`          |
 | `metrics.image.pullSecrets`                | Prometheus metrics image pull secrets                                                                  | `[]`                    |
