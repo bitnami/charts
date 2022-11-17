@@ -73,6 +73,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `commonAnnotations`      | Common annotations to add to all MariaDB resources (sub-charts are not considered)      | `{}`            |
 | `commonLabels`           | Common labels to add to all MariaDB resources (sub-charts are not considered)           | `{}`            |
 | `schedulerName`          | Name of the scheduler (other than default) to dispatch pods                             | `""`            |
+| `runtimeClassName`       | Name of the Runtime Class for all MariaDB pods                                          | `""`            |
 | `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template)             | `[]`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
