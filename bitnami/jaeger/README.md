@@ -108,6 +108,76 @@
 | `query.sidecars`                                    | Add additional sidecar containers to the jaeger pods                                      | `[]`              |
 
 
+### Collector deployment parameters
+
+| Name                                                    | Description                                                                               | Value                 |
+| ------------------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------- |
+| `collector.command`                                     | Command for running the container (set to default if not set). Use array form             | `[]`                  |
+| `collector.args`                                        | Args for running the container (set to default if not set). Use array form                | `[]`                  |
+| `collector.lifecycleHooks`                              | Override default etcd container hooks                                                     | `{}`                  |
+| `collector.extraEnvVars`                                | Extra environment variables to be set on jaeger container                                 | `[]`                  |
+| `collector.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars                                      | `""`                  |
+| `collector.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars                                         | `""`                  |
+| `collector.replicaCount`                                | Number of Jaeger replicas                                                                 | `1`                   |
+| `collector.livenessProbe.enabled`                       | Enable livenessProbe on collector nodes                                                   | `true`                |
+| `collector.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                   | `10`                  |
+| `collector.livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                          | `10`                  |
+| `collector.livenessProbe.timeoutSeconds`                | Timeout seconds for livenessProbe                                                         | `1`                   |
+| `collector.livenessProbe.failureThreshold`              | Failure threshold for livenessProbe                                                       | `3`                   |
+| `collector.livenessProbe.successThreshold`              | Success threshold for livenessProbe                                                       | `1`                   |
+| `collector.startupProbe.enabled`                        | Enable startupProbe on collector containers                                               | `false`               |
+| `collector.startupProbe.initialDelaySeconds`            | Initial delay seconds for startupProbe                                                    | `10`                  |
+| `collector.startupProbe.periodSeconds`                  | Period seconds for startupProbe                                                           | `10`                  |
+| `collector.startupProbe.timeoutSeconds`                 | Timeout seconds for startupProbe                                                          | `1`                   |
+| `collector.startupProbe.failureThreshold`               | Failure threshold for startupProbe                                                        | `15`                  |
+| `collector.startupProbe.successThreshold`               | Success threshold for startupProbe                                                        | `1`                   |
+| `collector.customLivenessProbe`                         | Custom livenessProbe that overrides the default one                                       | `{}`                  |
+| `collector.customStartupProbe`                          | Override default startup probe                                                            | `{}`                  |
+| `collector.resources.limits`                            | The resources limits for Jaeger containers                                                | `{}`                  |
+| `collector.resources.requests`                          | The requested resources for Jaeger containers                                             | `{}`                  |
+| `collector.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for jaeger container             | `[]`                  |
+| `collector.service.type`                                | Jaeger service type                                                                       | `ClusterIP`           |
+| `collector.service.ports.api`                           | Port for API                                                                              | `16686`               |
+| `collector.service.ports.admin`                         | Port for admin                                                                            | `16687`               |
+| `collector.service.nodePorts.api`                       | Node port for API                                                                         | `""`                  |
+| `collector.service.nodePorts.admin`                     | Node port for admin                                                                       | `""`                  |
+| `collector.service.extraPorts`                          | Extra ports to expose in the service (normally used with the `sidecar` value)             | `[]`                  |
+| `collector.service.loadBalancerIP`                      | LoadBalancerIP if service type is `LoadBalancer`                                          | `""`                  |
+| `collector.service.loadBalancerSourceRanges`            | Service Load Balancer sources                                                             | `[]`                  |
+| `collector.service.clusterIP`                           | Service Cluster IP                                                                        | `""`                  |
+| `collector.service.externalTrafficPolicy`               | Service external traffic policy                                                           | `Cluster`             |
+| `collector.service.annotations`                         | Provide any additional annotations which may be required.                                 | `{}`                  |
+| `collector.service.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                      | `None`                |
+| `collector.service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                               | `{}`                  |
+| `collector.serviceAccount.create`                       | Enables ServiceAccount                                                                    | `true`                |
+| `collector.serviceAccount.name`                         | ServiceAccount name                                                                       | `jaeger-collector-sa` |
+| `collector.serviceAccount.annotations`                  | Annotations to add to all deployed objects                                                | `{}`                  |
+| `collector.serviceAccount.automountServiceAccountToken` | Automount API credentials for a service account.                                          | `true`                |
+| `collector.podSecurityContext.enabled`                  | Enabled Jaeger pods' Security Context                                                     | `true`                |
+| `collector.podSecurityContext.fsGroup`                  | Set Jaeger pod's Security Context fsGroup                                                 | `1001`                |
+| `collector.containerSecurityContext.enabled`            | Enabled Jaeger containers' Security Context                                               | `true`                |
+| `collector.containerSecurityContext.runAsUser`          | Set Jaeger container's Security Context runAsUser                                         | `1001`                |
+| `collector.containerSecurityContext.runAsNonRoot`       | Force the container to be run as non root                                                 | `true`                |
+| `collector.podAnnotations`                              | Additional pod annotations                                                                | `{}`                  |
+| `collector.podLabels`                                   | Additional pod labels                                                                     | `{}`                  |
+| `collector.podAffinityPreset`                           | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                  |
+| `collector.podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                |
+| `collector.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                  |
+| `collector.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `affinity` is set                                     | `""`                  |
+| `collector.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `affinity` is set                                  | `[]`                  |
+| `collector.priorityClassName`                           | Server priorityClassName                                                                  | `""`                  |
+| `collector.affinity`                                    | Affinity for pod assignment                                                               | `{}`                  |
+| `collector.nodeSelector`                                | Node labels for pod assignment                                                            | `{}`                  |
+| `collector.tolerations`                                 | Tolerations for pod assignment                                                            | `[]`                  |
+| `collector.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment                                            | `[]`                  |
+| `collector.schedulerName`                               | Alternative scheduler                                                                     | `""`                  |
+| `collector.updateStrategy.type`                         | Jaeger collector deployment strategy type                                                 | `RollingUpdate`       |
+| `collector.updateStrategy.rollingUpdate`                | Jaeger collector deployment rolling update configuration parameters                       | `{}`                  |
+| `collector.extraVolumes`                                | Optionally specify extra list of additional volumes for jaeger container                  | `[]`                  |
+| `collector.initContainers`                              | Add additional init containers to the jaeger pods                                         | `[]`                  |
+| `collector.sidecars`                                    | Add additional sidecar containers to the jaeger pods                                      | `[]`                  |
+
+
 ### Cassandra storage pod
 
 | Name                | Description                   | Value  |
