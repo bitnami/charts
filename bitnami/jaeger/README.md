@@ -27,22 +27,15 @@
 
 ### Jaeger parameters
 
-| Name                    | Description                                                                                                      | Value                 |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`        | Jaeger image registry                                                                                            | `docker.io`           |
-| `image.repository`      | Jaeger image repository                                                                                          | `bitnami/jaeger`      |
-| `image.tag`             | Jaeger image tag (immutable tags are recommended)                                                                | `1.39.0-debian-11-r4` |
-| `image.digest`          | Jaeger image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag           | `""`                  |
-| `image.pullPolicy`      | image pull policy                                                                                                | `IfNotPresent`        |
-| `image.pullSecrets`     | Jaeger image pull secrets                                                                                        | `[]`                  |
-| `image.debug`           | Enable image debug mode                                                                                          | `false`               |
-| `dbUser.user`           | Jaeger admin user                                                                                                | `jaeger`              |
-| `dbUser.forcePassword`  | Force the user to provide a non                                                                                  | `false`               |
-| `dbUser.password`       | Password for `dbUser.user`. Randomly generated if empty                                                          | `""`                  |
-| `dbUser.existingSecret` | Use an existing secret object for `dbUser.user` password (will ignore `dbUser.password`)                         | `""`                  |
-| `initDBConfigMap`       | ConfigMap with cql scripts. Useful for creating a keyspace and pre-populating data                               | `""`                  |
-| `initDBSecret`          | Secret with cql script (with sensitive data). Useful for creating a keyspace and pre-populating data             | `""`                  |
-| `existingConfiguration` | ConfigMap with custom jaeger configuration files. This overrides any other Jaeger configuration set in the chart | `""`                  |
+| Name                | Description                                                                                            | Value                 |
+| ------------------- | ------------------------------------------------------------------------------------------------------ | --------------------- |
+| `image.registry`    | Jaeger image registry                                                                                  | `docker.io`           |
+| `image.repository`  | Jaeger image repository                                                                                | `bitnami/jaeger`      |
+| `image.tag`         | Jaeger image tag (immutable tags are recommended)                                                      | `1.39.0-debian-11-r4` |
+| `image.digest`      | Jaeger image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
+| `image.pullPolicy`  | image pull policy                                                                                      | `IfNotPresent`        |
+| `image.pullSecrets` | Jaeger image pull secrets                                                                              | `[]`                  |
+| `image.debug`       | Enable image debug mode                                                                                | `false`               |
 
 
 ### Query deployment parameters
