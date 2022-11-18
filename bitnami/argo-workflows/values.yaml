@@ -192,12 +192,12 @@ server:
     ## SSO configuration when SSO is specified as a server auth mode.
     ## All the values are required. SSO is activated by adding --auth-mode=sso to the server command line.
     ## @param server.auth.sso.enabled Enable SSO configuration for the server auth mode
-    ## @param server.auth.sso.issuer Root URL for the OIDC identity provider
-    ## @param server.auth.sso.clientId.name Name of the secret containing the OIDC client ID
-    ## @param server.auth.sso.clientId.key Key in the secret to obtain the OIDC client ID
-    ## @param server.auth.sso.clientSecret.name Name of the secret containing the OIDC client secret
-    ## @param server.auth.sso.clientSecret.key Key in the secret to obtain the OIDC client secret
-    ## @param server.auth.sso.redirectUrl The OIDC redirect URL. Should be in the form <argo-root-url>/oauth2/callback.
+    ## @param server.auth.sso.config.issuer Root URL for the OIDC identity provider
+    ## @param server.auth.sso.config.clientId.name Name of the secret containing the OIDC client ID
+    ## @param server.auth.sso.config.clientId.key Key in the secret to obtain the OIDC client ID
+    ## @param server.auth.sso.config.clientSecret.name Name of the secret containing the OIDC client secret
+    ## @param server.auth.sso.config.clientSecret.key Key in the secret to obtain the OIDC client secret
+    ## @param server.auth.sso.config.redirectUrl The OIDC redirect URL. Should be in the form <argo-root-url>/oauth2/callback.
     ## @param server.auth.sso.rbac.enabled Create RBAC resources for SSO
     ## @param server.auth.sso.rbac.secretWhitelist Restricts the secrets that the server can read
     ## @param server.auth.sso.scopes Scopes requested from the SSO ID provider
@@ -208,20 +208,21 @@ server:
       ## E.g.
       ## issuer: "https://accounts.google.com"
       ##
-      issuer: ""
-      ## Name of a secret and a key in it to retrieve the app OIDC client ID from.
-      ##
-      clientId:
-        name: ""
-        key: ""
-      ## Name of a secret and a key in it to retrieve the app OIDC client secret from.
-      ##
-      clientSecret:
-        name: ""
-        key: ""
-      ## The OIDC redirect URL. Should be in the form <argo-root-url>/oauth2/callback.
-      ##
-      redirectUrl: ""
+      config:
+        issuer: ""
+        ## Name of a secret and a key in it to retrieve the app OIDC client ID from.
+        ##
+        clientId:
+          name: ""
+          key: ""
+        ## Name of a secret and a key in it to retrieve the app OIDC client secret from.
+        ##
+        clientSecret:
+          name: ""
+          key: ""
+        ## The OIDC redirect URL. Should be in the form <argo-root-url>/oauth2/callback.
+        ##
+        redirectUrl: ""
       ## Create RBAC resources for SSO
       ##
       rbac:
@@ -668,7 +669,7 @@ controller:
     workflowDefaults: {{- include "common.tplvalues.render" (dict "value" .Values.controller.workflowDefaults "context" $) | nindent 2 }}
     {{- end }}
     {{- if and .Values.server.auth.enabled .Values.server.auth.sso.enabled }}
-    sso: {{- include "common.tplvalues.render" (dict "value" .Values.server.auth.sso "context" $) | nindent 2 }}
+    sso: {{- include "common.tplvalues.render" (dict "value" .Values.server.auth.sso.config "context" $) | nindent 2 }}
     {{- end }}
     ## Uncomment to set workflowRestrictions
     ## Ref: https://argoproj.github.io/argo-workflows/workflow-restrictions/
