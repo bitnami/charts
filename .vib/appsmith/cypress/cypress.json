@@ -1,0 +1,10 @@
+{
+  "env": {
+    "email": "user@example.com",
+    "password": "bitnami!1234"
+  },
+  "hosts": {
+    "bitnami-appsmith.my": "{{ TARGET_IP }}"
+  },
+  "defaultCommandTimeout": 60000
+}

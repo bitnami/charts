@@ -1,0 +1,11 @@
+client:
+  service:
+    ports:
+      http: 80
+  containerSecurityContext:
+    runAsUser: 1002
+  podSecurityContext:
+    fsGroup: 1002
+
+serviceAccount:
+  automountServiceAccountToken: true
