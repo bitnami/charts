@@ -178,6 +178,76 @@
 | `collector.sidecars`                                    | Add additional sidecar containers to the jaeger pods                                      | `[]`                  |
 
 
+### agent deployment parameters
+
+| Name                                                | Description                                                                               | Value             |
+| --------------------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------- |
+| `agent.command`                                     | Command for running the container (set to default if not set). Use array form             | `[]`              |
+| `agent.args`                                        | Args for running the container (set to default if not set). Use array form                | `[]`              |
+| `agent.lifecycleHooks`                              | Override default etcd container hooks                                                     | `{}`              |
+| `agent.extraEnvVars`                                | Extra environment variables to be set on jaeger container                                 | `[]`              |
+| `agent.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars                                      | `""`              |
+| `agent.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars                                         | `""`              |
+| `agent.replicaCount`                                | Number of Jaeger replicas                                                                 | `1`               |
+| `agent.livenessProbe.enabled`                       | Enable livenessProbe on agent nodes                                                       | `true`            |
+| `agent.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                   | `10`              |
+| `agent.livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                          | `10`              |
+| `agent.livenessProbe.timeoutSeconds`                | Timeout seconds for livenessProbe                                                         | `1`               |
+| `agent.livenessProbe.failureThreshold`              | Failure threshold for livenessProbe                                                       | `3`               |
+| `agent.livenessProbe.successThreshold`              | Success threshold for livenessProbe                                                       | `1`               |
+| `agent.startupProbe.enabled`                        | Enable startupProbe on agent containers                                                   | `false`           |
+| `agent.startupProbe.initialDelaySeconds`            | Initial delay seconds for startupProbe                                                    | `10`              |
+| `agent.startupProbe.periodSeconds`                  | Period seconds for startupProbe                                                           | `10`              |
+| `agent.startupProbe.timeoutSeconds`                 | Timeout seconds for startupProbe                                                          | `1`               |
+| `agent.startupProbe.failureThreshold`               | Failure threshold for startupProbe                                                        | `15`              |
+| `agent.startupProbe.successThreshold`               | Success threshold for startupProbe                                                        | `1`               |
+| `agent.customLivenessProbe`                         | Custom livenessProbe that overrides the default one                                       | `{}`              |
+| `agent.customStartupProbe`                          | Override default startup probe                                                            | `{}`              |
+| `agent.resources.limits`                            | The resources limits for Jaeger containers                                                | `{}`              |
+| `agent.resources.requests`                          | The requested resources for Jaeger containers                                             | `{}`              |
+| `agent.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for jaeger container             | `[]`              |
+| `agent.service.type`                                | Jaeger service type                                                                       | `ClusterIP`       |
+| `agent.service.ports.api`                           | Port for API                                                                              | `16686`           |
+| `agent.service.ports.admin`                         | Port for admin                                                                            | `16687`           |
+| `agent.service.nodePorts.api`                       | Node port for API                                                                         | `""`              |
+| `agent.service.nodePorts.admin`                     | Node port for admin                                                                       | `""`              |
+| `agent.service.extraPorts`                          | Extra ports to expose in the service (normally used with the `sidecar` value)             | `[]`              |
+| `agent.service.loadBalancerIP`                      | LoadBalancerIP if service type is `LoadBalancer`                                          | `""`              |
+| `agent.service.loadBalancerSourceRanges`            | Service Load Balancer sources                                                             | `[]`              |
+| `agent.service.clusterIP`                           | Service Cluster IP                                                                        | `""`              |
+| `agent.service.externalTrafficPolicy`               | Service external traffic policy                                                           | `Cluster`         |
+| `agent.service.annotations`                         | Provide any additional annotations which may be required.                                 | `{}`              |
+| `agent.service.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                      | `None`            |
+| `agent.service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                               | `{}`              |
+| `agent.serviceAccount.create`                       | Enables ServiceAccount                                                                    | `true`            |
+| `agent.serviceAccount.name`                         | ServiceAccount name                                                                       | `jaeger-agent-sa` |
+| `agent.serviceAccount.annotations`                  | Annotations to add to all deployed objects                                                | `{}`              |
+| `agent.serviceAccount.automountServiceAccountToken` | Automount API credentials for a service account.                                          | `true`            |
+| `agent.podSecurityContext.enabled`                  | Enabled Jaeger pods' Security Context                                                     | `true`            |
+| `agent.podSecurityContext.fsGroup`                  | Set Jaeger pod's Security Context fsGroup                                                 | `1001`            |
+| `agent.containerSecurityContext.enabled`            | Enabled Jaeger containers' Security Context                                               | `true`            |
+| `agent.containerSecurityContext.runAsUser`          | Set Jaeger container's Security Context runAsUser                                         | `1001`            |
+| `agent.containerSecurityContext.runAsNonRoot`       | Force the container to be run as non root                                                 | `true`            |
+| `agent.podAnnotations`                              | Additional pod annotations                                                                | `{}`              |
+| `agent.podLabels`                                   | Additional pod labels                                                                     | `{}`              |
+| `agent.podAffinityPreset`                           | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`              |
+| `agent.podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`            |
+| `agent.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`              |
+| `agent.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `affinity` is set                                     | `""`              |
+| `agent.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `affinity` is set                                  | `[]`              |
+| `agent.priorityClassName`                           | Server priorityClassName                                                                  | `""`              |
+| `agent.affinity`                                    | Affinity for pod assignment                                                               | `{}`              |
+| `agent.nodeSelector`                                | Node labels for pod assignment                                                            | `{}`              |
+| `agent.tolerations`                                 | Tolerations for pod assignment                                                            | `[]`              |
+| `agent.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment                                            | `[]`              |
+| `agent.schedulerName`                               | Alternative scheduler                                                                     | `""`              |
+| `agent.updateStrategy.type`                         | Jaeger agent deployment strategy type                                                     | `RollingUpdate`   |
+| `agent.updateStrategy.rollingUpdate`                | Jaeger agent deployment rolling update configuration parameters                           | `{}`              |
+| `agent.extraVolumes`                                | Optionally specify extra list of additional volumes for jaeger container                  | `[]`              |
+| `agent.initContainers`                              | Add additional init containers to the jaeger pods                                         | `[]`              |
+| `agent.sidecars`                                    | Add additional sidecar containers to the jaeger pods                                      | `[]`              |
+
+
 ### Cassandra storage pod
 
 | Name                | Description                   | Value  |
