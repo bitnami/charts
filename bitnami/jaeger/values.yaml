@@ -154,7 +154,7 @@ cluster:
   extraSeeds: []
   enableUDF: false
 
-## @section query deployment parameters
+## @section Query deployment parameters
 ##
 
 query:
@@ -184,7 +184,7 @@ query:
   replicaCount: 1
   ## Configure extra options for container's liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
-  ## @param query.livenessProbe.enabled Enable livenessProbe on Gateway nodes
+  ## @param query.livenessProbe.enabled Enable livenessProbe on Query nodes
   ## @param query.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param query.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param query.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -198,7 +198,7 @@ query:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
-  ## @param query.startupProbe.enabled Enable startupProbe on Gateway containers
+  ## @param query.startupProbe.enabled Enable startupProbe on Query containers
   ## @param query.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
   ## @param query.startupProbe.periodSeconds Period seconds for startupProbe
   ## @param query.startupProbe.timeoutSeconds Timeout seconds for startupProbe
