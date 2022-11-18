@@ -332,6 +332,10 @@ query:
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: soft
+  ## @param query.podAntiAffinityPresetTopologyKey Thanos Query pod anti-affinity topologyKey. Ignored if `query.affinity` is set.
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPresetTopologyKey: ""
   ## Thanos Query node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
