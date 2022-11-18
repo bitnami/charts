@@ -478,6 +478,11 @@ operator:
       timeoutSeconds: 5
       failureThreshold: 6
       successThreshold: 1
+  ## Restrict the namespaces that the operator watches
+  ## ref: `-namespaces` in https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/operator.md
+  ## @param operator.namespaces Optional comma-separated list of namespaces to watch (default=all).
+  ##
+  namespaces: ""
 
 ## @section Prometheus Parameters
 ##

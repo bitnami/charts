@@ -202,6 +202,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `operator.prometheusConfigReloader.readinessProbe.timeoutSeconds`                     | When the probe times out                                                                                               | `5`                           |
 | `operator.prometheusConfigReloader.readinessProbe.failureThreshold`                   | Minimum consecutive failures for the probe                                                                             | `6`                           |
 | `operator.prometheusConfigReloader.readinessProbe.successThreshold`                   | Minimum consecutive successes for the probe                                                                            | `1`                           |
+| `operator.namespaces`                                                                 | Optional comma-separated list of namespaces to watch (default=all).                                                    | `""`                          |
 
 
 ### Prometheus Parameters
