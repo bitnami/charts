@@ -1,0 +1,475 @@
+## @section Global parameters
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
+##
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass: ""
+
+## @section Common parameters
+##
+
+## @param nameOverride String to partially override common.names.fullname
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride: ""
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion: ""
+## @param commonLabels Labels to add to all deployed objects (sub-charts are not considered)
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+
+## @section Jaeger parameters
+##
+
+## Bitnami Jaeger image
+## ref: https://hub.docker.com/r/bitnami/jaeger/tags/
+## @param image.registry Jaeger image registry
+## @param image.repository Jaeger image repository
+## @param image.tag Jaeger image tag (immutable tags are recommended)
+## @param image.digest Jaeger image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param image.pullPolicy image pull policy
+## @param image.pullSecrets Jaeger image pull secrets
+## @param image.debug Enable image debug mode
+##
+image:
+  registry: docker.io
+  repository: bitnami/jaeger
+  tag: 1.39.0-debian-11-r4
+  digest: ""
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Enable debug mode
+  ##
+  debug: false
+
+## Secret with keystore, keystore password, truststore, truststore password
+## DEPRECATED. Use tls.existingSecret instead
+# tlsEncryptionSecretName:
+
+## Database credentials
+## @param dbUser.user Jaeger admin user
+## @param dbUser.forcePassword Force the user to provide a non
+## @param dbUser.password Password for `dbUser.user`. Randomly generated if empty
+## @param dbUser.existingSecret Use an existing secret object for `dbUser.user` password (will ignore `dbUser.password`)
+##
+dbUser:
+  user: jaeger
+  forcePassword: false
+  password: ""
+  ## Use an existing secrets which already stores your password data.
+  ## for backwards compatibility, existingSecret can be a simple string,
+  ## referencing the secret by name.
+  ## existingSecret:
+  ##   ## Name of the existing secret
+  ##   ##
+  ##   name: mySecret
+  ##   ## Key mapping where <key> is the value which the deployment is expecting and
+  ##   ## <value> is the name of the key in the existing secret.
+  ##   ##
+  ##   keyMapping:
+  ##     jaeger-password: myJaegerPasswordKey
+  ##
+  existingSecret: ""
+
+## @param initDBConfigMap ConfigMap with cql scripts. Useful for creating a keyspace and pre-populating data
+##
+initDBConfigMap: ""
+## @param initDBSecret Secret with cql script (with sensitive data). Useful for creating a keyspace and pre-populating data
+##
+initDBSecret: ""
+## @param existingConfiguration ConfigMap with custom jaeger configuration files. This overrides any other Jaeger configuration set in the chart
+##
+existingConfiguration: ""
+## Cluster parameters
+## @param cluster.name Jaeger cluster name
+## @param cluster.seedCount Number of seed nodes
+## @param cluster.numTokens Number of tokens for each node
+## @param cluster.datacenter Datacenter name
+## @param cluster.rack Rack name
+## @param cluster.endpointSnitch Endpoint Snitch
+## @param cluster.internodeEncryption DEPRECATED: use tls.internode and tls.client instead. Encryption values.
+## @param cluster.clientEncryption Client Encryption
+## @param cluster.extraSeeds For an external/second jaeger ring.
+## @param cluster.enableUDF Enable User defined functions
+##
+cluster:
+  name: jaeger
+  seedCount: 1
+  numTokens: 256
+  datacenter: dc1
+  rack: rack1
+  endpointSnitch: SimpleSnitch
+  ## NOTE: internodeEncryption requires tlsEncryptionSecretName
+  ##
+  internodeEncryption: none
+  clientEncryption: false
+  ## eg:
+  ## extraSeeds:
+  ##   - hostname/IP
+  ##   - hostname/IP
+  ##
+  extraSeeds: []
+  enableUDF: false
+
+
+
+
+
+
+
+
+
+query:
+  ## @param command Command for running the container (set to default if not set). Use array form
+  ##
+  command: []
+  ## @param args Args for running the container (set to default if not set). Use array form
+  ##
+  args: []
+  ## @param lifecycleHooks [object] Override default etcd container hooks
+  ##
+  lifecycleHooks: {}
+  ## @param extraEnvVars Extra environment variables to be set on jaeger container
+  ## For example:
+  ##  - name: FOO
+  ##    value: BAR
+  ##
+  extraEnvVars: []
+  ## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars
+  ##
+  extraEnvVarsCM: ""
+  ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
+  ##
+  extraEnvVarsSecret: ""
+  ## @param replicaCount Number of Jaeger replicas
+  ##
+  replicaCount: 1
+  ## Configure extra options for container's liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param query.livenessProbe.enabled Enable livenessProbe on Gateway nodes
+  ## @param query.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param query.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param query.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param query.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param query.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param query.readinessProbe.enabled Enable readinessProbe on Gateway nodes
+  ## @param query.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param query.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param query.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param query.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param query.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param query.startupProbe.enabled Enable startupProbe on Gateway containers
+  ## @param query.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param query.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param query.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param query.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param query.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param customStartupProbe [object] Override default startup probe
+  ##
+  customStartupProbe: {}
+  ## Jaeger pods' resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## Minimum memory for development is 4GB and 2 CPU cores
+  ## Minimum memory for production is 8GB and 4 CPU cores
+  ## ref: http://docs.datastax.com/en/archived/jaeger/2.0/jaeger/architecture/architecturePlanningHardware_c.html
+  ##
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param resources.limits The resources limits for Jaeger containers
+  ## @param resources.requests The requested resources for Jaeger containers
+  ##
+  resources:
+    ## Example:
+    ## limits:
+    ##    cpu: 2
+    ##    memory: 4Gi
+    ##
+    limits: {}
+    ## Examples:
+    ## requests:
+    ##    cpu: 2
+    ##    memory: 4Gi
+    ##
+    requests: {}
+  ## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for jaeger container
+  ##
+  extraVolumeMounts: []
+  ## Jaeger service parameters
+  ##
+  service:
+    ## @param service.type Jaeger service type
+    ##
+    type: ClusterIP
+    ## @param service.ports.....
+    ## @param service.ports.....
+    ##
+    ports:
+      api: 16686
+      admin: 16687
+    #    agent-compact: 6831
+    #    agent_binary: 6832
+    #    agent_config: 5778
+    #    agent_zipkin: 5775
+    #    agent_admin: 14271
+    #    collector_grpc: 14250
+    #    collector_binary: 14268
+    #    collector_zipkin: 9411
+    #    collector_admin: 14269
+    ## Node ports to expose
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ## @param service.nodePorts.cql Node port for CQL
+    ## @param service.nodePorts.metrics Node port for metrics
+    ##
+    nodePorts:
+      cql: ""
+      metrics: ""
+    ## @param service.extraPorts Extra ports to expose in the service (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
+    ## @param service.loadBalancerIP LoadBalancerIP if service type is `LoadBalancer`
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    loadBalancerIP: ""
+    ## @param service.loadBalancerSourceRanges Service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param service.clusterIP Service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param service.externalTrafficPolicy Service external traffic policy
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param service.annotations Provide any additional annotations which may be required.
+    ## This can be used to set the LoadBalancer service type to internal only.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    annotations: {}
+    ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+  ## Jaeger serviceAccount parameters
+  ##
+  serviceAccount:
+    ## @param enabled Enables ServiceAccount
+    ##
+    create: true
+    ## @param name ServiceAccount name
+    ##
+    name: jaeger-query-sa
+    ## @param commonAnnotations Annotations to add to all deployed objects
+    ##
+    annotations: {}
+    ## @param serviceAccount.automountServiceAccountToken Automount API credentials for a service account.
+    ##
+    automountServiceAccountToken: true
+
+  ## @param podManagementPolicy StatefulSet pod management policy
+  ##
+  podManagementPolicy: OrderedReady
+  ## Pod security context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param podSecurityContext.enabled Enabled Jaeger pods' Security Context
+  ## @param podSecurityContext.fsGroup Set Jaeger pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context (only main container)
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param containerSecurityContext.enabled Enabled Jaeger containers' Security Context
+  ## @param containerSecurityContext.runAsUser Set Jaeger container's Security Context runAsUser
+  ## @param containerSecurityContext.runAsNonRoot Force the container to be run as non root
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  ## @param priorityClassName Jaeger pods' priority.
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ##
+  priorityClassName: ""
+  ## @param podAnnotations Additional pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param podLabels Additional pod labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
+    ##
+    key: ""
+    ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param affinity Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param nodeSelector Node labels for pod assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param tolerations Tolerations for pod assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
+  ## @param schedulerName Alternative scheduler
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param web.updateStrategy.type Airflow web deployment strategy type
+    #  ## @param web.updateStrategy.rollingUpdate Airflow web deployment rolling update configuration parameters
+    #  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+    #  ##
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate: {}
+  ## @param extraVolumes Optionally specify extra list of additional volumes for jaeger container
+  ##
+  extraVolumes: []
+  ## @param initContainers Add additional init containers to the jaeger pods
+  ##
+  initContainers: []
+  ## @param sidecars Add additional sidecar containers to the jaeger pods
+  ##
+  sidecars: []
+
+
+
+
+
+
+
+
+
+
+
+
+
+## @section Cassandra storage pod
+##
+cassandra:
+  enabled: true
