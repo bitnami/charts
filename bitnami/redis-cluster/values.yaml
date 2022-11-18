@@ -288,6 +288,11 @@ service:
 ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
+  ## @param persistence.enabled Enable persistence on Redis&reg;
+  ## If enabled, nodes are using Persistent Volume Claims
+  ## If disabled, an emptyDir volume is used
+  ##
+  enabled: true
   ## @param persistence.path Path to mount the volume at, to use other images Redis&reg; images.
   ##
   path: /bitnami/redis/data
@@ -461,6 +466,11 @@ redis:
   ## @param redis.priorityClassName Redis&reg; Master pod priorityClassName
   ##
   priorityClassName: ""
+  ## @param redis.defaultConfigOverride Optional default Redis&reg; configuration for the nodes
+  ## If not set, the default Redis configuration from the chart is used
+  ## ref: https://redis.io/topics/config
+  ##
+  defaultConfigOverride: ""
   ## @param redis.configmap Additional Redis&reg; configuration for the nodes
   ## ref: https://redis.io/topics/config
   ##

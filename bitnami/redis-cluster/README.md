@@ -145,6 +145,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.externalTrafficPolicy`                         | Service external traffic policy                                                                                                                     | `Cluster`               |
 | `service.sessionAffinity`                               | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                | `None`                  |
 | `service.sessionAffinityConfig`                         | Additional settings for the sessionAffinity                                                                                                         | `{}`                    |
+| `persistence.enabled`                                   | Enable persistence on Redis&reg;                                                                                                                    | `true`                  |
 | `persistence.path`                                      | Path to mount the volume at, to use other images Redis&reg; images.                                                                                 | `/bitnami/redis/data`   |
 | `persistence.subPath`                                   | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services                                             | `""`                    |
 | `persistence.storageClass`                              | Storage class of backing PVC                                                                                                                        | `""`                    |
@@ -192,6 +193,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `redis.sidecars`                               | Extra sidecar containers to add to the deployment                                                          | `[]`            |
 | `redis.podLabels`                              | Additional labels for Redis&reg; pod                                                                       | `{}`            |
 | `redis.priorityClassName`                      | Redis&reg; Master pod priorityClassName                                                                    | `""`            |
+| `redis.defaultConfigOverride`                  | Optional default Redis&reg; configuration for the nodes                                                    | `""`            |
 | `redis.configmap`                              | Additional Redis&reg; configuration for the nodes                                                          | `""`            |
 | `redis.extraEnvVars`                           | An array to add extra environment variables                                                                | `[]`            |
 | `redis.extraEnvVarsCM`                         | ConfigMap with extra environment variables                                                                 | `""`            |
