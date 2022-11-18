@@ -95,6 +95,7 @@
 | `query.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`              |
 | `query.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `affinity` is set                                     | `""`              |
 | `query.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `affinity` is set                                  | `[]`              |
+| `query.priorityClassName`                           | Server priorityClassName                                                                  | `""`              |
 | `query.affinity`                                    | Affinity for pod assignment                                                               | `{}`              |
 | `query.nodeSelector`                                | Node labels for pod assignment                                                            | `{}`              |
 | `query.tolerations`                                 | Tolerations for pod assignment                                                            | `[]`              |
