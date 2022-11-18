@@ -82,6 +82,7 @@ spec:
             exit 1
             else
             info "Connection check success"
+            sleep 60
             fi
         env:
         - name: CQLSH

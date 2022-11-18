@@ -30,6 +30,13 @@ Create the name of the collector deployment
 {{- end -}}
 
 {{/*
+Create the name of the agent deployment
+*/}}
+{{- define "jaeger.agent.fullname" -}}
+    {{ printf "%s-agent" (include "common.names.fullname" .) }}
+{{- end -}}
+
+{{/*
 Return the cassandra subchart password.
 */}}
 {{- define "jaeger.cassandraSubChartPassword" -}}
