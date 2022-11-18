@@ -35,13 +35,6 @@ commonLabels: {}
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
-## @param clusterDomain Kubernetes cluster domain name
-##
-clusterDomain: cluster.local
-## @param extraDeploy Array of extra objects to deploy with the release
-##
-extraDeploy: []
-
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -161,13 +154,8 @@ cluster:
   extraSeeds: []
   enableUDF: false
 
-
-
-
-
-
-
-
+## @section query deployment parameters
+##
 
 query:
   ## @param command Command for running the container (set to default if not set). Use array form
@@ -210,20 +198,6 @@ query:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
-  ## @param query.readinessProbe.enabled Enable readinessProbe on Gateway nodes
-  ## @param query.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param query.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param query.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param query.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param query.readinessProbe.successThreshold Success threshold for readinessProbe
-  ##
-  readinessProbe:
-    enabled: true
-    failureThreshold: 3
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    successThreshold: 1
-    timeoutSeconds: 1
   ## @param query.startupProbe.enabled Enable startupProbe on Gateway containers
   ## @param query.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
   ## @param query.startupProbe.periodSeconds Period seconds for startupProbe
@@ -241,9 +215,6 @@ query:
   ## @param customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
-  ## @param customReadinessProbe Custom readinessProbe that overrides the default one
-  ##
-  customReadinessProbe: {}
   ## @param customStartupProbe [object] Override default startup probe
   ##
   customStartupProbe: {}
@@ -303,8 +274,8 @@ query:
     ## @param service.nodePorts.metrics Node port for metrics
     ##
     nodePorts:
-      cql: ""
-      metrics: ""
+      api: ""
+      admin: ""
     ## @param service.extraPorts Extra ports to expose in the service (normally used with the `sidecar` value)
     ##
     extraPorts: []
@@ -359,10 +330,6 @@ query:
     ## @param serviceAccount.automountServiceAccountToken Automount API credentials for a service account.
     ##
     automountServiceAccountToken: true
-
-  ## @param podManagementPolicy StatefulSet pod management policy
-  ##
-  podManagementPolicy: OrderedReady
   ## Pod security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param podSecurityContext.enabled Enabled Jaeger pods' Security Context
@@ -381,10 +348,6 @@ query:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
-  ## @param priorityClassName Jaeger pods' priority.
-  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
-  ##
-  priorityClassName: ""
   ## @param podAnnotations Additional pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
@@ -456,19 +419,6 @@ query:
   ## @param sidecars Add additional sidecar containers to the jaeger pods
   ##
   sidecars: []
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## @section Cassandra storage pod
 ##
 cassandra:

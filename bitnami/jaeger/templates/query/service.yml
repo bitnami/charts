@@ -41,16 +41,16 @@ spec:
     - name: api
       port: {{ .Values.query.service.ports.api }}
       targetPort: {{ .Values.query.service.ports.api }}
-      {{- if and (or (eq .Values.query.service.type "NodePort") (eq .Values.query.service.type "LoadBalancer")) (not (empty .Values.query.service.nodePorts.cql)) }}
-      nodePort: {{ .Values.query.service.nodePorts.cql }}
+      {{- if and (or (eq .Values.query.service.type "NodePort") (eq .Values.query.service.type "LoadBalancer")) (not (empty .Values.query.service.nodePorts.api)) }}
+      nodePort: {{ .Values.query.service.nodePorts.api }}
       {{- else if eq .Values.query.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
     - name: ui
       port: {{ .Values.query.service.ports.admin }}
       targetPort: {{ .Values.query.service.ports.admin }}
-      {{- if and (or (eq .Values.query.service.type "NodePort") (eq .Values.query.service.type "LoadBalancer")) (not (empty .Values.query.service.nodePorts.metrics)) }}
-      nodePort: {{ .Values.query.service.nodePorts.metrics }}
+      {{- if and (or (eq .Values.query.service.type "NodePort") (eq .Values.query.service.type "LoadBalancer")) (not (empty .Values.query.service.nodePorts.admin)) }}
+      nodePort: {{ .Values.query.service.nodePorts.admin }}
       {{- else if eq .Values.query.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}

@@ -139,6 +139,7 @@ spec:
               containerPort: {{ .Values.query.service.ports.api }}
             - name: admin
               containerPort: {{ .Values.query.service.ports.admin }}
+
           env:
             - name: CASSANDRA_SERVERS
               value: {{ printf "%s-cassandra" (include "common.names.fullname" .) }}
@@ -175,16 +176,6 @@ spec:
             tcpSocket:
               port: admin
           {{- end }}
-          {{- if .Values.query.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.query.customLivenessProbe "context" $) | nindent 12 }}
-          {{- else if .Values.query.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.query.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /
-              port: admin
-          {{- end }}
-          {{- end }}
-          {{- if .Values.query.resources }}
           resources: {{- toYaml .Values.query.resources | nindent 12 }}
           {{- end }}
           {{- if .Values.query.extraVolumeMounts }}
