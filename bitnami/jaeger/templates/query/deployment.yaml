@@ -129,7 +129,6 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
           {{- else if .Values.query.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.query.args "context" $) | nindent 12 }}
-          {{- else }}
           {{- end }}
           {{- if .Values.query.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.query.lifecycleHooks "context" $) | nindent 12 }}
@@ -153,7 +152,7 @@ spec:
                   name: {{ printf "%s-cassandra" (include "common.names.fullname" .) }}
                   key: cassandra-password
             - name: CASSANDRA_KEYSPACE
-                value: "jaeger_v1_dc1"
+              value: "jaeger_v1_dc1"
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
             {{- if .Values.query.extraEnvVars }}
@@ -176,6 +175,8 @@ spec:
             tcpSocket:
               port: admin
           {{- end }}
+          {{- end }}
+          {{- if .Values.query.resources }}
           resources: {{- toYaml .Values.query.resources | nindent 12 }}
           {{- end }}
           {{- if .Values.query.extraVolumeMounts }}

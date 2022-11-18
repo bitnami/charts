@@ -16,10 +16,17 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
-Create the name of the query service
+Create the name of the query deployment
 */}}
 {{- define "jaeger.query.fullname" -}}
     {{ printf "%s-query" (include "common.names.fullname" .) }}
+{{- end -}}
+
+{{/*
+Create the name of the collector deployment
+*/}}
+{{- define "jaeger.collector.fullname" -}}
+    {{ printf "%s-collector" (include "common.names.fullname" .) }}
 {{- end -}}
 
 {{/*

@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name:  {{ include "jaeger.collector.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: collector
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.collector.service.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.collector.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.collector.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  type: {{ .Values.collector.service.type }}
+  {{- if and (eq .Values.collector.service.type "LoadBalancer") (not (empty .Values.collector.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.collector.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.collector.service.type "LoadBalancer") (not (empty .Values.collector.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.collector.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and .Values.collector.service.clusterIP (eq .Values.collector.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.collector.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.collector.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.collector.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.collector.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.collector.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.collector.service.type "LoadBalancer") (eq .Values.collector.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.collector.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  ports:
+    - name: api
+      port: {{ .Values.collector.service.ports.api }}
+      targetPort: {{ .Values.collector.service.ports.api }}
+      {{- if and (or (eq .Values.collector.service.type "NodePort") (eq .Values.collector.service.type "LoadBalancer")) (not (empty .Values.collector.service.nodePorts.api)) }}
+      nodePort: {{ .Values.collector.service.nodePorts.api }}
+      {{- else if eq .Values.collector.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: ui
+      port: {{ .Values.collector.service.ports.admin }}
+      targetPort: {{ .Values.collector.service.ports.admin }}
+      {{- if and (or (eq .Values.collector.service.type "NodePort") (eq .Values.collector.service.type "LoadBalancer")) (not (empty .Values.collector.service.nodePorts.admin)) }}
+      nodePort: {{ .Values.collector.service.nodePorts.admin }}
+      {{- else if eq .Values.collector.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.collector.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.collector.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
