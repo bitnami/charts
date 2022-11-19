@@ -66,7 +66,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/geode
-  tag: 1.15.1-debian-11-r0
+  tag: 1.15.1-debian-11-r10
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -970,7 +970,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r43
+    tag: 11-debian-11-r52
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1019,7 +1019,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/haproxy
-    tag: 2.6.6-debian-11-r9
+    tag: 2.6.6-debian-11-r18
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

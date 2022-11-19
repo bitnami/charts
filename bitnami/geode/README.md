@@ -7,11 +7,7 @@ Apache Geode is a data management platform that provides advanced capabilities f
 [Overview of Apache Geode](https://geode.apache.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
-## Chart Deprecation Notice
-
-Apache Geode's chart is longer maintained and is now internally tagged to be deprecated. This chart will no longer be released in our catalog a month after this notice is published, but already released chart will still persist in the registries. Valid to be removed starting on: 12-08-2022
-
+                           
 ## TL;DR
 
 ```console
