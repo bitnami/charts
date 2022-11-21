@@ -31,7 +31,6 @@ spec:
         {{- end }}
       {{- end }}
     spec:
-      enableServiceLinks: false
       {{- if .Values.agent.schedulerName }}
       schedulerName: {{ .Values.agent.schedulerName }}
       {{- end }}
@@ -150,7 +149,7 @@ spec:
             - name: CASSANDRA_KEYSPACE
               value: {{ .Values.cassandra.keyspace }}
             - name: REPORTER_GRPC_HOST_PORT
-              value: {{ printf "%s" (include "common.names.fullname" .) }}
+              value: {{ printf "%s:%d" (include "jaeger.collector.fullname" .) (int .Values.collector.service.ports.grpc) }}
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
             {{- if .Values.agent.extraEnvVars }}

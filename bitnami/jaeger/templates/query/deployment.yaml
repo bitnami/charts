@@ -31,7 +31,6 @@ spec:
         {{- end }}
       {{- end }}
     spec:
-      enableServiceLinks: false
       {{- if .Values.query.schedulerName }}
       schedulerName: {{ .Values.query.schedulerName }}
       {{- end }}
