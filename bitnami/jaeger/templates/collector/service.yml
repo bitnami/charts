@@ -38,15 +38,31 @@ spec:
   externalTrafficPolicy: {{ .Values.collector.service.externalTrafficPolicy | quote }}
   {{- end }}
   ports:
-    - name: api
-      port: {{ .Values.collector.service.ports.api }}
-      targetPort: {{ .Values.collector.service.ports.api }}
-      {{- if and (or (eq .Values.collector.service.type "NodePort") (eq .Values.collector.service.type "LoadBalancer")) (not (empty .Values.collector.service.nodePorts.api)) }}
-      nodePort: {{ .Values.collector.service.nodePorts.api }}
+    - name: grpc
+      port: {{ .Values.collector.service.ports.grpc }}
+      targetPort: {{ .Values.collector.service.ports.grpc }}
+      {{- if and (or (eq .Values.collector.service.type "NodePort") (eq .Values.collector.service.type "LoadBalancer")) (not (empty .Values.collector.service.nodePorts.grpc)) }}
+      nodePort: {{ .Values.collector.service.nodePorts.grpc }}
       {{- else if eq .Values.collector.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    - name: ui
+    - name: binary
+      port: {{ .Values.collector.service.ports.binary }}
+      targetPort: {{ .Values.collector.service.ports.binary }}
+      {{- if and (or (eq .Values.collector.service.type "NodePort") (eq .Values.collector.service.type "LoadBalancer")) (not (empty .Values.collector.service.nodePorts.binary)) }}
+      nodePort: {{ .Values.collector.service.nodePorts.binary }}
+      {{- else if eq .Values.collector.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: zipkin
+      port: {{ .Values.collector.service.ports.zipkin }}
+      targetPort: {{ .Values.collector.service.ports.zipkin }}
+      {{- if and (or (eq .Values.collector.service.type "NodePort") (eq .Values.collector.service.type "LoadBalancer")) (not (empty .Values.collector.service.nodePorts.zipkin)) }}
+      nodePort: {{ .Values.collector.service.nodePorts.zipkin }}
+      {{- else if eq .Values.collector.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: admin
       port: {{ .Values.collector.service.ports.admin }}
       targetPort: {{ .Values.collector.service.ports.admin }}
       {{- if and (or (eq .Values.collector.service.type "NodePort") (eq .Values.collector.service.type "LoadBalancer")) (not (empty .Values.collector.service.nodePorts.admin)) }}

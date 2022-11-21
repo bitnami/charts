@@ -143,12 +143,30 @@ query:
     timeoutSeconds: 1
     failureThreshold: 15
     successThreshold: 1
+  ## @param query.readinessProbe.enabled Enable readinessProbe
+  ## @param query.readinessProbe.path Path to check for readinessProbe
+  ## @param query.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param query.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param query.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param query.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param query.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: false
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
   ## @param query.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
   ## @param query.customStartupProbe [object] Override default startup probe
   ##
   customStartupProbe: {}
+  ## @param query.customReadinessProbe [object] Override default readiness probe
+  ##
+  customReadinessProbe: {}
   ## Jaeger pods' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## Minimum memory for development is 4GB and 2 CPU cores
@@ -193,15 +211,6 @@ query:
       ## @param query.service.ports.admin Port for admin
       ##
       admin: 16687
-    #    agent-compact: 6831
-    #    agent_binary: 6832
-    #    agent_config: 5778
-    #    agent_zipkin: 5775
-    #    agent_admin: 14271
-    #    collector_grpc: 14250
-    #    collector_binary: 14268
-    #    collector_zipkin: 9411
-    #    collector_admin: 14269
     ## Node ports to expose
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     nodePorts:
@@ -417,12 +426,30 @@ collector:
     timeoutSeconds: 1
     failureThreshold: 15
     successThreshold: 1
+  ## @param collector.readinessProbe.enabled Enable readinessProbe
+  ## @param collector.readinessProbe.path Path to check for readinessProbe
+  ## @param collector.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param collector.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param collector.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param collector.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param collector.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: false
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
   ## @param collector.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
   ## @param collector.customStartupProbe [object] Override default startup probe
   ##
   customStartupProbe: {}
+  ## @param collector.customReadinessProbe [object] Override default readiness probe
+  ##
+  customReadinessProbe: {}
   ## Jaeger pods' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## Minimum memory for development is 4GB and 2 CPU cores
@@ -461,28 +488,31 @@ collector:
     ## Ports to expose
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ports:
-      ## @param collector.service.ports.api Port for API
+      ## @param collector.service.ports.zipkin can accept Zipkin spans in Thrift, JSON and Proto (disabled by default)
       ##
-      api: 16686
-      ## @param collector.service.ports.admin Port for admin
+      zipkin: 9411
+      ## @param collector.service.ports.grpc used by jaeger-agent to send spans in model.proto format
       ##
-      admin: 16687
-    #    agent-compact: 6831
-    #    agent_binary: 6832
-    #    agent_config: 5778
-    #    agent_zipkin: 5775
-    #    agent_admin: 14271
-    #    collector_grpc: 14250
-    #    collector_binary: 14268
-    #    collector_zipkin: 9411
-    #    collector_admin: 14269
+      grpc: 14250
+      ## @param collector.service.ports.binary can accept spans directly from clients in jaeger.thrift format over binary thrift protocol
+      ##
+      binary: 14268
+      ## @param collector.service.ports.admin Admin port: health check at / and metrics at /metrics
+      ##
+      admin: 14269
     ## Node ports to expose
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     nodePorts:
-      ## @param collector.service.nodePorts.api Node port for API
+      ## @param collector.service.nodePorts.zipkin can accept Zipkin spans in Thrift, JSON and Proto (disabled by default)
       ##
-      api: ""
-      ## @param collector.service.nodePorts.admin Node port for admin
+      zipkin: ""
+      ## @param collector.service.nodePorts.grpc used by jaeger-agent to send spans in model.proto format
+      ##
+      grpc: ""
+      ## @param collector.service.nodePorts.binary can accept spans directly from clients in jaeger.thrift format over binary thrift protocol
+      ##
+      binary: ""
+      ## @param collector.service.nodePorts.admin Admin port: health check at / and metrics at /metrics
       ##
       admin: ""
     ## @param collector.service.extraPorts Extra ports to expose in the service (normally used with the `sidecar` value)
@@ -691,12 +721,30 @@ agent:
     timeoutSeconds: 1
     failureThreshold: 15
     successThreshold: 1
+  ## @param agent.readinessProbe.enabled Enable readinessProbe
+  ## @param agent.readinessProbe.path Path to check for readinessProbe
+  ## @param agent.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param agent.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param agent.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param agent.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param agent.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: false
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
   ## @param agent.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
   ## @param agent.customStartupProbe [object] Override default startup probe
   ##
   customStartupProbe: {}
+  ## @param agent.customReadinessProbe [object] Override default readiness probe
+  ##
+  customReadinessProbe: {}
   ## Jaeger pods' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## Minimum memory for development is 4GB and 2 CPU cores
@@ -735,28 +783,37 @@ agent:
     ## Ports to expose
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ports:
-      ## @param agent.service.ports.api Port for API
+      ## @param agent.service.ports.compact accept jaeger.thrift in compact Thrift protocol used by most current Jaeger clients
       ##
-      api: 16686
-      ## @param agent.service.ports.admin Port for admin
+      compact: 6831
+      ## @param agent.service.ports.binary accept jaeger.thrift in binary Thrift protocol used by Node.js Jaeger client
       ##
-      admin: 16687
-    #    agent-compact: 6831
-    #    agent_binary: 6832
-    #    agent_config: 5778
-    #    agent_zipkin: 5775
-    #    agent_admin: 14271
-    #    agent_grpc: 14250
-    #    agent_binary: 14268
-    #    agent_zipkin: 9411
-    #    agent_admin: 14269
+      binary: 6832
+      ## @param agent.service.ports.config Serve configs, sampling strategies
+      ##
+      config: 5778
+      ## @param agent.service.ports.zipkin Accept zipkin.thrift in compact Thrift protocol (deprecated; only used by very old Jaeger clients, circa 2016)
+      ##
+      zipkin: 5775
+      ## @param agent.service.ports.admin Admin port: health check at / and metrics at /metrics
+      ##
+      admin: 14271
     ## Node ports to expose
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     nodePorts:
-      ## @param agent.service.nodePorts.api Node port for API
+      ## @param agent.service.nodePorts.compact accept jaeger.thrift in compact Thrift protocol used by most current Jaeger clients
       ##
-      api: ""
-      ## @param agent.service.nodePorts.admin Node port for admin
+      compact: ""
+      ## @param agent.service.nodePorts.binary accept jaeger.thrift in binary Thrift protocol used by Node.js Jaeger client
+      ##
+      binary: ""
+      ## @param agent.service.nodePorts.config Serve configs, sampling strategies
+      ##
+      config: ""
+      ## @param agent.service.nodePorts.zipkin Accept zipkin.thrift in compact Thrift protocol (deprecated; only used by very old Jaeger clients, circa 2016)
+      ##
+      zipkin: ""
+      ## @param agent.service.nodePorts.admin Admin port: health check at / and metrics at /metrics
       ##
       admin: ""
     ## @param agent.service.extraPorts Extra ports to expose in the service (normally used with the `sidecar` value)
@@ -913,3 +970,7 @@ cassandra:
   ## @param cassandra.enabled Enables cassandra storage pod
   ##
   enabled: true
+  ## @param cassandra.keyspace Name for cassandra's jaeger keyspace
+  ##
+  keyspace: "jaeger_v1_dc1"
+

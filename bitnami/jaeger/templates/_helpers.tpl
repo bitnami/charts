@@ -33,7 +33,7 @@ Create the name of the collector deployment
 Create the name of the agent deployment
 */}}
 {{- define "jaeger.agent.fullname" -}}
-    {{ printf "%s-agent" (include "common.names.fullname" .) }}
+    {{ printf "%s--agent" (include "common.names.fullname" .) }}
 {{- end -}}
 
 {{/*

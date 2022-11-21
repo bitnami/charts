@@ -46,7 +46,7 @@ spec:
       {{- else if eq .Values.query.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    - name: ui
+    - name: admin
       port: {{ .Values.query.service.ports.admin }}
       targetPort: {{ .Values.query.service.ports.admin }}
       {{- if and (or (eq .Values.query.service.type "NodePort") (eq .Values.query.service.type "LoadBalancer")) (not (empty .Values.query.service.nodePorts.admin)) }}

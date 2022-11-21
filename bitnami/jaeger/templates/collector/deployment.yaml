@@ -31,6 +31,7 @@ spec:
         {{- end }}
       {{- end }}
     spec:
+      enableServiceLinks: false
       {{- if .Values.collector.schedulerName }}
       schedulerName: {{ .Values.collector.schedulerName }}
       {{- end }}
@@ -71,18 +72,16 @@ spec:
 
             . /opt/bitnami/scripts/libos.sh
 
-            check_cassandra_connection() {
-                echo "SELECT 1" | cqlsh -u $CASSANDRA_USERNAME -p $CASSANDRA_PASSWORD -e "QUIT"
+            check_cassandra_keyspace_schema() {
+                echo "SELECT 1" | cqlsh -u $CASSANDRA_USERNAME -p $CASSANDRA_PASSWORD -e "SELECT COUNT(*) FROM ${CASSANDRA_KEYSPACE}.traces"
             }
 
             info "Connecting to the Cassandra instance $CQLSH_HOST:$CQLSH_PORT"
-            info "Take it easy. Could be authentication errors since the cassandra pod startup until the password is set"
-            if ! retry_while "check_cassandra_connection"; then
-            error "Could not connect to the database server"
-            exit 1
+            if ! retry_while "check_cassandra_keyspace_schema" 12 30; then
+              error "Could not connect to the database server"
+              exit 1
             else
-            info "Connection check success"
-            sleep 60
+              info "Connection check success"
             fi
         env:
         - name: CQLSH
@@ -98,6 +97,8 @@ spec:
             secretKeyRef:
               name: {{ printf "%s-cassandra" (include "common.names.fullname" .) }}
               key: cassandra-password
+        - name: CASSANDRA_KEYSPACE
+          value: {{ .Values.cassandra.keyspace }}
       {{- if .Values.collector.initContainers }}
       {{- include "common.tplvalues.render" (dict "value" .Values.collector.initContainers "context" $) | nindent 8 }}
       {{- end }}
@@ -124,8 +125,12 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.collector.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           ports:
-            - name: ui
-              containerPort: {{ .Values.collector.service.ports.api }}
+            - name: zipkin
+              containerPort: {{ .Values.collector.service.ports.zipkin }}
+            - name: binary
+              containerPort: {{ .Values.collector.service.ports.binary }}
+            - name: grpc
+              containerPort: {{ .Values.collector.service.ports.grpc }}
             - name: admin
               containerPort: {{ .Values.collector.service.ports.admin }}
           env:
@@ -141,7 +146,9 @@ spec:
                   name: {{ printf "%s-cassandra" (include "common.names.fullname" .) }}
                   key: cassandra-password
             - name: CASSANDRA_KEYSPACE
-              value: "jaeger_v1_dc1"
+              value: {{ .Values.cassandra.keyspace }}
+            - name: COLLECTOR_ZIPKIN_HOST_PORT
+              value: {{ .Values.collector.service.ports.zipkin | quote }}
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
             {{- if .Values.collector.extraEnvVars }}
@@ -161,6 +168,20 @@ spec:
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.collector.customStartupProbe "context" $) | nindent 12 }}
           {{- else if .Values.collector.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.collector.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: admin
+          {{- end }}
+          {{- if .Values.collector.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.collector.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.collector.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.collector.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: admin
+          {{- end }}
+          {{- if .Values.collector.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.collector.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.collector.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.collector.readinessProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: admin
           {{- end }}
