@@ -4,7 +4,7 @@
     "password": "bitnami!1234"
   },
   "hosts": {
-    "bitnami-appsmith.my": "127.0.0.1"
+    "bitnami-appsmith.my": "{{ TARGET_IP }}"
   },
   "defaultCommandTimeout": 60000
 }
