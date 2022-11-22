@@ -144,7 +144,6 @@ query:
     failureThreshold: 15
     successThreshold: 1
   ## @param query.readinessProbe.enabled Enable readinessProbe
-  ## @param query.readinessProbe.path Path to check for readinessProbe
   ## @param query.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
   ## @param query.readinessProbe.periodSeconds Period seconds for readinessProbe
   ## @param query.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -427,7 +426,6 @@ collector:
     failureThreshold: 15
     successThreshold: 1
   ## @param collector.readinessProbe.enabled Enable readinessProbe
-  ## @param collector.readinessProbe.path Path to check for readinessProbe
   ## @param collector.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
   ## @param collector.readinessProbe.periodSeconds Period seconds for readinessProbe
   ## @param collector.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -722,7 +720,6 @@ agent:
     failureThreshold: 15
     successThreshold: 1
   ## @param agent.readinessProbe.enabled Enable readinessProbe
-  ## @param agent.readinessProbe.path Path to check for readinessProbe
   ## @param agent.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
   ## @param agent.readinessProbe.periodSeconds Period seconds for readinessProbe
   ## @param agent.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
