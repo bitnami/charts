@@ -1166,7 +1166,7 @@ serviceAccount:
 ## All of these values are only used when mongodb.enabled is set to false
 ## @param externalDatabase.hosts Database hosts
 ## @param externalDatabase.port Database port number
-## @param externalDatabase.user Non-root username for Appsmith
+## @param externalDatabase.username Non-root username for Appsmith
 ## @param externalDatabase.password Password for the non-root username for Appsmith
 ## @param externalDatabase.database Appsmith database name
 ## @param externalDatabase.existingSecret Name of an existing secret resource containing the database credentials
