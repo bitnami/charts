@@ -1241,3 +1241,7 @@ mongodb:
   service:
     ports:
       mongodb: 27017
+  ## @param mongodb.arbiter.enabled Enable Arbiter nodes in the ReplicaSet
+  ##
+  arbiter:
+    enabled: false
