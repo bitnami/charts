@@ -27,7 +27,7 @@ spec:
         {{- if .Values.commonAnnotations }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
-        description: Thanos Store {{`{{`}} $labels.job {{`}}`}} is failing to handle {`{{`}} $value | humanize {{`}}`}}% of requests.
+        description: Thanos Store {{`{{`}} $labels.job {{`}}`}} is failing to handle {{`{{`}} $value | humanize {{`}}`}}% of requests.
         runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosstoregrpcerrorrate
         summary: Thanos Store is failing to handle qrpcd requests.
       expr: |
@@ -50,7 +50,7 @@ spec:
         {{- if .Values.commonAnnotations }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
-        description: Thanos Store {{`{{`}} $labels.job} {{`}}`}} has a 99th percentile latency of {{`{{`}} $value {{`}}`}} seconds for store series gate requests.
+        description: Thanos Store {{`{{`}} $labels.job {{`}}`}} has a 99th percentile latency of {{`{{`}} $value {{`}}`}} seconds for store series gate requests.
         runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosstoreseriesgatelatencyhigh
         summary: Thanos Store has high latency for store series gate requests.
       expr: |

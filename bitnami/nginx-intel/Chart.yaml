@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 0.4.8
+appVersion: 0.4.9
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -24,4 +24,4 @@ name: nginx-intel
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/nginx-intel
   - https://github.com/intel/asynch_mode_nginx
-version: 2.1.11
+version: 2.1.12

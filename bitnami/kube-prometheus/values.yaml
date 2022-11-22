@@ -64,7 +64,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.60.1-debian-11-r9
+    tag: 0.61.0-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -478,6 +478,11 @@ operator:
       timeoutSeconds: 5
       failureThreshold: 6
       successThreshold: 1
+  ## Restrict the namespaces that the operator watches
+  ## ref: `-namespaces` in https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/operator.md
+  ## @param operator.namespaces Optional comma-separated list of namespaces to watch (default=all).
+  ##
+  namespaces: ""
 
 ## @section Prometheus Parameters
 ##
@@ -499,7 +504,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.39.1-debian-11-r10
+    tag: 2.40.2-debian-11-r1
     digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1417,7 +1422,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.24.0-debian-11-r55
+    tag: 0.24.0-debian-11-r60
     digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1978,7 +1983,7 @@ blackboxExporter:
   image:
     registry: docker.io
     repository: bitnami/blackbox-exporter
-    tag: 0.22.0-debian-11-r32
+    tag: 0.22.0-debian-11-r37
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
