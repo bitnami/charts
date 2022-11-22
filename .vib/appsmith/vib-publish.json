@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/appsmith"
         },
-        "runtime_parameters": "YmFja2VuZDoKICBhZG1pblBhc3N3b3JkOiAiYml0bmFtaSExMjM0IgogIGNvbnRhaW5lclBvcnRzOgogICAgaHR0cDogODgyMwogIHNlcnZpY2U6CiAgICBwb3J0czoKICAgICAgaHR0cDogODA4MwogIGNvbnRhaW5lclNlY3VyaXR5Q29udGV4dDoKICAgIHJ1bkFzVXNlcjogMTAwMgogIHBvZFNlY3VyaXR5Q29udGV4dDoKICAgIGZzR3JvdXA6IDEwMDIKCgpydHM6CiAgY29udGFpbmVyUG9ydHM6CiAgICBodHRwOiA4ODUwCiAgc2VydmljZToKICAgIHBvcnRzOgogICAgICBodHRwOiA4MDg1CmNsaWVudDoKICBzZXJ2aWNlOgogICAgdHlwZTogTG9hZEJhbGFuY2VyCiAgICBwb3J0czoKICAgICAgaHR0cDogODAK",
+        "runtime_parameters": "YmFja2VuZDoKICBhZG1pblBhc3N3b3JkOiAiYml0bmFtaSExMjM0IgogIGNvbnRhaW5lclBvcnRzOgogICAgaHR0cDogODgyMwogIHNlcnZpY2U6CiAgICBwb3J0czoKICAgICAgaHR0cDogODA4MwoKCnJ0czoKICBjb250YWluZXJQb3J0czoKICAgIGh0dHA6IDg4NTAKICBzZXJ2aWNlOgogICAgcG9ydHM6CiAgICAgIGh0dHA6IDgwODUKY2xpZW50OgogIHNlcnZpY2U6CiAgICB0eXBlOiBMb2FkQmFsYW5jZXIKICAgIHBvcnRzOgogICAgICBodHRwOiA4MAogIGNvbnRhaW5lclNlY3VyaXR5Q29udGV4dDoKICAgIHJ1bkFzVXNlcjogMTAwMgogIHBvZFNlY3VyaXR5Q29udGV4dDoKICAgIGZzR3JvdXA6IDEwMDIKCg==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {

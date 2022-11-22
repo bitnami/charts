@@ -29,6 +29,6 @@ Cypress.Commands.add(
     cy.get('input[type="email"]').should('be.enabled').type(email);
     cy.get('input[type="password"]').should('be.enabled').type(password);
     cy.contains('button', 'sign in').click();
-    cy.contains('Workspaces').should('be.visible');
+    cy.contains('WORKSPACES').should('be.visible');
   }
 );

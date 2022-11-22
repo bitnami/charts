@@ -12,12 +12,22 @@ it('allows to log in and out', () => {
 
 it('allows to create a new project', () => {
   cy.login();
-  cy.visit('/applications');
   cy.get('button[class*="createnew"]').click();
   // We don't need a name as it already adds a random name
-  cy.contains('Start from a template').click();
-  cy.get('button[class*="fork-button"][tabindex="0"]').click();
-  cy.contains('Added successfully');
+  cy.contains('Widgets');
+  // There is a pop-up (when there is a new version available) that takes some
+  // animation to appear, but when it does, it blocks a button. We need to wait
+  // a few seconds to let it appear and then remove it so we can continue
+  cy.wait(2000)
+  cy.get('body').then(($body) => {
+    // Close the pop-up if appears
+    if ($body.find('[class*="toast-action"]').is(':visible')) {
+      cy.get('[class*="toast-action"]').click();
+    }
+  });
+  cy.contains('template').click();
+  cy.get('button[class*="fork-button"][tabindex="0"]').first().click();
+  cy.contains('Marketing');
 });
 
 it('allows to change admin settings', () => {
@@ -28,8 +38,6 @@ it('allows to change admin settings', () => {
       .clear()
       .type(`${$us.instanceName}-${random}`, { force: true });
     cy.contains('button', 'Save').click();
-    cy.contains('successfully');
-    cy.visit(`/settings/general`);
-    cy.contains(`${$us.instanceName}-${random}`);
+    cy.contains('Successfully');
   });
 });
