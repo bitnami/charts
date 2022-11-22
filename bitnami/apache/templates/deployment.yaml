@@ -43,6 +43,9 @@ spec:
       schedulerName: {{ .Values.schedulerName }}
       {{- end }}
       priorityClassName: {{ .Values.priorityClassName | quote }}
+      {{- if .Values.runtimeClassName }}
+      runtimeClassName: {{ .Values.runtimeClassName | quote }}
+      {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}

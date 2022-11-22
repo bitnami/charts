@@ -119,6 +119,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podAnnotations`                        | Pod annotations                                                                                                          | `{}`                   |
 | `hostAliases`                           | Add deployment host aliases                                                                                              | `[]`                   |
 | `priorityClassName`                     | Apache Server pods' priorityClassName                                                                                    | `""`                   |
+| `runtimeClassName`                      | Apache Server pods' runtimeClassName                                                                                     | `""`                   |
 | `schedulerName`                         | Name of the k8s scheduler (other than default)                                                                           | `""`                   |
 | `podSecurityContext.enabled`            | Enabled Apache Server pods' Security Context                                                                             | `true`                 |
 | `podSecurityContext.fsGroup`            | Set Apache Server pod's Security Context fsGroup                                                                         | `1001`                 |
