@@ -169,21 +169,24 @@ spec:
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.agent.customStartupProbe "context" $) | nindent 12 }}
           {{- else if .Values.agent.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.agent.startupProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
+            httpGet:
+              path: /
               port: admin
           {{- end }}
           {{- if .Values.agent.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.agent.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.agent.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.agent.livenessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
+            httpGet:
+              path: /
               port: admin
           {{- end }}
           {{- if .Values.agent.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.agent.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.agent.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.agent.readinessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
+            httpGet:
+              path: /
               port: admin
           {{- end }}
           {{- end }}

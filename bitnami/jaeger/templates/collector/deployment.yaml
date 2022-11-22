@@ -167,21 +167,24 @@ spec:
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.collector.customStartupProbe "context" $) | nindent 12 }}
           {{- else if .Values.collector.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.collector.startupProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
+            httpGet:
+              path: /
               port: admin
           {{- end }}
           {{- if .Values.collector.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.collector.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.collector.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.collector.livenessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
+            httpGet:
+              path: /
               port: admin
           {{- end }}
           {{- if .Values.collector.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.collector.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.collector.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.collector.readinessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
+            httpGet:
+              path: /
               port: admin
           {{- end }}
           {{- end }}
