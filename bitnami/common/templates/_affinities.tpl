@@ -47,7 +47,7 @@ Return a nodeAffinity definition
 
 {{/*
 Return a topologyKey definition
-{{ include "common.affinities.topologyKey" (dict "topologyKey" .topologyKey) -}}
+{{ include "common.affinities.topologyKey" (dict "topologyKey" "BAR") -}}
 */}}
 {{- define "common.affinities.topologyKey" -}}
 {{ .topologyKey | default "kubernetes.io/hostname" -}}
