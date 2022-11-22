@@ -70,7 +70,7 @@ preferredDuringSchedulingIgnoredDuringExecution:
           {{- range $key, $value := $extraMatchLabels }}
           {{ $key }}: {{ $value | quote }}
           {{- end }}
-      topologyKey: {{- include "common.affinities.topologyKey" (dict "topologyKey" .topologyKey) | indent 1 }}
+      topologyKey: {{ include "common.affinities.topologyKey" (dict "topologyKey" .topologyKey) }}
     weight: 1
 {{- end -}}
 
@@ -90,7 +90,7 @@ requiredDuringSchedulingIgnoredDuringExecution:
         {{- range $key, $value := $extraMatchLabels }}
         {{ $key }}: {{ $value | quote }}
         {{- end }}
-    topologyKey: {{- include "common.affinities.topologyKey" (dict "topologyKey" .topologyKey) | indent 1 }}
+    topologyKey: {{ include "common.affinities.topologyKey" (dict "topologyKey" .topologyKey) }}
 {{- end -}}
 
 {{/*
