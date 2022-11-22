@@ -41,6 +41,7 @@
         {
           "action_id": "goss",
           "params": {
+            "vars_file": "vars.yaml",
             "resources": {
               "path": "/.vib/appsmith/goss"
             },
