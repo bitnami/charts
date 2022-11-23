@@ -277,6 +277,17 @@
 | `agent.extraVolumes`                                | Optionally specify extra list of additional volumes for jaeger container                                       | `[]`              |
 | `agent.initContainers`                              | Add additional init containers to the jaeger pods                                                              | `[]`              |
 | `agent.sidecars`                                    | Add additional sidecar containers to the jaeger pods                                                           | `[]`              |
+| `migration.podLabels`                               | Additional pod labels                                                                                          | `{}`              |
+| `migration.podAnnotations`                          | Additional pod annotations                                                                                     | `{}`              |
+| `migration.annotations`                             | Provide any additional annotations which may be required.                                                      | `{}`              |
+| `migration.podSecurityContext.enabled`              | Enabled Jaeger pods' Security Context                                                                          | `true`            |
+| `migration.podSecurityContext.fsGroup`              | Set Jaeger pod's Security Context fsGroup                                                                      | `1001`            |
+| `migration.extraEnvVarsCM`                          | Name of existing ConfigMap containing extra env vars                                                           | `""`              |
+| `migration.extraEnvVarsSecret`                      | Name of existing Secret containing extra env vars                                                              | `""`              |
+| `migration.extraVolumeMounts`                       | Optionally specify extra list of additional volumeMounts for jaeger container                                  | `[]`              |
+| `migration.resources.limits`                        | The resources limits for Jaeger containers                                                                     | `{}`              |
+| `migration.resources.requests`                      | The requested resources for Jaeger containers                                                                  | `{}`              |
+| `migration.extraVolumes`                            | Optionally specify extra list of additional volumes for jaeger container                                       | `[]`              |
 
 
 ### Cassandra storage pod

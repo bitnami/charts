@@ -57,7 +57,7 @@ spec:
       {{- end }}
       initContainers:
       - name: jaeger-cassandra-ready-check
-        image: {{ .Values.cassandra.image.registry }}/{{ .Values.cassandra.image.repository }}:{{ .Values.cassandra.image.tag }}
+        image: {{ printf "%s/%s:%s" .Values.cassandra.image.registry .Values.cassandra.image.repository .Values.cassandra.image.tag }}
         command:
           - /bin/bash
         args:

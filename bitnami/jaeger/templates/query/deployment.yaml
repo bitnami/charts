@@ -56,58 +56,51 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.query.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
-      - name: jaeger-cassandra-schema-grabber
-        image: {{ include "jaeger.image" . }}
-        command: [ "cp", "-T", "-r", "/opt/bitnami/jaeger/cassandra-schema", "/cassandra-schema/" ]
-        volumeMounts:
-          - name: cassandra-schema
-            mountPath: "/cassandra-schema"
-      - name: jaeger-cassandra-schema-exec
-        image: {{ .Values.cassandra.image.registry }}/{{ .Values.cassandra.image.repository }}:{{ .Values.cassandra.image.tag }}
-        command:
-          - /bin/bash
-        args:
-          - -ec
-          - |
-            #!/bin/bash
+        - name: jaeger-cassandra-ready-check
+          image: {{ printf "%s/%s:%s" .Values.cassandra.image.registry .Values.cassandra.image.repository .Values.cassandra.image.tag }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              #!/bin/bash
 
-            set -o errexit
-            set -o nounset
-            set -o pipefail
+              set -o errexit
+              set -o nounset
+              set -o pipefail
 
-            . /opt/bitnami/scripts/libos.sh
+              . /opt/bitnami/scripts/libos.sh
 
-            check_cassandra_connection() {
-                echo "SELECT 1" | cqlsh -u $CASSANDRA_USERNAME -p $CASSANDRA_PASSWORD -e "QUIT"
-            }
+              check_cassandra_keyspace_schema() {
+                  echo "SELECT 1" | cqlsh -u $CASSANDRA_USERNAME -p $CASSANDRA_PASSWORD -e "SELECT COUNT(*) FROM ${CASSANDRA_KEYSPACE}.traces"
+              }
 
-
-            info "Connecting to the Cassandra instance $CQLSH_HOST:$CQLSH_PORT"
-            if ! retry_while "check_cassandra_connection" 12 30; then
-              error "Could not connect to the database server"
-              exit 1
-            else
-              info "Connection check success"
-              sed -i 's/cqlsh -e "show version"/cqlsh -e "show version" -u $CASSANDRA_USERNAME -p $CASSANDRA_PASSWORD /' /cassandra-schema/create.sh
-              /cassandra-schema/docker.sh
-            fi
-        env:
-        - name: CQLSH
-          value: /opt/bitnami/cassandra/bin/cqlsh
-        - name: CQLSH_HOST
-          value: {{ printf "%s-cassandra" (include "common.names.fullname" .) }}
-        - name: CQLSH_PORT
-          value: {{ .Values.cassandra.containerPorts.cql | quote }}
-        - name: CASSANDRA_USERNAME
-          value: {{ .Values.cassandra.dbUser.user }}
-        - name: CASSANDRA_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ printf "%s-cassandra" (include "common.names.fullname" .) }}
-              key: cassandra-password
-        volumeMounts:
-        - name: cassandra-schema
-          mountPath: "/cassandra-schema"
+              info "Connecting to the Cassandra instance $CQLSH_HOST:$CQLSH_PORT"
+              if ! retry_while "check_cassandra_keyspace_schema" 12 30; then
+                error "Could not connect to the database server"
+                exit 1
+              else
+                info "Connection check success"
+              fi
+          env:
+            - name: CQLSH
+              value: /opt/bitnami/cassandra/bin/cqlsh
+            - name: CQLSH_HOST
+              value: {{ printf "%s-cassandra" (include "common.names.fullname" .) }}
+            - name: CQLSH_PORT
+              value: {{ .Values.cassandra.containerPorts.cql | quote }}
+            - name: CASSANDRA_USERNAME
+              value: {{ .Values.cassandra.dbUser.user }}
+            - name: CASSANDRA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ printf "%s-cassandra" (include "common.names.fullname" .) }}
+                  key: cassandra-password
+            - name: CASSANDRA_KEYSPACE
+              value: {{ .Values.cassandra.keyspace }}
+            {{- if .Values.agent.initContainers }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.agent.initContainers "context" $) | nindent 8 }}
+            {{- end }}
       {{- if .Values.query.initContainers }}
       {{- include "common.tplvalues.render" (dict "value" .Values.query.initContainers "context" $) | nindent 8 }}
       {{- end }}
@@ -203,8 +196,6 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.query.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: cassandra-schema
-          emptyDir: {}
         {{- if .Values.query.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.query.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
