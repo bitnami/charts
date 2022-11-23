@@ -1215,6 +1215,15 @@ redis:
       ports:
         redis: 6379
 
+  ## @param redis.auth.enabled Enable Redis auth
+  ## @param redis.auth.password Redis password
+  ## @param redis.auth.existingSecret Name of a secret containing the Redis password
+  ##
+  auth:
+    enabled: true
+    password: ""
+    existingSecret: ""
+
 ## @section MongoDB sub-chart parameters
 ##
 mongodb:

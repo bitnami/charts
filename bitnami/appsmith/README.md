@@ -1,6 +1,6 @@
 <!--- app-name: appsmith -->
 
-# appsmith
+# Appsmith packaged by Bitnami
 
 Appsmith is an open source platform for building and maintaining internal tools, such as custom dashboards, admin panels or CRUD apps.
 
@@ -40,7 +40,7 @@ To install the chart with the release name `my-release`:
 helm install my-release my-repo/appsmith
 ```
 
-The command deploys appsmith on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+The command deploys Appsmith on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -87,11 +87,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullPolicy`       | Appsmith image pull policy                                                                                                                          | `IfNotPresent`       |
 | `image.pullSecrets`      | Appsmith image pull secrets                                                                                                                         | `[]`                 |
 | `image.debug`            | Enable Appsmith image debug mode                                                                                                                    | `false`              |
-
-
-### Appsmith common paramters
-
-
 
 
 ### Appsmith Client Parameters
@@ -424,12 +419,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Redis sub-chart parameters
 
-| Name                               | Description                                   | Value        |
-| ---------------------------------- | --------------------------------------------- | ------------ |
-| `redis.enabled`                    | Deploy Redis subchart                         | `true`       |
-| `redis.architecture`               | Set Redis architecture                        | `standalone` |
-| `redis.existingSecret`             | Name of a secret containing redis credentials | `""`         |
-| `redis.master.service.ports.redis` | Redis port                                    | `6379`       |
+| Name                               | Description                                    | Value        |
+| ---------------------------------- | ---------------------------------------------- | ------------ |
+| `redis.enabled`                    | Deploy Redis subchart                          | `true`       |
+| `redis.architecture`               | Set Redis architecture                         | `standalone` |
+| `redis.existingSecret`             | Name of a secret containing redis credentials  | `""`         |
+| `redis.master.service.ports.redis` | Redis port                                     | `6379`       |
+| `redis.auth.enabled`               | Enable Redis auth                              | `true`       |
+| `redis.auth.password`              | Redis password                                 | `""`         |
+| `redis.auth.existingSecret`        | Name of a secret containing the Redis password | `""`         |
 
 
 ### MongoDB sub-chart parameters
@@ -445,7 +443,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mongodb.arbiter.enabled`       | Enable Arbiter nodes in the ReplicaSet                 | `false`      |
 
 
-See https://github.com/bitnami-labs/readme-generator-for-helm to create the table
+See https://github.com/bitnami-labs/readme-generator-for-helm to create the table.
 
 The above parameters map to the env variables defined in [bitnami/appsmith](https://github.com/bitnami/containers/tree/main/bitnami/appsmith). For more information please refer to the [bitnami/appsmith](https://github.com/bitnami/containers/tree/main/bitnami/appsmith) image documentation.
 
