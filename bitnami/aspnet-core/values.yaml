@@ -432,13 +432,13 @@ appFromExternalRepo:
       pullSecrets: []
     ## @param appFromExternalRepo.publish.subFolder Sub folder under the Git repository containing the ASP.NET Core app
     ##
-    subFolder: aspnetcore/fundamentals/servers/kestrel/samples/6.x/KestrelSample
+    subFolder: aspnetcore/performance/caching/output/samples/7.x/
     ## @param appFromExternalRepo.publish.extraFlags Extra flags to be appended to "dotnet publish" command
     ##
     extraFlags: []
   ## @param appFromExternalRepo.startCommand Command used to start ASP.NET Core app
   ##
-  startCommand: ["dotnet", "KestrelSample.dll"]
+  startCommand: ["dotnet", "OCMinimal.dll"]
 ## Enable mounting your ASP.NET Core app from an existing PVC
 ## Do not enable it if your docker image already includes your application
 ## @param appFromExistingPVC.enabled Enable mounting your ASP.NET Core app from an existing PVC
