@@ -1,39 +1,34 @@
 command:
-  which-solr:
-    exec: which solr
+  {{- $auth := printf "SOLR_AUTH_TYPE=basic SOLR_AUTHENTICATION_OPTS=-Dbasicauth=%s:%s" .Vars.auth.adminUsername .Vars.auth.adminPassword }}
+  {{- $collection := printf "test.%s" (randNumeric 5) }}
+  {{- $replicas := .Vars.replicaCount }}
+  solr-manage-collection:
+    exec: |
+      export {{ $auth }} && \
+      solr create_collection -p {{ .Vars.containerPorts.http }} -replicationFactor {{ $replicas }} -c {{ $collection }} && \
+      solr healthcheck -z solr-zookeeper:2181/solr -c {{ $collection }}
     exit-status: 0
     stdout:
-      - "/opt/bitnami/solr/bin/solr"
-    stderr: [ ]
-    timeout: 40000
-  solr-version-ok:
-    exec: solr version | grep --quiet "$APP_VERSION"
-    exit-status: 0
-    stdout: [ ]
-    stderr: [ ]
-    timeout: 40000
-  solr-assert-running:
-    exec: SOLR_AUTH_TYPE=basic SOLR_AUTHENTICATION_OPTS="-Dbasicauth=${SOLR_ADMIN_USERNAME}:${SOLR_ADMIN_PASSWORD}" solr assert --cloud "http://localhost:${SOLR_PORT_NUMBER}/solr/"
-    exit-status: 0
-    stdout: [ ]
-    stderr: [ ]
-    timeout: 40000
-  solr-create-collection:
-    exec: SOLR_AUTH_TYPE=basic SOLR_AUTHENTICATION_OPTS="-Dbasicauth=${SOLR_ADMIN_USERNAME}:${SOLR_ADMIN_PASSWORD}" /opt/bitnami/solr/bin/solr create_collection -c "test.${RANDOM}"
+      - healthy
+    {{ range $e, $i := until $replicas }}
+      - /solr-{{ $i }}/
+    {{ end }}
+    timeout: 30000
+  check-user-info:
+    exec: id
     exit-status: 0
     stdout:
-      - "Created collection"
-    stderr: [ ]
-    timeout: 40000
+    - uid={{ .Vars.containerSecurityContext.runAsUser }}
+    - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
 file:
-  /opt/bitnami/solr/server:
+  {{ .Vars.persistence.mountPath }}:
     filetype: directory
     exists: true
-  /opt/bitnami/solr/server/solr/solr.xml:
-    mode: "0644"
+    mode: "2775"
+    owner: root
+  /scripts/setup.sh:
+    mode: "0755"
     filetype: file
     exists: true
-  /opt/bitnami/solr/server/solr/zoo.cfg:
-    mode: "0644"
-    filetype: file
-    exists: true
+    contains:
+    - SOLR_CLOUD_BOOTSTRAP={{ if .Vars.cloudBootstrap }}yes{{ else }}no{{ end }}
