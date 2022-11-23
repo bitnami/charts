@@ -722,6 +722,9 @@ service:
   ## Headless service properties
   ##
   headless:
+    ## @param service.headless.publishNotReadyAddresses Indicates that any agent which deals with endpoints for this Service should disregard any indications of ready/not-ready
+    ## ref: https://manifests.io/k8s-1.21/service.spec
+    publishNotReadyAddresses: false
     ## @param service.headless.annotations Annotations for the headless service.
     ##
     annotations: {}
@@ -836,6 +839,9 @@ externalAccess:
     ## ClusterIP: Must be specified, ingress IP or domain where tcp for external ports is configured
     ##
     domain: ""
+    ## @param externalAccess.service.publishNotReadyAddresses Indicates that any agent which deals with endpoints for this Service should disregard any indications of ready/not-ready
+    ## ref: https://manifests.io/k8s-1.21/service.spec
+    publishNotReadyAddresses: false
     ## @param externalAccess.service.labels Service labels for external access
     ##
     labels: {}
