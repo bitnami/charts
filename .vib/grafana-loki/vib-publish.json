@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/grafana-loki"
         },
-        "runtime_parameters": "Z2F0ZXdheToKICBzZXJ2aWNlOgogICAgcG9ydHM6CiAgICAgIGh0dHA6IDgwCiAgICB0eXBlOiBMb2FkQmFsYW5jZXIK",
+        "runtime_parameters": "bG9raToKICBkYXRhRGlyOiAiL2JpdG5hbWkvZ3JhZmFuYS1sb2tpIgogIGNvbnRhaW5lclBvcnRzOgogICAgaHR0cDogMzEwMQogICAgZ29zc2lwUmluZzogNzk0NgogIGdvc3NpcFJpbmc6CiAgICBzZXJ2aWNlOgogICAgICBwb3J0czoKICAgICAgICBodHRwOiA3OTQ2CmNvbXBhY3RvcjoKICBlbmFibGVkOiB0cnVlCiAgc2VydmljZToKICAgIHBvcnRzOgogICAgICBodHRwOiAzMTAwCmdhdGV3YXk6CiAgZW5hYmxlZDogdHJ1ZQogIHNlcnZpY2U6CiAgICBwb3J0czoKICAgICAgaHR0cDogODAKICAgIHR5cGU6IExvYWRCYWxhbmNlcgpkaXN0cmlidXRvcjoKICBzZXJ2aWNlOgogICAgcG9ydHM6CiAgICAgIGh0dHA6IDMxMDAKaW5nZXN0ZXI6CiAgc2VydmljZToKICAgIHBvcnRzOgogICAgICBodHRwOiAzMTAwCnF1ZXJpZXI6CiAgcG9kU2VjdXJpdHlDb250ZXh0OgogICAgZW5hYmxlZDogdHJ1ZQogICAgZnNHcm91cDogMTAwMgogIGNvbnRhaW5lclNlY3VyaXR5Q29udGV4dDoKICAgIGVuYWJsZWQ6IHRydWUKICAgIHJ1bkFzVXNlcjogMTAwMgogIHNlcnZpY2U6CiAgICBwb3J0czoKICAgICAgaHR0cDogMzEwMApxdWVyeUZyb250ZW5kOgogIHNlcnZpY2U6CiAgICBwb3J0czoKICAgICAgaHR0cDogMzEwMApxdWVyeVNjaGVkdWxlcjoKICBzZXJ2aWNlOgogICAgcG9ydHM6CiAgICAgIGh0dHA6IDMxMDAKcHJvbXRhaWw6CiAgZW5hYmxlZDogdHJ1ZQogIGNvbnRhaW5lclBvcnRzOgogICAgaHR0cDogODA4MQogIHBvZFNlY3VyaXR5Q29udGV4dDoKICAgIGVuYWJsZWQ6IHRydWUKICAgIGZzR3JvdXA6IDAKICBjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgICBlbmFibGVkOiB0cnVlCiAgICBydW5Bc1VzZXI6IDAKICBsb2dMZXZlbDogZGVidWcKICBzZXJ2aWNlOgogICAgdHlwZTogQ2x1c3RlcklQCiAgICBwb3J0czoKICAgICAgaHR0cDogMzEwMQogIHJiYWM6CiAgICBjcmVhdGU6IHRydWUKICBzZXJ2aWNlQWNjb3VudDoKICAgIGNyZWF0ZTogdHJ1ZQogICAgYXV0b21vdW50U2VydmljZUFjY291bnRUb2tlbjogdHJ1ZQptZW1jYWNoZWRjaHVua3M6CiAgZW5hYmxlZDogdHJ1ZQogIHNlcnZpY2U6CiAgICBwb3J0czoKICAgICAgbWVtY2FjaGVkOiAxMTIxMgptZW1jYWNoZWRmcm9udGVuZDoKICBlbmFibGVkOiB0cnVlCiAgc2VydmljZToKICAgIHBvcnRzOgogICAgICBtZW1jYWNoZWQ6IDExMjEyCm1lbWNhY2hlZGluZGV4cXVlcmllczoKICBlbmFibGVkOiB0cnVlCiAgYXJjaGl0ZWN0dXJlOiBoaWdoLWF2YWlsYWJpbGl0eQogIHNlcnZpY2U6CiAgICBwb3J0czoKICAgICAgbWVtY2FjaGVkOiAxMTIxMg==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -42,11 +42,12 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/grafana-loki/goss/gateway"
+              "path": "/.vib/grafana-loki/goss/promtail"
             },
             "remote": {
-              "workload": "deploy-grafana-loki-gateway"
-            }
+              "workload": "ds-grafana-loki-promtail"
+            },
+            "vars_file": "vars.yaml"
           }
         },
         {
@@ -57,7 +58,8 @@
             },
             "remote": {
               "workload": "sts-grafana-loki-querier"
-            }
+            },
+            "vars_file": "vars.yaml"
           }
         },
         {
