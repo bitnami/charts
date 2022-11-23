@@ -24,4 +24,4 @@ name: grafana
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/grafana
   - https://grafana.com/
-version: 8.2.18
+version: 8.2.19
