@@ -299,15 +299,15 @@ To use this feature, set the `appFromExternalRepo.enabled` to `true` and set the
 
 > Note: you can append any custom flag for the "dotnet publish" command setting the `appFromExternalRepo.publish.extraFlags` parameter.
 
-For example, you can deploy a sample [Kestrel server](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel) using the parameters below:
+For example, you can deploy a sample [OCMinimal](https://learn.microsoft.com/en-us/aspnet/core/performance/caching/output) using the parameters below:
 
 ```console
 appFromExternalRepo.enabled=true
 appFromExternalRepo.clone.repository=https://github.com/dotnet/AspNetCore.Docs.git
 appFromExternalRepo.clone.revision=main
-appFromExternalRepo.publish.aspnetcore/fundamentals/servers/kestrel/samples/6.x/KestrelSample
+appFromExternalRepo.publish.aspnetcore/performance/caching/output/samples/7.x/
 appFromExternalRepo.startCommand[0]=dotnet
-appFromExternalRepo.startCommand[1]=KestrelSample.dll
+appFromExternalRepo.startCommand[1]=OCMinimal.dll
 ```
 
 #### Mounting your ASP.NET Core application from an existing PVC
