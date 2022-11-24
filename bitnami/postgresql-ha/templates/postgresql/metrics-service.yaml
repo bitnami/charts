@@ -12,9 +12,9 @@ metadata:
     {{- if .Values.metrics.serviceMonitor.selector }}
     {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 4 }}
     {{- end }}
-  {{- if or .Values.metrics.annotations }}
+  {{- if or .Values.metrics.annotations .Values.commonAnnotations }}
   annotations:
-    {{- if .Values.metrics.annotations .Values.commonAnnotations }}
+    {{- if .Values.metrics.annotations }}
     {{- include "common.tplvalues.render" (dict "value" .Values.metrics.annotations "context" $) | nindent 4 }}
     {{- end }}
     {{- if .Values.commonAnnotations }}
