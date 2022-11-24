@@ -59,7 +59,7 @@
             "endpoint": "lb-gitea-http",
             "app_protocol": "HTTP",
             "env": {
-              "email": "user@example.com",
+              "user": "user@example.com",
               "password": "bitnami!1234"
             }
           }
