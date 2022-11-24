@@ -7,11 +7,7 @@ Apache Geode is a data management platform that provides advanced capabilities f
 [Overview of Apache Geode](https://geode.apache.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
-## Chart Deprecation Notice
-
-Apache Geode's chart is longer maintained and is now internally tagged to be deprecated. This chart will no longer be released in our catalog a month after this notice is published, but already released chart will still persist in the registries. Valid to be removed starting on: 12-08-2022
-
+                           
 ## TL;DR
 
 ```console
@@ -86,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------- |
 | `image.registry`                         | Apache Geode image registry                                                                                  | `docker.io`                                                 |
 | `image.repository`                       | Apache Geode image repository                                                                                | `bitnami/geode`                                             |
-| `image.tag`                              | Apache Geode image tag (immutable tags are recommended)                                                      | `1.15.1-debian-11-r0`                                       |
+| `image.tag`                              | Apache Geode image tag (immutable tags are recommended)                                                      | `1.15.1-debian-11-r10`                                      |
 | `image.digest`                           | Apache Geode image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                                        |
 | `image.pullPolicy`                       | Apache Geode image pull policy                                                                               | `IfNotPresent`                                              |
 | `image.pullSecrets`                      | Apache Geode image pull secrets                                                                              | `[]`                                                        |
@@ -317,7 +313,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r43`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r52`      |
 | `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -329,45 +325,45 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                                            | Description                                                                                                     | Value                |
-| ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | -------------------- |
-| `metrics.enabled`                               | Expose Apache Geode metrics                                                                                     | `false`              |
-| `metrics.image.registry`                        | Bitnami HAProxy image registry                                                                                  | `docker.io`          |
-| `metrics.image.repository`                      | Bitnami HAProxy image repository                                                                                | `bitnami/haproxy`    |
-| `metrics.image.tag`                             | Bitnami HAProxy image tag (immutable tags are recommended)                                                      | `2.6.6-debian-11-r9` |
-| `metrics.image.digest`                          | Bitnami HAProxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
-| `metrics.image.pullPolicy`                      | Bitnami HAProxy image pull policy                                                                               | `IfNotPresent`       |
-| `metrics.image.pullSecrets`                     | Bitnami HAProxy image pull secrets                                                                              | `[]`                 |
-| `metrics.containerPort`                         | Metrics container port                                                                                          | `9914`               |
-| `metrics.livenessProbe.enabled`                 | Enable livenessProbe on Metrics containers                                                                      | `true`               |
-| `metrics.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                         | `15`                 |
-| `metrics.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                | `10`                 |
-| `metrics.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                               | `5`                  |
-| `metrics.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                             | `5`                  |
-| `metrics.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                             | `1`                  |
-| `metrics.readinessProbe.enabled`                | Enable readinessProbe on Metrics containers                                                                     | `true`               |
-| `metrics.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                        | `15`                 |
-| `metrics.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                               | `10`                 |
-| `metrics.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                              | `5`                  |
-| `metrics.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                            | `5`                  |
-| `metrics.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                            | `1`                  |
-| `metrics.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                             | `{}`                 |
-| `metrics.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                            | `{}`                 |
-| `metrics.containerSecurityContext.enabled`      | Enabled Metrics containers' Security Context                                                                    | `true`               |
-| `metrics.containerSecurityContext.runAsUser`    | Set Metrics containers' Security Context runAsUser                                                              | `1001`               |
-| `metrics.containerSecurityContext.runAsNonRoot` | Set Metrics containers' Security Context runAsNonRoot                                                           | `true`               |
-| `metrics.service.port`                          | Service HTTP management port                                                                                    | `9914`               |
-| `metrics.service.annotations`                   | Annotations for enabling prometheus to access the metrics endpoints                                             | `{}`                 |
-| `metrics.serviceMonitor.enabled`                | Specify if a ServiceMonitor will be deployed for Prometheus Operator                                            | `false`              |
-| `metrics.serviceMonitor.namespace`              | Namespace in which Prometheus is running                                                                        | `""`                 |
-| `metrics.serviceMonitor.labels`                 | Extra labels for the ServiceMonitor                                                                             | `{}`                 |
-| `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in Prometheus                                | `""`                 |
-| `metrics.serviceMonitor.interval`               | How frequently to scrape metrics                                                                                | `""`                 |
-| `metrics.serviceMonitor.scrapeTimeout`          | Timeout after which the scrape is ended                                                                         | `""`                 |
-| `metrics.serviceMonitor.metricRelabelings`      | Specify additional relabeling of metrics                                                                        | `[]`                 |
-| `metrics.serviceMonitor.relabelings`            | Specify general relabeling                                                                                      | `[]`                 |
-| `metrics.serviceMonitor.selector`               | Prometheus instance selector labels                                                                             | `{}`                 |
-| `metrics.serviceMonitor.honorLabels`            | honorLabels chooses the metric's labels on collisions with target labels                                        | `false`              |
+| Name                                            | Description                                                                                                     | Value                 |
+| ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `metrics.enabled`                               | Expose Apache Geode metrics                                                                                     | `false`               |
+| `metrics.image.registry`                        | Bitnami HAProxy image registry                                                                                  | `docker.io`           |
+| `metrics.image.repository`                      | Bitnami HAProxy image repository                                                                                | `bitnami/haproxy`     |
+| `metrics.image.tag`                             | Bitnami HAProxy image tag (immutable tags are recommended)                                                      | `2.6.6-debian-11-r18` |
+| `metrics.image.digest`                          | Bitnami HAProxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
+| `metrics.image.pullPolicy`                      | Bitnami HAProxy image pull policy                                                                               | `IfNotPresent`        |
+| `metrics.image.pullSecrets`                     | Bitnami HAProxy image pull secrets                                                                              | `[]`                  |
+| `metrics.containerPort`                         | Metrics container port                                                                                          | `9914`                |
+| `metrics.livenessProbe.enabled`                 | Enable livenessProbe on Metrics containers                                                                      | `true`                |
+| `metrics.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                         | `15`                  |
+| `metrics.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                | `10`                  |
+| `metrics.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                               | `5`                   |
+| `metrics.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                             | `5`                   |
+| `metrics.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                             | `1`                   |
+| `metrics.readinessProbe.enabled`                | Enable readinessProbe on Metrics containers                                                                     | `true`                |
+| `metrics.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                        | `15`                  |
+| `metrics.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                               | `10`                  |
+| `metrics.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                              | `5`                   |
+| `metrics.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                            | `5`                   |
+| `metrics.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                            | `1`                   |
+| `metrics.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                             | `{}`                  |
+| `metrics.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                            | `{}`                  |
+| `metrics.containerSecurityContext.enabled`      | Enabled Metrics containers' Security Context                                                                    | `true`                |
+| `metrics.containerSecurityContext.runAsUser`    | Set Metrics containers' Security Context runAsUser                                                              | `1001`                |
+| `metrics.containerSecurityContext.runAsNonRoot` | Set Metrics containers' Security Context runAsNonRoot                                                           | `true`                |
+| `metrics.service.port`                          | Service HTTP management port                                                                                    | `9914`                |
+| `metrics.service.annotations`                   | Annotations for enabling prometheus to access the metrics endpoints                                             | `{}`                  |
+| `metrics.serviceMonitor.enabled`                | Specify if a ServiceMonitor will be deployed for Prometheus Operator                                            | `false`               |
+| `metrics.serviceMonitor.namespace`              | Namespace in which Prometheus is running                                                                        | `""`                  |
+| `metrics.serviceMonitor.labels`                 | Extra labels for the ServiceMonitor                                                                             | `{}`                  |
+| `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in Prometheus                                | `""`                  |
+| `metrics.serviceMonitor.interval`               | How frequently to scrape metrics                                                                                | `""`                  |
+| `metrics.serviceMonitor.scrapeTimeout`          | Timeout after which the scrape is ended                                                                         | `""`                  |
+| `metrics.serviceMonitor.metricRelabelings`      | Specify additional relabeling of metrics                                                                        | `[]`                  |
+| `metrics.serviceMonitor.relabelings`            | Specify general relabeling                                                                                      | `[]`                  |
+| `metrics.serviceMonitor.selector`               | Prometheus instance selector labels                                                                             | `{}`                  |
+| `metrics.serviceMonitor.honorLabels`            | honorLabels chooses the metric's labels on collisions with target labels                                        | `false`               |
 
 
 ### Other Parameters

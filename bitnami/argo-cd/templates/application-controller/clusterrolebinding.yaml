@@ -1,5 +1,5 @@
 {{- if and .Values.rbac.create .Values.controller.clusterAdminAccess }}
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
   name: {{ include "argocd.namespace.application-controller" . }}

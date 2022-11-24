@@ -1,5 +1,5 @@
 {{- if and .Values.server.rbac.create .Values.server.enabled -}}
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 {{- if .Values.rbac.singleNamespace }}
 kind: RoleBinding
 {{ else }}
@@ -32,7 +32,7 @@ subjects:
 
 {{- if .Values.server.clusterWorkflowTemplates.enabled }}
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
   name: {{ include "argo-workflows.server.fullname.namespace" . }}-cluster-template

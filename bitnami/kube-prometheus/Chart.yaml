@@ -1,7 +1,7 @@
 annotations:
   category: Analytics
 apiVersion: v2
-appVersion: 0.60.1
+appVersion: 0.61.0
 dependencies:
   - condition: exporters.enabled,exporters.node-exporter.enabled
     name: node-exporter
@@ -35,4 +35,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/prometheus
   - https://github.com/bitnami/containers/tree/main/bitnami/alertmanager
   - https://github.com/prometheus-operator/kube-prometheus
-version: 8.1.12
+version: 8.2.1

@@ -126,6 +126,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.nodeSelector`                          | Node labels for MySQL primary pods assignment                                                                   | `{}`                |
 | `primary.tolerations`                           | Tolerations for MySQL primary pods assignment                                                                   | `[]`                |
 | `primary.priorityClassName`                     | MySQL primary pods' priorityClassName                                                                           | `""`                |
+| `primary.runtimeClassName`                      | MySQL primary pods' runtimeClassName                                                                            | `""`                |
 | `primary.schedulerName`                         | Name of the k8s scheduler (other than default)                                                                  | `""`                |
 | `primary.terminationGracePeriodSeconds`         | In seconds, time the given to the MySQL primary pod needs to terminate gracefully                               | `""`                |
 | `primary.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                                                  | `[]`                |
@@ -215,6 +216,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.nodeSelector`                          | Node labels for MySQL secondary pods assignment                                                                     | `{}`                |
 | `secondary.tolerations`                           | Tolerations for MySQL secondary pods assignment                                                                     | `[]`                |
 | `secondary.priorityClassName`                     | MySQL secondary pods' priorityClassName                                                                             | `""`                |
+| `secondary.runtimeClassName`                      | MySQL secondary pods' runtimeClassName                                                                              | `""`                |
 | `secondary.schedulerName`                         | Name of the k8s scheduler (other than default)                                                                      | `""`                |
 | `secondary.terminationGracePeriodSeconds`         | In seconds, time the given to the MySQL secondary pod needs to terminate gracefully                                 | `""`                |
 | `secondary.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                                                      | `[]`                |
