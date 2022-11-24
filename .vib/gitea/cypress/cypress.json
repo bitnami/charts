@@ -3,8 +3,6 @@
     "username": "user@example.com",
     "password": "bitnami!1234"
   },
-  "hosts": {
-    "bitnami-gitea.my": "{{ TARGET_IP }}"
-  },
+  "baseUrl": "http://localhost",
   "defaultCommandTimeout": 60000
 }

@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/gitea"
         },
-        "runtime_parameters": "c2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGh0dHA6IDgwCmNvbnRhaW5lclBvcnRzOgogIGh0dHA6IDgxMjMKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIHJ1bkFzVXNlcjogMTAwMgpwb2RTZWN1cml0eUNvbnRleHQ6CiAgZnNHcm91cDogMTAwMgphZG1pblBhc3N3b3JkOiAiYml0bmFtaSExMjM0Igo=",
+        "runtime_parameters": "c2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGh0dHA6IDgwCmNvbnRhaW5lclBvcnRzOgogIGh0dHA6IDgxMjMKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIHJ1bkFzVXNlcjogMTAwMgpwb2RTZWN1cml0eUNvbnRleHQ6CiAgZnNHcm91cDogMTAwMgphZG1pblBhc3N3b3JkOiAiYml0bmFtaSExMjM0IgoKcG9zdGdyZXNxbDoKICBhdXRoOgogICAgdXNlcm5hbWU6IGJuX3ZpYl9naXRlYQogICAgZGF0YWJhc2U6IGJpdG5hbWlfdmliX2dpdGVhCiAgc2VydmljZToKICAgIHBvcnRzOgogICAgICBwb3N0Z3Jlc3FsOiA5MzkzCg==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {

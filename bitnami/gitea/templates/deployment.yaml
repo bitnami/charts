@@ -113,7 +113,7 @@ spec:
               value: {{ include "gitea.databasePort" . | quote }}
             - name: GITEA_DATABASE_NAME
               value: {{ include "gitea.databaseName" . | quote }}
-            - name: GITEA_DATABASE_USER
+            - name: GITEA_DATABASE_USERNAME
               value: {{ include "gitea.databaseUser" . | quote }}
             - name: GITEA_DATABASE_PASSWORD
               valueFrom:
