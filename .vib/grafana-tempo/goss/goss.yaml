@@ -1,4 +1,5 @@
 addr:
+  # Querying /ready in HTTP too early results in error 503 and makes the test flaky
   tcp://grafana-tempo-ingester:{{ .Vars.ingester.service.ports.http }}:
     reachable: true
 http:
