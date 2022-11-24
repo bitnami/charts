@@ -437,15 +437,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### MongoDB sub-chart parameters
 
-| Name                            | Description                                            | Value        |
-| ------------------------------- | ------------------------------------------------------ | ------------ |
-| `mongodb.enabled`               | Deploy MongoDB subchart                                | `true`       |
-| `mongodb.architecture`          | MongoDB architecture (Appsmith requires a Replica Set) | `replicaset` |
-| `mongodb.replicaCount`          | MongoDB number of replicas                             | `2`          |
-| `mongodb.auth.usernames`        | MongoDB non-root username creation                     | `[]`         |
-| `mongodb.auth.databases`        | MongoDB database creation                              | `[]`         |
-| `mongodb.service.ports.mongodb` | MongoDB service port                                   | `27017`      |
-| `mongodb.arbiter.enabled`       | Enable Arbiter nodes in the ReplicaSet                 | `false`      |
+| Name                             | Description                                            | Value        |
+| -------------------------------- | ------------------------------------------------------ | ------------ |
+| `mongodb.enabled`                | Deploy MongoDB subchart                                | `true`       |
+| `mongodb.architecture`           | MongoDB architecture (Appsmith requires a Replica Set) | `replicaset` |
+| `mongodb.replicaCount`           | MongoDB number of replicas                             | `2`          |
+| `mongodb.auth.usernames`         | MongoDB non-root username creation                     | `[]`         |
+| `mongodb.auth.databases`         | MongoDB database creation                              | `[]`         |
+| `mongodb.containerPorts.mongodb` | MongoDB container port (used by the headless service)  | `27017`      |
+| `mongodb.arbiter.enabled`        | Enable Arbiter nodes in the ReplicaSet                 | `false`      |
 
 
 See https://github.com/bitnami-labs/readme-generator-for-helm to create the table.
