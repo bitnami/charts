@@ -36,8 +36,24 @@ spec:
       port: {{ .Values.service.ports.tcpSecure }}
       protocol: TCP
     {{- end }}
-    - name: mysql
-      targetPort: mysql
+    {{- if .Values.keeper.enabled }}
+    - name: tcp-keeper
+      targetPort: tcp-keeper
+      port: {{ .Values.service.ports.keeper }}
+      protocol: TCP
+    - name: tcp-keeperinter
+      targetPort: tcp-keeperinter
+      port: {{ .Values.service.ports.keeperInter }}
+      protocol: TCP
+    {{- if .Values.tls.enabled }}
+    - name: tcp-keepertls
+      targetPort: tcp-keepertls
+      port: {{ .Values.service.ports.keeperSecure }}
+      protocol: TCP
+    {{- end }}
+    {{- end }}
+    - name: tcp-mysql
+      targetPort: tcp-mysql
       port: {{ .Values.service.ports.mysql }}
       protocol: TCP
     - name: tcp-postgresql
