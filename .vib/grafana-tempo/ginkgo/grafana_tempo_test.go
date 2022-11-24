@@ -50,11 +50,5 @@ var _ = Describe("Grafana Tempo", func() {
 			responseBody := getResponseBodyOrDie(ctx, fmt.Sprintf("http://%s:%s/api/traces/%s", queryFrontendIp, *apiPort, traceID))
 			Expect(containsString(responseBody, route)).To(BeTrue())
 		})
-
-		It("allows to list spans' tags", func() {
-			responseBody := getResponseBodyOrDie(ctx, fmt.Sprintf("http://%s:%s/api/search/tags", queryFrontendIp, *apiPort))
-			// Vulture is enabled an produces its own spans, which are properly tagged
-			Expect(containsString(responseBody, "vulture")).To(BeTrue())
-		})
 	})
 })

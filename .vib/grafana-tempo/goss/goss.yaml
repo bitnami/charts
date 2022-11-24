@@ -1,18 +1,37 @@
 addr:
-  tcp://localhost:{{ .Vars.tempo.containerPorts.grpc }}:
+  tcp://grafana-tempo-ingester:{{ .Vars.ingester.service.ports.http }}:
     reachable: true
+http:
+  http://grafana-tempo-distributor:{{ .Vars.distributor.service.ports.http }}/ready:
+    status: 200
+  http://grafana-tempo-querier:{{ .Vars.querier.service.ports.http }}/ready:
+    status: 200
 file:
   {{ .Vars.tempo.dataDir }}:
     exists: true
     filetype: directory
     mode: "2777"
     owner: root
+  /bitnami/grafana-tempo/conf/tempo.yaml:
+    exists: true
+    filetype: file
+    mode: "0644"
+    owner: root
+    contains:
+      - /http_listen_port.*{{ .Vars.tempo.containerPorts.web }}/
+      - /override_config.*\/bitnami\/grafana-tempo\/conf\/overrides.yaml/
+      - /cache.*memcached/
   /bitnami/grafana-tempo/conf/overrides.yaml:
     exists: true
     filetype: file
     mode: "0644"
     owner: root
 command:
+  vulture-registered-traces:
+    exec: tempo-cli query api search-tags http://grafana-tempo-query-frontend:{{ .Vars.queryFrontend.service.ports.http }}
+    exit-status: 0
+    stdout:
+      - "vulture"
   check-user-info:
     exec: id
     exit-status: 0
