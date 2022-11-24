@@ -103,7 +103,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "appsmith.mongodb.secretName" . }}
                   key: {{ include "appsmith.mongodb.secretKey" . }}
-            - name: APPSMITH_DATABASE_USERNAME
+            - name: APPSMITH_DATABASE_USER
               value: {{ ternary (index .Values.mongodb.auth.usernames 0) .Values.externalDatabase.username .Values.mongodb.enabled | quote }}
             - name: APPSMITH_DATABASE_NAME
               value: {{ ternary (index .Values.mongodb.auth.databases 0) .Values.externalDatabase.database .Values.mongodb.enabled | quote }}

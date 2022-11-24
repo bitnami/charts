@@ -148,7 +148,8 @@ Return mongodb port
 */}}
 {{- define "appsmith.mongodb.port" -}}
 {{- if .Values.mongodb.enabled -}}
-    {{- print .Values.mongodb.service.ports.mongodb -}}
+    {{/* We are using the headless service so we need to use the container port */}}
+    {{- print .Values.mongodb.containerPorts.mongodb -}}
 {{- else -}}
     {{- print .Values.externalDatabase.port  -}}
 {{- end -}}
@@ -195,7 +196,7 @@ Return the MongoDB Secret Name
       info "Waiting for MongoDB replica set to come up"
       for host in ${APPSMITH_DATABASE_HOST//,/ }; do
             info "Waiting for host $host"
-            appsmith_wait_for_mongodb_connection "mongodb://${APPSMITH_DATABASE_USERNAME}:${APPSMITH_DATABASE_PASSWORD}@${host}:${APPSMITH_DATABASE_PORT_NUMBER}/${APPSMITH_DATABASE_NAME}"
+            appsmith_wait_for_mongodb_connection "mongodb://${APPSMITH_DATABASE_USER}:${APPSMITH_DATABASE_PASSWORD}@${host}:${APPSMITH_DATABASE_PORT_NUMBER}/${APPSMITH_DATABASE_NAME}"
       done
       info "Database is ready"
   env:
@@ -208,7 +209,7 @@ Return the MongoDB Secret Name
         secretKeyRef:
           name: {{ include "appsmith.mongodb.secretName" . }}
           key: {{ include "appsmith.mongodb.secretKey" . }}
-    - name: APPSMITH_DATABASE_USERNAME
+    - name: APPSMITH_DATABASE_USER
       value: {{ ternary (index .Values.mongodb.auth.usernames 0) .Values.externalDatabase.username .Values.mongodb.enabled | quote }}
     - name: APPSMITH_DATABASE_NAME
       value: {{ ternary (index .Values.mongodb.auth.databases 0) .Values.externalDatabase.database .Values.mongodb.enabled | quote }}

@@ -6,6 +6,18 @@ client:
     runAsUser: 1002
   podSecurityContext:
     fsGroup: 1002
+  containerPorts:
+    http: 8022
 
 serviceAccount:
   automountServiceAccountToken: true
+
+backend:
+  service:
+    ports:
+      http: 8083
+
+rts:
+  service:
+    ports:
+      http: 8085

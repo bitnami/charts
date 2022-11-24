@@ -1245,11 +1245,10 @@ mongodb:
       - bn_appsmith
     databases:
       - bitnami_appsmith
-  ## @param mongodb.service.ports.mongodb MongoDB service port
+  ## @param mongodb.containerPorts.mongodb MongoDB container port (used by the headless service)
   ##
-  service:
-    ports:
-      mongodb: 27017
+  containerPorts:
+    mongodb: 27017
   ## @param mongodb.arbiter.enabled Enable Arbiter nodes in the ReplicaSet
   ##
   arbiter:
