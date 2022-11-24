@@ -2,21 +2,13 @@ http:
   http://localhost:{{ .Vars.containerPort }}:
     status: 403
 file:
-  /bitnami/oauth2-proxy/conf/oauth2_proxy.cfg:
-    exists: true
-    filetype: symlink
-    mode: "0777"
-    contains:
-      {{ range .Vars.configuration.content }}
-      - {{ . }}
-      {{ end }}
   /var/run/secrets/kubernetes.io/serviceaccount:
     exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
     filetype: directory
     mode: "3777"
 command:
-  check-app-config:
-    exec: \[ $OAUTH2_PROXY_REDIS_PASSWORD = {{ .Vars.redis.auth.password }} ] && [ $OAUTH2_PROXY_CLIENT_ID = {{ .Vars.configuration.clientID }} ] && [ $OAUTH2_PROXY_COOKIE_SECRET = {{ .Vars.configuration.cookieSecret }} ] && [ $OAUTH2_PROXY_CLIENT_SECRET = {{ .Vars.configuration.clientSecret }} ]
+  check-redis-auth:
+    exec: \[ $OAUTH2_PROXY_REDIS_PASSWORD = {{ .Vars.redis.auth.password }} ]
     exit-status: 0
   check-user-info:
     exec: id

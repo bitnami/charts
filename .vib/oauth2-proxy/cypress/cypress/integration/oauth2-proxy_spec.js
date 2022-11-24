@@ -1,24 +1,18 @@
 /// <reference types="cypress" />
 
-it('redirects to the auth provider login', () => {
-  // Access to the URL without proper identification results in a forbidden response
-  // with the UI to log in.
-  cy.visit('/', {failOnStatusCode:false})
-  cy.contains('button', 'Sign in');
+it('allows to access auth-protected resource', () => {
+  // DEX is deployed at localhost:5556, which is not exposed. In order to prevent failed redirections
+  // to this port, direct interaction (e.g. clicking) is generally avoided.
 
-  // Unfortunately, a third-party auth provider service (like Google, Facebook, OpenID connector, ...)
-  // is needed to test the identification process, which is difficult to configure for the tests.
-  //
-  // Hence, the test focuses on asserting that a redirection to the default auth provider (Google) is
-  // performed.
-  cy.request({
-    url: "/oauth2/start",
-    method: "GET"
-  }).then((response) => {
-    expect(response.status).to.eq(200);
-    expect(response.redirects).not.to.be.undefined;
-    response.redirects.forEach(red => {
-      expect(red).to.contains('google');
-    });
+  // OAuth2
+  cy.safeRedirectVisit(`/oauth2/start?rd=${Cypress.env('upstreamURL')}`);
+
+  // DEX UI
+  cy.contains('a', 'Log in with Example').invoke('attr', 'href').then((url) => {
+    cy.safeRedirectVisit(url);
   })
+  cy.contains('button', 'Grant Access').click();
+
+  // Back to OAuth2: Auth-protected resource
+  cy.contains(Cypress.env('upstreamContent'));
 });
