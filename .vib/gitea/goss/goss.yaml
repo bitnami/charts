@@ -3,8 +3,8 @@ command:
     exec: id
     exit-status: 0
     stdout:
-      - uid={{ .Vars.client.containerSecurityContext.runAsUser }}
-      - /groups=.*{{ .Vars.client.podSecurityContext.fsGroup }}/
+      - uid={{ .Vars.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
 file:
   /var/run/secrets/kubernetes.io/serviceaccount:
     exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}

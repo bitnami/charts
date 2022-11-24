@@ -60,6 +60,17 @@ Gitea root URL
 {{- end -}}
 
 {{/*
+ Create the name of the service account to use
+ */}}
+{{- define "gitea.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{- default (include "common.names.fullname" .) .Values.serviceAccount.name -}}
+{{- else -}}
+    {{- default "default" .Values.serviceAccount.name -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Gitea credential secret name
 */}}
 {{- define "gitea.secretKey" -}}
