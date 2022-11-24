@@ -1,6 +1,6 @@
 {
   "env": {
-    "email": "user@example.com",
+    "username": "user@example.com",
     "password": "bitnami!1234"
   },
   "hosts": {
