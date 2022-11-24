@@ -1,0 +1,10 @@
+{
+  "env": {
+    "username": "user@example.com",
+    "password": "bitnami!1234"
+  },
+  "hosts": {
+    "bitnami-gitea.my": "{{ TARGET_IP }}"
+  },
+  "defaultCommandTimeout": 60000
+}

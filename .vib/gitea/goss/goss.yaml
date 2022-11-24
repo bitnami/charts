@@ -1,0 +1,15 @@
+command:
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+      - uid={{ .Vars.client.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.client.podSecurityContext.fsGroup }}/
+file:
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
+    filetype: directory
+    mode: "3777"
+http:
+  http://gitea:{{ .Vars.service.ports.http }}:
+    status: 200

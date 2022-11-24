@@ -1,0 +1,85 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/gitea"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/gitea"
+        },
+        "runtime_parameters": "c2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGh0dHA6IDgwCmNvbnRhaW5lclBvcnRzOgogIGh0dHA6IDgxMjMKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIHJ1bkFzVXNlcjogMTAwMgpwb2RTZWN1cml0eUNvbnRleHQ6CiAgZnNHcm91cDogMTAwMgphZG1pblBhc3N3b3JkOiAiYml0bmFtaSExMjM0Igo=",
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "health-check",
+          "params": {
+            "endpoint": "lb-gitea-http",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "vars_file": "vars.yaml",
+            "resources": {
+              "path": "/.vib/gitea/goss"
+            },
+            "remote": {
+              "workload": "deploy-gitea"
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/gitea/cypress"
+            },
+            "endpoint": "lb-gitea-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "email": "user@example.com",
+              "password": "Complicated123!4"
+            }
+          }
+        }
+      ]
+    },
+    "publish": {
+      "actions": [
+        {
+          "action_id": "helm-publish",
+          "params": {
+            "repository": {
+              "kind": "S3",
+              "url": "{VIB_ENV_S3_URL}",
+              "username": "{VIB_ENV_S3_USERNAME}",
+              "password": "{VIB_ENV_S3_PASSWORD}"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
