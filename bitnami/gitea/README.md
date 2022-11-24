@@ -203,6 +203,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 
+### Database parameters
+
+
+
+
 ### JupyterHub database parameters
 
 | Name                                         | Description                                                             | Value           |
