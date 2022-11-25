@@ -16,8 +16,8 @@ Cypress.Commands.add(
   'login',
   (username = Cypress.env('username'), password = Cypress.env('password')) => {
     cy.visit('/');
-    cy.get('input[type="email"]').should('be.enabled').type(username);
-    cy.get('input[type="password"]').should('be.enabled').type(password);
+    cy.get('[type="email"]').should('be.enabled').type(username);
+    cy.get('[type="password"]').should('be.enabled').type(password);
     cy.contains('button', 'sign in').click();
     cy.contains('WORKSPACES').should('be.visible');
   }

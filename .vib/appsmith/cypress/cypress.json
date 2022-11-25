@@ -1,6 +1,6 @@
 {
   "env": {
-    "username": "user@example.com",
+    "username": "vibuser@example.com",
     "password": "bitnami!1234"
   },
   "baseUrl": "http://localhost",
