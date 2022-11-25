@@ -75,6 +75,10 @@ commonLabels: {}
 ##
 commonAnnotations: {}
 
+## @param topologyKey Uncomment following line to overide default topology key value from common lib
+##
+## topologyKey: topology.kubernetes.io/zone
+
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
