@@ -21,5 +21,9 @@ http:
       - __APPSMITH
   http://appsmith:{{ .Vars.client.service.ports.http }}/api/v1/users/me:
     status: 200
+  http://appsmith-backend:{{ .Vars.backend.service.ports.http }}/api/v1/users/me:
+    status: 200
   http://appsmith:{{ .Vars.client.service.ports.http }}/rts-api/v1/health-check:
+    status: 200
+  http://appsmith-rts:{{ .Vars.rts.service.ports.http }}/rts-api/v1/health-check:
     status: 200
