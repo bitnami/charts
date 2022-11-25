@@ -72,7 +72,7 @@ spec:
       priorityClassName: {{ .Values.mongos.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.mongos.topologySpreadConstraints }}
-      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.topologySpreadConstraints "context" .) | nindent 8 }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.mongos.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.mongos.podSecurityContext "enabled" | toYaml | nindent 8 }}
