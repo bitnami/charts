@@ -15,6 +15,7 @@ postgresql:
   auth:
     username: bn_vib_gitea
     database: bitnami_vib_gitea
-  service:
-    ports:
-      postgresql: 9393
+  primary:
+    service:
+      ports:
+        postgresql: 9393
