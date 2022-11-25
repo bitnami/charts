@@ -16,7 +16,9 @@ file:
     contains:
       - /NAME.*{{ .Vars.postgresql.auth.database }}/
       - /USER.*{{ .Vars.postgresql.auth.username }}/
-      - /HOST.*{{ .Vars.postgresql.service.ports.postgresql }}/
+      - /HOST.*{{ .Vars.postgresql.primary.service.ports.postgresql }}/
 http:
   http://gitea:{{ .Vars.service.ports.http }}:
+    status: 200
+  http://127.0.0.1:{{ .Vars.containerPorts.http }}:
     status: 200

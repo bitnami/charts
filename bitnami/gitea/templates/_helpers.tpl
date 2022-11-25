@@ -112,7 +112,7 @@ Return the PostgreSQL Port
 */}}
 {{- define "gitea.databasePort" -}}
 {{- if .Values.postgresql.enabled }}
-    {{- print .Values.postgresql.service.ports.postgresql -}}
+    {{- print .Values.postgresql.primary.service.ports.postgresql -}}
 {{- else -}}
     {{- printf "%d" (.Values.externalDatabase.port | int ) -}}
 {{- end -}}
