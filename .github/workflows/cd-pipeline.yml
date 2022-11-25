@@ -6,6 +6,7 @@ on: # rebuild any PRs and main branch changes
     paths:
       - 'bitnami/airflow/**'
       - 'bitnami/apache/**'
+      - 'bitnami/appsmith/**'
       - 'bitnami/argo-cd/**'
       - 'bitnami/argo-workflows/**'
       - 'bitnami/aspnet-core/**'
