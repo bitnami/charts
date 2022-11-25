@@ -10,3 +10,11 @@ podSecurityContext:
   fsGroup: 1002
 serviceAccount:
   automountServiceAccountToken: true
+
+postgresql:
+  auth:
+    username: bn_vib_gitea
+    database: bitnami_vib_gitea
+  service:
+    ports:
+      postgresql: 9393
