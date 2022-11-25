@@ -2,6 +2,7 @@ service:
   type: LoadBalancer
   ports:
     http: 80
+    ssh: 2500
 containerPorts:
   http: 8123
   ssh: 2299
