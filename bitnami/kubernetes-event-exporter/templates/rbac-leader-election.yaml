@@ -1,6 +1,6 @@
 {{- $config := fromYaml (include "kubernetes-event-exporter.config" .) -}}
 {{- if and .Values.rbac.create $config.leaderElection.enabled -}}
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
   {{- if .Values.commonAnnotations }}

@@ -11,6 +11,10 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
+{{- if .Values.redis.defaultConfigOverride }}
+  redis-default.conf: |-
+    {{- include "common.tplvalues.render" (dict "value" .Values.redis.defaultConfigOverride "context" $) | nindent 4 }}
+{{- else }}
   redis-default.conf: |-
     # Redis configuration file example.
     #
@@ -2290,6 +2294,7 @@ data:
     # to suppress
     #
     # ignore-warnings ARM64-COW-BUG
+{{- end }}
 {{- if .Values.redis.configmap }}
 {{- include "common.tplvalues.render" (dict "value" .Values.redis.configmap "context" $) | nindent 4 }}
 {{- end }}

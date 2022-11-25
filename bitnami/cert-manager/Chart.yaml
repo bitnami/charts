@@ -1,7 +1,7 @@
 annotations:
   category: CertificateAuthority
 apiVersion: v2
-appVersion: 1.10.0
+appVersion: 1.10.1
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -26,4 +26,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/cert-manager-webhook
   - https://github.com/bitnami/containers/tree/main/bitnami/cainjector
   - https://github.com/jetstack/cert-manager
-version: 0.8.7
+version: 0.8.9

@@ -1,7 +1,7 @@
 annotations:
   category: Database
 apiVersion: v2
-appVersion: 3.5.5
+appVersion: 3.5.6
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -24,4 +24,4 @@ name: etcd
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/etcd
   - https://coreos.com/etcd/
-version: 8.5.8
+version: 8.5.10

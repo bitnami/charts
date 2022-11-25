@@ -7,6 +7,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/airflow/**'
       - 'bitnami/apache/**'
       - 'bitnami/argo-cd/**'
+      - 'bitnami/argo-workflows/**'
       - 'bitnami/aspnet-core/**'
       - 'bitnami/cassandra/**'
       - 'bitnami/cert-manager/**'
@@ -35,6 +36,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/jasperreports/**'
       - 'bitnami/jenkins/**'
       - 'bitnami/joomla/**'
+      - 'bitnami/jupyterhub/**'
       - 'bitnami/kafka/**'
       - 'bitnami/keycloak/**'
       - 'bitnami/kibana/**'
@@ -169,7 +171,7 @@ jobs:
             verification_mode="$(cat $config_file | grep 'verification-mode' | cut -d'=' -f2)"
           fi
           echo "verification_mode=${verification_mode}" >> $GITHUB_OUTPUT
-      - uses: vmware-labs/vmware-image-builder-action@0.4.11
+      - uses: vmware-labs/vmware-image-builder-action@main
         name: Verify and publish ${{ needs.get-chart.outputs.chart }}
         with:
           pipeline: ${{ needs.get-chart.outputs.chart }}/vib-publish.json
