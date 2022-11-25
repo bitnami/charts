@@ -89,6 +89,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.debug`            | Enable Appsmith image debug mode                                                                                                                    | `false`               |
 
 
+### Appsmith common paramters
+
+
+
+
 ### Appsmith Client Parameters
 
 | Name                                                     | Description                                                                                                              | Value           |
