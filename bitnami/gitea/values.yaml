@@ -160,9 +160,6 @@ initContainers: []
 ## @param sidecars Attach additional containers to the pod (evaluated as a template)
 ##
 sidecars: []
-## @param serviceAccountName Attach serviceAccountName to the pod and sidecars
-##
-serviceAccountName: ""
 ## @param tolerations Tolerations for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
@@ -559,9 +556,9 @@ ingress:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
 serviceAccount:
-  ## @param serviceAccount.create Enable creation of ServiceAccount for Solr pod
+  ## @param serviceAccount.create Enable creation of ServiceAccount for Gitea pod
   ##
-  create: false
+  create: true
   ## @param serviceAccount.name The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the common.names.fullname template
   ##

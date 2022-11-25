@@ -16,8 +16,8 @@ Cypress.Commands.add(
   'login',
   (username = Cypress.env('username'), password = Cypress.env('password')) => {
     cy.visit('/user/login');
-    cy.get('input[name="user_name"]').should('be.enabled').type(username);
-    cy.get('input[type="password"]').should('be.enabled').type(password);
+    cy.get('[name="user_name"]').type(username);
+    cy.get('[type="password"]').type(password);
     cy.contains('button', 'Sign In').click();
     cy.get('#navbar .avatar').should('be.visible');
   }

@@ -4,6 +4,7 @@ service:
     http: 80
 containerPorts:
   http: 8123
+  ssh: 2299
 containerSecurityContext:
   runAsUser: 1002
 podSecurityContext:

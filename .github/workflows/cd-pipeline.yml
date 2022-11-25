@@ -26,6 +26,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/fluentd/**'
       - 'bitnami/geode/**'
       - 'bitnami/ghost/**'
+      - 'bitnami/gitea/**'
       - 'bitnami/grafana-loki/**'
       - 'bitnami/grafana-operator/**'
       - 'bitnami/grafana/**'

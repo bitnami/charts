@@ -1,3 +1,7 @@
+addr:
+  tcp://127.0.0.1:{{ .Vars.containerPorts.ssh }}:
+    reachable: true
+    timeout: 500
 command:
   check-user-info:
     exec: id

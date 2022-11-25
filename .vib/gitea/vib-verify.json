@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/gitea"
         },
-        "runtime_parameters": "c2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGh0dHA6IDgwCmNvbnRhaW5lclBvcnRzOgogIGh0dHA6IDgxMjMKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIHJ1bkFzVXNlcjogMTAwMgpwb2RTZWN1cml0eUNvbnRleHQ6CiAgZnNHcm91cDogMTAwMgphZG1pblBhc3N3b3JkOiAiYml0bmFtaSExMjM0IgoKcG9zdGdyZXNxbDoKICBhdXRoOgogICAgdXNlcm5hbWU6IGJuX3ZpYl9naXRlYQogICAgZGF0YWJhc2U6IGJpdG5hbWlfdmliX2dpdGVhCiAgcHJpbWFyeToKICAgIHNlcnZpY2U6CiAgICAgIHBvcnRzOgogICAgICAgIHBvc3RncmVzcWw6IDkzOTMK",
+        "runtime_parameters": "YWRtaW5FbWFpbDogInZpYi11c2VyQGV4YW1wbGUuY29tIgpzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgaHR0cDogODAKY29udGFpbmVyUG9ydHM6CiAgaHR0cDogODEyMwpjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIHJ1bkFzVXNlcjogMTAwMgpwb2RTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIGZzR3JvdXA6IDEwMDIKYWRtaW5QYXNzd29yZDogImJpdG5hbWkhMTIzNCIKCnBvc3RncmVzcWw6CiAgZW5hYmxlZDogdHJ1ZQogIGF1dGg6CiAgICB1c2VybmFtZTogYm5fdmliX2dpdGVhCiAgICBkYXRhYmFzZTogYml0bmFtaV92aWJfZ2l0ZWEKICBwcmltYXJ5OgogICAgc2VydmljZToKICAgICAgcG9ydHM6CiAgICAgICAgcG9zdGdyZXNxbDogOTM5Mwo=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -59,7 +59,7 @@
             "endpoint": "lb-gitea-http",
             "app_protocol": "HTTP",
             "env": {
-              "user": "user@example.com",
+              "user": "vib-user@example.com",
               "password": "bitnami!1234"
             }
           }
