@@ -109,7 +109,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraVolumeMounts`                     | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `[]`                  |
 | `initContainers`                        | Add additional init containers to the pod (evaluated as a template)                                                   | `[]`                  |
 | `sidecars`                              | Attach additional containers to the pod (evaluated as a template)                                                     | `[]`                  |
-| `serviceAccountName`                    | Attach serviceAccountName to the pod and sidecars                                                                     | `""`                  |
 | `tolerations`                           | Tolerations for pod assignment                                                                                        | `[]`                  |
 | `existingSecret`                        | Name of a secret with the application password                                                                        | `""`                  |
 | `existingSecretKey`                     | Key inside the existing secret containing the password                                                                | `admin-password`      |
@@ -205,12 +204,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Other Parameters
 
-| Name                                          | Description                                                            | Value   |
-| --------------------------------------------- | ---------------------------------------------------------------------- | ------- |
-| `serviceAccount.create`                       | Enable creation of ServiceAccount for Solr pod                         | `false` |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`    |
-| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true`  |
-| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
+| Name                                          | Description                                                            | Value  |
+| --------------------------------------------- | ---------------------------------------------------------------------- | ------ |
+| `serviceAccount.create`                       | Enable creation of ServiceAccount for Gitea pod                        | `true` |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`   |
+| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true` |
+| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`   |
 
 
 ### Database parameters
