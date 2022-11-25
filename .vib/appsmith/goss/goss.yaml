@@ -12,11 +12,11 @@ file:
     mode: "3777"
 http:
   http://appsmith:{{ .Vars.client.service.ports.http }}:
-    status: 2002
+    status: 200
     body:
       - __APPSMITH
   http://127.0.0.1:{{ .Vars.client.containerPorts.http }}:
-    status: 2002
+    status: 200
     body:
       - __APPSMITH
   http://appsmith:{{ .Vars.client.service.ports.http }}/api/v1/users/me:
