@@ -37,7 +37,11 @@ spec:
               mountPath: "/cassandra-schema"
       containers:
         - name: jaeger-cassandra-migrator
+          {{- if not (empty .Values.cassandra.migrationImage) }}
+          image: {{- include .Values.cassandra.migrationImage . -}}
+          {{- else }}
           image: {{ printf "%s/%s:%s" .Values.cassandra.image.registry .Values.cassandra.image.repository .Values.cassandra.image.tag }}
+          {{- end }}
           command:
             - /bin/bash
           args:

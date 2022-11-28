@@ -1029,6 +1029,9 @@ cassandra:
   ## @param cassandra.enabled Enables cassandra storage pod
   ##
   enabled: true
+  ## @param cassandra.migrationImage Set the image to use for the migration job
+  ##
+  migrationImage: ""
   ## @param cassandra.keyspace Name for cassandra's jaeger keyspace
   ##
   keyspace: "jaeger_v1_dc1"
