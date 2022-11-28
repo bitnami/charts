@@ -275,7 +275,7 @@ query:
     create: true
     ## @param query.serviceAccount.name ServiceAccount name
     ##
-    name: jaeger-query-sa
+    name: ""
     ## @param query.serviceAccount.annotations Annotations to add to all deployed objects
     ##
     annotations: {}
@@ -584,7 +584,7 @@ collector:
     create: true
     ## @param collector.serviceAccount.name ServiceAccount name
     ##
-    name: jaeger-collector-sa
+    name: ""
     ## @param collector.serviceAccount.annotations Annotations to add to all deployed objects
     ##
     annotations: {}
@@ -902,7 +902,7 @@ agent:
     create: true
     ## @param agent.serviceAccount.name ServiceAccount name
     ##
-    name: jaeger-agent-sa
+    name: ""
     ## @param agent.serviceAccount.annotations Annotations to add to all deployed objects
     ##
     annotations: {}
