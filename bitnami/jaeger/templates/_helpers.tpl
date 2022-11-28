@@ -23,7 +23,7 @@ Create the name of the query deployment
 {{- end -}}
 
 {{/*
-Create the name of the readyt check container for cassandra
+Create a container for checking cassandra availability
 */}}
 {{- define "jaeger.waitForDBInitContainer" -}}
 - name: jaeger-cassandra-ready-check
