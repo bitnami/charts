@@ -87,8 +87,8 @@ spec:
           args:
             - -ec
             - |
-              mkdir -p {{ .Values.configsvr.persistence.mountPath }}{{- if .Values.configsvr.persistence.subPath }}/{{ .include "common.tplvalues.render" (dict "value" $.Values.configsvr.persistence.subPath "context" $) }}{{- end }}
-              chown {{ .Values.configsvr.containerSecurityContext.runAsUser }}:{{ .Values.configsvr.podSecurityContext.fsGroup }} {{ .Values.configsvr.persistence.mountPath }}{{- if .Values.configsvr.persistence.subPath }}/{{ .include "common.tplvalues.render" (dict "value" $.Values.configsvr.persistence.subPath "context" $) }}{{- end }}
+              mkdir -p {{ .Values.configsvr.persistence.mountPath }}{{- if .Values.configsvr.persistence.subPath }}/{{ include "common.tplvalues.render" (dict "value" .Values.configsvr.persistence.subPath "context" $) }}{{- end }}
+              chown {{ .Values.configsvr.containerSecurityContext.runAsUser }}:{{ .Values.configsvr.podSecurityContext.fsGroup }} {{ .Values.configsvr.persistence.mountPath }}{{- if .Values.configsvr.persistence.subPath }}/{{ include "common.tplvalues.render" (dict "value" .Values.configsvr.persistence.subPath "context" $) }}{{- end }}
               find {{ .Values.configsvr.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.configsvr.containerSecurityContext.runAsUser }}:{{ .Values.configsvr.podSecurityContext.fsGroup }}
           securityContext:
             runAsUser: 0
@@ -97,7 +97,7 @@ spec:
             - name: datadir
               mountPath: {{ .Values.configsvr.persistence.mountPath }}
               {{- if .Values.configsvr.persistence.subPath }}
-              subPath: {{ .include "common.tplvalues.render" (dict "value" $.Values.configsvr.persistence.subPath "context" $) }}
+              subPath: {{ include "common.tplvalues.render" (dict "value" .Values.configsvr.persistence.subPath "context" $) }}
               {{- end }}
         {{- end }}
         {{- with .Values.configsvr.initContainers }}
@@ -255,7 +255,7 @@ spec:
             - name: datadir
               mountPath: {{ .Values.configsvr.persistence.mountPath }}
               {{- if .Values.configsvr.persistence.subPath }}
-              subPath: {{ .include "common.tplvalues.render" (dict "value" $.Values.configsvr.persistence.subPath "context" $) }}
+              subPath: {{ include "common.tplvalues.render" (dict "value" .Values.configsvr.persistence.subPath "context" $) }}
               {{- end }}
             {{- if or .Values.configsvr.config .Values.configsvr.configCM }}
             - name: config
