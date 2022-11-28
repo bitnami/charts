@@ -1104,4 +1104,10 @@ cassandra:
   ## @param cassandra.keyspace Name for cassandra's jaeger keyspace
   ##
   keyspace: "jaeger_v1_dc1"
-
+  ## Database credentials
+  ## @param dbUser.user Cassandra admin user
+  ## @param dbUser.password Password for `dbUser.user`. Randomly generated if empty
+  ##
+  dbUser:
+    user: cassandra
+    password: ""
