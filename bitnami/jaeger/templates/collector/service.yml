@@ -40,7 +40,7 @@ spec:
   ports:
     - name: grpc
       port: {{ .Values.collector.service.ports.grpc }}
-      targetPort: {{ .Values.collector.service.ports.grpc }}
+      targetPort: {{ .Values.collector.containerPorts.grpc }}
       {{- if and (or (eq .Values.collector.service.type "NodePort") (eq .Values.collector.service.type "LoadBalancer")) (not (empty .Values.collector.service.nodePorts.grpc)) }}
       nodePort: {{ .Values.collector.service.nodePorts.grpc }}
       {{- else if eq .Values.collector.service.type "ClusterIP" }}
@@ -48,7 +48,7 @@ spec:
       {{- end }}
     - name: binary
       port: {{ .Values.collector.service.ports.binary }}
-      targetPort: {{ .Values.collector.service.ports.binary }}
+      targetPort: {{ .Values.collector.containerPorts.binary }}
       {{- if and (or (eq .Values.collector.service.type "NodePort") (eq .Values.collector.service.type "LoadBalancer")) (not (empty .Values.collector.service.nodePorts.binary)) }}
       nodePort: {{ .Values.collector.service.nodePorts.binary }}
       {{- else if eq .Values.collector.service.type "ClusterIP" }}
@@ -56,7 +56,7 @@ spec:
       {{- end }}
     - name: zipkin
       port: {{ .Values.collector.service.ports.zipkin }}
-      targetPort: {{ .Values.collector.service.ports.zipkin }}
+      targetPort: {{ .Values.collector.containerPorts.zipkin }}
       {{- if and (or (eq .Values.collector.service.type "NodePort") (eq .Values.collector.service.type "LoadBalancer")) (not (empty .Values.collector.service.nodePorts.zipkin)) }}
       nodePort: {{ .Values.collector.service.nodePorts.zipkin }}
       {{- else if eq .Values.collector.service.type "ClusterIP" }}
@@ -64,7 +64,7 @@ spec:
       {{- end }}
     - name: admin
       port: {{ .Values.collector.service.ports.admin }}
-      targetPort: {{ .Values.collector.service.ports.admin }}
+      targetPort: {{ .Values.collector.containerPorts.admin }}
       {{- if and (or (eq .Values.collector.service.type "NodePort") (eq .Values.collector.service.type "LoadBalancer")) (not (empty .Values.collector.service.nodePorts.admin)) }}
       nodePort: {{ .Values.collector.service.nodePorts.admin }}
       {{- else if eq .Values.collector.service.type "ClusterIP" }}

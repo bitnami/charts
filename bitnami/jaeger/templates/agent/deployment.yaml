@@ -84,15 +84,15 @@ spec:
           {{- end }}
           ports:
             - name: binary
-              containerPort: {{ .Values.agent.service.ports.binary }}
+              containerPort: {{ .Values.agent.containerPorts.binary }}
             - name: zipkin
-              containerPort: {{ .Values.agent.service.ports.zipkin }}
+              containerPort: {{ .Values.agent.containerPorts.zipkin }}
             - name: admin
-              containerPort: {{ .Values.agent.service.ports.admin }}
+              containerPort: {{ .Values.agent.containerPorts.admin }}
             - name: compact
-              containerPort: {{ .Values.agent.service.ports.compact }}
+              containerPort: {{ .Values.agent.containerPorts.compact }}
             - name: config
-              containerPort: {{ .Values.agent.service.ports.config }}
+              containerPort: {{ .Values.agent.containerPorts.config }}
           env:
             - name: CASSANDRA_SERVERS
               value: {{ printf "%s-cassandra" (include "common.names.fullname" .) }}

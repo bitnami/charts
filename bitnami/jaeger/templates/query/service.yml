@@ -40,7 +40,7 @@ spec:
   ports:
     - name: api
       port: {{ .Values.query.service.ports.api }}
-      targetPort: {{ .Values.query.service.ports.api }}
+      targetPort: {{ .Values.query.containerPorts.api }}
       {{- if and (or (eq .Values.query.service.type "NodePort") (eq .Values.query.service.type "LoadBalancer")) (not (empty .Values.query.service.nodePorts.api)) }}
       nodePort: {{ .Values.query.service.nodePorts.api }}
       {{- else if eq .Values.query.service.type "ClusterIP" }}
@@ -48,7 +48,7 @@ spec:
       {{- end }}
     - name: admin
       port: {{ .Values.query.service.ports.admin }}
-      targetPort: {{ .Values.query.service.ports.admin }}
+      targetPort: {{ .Values.query.containerPorts.admin }}
       {{- if and (or (eq .Values.query.service.type "NodePort") (eq .Values.query.service.type "LoadBalancer")) (not (empty .Values.query.service.nodePorts.admin)) }}
       nodePort: {{ .Values.query.service.nodePorts.admin }}
       {{- else if eq .Values.query.service.type "ClusterIP" }}

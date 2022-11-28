@@ -195,6 +195,15 @@ query:
   ## @param query.extraVolumeMounts Optionally specify extra list of additional volumeMounts for jaeger container
   ##
   extraVolumeMounts: []
+  ## Container ports to expose
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  containerPorts:
+    ## @param query.containerPorts.api Port for API
+    ##
+    api: 16686
+    ## @param query.containerPorts.admin Port for admin
+    ##
+    admin: 16687
   ## Jaeger query.service parameters
   ##
   service:
@@ -477,6 +486,21 @@ collector:
   ## @param collector.extraVolumeMounts Optionally specify extra list of additional volumeMounts for jaeger container
   ##
   extraVolumeMounts: []
+  ## Container ports to expose
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  containerPorts:
+    ## @param collector.containerPorts.ports.zipkin can accept Zipkin spans in Thrift, JSON and Proto (disabled by default)
+    ##
+    zipkin: 9411
+    ## @param collector.containerPorts.ports.grpc used by jaeger-agent to send spans in model.proto format
+    ##
+    grpc: 14250
+    ## @param collector.containerPorts.ports.binary can accept spans directly from clients in jaeger.thrift format over binary thrift protocol
+    ##
+    binary: 14268
+    ## @param collector.containerPorts.ports.admin Admin port: health check at / and metrics at /metrics
+    ##
+    admin: 14269
   ## Jaeger collector.service parameters
   ##
   service:
@@ -771,6 +795,24 @@ agent:
   ## @param agent.extraVolumeMounts Optionally specify extra list of additional volumeMounts for jaeger container
   ##
   extraVolumeMounts: []
+  ## Container ports to expose
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  containerPorts:
+    ## @param agent.containerPorts.ports.compact accept jaeger.thrift in compact Thrift protocol used by most current Jaeger clients
+    ##
+    compact: 6831
+    ## @param agent.containerPorts.ports.binary accept jaeger.thrift in binary Thrift protocol used by Node.js Jaeger client
+    ##
+    binary: 6832
+    ## @param agent.containerPorts.ports.config Serve configs, sampling strategies
+    ##
+    config: 5778
+    ## @param agent.containerPorts.ports.zipkin Accept zipkin.thrift in compact Thrift protocol (deprecated; only used by very old Jaeger clients, circa 2016)
+    ##
+    zipkin: 5775
+    ## @param agent.containerPorts.ports.admin Admin port: health check at / and metrics at /metrics
+    ##
+    admin: 14271
   ## Jaeger agent.service parameters
   ##
   service:

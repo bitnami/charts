@@ -84,13 +84,13 @@ spec:
           {{- end }}
           ports:
             - name: zipkin
-              containerPort: {{ .Values.collector.service.ports.zipkin }}
+              containerPort: {{ .Values.collector.containerPorts.zipkin }}
             - name: binary
-              containerPort: {{ .Values.collector.service.ports.binary }}
+              containerPort: {{ .Values.collector.containerPorts.binary }}
             - name: grpc
-              containerPort: {{ .Values.collector.service.ports.grpc }}
+              containerPort: {{ .Values.collector.containerPorts.grpc }}
             - name: admin
-              containerPort: {{ .Values.collector.service.ports.admin }}
+              containerPort: {{ .Values.collector.containerPorts.admin }}
           env:
             - name: CASSANDRA_SERVERS
               value: {{ printf "%s-cassandra" (include "common.names.fullname" .) }}
@@ -106,7 +106,7 @@ spec:
             - name: CASSANDRA_KEYSPACE
               value: {{ .Values.cassandra.keyspace }}
             - name: COLLECTOR_ZIPKIN_HOST_PORT
-              value: {{ .Values.collector.service.ports.zipkin | quote }}
+              value: {{ .Values.collector.containerPorts.zipkin | quote }}
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
             {{- if .Values.collector.extraEnvVars }}

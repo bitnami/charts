@@ -40,7 +40,7 @@ spec:
   ports:
     - name: compact
       port: {{ .Values.agent.service.ports.compact }}
-      targetPort: {{ .Values.agent.service.ports.compact }}
+      targetPort: {{ .Values.agent.containerPorts.compact }}
       {{- if and (or (eq .Values.agent.service.type "NodePort") (eq .Values.agent.service.type "LoadBalancer")) (not (empty .Values.agent.service.nodePorts.compact)) }}
       nodePort: {{ .Values.agent.service.nodePorts.compact }}
       {{- else if eq .Values.agent.service.type "ClusterIP" }}
@@ -48,7 +48,7 @@ spec:
       {{- end }}
     - name: binary
       port: {{ .Values.agent.service.ports.binary }}
-      targetPort: {{ .Values.agent.service.ports.binary }}
+      targetPort: {{ .Values.agent.containerPorts.binary }}
       {{- if and (or (eq .Values.agent.service.type "NodePort") (eq .Values.agent.service.type "LoadBalancer")) (not (empty .Values.agent.service.nodePorts.binary)) }}
       nodePort: {{ .Values.agent.service.nodePorts.binary }}
       {{- else if eq .Values.agent.service.type "ClusterIP" }}
@@ -56,7 +56,7 @@ spec:
       {{- end }}
     - name: config
       port: {{ .Values.agent.service.ports.config }}
-      targetPort: {{ .Values.agent.service.ports.config }}
+      targetPort: {{ .Values.agent.containerPorts.config }}
       {{- if and (or (eq .Values.agent.service.type "NodePort") (eq .Values.agent.service.type "LoadBalancer")) (not (empty .Values.agent.service.nodePorts.config)) }}
       nodePort: {{ .Values.agent.service.nodePorts.config }}
       {{- else if eq .Values.agent.service.type "ClusterIP" }}
@@ -64,7 +64,7 @@ spec:
       {{- end }}
     - name: zipkin
       port: {{ .Values.agent.service.ports.zipkin }}
-      targetPort: {{ .Values.agent.service.ports.zipkin }}
+      targetPort: {{ .Values.agent.containerPorts.zipkin }}
       {{- if and (or (eq .Values.agent.service.type "NodePort") (eq .Values.agent.service.type "LoadBalancer")) (not (empty .Values.agent.service.nodePorts.zipkin)) }}
       nodePort: {{ .Values.agent.service.nodePorts.zipkin }}
       {{- else if eq .Values.agent.service.type "ClusterIP" }}
@@ -72,7 +72,7 @@ spec:
       {{- end }}
     - name: admin
       port: {{ .Values.agent.service.ports.admin }}
-      targetPort: {{ .Values.agent.service.ports.admin }}
+      targetPort: {{ .Values.agent.containerPorts.admin }}
       {{- if and (or (eq .Values.agent.service.type "NodePort") (eq .Values.agent.service.type "LoadBalancer")) (not (empty .Values.agent.service.nodePorts.admin)) }}
       nodePort: {{ .Values.agent.service.nodePorts.admin }}
       {{- else if eq .Values.agent.service.type "ClusterIP" }}

@@ -84,9 +84,9 @@ spec:
           {{- end }}
           ports:
             - name: ui
-              containerPort: {{ .Values.query.service.ports.api }}
+              containerPort: {{ .Values.query.containerPorts.api }}
             - name: admin
-              containerPort: {{ .Values.query.service.ports.admin }}
+              containerPort: {{ .Values.query.containerPorts.admin }}
           env:
             - name: CASSANDRA_SERVERS
               value: {{ printf "%s-cassandra" (include "common.names.fullname" .) }}
