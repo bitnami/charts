@@ -71,6 +71,39 @@ Create a container for checking cassandra availability
 {{- end -}}
 
 {{/*
+Create the name of the service account to use for the collector
+*/}}
+{{- define "jaeger.collector.serviceAccountName" -}}
+{{- if .Values.collector.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.collector.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.collector.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use for the agent
+*/}}
+{{- define "jaeger.agent.serviceAccountName" -}}
+{{- if .Values.agent.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.agent.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.agent.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use for the query
+*/}}
+{{- define "jaeger.query.serviceAccountName" -}}
+{{- if .Values.query.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.query.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.query.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create the name of the collector deployment. This name includes 2 hyphens due to
 an issue about env vars collision with the chart name when the release name is set to just 'jaeger'
 ref. https://github.com/jaegertracing/jaeger-operator/issues/1158
