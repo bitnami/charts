@@ -20,4 +20,4 @@ sources:
   - https://github.com/bitnami/charts
   - https://www.bitnami.com/
 type: library
-version: 2.2.1
+version: 2.2.2
