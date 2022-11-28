@@ -15,6 +15,7 @@ rules:
     - applications
     - applicationsets
     - applicationsets/finalizers
+    - applicationsets/status
     verbs:
     - create
     - delete

@@ -79,11 +79,11 @@ spec:
             - --argocd-repo-server
             - {{ include "argocd.repo-server" . }}:{{ .Values.repoServer.service.port }}
             - --policy
-            - {{ .Values.applicationSet.defaultArgs.policy }}
+            - {{ .Values.applicationSet.defaultArgs.policy | quote }}
             - --debug
-            - {{ .Values.applicationSet.defaultArgs.debug }}
+            - {{ .Values.applicationSet.defaultArgs.debug | quote }}
             - --dry-run
-            - {{ .Values.applicationSet.defaultArgs.dryRun }}
+            - {{ .Values.applicationSet.defaultArgs.dryRun | quote }}
           {{- if .Values.applicationSet.extraArgs }}
           {{- include "common.tplvalues.render" (dict "value" .Values.applicationSet.extraArgs "context" $) | nindent 12 }}
           {{- end }}
@@ -144,10 +144,14 @@ spec:
           volumeMounts:
             - mountPath: /app/config/ssh
               name: ssh-known-hosts
+            {{- if .Values.config.tlsCerts }}
             - mountPath: /app/config/tls
               name: tls-certs
+            {{- end }}
+            {{- if .Values.config.gpgKeys }}
             - mountPath: /app/config/gpg/source
               name: gpg-keys
+            {{- end }}
             - mountPath: /app/config/gpg/keys
               name: gpg-keyring
             - mountPath: /tmp
@@ -159,12 +163,16 @@ spec:
         - name: ssh-known-hosts
           configMap:
             name: argocd-ssh-known-hosts-cm
+        {{- if .Values.config.tlsCerts }}
         - name: tls-certs
           configMap:
             name: argocd-tls-certs-cm
+        {{- end }}
+        {{- if .Values.config.gpgKeys }}
         - name: gpg-keys
           configMap:
             name: argocd-gpg-keys-cm
+        {{- end }}
         - name: gpg-keyring
           emptyDir: {}
         - name: tmp

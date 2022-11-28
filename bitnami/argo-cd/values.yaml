@@ -578,9 +578,9 @@ applicationSet:
     metricsAddr: :8080
     probeBindAddr: :8081
     enableLeaderElection: false
-    policy: sync
-    debug: false
-    dryRun: false
+    policy: "sync"
+    debug: "false"
+    dryRun: "false"
   ## @param applicationSet.args Override default container args (useful when using custom images). Overrides the defaultArgs.
   ##
   args: []
