@@ -295,7 +295,7 @@
 | Name                       | Description                                | Value                             |
 | -------------------------- | ------------------------------------------ | --------------------------------- |
 | `cassandra.enabled`        | Enables cassandra storage pod              | `true`                            |
-| `cassandra.migrationImage` | Set the image to use for the migration job | `bitnami/cassandra:4.0-debian-11` |
+| `cassandra.cqlshImage` | Set the image to use for the migration job | `bitnami/cassandra:4.0-debian-11` |
 | `cassandra.keyspace`       | Name for cassandra's jaeger keyspace       | `jaeger_v1_dc1`                   |
 
 

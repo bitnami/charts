@@ -2,10 +2,17 @@
 
 
 {{/*
-Return the proper jaeger&trade; image name
+Return the proper jaeger image name
 */}}
 {{- define "jaeger.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return the proper cassandra external image name
+*/}}
+{{- define "jaeger.cassandra.cqlshImage" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.cassandra.cqlshImage "global" .Values.global) }}
 {{- end -}}
 
 
@@ -21,7 +28,7 @@ Create a container for checking cassandra availability
 */}}
 {{- define "jaeger.waitForDBInitContainer" -}}
 - name: jaeger-cassandra-ready-check
-  image: {{ .Values.cassandra.migrationImage }}
+  image: {{ include "jaeger.cassandra.cqlshImage" . }}
   command:
     - /bin/bash
   args:
