@@ -560,7 +560,7 @@ controller:
 ##
 applicationSet:
   ## @param applicationSet.enabled Enable ApplicationSet controller
-  enabled: true
+  enabled: false
   ## @param applicationSet.replicaCount The number of ApplicationSet controller pods to run
   replicaCount: 1
   ## @param applicationSet.command Override default container command (useful when using custom images)
