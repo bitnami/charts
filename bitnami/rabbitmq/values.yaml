@@ -75,6 +75,9 @@ extraDeploy: []
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
+## @param servicenameOverride String to partially override headless service name
+##
+servicenameOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
