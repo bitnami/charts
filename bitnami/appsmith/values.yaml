@@ -61,7 +61,7 @@ diagnosticMode:
     - infinity
 
 ## Bitnami Appsmith image
-## ref: https://hub.docker.com/r/bitnami/appsmith/tags/
+## ref: https://hub.docker.com/r/bitnami/Appsmith/tags/
 ## @param image.registry Appsmith image registry
 ## @param image.repository Appsmith image repository
 ## @param image.tag Appsmith image tag (immutable tags are recommended)
@@ -72,8 +72,8 @@ diagnosticMode:
 ##
 image:
   registry: docker.io
-  repository: bitnami/appsmith
-  tag: 1.8.10-debian-11-r0
+  repository: bitnami/Appsmith
+  tag: 1.8.10-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -380,7 +380,7 @@ client:
     apiVersion: ""
     ## @param client.ingress.hostname Default host for the ingress record
     ##
-    hostname: appsmith.local
+    hostname: Appsmith.local
     ## @param client.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
     ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
@@ -413,7 +413,7 @@ client:
     ## @param client.ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
     ## e.g:
     ## extraHosts:
-    ##   - name: appsmith.local
+    ##   - name: Appsmith.local
     ##     path: /
     ##
     extraHosts: []
@@ -431,8 +431,8 @@ client:
     ## e.g:
     ## extraTls:
     ## - hosts:
-    ##     - appsmith.local
-    ##   secretName: appsmith.local-tls
+    ##     - Appsmith.local
+    ##   secretName: Appsmith.local-tls
     ##
     extraTls: []
     ## @param client.ingress.secrets Custom TLS certificates as secrets
@@ -444,7 +444,7 @@ client:
     ## Please see README.md for more information
     ## e.g:
     ## secrets:
-    ##   - name: appsmith.local-tls
+    ##   - name: Appsmith.local-tls
     ##     key: |-
     ##       -----BEGIN RSA PRIVATE KEY-----
     ##       ...
@@ -783,7 +783,7 @@ backend:
     enabled: true
     ## @param backend.persistence.mountPath Path to mount the volume at.
     ##
-    mountPath: /bitnami/appsmith
+    mountPath: /bitnami/Appsmith
     ## @param backend.persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
     ##
     subPath: ""
@@ -1114,7 +1114,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r53
+    tag: 11-debian-11-r56
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1176,7 +1176,7 @@ externalDatabase:
   hosts: []
   port: 27017
   username: root
-  database: appsmith
+  database: Appsmith
   password: ""
   existingSecret: ""
   existingSecretPasswordKey: ""
@@ -1242,9 +1242,9 @@ mongodb:
   ##
   auth:
     usernames:
-      - bn_appsmith
+      - bn_Appsmith
     databases:
-      - bitnami_appsmith
+      - bitnami_Appsmith
   ## @param mongodb.containerPorts.mongodb MongoDB container port (used by the headless service)
   ##
   containerPorts:

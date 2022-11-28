@@ -1,29 +1,29 @@
-<!--- app-name: appsmith -->
+<!--- app-name: Appsmith -->
 
 # Appsmith packaged by Bitnami
 
 Appsmith is an open source platform for building and maintaining internal tools, such as custom dashboards, admin panels or CRUD apps.
 
-[Overview of Appsmith](https://www.appsmith.com/)
+[Overview of Appsmith](https://www.Appsmith.com/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
 $ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/appsmith
+$ helm install my-release my-repo/Appsmith
 ```
 
 ## Introduction
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps an [Appsmith](https://www.appsmith.com/) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps an [Appsmith](https://www.Appsmith.com/) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 
-[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/appsmith/get-started/).
+[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/Appsmith/get-started/).
 
 ## Prerequisites
 
@@ -37,7 +37,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release my-repo/appsmith
+helm install my-release my-repo/Appsmith
 ```
 
 The command deploys Appsmith on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the deployment                                                                                                | `["sleep"]`           |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                   | `["infinity"]`        |
 | `image.registry`         | Appsmith image registry                                                                                                                             | `docker.io`           |
-| `image.repository`       | Appsmith image repository                                                                                                                           | `bitnami/appsmith`    |
+| `image.repository`       | Appsmith image repository                                                                                                                           | `bitnami/Appsmith`    |
 | `image.tag`              | Appsmith image tag (immutable tags are recommended)                                                                                                 | `1.8.10-debian-11-r0` |
 | `image.digest`           | Appsmith image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                  |
 | `image.pullPolicy`       | Appsmith image pull policy                                                                                                                          | `IfNotPresent`        |
@@ -175,7 +175,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.ingress.enabled`                  | Enable ingress record generation for Appsmith                                                                                    | `false`                  |
 | `client.ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `client.ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `client.ingress.hostname`                 | Default host for the ingress record                                                                                              | `appsmith.local`         |
+| `client.ingress.hostname`                 | Default host for the ingress record                                                                                              | `Appsmith.local`         |
 | `client.ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `client.ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
 | `client.ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
@@ -282,7 +282,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                | Description                                                                                             | Value               |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------- |
 | `backend.persistence.enabled`       | Enable persistence using Persistent Volume Claims                                                       | `true`              |
-| `backend.persistence.mountPath`     | Path to mount the volume at.                                                                            | `/bitnami/appsmith` |
+| `backend.persistence.mountPath`     | Path to mount the volume at.                                                                            | `/bitnami/Appsmith` |
 | `backend.persistence.subPath`       | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services | `""`                |
 | `backend.persistence.storageClass`  | Storage class of backing PVC                                                                            | `""`                |
 | `backend.persistence.annotations`   | Persistent Volume Claim annotations                                                                     | `{}`                |
@@ -406,7 +406,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.port`                      | Database port number                                                    | `27017`    |
 | `externalDatabase.username`                  | Non-root username for Appsmith                                          | `root`     |
 | `externalDatabase.password`                  | Password for the non-root username for Appsmith                         | `""`       |
-| `externalDatabase.database`                  | Appsmith database name                                                  | `appsmith` |
+| `externalDatabase.database`                  | Appsmith database name                                                  | `Appsmith` |
 | `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials | `""`       |
 | `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials      | `""`       |
 
@@ -450,26 +450,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 See https://github.com/bitnami-labs/readme-generator-for-helm to create the table.
 
-The above parameters map to the env variables defined in [bitnami/appsmith](https://github.com/bitnami/containers/tree/main/bitnami/appsmith). For more information please refer to the [bitnami/appsmith](https://github.com/bitnami/containers/tree/main/bitnami/appsmith) image documentation.
+The above parameters map to the env variables defined in [bitnami/Appsmith](https://github.com/bitnami/containers/tree/main/bitnami/Appsmith). For more information please refer to the [bitnami/Appsmith](https://github.com/bitnami/containers/tree/main/bitnami/Appsmith) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
 helm install my-release \
-  --set appsmithUsername=admin \
-  --set appsmithPassword=password \
+  --set AppsmithUsername=admin \
+  --set AppsmithPassword=password \
   --set mariadb.auth.rootPassword=secretpassword \
-    my-repo/appsmith
+    my-repo/Appsmith
 ```
 
-The above command sets the appsmith administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
+The above command sets the Appsmith administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
 
 > NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/appsmith
+helm install my-release -f values.yaml my-repo/Appsmith
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -484,7 +484,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### External database support
 
-You may want to have appsmith connect to an external database rather than installing one inside your cluster. Typical reasons for this are to use a managed database service, or to share a common database server for all your applications. To achieve this, the chart allows you to specify credentials for an external database with the [`externalDatabase` parameter](#parameters). You should also disable the MongoDB installation with the `mongodb.enabled` option. Here is an example:
+You may want to have Appsmith connect to an external database rather than installing one inside your cluster. Typical reasons for this are to use a managed database service, or to share a common database server for all your applications. To achieve this, the chart allows you to specify credentials for an external database with the [`externalDatabase` parameter](#parameters). You should also disable the MongoDB installation with the `mongodb.enabled` option. Here is an example:
 
 ```console
 mongodb.enabled=false
@@ -497,7 +497,7 @@ externalDatabase.port=3306
 
 ### External redis support
 
-You may want to have appsmith connect to an external redis rather than installing one inside your cluster. Typical reasons for this are to use a managed redis service, or to share a common redis server for all your applications. To achieve this, the chart allows you to specify credentials for an external redis with the [`externalDatabase` parameter](#parameters). You should also disable the Redis installation with the `redis.enabled` option. Here is an example:
+You may want to have Appsmith connect to an external redis rather than installing one inside your cluster. Typical reasons for this are to use a managed redis service, or to share a common redis server for all your applications. To achieve this, the chart allows you to specify credentials for an external redis with the [`externalDatabase` parameter](#parameters). You should also disable the Redis installation with the `redis.enabled` option. Here is an example:
 
 ```console
 redis.enabled=false
@@ -512,22 +512,22 @@ externalDatabase.port=3306
 
 This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
 
-To enable Ingress integration, set `client.ingress.enabled` to `true`. The `client.ingress.hostname` property can be used to set the host name. The `client.ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/appsmith/configuration/configure-use-ingress/).
+To enable Ingress integration, set `client.ingress.enabled` to `true`. The `client.ingress.hostname` property can be used to set the host name. The `client.ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/Appsmith/configuration/configure-use-ingress/).
 
 ### TLS secrets
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/appsmith/administration/enable-tls/).
+The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/Appsmith/administration/enable-tls/).
 
 ## Persistence
 
-The [Bitnami appsmith](https://github.com/bitnami/containers/tree/main/bitnami/appsmith) image stores the appsmith data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments. [Learn more about persistence in the chart documentation](https://docs.bitnami.com/kubernetes/apps/appsmith/configuration/chart-persistence/).
+The [Bitnami Appsmith](https://github.com/bitnami/containers/tree/main/bitnami/Appsmith) image stores the Appsmith data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments. [Learn more about persistence in the chart documentation](https://docs.bitnami.com/kubernetes/apps/Appsmith/configuration/chart-persistence/).
 
 ### Additional environment variables
 
 In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property inside the `client`, `backend` and `rts` sections.
 
 ```yaml
-appsmith:
+Appsmith:
   backend:
     extraEnvVars:
       - name: LOG_LEVEL
@@ -538,7 +538,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as appsmith (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside the `client`, `backend` and `rts` sections. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/apps/appsmith/administration/configure-use-sidecars/).
+If additional containers are needed in the same pod as Appsmith (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside the `client`, `backend` and `rts` sections. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/apps/Appsmith/administration/configure-use-sidecars/).
 
 ### Pod affinity
 
