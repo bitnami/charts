@@ -1071,36 +1071,6 @@ cassandra:
   ## @param cassandra.enabled Enables cassandra storage pod
   ##
   enabled: true
-  ## @param cassandra.cqlshImage Set the image to use for the migration job
-  ## @param cassandra.cqlshImage.registry Cassandra image registry
-  ## @param cassandra.cqlshImage.repository Cassandra image repository
-  ## @param cassandra.cqlshImage.tag Cassandra image tag (immutable tags are recommended)
-  ## @param cassandra.cqlshImage.digest Cassandra image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ## @param cassandra.cqlshImage.pullPolicy image pull policy
-  ## @param cassandra.cqlshImage.pullSecrets Cassandra image pull secrets
-  ## @param cassandra.cqlshImage.debug Enable image debug mode
-  ##
-  cqlshImage:
-    registry: docker.io
-    repository: bitnami/cassandra
-    tag: 4.0-debian-11
-    digest: ""
-    ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-    ##
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
-    ##
-    pullSecrets: []
-    ## Enable debug mode
-    ##
-    debug: false
   ## @param cassandra.keyspace Name for cassandra's jaeger keyspace
   ##
   keyspace: "jaeger_v1_dc1"
@@ -1115,3 +1085,34 @@ cassandra:
   ## @param cassandra.containerPorts.cql Cassandra cql port
   containerPorts:
       cql: 9042
+
+## @param cqlshImage Set the image to use for the migration job
+## @param cqlshImage.registry Cassandra image registry
+## @param cqlshImage.repository Cassandra image repository
+## @param cqlshImage.tag Cassandra image tag (immutable tags are recommended)
+## @param cqlshImage.digest Cassandra image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param cqlshImage.pullPolicy image pull policy
+## @param cqlshImage.pullSecrets Cassandra image pull secrets
+## @param cqlshImage.debug Enable image debug mode
+##
+cqlshImage:
+  registry: docker.io
+  repository: bitnami/cassandra
+  tag: 4.0-debian-11
+  digest: ""
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Enable debug mode
+  ##
+  debug: false

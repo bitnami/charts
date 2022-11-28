@@ -11,8 +11,8 @@ Return the proper jaeger image name
 {{/*
 Return the proper cassandra external image name
 */}}
-{{- define "jaeger.cassandra.cqlshImage" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.cassandra.cqlshImage "global" .Values.global) }}
+{{- define "jaeger.cqlshImage" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.cqlshImage "global" .Values.global) }}
 {{- end -}}
 
 
@@ -28,7 +28,7 @@ Create a container for checking cassandra availability
 */}}
 {{- define "jaeger.waitForDBInitContainer" -}}
 - name: jaeger-cassandra-ready-check
-  image: {{ include "jaeger.cassandra.cqlshImage" . }}
+  image: {{ include "jaeger.cqlshImage" . }}
   command:
     - /bin/bash
   args:
@@ -76,7 +76,7 @@ Create the name of the service account to use for the collector
 */}}
 {{- define "jaeger.collector.serviceAccountName" -}}
 {{- if .Values.collector.serviceAccount.create -}}
-    {{ default (include "common.names.fullname" .) .Values.collector.serviceAccount.name }}
+    {{ default (include "jaeger.collector.fullname" .) .Values.collector.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.collector.serviceAccount.name }}
 {{- end -}}
@@ -87,7 +87,7 @@ Create the name of the service account to use for the agent
 */}}
 {{- define "jaeger.agent.serviceAccountName" -}}
 {{- if .Values.agent.serviceAccount.create -}}
-    {{ default (include "common.names.fullname" .) .Values.agent.serviceAccount.name }}
+    {{ default (include "jaeger.agent.fullname" .) .Values.agent.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.agent.serviceAccount.name }}
 {{- end -}}
@@ -98,7 +98,7 @@ Create the name of the service account to use for the query
 */}}
 {{- define "jaeger.query.serviceAccountName" -}}
 {{- if .Values.query.serviceAccount.create -}}
-    {{ default (include "common.names.fullname" .) .Values.query.serviceAccount.name }}
+    {{ default (include "jaeger.query.fullname" .) .Values.query.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.query.serviceAccount.name }}
 {{- end -}}
