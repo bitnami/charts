@@ -203,6 +203,109 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.initContainers`                                    | Add additional init containers to the Argo CD pod(s)                                                 | `[]`            |
 
 
+### Argo CD ApplicationSet controller parameters
+
+| Name                                                               | Description                                                                                              | Value              |
+| ------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------- | ------------------ |
+| `applicationSet.enabled`                                           | Enable ApplicationSet controller                                                                         | `true`             |
+| `applicationSet.replicaCount`                                      | The number of ApplicationSet controller pods to run                                                      | `1`                |
+| `applicationSet.command`                                           | Override default container command (useful when using custom images)                                     | `[]`               |
+| `applicationSet.defaultArgs.metricsAddr`                           | Default metrics port                                                                                     | `:8080`            |
+| `applicationSet.defaultArgs.probeBindAddr`                         | Default probe port                                                                                       | `:8081`            |
+| `applicationSet.defaultArgs.enableLeaderElection`                  | Enable leader election                                                                                   | `false`            |
+| `applicationSet.defaultArgs.policy`                                | Default policy                                                                                           | `sync`             |
+| `applicationSet.defaultArgs.debug`                                 | Enable debug mode                                                                                        | `false`            |
+| `applicationSet.defaultArgs.dryRun`                                | Enable dry-run mode                                                                                      | `false`            |
+| `applicationSet.args`                                              | Override default container args (useful when using custom images). Overrides the defaultArgs.            | `[]`               |
+| `applicationSet.extraArgs`                                         | Add extra arguments to the default arguments for the Argo CD controller                                  | `[]`               |
+| `applicationSet.logFormat`                                         | Format for the Argo CD applicationSet logs. Options: [text, json]                                        | `text`             |
+| `applicationSet.logLevel`                                          | Log level for the Argo CD applicationSet                                                                 | `info`             |
+| `applicationSet.containerPorts.metrics`                            | Argo CD applicationSet controller metrics port number                                                    | `8085`             |
+| `applicationSet.containerPorts.probe`                              | Argo CD applicationSet controller probe port number                                                      | `8081`             |
+| `applicationSet.metrics.enabled`                                   | Enable Argo CD applicationSet controller metrics                                                         | `false`            |
+| `applicationSet.metrics.service.type`                              | Argo CD applicationSet controller service type                                                           | `ClusterIP`        |
+| `applicationSet.metrics.service.port`                              | Argo CD applicationSet controller metrics service port                                                   | `8085`             |
+| `applicationSet.metrics.service.nodePort`                          | Node port for the applicationSet controller service                                                      | `""`               |
+| `applicationSet.metrics.service.clusterIP`                         | Argo CD applicationSet controller metrics service Cluster IP                                             | `""`               |
+| `applicationSet.metrics.service.loadBalancerIP`                    | Argo CD applicationSet controller service Load Balancer IP                                               | `""`               |
+| `applicationSet.metrics.service.loadBalancerSourceRanges`          | Argo CD applicationSet controller service Load Balancer sources                                          | `[]`               |
+| `applicationSet.metrics.service.externalTrafficPolicy`             | Argo CD applicationSet controller service external traffic policy                                        | `Cluster`          |
+| `applicationSet.metrics.service.annotations`                       | Additional custom annotations for Argo CD applicationSet controller service                              | `{}`               |
+| `applicationSet.metrics.service.sessionAffinity`                   | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                     | `None`             |
+| `applicationSet.metrics.service.sessionAffinityConfig`             | Additional settings for the sessionAffinity                                                              | `{}`               |
+| `applicationSet.metrics.serviceMonitor.enabled`                    | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                             | `false`            |
+| `applicationSet.metrics.serviceMonitor.namespace`                  | Namespace which Prometheus is running in                                                                 | `""`               |
+| `applicationSet.metrics.serviceMonitor.jobLabel`                   | The name of the label on the target service to use as the job name in prometheus.                        | `""`               |
+| `applicationSet.metrics.serviceMonitor.interval`                   | Interval at which metrics should be scraped                                                              | `30s`              |
+| `applicationSet.metrics.serviceMonitor.scrapeTimeout`              | Timeout after which the scrape is ended                                                                  | `10s`              |
+| `applicationSet.metrics.serviceMonitor.relabelings`                | RelabelConfigs to apply to samples before scraping                                                       | `[]`               |
+| `applicationSet.metrics.serviceMonitor.metricRelabelings`          | MetricRelabelConfigs to apply to samples before ingestion                                                | `[]`               |
+| `applicationSet.metrics.serviceMonitor.selector`                   | ServiceMonitor selector labels                                                                           | `{}`               |
+| `applicationSet.metrics.serviceMonitor.honorLabels`                | honorLabels chooses the metric's labels on collisions with target labels                                 | `false`            |
+| `applicationSet.service.type`                                      | Argo CD service type                                                                                     | `ClusterIP`        |
+| `applicationSet.service.port`                                      | Argo CD applicationSet controller service port                                                           | `7000`             |
+| `applicationSet.service.nodePort`                                  | Node port for Argo CD applicationSet controller service                                                  | `""`               |
+| `applicationSet.service.clusterIP`                                 | Argo CD applicationSet controller service Cluster IP                                                     | `""`               |
+| `applicationSet.service.loadBalancerIP`                            | Argo CD applicationSet controller service Load Balancer IP                                               | `""`               |
+| `applicationSet.service.loadBalancerSourceRanges`                  | Argo CD applicationSet controller service Load Balancer sources                                          | `[]`               |
+| `applicationSet.service.externalTrafficPolicy`                     | Argo CD applicationSet controller service external traffic policy                                        | `Cluster`          |
+| `applicationSet.service.annotations`                               | Additional custom annotations for Argo CD applicationSet controller service                              | `{}`               |
+| `applicationSet.service.extraPorts`                                | Extra ports to expose (normally used with the `sidecar` value)                                           | `[]`               |
+| `applicationSet.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                     | `None`             |
+| `applicationSet.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                              | `{}`               |
+| `applicationSet.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                     | `true`             |
+| `applicationSet.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                   | `""`               |
+| `applicationSet.serviceAccount.automountServiceAccountToken`       | Automount service account token for the applicationSet controller service account                        | `true`             |
+| `applicationSet.serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.               | `{}`               |
+| `applicationSet.podAffinityPreset`                                 | Pod affinity preset. Ignored if `applicationSet.affinity` is set. Allowed values: `soft` or `hard`       | `""`               |
+| `applicationSet.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `applicationSet.affinity` is set. Allowed values: `soft` or `hard`  | `soft`             |
+| `applicationSet.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `applicationSet.affinity` is set. Allowed values: `soft` or `hard` | `""`               |
+| `applicationSet.nodeAffinityPreset.key`                            | Node label key to match. Ignored if `applicationSet.affinity` is set                                     | `""`               |
+| `applicationSet.nodeAffinityPreset.values`                         | Node label values to match. Ignored if `applicationSet.affinity` is set                                  | `[]`               |
+| `applicationSet.affinity`                                          | Affinity for Argo CD pods assignment                                                                     | `{}`               |
+| `applicationSet.podAnnotations`                                    | Annotations for Argo CD pods                                                                             | `{}`               |
+| `applicationSet.podLabels`                                         | Extra labels for Argo CD pods                                                                            | `{}`               |
+| `applicationSet.containerSecurityContext.enabled`                  | Enabled Argo CD containers' Security Context                                                             | `true`             |
+| `applicationSet.containerSecurityContext.runAsUser`                | Set Argo CD containers' Security Context runAsUser                                                       | `1001`             |
+| `applicationSet.containerSecurityContext.allowPrivilegeEscalation` | Set Argo CD containers' Security Context allowPrivilegeEscalation                                        | `false`            |
+| `applicationSet.containerSecurityContext.capabilities.drop`        | Set Argo CD containers' Security Context capabilities to be dropped                                      | `["all"]`          |
+| `applicationSet.containerSecurityContext.readOnlyRootFilesystem`   | Set Argo CD containers' Security Context readOnlyRootFilesystem                                          | `false`            |
+| `applicationSet.containerSecurityContext.runAsNonRoot`             | Set Argo CD container's Security Context runAsNonRoot                                                    | `true`             |
+| `applicationSet.livenessProbe.enabled`                             | Enable livenessProbe on Argo CD nodes                                                                    | `true`             |
+| `applicationSet.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                  | `10`               |
+| `applicationSet.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                         | `10`               |
+| `applicationSet.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                        | `1`                |
+| `applicationSet.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                      | `3`                |
+| `applicationSet.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                      | `1`                |
+| `applicationSet.readinessProbe.enabled`                            | Enable readinessProbe on Argo CD nodes                                                                   | `true`             |
+| `applicationSet.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                 | `10`               |
+| `applicationSet.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                        | `10`               |
+| `applicationSet.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                       | `1`                |
+| `applicationSet.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                     | `3`                |
+| `applicationSet.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                     | `1`                |
+| `applicationSet.resources.limits`                                  | The resources limits for the Argo CD containers                                                          | `{}`               |
+| `applicationSet.resources.requests`                                | The requested resources for the Argo CD containers                                                       | `{}`               |
+| `applicationSet.podSecurityContext.enabled`                        | Enabled Argo CD pods' Security Context                                                                   | `true`             |
+| `applicationSet.podSecurityContext.fsGroup`                        | Set Argo CD pod's Security Context fsGroup                                                               | `1001`             |
+| `applicationSet.nodeSelector`                                      | Node labels for Argo CD pods assignment                                                                  | `{}`               |
+| `applicationSet.tolerations`                                       | Tolerations for Argo CD pods assignment                                                                  | `[]`               |
+| `applicationSet.priorityClassName`                                 | Argo CD pods' priorityClassName                                                                          | `""`               |
+| `applicationSet.extraVolumes`                                      | Optionally specify extra list of additional volumes for the Argo CD pod(s)                               | `[]`               |
+| `applicationSet.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Argo CD container(s)                    | `[]`               |
+| `applicationSet.extraEnvVars`                                      | Array with extra environment variables to add to Argo CD nodes                                           | `[]`               |
+| `applicationSet.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Argo CD nodes                                   | `""`               |
+| `applicationSet.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for Argo CD nodes                                      | `""`               |
+| `applicationSet.webhook.ingress.enabled`                           | Enable an ingress resource for Webhooks                                                                  | `false`            |
+| `applicationSet.webhook.ingress.annotations`                       | Additional ingress annotations                                                                           | `{}`               |
+| `applicationSet.webhook.ingress.labels`                            | Additional ingress labels                                                                                | `{}`               |
+| `applicationSet.webhook.ingress.ingressClassName`                  | Defines which ingress controller will implement the resource                                             | `""`               |
+| `applicationSet.webhook.ingress.hosts`                             | List of ingress hosts                                                                                    | `[]`               |
+| `applicationSet.webhook.ingress.paths`                             | List of ingress paths                                                                                    | `["/api/webhook"]` |
+| `applicationSet.webhook.ingress.pathType`                          | Ingress path type. One of `Exact`, `Prefix` or `ImplementationSpecific`                                  | `Prefix`           |
+| `applicationSet.webhook.ingress.extraPaths`                        | Additional ingress paths                                                                                 | `[]`               |
+| `applicationSet.webhook.ingress.tls`                               | Ingress TLS configuration                                                                                | `[]`               |
+
+
 ### Argo CD server Parameters
 
 | Name                                                       | Description                                                                                                                     | Value                    |
@@ -581,6 +684,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `config.styles`                                | Custom CSS styles                                                                                     | `""`   |
 | `config.existingStylesConfigmap`               | Use an existing styles configmap                                                                      | `""`   |
 | `config.tlsCerts`                              | TLS certificates used to verify the authenticity of the repository servers                            | `{}`   |
+| `config.gpgKeys`                               | GnuPG public keys to add to the keyring                                                               | `{}`   |
 | `config.secret.create`                         | Whether to create or not the secret                                                                   | `true` |
 | `config.secret.annotations`                    | General secret extra annotations                                                                      | `{}`   |
 | `config.secret.githubSecret`                   | GitHub secret to configure webhooks                                                                   | `""`   |

@@ -559,9 +559,9 @@ controller:
 ## ApplicationSet controller
 ##
 applicationSet:
-  # @param applicationSet.enabled Enable ApplicationSet controller
+  ## @param applicationSet.enabled Enable ApplicationSet controller
   enabled: true
-  # @param applicationSet.replicaCount The number of ApplicationSet controller pods to run
+  ## @param applicationSet.replicaCount The number of ApplicationSet controller pods to run
   replicaCount: 1
   ## @param applicationSet.command Override default container command (useful when using custom images)
   ##
@@ -893,26 +893,26 @@ applicationSet:
   ## Ref: https://argocd-applicationset.readthedocs.io/en/master/Generators-Git/#webhook-configuration)
   webhook:
     ingress:
-      # @param applicationSet.webhook.ingress.enabled Enable an ingress resource for Webhooks
+      ## @param applicationSet.webhook.ingress.enabled Enable an ingress resource for Webhooks
       enabled: false
-      # @param applicationSet.webhook.ingress.annotations Additional ingress annotations
+      ## @param applicationSet.webhook.ingress.annotations Additional ingress annotations
       annotations: {}
-      # @param applicationSet.webhook.ingress.labels Additional ingress labels
+      ## @param applicationSet.webhook.ingress.labels Additional ingress labels
       labels: {}
-      # @param applicationSet.webhook.ingress.ingressClassName Defines which ingress controller will implement the resource
+      ## @param applicationSet.webhook.ingress.ingressClassName Defines which ingress controller will implement the resource
       ingressClassName: ""
-      # @param applicationSet.webhook.ingress.hosts List of ingress hosts
+      ## @param applicationSet.webhook.ingress.hosts List of ingress hosts
       ## Hostnames must be provided if Ingress is enabled.
       ## Secrets must be manually created in the namespace
       hosts: []
-      # @param applicationSet.webhook.ingress.paths List of ingress paths
+      ## @param applicationSet.webhook.ingress.paths List of ingress paths
       paths:
         - /api/webhook
-      # @param applicationSet.webhook.ingress.pathType Ingress path type. One of `Exact`, `Prefix` or `ImplementationSpecific`
+      ## @param applicationSet.webhook.ingress.pathType Ingress path type. One of `Exact`, `Prefix` or `ImplementationSpecific`
       pathType: Prefix
-      # @param applicationSet.webhook.ingress.extraPaths Additional ingress paths
+      ## @param applicationSet.webhook.ingress.extraPaths Additional ingress paths
       extraPaths: []
-      # @param applicationSet.webhook.ingress.tls Ingress TLS configuration
+      ## @param applicationSet.webhook.ingress.tls Ingress TLS configuration
       tls: []
 
 ## @section Argo CD server Parameters
@@ -2587,8 +2587,7 @@ config:
   ##
   tlsCerts: {}
 
-  # -- [GnuPG] public keys to add to the keyring
-  # @default -- `{}` (See [values.yaml])
+  ## @param config.gpgKeys GnuPG public keys to add to the keyring
   ## Note: Public keys should be exported with `gpg --export --armor <KEY>`
   gpgKeys: {}
     # 4AEE18F83AFDEB23: |
