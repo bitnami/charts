@@ -21,7 +21,7 @@ Create a container for checking cassandra availability
 */}}
 {{- define "jaeger.waitForDBInitContainer" -}}
 - name: jaeger-cassandra-ready-check
-  image: {{ printf "%s/%s:%s" .Values.cassandra.image.registry .Values.cassandra.image.repository .Values.cassandra.image.tag }}
+  image: {{ .Values.cassandra.migrationImage }}
   command:
     - /bin/bash
   args:

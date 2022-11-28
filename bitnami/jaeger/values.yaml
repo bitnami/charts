@@ -1031,7 +1031,7 @@ cassandra:
   enabled: true
   ## @param cassandra.migrationImage Set the image to use for the migration job
   ##
-  migrationImage: ""
+  migrationImage: bitnami/cassandra:4.0-debian-11
   ## @param cassandra.keyspace Name for cassandra's jaeger keyspace
   ##
   keyspace: "jaeger_v1_dc1"
