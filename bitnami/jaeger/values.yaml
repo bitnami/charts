@@ -1111,3 +1111,7 @@ cassandra:
   dbUser:
     user: cassandra
     password: ""
+  ## Cassandra port
+  ## @param cassandra.containerPorts.cql Cassandra cql port
+  containerPorts:
+      cql: 9042
