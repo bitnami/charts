@@ -117,7 +117,7 @@ jobs:
             verification_mode="$(cat $config_file | grep 'verification-mode' | cut -d'=' -f2)"
           fi
           echo "verification_mode=${verification_mode}" >> $GITHUB_OUTPUT
-      - uses: vmware-labs/vmware-image-builder-action@0.4.11
+      - uses: vmware-labs/vmware-image-builder-action@main
         name: Verify ${{ needs.get-chart.outputs.chart }}
         with:
           pipeline: ${{ needs.get-chart.outputs.chart }}/vib-verify.json

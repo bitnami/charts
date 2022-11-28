@@ -14,7 +14,7 @@ metadata:
   {{- end }}
 spec:
   scaleTargetRef:
-    apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
+    apiVersion: {{ template "common.capabilities.statefulset.apiVersion" . }}
     kind: StatefulSet
     name: {{ include "elasticsearch.coordinating.fullname" . }}
   minReplicas: {{ .Values.coordinating.autoscaling.minReplicas }}

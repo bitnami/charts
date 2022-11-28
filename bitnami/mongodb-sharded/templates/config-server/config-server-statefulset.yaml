@@ -68,7 +68,7 @@ spec:
       priorityClassName: {{ .Values.configsvr.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.configsvr.topologySpreadConstraints }}
-      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.configsvr.topologySpreadConstraints "context" .) | nindent 8 }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.configsvr.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.configsvr.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.configsvr.podSecurityContext "enabled" | toYaml | nindent 8 }}
