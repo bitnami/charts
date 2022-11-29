@@ -267,6 +267,12 @@ query:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+    ## @param query.service.metrics.annotations [object] Annotations for Prometheus metrics
+    metrics:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: {{ .Values.query.service.ports.admin }}
+        prometheus.io/path: "/metrics"
   ## Jaeger Query serviceAccount parameters
   ##
   serviceAccount:
@@ -576,6 +582,12 @@ collector:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+    ## @param collector.service.metrics.annotations [object] Annotations for Prometheus metrics
+    metrics:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: { { .Values.collector.service.ports.admin } }
+        prometheus.io/path: "/metrics"
   ## Jaeger collector serviceAccount parameters
   ##
   serviceAccount:
@@ -894,6 +906,12 @@ agent:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+    ## @param agent.service.metrics.annotations [object] Annotations for Prometheus metrics
+    metrics:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: { { .Values.agent.service.ports.admin } }
+        prometheus.io/path: "/metrics"
   ## Jaeger agent serviceAccount parameters
   ##
   serviceAccount:
