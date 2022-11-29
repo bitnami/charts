@@ -1116,3 +1116,16 @@ cqlshImage:
   ## Enable debug mode
   ##
   debug: false
+
+externalDatabase:
+  host: ""
+  port: 5432
+  ## Database credentials
+  ## @param dbUser.user Cassandra admin user
+  ## @param dbUser.password Password for `dbUser.user`. Randomly generated if empty
+  ##
+  dbUser:
+    user: cassandra
+    password: ""
+  existingSecret: ""
+  existingSecretPasswordKey: "db-password"

@@ -93,16 +93,36 @@ spec:
               containerPort: {{ .Values.collector.containerPorts.admin }}
           env:
             - name: CASSANDRA_SERVERS
-              value: {{ printf "%s-cassandra" (include "common.names.fullname" .) }}
+              value: {{ if not .Values.cassandra.enabled }}
+                {{ .Values.externalDatabase.host | quote }}
+              {{ else }}
+                {{ printf "%s-cassandra" (include "common.names.fullname" .) }}
+              {{ end }}
             - name: CASSANDRA_PORT
-              value: {{ .Values.cassandra.containerPorts.cql | quote }}
+              value: {{ if not .Values.cassandra.enabled }}
+                {{ .Values.externalDatabase.port | quote }}
+              {{ else }}
+                {{ .Values.cassandra.containerPorts.cql | quote }}
+              {{ end }}
             - name: CASSANDRA_USERNAME
-              value: {{ .Values.cassandra.dbUser.user }}
+              value: {{ if not .Values.cassandra.enabled }}
+                {{ .Values.externalDatabase.dbUser.user | quote }}
+              {{ else }}
+                {{ .Values.cassandra.dbUser.user | quote }}
+              {{ end }}
             - name: CASSANDRA_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ printf "%s-cassandra" (include "common.names.fullname" .) }}
-                  key: cassandra-password
+                  name: {{ if not .Values.cassandra.enabled }}
+                    {{ .Values.externalDatabase.existingSecret }}
+                  {{ else }}
+                    {{ printf "%s-cassandra" (include "common.names.fullname" .) }}
+                  {{ end }}
+                  key: {{ if .Values.cassandra.enabled }}
+                    cassandra-password
+                  {{ else }}
+                    {{ .Values.externalDatabase.existingSecretPasswordKey }}
+                  {{ end }}
             - name: CASSANDRA_KEYSPACE
               value: {{ .Values.cassandra.keyspace }}
             - name: COLLECTOR_ZIPKIN_HOST_PORT
