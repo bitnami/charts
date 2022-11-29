@@ -169,7 +169,7 @@ Create the cassandra host
     {{- if not .Values.cassandra.enabled -}}
         {{- .Values.externalDatabase.host | quote -}}
     {{- else -}}
-        {{- printf "%s-cassandra" (include "common.names.fullname" .) -}}
+        {{- include "common.names.dependency.fullname" (dict "chartName" "cassandra" "chartValues" .Values.cassandra "context" $) -}}§
     {{- end }}
 {{- end }}
 
