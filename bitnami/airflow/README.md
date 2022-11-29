@@ -92,7 +92,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dags.existingConfigmap` | Name of an existing ConfigMap with all the DAGs files you want to load in Airflow                                                                                         | `""`                    |
 | `dags.image.registry`    | Init container load-dags image registry                                                                                                                                   | `docker.io`             |
 | `dags.image.repository`  | Init container load-dags image repository                                                                                                                                 | `bitnami/bitnami-shell` |
-| `dags.image.tag`         | Init container load-dags image tag (immutable tags are recommended)                                                                                                       | `11-debian-11-r50`      |
+| `dags.image.tag`         | Init container load-dags image tag (immutable tags are recommended)                                                                                                       | `11-debian-11-r56`      |
 | `dags.image.digest`      | Init container load-dags image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                  | `""`                    |
 | `dags.image.pullPolicy`  | Init container load-dags image pull policy                                                                                                                                | `IfNotPresent`          |
 | `dags.image.pullSecrets` | Init container load-dags image pull secrets                                                                                                                               | `[]`                    |
@@ -112,7 +112,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------- |
 | `web.image.registry`                        | Airflow image registry                                                                                                   | `docker.io`          |
 | `web.image.repository`                      | Airflow image repository                                                                                                 | `bitnami/airflow`    |
-| `web.image.tag`                             | Airflow image tag (immutable tags are recommended)                                                                       | `2.4.2-debian-11-r6` |
+| `web.image.tag`                             | Airflow image tag (immutable tags are recommended)                                                                       | `2.4.3-debian-11-r5` |
 | `web.image.digest`                          | Airflow image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                  | `""`                 |
 | `web.image.pullPolicy`                      | Airflow image pull policy                                                                                                | `IfNotPresent`       |
 | `web.image.pullSecrets`                     | Airflow image pull secrets                                                                                               | `[]`                 |
@@ -188,7 +188,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------------- |
 | `scheduler.image.registry`                        | Airflow Scheduler image registry                                                                                         | `docker.io`                 |
 | `scheduler.image.repository`                      | Airflow Scheduler image repository                                                                                       | `bitnami/airflow-scheduler` |
-| `scheduler.image.tag`                             | Airflow Scheduler image tag (immutable tags are recommended)                                                             | `2.4.2-debian-11-r4`        |
+| `scheduler.image.tag`                             | Airflow Scheduler image tag (immutable tags are recommended)                                                             | `2.4.3-debian-11-r4`        |
 | `scheduler.image.digest`                          | Airflow Schefuler image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag        | `""`                        |
 | `scheduler.image.pullPolicy`                      | Airflow Scheduler image pull policy                                                                                      | `IfNotPresent`              |
 | `scheduler.image.pullSecrets`                     | Airflow Scheduler image pull secrets                                                                                     | `[]`                        |
@@ -243,7 +243,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
 | `worker.image.registry`                        | Airflow Worker image registry                                                                                            | `docker.io`              |
 | `worker.image.repository`                      | Airflow Worker image repository                                                                                          | `bitnami/airflow-worker` |
-| `worker.image.tag`                             | Airflow Worker image tag (immutable tags are recommended)                                                                | `2.4.2-debian-11-r4`     |
+| `worker.image.tag`                             | Airflow Worker image tag (immutable tags are recommended)                                                                | `2.4.3-debian-11-r4`     |
 | `worker.image.digest`                          | Airflow Worker image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag           | `""`                     |
 | `worker.image.pullPolicy`                      | Airflow Worker image pull policy                                                                                         | `IfNotPresent`           |
 | `worker.image.pullSecrets`                     | Airflow Worker image pull secrets                                                                                        | `[]`                     |
@@ -320,33 +320,33 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Airflow git sync parameters
 
-| Name                           | Description                                                                                         | Value                 |
-| ------------------------------ | --------------------------------------------------------------------------------------------------- | --------------------- |
-| `git.image.registry`           | Git image registry                                                                                  | `docker.io`           |
-| `git.image.repository`         | Git image repository                                                                                | `bitnami/git`         |
-| `git.image.tag`                | Git image tag (immutable tags are recommended)                                                      | `2.38.1-debian-11-r7` |
-| `git.image.digest`             | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `git.image.pullPolicy`         | Git image pull policy                                                                               | `IfNotPresent`        |
-| `git.image.pullSecrets`        | Git image pull secrets                                                                              | `[]`                  |
-| `git.dags.enabled`             | Enable in order to download DAG files from git repositories.                                        | `false`               |
-| `git.dags.repositories`        | Array of repositories from which to download DAG files                                              | `[]`                  |
-| `git.plugins.enabled`          | Enable in order to download Plugins files from git repositories.                                    | `false`               |
-| `git.plugins.repositories`     | Array of repositories from which to download DAG files                                              | `[]`                  |
-| `git.clone.command`            | Override cmd                                                                                        | `[]`                  |
-| `git.clone.args`               | Override args                                                                                       | `[]`                  |
-| `git.clone.extraVolumeMounts`  | Add extra volume mounts                                                                             | `[]`                  |
-| `git.clone.extraEnvVars`       | Add extra environment variables                                                                     | `[]`                  |
-| `git.clone.extraEnvVarsCM`     | ConfigMap with extra environment variables                                                          | `""`                  |
-| `git.clone.extraEnvVarsSecret` | Secret with extra environment variables                                                             | `""`                  |
-| `git.clone.resources`          | Clone init container resource requests and limits                                                   | `{}`                  |
-| `git.sync.interval`            | Interval in seconds to pull the git repository containing the plugins and/or DAG files              | `60`                  |
-| `git.sync.command`             | Override cmd                                                                                        | `[]`                  |
-| `git.sync.args`                | Override args                                                                                       | `[]`                  |
-| `git.sync.extraVolumeMounts`   | Add extra volume mounts                                                                             | `[]`                  |
-| `git.sync.extraEnvVars`        | Add extra environment variables                                                                     | `[]`                  |
-| `git.sync.extraEnvVarsCM`      | ConfigMap with extra environment variables                                                          | `""`                  |
-| `git.sync.extraEnvVarsSecret`  | Secret with extra environment variables                                                             | `""`                  |
-| `git.sync.resources`           | Sync sidecar container resource requests and limits                                                 | `{}`                  |
+| Name                           | Description                                                                                         | Value                  |
+| ------------------------------ | --------------------------------------------------------------------------------------------------- | ---------------------- |
+| `git.image.registry`           | Git image registry                                                                                  | `docker.io`            |
+| `git.image.repository`         | Git image repository                                                                                | `bitnami/git`          |
+| `git.image.tag`                | Git image tag (immutable tags are recommended)                                                      | `2.38.1-debian-11-r14` |
+| `git.image.digest`             | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `git.image.pullPolicy`         | Git image pull policy                                                                               | `IfNotPresent`         |
+| `git.image.pullSecrets`        | Git image pull secrets                                                                              | `[]`                   |
+| `git.dags.enabled`             | Enable in order to download DAG files from git repositories.                                        | `false`                |
+| `git.dags.repositories`        | Array of repositories from which to download DAG files                                              | `[]`                   |
+| `git.plugins.enabled`          | Enable in order to download Plugins files from git repositories.                                    | `false`                |
+| `git.plugins.repositories`     | Array of repositories from which to download DAG files                                              | `[]`                   |
+| `git.clone.command`            | Override cmd                                                                                        | `[]`                   |
+| `git.clone.args`               | Override args                                                                                       | `[]`                   |
+| `git.clone.extraVolumeMounts`  | Add extra volume mounts                                                                             | `[]`                   |
+| `git.clone.extraEnvVars`       | Add extra environment variables                                                                     | `[]`                   |
+| `git.clone.extraEnvVarsCM`     | ConfigMap with extra environment variables                                                          | `""`                   |
+| `git.clone.extraEnvVarsSecret` | Secret with extra environment variables                                                             | `""`                   |
+| `git.clone.resources`          | Clone init container resource requests and limits                                                   | `{}`                   |
+| `git.sync.interval`            | Interval in seconds to pull the git repository containing the plugins and/or DAG files              | `60`                   |
+| `git.sync.command`             | Override cmd                                                                                        | `[]`                   |
+| `git.sync.args`                | Override args                                                                                       | `[]`                   |
+| `git.sync.extraVolumeMounts`   | Add extra volume mounts                                                                             | `[]`                   |
+| `git.sync.extraEnvVars`        | Add extra environment variables                                                                     | `[]`                   |
+| `git.sync.extraEnvVarsCM`      | ConfigMap with extra environment variables                                                          | `""`                   |
+| `git.sync.extraEnvVarsSecret`  | Secret with extra environment variables                                                             | `""`                   |
+| `git.sync.resources`           | Sync sidecar container resource requests and limits                                                 | `{}`                   |
 
 
 ### Airflow ldap parameters
@@ -420,7 +420,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                               | Whether or not to create a standalone Airflow exporter to expose Airflow metrics                                 | `false`                      |
 | `metrics.image.registry`                        | Airflow exporter image registry                                                                                  | `docker.io`                  |
 | `metrics.image.repository`                      | Airflow exporter image repository                                                                                | `bitnami/airflow-exporter`   |
-| `metrics.image.tag`                             | Airflow exporter image tag (immutable tags are recommended)                                                      | `0.20220314.0-debian-11-r57` |
+| `metrics.image.tag`                             | Airflow exporter image tag (immutable tags are recommended)                                                      | `0.20220314.0-debian-11-r64` |
 | `metrics.image.digest`                          | Airflow exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
 | `metrics.image.pullPolicy`                      | Airflow exporter image pull policy                                                                               | `IfNotPresent`               |
 | `metrics.image.pullSecrets`                     | Airflow exporter image pull secrets                                                                              | `[]`                         |
