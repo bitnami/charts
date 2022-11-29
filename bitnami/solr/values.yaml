@@ -552,6 +552,17 @@ persistence:
   ## @param persistence.mountPath Persistence mount path for Solr
   ##
   mountPath: /bitnami/solr
+  ## @param persistence.subPath Path within the volume from which the container's
+  ## volume should be mounted. Defaults to "" (volume's root).
+  ##
+  subPath: ""
+  ## @param persistence.subPathExpr Expanded path within the volume from which
+  ## the container's volume should be mounted. Behaves similarly to SubPath but
+  ## environment variable references $(VAR_NAME) are expanded using the
+  ## container's environment. Defaults to "" (volume's root).
+  ## SubPathExpr and SubPath are mutually exclusive.
+  ##
+  subPathExpr: ""
   ## @param persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
   ## If set, the PVC can't have a PV dynamically provisioned for it
   ## E.g.
