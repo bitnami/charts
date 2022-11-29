@@ -271,7 +271,7 @@ query:
     metrics:
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: {{ .Values.query.service.ports.admin }}
+        prometheus.io/port: "{{ .Values.query.service.ports.admin }}"
         prometheus.io/path: "/metrics"
   ## Jaeger Query serviceAccount parameters
   ##
@@ -586,7 +586,7 @@ collector:
     metrics:
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: { { .Values.collector.service.ports.admin } }
+        prometheus.io/port: "{{ .Values.collector.service.ports.admin }}"
         prometheus.io/path: "/metrics"
   ## Jaeger collector serviceAccount parameters
   ##
@@ -910,7 +910,7 @@ agent:
     metrics:
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: { { .Values.agent.service.ports.admin } }
+        prometheus.io/port: "{{ .Values.agent.service.ports.admin }}"
         prometheus.io/path: "/metrics"
   ## Jaeger agent serviceAccount parameters
   ##
