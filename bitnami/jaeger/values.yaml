@@ -1065,27 +1065,6 @@ migration:
   ##
   extraVolumes: []
 
-## @section Cassandra storage pod
-##
-cassandra:
-  ## @param cassandra.enabled Enables cassandra storage pod
-  ##
-  enabled: true
-  ## @param cassandra.keyspace Name for cassandra's jaeger keyspace
-  ##
-  keyspace: "jaeger_v1_dc1"
-  ## Database credentials
-  ## @param dbUser.user Cassandra admin user
-  ## @param dbUser.password Password for `dbUser.user`. Randomly generated if empty
-  ##
-  dbUser:
-    user: cassandra
-    password: ""
-  ## Cassandra port
-  ## @param cassandra.containerPorts.cql Cassandra cql port
-  containerPorts:
-      cql: 9042
-
 ## @param cqlshImage Set the image to use for the migration job
 ## @param cqlshImage.registry Cassandra image registry
 ## @param cqlshImage.repository Cassandra image repository
@@ -1129,3 +1108,25 @@ externalDatabase:
     password: ""
   existingSecret: ""
   existingSecretPasswordKey: ""
+
+
+## @section Cassandra storage sub-chart
+##
+cassandra:
+  ## @param cassandra.enabled Enables cassandra storage pod
+  ##
+  enabled: true
+  ## @param cassandra.keyspace Name for cassandra's jaeger keyspace
+  ##
+  keyspace: "jaeger_v1_dc1"
+  ## Database credentials
+  ## @param dbUser.user Cassandra admin user
+  ## @param dbUser.password Password for `dbUser.user`. Randomly generated if empty
+  ##
+  dbUser:
+    user: cassandra
+    password: ""
+  ## Cassandra port
+  ## @param cassandra.containerPorts.cql Cassandra cql port
+  containerPorts:
+    cql: 9042
