@@ -134,9 +134,9 @@ Create the cassandra secret key
 */}}
 {{- define "jaeger.cassandra.secretKey" -}}
     {{- if not .Values.cassandra.enabled -}}
-        cassandra-password
-    {{- else -}}
         {{- .Values.externalDatabase.existingSecretPasswordKey -}}
+    {{- else -}}
+        cassandra-password
     {{- end -}}
 {{- end -}}
 
@@ -181,5 +181,27 @@ Create the cassandra port
         {{- .Values.externalDatabase.port | quote -}}
     {{- else }}
         {{- .Values.cassandra.service.ports.cql | quote -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Create the cassandra datacenter
+*/}}
+{{- define "jaeger.cassandra.datacenter" -}}
+    {{- if not .Values.cassandra.enabled -}}
+        {{- .Values.externalDatabase.cluster.datacenter | quote -}}
+    {{- else }}
+        {{- .Values.cassandra.cluster.datacenter | quote -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Create the cassandra keyspace
+*/}}
+{{- define "jaeger.cassandra.keyspace" -}}
+    {{- if not .Values.cassandra.enabled -}}
+        {{- .Values.externalDatabase.keyspace | quote -}}
+    {{- else }}
+        {{- .Values.cassandra.keyspace | quote -}}
     {{- end -}}
 {{- end -}}

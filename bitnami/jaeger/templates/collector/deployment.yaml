@@ -105,7 +105,9 @@ spec:
                   name: {{ include "jaeger.cassandra.secretName" . }}
                   key: {{ include "jaeger.cassandra.secretKey" . }}
             - name: CASSANDRA_KEYSPACE
-              value: {{ .Values.cassandra.keyspace }}
+              value: {{ include "jaeger.cassandra.keyspace" . }}
+            - name: CASSANDRA_DATACENTER
+              value: {{ include "jaeger.cassandra.datacenter" . }}
             - name: COLLECTOR_ZIPKIN_HOST_PORT
               value: {{ .Values.collector.containerPorts.zipkin | quote }}
             - name: BITNAMI_DEBUG

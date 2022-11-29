@@ -68,36 +68,20 @@ spec:
               fi
           env:
             - name: CQLSH_HOST
-              value: {{ if not .Values.cassandra.enabled }}
-                {{ .Values.externalDatabase.host | quote }}
-              {{ else }}
-                {{ printf "%s-cassandra" (include "common.names.fullname" .) }}
-              {{ end }}
+              value: {{ include "jaeger.cassandra.host" . }}
             - name: CQLSH_PORT
-              value: {{ if not .Values.cassandra.enabled }}
-                {{ .Values.externalDatabase.port | quote }}
-              {{ else }}
-                {{ .Values.cassandra.service.ports.cql | quote }}
-              {{ end }}
+              value: {{ include "jaeger.cassandra.port" . }}
             - name: CASSANDRA_USERNAME
-              value: {{ if not .Values.cassandra.enabled }}
-                {{ .Values.externalDatabase.dbUser.user | quote }}
-              {{ else }}
-                {{ .Values.cassandra.dbUser.user | quote }}
-              {{ end }}
+              value: {{ include "jaeger.cassandra.user" . }}
+            - name: DATACENTER
+              value: {{ include "jaeger.cassandra.datacenter" . }}
+            - name: KEYSPACE
+              value: {{ include "jaeger.cassandra.keyspace" . }}
             - name: CASSANDRA_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ if not .Values.cassandra.enabled }}
-                    {{ .Values.externalDatabase.existingSecret }}
-                  {{ else }}
-                    {{ printf "%s-cassandra" (include "common.names.fullname" .) }}
-                  {{ end }}
-                  key: {{ if .Values.cassandra.enabled }}
-                    cassandra-password
-                  {{ else }}
-                    {{ .Values.externalDatabase.existingSecretPasswordKey }}
-                  {{ end }}
+                  name: {{ include "jaeger.cassandra.secretName" . }}
+                  key: {{ include "jaeger.cassandra.secretKey" . }}
           {{- if or .Values.migration.extraEnvVarsCM .Values.migration.extraEnvVarsSecret }}
           envFrom:
             {{- if .Values.migration.extraEnvVarsCM }}

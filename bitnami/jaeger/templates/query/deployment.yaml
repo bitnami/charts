@@ -101,7 +101,9 @@ spec:
                   name: {{ include "jaeger.cassandra.secretName" . }}
                   key: {{ include "jaeger.cassandra.secretKey" . }}
             - name: CASSANDRA_KEYSPACE
-              value: {{ .Values.cassandra.keyspace }}
+              value: {{ include "jaeger.cassandra.keyspace" . }}
+            - name: CASSANDRA_DATACENTER
+              value: {{ include "jaeger.cassandra.datacenter" . }}
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
             {{- if .Values.query.extraEnvVars }}

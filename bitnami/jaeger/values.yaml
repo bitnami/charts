@@ -1104,11 +1104,18 @@ externalDatabase:
   ## @param dbUser.password Password for `dbUser.user`. Randomly generated if empty
   ##
   dbUser:
-    user: cassandra
+    user: bn_jaeger
     password: ""
   existingSecret: ""
   existingSecretPasswordKey: ""
-
+  ## Cluster parameters
+  ## @param externalDatabase.cluster.datacenter Name for cassandra's jaeger datacenter
+  ##
+  cluster:
+    datacenter: "dc1"
+  ## @param externalDatabase.keyspace Name for cassandra's jaeger keyspace
+  ##
+  keyspace: "bitnami_jaeger"
 
 ## @section Cassandra storage sub-chart
 ##
@@ -1116,15 +1123,20 @@ cassandra:
   ## @param cassandra.enabled Enables cassandra storage pod
   ##
   enabled: true
+  ## Cluster parameters
+  ## @param cassandra.cluster.datacenter Name for cassandra's jaeger datacenter
+  ##
+  cluster:
+    datacenter: "dc1"
   ## @param cassandra.keyspace Name for cassandra's jaeger keyspace
   ##
-  keyspace: "jaeger_v1_dc1"
+  keyspace: "bitnami_jaeger"
   ## Database credentials
   ## @param dbUser.user Cassandra admin user
   ## @param dbUser.password Password for `dbUser.user`. Randomly generated if empty
   ##
   dbUser:
-    user: cassandra
+    user: bn_jaeger
     password: ""
   ## Cassandra port
   ## @param cassandra.containerPorts.cql Cassandra cql port
