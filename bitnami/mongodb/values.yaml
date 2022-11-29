@@ -75,9 +75,9 @@ commonLabels: {}
 ##
 commonAnnotations: {}
 
-## @param topologyKey Uncomment following line to overide default topology key value from common lib
+## @param topologyKey Override common lib default topology key. If empty - "kubernetes.io/hostname" is used
 ##
-## topologyKey: topology.kubernetes.io/zone
+## i.e. topologyKey: topology.kubernetes.io/zone
 topologyKey: ""
 
 ## Enable diagnostic mode in the deployment
