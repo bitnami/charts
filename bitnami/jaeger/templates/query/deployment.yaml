@@ -20,6 +20,7 @@ spec:
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/part-of: jaeger
         app.kubernetes.io/component: query
         {{- if .Values.query.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.query.podLabels "context" $) | nindent 8 }}
