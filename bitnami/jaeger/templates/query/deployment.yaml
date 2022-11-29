@@ -7,11 +7,15 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+    app.kubernetes.io/part-of: jaeger
+    app.kubernetes.io/component: query
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   selector:
+    app.kubernetes.io/part-of: jaeger
+    app.kubernetes.io/component: query
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   replicas: {{ .Values.query.replicaCount }}
   {{- if .Values.query.updateStrategy }}
