@@ -6,6 +6,7 @@ on: # rebuild any PRs and main branch changes
     paths:
       - 'bitnami/airflow/**'
       - 'bitnami/apache/**'
+      - 'bitnami/appsmith/**'
       - 'bitnami/argo-cd/**'
       - 'bitnami/argo-workflows/**'
       - 'bitnami/aspnet-core/**'
@@ -26,8 +27,10 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/fluentd/**'
       - 'bitnami/geode/**'
       - 'bitnami/ghost/**'
+      - 'bitnami/gitea/**'
       - 'bitnami/grafana-loki/**'
       - 'bitnami/grafana-operator/**'
+      - 'bitnami/grafana-tempo/**'
       - 'bitnami/grafana/**'
       - 'bitnami/haproxy/**'
       - 'bitnami/haproxy-intel/**'
