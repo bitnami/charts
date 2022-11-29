@@ -840,7 +840,7 @@ externalAccess:
     ##
     domain: ""
     ## @param externalAccess.service.publishNotReadyAddresses Indicates that any agent which deals with endpoints for this Service should disregard any indications of ready/not-ready
-    ## ref: https://manifests.io/k8s-1.21/service.spec
+    ## ref: https://kubernetes.io/docs/reference/kubernetes-api/service-resources/service-v1/
     publishNotReadyAddresses: false
     ## @param externalAccess.service.labels Service labels for external access
     ##
