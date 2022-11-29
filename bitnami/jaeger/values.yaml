@@ -1138,7 +1138,8 @@ cassandra:
   dbUser:
     user: bn_jaeger
     password: ""
-  ## Cassandra port
-  ## @param cassandra.containerPorts.cql Cassandra cql port
-  containerPorts:
-    cql: 9042
+  ## Cassandra service port
+  ## @param cassandra.service.ports.cql Cassandra cql port
+  service:
+    ports:
+      cql: 9042
