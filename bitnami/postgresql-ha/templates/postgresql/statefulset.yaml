@@ -172,13 +172,13 @@ spec:
             {{- if and (or (not (include "postgresql-ha.postgresqlCreateSecret" .)) (include "postgresql-ha.postgresqlPasswordProvided" .)) (not (eq (include "postgresql-ha.postgresqlUsername" .) "postgres")) }}
             {{- if .Values.postgresql.usePasswordFile }}
             - name: POSTGRES_POSTGRES_PASSWORD_FILE
-              value: "/opt/bitnami/postgresql/secrets/postgresql-postgres-password"
+              value: "/opt/bitnami/postgresql/secrets/postgres-password"
             {{- else }}
             - name: POSTGRES_POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "postgresql-ha.postgresqlSecretName" . }}
-                  key: postgresql-postgres-password
+                  key: postgres-password
             {{- end }}
             {{- end }}
             - name: POSTGRES_USER
