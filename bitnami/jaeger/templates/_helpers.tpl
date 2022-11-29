@@ -55,38 +55,18 @@ Create a container for checking cassandra availability
       fi
   env:
     - name: CQLSH_HOST
-      value: {{ if not .Values.cassandra.enabled }}
-        {{ .Values.externalDatabase.host | quote }}
-      {{ else }}
-        {{ printf "%s-cassandra" (include "common.names.fullname" .) }}
-      {{ end }}
+      value: {{ include "jaeger.cassandra.host" . }}
     - name: CQLSH_PORT
-      value: {{ if not .Values.cassandra.enabled }}
-        {{ .Values.externalDatabase.port | quote }}
-      {{ else }}
-        {{ .Values.cassandra.service.ports.cql | quote }}
-      {{ end }}
+      value: {{ include "jaeger.cassandra.port" . }}
     - name: CASSANDRA_USERNAME
-      value: {{ if not .Values.cassandra.enabled }}
-        {{ .Values.externalDatabase.dbUser.user | quote }}
-      {{ else }}
-        {{ .Values.cassandra.dbUser.user | quote }}
-      {{ end }}
+      value: {{ include "jaeger.cassandra.user" . }}
     - name: CASSANDRA_PASSWORD
       valueFrom:
         secretKeyRef:
-          name: {{ if not .Values.cassandra.enabled }}
-            {{ .Values.externalDatabase.existingSecret }}
-          {{ else }}
-            {{ printf "%s-cassandra" (include "common.names.fullname" .) }}
-          {{ end }}
-          key: {{ if .Values.cassandra.enabled }}
-            cassandra-password
-          {{ else }}
-            {{ .Values.externalDatabase.existingSecretPasswordKey }}
-          {{ end }}
+          name: {{ include "jaeger.cassandra.secretName" . }}
+          key: {{ include "jaeger.cassandra.secretKey" . }}
     - name: CASSANDRA_KEYSPACE
-    value: {{ .Values.cassandra.keyspace }}
+      value: {{ .Values.cassandra.keyspace }}
 {{- end -}}
 
 {{/*
@@ -136,4 +116,70 @@ ref. https://github.com/jaegertracing/jaeger-operator/issues/1158
 */}}
 {{- define "jaeger.agent.fullname" -}}
     {{ printf "%s--agent" (include "common.names.fullname" .) }}
+{{- end -}}
+
+{{/*
+Create the cassandra secret name
+*/}}
+{{- define "jaeger.cassandra.secretName" -}}
+    {{- if not .Values.cassandra.enabled -}}
+        {{- .Values.externalDatabase.existingSecret -}}
+    {{- else -}}
+        {{- printf "%s-cassandra" (include "common.names.fullname" .) -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Create the cassandra secret key
+*/}}
+{{- define "jaeger.cassandra.secretKey" -}}
+    {{- if not .Values.cassandra.enabled -}}
+        cassandra-password
+    {{- else -}}
+        {{- .Values.externalDatabase.existingSecretPasswordKey -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Create the cassandra user
+*/}}
+{{- define "jaeger.cassandra.user" -}}
+    {{- if not .Values.cassandra.enabled -}}
+        {{- .Values.externalDatabase.dbUser.user | quote -}}
+    {{- else -}}
+        {{- .Values.cassandra.dbUser.user | quote -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Create the cassandra password
+*/}}
+{{- define "jaeger.cassandra.password" -}}
+    {{- if not .Values.cassandra.enabled -}}
+        {{- .Values.externalDatabase.dbUser.password | quote -}}
+    {{- else -}}
+        {{ .Values.cassandra.dbUser.password | quote -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Create the cassandra host
+*/}}
+{{- define "jaeger.cassandra.host" -}}
+    {{- if not .Values.cassandra.enabled -}}
+        {{- .Values.externalDatabase.host | quote -}}
+    {{- else -}}
+        {{- printf "%s-cassandra" (include "common.names.fullname" .) -}}
+    {{- end }}
+{{- end }}
+
+{{/*
+Create the cassandra port
+*/}}
+{{- define "jaeger.cassandra.port" -}}
+    {{- if not .Values.cassandra.enabled -}}
+        {{- .Values.externalDatabase.port | quote -}}
+    {{- else }}
+        {{- .Values.cassandra.service.ports.cql | quote -}}
+    {{- end -}}
 {{- end -}}
