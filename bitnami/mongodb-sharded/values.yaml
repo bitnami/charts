@@ -481,7 +481,7 @@ configsvr:
     ## MongoDB&reg; images.
     ##
     mountPath: /bitnami/mongodb
-    ## @param configsvr.persistence.subPath Subdirectory of the volume to mount at
+    ## @param configsvr.persistence.subPath Subdirectory of the volume to mount at (evaluated as a template)
     ## Useful in dev environments and one PV for multiple services.
     ##
     subPath: ""
@@ -1246,7 +1246,7 @@ shardsvr:
     ## @param shardsvr.persistence.mountPath The path the volume will be mounted at, useful when using different MongoDB&reg; images.
     ##
     mountPath: /bitnami/mongodb
-    ## @param shardsvr.persistence.subPath Subdirectory of the volume to mount at
+    ## @param shardsvr.persistence.subPath Subdirectory of the volume to mount at (evaluated as a template)
     ## Useful in development environments and one PV for multiple services.
     ##
     subPath: ""
