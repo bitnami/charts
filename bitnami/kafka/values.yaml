@@ -610,10 +610,12 @@ priorityClassName: ""
 ##
 schedulerName: ""
 ## @param updateStrategy.type Kafka statefulset strategy type
+## @param updateStrategy.rollingUpdate Kafka statefulset rolling update configuration parameters
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
 ##
 updateStrategy:
   type: RollingUpdate
+  rollingUpdate: {}
 ## @param extraVolumes Optionally specify extra list of additional volumes for the Kafka pod(s)
 ## e.g:
 ## extraVolumes:
