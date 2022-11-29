@@ -1119,7 +1119,7 @@ cqlshImage:
 
 externalDatabase:
   host: ""
-  port: 5432
+  port: 9042
   ## Database credentials
   ## @param dbUser.user Cassandra admin user
   ## @param dbUser.password Password for `dbUser.user`. Randomly generated if empty
@@ -1128,4 +1128,4 @@ externalDatabase:
     user: cassandra
     password: ""
   existingSecret: ""
-  existingSecretPasswordKey: "db-password"
+  existingSecretPasswordKey: ""
