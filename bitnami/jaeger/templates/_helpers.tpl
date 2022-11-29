@@ -54,20 +54,38 @@ Create a container for checking cassandra availability
         info "Connection check success"
       fi
   env:
-  - name: CQLSH
-    value: /opt/bitnami/cassandra/bin/cqlsh
-  - name: CQLSH_HOST
-    value: {{ printf "%s-cassandra" (include "common.names.fullname" .) }}
-  - name: CQLSH_PORT
-    value: {{ .Values.cassandra.containerPorts.cql | quote }}
-  - name: CASSANDRA_USERNAME
-    value: {{ .Values.cassandra.dbUser.user }}
-  - name: CASSANDRA_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: {{ printf "%s-cassandra" (include "common.names.fullname" .) }}
-        key: cassandra-password
-  - name: CASSANDRA_KEYSPACE
+    - name: CQLSH_HOST
+      value: {{ if not .Values.cassandra.enabled }}
+        {{ .Values.externalDatabase.host | quote }}
+      {{ else }}
+        {{ printf "%s-cassandra" (include "common.names.fullname" .) }}
+      {{ end }}
+    - name: CQLSH_PORT
+      value: {{ if not .Values.cassandra.enabled }}
+        {{ .Values.externalDatabase.port | quote }}
+      {{ else }}
+        {{ .Values.cassandra.service.ports.cql | quote }}
+      {{ end }}
+    - name: CASSANDRA_USERNAME
+      value: {{ if not .Values.cassandra.enabled }}
+        {{ .Values.externalDatabase.dbUser.user | quote }}
+      {{ else }}
+        {{ .Values.cassandra.dbUser.user | quote }}
+      {{ end }}
+    - name: CASSANDRA_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: {{ if not .Values.cassandra.enabled }}
+            {{ .Values.externalDatabase.existingSecret }}
+          {{ else }}
+            {{ printf "%s-cassandra" (include "common.names.fullname" .) }}
+          {{ end }}
+          key: {{ if .Values.cassandra.enabled }}
+            cassandra-password
+          {{ else }}
+            {{ .Values.externalDatabase.existingSecretPasswordKey }}
+          {{ end }}
+    - name: CASSANDRA_KEYSPACE
     value: {{ .Values.cassandra.keyspace }}
 {{- end -}}
 

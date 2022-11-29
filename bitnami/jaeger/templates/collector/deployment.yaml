@@ -102,7 +102,7 @@ spec:
               value: {{ if not .Values.cassandra.enabled }}
                 {{ .Values.externalDatabase.port | quote }}
               {{ else }}
-                {{ .Values.cassandra.containerPorts.cql | quote }}
+                {{ .Values.cassandra.service.ports.cql | quote }}
               {{ end }}
             - name: CASSANDRA_USERNAME
               value: {{ if not .Values.cassandra.enabled }}
