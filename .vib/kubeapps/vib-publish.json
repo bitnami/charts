@@ -57,6 +57,10 @@
               "path": "/.vib/kubeapps/cypress"
             },
             "endpoint": "lb-kubeapps-http",
+            "env": {
+              "repoName": "bitnami",
+              "repoURL": "https://charts.bitnami.com/bitnami"
+            },
             "app_protocol": "HTTP"
           }
         }

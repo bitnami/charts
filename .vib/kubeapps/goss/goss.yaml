@@ -1,6 +1,8 @@
 http:
   http://kubeapps-internal-kubeappsapis:{{ .Vars.kubeappsapis.service.ports.http }}/core/plugins/v1alpha1/configured-plugins:
     status: 200
+  http://kubeapps-internal-dashboard:{{ .Vars.dashboard.service.ports.http }}:
+    status: 200
 file:
   /config/kubeapps-apis/plugins.conf:
     filetype: symlink

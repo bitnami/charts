@@ -1,3 +1,7 @@
+dashboard:
+  service:
+    ports:
+      http: 8081
 clusters:
   - name: default
     domain: cluster.local

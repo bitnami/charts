@@ -12,11 +12,13 @@ it('allows managing a helm chart release', () => {
     const releaseName = `${releases.newRelease.name}-${random}`
 
     cy.contains('div.card', releases.newRelease.application).click();
+    cy.contains(Cypress.env('repoName'));
+    cy.contains(Cypress.env('repoURL'));
     cy.contains('Deploy').click();
 
     cy.get('#releaseName').type(releaseName);
     cy.contains('Deploy').click();
-    cy.get('.application-status-pie-chart-title', { timeout: 75000 }).should(
+    cy.get('.application-status-pie-chart-title', { timeout: (Cypress.config('defaultCommandTimeout') * 3) }).should(
       'have.text',
       'Ready'
     );
