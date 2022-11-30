@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ printf "%s-worker" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-worker" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: worker
@@ -13,7 +13,7 @@ metadata:
 spec:
   replicas: 1
   podManagementPolicy: {{ .Values.podManagementPolicy | quote }}
-  serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) }}
+  serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: worker
@@ -214,7 +214,7 @@ spec:
         {{- else if .Files.Glob "files/*" }}
         - name: local-files
           configMap:
-            name: {{ include "common.names.fullname" . }}-files
+            name: {{ printf "%s-files" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
         {{- else if .Values.cloneFilesFromGit.enabled }}
         - name: git-cloned-files
           emptyDir: {}

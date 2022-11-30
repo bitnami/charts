@@ -118,14 +118,14 @@ spec:
                   name: {{ include "keycloak.databaseSecretName" . }}
                   key: {{ include "keycloak.databaseSecretKey" . }}
             {{- if and .Values.tls.enabled (or .Values.tls.keystorePassword .Values.tls.passwordsSecret) }}
-            - name: KEYCLOAK_TLS_KEY_STORE_PASSWORD
+            - name: KEYCLOAK_HTTPS_KEY_STORE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "keycloak.tlsPasswordsSecretName" . }}
                   key: "tls-keystore-password"
             {{- end }}
             {{- if and .Values.tls.enabled (or .Values.tls.truststorePassword .Values.tls.passwordsSecret) }}
-            - name: KEYCLOAK_TLS_TRUST_STORE_PASSWORD
+            - name: KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "keycloak.tlsPasswordsSecretName" . }}

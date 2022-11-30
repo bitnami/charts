@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
 | `image.registry`                                    | Sealed Secrets image registry                                                                                            | `docker.io`              |
 | `image.repository`                                  | Sealed Secrets image repository                                                                                          | `bitnami/sealed-secrets` |
-| `image.tag`                                         | Sealed Secrets image tag (immutable tags are recommended)                                                                | `0.19.1-scratch-r0`      |
+| `image.tag`                                         | Sealed Secrets image tag (immutable tags are recommended)                                                                | `0.19.2-scratch-r0`      |
 | `image.digest`                                      | Sealed Secrets image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag           | `""`                     |
 | `image.pullPolicy`                                  | Sealed Secrets image pull policy                                                                                         | `IfNotPresent`           |
 | `image.pullSecrets`                                 | Sealed Secrets image pull secrets                                                                                        | `[]`                     |
@@ -138,7 +138,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `priorityClassName`                                 | Sealed Secret pods' priorityClassName                                                                                    | `""`                     |
 | `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                     |
 | `schedulerName`                                     | Name of the k8s scheduler (other than default) for Sealed Secret pods                                                    | `""`                     |
-| `terminationGracePeriodSeconds`                     | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`                     |
+| `terminationGracePeriodSeconds`                     | Seconds the pod needs to terminate gracefully                                                                            | `""`                     |
 | `lifecycleHooks`                                    | for the Sealed Secret container(s) to automate configuration before or after startup                                     | `{}`                     |
 | `extraEnvVars`                                      | Array with extra environment variables to add to Sealed Secret nodes                                                     | `[]`                     |
 | `extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Sealed Secret nodes                                             | `""`                     |
@@ -154,7 +154,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                               | Description                                                                                           | Value                    |
 | ---------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                     | Sealed Secret service type                                                                            | `ClusterIP`              |
-| `service.ports.http`               | Sealed Secret service HTTP port                                                                       | `8080`                   |
+| `service.ports.http`               | Sealed Secret service HTTP port number                                                                | `8080`                   |
+| `service.ports.name`               | Sealed Secret service HTTP port name                                                                  | `http`                   |
 | `service.nodePorts.http`           | Node port for HTTP                                                                                    | `""`                     |
 | `service.clusterIP`                | Sealed Secret service Cluster IP                                                                      | `""`                     |
 | `service.loadBalancerIP`           | Sealed Secret service Load Balancer IP                                                                | `""`                     |
@@ -247,7 +248,7 @@ kubeseal --fetch-cert \
 > pub-cert.pem
 ```
 
-Refer to Sealed Secrets documentation for more infomation about [kubeseal usage](https://github.com/bitnami-labs/sealed-secrets#usage).
+Refer to Sealed Secrets documentation for more information about [kubeseal usage](https://github.com/bitnami-labs/sealed-secrets#usage).
 
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
@@ -259,15 +260,15 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
 
-To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/sealed-secrets/configuration/configure-use-ingress/).
+To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/infrastructure/sealed-secrets/configuration/configure-ingress/).
 
 ### TLS secrets
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/sealed-secrets/administration/enable-tls/).
+The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/infrastructure/sealed-secrets/administration/enable-tls-ingress/).
 
 ### Sidecars
 
-If additional containers are needed in the same pod as Sealed Secrets (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/apps/sealed-secrets/administration/configure-use-sidecars/).
+If additional containers are needed in the same pod as Sealed Secrets (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/sealed-secrets/configuration/configure-sidecar-init-containers/).
 
 ### Pod affinity
 

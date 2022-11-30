@@ -38,7 +38,7 @@ Pgpool acts as a load balancer for PostgreSQL and forward read/write connections
 
 To get the password for {{ (include "postgresql-ha.postgresqlUsername" .) | quote }} run:
 
-    export POSTGRES_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "postgresql-ha.postgresqlSecretName" . }} -o jsonpath="{.data.postgresql-password}" | base64 -d)
+    export POSTGRES_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "postgresql-ha.postgresqlSecretName" . }} -o jsonpath="{.data.password}" | base64 -d)
 
 To get the password for {{ (include "postgresql-ha.postgresqlRepmgrUsername" .) | quote }} run:
 
@@ -86,7 +86,7 @@ To connect to your database from outside the cluster execute the following comma
 {{- $requiredPasswords := list -}}
 {{- if not (include "postgresql-ha.postgresql.existingSecretProvided" . ) }}
 {{- $secretName := include "postgresql-ha.postgresqlSecretName" . -}}
-{{- $requiredPostgresqlPassword := dict "valueKey" "postgresql.password" "secret" $secretName "field" "postgresql-password" "context" $ -}}
+{{- $requiredPostgresqlPassword := dict "valueKey" "postgresql.password" "secret" $secretName "field" "password" "context" $ -}}
 {{- $requiredPasswords = append $requiredPasswords $requiredPostgresqlPassword -}}
 {{- $requiredRepmgrPassword := dict "valueKey" "postgresql.repmgrPassword" "secret" $secretName "field" "repmgr-password" "context" $ -}}
 {{- $requiredPasswords = append $requiredPasswords $requiredRepmgrPassword -}}

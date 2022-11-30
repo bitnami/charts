@@ -43,7 +43,7 @@ spec:
       {{- end }}
     spec:
       {{- include "thanos.imagePullSecrets" . | nindent 6 }}
-      serviceAccount: {{ include "thanos.serviceAccount.name" (dict "component" "query" "context" $) }}
+      serviceAccount: {{ include "thanos.serviceAccountName" (dict "component" "query" "context" $) }}
       automountServiceAccountToken: {{ .Values.query.automountServiceAccountToken }}
       {{- if .Values.query.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.query.hostAliases "context" $) | nindent 8 }}
@@ -53,7 +53,7 @@ spec:
       {{- else }}
       affinity:
         podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.query.podAffinityPreset "component" "query" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.query.podAntiAffinityPreset "component" "query" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.query.podAntiAffinityPreset "component" "query" "topologyKey" .Values.query.podAntiAffinityPresetTopologyKey "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.query.nodeAffinityPreset.type "key" .Values.query.nodeAffinityPreset.key "values" .Values.query.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.query.nodeSelector }}

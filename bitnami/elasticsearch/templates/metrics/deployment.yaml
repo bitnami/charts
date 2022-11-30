@@ -6,8 +6,10 @@ metadata:
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: metrics
+    {{- if .Values.useIstioLabels }}
     ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
     app: metrics
+    {{- end }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -27,8 +29,10 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: metrics
+        {{- if .Values.useIstioLabels }}
         ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
         app: metrics
+        {{- end }}
         {{- if .Values.metrics.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podLabels "context" $) | nindent 8 }}
         {{- end }}

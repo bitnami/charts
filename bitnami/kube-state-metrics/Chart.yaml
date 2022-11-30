@@ -1,7 +1,7 @@
 annotations:
   category: Analytics
 apiVersion: v2
-appVersion: 2.6.0
+appVersion: 2.7.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -23,4 +23,4 @@ name: kube-state-metrics
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/kube-state-metrics
   - https://github.com/kubernetes/kube-state-metrics
-version: 3.2.5
+version: 3.2.6

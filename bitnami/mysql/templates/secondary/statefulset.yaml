@@ -59,6 +59,9 @@ spec:
       {{- if .Values.secondary.priorityClassName }}
       priorityClassName: {{ .Values.secondary.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.secondary.runtimeClassName }}
+      runtimeClassName: {{ .Values.secondary.runtimeClassName | quote }}
+      {{- end }}
       {{- if .Values.secondary.schedulerName }}
       schedulerName: {{ .Values.secondary.schedulerName | quote }}
       {{- end }}
@@ -91,6 +94,9 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /bitnami/mysql
+              {{- if .Values.secondary.persistence.subPath }}
+              subPath: {{ .Values.secondary.persistence.subPath }}
+              {{- end }}
         {{- end }}
         {{- if .Values.secondary.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.secondary.initContainers "context" $) | nindent 8 }}
@@ -217,6 +223,9 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /bitnami/mysql
+              {{- if .Values.secondary.persistence.subPath }}
+              subPath: {{ .Values.secondary.persistence.subPath }}
+              {{- end }}
             {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
             - name: custom-init-scripts
               mountPath: /docker-entrypoint-initdb.d
@@ -315,7 +324,11 @@ spec:
         {{- if .Values.secondary.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.secondary.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
-  {{- if not .Values.secondary.persistence.enabled }}
+  {{- if and .Values.secondary.persistence.enabled .Values.secondary.persistence.existingClaim }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ tpl .Values.secondary.persistence.existingClaim . }}
+  {{- else if not .Values.secondary.persistence.enabled }}
         - name: data
           emptyDir: {}
   {{- else }}

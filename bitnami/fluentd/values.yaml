@@ -271,7 +271,7 @@ forwarder:
   ##
   extraArgs: ""
   ## @param forwarder.extraEnvVars Extra environment variables to pass to the container
-  ## extraEnv:
+  ## extraEnvVars:
   ##   - name: MY_ENV_VAR
   ##     value: my_value
   ##
@@ -773,7 +773,7 @@ aggregator:
   ##
   extraArgs: ""
   ## @param aggregator.extraEnvVars Extra environment variables to pass to the container
-  ## extraEnv:
+  ## extraEnvVars:
   ##   - name: MY_ENV_VAR
   ##     value: my_value
   ##
@@ -1288,6 +1288,7 @@ metrics:
     ##
     externalTrafficPolicy: Cluster
     ## @param metrics.service.annotations [object] Annotations for the Prometheus Exporter service service
+    ## If port or path annotation is provided the values will be used to in the prometheus ServiceMonitor CRD.
     ##
     annotations:
       prometheus.io/scrape: "true"
@@ -1352,6 +1353,9 @@ metrics:
     ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
     ##
     honorLabels: false
+    ## @param metrics.serviceMonitor.path path defines the path that promethues will use to pull metrics from the container
+    ##
+    path: "/metrics"
 ## Enable internal SSL/TLS encryption
 ##
 tls:

@@ -15,6 +15,56 @@
           "action_id": "helm-lint"
         }
       ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/jupyterhub"
+        },
+        "runtime_parameters": "aHViOgogIGJhc2VVcmw6IC8KICBhZG1pblVzZXI6IHRlc3RfdXNlcgogIHBhc3N3b3JkOiBDb21wbGljYXRlZFBhc3N3b3JkMTIzITQKICBjb250YWluZXJQb3J0czoKICAgIGh0dHA6IDgwODIKICBjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgICBlbmFibGVkOiB0cnVlCiAgICBydW5Bc1VzZXI6IDEwMDIKICBwb2RTZWN1cml0eUNvbnRleHQ6CiAgICBlbmFibGVkOiB0cnVlCiAgICBmc0dyb3VwOiAxMDAyCiAgc2VydmljZUFjY291bnQ6CiAgICBjcmVhdGU6IHRydWUKICAgIGF1dG9tb3VudFNlcnZpY2VBY2NvdW50VG9rZW46IHRydWUKICByYmFjOgogICAgY3JlYXRlOiB0cnVlCiAgc2VydmljZToKICAgIHBvcnRzOgogICAgICBodHRwOiA4MDgyCnByb3h5OgogIHNlcnZpY2U6CiAgICBhcGk6CiAgICAgIHBvcnRzOgogICAgICAgIGh0dHA6IDgwMDAKICAgIHB1YmxpYzoKICAgICAgdHlwZTogTG9hZEJhbGFuY2VyCiAgICAgIHBvcnRzOgogICAgICAgIGh0dHA6IDgwCmltYWdlUHVsbGVyOgogIGVuYWJsZWQ6IHRydWUKc2luZ2xldXNlcjoKICBjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgICBlbmFibGVkOiB0cnVlCiAgICBydW5Bc1VzZXI6IDEwMDIKICBwb2RTZWN1cml0eUNvbnRleHQ6CiAgICBlbmFibGVkOiB0cnVlCiAgICBmc0dyb3VwOiAxMDAyCiAgcGVyc2lzdGVuY2U6CiAgICBlbmFibGVkOiB0cnVlCnBvc3RncmVzcWw6CiAgZW5hYmxlZDogdHJ1ZQogIGF1dGg6CiAgICB1c2VybmFtZTogYm5fdmliX2p1cHl0ZXJodWIKICAgIGRhdGFiYXNlOiBiaXRuYW1pX3ZpYl9qdXB5dGVyaHViCiAgc2VydmljZToKICAgIHBvcnRzOgogICAgICBwb3N0Z3Jlc3FsOiA1NDMy",
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "health-check",
+          "params": {
+            "endpoint": "lb-jupyterhub-proxy-public-http",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/jupyterhub/goss"
+            },
+            "remote": {
+              "workload": "deploy-jupyterhub-hub"
+            },
+            "vars_file": "vars.yaml"
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/jupyterhub/cypress"
+            },
+            "endpoint": "lb-jupyterhub-proxy-public-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "username": "test_user",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
+        }
+      ]
     }
   }
 }

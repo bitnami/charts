@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ printf "%s-master" (include "common.names.fullname" .) }}
@@ -182,7 +182,7 @@ spec:
             {{- end }}
             {{- if .Values.security.ssl.enabled }}
             - name: shared-certs
-              mountPath: /bitnami/spark/conf/certs
+              mountPath: /opt/bitnami/spark/conf/certs
               readOnly: true
             {{- end }}
             {{- if .Values.master.extraVolumeMounts }}

@@ -326,9 +326,9 @@ false
 
 {{/* Service account name
 Usage:
-{{ include "thanos.serviceAccount.name" (dict "component" "bucketweb" "context" $) }}
+{{ include "thanos.serviceAccountName" (dict "component" "bucketweb" "context" $) }}
 */}}
-{{- define "thanos.serviceAccount.name" -}}
+{{- define "thanos.serviceAccountName" -}}
 {{- $component := index .context.Values .component -}}
 {{- if eq .component "query-frontend" -}}
 {{- $component = index .context.Values "queryFrontend" -}}

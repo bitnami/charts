@@ -68,7 +68,7 @@ spec:
       priorityClassName: {{ .Values.configsvr.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.configsvr.topologySpreadConstraints }}
-      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.configsvr.topologySpreadConstraints "context" .) | nindent 8 }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.configsvr.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.configsvr.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.configsvr.podSecurityContext "enabled" | toYaml | nindent 8 }}
@@ -87,8 +87,8 @@ spec:
           args:
             - -ec
             - |
-              mkdir -p {{ .Values.configsvr.persistence.mountPath }}{{- if .Values.configsvr.persistence.subPath }}/{{ .Values.configsvr.persistence.subPath }}{{- end }}
-              chown {{ .Values.configsvr.containerSecurityContext.runAsUser }}:{{ .Values.configsvr.podSecurityContext.fsGroup }} {{ .Values.configsvr.persistence.mountPath }}{{- if .Values.configsvr.persistence.subPath }}/{{ .Values.configsvr.persistence.subPath }}{{- end }}
+              mkdir -p {{ .Values.configsvr.persistence.mountPath }}{{- if .Values.configsvr.persistence.subPath }}/{{ include "common.tplvalues.render" (dict "value" .Values.configsvr.persistence.subPath "context" $) }}{{- end }}
+              chown {{ .Values.configsvr.containerSecurityContext.runAsUser }}:{{ .Values.configsvr.podSecurityContext.fsGroup }} {{ .Values.configsvr.persistence.mountPath }}{{- if .Values.configsvr.persistence.subPath }}/{{ include "common.tplvalues.render" (dict "value" .Values.configsvr.persistence.subPath "context" $) }}{{- end }}
               find {{ .Values.configsvr.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.configsvr.containerSecurityContext.runAsUser }}:{{ .Values.configsvr.podSecurityContext.fsGroup }}
           securityContext:
             runAsUser: 0
@@ -97,7 +97,7 @@ spec:
             - name: datadir
               mountPath: {{ .Values.configsvr.persistence.mountPath }}
               {{- if .Values.configsvr.persistence.subPath }}
-              subPath: {{ .Values.configsvr.persistence.subPath }}
+              subPath: {{ include "common.tplvalues.render" (dict "value" .Values.configsvr.persistence.subPath "context" $) }}
               {{- end }}
         {{- end }}
         {{- with .Values.configsvr.initContainers }}
@@ -255,7 +255,7 @@ spec:
             - name: datadir
               mountPath: {{ .Values.configsvr.persistence.mountPath }}
               {{- if .Values.configsvr.persistence.subPath }}
-              subPath: {{ .Values.configsvr.persistence.subPath }}
+              subPath: {{ include "common.tplvalues.render" (dict "value" .Values.configsvr.persistence.subPath "context" $) }}
               {{- end }}
             {{- if or .Values.configsvr.config .Values.configsvr.configCM }}
             - name: config
@@ -314,7 +314,7 @@ spec:
               {{- if .Values.auth.usePasswordFile }}
               export MONGODB_ROOT_PASSWORD="$(cat "${MONGODB_ROOT_PASSWORD_FILE}")"
               {{- end }}
-              /bin/mongodb_exporter --web.listen-address ":{{ .Values.metrics.containerPorts.metrics }}" --mongodb.uri mongodb://$(echo $MONGODB_ROOT_USER):$(echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g")@localhost:{{ .Values.common.containerPorts.mongodb }}/admin{{ ternary "?ssl=true" "" $.Values.metrics.useTLS }} {{ .Values.metrics.extraArgs }}
+              /bin/mongodb_exporter --collect-all --compatible-mode --web.listen-address ":{{ .Values.metrics.containerPorts.metrics }}" --mongodb.uri mongodb://$(echo $MONGODB_ROOT_USER):$(echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g")@localhost:{{ .Values.common.containerPorts.mongodb }}/admin{{ ternary "?ssl=true" "" $.Values.metrics.useTLS }} {{ .Values.metrics.extraArgs }}
           {{- end }}
           {{- if .Values.auth.usePasswordFile }}
           volumeMounts:

@@ -86,7 +86,7 @@ data:
     index=5
     for name in "${additional_names[@]}"; do
         cat >>/certs/openssl.cnf <<EOL
-    DNS.$index = $name
+    DNS.$index = $(eval echo "${name}")
     EOL
         ((index++))
     done;
