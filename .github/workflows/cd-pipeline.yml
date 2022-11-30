@@ -67,6 +67,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/nginx-intel/**'
       - 'bitnami/nginx/**'
       - 'bitnami/node-exporter/**'
+      - 'bitnami/oauth2-proxy/**'
       - 'bitnami/odoo/**'
       - 'bitnami/opencart/**'
       - 'bitnami/osclass/**'
