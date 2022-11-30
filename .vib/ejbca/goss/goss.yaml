@@ -27,7 +27,7 @@ command:
   # Identity type 1 corresponds to END-USER
   {{- $identityType := "1" }}
   add-identity-export-cert:
-    exec: ejbca.sh ra addendentity --username '{{ $user }}' --caname '{{ $caName}}' --dn '{{ $dn }}' --type {{ $identityType }} --token P12 --password '{{ $pass }}' && ejbca.sh ra setclearpwd '{{ $user }}' '{{ $pass }}' && ejbca.sh batch && ls ./p12/{{ $user }}.p12
+    exec: cd /opt/bitnami/ejbca && ejbca.sh ra addendentity --username '{{ $user }}' --caname '{{ $caName}}' --dn '{{ $dn }}' --type {{ $identityType }} --token P12 --password '{{ $pass }}' && ejbca.sh ra setclearpwd '{{ $user }}' '{{ $pass }}' && ejbca.sh batch && ls ./p12/{{ $user }}.p12
     exit-status: 0
     timeout: 20000
   check-user-info:
