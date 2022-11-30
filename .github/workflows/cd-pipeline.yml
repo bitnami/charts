@@ -45,6 +45,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/kiam/**'
       - 'bitnami/kibana/**'
       - 'bitnami/kong/**'
+      - 'bitnami/kubeapps/**'
       - 'bitnami/kube-prometheus/**'
       - 'bitnami/kube-state-metrics/**'
       - 'bitnami/kubernetes-event-exporter/**'
