@@ -961,6 +961,7 @@ keycloakConfigCli:
 ## PostgreSQL chart configuration
 ## ref: https://github.com/bitnami/charts/blob/main/bitnami/postgresql/values.yaml
 ## @param postgresql.enabled Switch to enable or disable the PostgreSQL helm chart
+## @param postgresql.auth.postgresPassword Password for the "postgres" admin user. Ignored if `auth.existingSecret` with key `postgres-password` is provided
 ## @param postgresql.auth.username Name for a custom user to create
 ## @param postgresql.auth.password Password for the custom user to create
 ## @param postgresql.auth.database Name for a custom database to create
@@ -970,6 +971,7 @@ keycloakConfigCli:
 postgresql:
   enabled: true
   auth:
+    postgresPassword: ""  
     username: bn_keycloak
     password: ""
     database: bitnami_keycloak
