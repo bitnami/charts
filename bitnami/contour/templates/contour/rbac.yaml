@@ -86,6 +86,7 @@ rules:
       - tlsroutes
       - udproutes
       - referencepolicies
+      - referencegrants
     verbs:
       - get
       - list

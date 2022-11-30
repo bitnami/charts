@@ -260,6 +260,9 @@ primary:
   ## @param primary.priorityClassName MySQL primary pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param primary.runtimeClassName MySQL primary pods' runtimeClassName
+  ##
+  runtimeClassName: ""
   ## @param primary.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -631,6 +634,9 @@ secondary:
   ## @param secondary.priorityClassName MySQL secondary pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param secondary.runtimeClassName MySQL secondary pods' runtimeClassName
+  ##
+  runtimeClassName: ""
   ## @param secondary.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##

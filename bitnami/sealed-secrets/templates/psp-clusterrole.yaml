@@ -2,7 +2,7 @@
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ printf "%s-psp" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-psp" (include "common.names.fullname.namespace" .) }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
@@ -16,5 +16,5 @@ rules:
     resources: ['podsecuritypolicies']
     verbs:     ['use']
     resourceNames:
-      - {{ include "common.names.fullname" . | quote }}
+      - {{ include "common.names.fullname.namespace" . | quote }}
 {{- end }}
