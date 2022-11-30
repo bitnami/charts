@@ -1,5 +1,5 @@
 const COMMAND_DELAY = 2000;
-const BASE_URL = 'http://bitnami-ghost.my';
+const BASE_URL = 'http://vmware-ghost.my';
 
 for (const command of ['click']) {
   Cypress.Commands.overwrite(command, (originalFn, ...args) => {
@@ -26,8 +26,8 @@ Cypress.Commands.add(
   'login',
   (email = Cypress.env('email'), password = Cypress.env('password')) => {
     cy.visit('/ghost/');
-    cy.get('input[type="email"]').should('be.enabled').type(email);
-    cy.get('input[type="password"]').should('be.enabled').type(password);
+    cy.get('[type="email"]').type(email);
+    cy.get('[type="password"]').type(password);
     cy.contains('button', 'Sign in').click();
     // In Ghost, logging is not considered as completed until the Dashboard view
     // is visible. Navigating to any other site before that will lead to an error

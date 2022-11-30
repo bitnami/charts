@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/ghost"
         },
-        "runtime_parameters": "Z2hvc3RVc2VybmFtZTogdXNlcgpnaG9zdFBhc3N3b3JkOiBDb21wbGljYXRlZDEyMyE0Cmdob3N0RW1haWw6IHVzZXJAZXhhbXBsZS5jb20KZ2hvc3RIb3N0OiBiaXRuYW1pLWdob3N0Lm15CnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCiAgcG9ydHM6CiAgICBodHRwOiA4MAo=",
+        "runtime_parameters": "Z2hvc3RVc2VybmFtZTogYml0bmFtaVRlc3QKZ2hvc3RQYXNzd29yZDogQ29tcGxpY2F0ZWQxMjMhNApnaG9zdEVtYWlsOiB2aW0tdGVzdHNAZXhhbXBsZS5jb20KZ2hvc3RIb3N0OiB2bXdhcmUtZ2hvc3QubXkKZ2hvc3RTa2lwSW5zdGFsbDogZmFsc2UKY29udGFpbmVyUG9ydHM6CiAgaHR0cDogMjM2OQpwb2RTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIGZzR3JvdXA6IDEwMDIKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBydW5Bc1VzZXI6IDEwMDIKc2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGh0dHA6IDgwCm15c3FsOgogIGVuYWJsZWQ6IHRydWUKICBhdXRoOgogICAgZGF0YWJhc2U6IGJpdG5hbWlfdGVzdF9naG9zdAogICAgdXNlcm5hbWU6IGJuX3Rlc3RfZ2hvc3QKICAgIHBhc3N3b3JkOiBiaXRuYW1pX3Rlc3RfcGFzc3dvcmQKc2VydmljZUFjY291bnQ6CiAgY3JlYXRlOiB0cnVlCiAgYXV0b21vdW50U2VydmljZUFjY291bnRUb2tlbjogdHJ1ZQ==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -44,6 +44,7 @@
             "resources": {
               "path": "/.vib/ghost/goss"
             },
+            "vars_file": "vars.yaml",
             "remote": {
               "workload": "deploy-ghost"
             }
