@@ -59,7 +59,8 @@
             "endpoint": "lb-ghost-http",
             "app_protocol": "HTTP",
             "env": {
-              "email": "user@example.com",
+              "email": "vim-tests@example.com",
+              "username": "bitnamiTest",
               "password": "Complicated123!4"
             }
           }
