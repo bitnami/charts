@@ -42,6 +42,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/jupyterhub/**'
       - 'bitnami/kafka/**'
       - 'bitnami/keycloak/**'
+      - 'bitnami/kiam/**'
       - 'bitnami/kibana/**'
       - 'bitnami/kong/**'
       - 'bitnami/kube-prometheus/**'
