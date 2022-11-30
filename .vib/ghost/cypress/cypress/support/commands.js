@@ -19,7 +19,9 @@ for (const command of ['click']) {
 //
 // Further details: https://github.com/cypress-io/cypress/issues/20647
 Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
-  return originalFn(`${BASE_URL}${url}`, options);
+  // Only replace relative URLs
+  const targetUrl = url.includes('://') ? url : `${BASE_URL}${url}`;
+  return originalFn(targetUrl, options);
 });
 
 Cypress.Commands.add(
@@ -32,7 +34,7 @@ Cypress.Commands.add(
     // In Ghost, logging is not considered as completed until the Dashboard view
     // is visible. Navigating to any other site before that will lead to an error
     // 500
-    cy.contains('Dashboard').should('be.visible');
+    cy.contains('h2', 'Dashboard').should('be.visible');
   }
 );
 
