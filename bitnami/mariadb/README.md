@@ -385,7 +385,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```bash
 $ helm install my-release \
-  --set auth.rootPassword=secretpassword,auth.database=app_database \
+  --set auth.rootPassword=secretpassword,auth.database=my_database \
     my-repo/mariadb
 ```
 
