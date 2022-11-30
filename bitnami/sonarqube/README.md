@@ -1,12 +1,12 @@
-<!--- app-name: SonarQube -->
+<!--- app-name: SonarQube&trade; -->
 
-# SonarQube packaged by Bitnami
+# SonarQube(TM) packaged by Bitnami
 
-SonarQube is an open source quality management platform that analyzes and measures code's technical quality. It enables developers to detect code issues, vulnerabilities, and bugs in early stages.
+SonarQube&trade; is an open source quality management platform that analyzes and measures code's technical quality. It enables developers to detect code issues, vulnerabilities, and bugs in early stages.
 
-[Overview of SonarQube](http://www.sonarqube.org)
+[Overview of SonarQube&trade;](http://www.sonarqube.org)
 
-Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement. SonarQube is a registered trademark of SonarSource SA. 
                            
 ## TL;DR
 
@@ -17,7 +17,7 @@ $ helm install my-release my-repo/sonarqube
 
 ## Introduction
 
-This chart bootstraps an [SonarQube](https://github.com/bitnami/containers/tree/main/bitnami/sonarqube) cluster on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps an [SonarQube&trade;](https://github.com/bitnami/containers/tree/main/bitnami/sonarqube) cluster on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -36,7 +36,7 @@ To install the chart with the release name `my-release`:
 $ helm install my-release my-repo/sonarqube
 ```
 
-The command deploys SonarQube on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+The command deploys SonarQube&trade; on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -77,29 +77,29 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
 
-### SonarQube Image parameters
+### SonarQube&trade; Image parameters
 
-| Name                | Description                                                                                               | Value                 |
-| ------------------- | --------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`    | SonarQube image registry                                                                                  | `docker.io`           |
-| `image.repository`  | SonarQube image repository                                                                                | `bitnami/sonarqube`   |
-| `image.tag`         | SonarQube image tag (immutable tags are recommended)                                                      | `9.7.1-debian-11-r10` |
-| `image.digest`      | SonarQube image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `image.pullPolicy`  | SonarQube image pull policy                                                                               | `IfNotPresent`        |
-| `image.pullSecrets` | SonarQube image pull secrets                                                                              | `[]`                  |
-| `image.debug`       | Enable SonarQube image debug mode                                                                         | `false`               |
+| Name                | Description                                                                                                      | Value                 |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `image.registry`    | SonarQube&trade; image registry                                                                                  | `docker.io`           |
+| `image.repository`  | SonarQube&trade; image repository                                                                                | `bitnami/sonarqube`   |
+| `image.tag`         | SonarQube&trade; image tag (immutable tags are recommended)                                                      | `9.7.1-debian-11-r10` |
+| `image.digest`      | SonarQube&trade; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
+| `image.pullPolicy`  | SonarQube&trade; image pull policy                                                                               | `IfNotPresent`        |
+| `image.pullSecrets` | SonarQube&trade; image pull secrets                                                                              | `[]`                  |
+| `image.debug`       | Enable SonarQube&trade; image debug mode                                                                         | `false`               |
 
 
-### SonarQube Configuration parameters
+### SonarQube&trade; Configuration parameters
 
 | Name                          | Description                                                                                                                                                               | Value                                                    |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| `sonarqubeUsername`           | SonarQube username                                                                                                                                                        | `user`                                                   |
-| `sonarqubePassword`           | SonarQube user password                                                                                                                                                   | `""`                                                     |
-| `existingSecret`              | Name of existing secret containing SonarQube credentials                                                                                                                  | `""`                                                     |
-| `sonarqubeEmail`              | SonarQube user email                                                                                                                                                      | `user@example.com`                                       |
-| `minHeapSize`                 | Minimum heap size for SonarQube                                                                                                                                           | `1024m`                                                  |
-| `maxHeapSize`                 | Maximum heap size for SonarQube                                                                                                                                           | `2048m`                                                  |
+| `sonarqubeUsername`           | SonarQube&trade; username                                                                                                                                                 | `user`                                                   |
+| `sonarqubePassword`           | SonarQube&trade; user password                                                                                                                                            | `""`                                                     |
+| `existingSecret`              | Name of existing secret containing SonarQube&trade; credentials                                                                                                           | `""`                                                     |
+| `sonarqubeEmail`              | SonarQube&trade; user email                                                                                                                                               | `user@example.com`                                       |
+| `minHeapSize`                 | Minimum heap size for SonarQube&trade;                                                                                                                                    | `1024m`                                                  |
+| `maxHeapSize`                 | Maximum heap size for SonarQube&trade;                                                                                                                                    | `2048m`                                                  |
 | `startTimeout`                | Timeout for the application to start in seconds                                                                                                                           | `150`                                                    |
 | `extraProperties`             | List of extra properties to be set in the sonar.properties file (key=value format)                                                                                        | `[]`                                                     |
 | `sonarqubeSkipInstall`        | Skip wizard installation                                                                                                                                                  | `false`                                                  |
@@ -128,85 +128,85 @@ The command removes all the Kubernetes components associated with the chart and 
 | `smtpExistingSecret`          | The name of an existing secret with SMTP credentials                                                                                                                      | `""`                                                     |
 | `command`                     | Override default container command (useful when using custom images)                                                                                                      | `[]`                                                     |
 | `args`                        | Override default container args (useful when using custom images)                                                                                                         | `[]`                                                     |
-| `extraEnvVars`                | Array with extra environment variables to add to SonarQube nodes                                                                                                          | `[]`                                                     |
-| `extraEnvVarsCM`              | Name of existing ConfigMap containing extra env vars for SonarQube nodes                                                                                                  | `""`                                                     |
-| `extraEnvVarsSecret`          | Name of existing Secret containing extra env vars for SonarQube nodes                                                                                                     | `""`                                                     |
+| `extraEnvVars`                | Array with extra environment variables to add to SonarQube&trade; nodes                                                                                                   | `[]`                                                     |
+| `extraEnvVarsCM`              | Name of existing ConfigMap containing extra env vars for SonarQube&trade; nodes                                                                                           | `""`                                                     |
+| `extraEnvVarsSecret`          | Name of existing Secret containing extra env vars for SonarQube&trade; nodes                                                                                              | `""`                                                     |
 
 
-### SonarQube deployment parameters
+### SonarQube&trade; deployment parameters
 
-| Name                                    | Description                                                                               | Value           |
-| --------------------------------------- | ----------------------------------------------------------------------------------------- | --------------- |
-| `replicaCount`                          | Number of SonarQube replicas to deploy                                                    | `1`             |
-| `containerPorts.http`                   | SonarQube HTTP container port                                                             | `9000`          |
-| `containerPorts.elastic`                | SonarQube Elasticsearch container port                                                    | `9001`          |
-| `livenessProbe.enabled`                 | Enable livenessProbe on SonarQube containers                                              | `true`          |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `100`           |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                          | `10`            |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                         | `5`             |
-| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                       | `6`             |
-| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                       | `1`             |
-| `readinessProbe.enabled`                | Enable readinessProbe on SonarQube containers                                             | `true`          |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                  | `100`           |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                         | `10`            |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                        | `5`             |
-| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                      | `6`             |
-| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                      | `1`             |
-| `startupProbe.enabled`                  | Enable startupProbe on SonarQube containers                                               | `false`         |
-| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                    | `30`            |
-| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                           | `10`            |
-| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                          | `1`             |
-| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                        | `15`            |
-| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                        | `1`             |
-| `customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                       | `{}`            |
-| `customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                      | `{}`            |
-| `customStartupProbe`                    | Custom startupProbe that overrides the default one                                        | `{}`            |
-| `resources.limits`                      | The resources limits for the SonarQube containers                                         | `{}`            |
-| `resources.requests`                    | The requested resources for the SonarQube containers                                      | `{}`            |
-| `podSecurityContext.enabled`            | Enabled SonarQube pods' Security Context                                                  | `true`          |
-| `podSecurityContext.fsGroup`            | Set SonarQube pod's Security Context fsGroup                                              | `1001`          |
-| `containerSecurityContext.enabled`      | Enabled SonarQube containers' Security Context                                            | `true`          |
-| `containerSecurityContext.runAsUser`    | Set SonarQube containers' Security Context runAsUser                                      | `1001`          |
-| `containerSecurityContext.runAsNonRoot` | Set SonarQube containers' Security Context runAsNonRoot                                   | `true`          |
-| `hostAliases`                           | SonarQube pods host aliases                                                               | `[]`            |
-| `podLabels`                             | Extra labels for SonarQube pods                                                           | `{}`            |
-| `podAnnotations`                        | Annotations for SonarQube pods                                                            | `{}`            |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`            |
-| `nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set                                     | `""`            |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set                                  | `[]`            |
-| `affinity`                              | Affinity for SonarQube pods assignment                                                    | `{}`            |
-| `nodeSelector`                          | Node labels for SonarQube pods assignment                                                 | `{}`            |
-| `tolerations`                           | Tolerations for SonarQube pods assignment                                                 | `[]`            |
-| `updateStrategy.type`                   | SonarQube statefulset strategy type                                                       | `RollingUpdate` |
-| `priorityClassName`                     | SonarQube pods' priorityClassName                                                         | `""`            |
-| `schedulerName`                         | Name of the k8s scheduler (other than default) for SonarQube pods                         | `""`            |
-| `lifecycleHooks`                        | for the SonarQube container(s) to automate configuration before or after startup          | `{}`            |
-| `extraVolumes`                          | Optionally specify extra list of additional volumes for the SonarQube pod(s)              | `[]`            |
-| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the SonarQube container(s)   | `[]`            |
-| `sidecars`                              | Add additional sidecar containers to the SonarQube pod(s)                                 | `[]`            |
-| `initContainers`                        | Add additional init containers to the SonarQube pod(s)                                    | `[]`            |
+| Name                                    | Description                                                                                    | Value           |
+| --------------------------------------- | ---------------------------------------------------------------------------------------------- | --------------- |
+| `replicaCount`                          | Number of SonarQube&trade; replicas to deploy                                                  | `1`             |
+| `containerPorts.http`                   | SonarQube&trade; HTTP container port                                                           | `9000`          |
+| `containerPorts.elastic`                | SonarQube&trade; Elasticsearch container port                                                  | `9001`          |
+| `livenessProbe.enabled`                 | Enable livenessProbe on SonarQube&trade; containers                                            | `true`          |
+| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                        | `100`           |
+| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                               | `10`            |
+| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                              | `5`             |
+| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                            | `6`             |
+| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                            | `1`             |
+| `readinessProbe.enabled`                | Enable readinessProbe on SonarQube&trade; containers                                           | `true`          |
+| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                       | `100`           |
+| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                              | `10`            |
+| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                             | `5`             |
+| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                           | `6`             |
+| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                           | `1`             |
+| `startupProbe.enabled`                  | Enable startupProbe on SonarQube&trade; containers                                             | `false`         |
+| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                         | `30`            |
+| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                | `10`            |
+| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                               | `1`             |
+| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                             | `15`            |
+| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                             | `1`             |
+| `customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                            | `{}`            |
+| `customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                           | `{}`            |
+| `customStartupProbe`                    | Custom startupProbe that overrides the default one                                             | `{}`            |
+| `resources.limits`                      | The resources limits for the SonarQube&trade; containers                                       | `{}`            |
+| `resources.requests`                    | The requested resources for the SonarQube&trade; containers                                    | `{}`            |
+| `podSecurityContext.enabled`            | Enabled SonarQube&trade; pods' Security Context                                                | `true`          |
+| `podSecurityContext.fsGroup`            | Set SonarQube&trade; pod's Security Context fsGroup                                            | `1001`          |
+| `containerSecurityContext.enabled`      | Enabled SonarQube&trade; containers' Security Context                                          | `true`          |
+| `containerSecurityContext.runAsUser`    | Set SonarQube&trade; containers' Security Context runAsUser                                    | `1001`          |
+| `containerSecurityContext.runAsNonRoot` | Set SonarQube&trade; containers' Security Context runAsNonRoot                                 | `true`          |
+| `hostAliases`                           | SonarQube&trade; pods host aliases                                                             | `[]`            |
+| `podLabels`                             | Extra labels for SonarQube&trade; pods                                                         | `{}`            |
+| `podAnnotations`                        | Annotations for SonarQube&trade; pods                                                          | `{}`            |
+| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`            | `""`            |
+| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `soft`          |
+| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`      | `""`            |
+| `nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set                                          | `""`            |
+| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set                                       | `[]`            |
+| `affinity`                              | Affinity for SonarQube&trade; pods assignment                                                  | `{}`            |
+| `nodeSelector`                          | Node labels for SonarQube&trade; pods assignment                                               | `{}`            |
+| `tolerations`                           | Tolerations for SonarQube&trade; pods assignment                                               | `[]`            |
+| `updateStrategy.type`                   | SonarQube&trade; statefulset strategy type                                                     | `RollingUpdate` |
+| `priorityClassName`                     | SonarQube&trade; pods' priorityClassName                                                       | `""`            |
+| `schedulerName`                         | Name of the k8s scheduler (other than default) for SonarQube&trade; pods                       | `""`            |
+| `lifecycleHooks`                        | for the SonarQube&trade; container(s) to automate configuration before or after startup        | `{}`            |
+| `extraVolumes`                          | Optionally specify extra list of additional volumes for the SonarQube&trade; pod(s)            | `[]`            |
+| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the SonarQube&trade; container(s) | `[]`            |
+| `sidecars`                              | Add additional sidecar containers to the SonarQube&trade; pod(s)                               | `[]`            |
+| `initContainers`                        | Add additional init containers to the SonarQube&trade; pod(s)                                  | `[]`            |
 
 
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | SonarQube service type                                                                                                           | `LoadBalancer`           |
-| `service.ports.http`               | SonarQube service HTTP port                                                                                                      | `80`                     |
-| `service.ports.elastic`            | SonarQube service ElasticSearch port                                                                                             | `9001`                   |
+| `service.type`                     | SonarQube&trade; service type                                                                                                    | `LoadBalancer`           |
+| `service.ports.http`               | SonarQube&trade; service HTTP port                                                                                               | `80`                     |
+| `service.ports.elastic`            | SonarQube&trade; service ElasticSearch port                                                                                      | `9001`                   |
 | `service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
 | `service.nodePorts.elastic`        | Node port for ElasticSearch                                                                                                      | `""`                     |
-| `service.clusterIP`                | SonarQube service Cluster IP                                                                                                     | `""`                     |
-| `service.loadBalancerIP`           | SonarQube service Load Balancer IP                                                                                               | `""`                     |
-| `service.loadBalancerSourceRanges` | SonarQube service Load Balancer sources                                                                                          | `[]`                     |
-| `service.externalTrafficPolicy`    | SonarQube service external traffic policy                                                                                        | `Cluster`                |
-| `service.annotations`              | Additional custom annotations for SonarQube service                                                                              | `{}`                     |
-| `service.extraPorts`               | Extra ports to expose in SonarQube service (normally used with the `sidecars` value)                                             | `[]`                     |
+| `service.clusterIP`                | SonarQube&trade; service Cluster IP                                                                                              | `""`                     |
+| `service.loadBalancerIP`           | SonarQube&trade; service Load Balancer IP                                                                                        | `""`                     |
+| `service.loadBalancerSourceRanges` | SonarQube&trade; service Load Balancer sources                                                                                   | `[]`                     |
+| `service.externalTrafficPolicy`    | SonarQube&trade; service external traffic policy                                                                                 | `Cluster`                |
+| `service.annotations`              | Additional custom annotations for SonarQube&trade; service                                                                       | `{}`                     |
+| `service.extraPorts`               | Extra ports to expose in SonarQube&trade; service (normally used with the `sidecars` value)                                      | `[]`                     |
 | `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
 | `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
-| `ingress.enabled`                  | Enable ingress record generation for SonarQube                                                                                   | `false`                  |
+| `ingress.enabled`                  | Enable ingress record generation for SonarQube&trade;                                                                            | `false`                  |
 | `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
@@ -269,9 +269,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
 | `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `true`  |
 | `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`    |
-| `autoscaling.enabled`                         | Enable Horizontal POD autoscaling for SonarQube                                                                     | `false` |
-| `autoscaling.minReplicas`                     | Minimum number of SonarQube replicas                                                                                | `1`     |
-| `autoscaling.maxReplicas`                     | Maximum number of SonarQube replicas                                                                                | `11`    |
+| `autoscaling.enabled`                         | Enable Horizontal POD autoscaling for SonarQube&trade;                                                              | `false` |
+| `autoscaling.minReplicas`                     | Minimum number of SonarQube&trade; replicas                                                                         | `1`     |
+| `autoscaling.maxReplicas`                     | Maximum number of SonarQube&trade; replicas                                                                         | `11`    |
 | `autoscaling.targetCPU`                       | Target CPU utilization percentage                                                                                   | `50`    |
 | `autoscaling.targetMemory`                    | Target Memory utilization percentage                                                                                | `50`    |
 
@@ -372,7 +372,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Default kernel settings
 
-Currently, SonarQube requires some changes in the kernel of the host machine to work as expected. If those values are not set in the underlying operating system, the SonarQube containers fail to boot with ERROR messages. More information about these requirements can be found in the links below:
+Currently, SonarQube&trade; requires some changes in the kernel of the host machine to work as expected. If those values are not set in the underlying operating system, the SonarQube&trade; containers fail to boot with ERROR messages. More information about these requirements can be found in the links below:
 
 - [File Descriptor requirements](https://www.elastic.co/guide/en/elasticsearch/reference/current/file-descriptors.html)
 - [Virtual memory requirements](https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html)
@@ -381,7 +381,7 @@ This chart uses a **privileged** initContainer to change those settings in the K
 
 ### External database support
 
-You may want to have SonarQube connect to an external database rather than installing one inside your cluster. Typical reasons for this are to use a managed database service, or to share a common database server for all your applications. To achieve this, set the `postgresql.enabled` parameter to `false` and specify the credentials for the external database using the `externalDatabase.*` parameters.
+You may want to have SonarQube&trade; connect to an external database rather than installing one inside your cluster. Typical reasons for this are to use a managed database service, or to share a common database server for all your applications. To achieve this, set the `postgresql.enabled` parameter to `false` and specify the credentials for the external database using the `externalDatabase.*` parameters.
 
 Refer to the [chart documentation on using an external database](https://docs.bitnami.com/kubernetes/apps/sonarqube/configuration/use-external-database) for more details and an example.
 
@@ -410,7 +410,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as SonarQube (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/apps/sonarqube/configuration/configure-sidecar-init-containers/).
+If additional containers are needed in the same pod as SonarQube&trade; (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/apps/sonarqube/configuration/configure-sidecar-init-containers/).
 
 ### Pod affinity
 
@@ -420,7 +420,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ## Persistence
 
-The [Bitnami SonarQube](https://github.com/bitnami/containers/tree/main/bitnami/sonarqube) image stores the SonarQube data and configurations at the `/bitnami/sonarqube` path of the container. Persistent Volume Claims are used to keep the data across deployments.
+The [Bitnami SonarQube&trade;](https://github.com/bitnami/containers/tree/main/bitnami/sonarqube) image stores the SonarQube&trade; data and configurations at the `/bitnami/sonarqube` path of the container. Persistent Volume Claims are used to keep the data across deployments.
 
 ### Adjust permissions of persistent volume mountpoint
 

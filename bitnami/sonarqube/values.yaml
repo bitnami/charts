@@ -57,18 +57,18 @@ diagnosticMode:
   args:
     - infinity
 
-## @section SonarQube Image parameters
+## @section SonarQube&trade; Image parameters
 ##
 
-## Bitnami SonarQube image
+## Bitnami SonarQube&trade; image
 ## ref: https://hub.docker.com/r/bitnami/sonarqube/tags/
-## @param image.registry SonarQube image registry
-## @param image.repository SonarQube image repository
-## @param image.tag SonarQube image tag (immutable tags are recommended)
-## @param image.digest SonarQube image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-## @param image.pullPolicy SonarQube image pull policy
-## @param image.pullSecrets SonarQube image pull secrets
-## @param image.debug Enable SonarQube image debug mode
+## @param image.registry SonarQube&trade; image registry
+## @param image.repository SonarQube&trade; image repository
+## @param image.tag SonarQube&trade; image tag (immutable tags are recommended)
+## @param image.digest SonarQube&trade; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param image.pullPolicy SonarQube&trade; image pull policy
+## @param image.pullSecrets SonarQube&trade; image pull secrets
+## @param image.debug Enable SonarQube&trade; image debug mode
 ##
 image:
   registry: docker.io
@@ -92,28 +92,28 @@ image:
   ##
   debug: false
 
-## @section SonarQube Configuration parameters
-## SonarQube settings based on environment variables
+## @section SonarQube&trade; Configuration parameters
+## SonarQube&trade; settings based on environment variables
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/sonarqube#environment-variables
-## @param sonarqubeUsername SonarQube username
+## @param sonarqubeUsername SonarQube&trade; username
 ##
 sonarqubeUsername: user
-## @param sonarqubePassword SonarQube user password
+## @param sonarqubePassword SonarQube&trade; user password
 ## Defaults to a random 10-character alphanumeric string if not set
 ##
 sonarqubePassword: ""
-## @param existingSecret Name of existing secret containing SonarQube credentials
+## @param existingSecret Name of existing secret containing SonarQube&trade; credentials
 ## NOTE: Must contain key `sonarqube-password`
 ## NOTE: When it's set, the `sonarqubePassword` parameter is ignored
 ##
 existingSecret: ""
-## @param sonarqubeEmail SonarQube user email
+## @param sonarqubeEmail SonarQube&trade; user email
 ##
 sonarqubeEmail: user@example.com
-## @param minHeapSize Minimum heap size for SonarQube
+## @param minHeapSize Minimum heap size for SonarQube&trade;
 ##
 minHeapSize: 1024m
-## @param maxHeapSize Maximum heap size for SonarQube
+## @param maxHeapSize Maximum heap size for SonarQube&trade;
 ##
 maxHeapSize: 2048m
 ## @param startTimeout Timeout for the application to start in seconds
@@ -127,12 +127,12 @@ startTimeout: 150
 ##
 extraProperties: []
 ## @param sonarqubeSkipInstall Skip wizard installation
-## NOTE: useful if you use an external database that already contains SonarQube data
+## NOTE: useful if you use an external database that already contains SonarQube&trade; data
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/sonarqube#connect-sonarqube-container-to-an-existing-database
 ##
 sonarqubeSkipInstall: false
 ## @param sonarSecurityRealm Set this to LDAP authenticate first against the external sytem. If the external system is not
-## reachable or if the user is not defined in the external system, authentication will be performed against SonarQube's internal database.
+## reachable or if the user is not defined in the external system, authentication will be performed against SonarQube&trade;'s internal database.
 ##
 sonarSecurityRealm: ""
 ## @param sonarAuthenticatorDowncase Set to true when connecting to a LDAP server using a case-insensitive setup.
@@ -209,36 +209,36 @@ command: []
 ## @param args Override default container args (useful when using custom images)
 ##
 args: []
-## @param extraEnvVars Array with extra environment variables to add to SonarQube nodes
+## @param extraEnvVars Array with extra environment variables to add to SonarQube&trade; nodes
 ## e.g:
 ## extraEnvVars:
 ##   - name: FOO
 ##     value: "bar"
 ##
 extraEnvVars: []
-## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars for SonarQube nodes
+## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars for SonarQube&trade; nodes
 ##
 extraEnvVarsCM: ""
-## @param extraEnvVarsSecret Name of existing Secret containing extra env vars for SonarQube nodes
+## @param extraEnvVarsSecret Name of existing Secret containing extra env vars for SonarQube&trade; nodes
 ##
 extraEnvVarsSecret: ""
 
-## @section SonarQube deployment parameters
+## @section SonarQube&trade; deployment parameters
 ##
 
-## @param replicaCount Number of SonarQube replicas to deploy
+## @param replicaCount Number of SonarQube&trade; replicas to deploy
 ## NOTE: ReadWriteMany PVC(s) are required if replicaCount > 1
 ##
 replicaCount: 1
-## @param containerPorts.http SonarQube HTTP container port
-## @param containerPorts.elastic SonarQube Elasticsearch container port
+## @param containerPorts.http SonarQube&trade; HTTP container port
+## @param containerPorts.elastic SonarQube&trade; Elasticsearch container port
 ##
 containerPorts:
   http: 9000
   elastic: 9001
-## Configure extra options for SonarQube containers' liveness and readiness probes
+## Configure extra options for SonarQube&trade; containers' liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-## @param livenessProbe.enabled Enable livenessProbe on SonarQube containers
+## @param livenessProbe.enabled Enable livenessProbe on SonarQube&trade; containers
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -252,7 +252,7 @@ livenessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
-## @param readinessProbe.enabled Enable readinessProbe on SonarQube containers
+## @param readinessProbe.enabled Enable readinessProbe on SonarQube&trade; containers
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
 ## @param readinessProbe.periodSeconds Period seconds for readinessProbe
 ## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -266,7 +266,7 @@ readinessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
-## @param startupProbe.enabled Enable startupProbe on SonarQube containers
+## @param startupProbe.enabled Enable startupProbe on SonarQube&trade; containers
 ## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
 ## @param startupProbe.periodSeconds Period seconds for startupProbe
 ## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
@@ -289,10 +289,10 @@ customReadinessProbe: {}
 ## @param customStartupProbe Custom startupProbe that overrides the default one
 ##
 customStartupProbe: {}
-## SonarQube resource requests and limits
+## SonarQube&trade; resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
-## @param resources.limits The resources limits for the SonarQube containers
-## @param resources.requests [object] The requested resources for the SonarQube containers
+## @param resources.limits The resources limits for the SonarQube&trade; containers
+## @param resources.requests [object] The requested resources for the SonarQube&trade; containers
 ##
 resources:
   limits: {}
@@ -301,31 +301,31 @@ resources:
     memory: 2048Mi
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-## @param podSecurityContext.enabled Enabled SonarQube pods' Security Context
-## @param podSecurityContext.fsGroup Set SonarQube pod's Security Context fsGroup
+## @param podSecurityContext.enabled Enabled SonarQube&trade; pods' Security Context
+## @param podSecurityContext.fsGroup Set SonarQube&trade; pod's Security Context fsGroup
 ##
 podSecurityContext:
   enabled: true
   fsGroup: 1001
 ## Configure Container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-## @param containerSecurityContext.enabled Enabled SonarQube containers' Security Context
-## @param containerSecurityContext.runAsUser Set SonarQube containers' Security Context runAsUser
-## @param containerSecurityContext.runAsNonRoot Set SonarQube containers' Security Context runAsNonRoot
+## @param containerSecurityContext.enabled Enabled SonarQube&trade; containers' Security Context
+## @param containerSecurityContext.runAsUser Set SonarQube&trade; containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set SonarQube&trade; containers' Security Context runAsNonRoot
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
-## @param hostAliases SonarQube pods host aliases
+## @param hostAliases SonarQube&trade; pods host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-## @param podLabels Extra labels for SonarQube pods
+## @param podLabels Extra labels for SonarQube&trade; pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
-## @param podAnnotations Annotations for SonarQube pods
+## @param podAnnotations Annotations for SonarQube&trade; pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
@@ -354,20 +354,20 @@ nodeAffinityPreset:
   ##   - e2e-az2
   ##
   values: []
-## @param affinity Affinity for SonarQube pods assignment
+## @param affinity Affinity for SonarQube&trade; pods assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## NOTE: `podAffinityPreset`, `podAntiAffinityPreset`, and `nodeAffinityPreset` will be ignored when it's set
 ##
 affinity: {}
-## @param nodeSelector Node labels for SonarQube pods assignment
+## @param nodeSelector Node labels for SonarQube&trade; pods assignment
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-## @param tolerations Tolerations for SonarQube pods assignment
+## @param tolerations Tolerations for SonarQube&trade; pods assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-## @param updateStrategy.type SonarQube statefulset strategy type
+## @param updateStrategy.type SonarQube&trade; statefulset strategy type
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
 ##
 updateStrategy:
@@ -375,23 +375,23 @@ updateStrategy:
   ## Can be set to RollingUpdate or OnDelete
   ##
   type: RollingUpdate
-## @param priorityClassName SonarQube pods' priorityClassName
+## @param priorityClassName SonarQube&trade; pods' priorityClassName
 ##
 priorityClassName: ""
-## @param schedulerName Name of the k8s scheduler (other than default) for SonarQube pods
+## @param schedulerName Name of the k8s scheduler (other than default) for SonarQube&trade; pods
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
 schedulerName: ""
-## @param lifecycleHooks for the SonarQube container(s) to automate configuration before or after startup
+## @param lifecycleHooks for the SonarQube&trade; container(s) to automate configuration before or after startup
 ##
 lifecycleHooks: {}
-## @param extraVolumes Optionally specify extra list of additional volumes for the SonarQube pod(s)
+## @param extraVolumes Optionally specify extra list of additional volumes for the SonarQube&trade; pod(s)
 ##
 extraVolumes: []
-## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for the SonarQube container(s)
+## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for the SonarQube&trade; container(s)
 ##
 extraVolumeMounts: []
-## @param sidecars Add additional sidecar containers to the SonarQube pod(s)
+## @param sidecars Add additional sidecar containers to the SonarQube&trade; pod(s)
 ## e.g:
 ## sidecars:
 ##   - name: your-image-name
@@ -402,7 +402,7 @@ extraVolumeMounts: []
 ##         containerPort: 1234
 ##
 sidecars: []
-## @param initContainers Add additional init containers to the SonarQube pod(s)
+## @param initContainers Add additional init containers to the SonarQube&trade; pod(s)
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 ## e.g:
 ## initContainers:
@@ -416,14 +416,14 @@ initContainers: []
 ## @section Traffic Exposure Parameters
 ##
 
-## SonarQube service parameters
+## SonarQube&trade; service parameters
 ##
 service:
-  ## @param service.type SonarQube service type
+  ## @param service.type SonarQube&trade; service type
   ##
   type: LoadBalancer
-  ## @param service.ports.http SonarQube service HTTP port
-  ## @param service.ports.elastic SonarQube service ElasticSearch port
+  ## @param service.ports.http SonarQube&trade; service HTTP port
+  ## @param service.ports.elastic SonarQube&trade; service ElasticSearch port
   ##
   ports:
     http: 80
@@ -436,30 +436,30 @@ service:
   nodePorts:
     http: ""
     elastic: ""
-  ## @param service.clusterIP SonarQube service Cluster IP
+  ## @param service.clusterIP SonarQube&trade; service Cluster IP
   ## e.g.:
   ## clusterIP: None
   ##
   clusterIP: ""
-  ## @param service.loadBalancerIP SonarQube service Load Balancer IP
+  ## @param service.loadBalancerIP SonarQube&trade; service Load Balancer IP
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
   loadBalancerIP: ""
-  ## @param service.loadBalancerSourceRanges SonarQube service Load Balancer sources
+  ## @param service.loadBalancerSourceRanges SonarQube&trade; service Load Balancer sources
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ## e.g:
   ## loadBalancerSourceRanges:
   ##   - 10.10.10.0/24
   ##
   loadBalancerSourceRanges: []
-  ## @param service.externalTrafficPolicy SonarQube service external traffic policy
+  ## @param service.externalTrafficPolicy SonarQube&trade; service external traffic policy
   ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
-  ## @param service.annotations Additional custom annotations for SonarQube service
+  ## @param service.annotations Additional custom annotations for SonarQube&trade; service
   ##
   annotations: {}
-  ## @param service.extraPorts Extra ports to expose in SonarQube service (normally used with the `sidecars` value)
+  ## @param service.extraPorts Extra ports to expose in SonarQube&trade; service (normally used with the `sidecars` value)
   ##
   extraPorts: []
   ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
@@ -473,11 +473,11 @@ service:
   ##     timeoutSeconds: 300
   ##
   sessionAffinityConfig: {}
-## SonarQube ingress parameters
+## SonarQube&trade; ingress parameters
 ## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
-  ## @param ingress.enabled Enable ingress record generation for SonarQube
+  ## @param ingress.enabled Enable ingress record generation for SonarQube&trade;
   ##
   enabled: false
   ## @param ingress.pathType Ingress path type
@@ -721,11 +721,11 @@ serviceAccount:
   name: ""
   automountServiceAccountToken: true
   annotations: {}
-## SonarQube Autoscaling configuration
+## SonarQube&trade; Autoscaling configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-## @param autoscaling.enabled Enable Horizontal POD autoscaling for SonarQube
-## @param autoscaling.minReplicas Minimum number of SonarQube replicas
-## @param autoscaling.maxReplicas Maximum number of SonarQube replicas
+## @param autoscaling.enabled Enable Horizontal POD autoscaling for SonarQube&trade;
+## @param autoscaling.minReplicas Minimum number of SonarQube&trade; replicas
+## @param autoscaling.maxReplicas Maximum number of SonarQube&trade; replicas
 ## @param autoscaling.targetCPU Target CPU utilization percentage
 ## @param autoscaling.targetMemory Target Memory utilization percentage
 ##
@@ -742,7 +742,7 @@ autoscaling:
 ## Prometheus Exporters / Metrics
 ##
 metrics:
-  ## Prometheus JMX Exporter: exposes the majority of SonarQube metrics
+  ## Prometheus JMX Exporter: exposes the majority of SonarQube&trade; metrics
   ##
   jmx:
     ## @param metrics.jmx.enabled Whether or not to expose JMX metrics to Prometheus
