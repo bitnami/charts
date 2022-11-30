@@ -4,7 +4,7 @@ it('list and retrieve jaeger traces', async () => {
 
     const testService = 'redis';
     // Check application availability though the UI
-    await cy.visit('http://localhost:16686/search?end=3669306189365000&limit=20&lookback=1h&maxDuration&minDuration&service=' + testService + '&start=0');
+    await cy.visit('/search?end=3669306189365000&limit=20&lookback=1h&maxDuration&minDuration&service=' + testService + '&start=0');
 
     // Ensure page contains Traces in an H2 tag
     await cy.contains('h2', 'Traces');
@@ -19,7 +19,7 @@ it('list and retrieve jaeger traces', async () => {
         // Get trace info through API
         cy.request({
             method: 'GET',
-            url: 'http://localhost:16686/api/traces/' + traceID
+            url: '/api/traces/' + traceID
         }).then((response) => {
             expect(response.status).to.eq(200);
             expect(response.body.data[0].traceID).to.eq(traceID);

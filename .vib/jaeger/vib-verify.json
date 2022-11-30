@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/jaeger"
         },
-        "runtime_parameters": "TBD",
+        "runtime_parameters": "cXVlcnk6CiAgc2VydmljZToKICAgIHBvcnRzOgogICAgICBhcGk6IDgw",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
