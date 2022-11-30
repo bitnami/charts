@@ -67,6 +67,8 @@ spec:
                 /cassandra-schema/docker.sh
               fi
           env:
+            - name: CQLSH
+              value: /opt/bitnami/cassandra/bin/cqlsh
             - name: CQLSH_HOST
               value: {{ include "jaeger.cassandra.host" . }}
             - name: CQLSH_PORT
