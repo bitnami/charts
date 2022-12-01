@@ -4,7 +4,7 @@
 
 HAProxy is a high-performance, open-source load balancer and reverse proxy for TCP and HTTP applications. This image is optimized with Intel(R) QuickAssist Technology OpenSSL* Engine (QAT_Engine).
 
-[Overview of HAProxy for Intel](http://www.haproxy.org/)
+[Overview of HAProxy for Intel](https://www.haproxy.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
                            
