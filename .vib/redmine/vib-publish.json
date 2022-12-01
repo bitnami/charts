@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/redmine"
         },
-        "runtime_parameters": "cmVkbWluZVVzZXJuYW1lOiB1c2VyCnJlZG1pbmVQYXNzd29yZDogQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0CnNlcnZpY2U6CiAgcG9ydDogODAKICB0eXBlOiBMb2FkQmFsYW5jZXIKc210cEhvc3Q6IGVtYWlsaG9zdApzbXRwUG9ydDogOTAwMApzbXRwVXNlcjogc210cF91c2VyCnNtdHBQYXNzd29yZDogc210cF91c2VyX3Bhc3N3b3Jk",
+        "runtime_parameters": "cmVkbWluZVVzZXJuYW1lOiBiaXRuYW1pVGVzdApyZWRtaW5lUGFzc3dvcmQ6IENvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNApzZXJ2aWNlOgogIHBvcnQ6IDgwCiAgdHlwZTogTG9hZEJhbGFuY2VyCmRhdGFiYXNlVHlwZTogbWFyaWFkYgptYXJpYWRiOgogIGVuYWJsZWQ6IHRydWUKICBhdXRoOgogICAgdXNlcm5hbWU6IGJuX3Rlc3RfcmVkbWluZQogICAgcGFzc3dvcmQ6IGJpdG5hbWlfdGVzdF9wYXNzd29yZA==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
           "size": {
@@ -44,6 +44,7 @@
             "resources": {
               "path": "/.vib/redmine/goss"
             },
+            "vars_file": "vars.yaml",
             "remote": {
               "workload": "deploy-redmine"
             }
@@ -58,7 +59,7 @@
             "endpoint": "lb-redmine-http",
             "app_protocol": "HTTP",
             "env": {
-              "username": "user",
+              "username": "bitnamiTest",
               "password": "ComplicatedPassword123!4"
             }
           }
