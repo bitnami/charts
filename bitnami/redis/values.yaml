@@ -289,6 +289,9 @@ master:
     ##
     type: RollingUpdate
     rollingUpdate: {}
+  ## @param master.minReadySeconds How many seconds a pod needs to be ready before killing the next, during update
+  ##
+  minReadySeconds: 0
   ## @param master.priorityClassName Redis&reg; master pods' priorityClassName
   ##
   priorityClassName: ""
@@ -687,6 +690,9 @@ replica:
     ##
     type: RollingUpdate
     rollingUpdate: {}
+  ## @param replica.minReadySeconds How many seconds a pod needs to be ready before killing the next, during update
+  ##
+  minReadySeconds: 0
   ## @param replica.priorityClassName Redis&reg; replicas pods' priorityClassName
   ##
   priorityClassName: ""
