@@ -26,9 +26,6 @@ spec:
   {{- else }}
   updateStrategy: {{- toYaml .Values.master.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- if .Values.master.minReadySeconds }}
-  minReadySeconds: {{ .Values.master.minReadySeconds }}
-  {{- end }}
   {{- end }}
   template:
     metadata:

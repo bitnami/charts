@@ -166,7 +166,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.kind`                                        | Use either Deployment or StatefulSet (default)                                                        | `StatefulSet`            |
 | `master.schedulerName`                               | Alternate scheduler for Redis&reg; master pods                                                        | `""`                     |
 | `master.updateStrategy.type`                         | Redis&reg; master statefulset strategy type                                                           | `RollingUpdate`          |
-| `master.minReadySeconds`                             | How many seconds a pod needs to be ready before killing the next, during update                       | `0`                      |
 | `master.priorityClassName`                           | Redis&reg; master pods' priorityClassName                                                             | `""`                     |
 | `master.hostAliases`                                 | Redis&reg; master pods host aliases                                                                   | `[]`                     |
 | `master.podLabels`                                   | Extra labels for Redis&reg; master pods                                                               | `{}`                     |
@@ -267,7 +266,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.containerSecurityContext.runAsUser`          | Set Redis&reg; replicas containers' Security Context runAsUser                                          | `1001`                   |
 | `replica.schedulerName`                               | Alternate scheduler for Redis&reg; replicas pods                                                        | `""`                     |
 | `replica.updateStrategy.type`                         | Redis&reg; replicas statefulset strategy type                                                           | `RollingUpdate`          |
-| `replica.minReadySeconds`                             | How many seconds a pod needs to be ready before killing the next, during update                         | `0`                      |
 | `replica.priorityClassName`                           | Redis&reg; replicas pods' priorityClassName                                                             | `""`                     |
 | `replica.podManagementPolicy`                         | podManagementPolicy to manage scaling operation of %%MAIN_CONTAINER_NAME%% pods                         | `""`                     |
 | `replica.hostAliases`                                 | Redis&reg; replicas pods host aliases                                                                   | `[]`                     |

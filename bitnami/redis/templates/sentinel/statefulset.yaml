@@ -22,9 +22,6 @@ spec:
   {{- if .Values.replica.updateStrategy }}
   updateStrategy: {{- toYaml .Values.replica.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- if .Values.replica.minReadySeconds }}
-  minReadySeconds: {{ .Values.replica.minReadySeconds }}
-  {{- end }}
   {{- if .Values.replica.podManagementPolicy }}
   podManagementPolicy: {{ .Values.replica.podManagementPolicy | quote }}
   {{- end }}
