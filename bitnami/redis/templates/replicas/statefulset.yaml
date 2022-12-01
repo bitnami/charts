@@ -23,7 +23,7 @@ spec:
   {{- if .Values.replica.updateStrategy }}
   updateStrategy: {{- toYaml .Values.replica.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- if .Values.replica.minReadySeconds }}
+  {{- if and .Values.replica.minReadySeconds (semverCompare ">= 1.25" (include "common.capabilities.kubeVersion" .)) }}
   minReadySeconds: {{ .Values.replica.minReadySeconds }}
   {{- end }}
   {{- if .Values.replica.podManagementPolicy }}
