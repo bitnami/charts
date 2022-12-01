@@ -1,3 +1,7 @@
+This Helm chart is deprecated
+
+The bitnami/geode chart is deprecated and no longer maintained.
+
 CHART NAME: {{ .Chart.Name }}
 CHART VERSION: {{ .Chart.Version }}
 APP VERSION: {{ .Chart.AppVersion }}
