@@ -8,18 +8,18 @@ dependencies:
     tags:
       - bitnami-common
     version: 2.x.x
-description: Apache Geode is a data management platform that provides advanced capabilities for data-intensive applications.
+# The Geode chart is deprecated and no longer maintained.
+deprecated: true
+description: DEPRECATED Apache Geode is a data management platform that provides advanced capabilities for data-intensive applications.
 home: https://github.com/bitnami/charts/tree/main/bitnami/geode
 icon: https://bitnami.com/assets/stacks/geode/img/geode-stack-220x234.png
 keywords:
   - apache
   - geode
   - database
-maintainers:
-  - name: Bitnami
-    url: https://github.com/bitnami/charts
+maintainers: []
 name: geode
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/geode
   - https://github.com/apache/geode
-version: 1.1.6
+version: 1.1.8

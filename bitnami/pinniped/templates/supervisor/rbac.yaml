@@ -176,7 +176,7 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
 ---
 kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
   name: {{ template "pinniped.supervisor.fullname.namespace" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
@@ -249,7 +249,7 @@ rules:
       - watch
 ---
 kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
   name: {{ printf "%s-%s" (include "pinniped.supervisor.fullname.namespace" .) "aggregated-api-server" | trunc 63 | trimSuffix "-" }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}

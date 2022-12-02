@@ -7,7 +7,7 @@ ASP.NET Core is an open-source framework for web application development created
 [Overview of ASP.NET](https://github.com/dotnet/aspnetcore)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------- | ------------------------------------------------------------------------------------------------------------ | --------------------- |
 | `image.registry`     | ASP.NET Core image registry                                                                                  | `docker.io`           |
 | `image.repository`   | ASP.NET Core image repository                                                                                | `bitnami/aspnet-core` |
-| `image.tag`          | ASP.NET Core image tag (immutable tags are recommended)                                                      | `6.0.10-debian-11-r0` |
+| `image.tag`          | ASP.NET Core image tag (immutable tags are recommended)                                                      | `7.0.0-debian-11-r0`  |
 | `image.digest`       | ASP.NET Core image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`   | ASP.NET Core image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets`  | ASP.NET Core image pull secrets                                                                              | `[]`                  |
@@ -162,29 +162,29 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Custom ASP.NET Core application parameters
 
-| Name                                            | Description                                                                                              | Value                                                               |
-| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| `appFromExternalRepo.enabled`                   | Enable to download/build ASP.NET Core app from external git repository                                   | `true`                                                              |
-| `appFromExternalRepo.clone.image.registry`      | Git image registry                                                                                       | `docker.io`                                                         |
-| `appFromExternalRepo.clone.image.repository`    | Git image repository                                                                                     | `bitnami/git`                                                       |
-| `appFromExternalRepo.clone.image.tag`           | Git image tag (immutable tags are recommended)                                                           | `2.38.0-debian-11-r2`                                               |
-| `appFromExternalRepo.clone.image.digest`        | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag      | `""`                                                                |
-| `appFromExternalRepo.clone.image.pullPolicy`    | Git image pull policy                                                                                    | `IfNotPresent`                                                      |
-| `appFromExternalRepo.clone.image.pullSecrets`   | Git image pull secrets                                                                                   | `[]`                                                                |
-| `appFromExternalRepo.clone.repository`          | Git repository to clone                                                                                  | `https://github.com/dotnet/AspNetCore.Docs.git`                     |
-| `appFromExternalRepo.clone.revision`            | Git revision to checkout                                                                                 | `main`                                                              |
-| `appFromExternalRepo.clone.extraVolumeMounts`   | Add extra volume mounts for the GIT container                                                            | `[]`                                                                |
-| `appFromExternalRepo.publish.image.registry`    | .NET SDK image registry                                                                                  | `docker.io`                                                         |
-| `appFromExternalRepo.publish.image.repository`  | .NET SDK image repository                                                                                | `bitnami/dotnet-sdk`                                                |
-| `appFromExternalRepo.publish.image.tag`         | .NET SDK image tag (immutable tags are recommended)                                                      | `6.0.401-debian-11-r9`                                              |
-| `appFromExternalRepo.publish.image.digest`      | .NET SDK image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                                                |
-| `appFromExternalRepo.publish.image.pullPolicy`  | .NET SDK image pull policy                                                                               | `IfNotPresent`                                                      |
-| `appFromExternalRepo.publish.image.pullSecrets` | .NET SDK image pull secrets                                                                              | `[]`                                                                |
-| `appFromExternalRepo.publish.subFolder`         | Sub folder under the Git repository containing the ASP.NET Core app                                      | `aspnetcore/fundamentals/servers/kestrel/samples/6.x/KestrelSample` |
-| `appFromExternalRepo.publish.extraFlags`        | Extra flags to be appended to "dotnet publish" command                                                   | `[]`                                                                |
-| `appFromExternalRepo.startCommand`              | Command used to start ASP.NET Core app                                                                   | `["dotnet","KestrelSample.dll"]`                                    |
-| `appFromExistingPVC.enabled`                    | Enable mounting your ASP.NET Core app from an existing PVC                                               | `false`                                                             |
-| `appFromExistingPVC.existingClaim`              | A existing Persistent Volume Claim containing your ASP.NET Core app                                      | `""`                                                                |
+| Name                                            | Description                                                                                              | Value                                                |
+| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| `appFromExternalRepo.enabled`                   | Enable to download/build ASP.NET Core app from external git repository                                   | `true`                                               |
+| `appFromExternalRepo.clone.image.registry`      | Git image registry                                                                                       | `docker.io`                                          |
+| `appFromExternalRepo.clone.image.repository`    | Git image repository                                                                                     | `bitnami/git`                                        |
+| `appFromExternalRepo.clone.image.tag`           | Git image tag (immutable tags are recommended)                                                           | `2.38.1-debian-11-r12`                               |
+| `appFromExternalRepo.clone.image.digest`        | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag      | `""`                                                 |
+| `appFromExternalRepo.clone.image.pullPolicy`    | Git image pull policy                                                                                    | `IfNotPresent`                                       |
+| `appFromExternalRepo.clone.image.pullSecrets`   | Git image pull secrets                                                                                   | `[]`                                                 |
+| `appFromExternalRepo.clone.repository`          | Git repository to clone                                                                                  | `https://github.com/dotnet/AspNetCore.Docs.git`      |
+| `appFromExternalRepo.clone.revision`            | Git revision to checkout                                                                                 | `main`                                               |
+| `appFromExternalRepo.clone.extraVolumeMounts`   | Add extra volume mounts for the GIT container                                                            | `[]`                                                 |
+| `appFromExternalRepo.publish.image.registry`    | .NET SDK image registry                                                                                  | `docker.io`                                          |
+| `appFromExternalRepo.publish.image.repository`  | .NET SDK image repository                                                                                | `bitnami/dotnet-sdk`                                 |
+| `appFromExternalRepo.publish.image.tag`         | .NET SDK image tag (immutable tags are recommended)                                                      | `7.0.100-debian-11-r0`                               |
+| `appFromExternalRepo.publish.image.digest`      | .NET SDK image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                                 |
+| `appFromExternalRepo.publish.image.pullPolicy`  | .NET SDK image pull policy                                                                               | `IfNotPresent`                                       |
+| `appFromExternalRepo.publish.image.pullSecrets` | .NET SDK image pull secrets                                                                              | `[]`                                                 |
+| `appFromExternalRepo.publish.subFolder`         | Sub folder under the Git repository containing the ASP.NET Core app                                      | `aspnetcore/performance/caching/output/samples/7.x/` |
+| `appFromExternalRepo.publish.extraFlags`        | Extra flags to be appended to "dotnet publish" command                                                   | `[]`                                                 |
+| `appFromExternalRepo.startCommand`              | Command used to start ASP.NET Core app                                                                   | `["dotnet","OCMinimal.dll"]`                         |
+| `appFromExistingPVC.enabled`                    | Enable mounting your ASP.NET Core app from an existing PVC                                               | `false`                                              |
+| `appFromExistingPVC.existingClaim`              | A existing Persistent Volume Claim containing your ASP.NET Core app                                      | `""`                                                 |
 
 
 ### Traffic Exposure Parameters
@@ -299,15 +299,15 @@ To use this feature, set the `appFromExternalRepo.enabled` to `true` and set the
 
 > Note: you can append any custom flag for the "dotnet publish" command setting the `appFromExternalRepo.publish.extraFlags` parameter.
 
-For example, you can deploy a sample [Kestrel server](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel) using the parameters below:
+For example, you can deploy a sample [OCMinimal](https://learn.microsoft.com/en-us/aspnet/core/performance/caching/output) using the parameters below:
 
 ```console
 appFromExternalRepo.enabled=true
 appFromExternalRepo.clone.repository=https://github.com/dotnet/AspNetCore.Docs.git
 appFromExternalRepo.clone.revision=main
-appFromExternalRepo.publish.aspnetcore/fundamentals/servers/kestrel/samples/3.x/KestrelSample
+appFromExternalRepo.publish.aspnetcore/performance/caching/output/samples/7.x/
 appFromExternalRepo.startCommand[0]=dotnet
-appFromExternalRepo.startCommand[1]=KestrelSample.dll
+appFromExternalRepo.startCommand[1]=OCMinimal.dll
 ```
 
 #### Mounting your ASP.NET Core application from an existing PVC

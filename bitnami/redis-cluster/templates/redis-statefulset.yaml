@@ -422,6 +422,11 @@ spec:
             secretName: {{ include "redis-cluster.tlsSecretName" . }}
             defaultMode: 256
         {{- end }}
+        {{- if not .Values.persistence.enabled }}
+        - name: redis-data
+          emptyDir: {}
+        {{- end }}
+  {{- if .Values.persistence.enabled }}
   volumeClaimTemplates:
     - metadata:
         name: redis-data
@@ -449,4 +454,5 @@ spec:
           {{- toYaml .Values.persistence.matchExpressions | nindent 12 }}
         {{- end -}}
         {{- end }}
+  {{- end }}
 {{- end }}

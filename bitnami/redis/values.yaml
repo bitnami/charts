@@ -289,6 +289,9 @@ master:
     ##
     type: RollingUpdate
     rollingUpdate: {}
+  ## @param master.minReadySeconds How many seconds a pod needs to be ready before killing the next, during update
+  ##
+  minReadySeconds: 0
   ## @param master.priorityClassName Redis&reg; master pods' priorityClassName
   ##
   priorityClassName: ""
@@ -420,6 +423,9 @@ master:
     ## NOTE: Useful in dev environments
     ##
     subPath: ""
+    ## @param master.persistence.subPathExpr Used to construct the subPath subdirectory of the volume to mount on Redis&reg; master containers
+    ##
+    subPathExpr: ""
     ## @param master.persistence.storageClass Persistent Volume storage class
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -684,6 +690,9 @@ replica:
     ##
     type: RollingUpdate
     rollingUpdate: {}
+  ## @param replica.minReadySeconds How many seconds a pod needs to be ready before killing the next, during update
+  ##
+  minReadySeconds: 0
   ## @param replica.priorityClassName Redis&reg; replicas pods' priorityClassName
   ##
   priorityClassName: ""
@@ -819,6 +828,9 @@ replica:
     ## NOTE: Useful in dev environments
     ##
     subPath: ""
+    ## @param replica.persistence.subPathExpr Used to construct the subPath subdirectory of the volume to mount on Redis&reg; replicas containers
+    ##
+    subPathExpr: ""
     ## @param replica.persistence.storageClass Persistent Volume storage class
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning

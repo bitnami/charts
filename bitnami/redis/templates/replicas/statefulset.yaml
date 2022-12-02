@@ -23,6 +23,9 @@ spec:
   {{- if .Values.replica.updateStrategy }}
   updateStrategy: {{- toYaml .Values.replica.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- if and .Values.replica.minReadySeconds (semverCompare ">= 1.25" (include "common.capabilities.kubeVersion" .)) }}
+  minReadySeconds: {{ .Values.replica.minReadySeconds }}
+  {{- end }}
   {{- if .Values.replica.podManagementPolicy }}
   podManagementPolicy: {{ .Values.replica.podManagementPolicy | quote }}
   {{- end }}
@@ -245,7 +248,11 @@ spec:
             {{- end }}
             - name: redis-data
               mountPath: /data
+              {{- if .Values.replica.persistence.subPath }}
               subPath: {{ .Values.replica.persistence.subPath }}
+              {{- else if .Values.replica.persistence.subPathExpr }}
+              subPathExpr: {{ .Values.replica.persistence.subPathExpr }}
+              {{- end }}
             - name: config
               mountPath: /opt/bitnami/redis/mounted-etc
             - name: redis-tmp-conf
@@ -364,7 +371,11 @@ spec:
           volumeMounts:
             - name: redis-data
               mountPath: {{ .Values.replica.persistence.path }}
+              {{- if .Values.replica.persistence.subPath }}
               subPath: {{ .Values.replica.persistence.subPath }}
+              {{- else if .Values.replica.persistence.subPathExpr }}
+              subPathExpr: {{ .Values.replica.persistence.subPathExpr }}
+              {{- end }}
         {{- end }}
         {{- if .Values.sysctl.enabled }}
         - name: init-sysctl

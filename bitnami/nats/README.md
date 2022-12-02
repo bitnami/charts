@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------ | ----------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`         | NATS image registry                                                                                   | `docker.io`          |
 | `image.repository`       | NATS image repository                                                                                 | `bitnami/nats`       |
-| `image.tag`              | NATS image tag (immutable tags are recommended)                                                       | `2.9.5-debian-11-r0` |
+| `image.tag`              | NATS image tag (immutable tags are recommended)                                                       | `2.9.8-debian-11-r0` |
 | `image.digest`           | NATS image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag  | `""`                 |
 | `image.pullPolicy`       | NATS image pull policy                                                                                | `IfNotPresent`       |
 | `image.pullSecrets`      | NATS image pull secrets                                                                               | `[]`                 |
@@ -92,11 +92,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.timeout`           | Client authentication timeout (seconds)                                                               | `1`                  |
 | `auth.usersCredentials`  | Client authentication users credentials collection                                                    | `[]`                 |
 | `auth.noAuthUser`        | Client authentication username from auth.usersCredentials map to be used when no credentials provided | `""`                 |
+| `cluster.name`           | Cluster name                                                                                          | `nats`               |
 | `cluster.connectRetries` | Configure number of connect retries for implicit routes, otherwise leave blank                        | `""`                 |
 | `cluster.auth.enabled`   | Switch to enable/disable cluster authentication                                                       | `true`               |
 | `cluster.auth.user`      | Cluster authentication user                                                                           | `nats_cluster`       |
 | `cluster.auth.password`  | Cluster authentication password                                                                       | `""`                 |
-| `cluster.auth.token`     | Cluster authentication token                                                                          | `""`                 |
+| `jetstream.enabled`      | Switch to enable/disable JetStream                                                                    | `false`              |
+| `jetstream.maxMemory`    | Max memory usage for JetStream                                                                        | `1G`                 |
 | `debug.enabled`          | Switch to enable/disable debug on logging                                                             | `false`              |
 | `debug.trace`            | Switch to enable/disable trace debug level on logging                                                 | `false`              |
 | `debug.logtime`          | Switch to enable/disable logtime on logging                                                           | `false`              |
@@ -218,7 +220,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Enable Prometheus metrics via exporter side-car                                                        | `false`                 |
 | `metrics.image.registry`                   | Prometheus metrics exporter image registry                                                             | `docker.io`             |
 | `metrics.image.repository`                 | Prometheus metrics exporter image repository                                                           | `bitnami/nats-exporter` |
-| `metrics.image.tag`                        | Prometheus metrics exporter image tag (immutable tags are recommended)                                 | `0.10.0-debian-11-r25`  |
+| `metrics.image.tag`                        | Prometheus metrics exporter image tag (immutable tags are recommended)                                 | `0.10.1-debian-11-r6`   |
 | `metrics.image.digest`                     | Petete image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `metrics.image.pullPolicy`                 | Prometheus metrics image pull policy                                                                   | `IfNotPresent`          |
 | `metrics.image.pullSecrets`                | Prometheus metrics image pull secrets                                                                  | `[]`                    |
@@ -239,6 +241,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                                               | `[]`                    |
 | `metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                                             | `[]`                    |
 | `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                    | `{}`                    |
+
+
+### Persistence parameters
+
+| Name                       | Description                                                         | Value               |
+| -------------------------- | ------------------------------------------------------------------- | ------------------- |
+| `persistence.enabled`      | Enable NATS data persistence using PVC(s)                           | `false`             |
+| `persistence.storageClass` | PVC Storage Class for NATS data volume                              | `""`                |
+| `persistence.accessModes`  | PVC Access modes                                                    | `["ReadWriteOnce"]` |
+| `persistence.size`         | PVC Storage Request for NATS data volume                            | `8Gi`               |
+| `persistence.annotations`  | Annotations for the PVC                                             | `{}`                |
+| `persistence.selector`     | Selector to match an existing Persistent Volume for NATS's data PVC | `{}`                |
 
 
 ### Other parameters

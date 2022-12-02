@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/oauth2-proxy"
         },
-        "runtime_parameters": "InJlZGlzIjoKICAiYXV0aCI6CiAgICAicGFzc3dvcmQiOiAiam5kZkRGZiIKInNlcnZpY2UiOgogICJwb3J0IjogODAKICAidHlwZSI6ICJMb2FkQmFsYW5jZXIi",
+        "runtime_parameters": "c2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0OiA4MApjb25maWd1cmF0aW9uOgogIGNsaWVudElEOiB2aWItZGV4LWNsaWVudAogIGNsaWVudFNlY3JldDogWlhoaGJYQnNaUzFoY0hBdGMyVmpjbVYwCiAgY29va2llU2VjcmV0OiB2aWItdGVzdHMtY29va2llCiAgY29udGVudDogfAogICAgZW1haWxfZG9tYWlucyA9IFsgIioiIF0KICAgIHByb3ZpZGVyID0gIm9pZGMiCiAgICBvaWRjX2lzc3Vlcl91cmwgPSAiaHR0cDovL3Ztd2FyZS1vYXV0aDItcHJveHkubXk6NTU1Ni9kZXgiCiAgICByZWRpcmVjdF91cmwgPSAiaHR0cDovL3Ztd2FyZS1vYXV0aDItcHJveHkubXkvb2F1dGgyL2NhbGxiYWNrIgogICAgY29va2llX3NlY3VyZSA9IGZhbHNlCiAgICBza2lwX2F1dGhfcm91dGVzID0gWyAiXlwvZGV4XC8uKiIgXQogICAgdXBzdHJlYW1zID0gWyAiZmlsZTovLy9iaXRuYW1pL29hdXRoMi1wcm94eS9jb25mLyIsICJodHRwOi8vdm13YXJlLW9hdXRoMi1wcm94eS5teTo1NTU2L2RleC8iIF0KY29udGFpbmVyUG9ydDogNDE4MQpob3N0QWxpYXNlczoKICAtIGlwOiAiMTI3LjAuMC4xIgogICAgaG9zdG5hbWVzOgogICAgICAtICJ2bXdhcmUtb2F1dGgyLXByb3h5Lm15Igpwb2RTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIGZzR3JvdXA6IDEwMDIKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBydW5Bc1VzZXI6IDEwMDIKc2VydmljZUFjY291bnQ6CiAgY3JlYXRlOiB0cnVlCiAgYXV0b21vdW50U2VydmljZUFjY291bnRUb2tlbjogdHJ1ZQpyZWRpczoKICBlbmFibGVkOiB0cnVlCiAgYXV0aDoKICAgIGVuYWJsZWQ6IHRydWUKICAgIHBhc3N3b3JkOiBvYXV0aDItdmliLXBhc3N3b3JkCnNpZGVjYXJzOgogIC0gbmFtZTogZGV4CiAgICBpbWFnZTogYml0bmFtaS9kZXgKICAgIGFyZ3M6IFsic2VydmUiLCAiL2NvbmZpZy9jb25maWcueWFtbCJdCiAgICBwb3J0czoKICAgICAgLSBuYW1lOiBodHRwCiAgICAgICAgY29udGFpbmVyUG9ydDogNTU1NgogICAgdm9sdW1lTW91bnRzOgogICAgICAtIG5hbWU6IGRleC12aWItY29uZmlnCiAgICAgICAgbW91bnRQYXRoOiAvY29uZmlnCmV4dHJhVm9sdW1lczoKICAtIG5hbWU6IGRleC12aWItY29uZmlnCiAgICBjb25maWdNYXA6CiAgICAgIG5hbWU6IGRleC12aWItY29uZmlnCmV4dHJhRGVwbG95OgogIC0gYXBpVmVyc2lvbjogdjEKICAgIGtpbmQ6IENvbmZpZ01hcAogICAgbWV0YWRhdGE6CiAgICAgIG5hbWU6IGRleC12aWItY29uZmlnCiAgICBkYXRhOgogICAgICBjb25maWcueWFtbDogfC0KICAgICAgICBpc3N1ZXI6IGh0dHA6Ly92bXdhcmUtb2F1dGgyLXByb3h5Lm15OjU1NTYvZGV4CiAgICAgICAgc3RvcmFnZToKICAgICAgICAgIHR5cGU6IHNxbGl0ZTMKICAgICAgICAgIGNvbmZpZzoKICAgICAgICAgICAgZmlsZTogL3RtcC9kZXguZGIKICAgICAgICB3ZWI6CiAgICAgICAgICBodHRwOiAwLjAuMC4wOjU1NTYKICAgICAgICBmcm9udGVuZDoKICAgICAgICAgIGRpcjogL29wdC9iaXRuYW1pL2RleC93ZWIKICAgICAgICBzdGF0aWNDbGllbnRzOgogICAgICAgICAgLSBpZDogdmliLWRleC1jbGllbnQKICAgICAgICAgICAgcmVkaXJlY3RVUklzOgogICAgICAgICAgICAgIC0gImh0dHA6Ly92bXdhcmUtb2F1dGgyLXByb3h5Lm15L29hdXRoMi9jYWxsYmFjayIKICAgICAgICAgICAgbmFtZTogJ1ZJQi1EZXgnCiAgICAgICAgICAgIHNlY3JldDogWlhoaGJYQnNaUzFoY0hBdGMyVmpjbVYwCiAgICAgICAgY29ubmVjdG9yczoKICAgICAgICAgIC0gdHlwZTogbW9ja0NhbGxiYWNrCiAgICAgICAgICAgIGlkOiBtb2NrCiAgICAgICAgICAgIG5hbWU6IEV4YW1wbGUKICAgICAgICBlbmFibGVQYXNzd29yZERCOiB0cnVlCiAgICAgICAgc3RhdGljUGFzc3dvcmRzOgogICAgICAgICAgLSBlbWFpbDogImFkbWluQGV4YW1wbGUuY29tIgogICAgICAgICAgICBoYXNoOiAiJDJhJDEwJDJiMmNVOENQaE9UYUdyczFIUlF1QXVlUzdKVFQ1WkhzSFN6WWlGUG0xbGVaY2s3TWM4VDRXIgogICAgICAgICAgICB1c2VybmFtZTogImFkbWluIgogICAgICAgICAgICB1c2VySUQ6ICIwOGE4Njg0Yi1kYjg4LTRiNzMtOTBhOS0zY2QxNjYxZjU0NjYi",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -36,6 +36,33 @@
           "params": {
             "endpoint": "lb-oauth2-proxy-http",
             "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/oauth2-proxy/goss"
+            },
+            "remote": {
+              "workload": "deploy-oauth2-proxy"
+            },
+            "vars_file": "vars.yaml"
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/oauth2-proxy/cypress"
+            },
+            "endpoint": "lb-oauth2-proxy-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "upstreamURL": "/bitnami/oauth2-proxy/conf/",
+              "upstreamContent": "oauth2_proxy.cfg",
+              "dexPort": "5556"
+            }
           }
         }
       ]

@@ -1,5 +1,5 @@
 {{/*
-Return the proper SonarQube image name
+Return the proper SonarQube(TM) image name
 */}}
 {{- define "sonarqube.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
@@ -128,7 +128,7 @@ Return the Database Secret Name
 {{- end -}}
 
 {{/*
-Return true if a SonarQube authentication credentials secret object should be created
+Return true if a SonarQube(TM) authentication credentials secret object should be created
 */}}
 {{- define "sonarqube.createSecret" -}}
 {{- if or (not .Values.existingSecret) (and (not .Values.smtpExistingSecret) .Values.smtpPassword) }}
@@ -137,7 +137,7 @@ Return true if a SonarQube authentication credentials secret object should be cr
 {{- end -}}
 
 {{/*
-Return the SonarQube Secret Name
+Return the SonarQube(TM) Secret Name
 */}}
 {{- define "sonarqube.secretName" -}}
 {{- if .Values.existingSecret }}
@@ -183,7 +183,7 @@ Compile all warnings into a single message.
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of SonarQube - Database */}}
+{{/* Validate values of SonarQube(TM) - Database */}}
 {{- define "sonarqube.validateValues.database" -}}
 {{- if and (not .Values.postgresql.enabled) (or (empty .Values.externalDatabase.host) (empty .Values.externalDatabase.port) (empty .Values.externalDatabase.database)) -}}
 sonarqube: database

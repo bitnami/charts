@@ -1,0 +1,31 @@
+addr:
+  tcp://127.0.0.1:{{ .Vars.containerPorts.ssh }}:
+    reachable: true
+    timeout: 500
+  tcp://gitea:{{ .Vars.service.ports.ssh }}:
+    reachable: true
+    timeout: 500
+command:
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+      - uid={{ .Vars.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
+file:
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
+    filetype: directory
+    mode: "3777"
+  /bitnami/gitea/custom/conf/app.ini:
+    exists: true
+    filetype: file
+    contains:
+      - /NAME.*{{ .Vars.postgresql.auth.database }}/
+      - /USER.*{{ .Vars.postgresql.auth.username }}/
+      - /HOST.*{{ .Vars.postgresql.primary.service.ports.postgresql }}/
+http:
+  http://gitea:{{ .Vars.service.ports.http }}:
+    status: 200
+  http://127.0.0.1:{{ .Vars.containerPorts.http }}:
+    status: 200

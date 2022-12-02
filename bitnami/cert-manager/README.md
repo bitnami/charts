@@ -1,10 +1,10 @@
-<!--- app-name: Cert Manager -->
+<!--- app-name: cert-manager -->
 
-# Cert Manager packaged by Bitnami
+# cert-manager packaged by Bitnami
 
-Cert Manager is a Kubernetes add-on to automate the management and issuance of TLS certificates from various issuing sources.
+cert-manager is a Kubernetes add-on to automate the management and issuance of TLS certificates from various issuing sources.
 
-[Overview of Cert Manager](https://github.com/jetstack/cert-manager)
+[Overview of cert-manager](https://github.com/jetstack/cert-manager)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
                            
@@ -71,11 +71,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `commonLabels`             | Labels to add to all deployed objects                                                                                                             | `{}`          |
 | `commonAnnotations`        | Annotations to add to all deployed objects                                                                                                        | `{}`          |
 | `extraDeploy`              | Array of extra objects to deploy with the release                                                                                                 | `[]`          |
-| `logLevel`                 | Set up cert manager log level                                                                                                                     | `2`           |
+| `logLevel`                 | Set up cert-manager log level                                                                                                                     | `2`           |
 | `clusterResourceNamespace` | Namespace used to store DNS provider credentials etc. for ClusterIssuer resources. If empty, uses the namespace where the controller is deployed. | `""`          |
 | `leaderElection.namespace` | Namespace which leaderElection works.                                                                                                             | `kube-system` |
-| `installCRDs`              | Flag to install Cert Manager CRDs                                                                                                                 | `false`       |
-| `replicaCount`             | Number of Cert Manager replicas                                                                                                                   | `1`           |
+| `installCRDs`              | Flag to install cert-manager CRDs                                                                                                                 | `false`       |
+| `replicaCount`             | Number of cert-manager replicas                                                                                                                   | `1`           |
 
 
 ### Controller deployment parameters
@@ -85,14 +85,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.replicaCount`                                | Number of Controller replicas                                                                              | `1`                    |
 | `controller.image.registry`                              | Controller image registry                                                                                  | `docker.io`            |
 | `controller.image.repository`                            | Controller image repository                                                                                | `bitnami/cert-manager` |
-| `controller.image.tag`                                   | Controller image tag (immutable tags are recommended)                                                      | `1.9.1-debian-11-r26`  |
+| `controller.image.tag`                                   | Controller image tag (immutable tags are recommended)                                                      | `1.10.1-debian-11-r0`  |
 | `controller.image.digest`                                | Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `controller.image.pullPolicy`                            | Controller image pull policy                                                                               | `IfNotPresent`         |
 | `controller.image.pullSecrets`                           | Controller image pull secrets                                                                              | `[]`                   |
 | `controller.image.debug`                                 | Controller image debug mode                                                                                | `false`                |
 | `controller.acmesolver.image.registry`                   | Controller image registry                                                                                  | `docker.io`            |
 | `controller.acmesolver.image.repository`                 | Controller image repository                                                                                | `bitnami/acmesolver`   |
-| `controller.acmesolver.image.tag`                        | Controller image tag (immutable tags are recommended)                                                      | `1.9.1-debian-11-r28`  |
+| `controller.acmesolver.image.tag`                        | Controller image tag (immutable tags are recommended)                                                      | `1.10.1-debian-11-r0`  |
 | `controller.acmesolver.image.digest`                     | Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `controller.acmesolver.image.pullPolicy`                 | Controller image pull policy                                                                               | `IfNotPresent`         |
 | `controller.acmesolver.image.pullSecrets`                | Controller image pull secrets                                                                              | `[]`                   |
@@ -109,7 +109,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `controller.affinity` is set. Allowed values: `soft` or `hard`       | `""`                   |
 | `controller.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `controller.affinity` is set                                           | `""`                   |
 | `controller.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `controller.affinity` is set                                        | `[]`                   |
-| `controller.affinity`                                    | Affinity for Cert Manager Controller                                                                       | `{}`                   |
+| `controller.affinity`                                    | Affinity for cert-manager Controller                                                                       | `{}`                   |
 | `controller.nodeSelector`                                | Node labels for pod assignment                                                                             | `{}`                   |
 | `controller.containerPort`                               | Controller container port                                                                                  | `9402`                 |
 | `controller.command`                                     | Override Controller default command                                                                        | `[]`                   |
@@ -148,7 +148,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `webhook.replicaCount`                                | Number of Webhook replicas                                                                              | `1`                            |
 | `webhook.image.registry`                              | Webhook image registry                                                                                  | `docker.io`                    |
 | `webhook.image.repository`                            | Webhook image repository                                                                                | `bitnami/cert-manager-webhook` |
-| `webhook.image.tag`                                   | Webhook image tag (immutable tags are recommended)                                                      | `1.9.1-debian-11-r24`          |
+| `webhook.image.tag`                                   | Webhook image tag (immutable tags are recommended)                                                      | `1.10.1-debian-11-r0`          |
 | `webhook.image.digest`                                | Webhook image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                           |
 | `webhook.image.pullPolicy`                            | Webhook image pull policy                                                                               | `IfNotPresent`                 |
 | `webhook.image.pullSecrets`                           | Webhook image pull secrets                                                                              | `[]`                           |
@@ -165,7 +165,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `webhook.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `webhook.affinity` is set. Allowed values: `soft` or `hard`       | `""`                           |
 | `webhook.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `webhook.affinity` is set                                           | `""`                           |
 | `webhook.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `webhook.affinity` is set                                        | `[]`                           |
-| `webhook.affinity`                                    | Affinity for Cert Manager Webhook                                                                       | `{}`                           |
+| `webhook.affinity`                                    | Affinity for cert-manager Webhook                                                                       | `{}`                           |
 | `webhook.nodeSelector`                                | Node labels for pod assignment                                                                          | `{}`                           |
 | `webhook.containerPort`                               | Webhook container port                                                                                  | `10250`                        |
 | `webhook.httpsPort`                                   | Webhook container port                                                                                  | `443`                          |
@@ -220,7 +220,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cainjector.replicaCount`                                | Number of CAInjector replicas                                                                              | `1`                   |
 | `cainjector.image.registry`                              | CAInjector image registry                                                                                  | `docker.io`           |
 | `cainjector.image.repository`                            | CAInjector image repository                                                                                | `bitnami/cainjector`  |
-| `cainjector.image.tag`                                   | CAInjector image tag (immutable tags are recommended)                                                      | `1.9.1-debian-11-r26` |
+| `cainjector.image.tag`                                   | CAInjector image tag (immutable tags are recommended)                                                      | `1.10.1-debian-11-r0` |
 | `cainjector.image.digest`                                | CAInjector image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `cainjector.image.pullPolicy`                            | CAInjector image pull policy                                                                               | `IfNotPresent`        |
 | `cainjector.image.pullSecrets`                           | CAInjector image pull secrets                                                                              | `[]`                  |
@@ -237,7 +237,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cainjector.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `cainjector.affinity` is set. Allowed values: `soft` or `hard`       | `""`                  |
 | `cainjector.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `cainjector.affinity` is set                                           | `""`                  |
 | `cainjector.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `cainjector.affinity` is set                                        | `[]`                  |
-| `cainjector.affinity`                                    | Affinity for Cert Manager CAInjector                                                                       | `{}`                  |
+| `cainjector.affinity`                                    | Affinity for cert-manager CAInjector                                                                       | `{}`                  |
 | `cainjector.nodeSelector`                                | Node labels for pod assignment                                                                             | `{}`                  |
 | `cainjector.command`                                     | Override CAInjector default command                                                                        | `[]`                  |
 | `cainjector.args`                                        | Override CAInjector default args                                                                           | `[]`                  |
@@ -271,7 +271,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                       | Description                                                                       | Value      |
 | ------------------------------------------ | --------------------------------------------------------------------------------- | ---------- |
 | `metrics.enabled`                          | Start metrics                                                                     | `true`     |
-| `metrics.podAnnotations`                   | Annotations for Cert Manager exporter pods                                        | `{}`       |
+| `metrics.podAnnotations`                   | Annotations for cert-manager exporter pods                                        | `{}`       |
 | `metrics.serviceMonitor.path`              | The path which the ServiceMonitor will monitor                                    | `/metrics` |
 | `metrics.serviceMonitor.targetPort`        | The port in which the ServiceMonitor will monitor                                 | `9402`     |
 | `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator      | `false`    |
@@ -331,7 +331,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars and Init Containers
 
-If you have a need for additional containers to run within the same pod as the Cert Manager app (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+If you have a need for additional containers to run within the same pod as the cert-manager app (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
 
 ```yaml
 sidecars:
@@ -373,7 +373,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 0.5.0
 
-Exisiting CRDs have been syncronised with the official [Cert Manager repository](https://github.com/cert-manager/cert-manager/tree/master/deploy/crds). Using the templates present in the 1.8.0 tag.
+Exisiting CRDs have been syncronised with the official [cert-manager repository](https://github.com/cert-manager/cert-manager/tree/master/deploy/crds). Using the templates present in the 1.8.0 tag.
 
 ## License
 

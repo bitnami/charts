@@ -6,6 +6,6 @@ file:
     owner: root
 command:
   jboss-deploy:
-    exec: jboss-cli.sh --controller=wildfly:{{ .Vars.service.ports.mgmt }} --connect --user={{ .Vars.wildflyUsername }} --password='{{ .Vars.wildflyPassword }}' 'deploy /bitnami/wildfly/sample.war --force'
+    exec: jboss-cli.sh --controller=wildfly:{{ .Vars.service.ports.mgmt }} --connect --user={{ .Vars.wildflyUsername }} --password='{{ .Vars.wildflyPassword }}' 'deploy /bitnami/wildfly/helloworld.war --force'
     exit-status: 0
     timeout: 10000

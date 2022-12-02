@@ -73,7 +73,7 @@ spec:
       securityContext: {{- omit .Values.postgresql.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.serviceAccount.create }}
-      serviceAccountName: {{ default (include "common.names.fullname" . ) .Values.serviceAccount.name }}
+      serviceAccountName: {{ include "postgresql-ha.serviceAccountName" . }}
       {{- end }}
       hostNetwork: {{ .Values.postgresql.hostNetwork }}
       hostIPC: {{ .Values.postgresql.hostIPC }}
@@ -172,26 +172,26 @@ spec:
             {{- if and (or (not (include "postgresql-ha.postgresqlCreateSecret" .)) (include "postgresql-ha.postgresqlPasswordProvided" .)) (not (eq (include "postgresql-ha.postgresqlUsername" .) "postgres")) }}
             {{- if .Values.postgresql.usePasswordFile }}
             - name: POSTGRES_POSTGRES_PASSWORD_FILE
-              value: "/opt/bitnami/postgresql/secrets/postgresql-postgres-password"
+              value: "/opt/bitnami/postgresql/secrets/postgres-password"
             {{- else }}
             - name: POSTGRES_POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "postgresql-ha.postgresqlSecretName" . }}
-                  key: postgresql-postgres-password
+                  key: postgres-password
             {{- end }}
             {{- end }}
             - name: POSTGRES_USER
               value: {{ (include "postgresql-ha.postgresqlUsername" .) | quote }}
             {{- if .Values.postgresql.usePasswordFile }}
             - name: POSTGRES_PASSWORD_FILE
-              value: "/opt/bitnami/postgresql/secrets/postgresql-password"
+              value: "/opt/bitnami/postgresql/secrets/password"
             {{- else }}
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "postgresql-ha.postgresqlSecretName" . }}
-                  key: postgresql-password
+                  key: password
             {{- end }}
             {{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }}
             - name: POSTGRES_DB
@@ -413,7 +413,7 @@ spec:
               mountPath: /docker-entrypoint-initdb.d/secret
             {{- end }}
             {{- if .Values.postgresql.usePasswordFile }}
-            - name: postgresql-password
+            - name: password
               mountPath: /opt/bitnami/postgresql/secrets/
             {{- end }}
             {{- if .Values.postgresql.tls.enabled }}
@@ -442,13 +442,13 @@ spec:
               value: {{ printf "127.0.0.1:%d/%s?sslmode=disable" (.Values.postgresql.containerPorts.postgresql | int64) (include "postgresql-ha.postgresqlDatabase" .) | quote }}
             {{- if .Values.postgresql.usePasswordFile }}
             - name: DATA_SOURCE_PASS_FILE
-              value: "/opt/bitnami/postgresql/secrets/postgresql-password"
+              value: "/opt/bitnami/postgresql/secrets/password"
             {{- else }}
             - name: DATA_SOURCE_PASS
               valueFrom:
                 secretKeyRef:
                   name: {{ include "postgresql-ha.postgresqlSecretName" . }}
-                  key: postgresql-password
+                  key: password
             {{- end }}
             - name: DATA_SOURCE_USER
               value: {{ (include "postgresql-ha.postgresqlUsername" .) | quote }}
@@ -499,7 +499,7 @@ spec:
           {{- end }}
           volumeMounts:
             {{- if .Values.postgresql.usePasswordFile }}
-            - name: postgresql-password
+            - name: password
               mountPath: /opt/bitnami/postgresql/secrets/
             {{- end }}
             {{- if .Values.metrics.customMetrics }}
@@ -548,7 +548,7 @@ spec:
             secretName: {{ template "postgresql-ha.postgresqlInitdbScriptsSecret" . }}
         {{- end }}
         {{- if .Values.postgresql.usePasswordFile }}
-        - name: postgresql-password
+        - name: password
           secret:
             secretName: {{ include "postgresql-ha.postgresqlSecretName" . }}
         {{- end }}
