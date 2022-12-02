@@ -36,7 +36,8 @@
           "params": {
             "endpoint": "lb-jaeger-query-http",
             "app_protocol": "HTTP"
-          }
+          },
+          "port": 80
         },
         {
           "action_id": "cypress",
@@ -46,7 +47,8 @@
             },
             "endpoint": "lb-jaeger-query-http",
             "app_protocol": "HTTP"
-          }
+          },
+          "port": 80
         }
       ]
     }
