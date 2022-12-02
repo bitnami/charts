@@ -495,16 +495,16 @@ collector:
   ## Container ports to expose
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   containerPorts:
-    ## @param collector.containerPorts.ports.zipkin can accept Zipkin spans in Thrift, JSON and Proto (disabled by default)
+    ## @param collector.containerPorts.zipkin can accept Zipkin spans in Thrift, JSON and Proto (disabled by default)
     ##
     zipkin: 9411
-    ## @param collector.containerPorts.ports.grpc used by jaeger-agent to send spans in model.proto format
+    ## @param collector.containerPorts.grpc used by jaeger-agent to send spans in model.proto format
     ##
     grpc: 14250
-    ## @param collector.containerPorts.ports.binary can accept spans directly from clients in jaeger.thrift format over binary thrift protocol
+    ## @param collector.containerPorts.binary can accept spans directly from clients in jaeger.thrift format over binary thrift protocol
     ##
     binary: 14268
-    ## @param collector.containerPorts.ports.admin Admin port: health check at / and metrics at /metrics
+    ## @param collector.containerPorts.admin Admin port: health check at / and metrics at /metrics
     ##
     admin: 14269
   ## Jaeger collector.service parameters
@@ -810,19 +810,19 @@ agent:
   ## Container ports to expose
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   containerPorts:
-    ## @param agent.containerPorts.ports.compact accept jaeger.thrift in compact Thrift protocol used by most current Jaeger clients
+    ## @param agent.containerPorts.compact accept jaeger.thrift in compact Thrift protocol used by most current Jaeger clients
     ##
     compact: 6831
-    ## @param agent.containerPorts.ports.binary accept jaeger.thrift in binary Thrift protocol used by Node.js Jaeger client
+    ## @param agent.containerPorts.binary accept jaeger.thrift in binary Thrift protocol used by Node.js Jaeger client
     ##
     binary: 6832
-    ## @param agent.containerPorts.ports.config Serve configs, sampling strategies
+    ## @param agent.containerPorts.config Serve configs, sampling strategies
     ##
     config: 5778
-    ## @param agent.containerPorts.ports.zipkin Accept zipkin.thrift in compact Thrift protocol (deprecated; only used by very old Jaeger clients, circa 2016)
+    ## @param agent.containerPorts.zipkin Accept zipkin.thrift in compact Thrift protocol (deprecated; only used by very old Jaeger clients, circa 2016)
     ##
     zipkin: 5775
-    ## @param agent.containerPorts.ports.admin Admin port: health check at / and metrics at /metrics
+    ## @param agent.containerPorts.admin Admin port: health check at / and metrics at /metrics
     ##
     admin: 14271
   ## Jaeger agent.service parameters
@@ -1083,7 +1083,7 @@ migration:
   ##
   extraVolumes: []
 
-## @param cqlshImage Set the image to use for the migration job
+## @section Set the image to use for the migration job
 ## @param cqlshImage.registry Cassandra image registry
 ## @param cqlshImage.repository Cassandra image repository
 ## @param cqlshImage.tag Cassandra image tag (immutable tags are recommended)
@@ -1115,16 +1115,22 @@ cqlshImage:
   debug: false
 
 externalDatabase:
+  ## @param externalDatabase.host External database host
   host: ""
+  ## @param externalDatabase.port External database port
   port: 9042
   ## Database credentials
-  ## @param dbUser.user Cassandra admin user
-  ## @param dbUser.password Password for `dbUser.user`. Randomly generated if empty
+  ## @param externalDatabase.dbUser.user Cassandra admin user
+  ## @param externalDatabase.dbUser.password Password for `dbUser.user`. Randomly generated if empty
   ##
   dbUser:
     user: bn_jaeger
     password: ""
+  ## @param externalDatabase.existingSecret Name of existing secret containing the database secret
+  ##
   existingSecret: ""
+  ## @param externalDatabase.existingSecretPasswordKey Name of existing secret key containing the database password secret key
+  ##
   existingSecretPasswordKey: ""
   ## Cluster parameters
   ## @param externalDatabase.cluster.datacenter Name for cassandra's jaeger datacenter
@@ -1150,8 +1156,8 @@ cassandra:
   ##
   keyspace: "bitnami_jaeger"
   ## Database credentials
-  ## @param dbUser.user Cassandra admin user
-  ## @param dbUser.password Password for `dbUser.user`. Randomly generated if empty
+  ## @param cassandra.dbUser.user Cassandra admin user
+  ## @param cassandra.dbUser.password Password for `dbUser.user`. Randomly generated if empty
   ##
   dbUser:
     user: bn_jaeger
