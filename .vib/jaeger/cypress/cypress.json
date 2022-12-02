@@ -1,4 +1,3 @@
 {
-  "baseUrl": "http://localhost",
-  "env": {}
+  "baseUrl": "http://localhost"
 }
