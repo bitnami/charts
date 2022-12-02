@@ -190,11 +190,11 @@ spec:
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "postgresql-ha.postgresqlSecretName" . }}
-                  {{- if ( index ( lookup "v1" "Secret" (include "common.names.namespace" .) (include "postgresql-ha.postgresqlSecretName" .) ) ".data.postgres-password" ) }}
-                  key: postgres-password
-                  {{- else }}
+                  name: {{ include "postgresql-ha.postgresqlSecretName" . }} 
+                  {{- if (include "postgresql-ha.postgresqlCreateSecret" .) }}
                   key: password
+                  {{- else }}
+                  key: postgres-password
                   {{- end }}
             {{- end }}
             {{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }}
