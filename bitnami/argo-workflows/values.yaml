@@ -600,6 +600,12 @@ controller:
   ##
   extraArgs: ""
 
+  ##
+  ## @param controller.persistence.archive.enabled Save completed workflows to an SQL database.
+  persistence:
+    archive:  
+      enabled: false
+
   ## Controller configmap configuration content. Requires controller.existingConfigmap to be empty.
   ## @param controller.config [object] Controller configmap configuration content
   ##
@@ -646,7 +652,7 @@ controller:
         maxIdleConns: 100
         maxOpenConns: 0
       nodeStatusOffLoad: false
-      archive: false
+      archive: {{ include "common.tplvalues.render" (dict "value" .Values.controller.persistence.archive.enabled "context" $) }}
       {{- if or .Values.postgresql.enabled (eq .Values.externalDatabase.type "postgresql") }}
       postgresql:
       {{- else if or .Values.mysql.enabled (eq .Values.externalDatabase.type "mysql") }}
