@@ -45,7 +45,7 @@
               "path": "/.vib/jaeger/cypress"
             },
             "endpoint": "lb-jaeger-query-http",
-            "app_protocol": "HTTP",
+            "app_protocol": "HTTP"
           }
         }
       ]
