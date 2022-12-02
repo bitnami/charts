@@ -34,10 +34,9 @@
         {
           "action_id": "health-check",
           "params": {
-            "endpoint": "lb-jaeger-query-http",
+            "endpoint": "lb-jaeger-query-api",
             "app_protocol": "HTTP"
-          },
-          "port": 80
+          }
         },
         {
           "action_id": "cypress",
@@ -45,10 +44,9 @@
             "resources": {
               "path": "/.vib/jaeger/cypress"
             },
-            "endpoint": "lb-jaeger-query-http",
+            "endpoint": "lb-jaeger-query-api",
             "app_protocol": "HTTP"
-          },
-          "port": 80
+          }
         }
       ]
     }
