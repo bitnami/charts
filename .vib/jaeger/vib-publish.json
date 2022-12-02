@@ -1,0 +1,54 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/jaeger"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/jaeger"
+        },
+        "runtime_parameters": "cXVlcnk6CiAgc2VydmljZToKICAgIHBvcnRzOgogICAgICBhcGk6IDgwCmFnZW50OgogIHNpZGVjYXJzOgogICAgLSBuYW1lOiBob3Ryb2QtZXhhbXBsZQogICAgICBpbWFnZTogamFlZ2VydHJhY2luZy9leGFtcGxlLWhvdHJvZDoxLjM5CiAgICAgIGFyZ3M6CiAgICAgICAgLSBhbGwKICAgIC0gbmFtZTogdHJhY2UtZ2VuZXJhdG9yCiAgICAgIGltYWdlOiBiaXRuYW1pL2JpdG5hbWktc2hlbGw6MTEtZGViaWFuLTExLXI1NwogICAgICBjb21tYW5kOgogICAgICAgIC0gL2Jpbi9iYXNoCiAgICAgICAgLSAtZWMKICAgICAgICAtIHwKICAgICAgICAgICMhL2Jpbi9iYXNoCiAgICAgICAgICB3aGlsZSB0cnVlOyBkbwogICAgICAgICAgICAjIFNhbXBsZSB0YWtlbiBmcm9tIGluc3BlY3RpbmcgaG90cm9kIGNvZGUKICAgICAgICAgICAgY3VybCAnaHR0cDovLzEyNy4wLjAuMTo4MDgwL2Rpc3BhdGNoP2N1c3RvbWVyPTM5MiZub25zZT0wLjQ1ODM4ODg0NzEwNTAxNzI2JwogICAgICAgICAgICBzbGVlcCA1CiAgICAgICAgICBkb25lCg==",
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "M4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "health-check",
+          "params": {
+            "endpoint": "lb-jaeger-query-http",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/jaeger/cypress"
+            },
+            "endpoint": "lb-jaeger-query-http",
+            "app_protocol": "HTTP",
+          }
+        }
+      ]
+    }
+  }
+}
