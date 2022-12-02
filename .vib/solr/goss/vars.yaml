@@ -1,0 +1,13 @@
+auth:
+  adminUsername: admin_user
+  adminPassword: ComplicatedPassword123!4
+cloudBootstrap: true
+replicaCount: 4
+containerPorts:
+  http: 8984
+podSecurityContext:
+  fsGroup: 1002
+containerSecurityContext:
+  runAsUser: 1002
+persistence:
+  mountPath: /bitnami/solr

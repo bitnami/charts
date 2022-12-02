@@ -22,11 +22,11 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/solr"
         },
-        "runtime_parameters": "ImF1dGgiOgogICJhZG1pblBhc3N3b3JkIjogIkNvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNCIKICAiYWRtaW5Vc2VybmFtZSI6ICJ1c2VyIgoic2VydmljZSI6CiAgInBvcnRzIjoKICAgICJodHRwIjogODAKICAidHlwZSI6ICJMb2FkQmFsYW5jZXIi",
+        "runtime_parameters": "YXV0aDoKICBlbmFibGVkOiB0cnVlCiAgYWRtaW5QYXNzd29yZDogQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0CiAgYWRtaW5Vc2VybmFtZTogYWRtaW5fdXNlcgpjbG91ZEVuYWJsZWQ6IHRydWUKY2xvdWRCb290c3RyYXA6IHRydWUKY29sbGVjdGlvbjogdmliLXRlc3QtY29sbGVjdGlvbgpjb2xsZWN0aW9uU2hhcmRzOiAyCmNvbGxlY3Rpb25SZXBsaWNhczogMgpyZXBsaWNhQ291bnQ6IDQKY29udGFpbmVyUG9ydHM6CiAgaHR0cDogODk4NApwb2RTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIGZzR3JvdXA6IDEwMDIKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBydW5Bc1VzZXI6IDEwMDIKc2VydmljZToKICBwb3J0czoKICAgIGh0dHA6IDgwCiAgdHlwZTogTG9hZEJhbGFuY2VyCnBlcnNpc3RlbmNlOgogIGVuYWJsZWQ6IHRydWUKICBtb3VudFBhdGg6IC9iaXRuYW1pL3NvbHIKem9va2VlcGVyOgogIGVuYWJsZWQ6IHRydWU=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
-            "name": "S4"
+            "name": "M4"
           }
         }
       },
@@ -46,7 +46,8 @@
             },
             "remote": {
               "workload": "sts-solr"
-            }
+            },
+            "vars_file": "vars.yaml"
           }
         },
         {
@@ -56,11 +57,7 @@
               "path": "/.vib/solr/cypress"
             },
             "endpoint": "lb-solr-tcp-client",
-            "app_protocol": "HTTP",
-            "env": {
-              "username": "user",
-              "password": "ComplicatedPassword123!4"
-            }
+            "app_protocol": "HTTP"
           }
         }
       ]
