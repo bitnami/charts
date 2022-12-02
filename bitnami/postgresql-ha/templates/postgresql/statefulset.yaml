@@ -194,7 +194,11 @@ spec:
                   {{- if (include "postgresql-ha.postgresqlCreateSecret" .) }}
                   key: password
                   {{- else }}
+                  {{- if ( index ( lookup "v1" "Secret" (include "common.names.namespace" .) (include "postgresql-ha.postgresqlSecretName" .) ) ".data.postgres-password" ) }}
                   key: postgres-password
+                  {{- else }}
+                  key: password
+                  {{- end }}
                   {{- end }}
             {{- end }}
             {{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }}
