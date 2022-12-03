@@ -83,7 +83,7 @@ To uninstall/delete the `my-release` deployment:
 | ------------------- | ---------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`    | kong image registry                                                                                  | `docker.io`           |
 | `image.repository`  | kong image repository                                                                                | `bitnami/kong`        |
-| `image.tag`         | kong image tag (immutable tags are recommended)                                                      | `3.0.1-debian-11-r15` |
+| `image.tag`         | kong image tag (immutable tags are recommended)                                                      | `3.0.1-debian-11-r16` |
 | `image.digest`      | kong image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`  | kong image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                                                     | `[]`                  |
