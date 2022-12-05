@@ -57,6 +57,8 @@ Create a container for checking cassandra availability
   env:
     - name: CQLSH_HOST
       value: {{ include "jaeger.cassandra.host" . }}
+    - name: BITNAMI_DEBUG
+      value: {{ ternary "true" "false" .Values.cqlshImage.debug | quote }}
     - name: CQLSH_PORT
       value: {{ include "jaeger.cassandra.port" . }}
     - name: CASSANDRA_USERNAME
