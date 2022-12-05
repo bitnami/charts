@@ -1,0 +1,24 @@
+addr:
+  # Querying /ready in HTTP too early results in error 503 and makes the test flaky
+  tcp://jaeger-query:{{ .Vars.query.service.ports.api }}:
+    reachable: true
+http:
+  http://jaeger-agent:{{ .Vars.agent.service.ports.admin }}/:
+    status: 200
+  http://jaeger-collector:{{ .Vars.collector.service.ports.admin }}/:
+    status: 200
+  http://jaeger-query:{{ .Vars.query.service.ports.admin }}/:
+    status: 200
+file:
+  /opt/bitnami/jaeger/bin/jaeger-agent:
+    exists: true
+    filetype: file
+    mode: "755"
+    owner: root
+command:
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+      - uid={{ .Vars.query.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.query.podSecurityContext.fsGroup }}/

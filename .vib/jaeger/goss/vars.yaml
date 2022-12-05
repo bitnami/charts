@@ -1,0 +1,17 @@
+query:
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 1002
+  service:
+    ports:
+      admin: 3101
+      api: 3102
+collector:
+  service:
+    ports:
+      admin: 3101
+agent:
+  service:
+    ports:
+      admin: 3101

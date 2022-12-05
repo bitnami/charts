@@ -39,6 +39,18 @@
           }
         },
         {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/jaeger/goss"
+            },
+            "remote": {
+              "workload": "deploy-jaeger-query"
+            },
+            "vars_file": "vars.yaml"
+          }
+        },
+        {
           "action_id": "cypress",
           "params": {
             "resources": {
