@@ -155,17 +155,6 @@ Create the cassandra user
 {{- end -}}
 
 {{/*
-Create the cassandra password
-*/}}
-{{- define "jaeger.cassandra.password" -}}
-    {{- if not .Values.cassandra.enabled -}}
-        {{- .Values.externalDatabase.dbUser.password | quote -}}
-    {{- else -}}
-        {{ .Values.cassandra.dbUser.password | quote -}}
-    {{- end -}}
-{{- end -}}
-
-{{/*
 Create the cassandra host
 */}}
 {{- define "jaeger.cassandra.host" -}}
