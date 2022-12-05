@@ -112,6 +112,16 @@ spec:
               value: {{ include "jaeger.cassandra.keyspace" . }}
             - name: CASSANDRA_DATACENTER
               value: {{ include "jaeger.cassandra.datacenter" . }}
+            - name: HTTP_SERVER_HOST_PORT
+              value: {{ .Values.agent.containerPorts.config | quote }}
+            - name: PROCESSOR_JAEGER_BINARY_SERVER_HOST_PORT
+              value: {{ .Values.agent.containerPorts.binary | quote }}
+            - name: PROCESSOR_JAEGER_COMPACT_SERVER_HOST_PORT
+              value: {{ .Values.agent.containerPorts.compact | quote }}
+            - name: PROCESSOR_ZIPKIN_COMPACT_SERVER_HOST_PORT
+              value: {{ .Values.agent.containerPorts.zipkin | quote }}
+            - name: ADMIN_HTTP_HOST-PORT
+              value: {{ .Values.agent.containerPorts.admin | quote }}
             - name: REPORTER_GRPC_HOST_PORT
               value: {{ printf "%s:%d" (include "jaeger.collector.fullname" .) (int .Values.collector.service.ports.grpc) }}
             - name: BITNAMI_DEBUG

@@ -106,6 +106,10 @@ spec:
               value: {{ include "jaeger.cassandra.keyspace" . }}
             - name: CASSANDRA_DATACENTER
               value: {{ include "jaeger.cassandra.datacenter" . }}
+            - name: QUERY_HTTP_SERVER_HOST_PORT
+              value: {{ .Values.query.containerPorts.api | quote }}
+            - name: ADMIN_HTTP_HOST-PORT
+              value: {{ .Values.query.containerPorts.admin | quote }}
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
             {{- if .Values.query.extraEnvVars }}
