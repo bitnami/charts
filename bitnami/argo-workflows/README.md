@@ -413,7 +413,7 @@ You may want to have Argo Workflows controller connected to a database to store 
 postgresql.enabled=true
 ```
 
-If your installaion does not require to to store controller evidences, you can disable the controller persistence by setting `postgresql.enabled=false`, `mysql.enabled=false` and ` externalDatabase.enabled=false`.
+If your installation does not require to to store controller evidences, you can disable the controller persistence by setting `postgresql.enabled=false`, `mysql.enabled=false` and ` externalDatabase.enabled=false`.
 
 #### External database
 
