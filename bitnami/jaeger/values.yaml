@@ -1044,6 +1044,12 @@ migration:
   podSecurityContext:
     enabled: true
     fsGroup: 1001
+  ## @param migration.extraEnvVars Extra environment variables to be set on jaeger migration container
+  ## For example:
+  ##  - name: FOO
+  ##    value: BAR
+  ##
+  extraEnvVars: []
   ## @param migration.extraEnvVarsCM Name of existing ConfigMap containing extra env vars
   ##
   extraEnvVarsCM: ""

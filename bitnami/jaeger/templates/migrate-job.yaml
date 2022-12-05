@@ -4,7 +4,7 @@ metadata:
   name: {{ include "common.names.fullname" . }}-migrate
   namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: query
+    app.kubernetes.io/component: migration
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -94,6 +94,9 @@ spec:
             - secretRef:
                 name: {{ .Values.migration.extraEnvVarsSecret }}
             {{- end }}
+          {{- end }}
+          {{- if .Values.migration.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.migration.extraEnvVars "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: cassandra-schema
