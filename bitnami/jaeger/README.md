@@ -296,6 +296,7 @@
 | `migration.annotations`                             | Provide any additional annotations which may be required.                                                      | `{}`            |
 | `migration.podSecurityContext.enabled`              | Enabled Jaeger pods' Security Context                                                                          | `true`          |
 | `migration.podSecurityContext.fsGroup`              | Set Jaeger pod's Security Context fsGroup                                                                      | `1001`          |
+| `migration.extraEnvVars`                            | Extra environment variables to be set on jaeger migration container                                            | `[]`            |
 | `migration.extraEnvVarsCM`                          | Name of existing ConfigMap containing extra env vars                                                           | `""`            |
 | `migration.extraEnvVarsSecret`                      | Name of existing Secret containing extra env vars                                                              | `""`            |
 | `migration.extraVolumeMounts`                       | Optionally specify extra list of additional volumeMounts for jaeger container                                  | `[]`            |
