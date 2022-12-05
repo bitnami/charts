@@ -42,6 +42,7 @@ spec:
   loadBalancerSourceRanges: {{- toYaml $root.Values.externalAccess.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   {{- end }}
+  publishNotReadyAddresses: {{ $root.Values.externalAccess.service.publishNotReadyAddresses }}
   ports:
     - name: tcp-kafka
       port: {{ $root.Values.externalAccess.service.ports.external }}

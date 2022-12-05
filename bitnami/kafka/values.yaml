@@ -69,7 +69,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 3.3.1-debian-11-r11
+  tag: 3.3.1-debian-11-r19
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -610,10 +610,12 @@ priorityClassName: ""
 ##
 schedulerName: ""
 ## @param updateStrategy.type Kafka statefulset strategy type
+## @param updateStrategy.rollingUpdate Kafka statefulset rolling update configuration parameters
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
 ##
 updateStrategy:
   type: RollingUpdate
+  rollingUpdate: {}
 ## @param extraVolumes Optionally specify extra list of additional volumes for the Kafka pod(s)
 ## e.g:
 ## extraVolumes:
@@ -722,6 +724,9 @@ service:
   ## Headless service properties
   ##
   headless:
+    ## @param service.headless.publishNotReadyAddresses Indicates that any agent which deals with endpoints for this Service should disregard any indications of ready/not-ready
+    ## ref: https://kubernetes.io/docs/reference/kubernetes-api/service-resources/service-v1/
+    publishNotReadyAddresses: false
     ## @param service.headless.annotations Annotations for the headless service.
     ##
     annotations: {}
@@ -757,7 +762,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.25.3-debian-11-r8
+      tag: 1.25.4-debian-11-r6
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -836,6 +841,9 @@ externalAccess:
     ## ClusterIP: Must be specified, ingress IP or domain where tcp for external ports is configured
     ##
     domain: ""
+    ## @param externalAccess.service.publishNotReadyAddresses Indicates that any agent which deals with endpoints for this Service should disregard any indications of ready/not-ready
+    ## ref: https://kubernetes.io/docs/reference/kubernetes-api/service-resources/service-v1/
+    publishNotReadyAddresses: false
     ## @param externalAccess.service.labels Service labels for external access
     ##
     labels: {}
@@ -993,7 +1001,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r49
+    tag: 11-debian-11-r57
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1073,7 +1081,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kafka-exporter
-      tag: 1.6.0-debian-11-r25
+      tag: 1.6.0-debian-11-r34
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1309,7 +1317,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.17.2-debian-11-r15
+      tag: 0.17.2-debian-11-r23
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

@@ -7,7 +7,7 @@ Thanos is a highly available metrics system that can be added on top of existing
 [Overview of Thanos](https://thanos.io/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```bash
@@ -111,7 +111,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------- |
 | `image.registry`                              | Thanos image registry                                                                                               | `docker.io`         |
 | `image.repository`                            | Thanos image repository                                                                                             | `bitnami/thanos`    |
-| `image.tag`                                   | Thanos image tag (immutable tags are recommended)                                                                   | `0.28.1-scratch-r0` |
+| `image.tag`                                   | Thanos image tag (immutable tags are recommended)                                                                   | `0.29.0-scratch-r0` |
 | `image.digest`                                | Thanos image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                |
 | `image.pullPolicy`                            | Thanos image pull policy                                                                                            | `IfNotPresent`      |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                    | `[]`                |
@@ -197,6 +197,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `query.extraVolumeMounts`                                 | Extra volume mounts to add to the query container                                                                                       | `[]`                     |
 | `query.podAffinityPreset`                                 | Thanos Query pod affinity preset                                                                                                        | `""`                     |
 | `query.podAntiAffinityPreset`                             | Thanos Query pod anti-affinity preset. Ignored if `query.affinity` is set. Allowed values: `soft` or `hard`                             | `soft`                   |
+| `query.podAntiAffinityPresetTopologyKey`                  | Thanos Query pod anti-affinity topologyKey. Ignored if `query.affinity` is set.                                                         | `""`                     |
 | `query.nodeAffinityPreset.type`                           | Thanos Query node affinity preset type. Ignored if `query.affinity` is set. Allowed values: `soft` or `hard`                            | `""`                     |
 | `query.nodeAffinityPreset.key`                            | Thanos Query node label key to match Ignored if `query.affinity` is set.                                                                | `""`                     |
 | `query.nodeAffinityPreset.values`                         | Thanos Query node label values to match. Ignored if `query.affinity` is set.                                                            | `[]`                     |
@@ -1154,7 +1155,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `volumePermissions.enabled`           | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                                   | `false`                 |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`  | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                       | `11-debian-11-r39`      |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                       | `11-debian-11-r55`      |
 | `volumePermissions.image.digest`      | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                  | `[]`                    |

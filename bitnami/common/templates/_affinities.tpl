@@ -50,8 +50,7 @@ Return a topologyKey definition
 {{ include "common.affinities.topologyKey" (dict "topologyKey" "BAR") -}}
 */}}
 {{- define "common.affinities.topologyKey" -}}
-{{- $topologyKey := default "kubernetes.io/hostname" .topologyKey -}}
-{{- $topologyKey | indent 1 -}}
+{{ .topologyKey | default "kubernetes.io/hostname" -}}
 {{- end -}}
 
 {{/*
@@ -71,7 +70,7 @@ preferredDuringSchedulingIgnoredDuringExecution:
           {{- range $key, $value := $extraMatchLabels }}
           {{ $key }}: {{ $value | quote }}
           {{- end }}
-      topologyKey:{{ include "common.affinities.topologyKey" .topologyKey }}
+      topologyKey: {{ include "common.affinities.topologyKey" (dict "topologyKey" .topologyKey) }}
     weight: 1
 {{- end -}}
 
@@ -91,7 +90,7 @@ requiredDuringSchedulingIgnoredDuringExecution:
         {{- range $key, $value := $extraMatchLabels }}
         {{ $key }}: {{ $value | quote }}
         {{- end }}
-    topologyKey:{{ include "common.affinities.topologyKey" .topologyKey }}
+    topologyKey: {{ include "common.affinities.topologyKey" (dict "topologyKey" .topologyKey) }}
 {{- end -}}
 
 {{/*
