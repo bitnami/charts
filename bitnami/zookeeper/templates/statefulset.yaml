@@ -488,16 +488,11 @@ spec:
     {{- if not .Values.persistence.existingClaim }}
     - metadata:
         name: data
-        annotations:
-        {{- range $key, $value := .Values.persistence.annotations }}
-          {{ $key }}: {{ $value }}
+        {{- if .Values.persistence.annotations }}
+        annotations: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}
         {{- end }}
-        {{- if .Values.commonAnnotations }}
-          {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 10 }}
-        {{- end }}
-        {{- if .Values.commonLabels }}
-        labels:
-          {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 10 }}
+        {{- if .Values.persistence.labels }}
+        labels: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.labels "context" $) | nindent 10 }}
         {{- end }}
       spec:
         accessModes:
@@ -515,16 +510,11 @@ spec:
     {{- if and (not .Values.persistence.dataLogDir.existingClaim) .Values.dataLogDir }}
     - metadata:
         name: data-log
-        annotations:
-        {{- range $key, $value := .Values.persistence.annotations }}
-          {{ $key }}: {{ $value }}
+        {{- if .Values.persistence.annotations }}
+        annotations: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}
         {{- end }}
-        {{- if .Values.commonAnnotations }}
-          {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 10 }}
-        {{- end }}
-        {{- if .Values.commonLabels }}
-        labels:
-          {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 10 }}
+        {{- if .Values.persistence.labels }}
+        labels: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.labels "context" $) | nindent 10 }}
         {{- end }}
       spec:
         accessModes:

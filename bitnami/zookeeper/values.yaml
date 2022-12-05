@@ -607,6 +607,9 @@ persistence:
   ## @param persistence.annotations Annotations for the PVC
   ##
   annotations: {}
+  ## @param persistence.labels Labels for the PVC
+  ##
+  labels: {}
   ## @param persistence.selector Selector to match an existing Persistent Volume for ZooKeeper's data PVC
   ## If set, the PVC can't have a PV dynamically provisioned for it
   ## E.g.

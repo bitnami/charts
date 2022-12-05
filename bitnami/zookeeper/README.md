@@ -7,7 +7,7 @@ Apache ZooKeeper provides a reliable, centralized register of configuration data
 [Overview of Apache ZooKeeper](https://zookeeper.apache.org)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -240,6 +240,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.accessModes`              | PVC Access modes                                                               | `["ReadWriteOnce"]` |
 | `persistence.size`                     | PVC Storage Request for ZooKeeper data volume                                  | `8Gi`               |
 | `persistence.annotations`              | Annotations for the PVC                                                        | `{}`                |
+| `persistence.labels`                   | Labels for the PVC                                                             | `{}`                |
 | `persistence.selector`                 | Selector to match an existing Persistent Volume for ZooKeeper's data PVC       | `{}`                |
 | `persistence.dataLogDir.size`          | PVC Storage Request for ZooKeeper's dedicated data log directory               | `8Gi`               |
 | `persistence.dataLogDir.existingClaim` | Provide an existing `PersistentVolumeClaim` for ZooKeeper's data log directory | `""`                |
