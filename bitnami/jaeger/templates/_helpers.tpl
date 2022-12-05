@@ -29,6 +29,7 @@ Create a container for checking cassandra availability
 {{- define "jaeger.waitForDBInitContainer" -}}
 - name: jaeger-cassandra-ready-check
   image: {{ include "jaeger.cqlshImage" . }}
+  imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
   command:
     - /bin/bash
   args:
