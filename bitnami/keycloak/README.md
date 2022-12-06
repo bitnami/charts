@@ -342,9 +342,10 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Keycloak Logging parameters
 
-| Name             | Description                                                     | Value     |
-| ---------------- | --------------------------------------------------------------- | --------- |
-| `logging.output` | Alternates between the default log output format or json format | `default` |
+| Name              | Description                                                     | Value     |
+|-------------------| --------------------------------------------------------------- | --------- |
+| `logging.output`  | Alternates between the default log output format or json format | `default` |
+| `logging.level`   | Specify one of the documented level from keycloak               | `INFO`    |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
