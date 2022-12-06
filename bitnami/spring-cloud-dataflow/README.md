@@ -7,7 +7,7 @@ Spring Cloud Data Flow is a microservices-based toolkit for building streaming a
 [Overview of Spring Cloud Data Flow](https://github.com/spring-cloud/spring-cloud-dataflow)
 
 
-                           
+
 ## TL;DR
 
 ```bash
@@ -667,6 +667,10 @@ Find more information about how to deal with common errors related to Bitnami He
 ## Upgrading
 
 If you enabled RabbitMQ chart to be used as the messaging solution for Skipper to manage streaming content, then it's necessary to set the `rabbitmq.auth.password` and `rabbitmq.auth.erlangCookie` parameters when upgrading for readiness/liveness probes to work properly. Inspect the RabbitMQ secret to obtain the password and the Erlang cookie, then you can upgrade your chart using the command below:
+
+### To 15.0.0
+
+This major updates the Kafka subchart to its newest major, 20.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2000) you can find more information about the changes introduced in that version.
 
 ### To 14.0.0
 
