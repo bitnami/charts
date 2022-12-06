@@ -7,7 +7,7 @@ Confluent Schema Registry provides a RESTful interface by adding a serving layer
 [Overview of Confluent Schema Registry](https://www.confluent.io)
 
 
-                           
+
 ## TL;DR
 
 ```bash
@@ -412,6 +412,10 @@ For each host indicated at `ingress.extraHosts`, please indicate a `name`, `path
 For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
 
 ## Upgrading
+
+### To 8.0.0
+
+This major updates the Kafka subchart to it newest major, 20.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2000).
 
 ### To 6.0.0
 
