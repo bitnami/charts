@@ -7,7 +7,7 @@ Apache Kafka is a distributed streaming platform designed to build real-time pip
 [Overview of Apache Kafka](http://kafka.apache.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -621,7 +621,7 @@ allowEveryoneIfNoAclFound=false
 superUsers=User:admin
 ```
 
-If you are using Kafka ACLs, you might encounter in kafka-authorizer.log the following event: `[...] Principal = User:ANONYMOUS is Allowed Operation [...]`. 
+If you are using Kafka ACLs, you might encounter in kafka-authorizer.log the following event: `[...] Principal = User:ANONYMOUS is Allowed Operation [...]`.
 
 By setting the following parameter: `auth.clientProtocol=mtls`, it will set the configuration in Kafka to `ssl.client.auth=required`. This option will require the clients to authenticate to Kafka brokers.
 
@@ -850,6 +850,10 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 20.0.0
+
+This major updates the Zookeeper subchart to it newest major, 11.0.0. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/zookeeper#to-1100).
 
 ### To 19.0.0
 
