@@ -431,10 +431,14 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 11.0.0
+
+This major version removes `commonAnnotations` and `commonLabels` from `volumeClaimTemplates`. Now annotations and labels can be set in volume claims using `persistence.annotations` and `persistence.labels` values. If the previous deployment has already set `commonAnnotations` and/or `commonLabels` values, to ensure a clean upgrade from previous version without loosing data, please set `persistence.annotations` and/or `persistence.labels` values with the same content as the common values.
+
 ### To 10.0.0
 
 This new version of the chart adds support for server-server authentication.
-The chart previously supported client-server authentication, to avioud confusion, the previous parameters have been renamed from `auth.*` to `auth.client.*`.
+The chart previously supported client-server authentication, to avoid confusion, the previous parameters have been renamed from `auth.*` to `auth.client.*`.
 
 ### To 9.0.0
 
