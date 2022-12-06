@@ -242,7 +242,7 @@ ingress:
 image:
   registry: docker.io
   repository: bitnami/oauth2-proxy
-  tag: 7.3.0-debian-11-r43
+  tag: 7.4.0-debian-11-r10
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -345,6 +345,15 @@ configuration:
     ##    testuser:{SHA}EWhzdhgoYJWy0z2gyzhRYlN9DSiv
     ##
     content: ""
+
+  ## @param configuration.oidcIssuerUrl OpenID Connect issuer URL
+  oidcIssuerUrl: ""
+
+  ## @param configuration.redirectUrl OAuth Redirect URL
+  redirectUrl: ""
+
+  ## @param configuration.whiteList Allowed domains for redirection after authentication. Prefix domain with a . or a *. to allow subdomains
+  whiteList: ""
 
 ## @section OAuth2 Proxy deployment parameters
 ##

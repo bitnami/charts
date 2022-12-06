@@ -1,0 +1,23 @@
+service:
+  type: LoadBalancer
+  ports:
+    http: 80
+    ssh: 2500
+containerPorts:
+  http: 8123
+  ssh: 2321
+containerSecurityContext:
+  runAsUser: 1002
+podSecurityContext:
+  fsGroup: 1002
+serviceAccount:
+  automountServiceAccountToken: true
+
+postgresql:
+  auth:
+    username: bn_vib_gitea
+    database: bitnami_vib_gitea
+  primary:
+    service:
+      ports:
+        postgresql: 9393

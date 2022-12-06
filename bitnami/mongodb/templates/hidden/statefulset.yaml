@@ -35,6 +35,9 @@ spec:
         {{- if .Values.hidden.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.hidden.podLabels "context" $) | nindent 8 }}
         {{- end }}
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- end }}
       {{- if or (include "mongodb.hidden.createConfigmap" .) .Values.hidden.podAnnotations }}
       annotations:
         {{- if (include "mongodb.hidden.createConfigmap" .) }}
@@ -124,13 +127,24 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.hostIP
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
           volumeMounts:
-          - name: certs-volume
-            mountPath: /certs/CAs
-          - name: certs
-            mountPath: /certs
-          - name: common-scripts
-            mountPath: /bitnami/scripts
+            {{- if (include "mongodb.autoGenerateCerts" .) }}
+            - name: certs-volume
+              mountPath: /certs/CAs
+            {{- else }}
+            {{- range $index, $_ := .Values.tls.hidden.existingSecrets }}
+            - name: mongodb-certs-{{ $index }}
+              mountPath: /certs-{{ $index }}
+            {{- end }}
+            {{- end }}
+            - name: certs
+              mountPath: /certs
+            - name: common-scripts
+              mountPath: /bitnami/scripts
           command:
             - /bitnami/scripts/generate-certs.sh
           args:
@@ -484,6 +498,7 @@ spec:
         {{- if .Values.tls.enabled }}
         - name: certs
           emptyDir: {}
+        {{- if (include "mongodb.autoGenerateCerts" .) }}
         - name: certs-volume
           secret:
             secretName: {{ template "mongodb.tlsSecretName" . }}
@@ -494,6 +509,14 @@ spec:
             - key: mongodb-ca-key
               path: mongodb-ca-key
               mode: 0600
+        {{- else }}
+        {{- range $index, $secret := .Values.tls.hidden.existingSecrets }}
+        - name: mongodb-certs-{{ $index }}
+          secret:
+            secretName: {{ include "common.tplvalues.render" ( dict "value" $secret "context" $) }}
+            defaultMode: 256
+        {{- end }}
+        {{- end }}
         {{- end }}
   {{- if not .Values.hidden.persistence.enabled }}
         - name: datadir

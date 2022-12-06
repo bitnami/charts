@@ -83,7 +83,7 @@ To uninstall/delete the `my-release` deployment:
 | ------------------- | ---------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`    | kong image registry                                                                                  | `docker.io`           |
 | `image.repository`  | kong image repository                                                                                | `bitnami/kong`        |
-| `image.tag`         | kong image tag (immutable tags are recommended)                                                      | `2.8.1-debian-11-r34` |
+| `image.tag`         | kong image tag (immutable tags are recommended)                                                      | `3.0.1-debian-11-r16` |
 | `image.digest`      | kong image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`  | kong image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                                                     | `[]`                  |
@@ -219,7 +219,7 @@ To uninstall/delete the `my-release` deployment:
 | `ingressController.enabled`                                     | Enable/disable the Kong Ingress Controller                                                                                                    | `true`                            |
 | `ingressController.image.registry`                              | Kong Ingress Controller image registry                                                                                                        | `docker.io`                       |
 | `ingressController.image.repository`                            | Kong Ingress Controller image name                                                                                                            | `bitnami/kong-ingress-controller` |
-| `ingressController.image.tag`                                   | Kong Ingress Controller image tag                                                                                                             | `2.5.0-debian-11-r13`             |
+| `ingressController.image.tag`                                   | Kong Ingress Controller image tag                                                                                                             | `2.7.0-debian-11-r21`             |
 | `ingressController.image.digest`                                | Kong Ingress Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                       | `""`                              |
 | `ingressController.image.pullPolicy`                            | Kong Ingress Controller image pull policy                                                                                                     | `IfNotPresent`                    |
 | `ingressController.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                              | `[]`                              |
@@ -284,27 +284,27 @@ To uninstall/delete the `my-release` deployment:
 
 ### PostgreSQL Parameters
 
-| Name                                            | Description                                                                                                | Value                   |
-| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `postgresql.enabled`                            | Switch to enable or disable the PostgreSQL helm chart                                                      | `true`                  |
-| `postgresql.auth.postgresPassword`              | Password for the "postgres" admin user                                                                     | `""`                    |
-| `postgresql.auth.username`                      | Name for a custom user to create                                                                           | `kong`                  |
-| `postgresql.auth.password`                      | Password for the custom user to create                                                                     | `""`                    |
-| `postgresql.auth.database`                      | Name for a custom database to create                                                                       | `kong`                  |
-| `postgresql.auth.existingSecret`                | Name of existing secret to use for PostgreSQL credentials                                                  | `""`                    |
-| `postgresql.auth.usePasswordFiles`              | Mount credentials as a files instead of using an environment variable                                      | `false`                 |
-| `postgresql.architecture`                       | PostgreSQL architecture (`standalone` or `replication`)                                                    | `standalone`            |
-| `postgresql.image.registry`                     | PostgreSQL image registry                                                                                  | `docker.io`             |
-| `postgresql.image.repository`                   | PostgreSQL image repository                                                                                | `bitnami/postgresql`    |
-| `postgresql.image.tag`                          | PostgreSQL image tag (immutable tags are recommended)                                                      | `11.16.0-debian-11-r33` |
-| `postgresql.image.digest`                       | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
-| `postgresql.external.host`                      | Database host                                                                                              | `""`                    |
-| `postgresql.external.port`                      | Database port number                                                                                       | `5432`                  |
-| `postgresql.external.user`                      | Non-root username for Kong                                                                                 | `kong`                  |
-| `postgresql.external.password`                  | Password for the non-root username for Kong                                                                | `""`                    |
-| `postgresql.external.database`                  | Kong database name                                                                                         | `kong`                  |
-| `postgresql.external.existingSecret`            | Name of an existing secret resource containing the database credentials                                    | `""`                    |
-| `postgresql.external.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials                                         | `""`                    |
+| Name                                            | Description                                                                                                | Value                 |
+| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------- |
+| `postgresql.enabled`                            | Switch to enable or disable the PostgreSQL helm chart                                                      | `true`                |
+| `postgresql.auth.postgresPassword`              | Password for the "postgres" admin user                                                                     | `""`                  |
+| `postgresql.auth.username`                      | Name for a custom user to create                                                                           | `kong`                |
+| `postgresql.auth.password`                      | Password for the custom user to create                                                                     | `""`                  |
+| `postgresql.auth.database`                      | Name for a custom database to create                                                                       | `kong`                |
+| `postgresql.auth.existingSecret`                | Name of existing secret to use for PostgreSQL credentials                                                  | `""`                  |
+| `postgresql.auth.usePasswordFiles`              | Mount credentials as a files instead of using an environment variable                                      | `false`               |
+| `postgresql.architecture`                       | PostgreSQL architecture (`standalone` or `replication`)                                                    | `standalone`          |
+| `postgresql.image.registry`                     | PostgreSQL image registry                                                                                  | `docker.io`           |
+| `postgresql.image.repository`                   | PostgreSQL image repository                                                                                | `bitnami/postgresql`  |
+| `postgresql.image.tag`                          | PostgreSQL image tag (immutable tags are recommended)                                                      | `14.6.0-debian-11-r7` |
+| `postgresql.image.digest`                       | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
+| `postgresql.external.host`                      | Database host                                                                                              | `""`                  |
+| `postgresql.external.port`                      | Database port number                                                                                       | `5432`                |
+| `postgresql.external.user`                      | Non-root username for Kong                                                                                 | `kong`                |
+| `postgresql.external.password`                  | Password for the non-root username for Kong                                                                | `""`                  |
+| `postgresql.external.database`                  | Kong database name                                                                                         | `kong`                |
+| `postgresql.external.existingSecret`            | Name of an existing secret resource containing the database credentials                                    | `""`                  |
+| `postgresql.external.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials                                         | `""`                  |
 
 
 ### Cassandra Parameters
@@ -508,7 +508,7 @@ extraDeploy:
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
@@ -528,6 +528,10 @@ $ helm upgrade my-release my-repo/kong \
 
 > Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_ with the values obtained from instructions in the installation notes.
 
+### To 8.0.0
+
+This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1200) you can find more information about the changes introduced in that version.
+
 ### To 6.0.0
 
 The `postgresql` sub-chart was upgraded to `11.x.x`. Several values of the sub-chart were changed, so please check the [upgrade notes](https://docs.bitnami.com/kubernetes/infrastructure/postgresql/administration/upgrade/).
@@ -536,7 +540,7 @@ No issues are expected during the upgrade.
 
 ### To 5.0.0
 
-The `cassandra` sub-chart was upgraded to `9.x.x`. Several values of the sub-chart were changed, so please check the [upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/cassandra#to-900).
+The `cassandra` sub-chart was upgraded to `9.x.x`. Several values of the sub-chart were changed, so please check the [upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/cassandra#to-900).
 
 No issues are expected during the upgrade.
 
@@ -609,7 +613,7 @@ postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
 
 ### To 4.0.0
 
-This major updates the Cassandra subchart to its newest major, 4.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/cassandra#to-800) you can find more information about the changes introduced in those versions.
+This major updates the Cassandra subchart to its newest major, 4.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/cassandra#to-800) you can find more information about the changes introduced in those versions.
 
 ### To 2.0.0
 
@@ -617,9 +621,9 @@ PostgreSQL and Cassandra dependencies versions were bumped to new major versions
 
 In order to properly migrate your data to this new version:
 
-* If you were using PostgreSQL as your database, please refer to the [PostgreSQL Upgrade Notes](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#900).
+* If you were using PostgreSQL as your database, please refer to the [PostgreSQL Upgrade Notes](https://github.com/bitnami/charts/tree/main/bitnami/postgresql#900).
 
-* If you were using Cassandra as your database, please refer to the [Cassandra Upgrade Notes](https://github.com/bitnami/charts/tree/master/bitnami/cassandra#to-600).
+* If you were using Cassandra as your database, please refer to the [Cassandra Upgrade Notes](https://github.com/bitnami/charts/tree/main/bitnami/cassandra#to-600).
 
 ## License
 

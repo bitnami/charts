@@ -1,0 +1,29 @@
+command:
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+      - uid={{ .Vars.client.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.client.podSecurityContext.fsGroup }}/
+file:
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
+    filetype: directory
+    mode: "3777"
+http:
+  http://appsmith:{{ .Vars.client.service.ports.http }}:
+    status: 200
+    body:
+      - __APPSMITH
+  http://127.0.0.1:{{ .Vars.client.containerPorts.http }}:
+    status: 200
+    body:
+      - __APPSMITH
+  http://appsmith:{{ .Vars.client.service.ports.http }}/api/v1/users/me:
+    status: 200
+  http://appsmith-backend:{{ .Vars.backend.service.ports.http }}/api/v1/users/me:
+    status: 200
+  http://appsmith:{{ .Vars.client.service.ports.http }}/rts-api/v1/health-check:
+    status: 200
+  http://appsmith-rts:{{ .Vars.rts.service.ports.http }}/rts-api/v1/health-check:
+    status: 200

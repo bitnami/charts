@@ -1,0 +1,33 @@
+http:
+  https://kong:{{ .Vars.service.ports.proxyHttps }}:
+    # The proxy does respond but the route is not registered
+    status: 404
+    allow-insecure: true
+  https://kong:{{ .Vars.service.ports.adminHttps }}:
+    status: 200
+    allow-insecure: true
+file:
+  /opt/bitnami/kong/conf/kong.conf:
+    exists: true
+    filetype: file
+    mode: '0644'
+    owner: root
+    contains:
+      - /pg_user.*{{ .Vars.postgresql.auth.username }}/
+      - /pg_database.*{{ .Vars.postgresql.auth.database }}/
+      - /pg_password.*{{ .Vars.postgresql.auth.password }}/
+  /opt/bitnami/kong/server/nginx-kong.conf:
+    exists: true
+    filetype: file
+    mode: '0644'
+    contains:
+      - /listen.*{{ .Vars.kong.containerPorts.proxyHttp }}/
+      - /listen.*{{ .Vars.kong.containerPorts.adminHttp }}/
+      - /listen.*{{ .Vars.kong.containerPorts.proxyHttps }}.*ssl/
+      - /listen.*{{ .Vars.kong.containerPorts.adminHttps }}.*ssl/
+command:
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+      - uid={{ .Vars.containerSecurityContext.runAsUser }}

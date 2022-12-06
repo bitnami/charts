@@ -10,7 +10,7 @@ Usage:
 {{- if .value.create }}
     {{- default (printf "%s-%s" (include "common.names.fullname" .context) .component) .value.name | quote }}
 {{- else if .context.Values.common.serviceAccount.create }}
-    {{- default (printf "%s-%s" (include "common.names.fullname" .context) .component).context.Values.common.serviceAccount.name | quote }}
+    {{- default (printf "%s-%s" (include "common.names.fullname" .context) .component) .context.Values.common.serviceAccount.name | quote }}
 {{- else -}}
     {{- default "default" .value.name | quote }}
 {{- end }}

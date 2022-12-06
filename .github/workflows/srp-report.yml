@@ -34,7 +34,7 @@ jobs:
             --name "bac-charts" --path . --saveto ./source-provenance.json \
             --comp-uid "${SRP_UID}" --build-number "${GITHUB_RUN_ID}" \
             --version "1.0" --all-ephemeral true --build-type release
-          echo "::set-output name=uid::${SRP_UID}"
+          echo "uid=${SRP_UID}" >> $GITHUB_OUTPUT
       - name: Archive SRP report
         uses: actions/upload-artifact@v3
         with:

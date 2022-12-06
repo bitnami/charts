@@ -57,7 +57,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/pinniped
-  tag: 0.20.0-scratch-r0
+  tag: 0.20.0-scratch-r8
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -724,6 +724,11 @@ supervisor:
     ##
     ports:
       https: 443
+      ## pinniped-supervisor aggregated api server currently listens on port 10250
+      ## https://github.com/vmware-tanzu/pinniped/blob/4951cbe5d4c6bb1b1bb04b2981c10b1ae7504c01/internal/config/supervisor/config.go
+      ## @param supervisor.service.ports.aggregatedAPIServer Supervisor aggregated API server port
+      ##
+      aggregatedAPIServer: 10250
     ## Node ports to expose
     ## @param supervisor.service.nodePorts.https Node port for HTTPS
     ## NOTE: choose port between <30000-32767>

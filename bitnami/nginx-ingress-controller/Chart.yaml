@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 1.4.0
+appVersion: 1.5.1
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -10,7 +10,7 @@ dependencies:
     version: 2.x.x
 description: NGINX Ingress Controller is an Ingress controller that manages external access to HTTP services in a Kubernetes cluster using NGINX.
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller
+home: https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller
 icon: https://bitnami.com/assets/stacks/nginx-ingress-controller/img/nginx-ingress-controller-stack-220x234.png
 keywords:
   - ingress
@@ -27,4 +27,4 @@ name: nginx-ingress-controller
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/nginx-ingress-controller
   - https://github.com/kubernetes/ingress-nginx
-version: 9.3.18
+version: 9.3.22

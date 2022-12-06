@@ -77,7 +77,7 @@ This charts allows you install several Thanos components, so you deploy an archi
                                                          +--------------+
 ```
 
-> Note: Components marked with (*) are provided by subchart(s) (such as the [Bitnami MinIO&reg; chart](https://github.com/bitnami/charts/tree/master/bitnami/minio)) or external charts (such as the [Bitnami kube-prometheus chart](https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus)).
+> Note: Components marked with (*) are provided by subchart(s) (such as the [Bitnami MinIO&reg; chart](https://github.com/bitnami/charts/tree/main/bitnami/minio)) or external charts (such as the [Bitnami kube-prometheus chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus)).
 
 Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate-thanos-with-prometheus-and-alertmanager) for detailed instructions to deploy this architecture.
 
@@ -111,7 +111,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------- |
 | `image.registry`                              | Thanos image registry                                                                                               | `docker.io`         |
 | `image.repository`                            | Thanos image repository                                                                                             | `bitnami/thanos`    |
-| `image.tag`                                   | Thanos image tag (immutable tags are recommended)                                                                   | `0.28.1-scratch-r0` |
+| `image.tag`                                   | Thanos image tag (immutable tags are recommended)                                                                   | `0.29.0-scratch-r0` |
 | `image.digest`                                | Thanos image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                |
 | `image.pullPolicy`                            | Thanos image pull policy                                                                                            | `IfNotPresent`      |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                    | `[]`                |
@@ -197,6 +197,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `query.extraVolumeMounts`                                 | Extra volume mounts to add to the query container                                                                                       | `[]`                     |
 | `query.podAffinityPreset`                                 | Thanos Query pod affinity preset                                                                                                        | `""`                     |
 | `query.podAntiAffinityPreset`                             | Thanos Query pod anti-affinity preset. Ignored if `query.affinity` is set. Allowed values: `soft` or `hard`                             | `soft`                   |
+| `query.podAntiAffinityPresetTopologyKey`                  | Thanos Query pod anti-affinity topologyKey. Ignored if `query.affinity` is set.                                                         | `""`                     |
 | `query.nodeAffinityPreset.type`                           | Thanos Query node affinity preset type. Ignored if `query.affinity` is set. Allowed values: `soft` or `hard`                            | `""`                     |
 | `query.nodeAffinityPreset.key`                            | Thanos Query node label key to match Ignored if `query.affinity` is set.                                                                | `""`                     |
 | `query.nodeAffinityPreset.values`                         | Thanos Query node label values to match. Ignored if `query.affinity` is set.                                                            | `[]`                     |
@@ -1073,22 +1074,78 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 
 ### Metrics parameters
 
-| Name                                       | Description                                                                                            | Value   |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ------- |
-| `metrics.enabled`                          | Enable the export of Prometheus metrics                                                                | `false` |
-| `metrics.serviceMonitor.enabled`           | Specify if a ServiceMonitor will be deployed for Prometheus Operator                                   | `false` |
-| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                               | `""`    |
-| `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                                    | `{}`    |
-| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in Prometheus                       | `""`    |
-| `metrics.serviceMonitor.interval`          | How frequently to scrape metrics                                                                       | `""`    |
-| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                | `""`    |
-| `metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                                               | `[]`    |
-| `metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                                             | `[]`    |
-| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                    | `{}`    |
-| `metrics.prometheusRule.enabled`           | If `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true`) | `false` |
-| `metrics.prometheusRule.namespace`         | Namespace in which the PrometheusRule CRD is created                                                   | `""`    |
-| `metrics.prometheusRule.additionalLabels`  | Additional labels for the prometheusRule                                                               | `{}`    |
-| `metrics.prometheusRule.groups`            | Prometheus Rule Groups for Thanos components                                                           | `[]`    |
+| Name                                                                                    | Description                                                                                                                                                   | Value   |
+| --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `metrics.enabled`                                                                       | Enable the export of Prometheus metrics                                                                                                                       | `false` |
+| `metrics.serviceMonitor.enabled`                                                        | Specify if a ServiceMonitor will be deployed for Prometheus Operator                                                                                          | `false` |
+| `metrics.serviceMonitor.namespace`                                                      | Namespace in which Prometheus is running                                                                                                                      | `""`    |
+| `metrics.serviceMonitor.labels`                                                         | Extra labels for the ServiceMonitor                                                                                                                           | `{}`    |
+| `metrics.serviceMonitor.jobLabel`                                                       | The name of the label on the target service to use as the job name in Prometheus                                                                              | `""`    |
+| `metrics.serviceMonitor.interval`                                                       | How frequently to scrape metrics                                                                                                                              | `""`    |
+| `metrics.serviceMonitor.scrapeTimeout`                                                  | Timeout after which the scrape is ended                                                                                                                       | `""`    |
+| `metrics.serviceMonitor.metricRelabelings`                                              | Specify additional relabeling of metrics                                                                                                                      | `[]`    |
+| `metrics.serviceMonitor.relabelings`                                                    | Specify general relabeling                                                                                                                                    | `[]`    |
+| `metrics.serviceMonitor.selector`                                                       | Prometheus instance selector labels                                                                                                                           | `{}`    |
+| `metrics.prometheusRule.enabled`                                                        | If `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true`)                                                        | `false` |
+| `metrics.prometheusRule.default.absent_rules`                                           | Enable absent_rules when metrics.prometheusRule.default.create is false (also requires `metrics.enabled` to be `true`)                                        |         |
+| `metrics.prometheusRule.default.compaction`                                             | Enable compaction rules when metrics.prometheusRule.default.create is false (also requires `metrics.enabled` to be `true`)                                    |         |
+| `metrics.prometheusRule.default.query`                                                  | Enable query when metrics.prometheusRule.default.create is false (also requires `metrics.enabled` to be `true`)                                               |         |
+| `metrics.prometheusRule.default.receive`                                                | Enable receive rules when metrics.prometheusRule.default.create is false (also requires `metrics.enabled` to be `true`)                                       |         |
+| `metrics.prometheusRule.default.replicate`                                              | Enable replicate rules when metrics.prometheusRule.default.create is false (also requires `metrics.enabled` to be `true`)                                     |         |
+| `metrics.prometheusRule.default.ruler`                                                  | Enable ruler rules when metrics.prometheusRule.default.create is false (also requires `metrics.enabled` to be `true`)                                         |         |
+| `metrics.prometheusRule.default.sidecar`                                                | Enable sidecar rules when metrics.prometheusRule.default.create is false (also requires `metrics.enabled` to be `true`)                                       |         |
+| `metrics.prometheusRule.default.store_gateway`                                          | Enable store_gateway rules when metrics.prometheusRule.default.create is false (also requires `metrics.enabled` to be `true`)                                 |         |
+| `metrics.prometheusRule.default.create`                                                 | would create all default prometheus alerts                                                                                                                    | `false` |
+| `metrics.prometheusRule.default.disabled.ThanosCompactIsDown`                           | Disable ThanosCompactIsDown rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.absent_rules is true                            |         |
+| `metrics.prometheusRule.default.disabled.ThanosQueryIsDown`                             | Disable ThanosQueryIsDown rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.absent_rules is true                              |         |
+| `metrics.prometheusRule.default.disabled.ThanosReceiveIsDown`                           | Disable ThanosReceiveIsDown rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.absent_rules is true                            |         |
+| `metrics.prometheusRule.default.disabled.ThanosRuleIsDown`                              | Disable ThanosRuleIsDown rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.absent_rules is true                               |         |
+| `metrics.prometheusRule.default.disabled.ThanosSidecarIsDown`                           | Disable ThanosSidecarIsDown rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.absent_rules is true                            |         |
+| `metrics.prometheusRule.default.disabled.ThanosStoreIsDown`                             | Disable ThanosStoreIsDown rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.absent_rules is true                              |         |
+| `metrics.prometheusRule.default.disabled.ThanosCompactMultipleRunning`                  | Disable ThanosCompactMultipleRunning rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.compaction is true                     |         |
+| `metrics.prometheusRule.default.disabled.ThanosCompactHalted`                           | Disable ThanosCompactMultipleRunning rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.compaction is true                     |         |
+| `metrics.prometheusRule.default.disabled.ThanosCompactHighCompactionFailures`           | Disable ThanosCompactMultipleRunning rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.compaction is true                     |         |
+| `metrics.prometheusRule.default.disabled.ThanosCompactBucketHighOperationFailures`      | Disable ThanosCompactMultipleRunning rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.compaction is true                     |         |
+| `metrics.prometheusRule.default.disabled.ThanosCompactHasNotRun`                        | Disable ThanosCompactMultipleRunning rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.compaction is true                     |         |
+| `metrics.prometheusRule.default.disabled.ThanosQueryHttpRequestQueryErrorRateHigh`      | Disable ThanosQueryHttpRequestQueryErrorRateHigh rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.query is true              |         |
+| `metrics.prometheusRule.default.disabled.ThanosQueryHttpRequestQueryRangeErrorRateHigh` | Disable ThanosQueryHttpRequestQueryRangeErrorRateHigh rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.query is true         |         |
+| `metrics.prometheusRule.default.disabled.ThanosQueryGrpcServerErrorRate`                | Disable ThanosQueryGrpcServerErrorRate rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.query is true                        |         |
+| `metrics.prometheusRule.default.disabled.ThanosQueryGrpcClientErrorRate`                | Disable ThanosQueryGrpcClientErrorRate rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.query is true                        |         |
+| `metrics.prometheusRule.default.disabled.ThanosQueryHighDNSFailures`                    | Disable ThanosQueryHighDNSFailures rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.query is true                            |         |
+| `metrics.prometheusRule.default.disabled.ThanosQueryInstantLatencyHigh`                 | Disable ThanosQueryInstantLatencyHigh rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.query is true                         |         |
+| `metrics.prometheusRule.default.disabled.ThanosQueryRangeLatencyHigh`                   | Disable ThanosQueryRangeLatencyHigh rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.query is true                           |         |
+| `metrics.prometheusRule.default.disabled.ThanosQueryOverload`                           | Disable ThanosQueryOverload rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.query is true                                   |         |
+| `metrics.prometheusRule.default.disabled.ThanosReceiveHttpRequestErrorRateHigh`         | Disable ThanosReceiveHttpRequestErrorRateHigh rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.receive is true               |         |
+| `metrics.prometheusRule.default.disabled.ThanosReceiveHttpRequestLatencyHigh`           | Disable ThanosReceiveHttpRequestLatencyHigh rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.receive is true                 |         |
+| `metrics.prometheusRule.default.disabled.ThanosReceiveHighReplicationFailures`          | Disable ThanosReceiveHighReplicationFailures rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.receive is true                |         |
+| `metrics.prometheusRule.default.disabled.ThanosReceiveHighForwardRequestFailures`       | Disable ThanosReceiveHighForwardRequestFailures rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.receive is true             |         |
+| `metrics.prometheusRule.default.disabled.ThanosReceiveHighHashringFileRefreshFailures`  | Disable ThanosReceiveHighHashringFileRefreshFailures rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.receive is true        |         |
+| `metrics.prometheusRule.default.disabled.ThanosReceiveConfigReloadFailure`              | Disable ThanosReceiveConfigReloadFailure rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.receive is true                    |         |
+| `metrics.prometheusRule.default.disabled.ThanosReceiveNoUpload`                         | Disable ThanosReceiveNoUpload rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.receive is true                               |         |
+| `metrics.prometheusRule.default.disabled.ThanosReceiveTrafficBelowThreshold`            | Disable ThanosReceiveTrafficBelowThreshold rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.receive is true                  |         |
+| `metrics.prometheusRule.default.disabled.ThanosBucketReplicateErrorRate`                | Disable ThanosBucketReplicateErrorRate rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.receive is true                      |         |
+| `metrics.prometheusRule.default.disabled.ThanosBucketReplicateRunLatency`               | Disable ThanosBucketReplicateRunLatency rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.receive is true                     |         |
+| `metrics.prometheusRule.default.disabled.ThanosRuleQueueIsDroppingAlerts`               | Disable ThanosRuleQueueIsDroppingAlerts rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                       |         |
+| `metrics.prometheusRule.default.disabled.ThanosRuleSenderIsFailingAlerts`               | Disable ThanosRuleSenderIsFailingAlerts rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                       |         |
+| `metrics.prometheusRule.default.disabled.ThanosRuleHighRuleEvaluationFailures`          | Disable ThanosRuleHighRuleEvaluationFailures rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                  |         |
+| `metrics.prometheusRule.default.disabled.ThanosRuleHighRuleEvaluationWarnings`          | Disable ThanosRuleHighRuleEvaluationWarnings rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                  |         |
+| `metrics.prometheusRule.default.disabled.ThanosRuleRuleEvaluationLatencyHigh`           | Disable ThanosRuleRuleEvaluationLatencyHigh rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                   |         |
+| `metrics.prometheusRule.default.disabled.ThanosRuleGrpcErrorRate`                       | Disable ThanosRuleGrpcErrorRate rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                               |         |
+| `metrics.prometheusRule.default.disabled.ThanosRuleConfigReloadFailure`                 | Disable ThanosRuleConfigReloadFailure rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                         |         |
+| `metrics.prometheusRule.default.disabled.ThanosRuleQueryHighDNSFailures`                | Disable ThanosRuleQueryHighDNSFailures rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                        |         |
+| `metrics.prometheusRule.default.disabled.ThanosRuleAlertmanagerHighDNSFailures`         | Disable ThanosRuleAlertmanagerHighDNSFailures rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                 |         |
+| `metrics.prometheusRule.default.disabled.ThanosRuleNoEvaluationFor10Intervals`          | Disable ThanosRuleNoEvaluationFor10Intervals rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                  |         |
+| `metrics.prometheusRule.default.disabled.ThanosNoRuleEvaluations`                       | Disable ThanosNoRuleEvaluations rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                               |         |
+| `metrics.prometheusRule.default.disabled.ThanosSidecarBucketOperationsFailed`           | Disable ThanosSidecarBucketOperationsFailed rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.sidecar is true                 |         |
+| `metrics.prometheusRule.default.disabled.ThanosSidecarNoConnectionToStartedPrometheus`  | Disable ThanosSidecarNoConnectionToStartedPrometheus rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.sidecar is true        |         |
+| `metrics.prometheusRule.default.disabled.ThanosStoreGrpcErrorRate`                      | Disable ThanosSidecarNoConnectionToStartedPrometheus rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.store_gateway  is true |         |
+| `metrics.prometheusRule.default.disabled.ThanosStoreSeriesGateLatencyHigh`              | Disable ThanosStoreSeriesGateLatencyHigh rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.store_gateway  is true             |         |
+| `metrics.prometheusRule.default.disabled.ThanosStoreBucketHighOperationFailures`        | Disable ThanosStoreBucketHighOperationFailures rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.store_gateway  is true       |         |
+| `metrics.prometheusRule.default.disabled.ThanosStoreObjstoreOperationLatencyHigh`       | Disable ThanosStoreObjstoreOperationLatencyHigh rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.store_gateway  is true      |         |
+| `metrics.prometheusRule.default.disabled`                                               | disable one specific prometheus alert rule                                                                                                                    | `{}`    |
+| `metrics.prometheusRule.namespace`                                                      | Namespace in which the PrometheusRule CRD is created                                                                                                          | `""`    |
+| `metrics.prometheusRule.additionalLabels`                                               | Additional labels for the prometheusRule                                                                                                                      | `{}`    |
+| `metrics.prometheusRule.groups`                                                         | Prometheus Rule Groups for Thanos components                                                                                                                  | `[]`    |
 
 
 ### Volume Permissions parameters
@@ -1098,7 +1155,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `volumePermissions.enabled`           | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                                   | `false`                 |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`  | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                       | `11-debian-11-r39`      |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                       | `11-debian-11-r55`      |
 | `volumePermissions.image.digest`      | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
@@ -1106,13 +1163,13 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 
 ### MinIO&reg; chart parameters
 
-| Name                      | Description                                                                                                                         | Value    |
-| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| `minio`                   | For full list of MinIO&reg; values configurations please refere [here](https://github.com/bitnami/charts/tree/master/bitnami/minio) |          |
-| `minio.enabled`           | Enable/disable MinIO&reg; chart installation                                                                                        | `false`  |
-| `minio.auth.rootUser`     | MinIO&reg; root username                                                                                                            | `admin`  |
-| `minio.auth.rootPassword` | Password for MinIO&reg; root user                                                                                                   | `""`     |
-| `minio.defaultBuckets`    | Comma, semi-colon or space separated list of MinIO&reg; buckets to create                                                           | `thanos` |
+| Name                      | Description                                                                                                                       | Value    |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `minio`                   | For full list of MinIO&reg; values configurations please refere [here](https://github.com/bitnami/charts/tree/main/bitnami/minio) |          |
+| `minio.enabled`           | Enable/disable MinIO&reg; chart installation                                                                                      | `false`  |
+| `minio.auth.rootUser`     | MinIO&reg; root username                                                                                                          | `admin`  |
+| `minio.auth.rootPassword` | Password for MinIO&reg; root user                                                                                                 | `""`     |
+| `minio.defaultBuckets`    | Comma, semi-colon or space separated list of MinIO&reg; buckets to create                                                         | `thanos` |
 
 
 ### NetWorkPolicy parameters
@@ -1248,7 +1305,7 @@ timePartitioning:
 
 ### Integrate Thanos with Prometheus and Alertmanager
 
-You can integrate Thanos with Prometheus & Alertmanager using this chart and the [Bitnami kube-prometheus chart](https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus) following the steps below:
+You can integrate Thanos with Prometheus & Alertmanager using this chart and the [Bitnami kube-prometheus chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) following the steps below:
 
 > Note: in this example we will use MinIO&reg; (subchart) as the Objstore. Every component will be deployed in the "monitoring" namespace.
 
@@ -1336,7 +1393,7 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 
 This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
@@ -1363,7 +1420,7 @@ The chart was changed to adapt to the common Bitnami chart standards. Now it inc
 
 ### To 7.0.0
 
-This major updates the MinIO&reg; subchart to its newest major, 9.0.0, which updates authentication parameters. Check [MinIO&reg; Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/minio#to-900) for more information.
+This major updates the MinIO&reg; subchart to its newest major, 9.0.0, which updates authentication parameters. Check [MinIO&reg; Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/minio#to-900) for more information.
 This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repositor. Some of the affected values are:
 
 - `XXX.extraEnv` parameters were renamed to `XXX.extraEnvVars`.
@@ -1374,7 +1431,7 @@ This major release renames several values in this chart and adds missing feature
 
 ### To 6.0.0
 
-This major updates the MinIO&reg; subchart to its newest major, 8.0.0, which now has two separated services for MinIO&reg; Console and MinIO&reg; API. Check [MinIO&reg; Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/minio#to-800) for more information.
+This major updates the MinIO&reg; subchart to its newest major, 8.0.0, which now has two separated services for MinIO&reg; Console and MinIO&reg; API. Check [MinIO&reg; Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/minio#to-800) for more information.
 
 ### To 5.4.0
 
@@ -1418,7 +1475,7 @@ This major updates the MinIO subchart to its newest major, 7.0.0, which removes 
 
 ### To 3.3.0
 
-This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### To 3.1.0
 

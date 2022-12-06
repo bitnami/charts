@@ -1,7 +1,7 @@
 annotations:
   category: WorkFlow
 apiVersion: v2
-appVersion: 2.3.4
+appVersion: 2.4.3
 dependencies:
   - condition: redis.enabled
     name: redis
@@ -10,7 +10,7 @@ dependencies:
   - condition: postgresql.enabled
     name: postgresql
     repository: https://charts.bitnami.com/bitnami
-    version: 11.x.x
+    version: 12.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -18,7 +18,7 @@ dependencies:
     version: 2.x.x
 description: Apache Airflow is a tool to express and execute workflows as directed acyclic graphs (DAGs). It includes utilities to schedule tasks, monitor task progress and handle task dependencies.
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/airflow
+home: https://github.com/bitnami/charts/tree/main/bitnami/airflow
 icon: https://bitnami.com/assets/stacks/airflow/img/airflow-stack-220x234.png
 keywords:
   - apache
@@ -32,4 +32,4 @@ name: airflow
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/airflow
   - https://airflow.apache.org/
-version: 13.1.7
+version: 14.0.4

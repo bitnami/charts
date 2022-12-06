@@ -15,6 +15,51 @@
           "action_id": "helm-lint"
         }
       ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/wavefront"
+        },
+        "runtime_parameters": "Y2x1c3Rlck5hbWU6IGZha2Utd2F2ZWZyb250CndhdmVmcm9udDoKICB0b2tlbjogZmFrZQogIHVybDogaHR0cHM6Ly9mYWtlLndhdmVmcm9udC5jb20KcmJhYzoKICBjcmVhdGU6IHRydWUKc2VydmljZUFjY291bnQ6CiAgY3JlYXRlOiB0cnVlCiAgYXV0b21vdW50U2VydmljZUFjY291bnRUb2tlbjogdHJ1ZQpjb2xsZWN0b3I6CiAgZW5hYmxlZDogdHJ1ZQogIHVzZURhZW1vbnNldDogdHJ1ZQogIGludGVydmFsOiAiNTVzIgogIHVzZVByb3h5OiB0cnVlCiAga3ViZXJuZXRlc1N0YXRlOiB0cnVlCiAgZXZlbnRzOgogICAgZW5hYmxlZDogZmFsc2UKICBkaXNjb3Zlcnk6CiAgICBlbmFibGVkOiB0cnVlCnByb3h5OgogIGVuYWJsZWQ6IHRydWUKICBjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgICBlbmFibGVkOiB0cnVlCiAgICBydW5Bc1VzZXI6IDEwMDIKICAgIHJlYWRPbmx5Um9vdEZpbGVzeXN0ZW06IGZhbHNlCiAgcG9kU2VjdXJpdHlDb250ZXh0OgogICAgZW5hYmxlZDogdHJ1ZQogICAgZnNHcm91cDogMTAwMgogIHBvcnQ6IDI4Nzg=",
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4",
+            "worker_nodes_instance_count": "1"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/wavefront/goss"
+            },
+            "remote": {
+              "workload": "deploy-wavefront-proxy"
+            },
+            "vars_file": "vars.yaml"
+          }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/wavefront/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "proxy-port": "2878",
+              "cluster-name": "fake-wavefront",
+              "collection-interval": "55s"
+            }
+          }
+        }
+      ]
     }
   }
 }

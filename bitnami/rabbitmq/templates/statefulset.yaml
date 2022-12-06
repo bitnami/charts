@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ include "common.names.fullname" . }}
@@ -224,7 +224,7 @@ spec:
             - name: RABBITMQ_DEFINITIONS_FILE
               value: {{ .Values.loadDefinition.file | quote }}
             - name: RABBITMQ_SECURE_PASSWORD
-              value: "yes"
+              value: {{ ternary "yes" "no" (or .Values.auth.securePassword (not .Values.auth.password)) | quote }}
             - name: RABBITMQ_USERNAME
               value: {{ .Values.auth.username | quote }}
             - name: RABBITMQ_PASSWORD

@@ -35,7 +35,7 @@ it('allows a user to place an order and an admin to list it', () => {
     cy.contains('button', 'Place order').click();
     cy.contains('order is confirmed');
     cy.login();
-    cy.contains('[href*="sell/orders"]', 'Orders').click();
+    cy.contains('a[href*="sell/orders/?"]', 'Orders').click();
     cy.contains('li#subtab-AdminOrders', 'Orders').click();
     cy.get('td[class*="column-reference"]').first().click();
     cy.contains(`${random}${customers.shopper.email}`);

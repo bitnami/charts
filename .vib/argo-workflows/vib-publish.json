@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/argo-workflows"
         },
-        "runtime_parameters": "InBvc3RncmVzcWwiOgogICJwb3N0Z3Jlc3FsUGFzc3dvcmQiOiAiMmI3ZFJncUsiCiJzZXJ2ZXIiOgogICJzZXJ2aWNlIjoKICAgICJwb3J0cyI6CiAgICAgICJodHRwIjogODAKICAgICJ0eXBlIjogIkxvYWRCYWxhbmNlciI=",
+        "runtime_parameters": "cmJhYzoKICBzaW5nbGVOYW1lc3BhY2U6IGZhbHNlCmNyZWF0ZUFnZ3JlZ2F0ZVJvbGVzOiB0cnVlCnNlcnZlcjoKICBlbmFibGVkOiB0cnVlCiAgcmJhYzoKICAgIGNyZWF0ZTogdHJ1ZQogIGF1dGg6CiAgICBlbmFibGVkOiB0cnVlCiAgICBtb2RlOiBzZXJ2ZXIKICBjbHVzdGVyV29ya2Zsb3dUZW1wbGF0ZXM6CiAgICBlbmFibGVkOiB0cnVlCiAgICBlbmFibGVFZGl0aW5nOiB0cnVlCiAgc2VjdXJlOiBmYWxzZQogIHNlcnZpY2U6CiAgICBwb3J0czoKICAgICAgaHR0cDogODAKICAgIHR5cGU6IExvYWRCYWxhbmNlcgp3b3JrZmxvd3M6CiAgcmJhYzoKICAgIGNyZWF0ZTogdHJ1ZQpwb3N0Z3Jlc3FsOgogIGVuYWJsZWQ6IHRydWUKICBzZXJ2aWNlOgogICAgcG9ydHM6CiAgICAgIHBvc3RncmVzcWw6IDU0MzIKbXlzcWw6CiAgZW5hYmxlZDogZmFsc2U=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -34,6 +34,16 @@
         {
           "action_id": "health-check",
           "params": {
+            "endpoint": "lb-argo-workflows-server-http",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/argo-workflows/cypress"
+            },
             "endpoint": "lb-argo-workflows-server-http",
             "app_protocol": "HTTP"
           }

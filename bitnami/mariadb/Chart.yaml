@@ -1,7 +1,7 @@
 annotations:
   category: Database
 apiVersion: v2
-appVersion: 10.6.10
+appVersion: 10.6.11
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -10,7 +10,7 @@ dependencies:
     version: 2.x.x
 description: MariaDB is an open source, community-developed SQL database server that is widely in use around the world due to its enterprise features, flexibility, and collaboration with leading tech firms.
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/mariadb
+home: https://github.com/bitnami/charts/tree/main/bitnami/mariadb
 icon: https://bitnami.com/assets/stacks/mariadb/img/mariadb-stack-220x234.png
 keywords:
   - mariadb
@@ -26,4 +26,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/mariadb
   - https://github.com/prometheus/mysqld_exporter
   - https://mariadb.org
-version: 11.3.3
+version: 11.4.0

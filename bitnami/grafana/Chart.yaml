@@ -1,7 +1,7 @@
 annotations:
   category: Analytics
 apiVersion: v2
-appVersion: 9.1.7
+appVersion: 9.2.6
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -10,7 +10,7 @@ dependencies:
     version: 2.x.x
 description: Grafana is an open source metric analytics and visualization suite for visualizing time series data that supports various types of data sources.
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/grafana
+home: https://github.com/bitnami/charts/tree/main/bitnami/grafana
 icon: https://bitnami.com/assets/stacks/grafana/img/grafana-stack-220x234.png
 keywords:
   - analytics
@@ -24,4 +24,4 @@ name: grafana
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/grafana
   - https://grafana.com/
-version: 8.2.11
+version: 8.2.20

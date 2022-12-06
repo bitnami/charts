@@ -172,7 +172,7 @@ spec:
             - name: REDIS_TLS_ENABLED
               value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
             {{- if .Values.tls.enabled }}
-            - name: REDIS_TLS_PORT
+            - name: REDIS_TLS_PORT_NUMBER
               value: {{ .Values.redis.containerPorts.redis | quote }}
             - name:  REDIS_TLS_AUTH_CLIENTS
               value: {{ ternary "yes" "no" .Values.tls.authClients | quote }}
@@ -187,7 +187,7 @@ spec:
               value: {{ template "redis-cluster.tlsDHParams" . }}
             {{- end }}
             {{- else }}
-            - name: REDIS_PORT
+            - name: REDIS_PORT_NUMBER
               value: {{ .Values.redis.containerPorts.redis | quote }}
             {{- end }}
             {{- if .Values.redis.extraEnvVars }}
@@ -382,9 +382,9 @@ spec:
           {{- end }}
           command:
           {{- toYaml .Values.sysctlImage.command | nindent 12 }}
-          securityContext:
-            privileged: true
-            runAsUser: 0
+          {{- if .Values.sysctlImage.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.sysctlImage.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
         {{- end }}
         {{- if .Values.redis.initContainers }}
         {{- toYaml .Values.redis.initContainers | nindent 8 }}
@@ -422,6 +422,11 @@ spec:
             secretName: {{ include "redis-cluster.tlsSecretName" . }}
             defaultMode: 256
         {{- end }}
+        {{- if not .Values.persistence.enabled }}
+        - name: redis-data
+          emptyDir: {}
+        {{- end }}
+  {{- if .Values.persistence.enabled }}
   volumeClaimTemplates:
     - metadata:
         name: redis-data
@@ -449,4 +454,5 @@ spec:
           {{- toYaml .Values.persistence.matchExpressions | nindent 12 }}
         {{- end -}}
         {{- end }}
+  {{- end }}
 {{- end }}

@@ -148,9 +148,8 @@ containers:
     {{- end }}
     command:
       - java
-      - -XX:+UnlockExperimentalVMOptions
-      - -XX:+UseCGroupMemoryLimitForHeap
-      - -XX:MaxRAMFraction=1
+    args:
+      - -XX:MaxRAMPercentage=100
       - -XshowSettings:vm
       - -jar
       - jmx_prometheus_httpserver.jar
@@ -191,6 +190,6 @@ volumes:
   {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 2 }}
   {{- end }}
 {{- if .Values.extraPodSpec }}
-{{- include "common.tplvalues.render" (dict "value" .Values.extraPodSpec "context" $) }}
+{{- include "common.tplvalues.render" (dict "value" .Values.extraPodSpec "context" $) | nindent 0}}
 {{- end }}
 {{- end -}}

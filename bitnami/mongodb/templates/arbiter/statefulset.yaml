@@ -37,6 +37,9 @@ spec:
         {{- if .Values.arbiter.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.podLabels "context" $) | nindent 8 }}
         {{- end }}
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- end }}
       {{- if or (include "mongodb.arbiter.createConfigmap" .) .Values.arbiter.podAnnotations }}
       annotations:
         {{- if (include "mongodb.arbiter.createConfigmap" .) }}
@@ -89,7 +92,7 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.initContainers "context" $) | nindent 8 }}
         {{- end }}
         {{- if and .Values.tls.enabled .Values.arbiter.enabled }}
-        - name: generate-client
+        - name: generate-tls-certs
           image: {{ include "mongodb.tls.image" . }}
           imagePullPolicy: {{ .Values.tls.image.pullPolicy | quote }}
           env:
@@ -101,13 +104,22 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.hostIP
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
           volumeMounts:
-          - name: certs-volume
-            mountPath: /certs/CAs
-          - name: certs
-            mountPath: /certs
-          - name: common-scripts
-            mountPath: /bitnami/scripts
+            {{- if (include "mongodb.autoGenerateCerts" .) }}
+            - name: certs-volume
+              mountPath: /certs/CAs
+            {{- else }}
+            - name: mongodb-certs-0
+              mountPath: /certs-0
+            {{- end }}
+            - name: certs
+              mountPath: /certs
+            - name: common-scripts
+              mountPath: /bitnami/scripts
           command:
             - /bitnami/scripts/generate-certs.sh
           args:
@@ -261,6 +273,7 @@ spec:
         {{- if and .Values.tls.enabled .Values.arbiter.enabled }}
         - name: certs
           emptyDir: {}
+        {{- if (include "mongodb.autoGenerateCerts" .) }}
         - name: certs-volume
           secret:
             secretName: {{ template "mongodb.tlsSecretName" . }}
@@ -271,6 +284,12 @@ spec:
             - key: mongodb-ca-key
               path: mongodb-ca-key
               mode: 0600
+        {{- else }}
+        - name: mongodb-certs-0
+          secret:
+            secretName: {{ include "common.tplvalues.render" ( dict "value" .Values.tls.arbiter.existingSecret "context" $) }}
+            defaultMode: 256
+        {{- end }}
         {{- end }}
         {{- if .Values.arbiter.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.extraVolumes "context" $) | nindent 8 }}

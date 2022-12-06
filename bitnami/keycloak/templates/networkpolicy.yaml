@@ -1,8 +1,8 @@
 {{- if .Values.networkPolicy.enabled }}
 kind: NetworkPolicy
-apiVersion: networking.k8s.io/v1
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
-  name: {{ template "keycloak.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: keycloak
@@ -18,14 +18,14 @@ spec:
   ingress:
     - ports:
         - port: {{ .Values.containerPorts.http }}
-        {{- if .Values.auth.tls.enabled }}
+        {{- if .Values.tls.enabled }}
         - port: {{ .Values.containerPorts.https }}
         {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:
             matchLabels:
-              {{ template "keycloak.fullname" . }}-client: "true"
+              {{ template "common.names.fullname" . }}-client: "true"
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
               app.kubernetes.io/component: keycloak

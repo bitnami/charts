@@ -68,24 +68,6 @@ spec:
       securityContext: {{- omit .Values.server.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       initContainers:
-        {{- if .Values.volumePermissions.enabled }}
-        - name: volume-permissions
-          image: {{ include "argocd.volumePermissions.image" . }}
-          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
-          command:
-            - /bin/bash
-            - -ec
-            - |
-              chown -R {{ .Values.server.containerSecurityContext.runAsUser }}:{{ .Values.server.containerSecurityContext.fsGroup }} /opt/bitnami/argo-cd/app
-          securityContext:
-            runAsUser: {{ .Values.volumePermissions.containerSecurityContext.runAsUser }}
-          {{- if .Values.volumePermissions.resources }}
-          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
-          {{- end }}
-          volumeMounts:
-            - name: static-assets
-              mountPath: /opt/bitnami/argo-cd/app
-        {{- end }}
         {{- if .Values.server.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.server.initContainers "context" $) | nindent 8 }}
         {{- end }}

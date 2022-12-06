@@ -10,7 +10,7 @@ dependencies:
     version: 2.x.x
 description: DokuWiki is a standards-compliant wiki optimized for creating documentation. Designed to be simple to use for small organizations, it stores all data in plain text files so no database is required.
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/dokuwiki
+home: https://github.com/bitnami/charts/tree/main/bitnami/dokuwiki
 icon: https://bitnami.com/assets/stacks/dokuwiki/img/dokuwiki-stack-220x234.png
 keywords:
   - dokuwiki
@@ -26,4 +26,4 @@ name: dokuwiki
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/dokuwiki
   - http://www.dokuwiki.org/
-version: 13.1.7
+version: 13.1.8

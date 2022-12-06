@@ -76,7 +76,7 @@ spec:
             - /bin/bash
             - -ec
             - |
-              chown -R {{ .Values.repoServer.containerSecurityContext.runAsUser }}:{{ .Values.repoServer.containerSecurityContext.fsGroup }} /tmp
+              chown -R {{ .Values.repoServer.containerSecurityContext.runAsUser }}:{{ .Values.repoServer.podSecurityContext.fsGroup }} /tmp
           securityContext:
             runAsUser: {{ .Values.volumePermissions.containerSecurityContext.runAsUser }}
           {{- if .Values.volumePermissions.resources }}

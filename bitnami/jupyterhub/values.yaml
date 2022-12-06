@@ -68,7 +68,7 @@ hub:
   image:
     registry: docker.io
     repository: bitnami/jupyterhub
-    tag: 3.0.0-debian-11-r0
+    tag: 3.0.0-debian-11-r20
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -606,7 +606,7 @@ hub:
       ##
       labels: {}
       ## @param hub.metrics.serviceMonitor.selector Prometheus instance selector labels
-      ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
       ##
       selector: {}
       ## @param hub.metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
@@ -636,7 +636,7 @@ proxy:
   image:
     registry: docker.io
     repository: bitnami/configurable-http-proxy
-    tag: 4.5.3-debian-11-r6
+    tag: 4.5.3-debian-11-r25
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1189,7 +1189,7 @@ proxy:
       ##
       labels: {}
       ## @param proxy.metrics.serviceMonitor.selector Prometheus instance selector labels
-      ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
       ##
       selector: {}
       ## @param proxy.metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
@@ -1392,7 +1392,7 @@ singleuser:
   image:
     registry: docker.io
     repository: bitnami/jupyter-base-notebook
-    tag: 3.0.0-debian-11-r0
+    tag: 3.0.0-debian-11-r20
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1421,7 +1421,7 @@ singleuser:
   ## @param singleuser.extraEnvVars Extra environment variables that should be set for the user pods
   ## ref: https://zero-to-jupyterhub.readthedocs.io/en/latest/resources/reference.html#singleuser-extraenv
   ##
-  extraEnvVars: {}
+  extraEnvVars: []
   ## @param singleuser.containerPort Single User container port
   ##
   containerPort: 8888
@@ -1576,7 +1576,7 @@ singleuser:
 auxiliaryImage:
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: 11-debian-11-r37
+  tag: 11-debian-11-r55
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -1591,7 +1591,7 @@ auxiliaryImage:
 ## @section JupyterHub database parameters
 
 ## PostgreSQL chart configuration
-## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
+## ref: https://github.com/bitnami/charts/blob/main/bitnami/postgresql/values.yaml
 ## @param postgresql.enabled Switch to enable or disable the PostgreSQL helm chart
 ## @param postgresql.auth.username Name for a custom user to create
 ## @param postgresql.auth.password Password for the custom user to create

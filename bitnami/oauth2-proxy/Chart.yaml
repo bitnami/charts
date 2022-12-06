@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 7.3.0
+appVersion: 7.4.0
 dependencies:
   - condition: redis.enabled
     name: redis
@@ -14,7 +14,7 @@ dependencies:
     version: 2.x.x
 description: A reverse proxy and static file server that provides authentication using Providers (Google, GitHub, and others) to validate accounts by email, domain or group.
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/oauth2-proxy
+home: https://github.com/bitnami/charts/tree/main/bitnami/oauth2-proxy
 icon: https://bitnami.com/assets/stacks/oauth2-proxy/img/oauth2-proxy-stack-220x234.png
 keywords:
   - kubernetes
@@ -30,4 +30,4 @@ name: oauth2-proxy
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/oauth2-proxy
   - https://github.com/oauth2-proxy/oauth2-proxy
-version: 3.3.3
+version: 3.4.1

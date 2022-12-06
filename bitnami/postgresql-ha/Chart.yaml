@@ -1,7 +1,7 @@
 annotations:
   category: Database
 apiVersion: v2
-appVersion: 14.5.0
+appVersion: 15.1.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -10,7 +10,7 @@ dependencies:
     version: 2.x.x
 description: This PostgreSQL cluster solution includes the PostgreSQL replication manager, an open-source tool for managing replication and failover on PostgreSQL clusters.
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha
+home: https://github.com/bitnami/charts/tree/main/bitnami/postgresql-ha
 icon: https://bitnami.com/assets/stacks/postgresql/img/postgresql-stack-220x234.png
 keywords:
   - postgresql
@@ -29,4 +29,4 @@ name: postgresql-ha
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/postgresql
   - https://www.postgresql.org/
-version: 9.4.7
+version: 10.0.7

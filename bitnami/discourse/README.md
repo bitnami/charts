@@ -7,7 +7,7 @@ Discourse is an open source discussion platform with built-in moderation and gov
 [Overview of Discourse&reg;](http://www.discourse.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -19,7 +19,7 @@ $ helm install my-release my-repo/discourse
 
 This chart bootstraps a [Discourse](https://www.discourse.org/) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages [Bitnami Postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) and [Bitnami Redis&reg;](https://github.com/bitnami/charts/tree/master/bitnami/redis) which are required as databases for the Discourse application.
+It also packages [Bitnami Postgresql](https://github.com/bitnami/charts/tree/main/bitnami/postgresql) and [Bitnami Redis&reg;](https://github.com/bitnami/charts/tree/main/bitnami/redis) which are required as databases for the Discourse application.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -81,53 +81,53 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Discourse Common parameters
 
-| Name                            | Description                                                                                                              | Value                |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------- |
-| `image.registry`                | Discourse image registry                                                                                                 | `docker.io`          |
-| `image.repository`              | Discourse image repository                                                                                               | `bitnami/discourse`  |
-| `image.tag`                     | Discourse image tag                                                                                                      | `2.8.9-debian-11-r3` |
-| `image.digest`                  | Discourse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                 |
-| `image.pullPolicy`              | Discourse image pull policy                                                                                              | `IfNotPresent`       |
-| `image.pullSecrets`             | Discourse image pull secrets                                                                                             | `[]`                 |
-| `image.debug`                   | Enable image debug mode                                                                                                  | `false`              |
-| `auth.email`                    | Discourse admin user email                                                                                               | `user@example.com`   |
-| `auth.username`                 | Discourse admin user                                                                                                     | `user`               |
-| `auth.password`                 | Discourse admin password. WARNING: Minimum length of 10 characters                                                       | `""`                 |
-| `auth.existingSecret`           | Name of an existing secret to use for Discourse credentials                                                              | `""`                 |
-| `host`                          | Hostname to create application URLs (include the port if =/= 80)                                                         | `""`                 |
-| `siteName`                      | Discourse site name                                                                                                      | `My Site!`           |
-| `smtp.enabled`                  | Enable/disable SMTP                                                                                                      | `false`              |
-| `smtp.host`                     | SMTP host name                                                                                                           | `""`                 |
-| `smtp.port`                     | SMTP port number                                                                                                         | `""`                 |
-| `smtp.user`                     | SMTP account user name                                                                                                   | `""`                 |
-| `smtp.password`                 | SMTP account password                                                                                                    | `""`                 |
-| `smtp.protocol`                 | SMTP protocol (Allowed values: tls, ssl)                                                                                 | `""`                 |
-| `smtp.auth`                     | SMTP authentication method                                                                                               | `""`                 |
-| `smtp.existingSecret`           | Name of an existing Kubernetes secret. The secret must have the following key configured: `smtp-password`                | `""`                 |
-| `replicaCount`                  | Number of Discourse & Sidekiq replicas                                                                                   | `1`                  |
-| `podSecurityContext.enabled`    | Enabled Discourse pods' Security Context                                                                                 | `false`              |
-| `podSecurityContext.fsGroup`    | Set Discourse pod's Security Context fsGroup                                                                             | `0`                  |
-| `hostAliases`                   | Add deployment host aliases                                                                                              | `[]`                 |
-| `podAnnotations`                | Additional pod annotations                                                                                               | `{}`                 |
-| `podLabels`                     | Additional pod labels                                                                                                    | `{}`                 |
-| `podAffinityPreset`             | Pod affinity preset. Allowed values: soft, hard                                                                          | `""`                 |
-| `podAntiAffinityPreset`         | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`               |
-| `nodeAffinityPreset.type`       | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `""`                 |
-| `nodeAffinityPreset.key`        | Node label key to match Ignored if `affinity` is set.                                                                    | `""`                 |
-| `nodeAffinityPreset.values`     | Node label values to match. Ignored if `affinity` is set.                                                                | `[]`                 |
-| `affinity`                      | Affinity for pod assignment                                                                                              | `{}`                 |
-| `nodeSelector`                  | Node labels for pod assignment.                                                                                          | `{}`                 |
-| `tolerations`                   | Tolerations for pod assignment.                                                                                          | `[]`                 |
-| `topologySpreadConstraints`     | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                 |
-| `priorityClassName`             | Priority Class Name                                                                                                      | `""`                 |
-| `schedulerName`                 | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                 |
-| `terminationGracePeriodSeconds` | Seconds Discourse pod needs to terminate gracefully                                                                      | `""`                 |
-| `updateStrategy.type`           | Discourse deployment strategy type                                                                                       | `RollingUpdate`      |
-| `updateStrategy.rollingUpdate`  | Discourse deployment rolling update configuration parameters                                                             | `{}`                 |
-| `sidecars`                      | Add additional sidecar containers to the Discourse pods                                                                  | `[]`                 |
-| `initContainers`                | Add additional init containers to the Discourse pods                                                                     | `[]`                 |
-| `extraVolumeMounts`             | Optionally specify extra list of additional volumeMounts for the Discourse pods                                          | `[]`                 |
-| `extraVolumes`                  | Optionally specify extra list of additional volumes for the Discourse pods                                               | `[]`                 |
+| Name                            | Description                                                                                                              | Value                 |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------- |
+| `image.registry`                | Discourse image registry                                                                                                 | `docker.io`           |
+| `image.repository`              | Discourse image repository                                                                                               | `bitnami/discourse`   |
+| `image.tag`                     | Discourse image tag                                                                                                      | `2.8.11-debian-11-r5` |
+| `image.digest`                  | Discourse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                  |
+| `image.pullPolicy`              | Discourse image pull policy                                                                                              | `IfNotPresent`        |
+| `image.pullSecrets`             | Discourse image pull secrets                                                                                             | `[]`                  |
+| `image.debug`                   | Enable image debug mode                                                                                                  | `false`               |
+| `auth.email`                    | Discourse admin user email                                                                                               | `user@example.com`    |
+| `auth.username`                 | Discourse admin user                                                                                                     | `user`                |
+| `auth.password`                 | Discourse admin password. WARNING: Minimum length of 10 characters                                                       | `""`                  |
+| `auth.existingSecret`           | Name of an existing secret to use for Discourse credentials                                                              | `""`                  |
+| `host`                          | Hostname to create application URLs (include the port if =/= 80)                                                         | `""`                  |
+| `siteName`                      | Discourse site name                                                                                                      | `My Site!`            |
+| `smtp.enabled`                  | Enable/disable SMTP                                                                                                      | `false`               |
+| `smtp.host`                     | SMTP host name                                                                                                           | `""`                  |
+| `smtp.port`                     | SMTP port number                                                                                                         | `""`                  |
+| `smtp.user`                     | SMTP account user name                                                                                                   | `""`                  |
+| `smtp.password`                 | SMTP account password                                                                                                    | `""`                  |
+| `smtp.protocol`                 | SMTP protocol (Allowed values: tls, ssl)                                                                                 | `""`                  |
+| `smtp.auth`                     | SMTP authentication method                                                                                               | `""`                  |
+| `smtp.existingSecret`           | Name of an existing Kubernetes secret. The secret must have the following key configured: `smtp-password`                | `""`                  |
+| `replicaCount`                  | Number of Discourse & Sidekiq replicas                                                                                   | `1`                   |
+| `podSecurityContext.enabled`    | Enabled Discourse pods' Security Context                                                                                 | `false`               |
+| `podSecurityContext.fsGroup`    | Set Discourse pod's Security Context fsGroup                                                                             | `0`                   |
+| `hostAliases`                   | Add deployment host aliases                                                                                              | `[]`                  |
+| `podAnnotations`                | Additional pod annotations                                                                                               | `{}`                  |
+| `podLabels`                     | Additional pod labels                                                                                                    | `{}`                  |
+| `podAffinityPreset`             | Pod affinity preset. Allowed values: soft, hard                                                                          | `""`                  |
+| `podAntiAffinityPreset`         | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`                |
+| `nodeAffinityPreset.type`       | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `""`                  |
+| `nodeAffinityPreset.key`        | Node label key to match Ignored if `affinity` is set.                                                                    | `""`                  |
+| `nodeAffinityPreset.values`     | Node label values to match. Ignored if `affinity` is set.                                                                | `[]`                  |
+| `affinity`                      | Affinity for pod assignment                                                                                              | `{}`                  |
+| `nodeSelector`                  | Node labels for pod assignment.                                                                                          | `{}`                  |
+| `tolerations`                   | Tolerations for pod assignment.                                                                                          | `[]`                  |
+| `topologySpreadConstraints`     | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                  |
+| `priorityClassName`             | Priority Class Name                                                                                                      | `""`                  |
+| `schedulerName`                 | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                  |
+| `terminationGracePeriodSeconds` | Seconds Discourse pod needs to terminate gracefully                                                                      | `""`                  |
+| `updateStrategy.type`           | Discourse deployment strategy type                                                                                       | `RollingUpdate`       |
+| `updateStrategy.rollingUpdate`  | Discourse deployment rolling update configuration parameters                                                             | `{}`                  |
+| `sidecars`                      | Add additional sidecar containers to the Discourse pods                                                                  | `[]`                  |
+| `initContainers`                | Add additional init containers to the Discourse pods                                                                     | `[]`                  |
+| `extraVolumeMounts`             | Optionally specify extra list of additional volumeMounts for the Discourse pods                                          | `[]`                  |
+| `extraVolumes`                  | Optionally specify extra list of additional volumes for the Discourse pods                                               | `[]`                  |
 
 
 ### Discourse container parameters
@@ -470,7 +470,7 @@ The chart also facilitates the creation of TLS secrets for use with the Ingress 
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Persistence
 
@@ -484,6 +484,12 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 9.0.0
+
+This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1200) you can find more information about the changes introduced in that version.
+
+### To any previous version
 
 Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/apps/discourse/administration/upgrade/).
 

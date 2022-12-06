@@ -22,29 +22,29 @@ In order to replicate the container startup scripts execute this command:
 {{- else }}
 {{- $port := .Values.service.ports.http | toString }}
 
-Your SonarQube site can be accessed through the following DNS name from within your cluster:
+Your SonarQube(TM) site can be accessed through the following DNS name from within your cluster:
 
     {{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ $port }})
 
-To access your SonarQube site from outside the cluster follow the steps below:
+To access your SonarQube(TM) site from outside the cluster follow the steps below:
 
 {{- if .Values.ingress.enabled }}
 
-1. Get the SonarQube URL and associate SonarQube hostname to your cluster external IP:
+1. Get the SonarQube(TM) URL and associate SonarQube(TM) hostname to your cluster external IP:
 
    export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
-   echo "SonarQube URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ .Values.ingress.hostname }}/"
+   echo "SonarQube(TM) URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ .Values.ingress.hostname }}/"
    echo "$CLUSTER_IP  {{ .Values.ingress.hostname }}" | sudo tee -a /etc/hosts
 
 {{- else }}
 
-1. Get the SonarQube URL by running these commands:
+1. Get the SonarQube(TM) URL by running these commands:
 
 {{- if contains "NodePort" .Values.service.type }}
 
    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-   echo "SonarQube URL: http://$NODE_IP:$NODE_PORT/"
+   echo "SonarQube(TM) URL: http://$NODE_IP:$NODE_PORT/"
 
 {{- else if contains "LoadBalancer" .Values.service.type }}
 
@@ -52,17 +52,17 @@ To access your SonarQube site from outside the cluster follow the steps below:
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
-   echo "SonarQube URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ $port }}{{ end }}/"
+   echo "SonarQube(TM) URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ $port }}{{ end }}/"
 
 {{- else if contains "ClusterIP"  .Values.service.type }}
 
    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} {{ $port }}:{{ $port }} &
-   echo "SonarQube URL: http://127.0.0.1{{- if ne $port "80" }}:{{ $port }}{{ end }}/"
+   echo "SonarQube(TM) URL: http://127.0.0.1{{- if ne $port "80" }}:{{ $port }}{{ end }}/"
 
 {{- end }}
 {{- end }}
 
-2. Open a browser and access SonarQube using the obtained URL.
+2. Open a browser and access SonarQube(TM) using the obtained URL.
 
 3. Login with the following credentials below:
 

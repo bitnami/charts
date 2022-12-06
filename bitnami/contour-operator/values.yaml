@@ -54,7 +54,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/contour-operator
-  tag: 1.22.1-scratch-r2
+  tag: 1.23.0-scratch-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -81,7 +81,7 @@ image:
 contourImage:
   registry: docker.io
   repository: bitnami/contour
-  tag: 1.22.1-debian-11-r10
+  tag: 1.23.0-debian-11-r6
   digest: ""
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -103,7 +103,7 @@ contourImage:
 envoyImage:
   registry: docker.io
   repository: bitnami/envoy
-  tag: 1.23.1-debian-11-r12
+  tag: 1.24.0-debian-11-r8
   digest: ""
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -440,6 +440,6 @@ metrics:
     ##
     relabelings: []
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
-    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ##
     selector: []

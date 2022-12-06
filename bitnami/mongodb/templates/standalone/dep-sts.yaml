@@ -137,8 +137,13 @@ spec:
                 fieldRef:
                   fieldPath: status.hostIP
           volumeMounts:
+            {{- if (include "mongodb.autoGenerateCerts" .) }}
             - name: certs-volume
               mountPath: /certs/CAs
+            {{- else }}
+            - name: mongodb-certs-0
+              mountPath: /certs-0
+            {{- end }}
             - name: certs
               mountPath: /certs
             - name: common-scripts
@@ -424,6 +429,7 @@ spec:
         {{- if .Values.tls.enabled }}
         - name: certs
           emptyDir: {}
+        {{- if (include "mongodb.autoGenerateCerts" .) }}
         - name: certs-volume
           secret:
             secretName: {{ template "mongodb.tlsSecretName" . }}
@@ -434,6 +440,12 @@ spec:
             - key: mongodb-ca-key
               path: mongodb-ca-key
               mode: 0600
+        {{- else }}
+        - name: mongodb-certs-0
+          secret:
+            secretName: {{ include "common.tplvalues.render" ( dict "value" .Values.tls.standalone.existingSecret "context" $) }}
+            defaultMode: 256
+        {{- end }}
         {{- end }}
   {{- if not .Values.persistence.enabled }}
         - name: datadir

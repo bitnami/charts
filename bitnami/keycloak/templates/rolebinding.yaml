@@ -2,7 +2,7 @@
 kind: RoleBinding
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
-  name: {{ template "keycloak.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: keycloak
@@ -15,7 +15,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ template "keycloak.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
 subjects:
   - kind: ServiceAccount
     name: {{ template "keycloak.serviceAccountName" . }}

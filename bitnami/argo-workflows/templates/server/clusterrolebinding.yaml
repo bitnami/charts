@@ -1,12 +1,12 @@
 {{- if and .Values.server.rbac.create .Values.server.enabled -}}
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 {{- if .Values.rbac.singleNamespace }}
 kind: RoleBinding
 {{ else }}
 kind: ClusterRoleBinding
 {{- end }}
 metadata:
-  name: {{ include "argo-workflows.server.fullname" . }}
+  name: {{ include "argo-workflows.server.fullname.namespace" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: argo-workflows
@@ -24,7 +24,7 @@ roleRef:
   {{ else }}
   kind: ClusterRole
   {{- end }}
-  name: {{ include "argo-workflows.server.fullname" . }}
+  name: {{ include "argo-workflows.server.fullname.namespace" . }}
 subjects:
   - kind: ServiceAccount
     name: {{ include "argo-workflows.server.serviceAccountName" . }}
@@ -32,10 +32,10 @@ subjects:
 
 {{- if .Values.server.clusterWorkflowTemplates.enabled }}
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
-  name: {{ include "argo-workflows.server.fullname" . }}-cluster-template
+  name: {{ include "argo-workflows.server.fullname.namespace" . }}-cluster-template
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: argo-workflows
@@ -49,7 +49,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ include "argo-workflows.server.fullname" . }}-cluster-template
+  name: {{ include "argo-workflows.server.fullname.namespace" . }}-cluster-template
 subjects:
   - kind: ServiceAccount
     name: {{ include "argo-workflows.server.serviceAccountName" . }}

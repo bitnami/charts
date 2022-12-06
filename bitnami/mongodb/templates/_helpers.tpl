@@ -285,6 +285,8 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "mongodb.validateValues.loadBalancerIPsListLength" .) -}}
 {{- $messages := append $messages (include "mongodb.validateValues.nodePortListLength" .) -}}
 {{- $messages := append $messages (include "mongodb.validateValues.externalAccessAutoDiscoveryRBAC" .) -}}
+{{- $messages := append $messages (include "mongodb.validateValues.replicaset.existingSecrets" .) -}}
+{{- $messages := append $messages (include "mongodb.validateValues.hidden.existingSecrets" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -385,6 +387,32 @@ mongodb: rbac.create
 {{- end -}}
 
 {{/*
+Validate values of MongoDB&reg; - Number of replicaset secrets must be the same than number of replicaset nodes.
+*/}}
+{{- define "mongodb.validateValues.replicaset.existingSecrets" -}}
+{{- if and .Values.tls.enabled (eq .Values.architecture "replicaset") (not (empty .Values.tls.replicaset.existingSecrets)) }}
+{{- $nbSecrets := len .Values.tls.replicaset.existingSecrets -}}
+{{- if not (eq $nbSecrets (int .Values.replicaCount)) }}
+mongodb: tls.replicaset.existingSecrets
+    tls.replicaset.existingSecrets Number of secrets and number of replicaset nodes must be the same.
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of MongoDB&reg; - Number of hidden secrets must be the same than number of hidden nodes.
+*/}}
+{{- define "mongodb.validateValues.hidden.existingSecrets" -}}
+{{- if and .Values.tls.enabled (include "mongodb.hidden.enabled" .) (not (empty .Values.tls.hidden.existingSecrets)) }}
+{{- $nbSecrets := len .Values.tls.hidden.existingSecrets -}}
+{{- if not (eq $nbSecrets (int .Values.hidden.replicaCount)) }}
+mongodb: tls.hidden.existingSecrets
+    tls.hidden.existingSecrets Number of secrets and number of hidden nodes must be the same.
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Validate values of MongoDB&reg; exporter URI string - auth.enabled and/or tls.enabled must be enabled or it defaults
 */}}
 {{- define "mongodb.mongodb_exporter.uri" -}}
@@ -397,7 +425,6 @@ Validate values of MongoDB&reg; exporter URI string - auth.enabled and/or tls.en
         {{- printf "mongodb://%slocalhost:27017/admin?%s" $uriAuth $uriTlsArgs -}}
     {{- end -}}
 {{- end -}}
-
 
 {{/*
 Return the appropriate apiGroup for PodSecurityPolicy.
@@ -414,7 +441,7 @@ Return the appropriate apiGroup for PodSecurityPolicy.
 Return true if a TLS secret object should be created
 */}}
 {{- define "mongodb.createTlsSecret" -}}
-{{- if and .Values.tls.enabled (not .Values.tls.existingSecret) }}
+{{- if and .Values.tls.enabled (not .Values.tls.existingSecret) (include "mongodb.autoGenerateCerts" .) }}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -428,5 +455,18 @@ Return the secret containing MongoDB&reg; TLS certificates
     {{- printf "%s" (tpl $secretName $) -}}
 {{- else -}}
     {{- printf "%s-ca" (include "mongodb.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if certificates must be auto generated
+*/}}
+{{- define "mongodb.autoGenerateCerts" -}}
+{{- $standalone := (eq .Values.architecture "standalone") | ternary (not .Values.tls.standalone.existingSecret) true -}}
+{{- $replicaset := (eq .Values.architecture "replicaset") | ternary (empty .Values.tls.replicaset.existingSecrets) true -}}
+{{- $arbiter := (eq (include "mongodb.arbiter.enabled" .) "true") | ternary (not .Values.tls.arbiter.existingSecret) true -}}
+{{- $hidden := (eq (include "mongodb.hidden.enabled" .) "true") | ternary (empty .Values.tls.hidden.existingSecrets) true -}}
+{{- if and $standalone $replicaset $arbiter $hidden -}}
+    {{- true -}}
 {{- end -}}
 {{- end -}}

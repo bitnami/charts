@@ -76,6 +76,9 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.operator.args "context" $) | nindent 12 }}
           {{- else }}
           args:
+            {{- if .Values.operator.namespaces }}
+            - --namespaces={{ .Values.operator.namespaces }}
+            {{- end }}
             {{- if .Values.operator.kubeletService.enabled }}
             - --kubelet-service={{ .Values.operator.kubeletService.namespace }}/{{ template "kube-prometheus.fullname" . }}-kubelet
             {{- end }}

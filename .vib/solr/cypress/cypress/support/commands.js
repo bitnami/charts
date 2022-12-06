@@ -21,8 +21,8 @@ Cypress.Commands.add(
     });
     cy.visit('/solr/#/');
     cy.contains('Basic Authentication');
-    cy.get('input#username').type(username);
-    cy.get('input#password').type(password);
+    cy.get('#username').type(username);
+    cy.get('#password').type(password);
     cy.contains('button', 'Login').click();
   }
 );

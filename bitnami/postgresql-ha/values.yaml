@@ -101,7 +101,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql-repmgr
-    tag: 14.5.0-debian-11-r19
+    tag: 15.1.0-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -543,7 +543,7 @@ postgresql:
   ## @param postgresql.initdbScripts Dictionary of initdb scripts
   ## Specify dictionary of scripts to be run at first boot
   ## The allowed extensions are `.sh`, `.sql` and `.sql.gz`
-  ## ref: https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#initialize-a-fresh-instance
+  ## ref: https://github.com/bitnami/charts/tree/main/bitnami/postgresql-ha#initialize-a-fresh-instance
   ## e.g:
   ## initdbScripts:
   ##   my_init_script.sh: |
@@ -596,7 +596,7 @@ pgpool:
   image:
     registry: docker.io
     repository: bitnami/pgpool
-    tag: 4.3.3-debian-11-r13
+    tag: 4.3.3-debian-11-r28
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -966,7 +966,7 @@ pgpool:
   ## @param pgpool.initdbScripts Dictionary of initdb scripts
   ## Specify dictionary of scripts to be run every time Pgpool container is initialized
   ## The allowed extension is `.sh`
-  ## ref: https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#initialize-a-fresh-instance
+  ## ref: https://github.com/bitnami/charts/tree/main/bitnami/postgresql-ha#initialize-a-fresh-instance
   ## e.g:
   ## initdbScripts:
   ##   my_init_script.sh: |
@@ -1106,7 +1106,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.11.1-debian-11-r13
+    tag: 0.11.1-debian-11-r27
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1308,9 +1308,9 @@ metrics:
     ## @param metrics.serviceMonitor.labels Additional labels that can be used so ServiceMonitor will be discovered by Prometheus
     ##
     labels: {}
-    ## @param metrics.serviceMonitor.selector [object] Defaults to what's used if you follow CoreOS Prometheus Install Instructions (https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus#tldr)
-    ## Prometheus Selector Label (https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus#prometheus-operator-parameters)
-    ## Kube Prometheus Selector Label (https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus#exporters)
+    ## @param metrics.serviceMonitor.selector [object] Defaults to what's used if you follow CoreOS Prometheus Install Instructions (https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus#tldr)
+    ## Prometheus Selector Label (https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus#prometheus-operator-parameters)
+    ## Kube Prometheus Selector Label (https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus#exporters)
     ##
     selector:
       prometheus: kube-prometheus
@@ -1348,7 +1348,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r37
+    tag: 11-debian-11-r50
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
