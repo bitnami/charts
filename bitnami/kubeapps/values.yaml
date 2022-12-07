@@ -524,7 +524,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 2.6.1-debian-11-r4
+    tag: 2.4.6-debian-11-r11
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -831,7 +831,7 @@ apprepository:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 2.6.1-scratch-r0
+    tag: 2.4.6-scratch-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -858,7 +858,7 @@ apprepository:
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-asset-syncer
-    tag: 2.6.1-scratch-r0
+    tag: 2.4.6-scratch-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -937,7 +937,7 @@ apprepository:
     httpProxy: ""
     httpsProxy: ""
     noProxy: ""
-  ## @param apprepository.crontab Schedule for syncing App repositories (default to 10 minutes)
+  ## @param apprepository.crontab Default schedule for syncing App repositories (defaults to every 10 minutes)
   ## e.g:
   ## crontab: "*/10 * * * *"
   ##
@@ -1276,7 +1276,7 @@ pinnipedProxy:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-pinniped-proxy
-    tag: 2.6.1-debian-11-r3
+    tag: 2.4.6-debian-11-r11
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1513,8 +1513,6 @@ kubeappsapis:
         v1alpha1:
           ## @param kubeappsapis.pluginConfig.helm.packages.v1alpha1.globalPackagingNamespace Custom global packaging namespace. Using this value will override the current "kubeapps release namespace + suffix" pattern and will create a new namespace if not exists.
           globalPackagingNamespace: ""
-          ## @param kubeappsapis.pluginConfig.helm.packages.v1alpha1.userManagedSecrets Default policy for handling repository secrets, either managed by the user or by kubeapps-apis
-          userManagedSecrets: false
     kappController:
       packages:
         v1alpha1:
@@ -1539,8 +1537,8 @@ kubeappsapis:
           ## @param kubeappsapis.pluginConfig.flux.packages.v1alpha1.defaultUpgradePolicy Default upgrade policy generating version constraints
           ## enum: [ "major", "minor", "patch", "none" ]
           defaultUpgradePolicy: none
-            ## @param kubeappsapis.pluginConfig.flux.packages.v1alpha1.userManagedSecrets Default policy for handling repository secrets, either managed by the user or by kubeapps-apis
-          userManagedSecrets: false
+          ## @param kubeappsapis.pluginConfig.flux.packages.v1alpha1.noCrossNamespaceRefs Enable this flag to disallow cross-namespace references, useful when running Flux on multi-tenant clusters
+          noCrossNamespaceRefs: false
     resources:
       packages:
         v1alpha1:
@@ -1569,7 +1567,7 @@ kubeappsapis:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apis
-    tag: 2.6.1-debian-11-r3
+    tag: 2.4.6-debian-11-r13
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

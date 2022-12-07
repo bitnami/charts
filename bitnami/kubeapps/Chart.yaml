@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 2.6.1
+appVersion: 2.6.2
 dependencies:
   - condition: packaging.flux.enabled
     name: redis
@@ -31,4 +31,4 @@ maintainers:
 name: kubeapps
 sources:
   - https://github.com/vmware-tanzu/kubeapps
-version: 12.1.1
+version: 12.1.2-dev0

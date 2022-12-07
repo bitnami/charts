@@ -262,6 +262,7 @@ spec:
             - name: DEFAULT_PINNIPED_API_SUFFIX
               value: {{ .Values.pinnipedProxy.defaultPinnipedAPISuffix | quote }}
             - name: RUST_LOG
+              # Use info,pinniped_proxy::pinniped=debug for module control.
               value: info
               {{- if .Values.pinnipedProxy.extraEnvVars }}
               {{- include "common.tplvalues.render" (dict "value" .Values.pinnipedProxy.extraEnvVars "context" $) | nindent 12 }}
