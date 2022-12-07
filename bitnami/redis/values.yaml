@@ -285,10 +285,9 @@ master:
   ##
   updateStrategy:
     ## StrategyType
-    ## Can be set to RollingUpdate or OnDelete
+    ## Can be set to RollingUpdate, OnDelete (statefulset), Recreate (deployment)
     ##
     type: RollingUpdate
-    rollingUpdate: {}
   ## @param master.minReadySeconds How many seconds a pod needs to be ready before killing the next, during update
   ##
   minReadySeconds: 0
@@ -686,10 +685,9 @@ replica:
   ##
   updateStrategy:
     ## StrategyType
-    ## Can be set to RollingUpdate or OnDelete
+    ## Can be set to RollingUpdate, OnDelete (statefulset), Recreate (deployment)
     ##
     type: RollingUpdate
-    rollingUpdate: {}
   ## @param replica.minReadySeconds How many seconds a pod needs to be ready before killing the next, during update
   ##
   minReadySeconds: 0
