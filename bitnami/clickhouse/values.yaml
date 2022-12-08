@@ -229,7 +229,7 @@ auth:
 logLevel: information
 
 ## @section ClickHouse keeper configuration parameters
-## @param keeper.enabled Deploy ClickHouse keeper
+## @param keeper.enabled Deploy ClickHouse keeper. Support is experimental.
 ##
 keeper:
   enabled: false
