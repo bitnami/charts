@@ -23,38 +23,40 @@ metadata:
     {{- end }}
   {{- end }}
 spec:
-  type: {{ .Values.supervisor.service.type }}
-  {{- if and .Values.supervisor.service.clusterIP (eq .Values.supervisor.service.type "ClusterIP") }}
-  clusterIP: {{ .Values.supervisor.service.clusterIP }}
+  {{- with .Values.supervisor.service }}
+  type: {{ .type }}
+  {{- if and .clusterIP (eq .type "ClusterIP") }}
+  clusterIP: {{ .clusterIP }}
   {{- end }}
-  {{- if .Values.supervisor.service.sessionAffinity }}
-  sessionAffinity: {{ .Values.supervisor.service.sessionAffinity }}
+  {{- if .sessionAffinity }}
+  sessionAffinity: {{ .sessionAffinity }}
   {{- end }}
-  {{- if .Values.supervisor.service.sessionAffinityConfig }}
-  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.supervisor.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- if .sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .sessionAffinityConfig "context" $) | nindent 4 }}
   {{- end }}
-  {{- if or (eq .Values.supervisor.service.type "LoadBalancer") (eq .Values.supervisor.service.type "NodePort") }}
-  externalTrafficPolicy: {{ .Values.supervisor.service.externalTrafficPolicy | quote }}
+  {{- if or (eq .type "LoadBalancer") (eq .type "NodePort") }}
+  externalTrafficPolicy: {{ .externalTrafficPolicy | quote }}
   {{- end }}
-  {{- if and (eq .Values.supervisor.service.type "LoadBalancer") (not (empty .Values.supervisor.service.loadBalancerSourceRanges)) }}
-  loadBalancerSourceRanges: {{ .Values.supervisor.service.loadBalancerSourceRanges }}
+  {{- if and (eq .type "LoadBalancer") (not (empty .loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .loadBalancerSourceRanges }}
   {{- end }}
-  {{- if and (eq .Values.supervisor.service.type "LoadBalancer") (not (empty .Values.supervisor.service.loadBalancerIP)) }}
-  loadBalancerIP: {{ .Values.supervisor.service.loadBalancerIP }}
+  {{- if and (eq .type "LoadBalancer") (not (empty .loadBalancerIP)) }}
+  loadBalancerIP: {{ .loadBalancerIP }}
   {{- end }}
   ports:
     - name: https
-      port: {{ .Values.supervisor.service.ports.https }}
+      port: {{ .ports.https }}
       protocol: TCP
-      targetPort: {{ .Values.supervisor.service.ports.aggregatedAPIServer }}
-      {{- if and (or (eq .Values.supervisor.service.type "NodePort") (eq .Values.supervisor.service.type "LoadBalancer")) (not (empty .Values.supervisor.service.nodePorts.https)) }}
-      nodePort: {{ .Values.supervisor.service.nodePorts.https }}
-      {{- else if eq .Values.supervisor.service.type "ClusterIP" }}
+      targetPort: {{ .ports.aggregatedAPIServer }}
+      {{- if and (or (eq .type "NodePort") (eq .type "LoadBalancer")) (not (empty .nodePorts.https)) }}
+      nodePort: {{ .nodePorts.https }}
+      {{- else if eq .type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    {{- if .Values.supervisor.service.extraPorts }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.supervisor.service.extraPorts "context" $) | nindent 4 }}
+    {{- if .extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .extraPorts "context" $) | nindent 4 }}
     {{- end }}
+  {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: supervisor
 {{- end }}
