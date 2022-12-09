@@ -17,6 +17,10 @@ it('allows creating a bucket, uploading and retrieving a file', () => {
     cy.get('[type="file"]')
       .should('not.be.disabled')
       .selectFile(`cypress/fixtures/${fileToUpload}`, { force: true });
+  });
+  // Intentional reload. Sometimes object-list-wrapper is not reloaded automatically
+  cy.reload();
+  cy.get('#object-list-wrapper').within(() => {
     cy.contains(fileToUpload).should('be.visible').click();
     cy.contains('Download').click({ force: true });
   });
