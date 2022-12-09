@@ -4,5 +4,7 @@
       "username": "test_admin",
       "password": "ComplicatedPassword123!4"
     },
-    "defaultCommandTimeout": 30000
+    "defaultCommandTimeout": 60000,
+    "viewportWidth": 1000,
+    "viewportHeight": 660
 }
