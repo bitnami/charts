@@ -7,6 +7,8 @@ it('allows creating a bucket, uploading and retrieving a file', () => {
   cy.fixture('buckets').then((buckets) => {
     cy.get('#bucket-name').type(`${buckets.newBucket.name}.${random}`);
     cy.contains('button', 'Create Bucket').click();
+    // Wait 10 seconds
+    cy.wait(10000);
     cy.visit(`/buckets/${buckets.newBucket.name}.${random}/browse`);
   });
 
