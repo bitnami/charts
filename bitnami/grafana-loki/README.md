@@ -2,7 +2,7 @@
 
 # Grafana Loki packaged by Bitnami
 
-Grafana Loki is a horizontally scalable, highly available, and multi-tenant log aggregation system. It provides real-time long tailing and full persistence to object storage. 
+Grafana Loki is a horizontally scalable, highly available, and multi-tenant log aggregation system. It provides real-time long tailing and full persistence to object storage.
 
 [Overview of Grafana Loki](https://grafana.com/oss/loki/)
 
