@@ -271,6 +271,9 @@ spec:
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.provisioning.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
       volumes:
         {{- if .Values.provisioning.enabled }}
         - name: minio-provisioning
