@@ -113,7 +113,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ### MinIO&reg; deployment/statefulset parameters
 
 | Name                                                 | Description                                                                                                                                                                                   | Value           |
-| ---------------------------------------------------- |-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------|
+| ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
 | `schedulerName`                                      | Specifies the schedulerName, if it's nil uses kube-scheduler                                                                                                                                  | `""`            |
 | `terminationGracePeriodSeconds`                      | In seconds, time the given to the MinIO pod needs to terminate gracefully                                                                                                                     | `""`            |
 | `deployment.updateStrategy.type`                     | Deployment strategy type                                                                                                                                                                      | `Recreate`      |
