@@ -218,6 +218,10 @@ provisioning:
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
+  ## @param provisioning.nodeSelector Node labels for pod assignment. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
   ## @param provisioning.podAnnotations Provisioning Pod annotations.
   ##
   podAnnotations: {}
