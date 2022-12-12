@@ -3,11 +3,11 @@ import { random } from '../support/utils';
 it('allows creating a bucket, uploading and retrieving a file', () => {
   cy.login();
   cy.visit(`/buckets/add-bucket`);
+  let bucketName='';
   cy.fixture('buckets').then((buckets) => {
-    cy.get('#bucket-name').type(`${buckets.newBucket.name}.${random}`);
+    bucketName=`${buckets.newBucket.name}.${random}`;
+    cy.get('#bucket-name').type(`${bucketName}`);
     cy.contains('button', 'Create Bucket').click();
-    cy.visit(`/buckets/${buckets.newBucket.name}.${random}/browse`);
-    cy.get('#object-list-wrapper').contains('This location is empty');
   });
 
 
@@ -18,11 +18,10 @@ it('allows creating a bucket, uploading and retrieving a file', () => {
     cy.get('[type="file"]')
       .should('not.be.disabled')
       .selectFile(`cypress/fixtures/${fileToUpload}`, { force: true });
-    cy.contains(fileToUpload).should('be.visible').click();
-    cy.contains('Download').click({ force: true });
   });
 
   cy.fixture(fileToUpload).then((uploadedFile) => {
+    cy.request(`/api/v1/buckets/${bucketName}/objects/download?prefix=${Buffer.from(fileToUpload).toString('base64')}`)
     cy.readFile(`cypress/downloads/${fileToUpload}`).then((downloadedFile) => {
       expect(downloadedFile).to.contain(uploadedFile);
     });
