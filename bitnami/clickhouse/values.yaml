@@ -260,6 +260,8 @@ defaultConfigurationOverrides: |
             <replica>
                 <host>{{ printf "%s-shard%d-%d.%s.%s.svc.%s" (include "common.names.fullname" $ ) $shard $i (include "clickhouse.headlessServiceName" $) (include "common.names.namespace" $) $.Values.clusterDomain }}</host>
                 <port>{{ $.Values.service.ports.tcp }}</port>
+                <user>{{ $.Values.auth.username }}</user>
+                <password>{{ $.Values.auth.username }}</password>
             </replica>
             {{- end }}
         </shard>
