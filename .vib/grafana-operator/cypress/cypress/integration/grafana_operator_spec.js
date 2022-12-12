@@ -2,6 +2,13 @@
 import { random } from '../support/utils';
 
 it('allows uploading a dashboard as JSON file', () => {
+  cy.on('uncaught:exception', (err, runnable) => {
+    expect(err.message).to.include('eventTrackingNamespace')
+    // return false to prevent the error from
+    // failing this test
+    return false
+  })
+
   cy.login();
   cy.visit('dashboard/import');
   cy.get('[type=file]').selectFile('cypress/fixtures/test-dashboard.json', {
