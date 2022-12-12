@@ -1,0 +1,13 @@
+promtail:
+  containerPorts:
+    http: 8081
+  podSecurityContext:
+    fsGroup: 0
+  containerSecurityContext:
+    runAsUser: 0
+  logLevel: debug
+  service:
+    ports:
+      http: 3101
+  serviceAccount:
+    automountServiceAccountToken: true

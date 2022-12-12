@@ -2,36 +2,6 @@
 import body from '../fixtures/logs-body.json';
 import { lastMinuteTimestamp } from '../support/utils';
 
-it('shows build info endpoint', () => {
-  cy.request({
-    method: 'GET',
-    url: '/loki/api/v1/status/buildinfo',
-    form: true,
-  }).then((response) => {
-    expect(response.status).to.eq(200);
-    expect(response.body).to.include.all.keys(
-      'version',
-      'revision',
-      'branch',
-      'buildUser',
-      'goVersion'
-    );
-  });
-});
-
-it('allows Loki to get Grafana logs', () => {
-  cy.request({
-    method: 'GET',
-    url: 'loki/api/v1/query?query={app="grafana-loki"}',
-    form: true,
-  }).then((response) => {
-    expect(response.status).to.eq(200);
-    expect(response.headers['content-type']).to.eq(
-      'application/json; charset=UTF-8'
-    );
-  });
-});
-
 it('checks Loki range endpoint', () => {
   cy.request({
     method: 'GET',
@@ -73,15 +43,5 @@ it('can publish and retrieve a label', () => {
   }).then((response) => {
     expect(response.status).to.eq(200);
     expect(response.body.data).to.contain('value');
-  });
-});
-
-it('can get a list of series', () => {
-  cy.request({
-    method: 'GET',
-    url: 'loki/api/v1/series',
-    form: true,
-  }).then((response) => {
-    expect(response.status).to.eq(200);
   });
 });
