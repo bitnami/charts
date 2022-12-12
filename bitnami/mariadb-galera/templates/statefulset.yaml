@@ -285,7 +285,11 @@ spec:
                   if [[ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]]; then
                       password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
                   fi
-                  exec mysqladmin status -u"${MARIADB_ROOT_USER}" -p"${password_aux}"
+                  # If wsrep_local_state != 4, would mean the node is not yet synced and therefore not ready to receive connections
+                  if [[ ! $(mysqladmin extended-status -u"${MARIADB_ROOT_USER}" -p"${password_aux}" | grep " wsrep_local_state " | grep " 4 ") ]]; then
+                    echo "Node is not in synced status"
+                    exit 1
+                  fi
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
