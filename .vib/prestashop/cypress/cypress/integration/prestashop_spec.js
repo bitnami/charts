@@ -41,3 +41,29 @@ it('allows a user to place an order and an admin to list it', () => {
     cy.contains(`${random}${customers.shopper.email}`);
   });
 });
+
+it('allows performing backups', () => {
+  cy.login();
+  cy.contains(
+    '[href*="configure/advanced/system-information"]',
+    'Advanced Parameters'
+  ).click();
+  cy.contains('[href*="configure/advanced/sql-requests"]', 'Database').click();
+  cy.contains('#subtab-AdminBackup', 'DB Backup').click();
+
+  cy.contains('button', 'create a new backup').click();
+  // Perform a request instead of clicking the link, as Cypress would try to
+  // navigate and eventually fail.
+  cy.contains('a', 'Download the backup')
+    .invoke('attr', 'href')
+    .then((href) => {
+      cy.log(href);
+      cy.request({
+        url: href,
+        method: 'GET',
+      }).then((response) => {
+        expect(response.status).to.eq(200);
+        expect(response.headers['content-type']).to.eq('application/x-bzip2');
+      });
+    });
+});
