@@ -1,16 +1,15 @@
 /// <reference types="cypress" />
 import { random } from '../support/utils';
-
 it('allows creating a bucket, uploading and retrieving a file', () => {
   cy.login();
-  cy.visit('/buckets/add-bucket');
+  cy.visit(`/buckets/add-bucket`);
   cy.fixture('buckets').then((buckets) => {
     cy.get('#bucket-name').type(`${buckets.newBucket.name}.${random}`);
     cy.contains('button', 'Create Bucket').click();
-    // Wait 10 seconds
-    cy.wait(10000);
     cy.visit(`/buckets/${buckets.newBucket.name}.${random}/browse`);
+    cy.get('#object-list-wrapper').contains('This location is empty');
   });
+
 
   const fileToUpload = 'example.json';
   cy.get('#upload-main').click();
@@ -19,10 +18,6 @@ it('allows creating a bucket, uploading and retrieving a file', () => {
     cy.get('[type="file"]')
       .should('not.be.disabled')
       .selectFile(`cypress/fixtures/${fileToUpload}`, { force: true });
-  });
-  // Intentional reload. Sometimes object-list-wrapper is not reloaded automatically
-  cy.reload();
-  cy.get('#object-list-wrapper').within(() => {
     cy.contains(fileToUpload).should('be.visible').click();
     cy.contains('Download').click({ force: true });
   });

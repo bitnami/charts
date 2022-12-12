@@ -1,8 +1,8 @@
 {
-    "baseUrl": "http://localhost/",
+    "baseUrl": "http://localhost:8080/",
     "env": {
       "username": "test_admin",
       "password": "ComplicatedPassword123!4"
     },
-    "defaultCommandTimeout": 1800000
+    "defaultCommandTimeout": 10000
 }
