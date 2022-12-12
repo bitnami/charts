@@ -146,6 +146,7 @@ jobs:
         with:
           pull-request-number: ${{ github.event.number }}
       - name: Merge
+        id: merge
         if: ${{ needs.vib-verify.result == 'success' }}
         uses: actions/github-script@v6
         with:
@@ -162,7 +163,7 @@ jobs:
       # If the CI did not succeed ('VIB Verify' failed or skipped),
       # post a comment on the PR and assign a maintainer agent to review it
       - name: Manual review required
-        if: ${{ needs.vib-verify.result != 'success' }}
+        if: ${{ always() && (needs.vib-verify.result != 'success' || steps.merge.outcome != 'success' ) }}
         uses: peter-evans/create-or-update-comment@v2.0.0
         with:
           issue-number: ${{ github.event.number }}
