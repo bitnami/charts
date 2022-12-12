@@ -153,7 +153,7 @@ jobs:
           retries: 3
           github-token: ${{ secrets.BITNAMI_BOT_TOKEN }}
           script: |
-            github.pulls.merge({
+            github.rest.pulls.merge({
               pull_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
