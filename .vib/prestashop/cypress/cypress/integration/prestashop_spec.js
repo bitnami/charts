@@ -12,94 +12,33 @@ it('allows a user to place an order and an admin to list it', () => {
   cy.visit('/order');
   cy.fixture('customers').then((customers) => {
     cy.get('form#customer-form').within(() => {
-      cy.get('input#field-id_gender-1').check();
-      cy.get('input#field-firstname').type(customers.shopper.firstName);
-      cy.get('input#field-lastname').type(customers.shopper.lastName);
-      cy.get('input#field-email').type(`${random}${customers.shopper.email}`);
-      cy.get('input[name="customer_privacy"]').check();
-      cy.get('input[name="psgdpr"]').check();
+      cy.get('#field-id_gender-1').check();
+      cy.get('#field-firstname').type(customers.shopper.firstName);
+      cy.get('#field-lastname').type(customers.shopper.lastName);
+      cy.get('#field-email').type(`${random}${customers.shopper.email}`);
+      cy.get('[name="customer_privacy"]').check();
+      cy.get('[name="psgdpr"]').check();
       cy.contains('button', 'Continue').click();
     });
     cy.get('div.js-address-form').within(() => {
-      cy.get('input#field-address1').type(customers.shopper.address.street);
-      cy.get('input#field-city').type(customers.shopper.address.city);
-      cy.get('select#field-id_state').select(customers.shopper.address.state);
-      cy.get('input#field-postcode').type(customers.shopper.address.zipcode);
+      cy.get('#field-address1').type(customers.shopper.address.street);
+      cy.get('#field-city').type(customers.shopper.address.city);
+      cy.get('#field-id_state').select(customers.shopper.address.state);
+      cy.get('#field-postcode').type(customers.shopper.address.zipcode);
       cy.contains('button', 'Continue').click();
     });
     cy.get('form#js-delivery').within(() => {
       cy.contains('button', 'Continue').click();
     });
-    cy.get('input#payment-option-1').click();
-    cy.get('input[id*="conditions_to_approve"]').click();
+    cy.get('#payment-option-1').click();
+    cy.get('[id*="conditions_to_approve"]').click();
     cy.contains('button', 'Place order').click();
     cy.contains('order is confirmed');
     cy.login();
     cy.contains('a[href*="sell/orders/?"]', 'Orders').click();
-    cy.contains('li#subtab-AdminOrders', 'Orders').click();
+    cy.get('#subtab-AdminOrders').click();
     cy.get('td[class*="column-reference"]').first().click();
     cy.contains(`${random}${customers.shopper.email}`);
-  });
-});
-
-it('allows registering a new product', () => {
-  cy.login();
-  cy.contains('[href*="catalog/products"]', 'Catalog').click();
-  cy.contains('[href*="catalog/products"]', 'Products').click();
-  cy.get('div.header-toolbar').within(() => {
-    cy.contains('[href*="catalog/products/new"]', 'New product').click();
-  });
-
-  cy.fixture('products').then((products) => {
-    cy.get('input[placeholder="Enter your product name"]').type(
-      `${products.newProduct.name} ${random}`
-    );
-    cy.get('input[type="file"][accept="image/*"]').selectFile(
-      'cypress/fixtures/images/product_image.png',
-      { force: true }
-    );
-    cy.get('input#form_step1_price_shortcut').type(products.newProduct.price);
-    cy.contains('input#submit', 'Save').click();
-    cy.contains('Settings updated');
-
-    cy.contains('[href*="catalog/products"]', 'Products').click();
-    cy.contains(`${products.newProduct.name} ${random}`);
-  });
-});
-
-it('allows registering a new customer', () => {
-  cy.login();
-  cy.contains('[href*="sell/customers"]', 'Customers').click();
-  cy.contains('li#subtab-AdminCustomers', 'Customers').click();
-  cy.get('div.header-toolbar').within(() => {
-    cy.contains('[href*="customers/new"]', 'Add new customer').click();
-  });
-
-  cy.fixture('customers').then((customers) => {
-    cy.get('input#customer_first_name').type(customers.newCustomer.firstName);
-    cy.get('input#customer_last_name').type(customers.newCustomer.lastName);
-    cy.get('input#customer_email').type(
-      `${random}.${customers.newCustomer.email}`
-    );
-    cy.get('input#customer_password').type(customers.newCustomer.password);
-    cy.get('button#save-button').click();
-    cy.contains('Successful creation');
-    cy.contains(`${random}.${customers.newCustomer.email}`);
-  });
-  cy.clearCookies();
-  cy.clearLocalStorage();
-});
-
-it('has payments activated', () => {
-  cy.login();
-  cy.contains('[href*="payment/payment_methods"]', 'Payment').click();
-  cy.contains('[href*="payment/payment_methods"]', 'Payment Methods').click();
-  const DEFAULT_ACTIVE_PAY_METHODS = ['Bank transfer', 'Payments by check'];
-
-  cy.contains('div.card', 'Active payment').within(() => {
-    DEFAULT_ACTIVE_PAY_METHODS.forEach((method) => {
-      cy.contains(method);
-    });
   });
 });
 

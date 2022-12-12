@@ -1,33 +1,44 @@
+http:
+  http://localhost:{{ .Vars.containerPorts.http }}:
+    status: 302
+    no-follow-redirects: true
+  https://localhost:{{ .Vars.containerPorts.https }}:
+    status: 302
+    allow-insecure: true
+    no-follow-redirects: true
 command:
-  apcu-caching-support:
-    exec: /opt/bitnami/php/bin/php -i | grep --quiet apcu
-    exit-status: 0
-    stdout: [ ]
-    stderr: [ ]
-    timeout: 40000
-  prestashop-version-ok:
-    exec: cat /opt/bitnami/prestashop/app/AppKernel.php | grep --quiet $(echo $APP_VERSION | tr "-" ".")
-    exit-status: 0
-    stdout: [ ]
-    stderr: [ ]
-    timeout: 40000
   prestashop-cli-list-commands:
-    exec: /opt/bitnami/php/bin/php /opt/bitnami/prestashop/bin/console prestashop:list:commands-and-queries
+    exec: /opt/bitnami/php/bin/php /opt/bitnami/prestashop/bin/console prestashop:config get PS_COOKIE_CHECKIP
     exit-status: 0
     stdout:
-      - "Class:"
-      - "Type:"
-    stderr: [ ]
-    timeout: 40000
+      - /PS_COOKIE_CHECKIP={{ (eq .Vars.prestashopCookieCheckIP "yes") | int }}/
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+      - uid={{ .Vars.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
 file:
-  /opt/bitnami/prestashop:
-    filetype: symlink
-    linked-to: /bitnami/prestashop
+  /etc/hosts:
     exists: true
+    filetype: file
+    contains:
+    {{ range .Vars.hostAliases }}
+    {{ $ip := .ip }}
+    {{ range $host := .hostnames }}
+      - /{{ $ip }}.*{{ $host }}/
+    {{ end }}
+    {{ end }}
+  /bitnami/prestashop:
+    exists: true
+    filetype: directory
+    mode: '2775'
+    owner: root
   /opt/bitnami/prestashop/app/config/parameters.php:
     mode: "0644"
     filetype: file
     exists: true
     contains:
-      - {{ printf "/database_name.*%s/" .Env.PRESTASHOP_DATABASE_NAME }}
-      - {{ printf "/database_user.*%s/" .Env.PRESTASHOP_DATABASE_USER }}
+      - /database_name.*{{ .Vars.mariadb.auth.database }}/
+      - /database_user.*{{ .Vars.mariadb.auth.username }}/
+      - /database_password.*{{ .Vars.mariadb.auth.password }}/

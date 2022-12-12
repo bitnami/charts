@@ -26,18 +26,10 @@ Cypress.Commands.add(
   'login',
   (email = Cypress.env('email'), password = Cypress.env('password')) => {
     cy.visit('/administration/index.php');
-    cy.get('input#email').type(email);
-    cy.get('input#passwd').type(password);
-    cy.get('button#submit_login').click();
-    cy.get('div#error').should('not.exist');
+    cy.get('#email').type(email);
+    cy.get('#passwd').type(password);
+    cy.get('#submit_login').click();
     cy.contains('Dashboard');
-    cy.get('body').then(($body) => {
-      if (
-        $body.find('button[class*="onboarding-button-shut-down"]').length > 0
-      ) {
-        cy.get('button[class*="onboarding-button-shut-down"]').click();
-      }
-    });
   }
 );
 
