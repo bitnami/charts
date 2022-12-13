@@ -66,13 +66,13 @@ spec:
           args:
             - argocd-applicationset-controller
             - --logformat
-            - {{ .Values.applicationSet.logFormat }}
+            - {{ .Values.applicationSet.logFormat | quote }}
             - --loglevel
-            - {{ .Values.applicationSet.logLevel }}
+            - {{ .Values.applicationSet.logLevel | quote }}
             - --metrics-addr
-            - {{ .Values.applicationSet.defaultArgs.metricsAddr | quote }}
+            - ":{{ .Values.applicationSet.containerPorts.metrics }}"
             - --probe-addr
-            - {{ .Values.applicationSet.defaultArgs.probeBindAddr | quote }}
+            - ":{{ .Values.applicationSet.containerPorts.probe }}"
             {{- if or (gt ( .Values.applicationSet.replicaCount | int64) 1) .Values.applicationSet.defaultArgs.enableLeaderElection }}
             - --enable-leader-election=true
             {{- end }}

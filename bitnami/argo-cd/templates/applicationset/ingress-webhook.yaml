@@ -9,6 +9,9 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+    {{- if .Values.applicationSet.webhook.ingress.labels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.applicationSet.webhook.ingress.labels "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- if or .Values.applicationSet.webhook.ingress.annotations .Values.commonAnnotations .Values.applicationSet.webhook.ingress.certManager }}
   annotations:
     {{- if .Values.applicationSet.webhook.ingress.certManager }}
@@ -26,32 +29,29 @@ spec:
   ingressClassName: {{ .Values.applicationSet.webhook.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
-  {{- if .Values.applicationSet.webhook.ingress.hosts }}
-    {{- range $host := .Values.applicationSet.webhook.ingress.hosts }}
-    - host: {{ $host }}
+    {{- if .Values.applicationSet.webhook.ingress.hostname }}
+    - host: {{ .Values.applicationSet.webhook.ingress.hostname }}
       http:
         paths:
           {{- if .Values.applicationSet.webhook.ingress.extraPaths }}
           {{- toYaml .Values.applicationSet.webhook.ingress.extraPaths | nindent 10 }}
           {{- end }}
-          {{- range $p := .Values.applicationSet.webhook.ingress.paths }}
-          - path: {{ $p }}
+          - path: {{ .Values.applicationSet.webhook.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.applicationSet.webhook.ingress.pathType }}
-            backend: {{- include "common.webhook.ingress.backend" (dict "serviceName" (include "argocd.applicationSet" .) "servicePort" (ternary "https" "http" .Values.applicationSet.webhook.ingress.tls) "context" $)  | nindent 14 }}
-          {{- end -}}
-    {{- end -}}
-  {{- else }}
-    - http:
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "argocd.server" .) "servicePort" (ternary "https" "http" .Values.applicationSet.webhook.ingress.tls) "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- range .Values.applicationSet.webhook.ingress.extraHosts }}
+    - host: {{ .name | quote }}
+      http:
         paths:
-          {{- if .Values.applicationSet.webhook.ingress.extraPaths }}
-          {{- toYaml .Values.applicationSet.webhook.ingress.extraPaths | nindent 10 }}
-          {{- end }}
-          {{- range $p := .Values.applicationSet.webhook.ingress.paths }}
-          - path: {{ $p }}
-            pathType: {{ .Values.applicationSet.webhook.ingress.pathType }}
-            backend: {{- include "common.webhook.ingress.backend" (dict "serviceName" (include "argocd.applicationSet" .) "servicePort" (ternary "https" "http" .Values.applicationSet.webhook.ingress.tls) "context" $)  | nindent 14 }}
-          {{- end -}}
-  {{- end -}}
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "argocd.server" $) "servicePort" (ternary "https" "http" $.Values.applicationSet.webhook.ingress.tls) "context" $) | nindent 14 }}
+    {{- end }}
   tls:
     {{- if .Values.applicationSet.webhook.ingress.tls }}
     - hosts:

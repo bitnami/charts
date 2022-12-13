@@ -26,17 +26,14 @@ spec:
       {{- if .Values.applicationSet.metrics.serviceMonitor.interval }}
       interval: {{ .Values.applicationSet.metrics.serviceMonitor.interval }}
       {{- end }}
-      {{- if .Values.applicationSet.metrics.serviceMonitor.relabelings }}
-      relabelings: {{- toYaml .Values.applicationSet.metrics.serviceMonitor.relabelings | nindent 8 }}
+      {{- if .Values.applicationSet.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.applicationSet.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.applicationSet.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.applicationSet.metrics.serviceMonitor.honorLabels }}
       {{- end }}
       {{- if .Values.applicationSet.metrics.serviceMonitor.metricRelabelings }}
-      metricRelabelings: {{- toYaml .Values.applicationSet.metrics.serviceMonitor.metricRelabelings | nindent 8 }}
-      {{- end }}
-      {{- if .Values.applicationSet.metrics.serviceMonitor.scheme }}
-      scheme: {{ .Values.applicationSet.metrics.serviceMonitor.scheme }}
-      {{- end }}
-      {{- if .Values.applicationSet.metrics.serviceMonitor.tlsConfig }}
-      tlsConfig: {{- toYaml .Values.applicationSet.metrics.serviceMonitor.tlsConfig | nindent 8 }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.applicationSet.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.applicationSet.metrics.serviceMonitor.relabelings }}
       relabelings: {- include "common.tplvalues.render" ( dict "value" .Values.applicationSet.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}

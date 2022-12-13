@@ -575,8 +575,6 @@ applicationSet:
   ## @param applicationSet.defaultArgs.dryRun Enable dry-run mode 
   ##
   defaultArgs:
-    metricsAddr: :8080
-    probeBindAddr: :8081
     enableLeaderElection: false
     policy: "sync"
     debug: "false"
@@ -843,6 +841,12 @@ applicationSet:
     timeoutSeconds: 1
     failureThreshold: 3
     successThreshold: 1
+  ## @param applicationSet.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param applicationSet.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
   ## Argo CD resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param applicationSet.resources.limits The resources limits for the Argo CD containers
@@ -867,6 +871,14 @@ applicationSet:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
+  ## @param applicationSet.updateStrategy.type Argo CD statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
   ## @param applicationSet.priorityClassName Argo CD pods' priorityClassName
   ##
   priorityClassName: ""
@@ -895,23 +907,44 @@ applicationSet:
     ingress:
       ## @param applicationSet.webhook.ingress.enabled Enable an ingress resource for Webhooks
       enabled: false
+      ## DEPRECATED: Use server.ingress.annotations instead of server.ingress.certManager
+      ## certManager: false
+      ##
       ## @param applicationSet.webhook.ingress.annotations Additional ingress annotations
       annotations: {}
       ## @param applicationSet.webhook.ingress.labels Additional ingress labels
       labels: {}
       ## @param applicationSet.webhook.ingress.ingressClassName Defines which ingress controller will implement the resource
       ingressClassName: ""
-      ## @param applicationSet.webhook.ingress.hosts List of ingress hosts
-      ## Hostnames must be provided if Ingress is enabled.
-      ## Secrets must be manually created in the namespace
-      hosts: []
-      ## @param applicationSet.webhook.ingress.paths List of ingress paths
-      paths:
-        - /api/webhook
+      ## @param applicationSet.webhook.ingress.hostname Ingress hostname for the Argo CD applicationSet ingress
+      ## Hostname must be provided if Ingress is enabled.
+      ##
+      hostname: ""
+      ## @param applicationSet.webhook.ingress.path Argo CD applicationSet ingress path
+      path: /api/webhook
       ## @param applicationSet.webhook.ingress.pathType Ingress path type. One of `Exact`, `Prefix` or `ImplementationSpecific`
       pathType: Prefix
-      ## @param applicationSet.webhook.ingress.extraPaths Additional ingress paths
+      ## @param applicationSet.webhook.ingress.extraHosts Extra hosts array for the Argo CD applicationSet ingress
+      ## The list of additional hostnames to be covered with this ingress record.
+      ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+      extraHosts: []
+      ## @param applicationSet.webhook.ingress.extraPaths Extra paths for the Argo CD applicationSet ingress
+      ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
+      ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
       extraPaths: []
+      ## - path: /*
+      ##   backend:
+      ##     serviceName: ssl-redirect
+      ##     servicePort: use-annotation
+      ##
+      ## @param applicationSet.webhook.ingress.extraTls Extra TLS configuration for the Argo CD applicationSet ingress
+      ## The tls configuration for additional hostnames to be covered with this ingress record.
+      ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+      extraTls: []
+      ## - hosts:
+      ##     - argocd.server.local
+      ##   secretName: argocd.server.local-tls
+      ##
       ## @param applicationSet.webhook.ingress.tls Ingress TLS configuration
       tls: []
 
