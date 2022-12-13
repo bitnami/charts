@@ -204,18 +204,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence parameters
 
-| Name                        | Description                                                                                                                                                                                                                                                                                       | Value               |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `persistence.enabled`       | Use a PVC to persist data.                                                                                                                                                                                                                                                                        | `true`              |
-| `persistence.existingClaim` | A manually managed Persistent Volume and Claim                                                                                                                                                                                                                                                    | `""`                |
-| `persistence.storageClass`  | Storage class of backing PVC                                                                                                                                                                                                                                                                      | `""`                |
-| `persistence.accessModes`   | Persistent Volume Access Modes                                                                                                                                                                                                                                                                    | `["ReadWriteOnce"]` |
-| `persistence.size`          | Size of data volume                                                                                                                                                                                                                                                                               | `8Gi`               |
-| `persistence.annotations`   | Persistence annotations for Solr                                                                                                                                                                                                                                                                  | `{}`                |
-| `persistence.mountPath`     | Persistence mount path for Solr                                                                                                                                                                                                                                                                   | `/bitnami/solr`     |
-| `persistence.subPath`       | Path within the volume from which the container's volume should be mounted. Defaults to "" (volume's root).                                                                                                                                                                                       | `""`                |
-| `persistence.subPathExpr`   | Expanded path within the volume from which the container's volume should be mounted. Behaves similarly to SubPath but environment variable references $(VAR_NAME) are expanded using the container's environment. Defaults to "" (volume's root). SubPathExpr and SubPath are mutually exclusive. | `""`              |
-| `persistence.selector`      | Selector to match an existing Persistent Volume for WordPress data PVC                                                                                                                                                                                                                            | `{}`                |
+| Name                        | Description                                                            | Value               |
+| --------------------------- | ---------------------------------------------------------------------- | ------------------- |
+| `persistence.enabled`       | Use a PVC to persist data.                                             | `true`              |
+| `persistence.existingClaim` | A manually managed Persistent Volume and Claim                         | `""`                |
+| `persistence.storageClass`  | Storage class of backing PVC                                           | `""`                |
+| `persistence.accessModes`   | Persistent Volume Access Modes                                         | `["ReadWriteOnce"]` |
+| `persistence.size`          | Size of data volume                                                    | `8Gi`               |
+| `persistence.annotations`   | Persistence annotations for Solr                                       | `{}`                |
+| `persistence.mountPath`     | Persistence mount path for Solr                                        | `/bitnami/solr`     |
+| `persistence.subPath`       | Path within the volume from which the container's                      | `""`                |
+| `persistence.subPathExpr`   | Expanded path within the volume from which                             | `""`                |
+| `persistence.selector`      | Selector to match an existing Persistent Volume for WordPress data PVC | `{}`                |
 
 
 ### Volume Permissions parameters
