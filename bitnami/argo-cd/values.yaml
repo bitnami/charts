@@ -567,8 +567,6 @@ applicationSet:
   ##
   command: []
   ## Arguments that will be used by default for the application controller
-  ## @param applicationSet.defaultArgs.metricsAddr Default metrics port
-  ## @param applicationSet.defaultArgs.probeBindAddr Default probe port
   ## @param applicationSet.defaultArgs.enableLeaderElection Enable leader election
   ## @param applicationSet.defaultArgs.policy Default policy
   ## @param applicationSet.defaultArgs.debug Enable debug mode
