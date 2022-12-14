@@ -313,21 +313,22 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Database parameters
 
-| Name                                         | Description                                                             | Value              |
-| -------------------------------------------- | ----------------------------------------------------------------------- | ------------------ |
-| `postgresql.enabled`                         | Switch to enable or disable the PostgreSQL helm chart                   | `true`             |
-| `postgresql.auth.username`                   | Name for a custom user to create                                        | `bn_keycloak`      |
-| `postgresql.auth.password`                   | Password for the custom user to create                                  | `""`               |
-| `postgresql.auth.database`                   | Name for a custom database to create                                    | `bitnami_keycloak` |
-| `postgresql.auth.existingSecret`             | Name of existing secret to use for PostgreSQL credentials               | `""`               |
-| `postgresql.architecture`                    | PostgreSQL architecture (`standalone` or `replication`)                 | `standalone`       |
-| `externalDatabase.host`                      | Database host                                                           | `""`               |
-| `externalDatabase.port`                      | Database port number                                                    | `5432`             |
-| `externalDatabase.user`                      | Non-root username for Keycloak                                          | `bn_keycloak`      |
-| `externalDatabase.password`                  | Password for the non-root username for Keycloak                         | `""`               |
-| `externalDatabase.database`                  | Keycloak database name                                                  | `bitnami_keycloak` |
-| `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials | `""`               |
-| `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials      | `""`               |
+| Name                                         | Description                                                                                                       | Value              |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `postgresql.enabled`                         | Switch to enable or disable the PostgreSQL helm chart                                                             | `true`             |
+| `postgresql.auth.postgresPassword`           | Password for the "postgres" admin user. Ignored if `auth.existingSecret` with key `postgres-password` is provided | `""`               |
+| `postgresql.auth.username`                   | Name for a custom user to create                                                                                  | `bn_keycloak`      |
+| `postgresql.auth.password`                   | Password for the custom user to create                                                                            | `""`               |
+| `postgresql.auth.database`                   | Name for a custom database to create                                                                              | `bitnami_keycloak` |
+| `postgresql.auth.existingSecret`             | Name of existing secret to use for PostgreSQL credentials                                                         | `""`               |
+| `postgresql.architecture`                    | PostgreSQL architecture (`standalone` or `replication`)                                                           | `standalone`       |
+| `externalDatabase.host`                      | Database host                                                                                                     | `""`               |
+| `externalDatabase.port`                      | Database port number                                                                                              | `5432`             |
+| `externalDatabase.user`                      | Non-root username for Keycloak                                                                                    | `bn_keycloak`      |
+| `externalDatabase.password`                  | Password for the non-root username for Keycloak                                                                   | `""`               |
+| `externalDatabase.database`                  | Keycloak database name                                                                                            | `bitnami_keycloak` |
+| `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials                                           | `""`               |
+| `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials                                                | `""`               |
 
 
 ### Keycloak Cache parameters

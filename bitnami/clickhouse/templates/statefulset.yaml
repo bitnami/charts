@@ -1,5 +1,5 @@
-{{- $replicas := .Values.shards | int }}
-{{- range $i, $e := until $replicas }}
+{{- $shards := .Values.shards | int }}
+{{- range $i, $e := until $shards }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" $ }}
 kind: StatefulSet
 metadata:
@@ -104,6 +104,10 @@ spec:
           command: |
             mkdir -p /bitnami/clickhouse/data
             chmod 700 /bitnami/clickhouse/data
+            {{- if $.Values.keeper.enabled }}
+            mkdir -p /bitnami/clickhouse/keeper
+            chmod 700 /bitnami/clickhouse/keeper
+            {{- end }}
             chown {{ $.Values.containerSecurityContext.runAsUser }}:{{ $.Values.podSecurityContext.fsGroup }} /bitnami/clickhouse
             find /bitnami/clickhouse -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | \
             xargs -r chown -R {{ $.Values.containerSecurityContext.runAsUser }}:{{ $.Values.podSecurityContext.fsGroup }}
@@ -171,6 +175,16 @@ spec:
             - name: CLICKHOUSE_TCP_SECURE_PORT
               value: {{ $.Values.containerPorts.tcpSecure | quote }}
             {{- end }}
+            {{- if $.Values.keeper.enabled }}
+            - name: CLICKHOUSE_KEEPER_PORT
+              value: {{ $.Values.containerPorts.keeper | quote }}
+            - name: CLICKHOUSE_KEEPER_INTER_PORT
+              value: {{ $.Values.containerPorts.keeperInter | quote }}
+            {{- if $.Values.tls.enabled }}
+            - name: CLICKHOUSE_KEEPER_SECURE_PORT
+              value: {{ $.Values.containerPorts.keeperSecure | quote }}
+            {{- end }}
+            {{- end }}
             {{- if $.Values.metrics.enabled }}
             - name: CLICKHOUSE_METRICS_PORT
               value: {{ $.Values.containerPorts.metrics | quote }}
@@ -196,8 +210,21 @@ spec:
             - name: CLICKHOUSE_TLS_CA_FILE
               value: {{ include "clickhouse.tlsCACert" $ | quote }}
             {{- end }}
-          {{- if $.Values.extraEnvVars }}
+            {{- if $.Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" $.Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if $.Values.keeper.enabled }}
+            {{- $replicas := $.Values.replicaCount | int }}
+            {{- range $j, $r := until $replicas }}
+            - name: {{ printf "KEEPER_NODE_%d" $j }}
+              value: {{ printf "%s-shard%d-%d.%s.%s.svc.%s" (include "common.names.fullname" $ ) $i $j (include "clickhouse.headlessServiceName" $) (include "common.names.namespace" $) $.Values.clusterDomain }}
+            {{- end }}
+            {{- else if $.Values.zookeeper.enabled }}
+            {{- $replicas := $.Values.zookeeper.replicaCount | int }}
+            {{- range $j, $r := until $replicas }}
+            - name: {{ printf "KEEPER_NODE_%d" $j }}
+              value: {{ printf "%s-%d.%s.%s.svc.%s" (include "clickhouse.zookeeper.fullname" $ ) $j (include "clickhouse.zookeeper.headlessServiceName" $) (include "common.names.namespace" $) $.Values.clusterDomain }}
+            {{- end }}
             {{- end }}
           envFrom:
             {{- if $.Values.extraEnvVarsCM }}
@@ -219,6 +246,16 @@ spec:
             {{- if $.Values.tls.enabled }}
             - name: tcp-secure
               containerPort: {{ $.Values.containerPorts.tcpSecure }}
+            {{- end }}
+            {{- if $.Values.keeper.enabled }}
+            - name: tcp-keeper
+              containerPort: {{ $.Values.containerPorts.keeper }}
+            - name: tcp-keeperinter
+              containerPort: {{ $.Values.containerPorts.keeperInter }}
+            {{- if $.Values.tls.enabled }}
+            - name: tcp-keepertls
+              containerPort: {{ $.Values.containerPorts.keeperSecure }}
+            {{- end }}
             {{- end }}
             - name: tcp-postgresql
               containerPort: {{ $.Values.containerPorts.postgresql }}
@@ -260,6 +297,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" $.Values.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: scripts
+              mountPath: /scripts/setup.sh
+              subPath: setup.sh
             - name: data
               mountPath: /bitnami/clickhouse
             - name: config
@@ -291,6 +331,10 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" $.Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: scripts
+          configMap:
+            name: {{ printf "%s-scripts" (include "common.names.fullname" $) }}
+            defaultMode: 0755
         - name: config
           configMap:
             name: {{ template "clickhouse.configmapName" $ }}
