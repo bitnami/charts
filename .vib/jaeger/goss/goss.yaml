@@ -9,7 +9,7 @@ file:
   /opt/bitnami/jaeger/bin/jaeger-agent:
     exists: true
     filetype: file
-    mode: "755"
+    mode: "0755"
     owner: root
 command:
   check-user-info:
