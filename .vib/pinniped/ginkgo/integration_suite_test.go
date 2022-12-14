@@ -50,7 +50,7 @@ func clusterConfigOrDie() *rest.Config {
 	return config
 }
 
-func createPodOrDie(ctx context.Context, c cv1.PodsGetter) *v1.Pod {
+func createTestingPodOrDie(ctx context.Context, c cv1.PodsGetter) *v1.Pod {
 	kubeconfigContent, _ := os.ReadFile(*kubeconfig)
 	scriptContent, _ := os.ReadFile("./scripts/pinniped-auth.sh")
 
@@ -150,8 +150,8 @@ func getContainerLogsOrDie(ctx context.Context, c cv1.PodsGetter, podName string
 	return output
 }
 
-func containerLogsContainPattern(ctx context.Context, c cv1.PodsGetter, podName string, pattern string) (bool, error) {
-	containerLogs := getContainerLogsOrDie(ctx, c, podName, "vib-minideb")
+func containerLogsContainPattern(ctx context.Context, c cv1.PodsGetter, podName string, containerName string, pattern string) (bool, error) {
+	containerLogs := getContainerLogsOrDie(ctx, c, podName, containerName)
 	return containsPattern(containerLogs, pattern)
 }
 
@@ -203,10 +203,10 @@ func CheckRequirements() {
 		panic(fmt.Sprintf("The namespace where %s is deployed must be provided. Use the '--namespace' flag", APP_NAME))
 	}
 	if *authUser == "" {
-		panic("The LDAP username used to login. Use the '--auth-user' flag")
+		panic("The LDAP username used to login must be provided. Use the '--auth-user' flag")
 	}
 	if *authPassword == "" {
-		panic("The LDAP password used to login. Use the '--auth-password' flag")
+		panic("The LDAP password used to login must be provided. Use the '--auth-password' flag")
 	}
 }
 
