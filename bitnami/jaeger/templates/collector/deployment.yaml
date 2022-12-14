@@ -110,14 +110,14 @@ spec:
               value: {{ include "jaeger.cassandra.keyspace" . }}
             - name: CASSANDRA_DATACENTER
               value: {{ include "jaeger.cassandra.datacenter" . }}
-            - name: ADMIN_HTTP_HOST-PORT
-              value: {{ .Values.collector.containerPorts.admin | quote }}
+            - name: ADMIN_HTTP_HOST_PORT
+              value: {{ printf ":%v" .Values.collector.containerPorts.admin | quote }}
             - name: COLLECTOR_ZIPKIN_HOST_PORT
-              value: {{ .Values.collector.containerPorts.zipkin | quote }}
+              value: {{ printf ":%v" .Values.collector.containerPorts.zipkin | quote }}
             - name: COLLECTOR_GRPC_SERVER_HOST_PORT
-              value: {{ .Values.collector.containerPorts.grpc | quote }}
+              value: {{ printf ":%v" .Values.collector.containerPorts.grpc | quote }}
             - name: COLLECTOR_HTTP_SERVER_HOST_PORT
-              value: {{ .Values.collector.containerPorts.binary | quote }}
+              value: {{ printf ":%v" .Values.collector.containerPorts.binary | quote }}
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
             {{- if .Values.collector.extraEnvVars }}
