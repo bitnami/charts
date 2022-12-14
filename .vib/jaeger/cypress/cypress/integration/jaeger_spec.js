@@ -6,14 +6,14 @@ it('list and retrieve jaeger traces', () => {
     const currentDate = new Date();
     const timestamp = currentDate.getTime();
     // Check application availability though the UI
-    cy.visit('/search?end=' + timestamp.toString() + '&service=' + testService + '&start=0').then(() => {
+    cy.visit('/search?end=' + timestamp.toString() + '&limit=20&lookback=1h&service=' + testService + '&start=0').then(() => {
 
         // Ensure page contains Traces in an H2 tag
         cy.contains('h2', 'Traces');
 
         let traceIDLink = '';
         // Get <a> tag link of class "ResultItemTitle--item ub-flex-auto"
-        cy.get('a.ResultItemTitle--item.ub-flex§-auto').then((href) => {
+        cy.get('a.ResultItemTitle--item.ub-flex-auto').then((href) => {
             traceIDLink = href[0].href;
             // Get traceIDLink trace id after last slash
             const traceID = traceIDLink.substring(traceIDLink.lastIndexOf('/') + 1, traceIDLink.length);
