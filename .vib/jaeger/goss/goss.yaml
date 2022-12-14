@@ -1,7 +1,3 @@
-addr:
-  # Querying /ready in HTTP too early results in error 503 and makes the test flaky
-  tcp://jaeger-query:{{ .Vars.query.service.ports.api }}:
-    reachable: true
 http:
   http://jaeger--agent:{{ .Vars.agent.service.ports.admin }}/:
     status: 200
