@@ -90,7 +90,7 @@ The order in which this function returns a secret password:
 {{- $passwordLength := default 10 .length }}
 {{- $providedPasswordKey := include "common.utils.getKeyFromList" (dict "keys" .providedValues "context" $.context) }}
 {{- $providedPasswordValue := include "common.utils.getValueFromKey" (dict "key" $providedPasswordKey "context" $.context) }}
-{{- $secretData := (lookup "v1" "Secret" $.context.Release.Namespace .secret).data }}
+{{- $secretData := (lookup "v1" "Secret" (include "common.names.namespace" .context) .secret).data }}
 {{- if $secretData }}
   {{- if hasKey $secretData .key }}
     {{- $password = index $secretData .key | quote }}
@@ -138,7 +138,7 @@ Params:
 {{- define "common.secrets.lookup" -}}
 {{- $value := "" -}}
 {{- $defaultValue := required "\n'common.secrets.lookup': Argument 'defaultValue' missing or empty" .defaultValue -}}
-{{- $secretData := (lookup "v1" "Secret" $.context.Release.Namespace .secret).data -}}
+{{- $secretData := (lookup "v1" "Secret" (include "common.names.namespace" .context) .secret).data -}}
 {{- if and $secretData (hasKey $secretData .key) -}}
   {{- $value = index $secretData .key -}}
 {{- else -}}
@@ -158,7 +158,7 @@ Params:
   - context - Context - Required - Parent context.
 */}}
 {{- define "common.secrets.exists" -}}
-{{- $secret := (lookup "v1" "Secret" $.context.Release.Namespace .secret) }}
+{{- $secret := (lookup "v1" "Secret" (include "common.names.namespace" .context) .secret) }}
 {{- if $secret }}
   {{- true -}}
 {{- end -}}

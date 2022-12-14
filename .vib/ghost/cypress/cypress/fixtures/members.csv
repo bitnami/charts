@@ -1,3 +1,0 @@
-id,email,name,note,subscribed_to_emails,complimentary_plan,stripe_customer_id,created_at,deleted_at,labels,products
-624dbfbd02708a014290a2af,loic@example.com,Loic,Sample note,true,,,2022-04-06T16:28:45.000Z,,,
-624dbfdb02708a014290a2b2,marina@example.com,Marina,Bitnami engineer,true,,,2022-04-06T16:29:15.000Z,,,
