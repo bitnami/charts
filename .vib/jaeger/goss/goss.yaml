@@ -3,7 +3,7 @@ addr:
   tcp://jaeger-query:{{ .Vars.query.service.ports.api }}:
     reachable: true
 http:
-  http://jaeger-agent:{{ .Vars.agent.service.ports.admin }}/:
+  http://jaeger--agent:{{ .Vars.agent.service.ports.admin }}/:
     status: 200
   http://jaeger-collector:{{ .Vars.collector.service.ports.admin }}/:
     status: 200
