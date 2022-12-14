@@ -4,7 +4,7 @@ it('list and retrieve jaeger traces', () => {
 
     const testService = 'redis';
     // Check application availability though the UI
-    cy.visit('/search?end=10000000000&limit=20&lookback=1h&maxDuration&minDuration&service=' + testService + '&start=0').then(() => {
+    cy.visit('/search?end=10000000000000&limit=20&lookback=1h&maxDuration&minDuration&service=' + testService + '&start=0').then(() => {
 
         // Ensure page contains Traces in an H2 tag
         cy.contains('h2', 'Traces');
