@@ -130,7 +130,7 @@ https:
 ##
 auth:
   ## @param auth.basicAuthUsers Object containing <user>:<passwords> key-value pairs for each user that will have access via basic authentication
-  ## Note: Passwords will be later encripted using bcrypt
+  ## Note: Passwords will be later encrypted using bcrypt
   basicAuthUsers: {}
 
 ## Common Service Account
