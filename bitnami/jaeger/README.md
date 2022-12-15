@@ -399,7 +399,7 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-## Persistence
+### Persistence
 
 The [Bitnami jaeger](https://github.com/bitnami/containers/tree/main/bitnami/jaeger) image stores the trace onto an external database. Persistent Volume Claims are used to keep the data across deployments.
 
