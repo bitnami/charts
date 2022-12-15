@@ -1,0 +1,46 @@
+serviceAccount:
+  automountServiceAccountToken: true
+
+web:
+  containerPorts:
+    http: 8123
+  containerSecurityContext:
+    runAsUser: 1002
+  podSecurityContext:
+    fsGroup: 1002
+  service:
+    ports:
+      http: 8500
+
+streaming:
+  service:
+    ports:
+      http: 8600
+
+apache:
+  service:
+    type: LoadBalancer
+    ports:
+      http: 80
+
+postgresql:
+  primary:
+    service:
+      ports:
+        postgresql: 9393
+
+minio:
+  service:
+    ports:
+      api: 8011
+
+redis:
+  master:
+    service:
+      ports:
+        redis: 6800
+
+elasticsearch:
+  service:
+    ports:
+      restAPI: 7777

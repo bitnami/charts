@@ -51,6 +51,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/kubernetes-event-exporter/**'
       - 'bitnami/logstash/**'
       - 'bitnami/magento/**'
+      - 'bitnami/mastodon/**'
       - 'bitnami/mariadb-galera/**'
       - 'bitnami/mariadb/**'
       - 'bitnami/matomo/**'

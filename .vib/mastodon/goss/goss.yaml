@@ -1,0 +1,34 @@
+addr:
+  tcp://mastodon-elasticsearch:{{ .Vars.elasticsearch.service.ports.restAPI }}:
+    reachable: true
+    timeout: 500
+  tcp://mastodon-redis-master:{{ .Vars.redis.master.service.ports.redis }}:
+    reachable: true
+    timeout: 500
+  tcp://mastodon-postgresql:{{ .Vars.postgresql.primary.service.ports.postgresql }}:
+    reachable: true
+    timeout: 500
+  tcp://mastodon-minio:{{ .Vars.minio.service.ports.api }}:
+    reachable: true
+    timeout: 500
+command:
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+      - uid={{ .Vars.web.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.web.podSecurityContext.fsGroup }}/
+file:
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
+    filetype: directory
+    mode: "3777"
+http:
+  http://mastodon-web:{{ .Vars.web.service.ports.http }}/health:
+    status: 200
+  http://mastodon-streaming:{{ .Vars.streaming.service.ports.http }}/api/v1/streaming/health:
+    status: 200
+  http://mastodon-apache:{{ .Vars.apache.service.ports.http }}/health:
+    status: 200
+  http://mastodon-apache:{{ .Vars.apache.service.ports.http }}/api/v1/streaming/health:
+    status: 200
