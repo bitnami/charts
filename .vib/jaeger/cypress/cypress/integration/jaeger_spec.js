@@ -3,29 +3,26 @@
 it('list and retrieve jaeger traces', () => {
 
     const testService = 'redis';
-    const currentDate = new Date(); 
-    const timestampMillis = currentDate. getTime() * 1000;
-    // Check application availability though the UI
-    cy.visit('/search?end=' + timestampMillis + '&limit=20&lookback=1h&maxDuration&minDuration&service=' + testService + '&start=0').then(() => {
+    const currentDate = new Date();
+    const timestampMillis = currentDate.getTime() * 1000;
 
-        // Ensure page contains Traces in an H2 tag
-        cy.contains('h2', 'Traces');
+    cy.visit('/search?end=' + timestampMillis + '&limit=20&lookback=1h&maxDuration&minDuration&service=' + testService + '&start=0')
 
-        let traceIDLink = '';
-        // Get <a> tag link of class "ResultItemTitle--item ub-flex-auto"
-        cy.get('a.ResultItemTitle--item.ub-flex-auto').then((href) => {
-            traceIDLink = href[0].href;
-            // Get traceIDLink trace id after last slash
-            const traceID = traceIDLink.substring(traceIDLink.lastIndexOf('/') + 1, traceIDLink.length);
+    // Ensure page contains Traces in an H2 tag
+    cy.contains('h2', 'Traces');
 
-            // Get trace info through API
-            cy.request({
-                method: 'GET',
-                url: '/api/traces/' + traceID
-            }).then((response) => {
-                expect(response.status).to.eq(200);
-                expect(response.body.data[0].traceID).to.eq(traceID);
-            });
-        })
-    });
+    let traceIDLink = '';
+    cy.get('a.ResultItemTitle--item.ub-flex-auto').then((href) => {
+        traceIDLink = href[0].href;
+        const traceID = traceIDLink.substring(traceIDLink.lastIndexOf('/') + 1, traceIDLink.length);
+
+        cy.request({
+            method: 'GET',
+            url: '/api/traces/' + traceID
+        }).then((response) => {
+            expect(response.status).to.eq(200);
+            expect(response.body.data[0].traceID).to.eq(traceID);
+        });
+    })
+
 });
