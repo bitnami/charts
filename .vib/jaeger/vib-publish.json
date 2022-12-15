@@ -26,7 +26,7 @@
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
-            "name": "M4"
+            "name": "L4"
           }
         }
       },
@@ -34,8 +34,20 @@
         {
           "action_id": "health-check",
           "params": {
-            "endpoint": "lb-jaeger-query-http",
+            "endpoint": "lb-jaeger-query-api",
             "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/jaeger/goss"
+            },
+            "remote": {
+              "workload": "deploy-jaeger-query"
+            },
+            "vars_file": "vars.yaml"
           }
         },
         {
@@ -44,8 +56,23 @@
             "resources": {
               "path": "/.vib/jaeger/cypress"
             },
-            "endpoint": "lb-jaeger-query-http",
-            "app_protocol": "HTTP",
+            "endpoint": "lb-jaeger-query-api",
+            "app_protocol": "HTTP"
+          }
+        }
+      ]
+    },
+    "publish": {
+      "actions": [
+        {
+          "action_id": "helm-publish",
+          "params": {
+            "repository": {
+              "kind": "S3",
+              "url": "{VIB_ENV_S3_URL}",
+              "username": "{VIB_ENV_S3_USERNAME}",
+              "password": "{VIB_ENV_S3_PASSWORD}"
+            }
           }
         }
       ]
