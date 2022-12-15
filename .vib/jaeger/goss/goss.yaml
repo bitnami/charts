@@ -5,12 +5,6 @@ http:
     status: 200
   http://jaeger-query:{{ .Vars.query.service.ports.admin }}/:
     status: 200
-file:
-  /opt/bitnami/jaeger/bin/jaeger-agent:
-    exists: true
-    filetype: file
-    mode: "0755"
-    owner: root
 command:
   check-user-info:
     exec: id
