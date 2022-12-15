@@ -197,3 +197,33 @@ Create the cassandra keyspace
         {{- .Values.cassandra.keyspace | quote -}}
     {{- end -}}
 {{- end -}}
+
+{{/*
+Compile all warnings into a single message.
+*/}}
+{{- define "jaeger.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "jaeger.validateValues.cassandra" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of jaeger - Cassandra */}}
+{{- define "jaeger.validateValues.cassandra" -}}
+{{- if and .Values.cassandra.enabled .Values.externalDatabase.host -}}
+jaeger: Cassandra
+    You can only use one database.
+    Please choose installing a Cassandra chart (--set cassandra.enabled=true) or
+    using an external database (--set externalDatabase.host)
+{{- end -}}
+{{- if and (not .Values.cassandra.enabled) (not .Values.externalDatabase.host) -}}
+jaeger: Cassandra
+    You did not set any database.
+    Please choose installing a Cassandra chart (--set mongodb.enabled=true) or
+    using an external database (--set externalDatabase.host)
+{{- end -}}
+{{- end -}}
