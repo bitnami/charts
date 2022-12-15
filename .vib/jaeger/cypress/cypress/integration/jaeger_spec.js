@@ -9,7 +9,7 @@ it('lists and retrieves jaeger traces', () => {
 
   cy.visit(`/search?end=${timestampMillis}&limit=20&lookback=1h&maxDuration&minDuration&service=${testService}&start=0`);
 
-  cy.get('a.ResultItemTitle--item.ub-flex-auto').invoke('attr', 'href').then((href) => {
+  cy.contains('a', '/dispatch').invoke('attr', 'href').then((href) => {
     const traceID = href.substring(href.lastIndexOf('/') + 1, href.length);
 
     cy.request({
