@@ -70,7 +70,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/influxdb
-  tag: 2.5.1-debian-11-r9
+  tag: 2.6.0-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -817,7 +817,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r61
+    tag: 11-debian-11-r62
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -987,7 +987,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/azure-cli
-        tag: 2.43.0-debian-11-r2
+        tag: 2.43.0-debian-11-r3
         digest: ""
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1026,7 +1026,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/aws-cli
-        tag: 2.9.6-debian-11-r1
+        tag: 2.9.7-debian-11-r0
         digest: ""
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
