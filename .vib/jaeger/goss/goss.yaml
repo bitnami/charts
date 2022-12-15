@@ -2,11 +2,16 @@ http:
   http://jaeger--agent:{{ .Vars.agent.service.ports.admin }}/:
     status: 200
     body:
-      - Server available
+      - Jaeger
   http://jaeger-collector:{{ .Vars.collector.service.ports.admin }}/:
     status: 200
   http://jaeger-query:{{ .Vars.query.service.ports.admin }}/:
     status: 200
+file:
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
+    filetype: directory
+    mode: "3777"
 command:
   check-user-info:
     exec: id

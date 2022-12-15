@@ -4,14 +4,45 @@ query:
   containerSecurityContext:
     runAsUser: 1002
   service:
+    type: LoadBalancer
     ports:
       admin: 3101
-      api: 3102
+      api: 80
+    containerPorts:
+      admin: 3102
+      api: 8095
 collector:
   service:
     ports:
       admin: 3101
+    containerPorts:
+      admin: 3102
+      api: 8095
 agent:
   service:
     ports:
       admin: 3101
+    containerPorts:
+      admin: 3102
+      api: 8095
+  sidecars:
+    - name: hotrod-example
+      image: jaegertracing/example-hotrod:1.39
+      args:
+        - all
+    - name: trace-generator
+      image: bitnami/bitnami-shell:11-debian-11-r57
+      command:
+        - /bin/bash
+        - -ec
+        - |
+          #!/bin/bash
+          while true; do
+            # Sample taken from inspecting hotrod code
+            curl 'http://127.0.0.1:8080/dispatch?customer=392&nonse=0.45838884710501726'
+            sleep 5
+          done
+  serviceAccount:
+    automountServiceAccountToken: true
+cassandra:
+  enabled: true
