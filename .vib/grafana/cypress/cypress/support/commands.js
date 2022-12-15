@@ -14,7 +14,7 @@ for (const command of ['click']) {
 
 Cypress.on('uncaught:exception', (err, runnable) => {
   // In Grafana 9.3.0 the console throws a typeError with message
-  //'Cannot read properties of undefined (reading 'eventTrackingNamespace')'.
+  // 'Cannot read properties of undefined (reading 'eventTrackingNamespace')'.
   // An issue has been created:
   // https://github.com/grafana/grafana/issues/60377
   if (err.message.includes("Cannot read properties of undefined (reading 'eventTrackingNamespace')")) {
