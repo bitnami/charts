@@ -9,7 +9,7 @@ http:
     status: 200
 file:
   /var/run/secrets/kubernetes.io/serviceaccount:
-    exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
+    exists: {{ .Vars.agent.serviceAccount.automountServiceAccountToken }}
     filetype: directory
     mode: "3777"
 command:
@@ -17,5 +17,5 @@ command:
     exec: id
     exit-status: 0
     stdout:
-      - uid={{ .Vars.query.containerSecurityContext.runAsUser }}
-      - /groups=.*{{ .Vars.query.podSecurityContext.fsGroup }}/
+      - uid={{ .Vars.agent.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.agent.podSecurityContext.fsGroup }}/

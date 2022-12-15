@@ -1,8 +1,4 @@
 query:
-  podSecurityContext:
-    fsGroup: 1002
-  containerSecurityContext:
-    runAsUser: 1002
   service:
     type: LoadBalancer
     ports:
@@ -25,6 +21,10 @@ agent:
     containerPorts:
       admin: 3102
       api: 8095
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 1002
   sidecars:
     - name: hotrod-example
       image: jaegertracing/example-hotrod:1.39
