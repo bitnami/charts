@@ -1,12 +1,12 @@
 /// <reference types="cypress" />
 
-it('list and retrieve jaeger traces', () => {
+it('lists and retrieves jaeger traces', () => {
 
     const testService = 'redis';
     const currentDate = new Date();
     const timestampMillis = currentDate.getTime() * 1000;
 
-    cy.visit('/search?end=' + timestampMillis + '&limit=20&lookback=1h&maxDuration&minDuration&service=' + testService + '&start=0')
+    cy.visit(`/search?end=${timestampMillis}&limit=20&lookback=1h&maxDuration&minDuration&service=${testService}&start=0`)
 
     // Ensure page contains Traces in an H2 tag
     cy.contains('h2', 'Traces');
