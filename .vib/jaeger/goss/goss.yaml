@@ -1,6 +1,8 @@
 http:
   http://jaeger--agent:{{ .Vars.agent.service.ports.admin }}/:
     status: 200
+    body:
+      - Server available
   http://jaeger-collector:{{ .Vars.collector.service.ports.admin }}/:
     status: 200
   http://jaeger-query:{{ .Vars.query.service.ports.admin }}/:
