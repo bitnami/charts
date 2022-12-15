@@ -138,12 +138,16 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "mastodon.defaultConfigmapName" . }}
-            - configMapRef:
-                name: {{ include "mastodon.extraConfigmapName" . }}
             - secretRef:
                 name: {{ include "mastodon.defaultSecretName" . }}
+            {{- if or .Values.extraConfig .Values.extraConfigExistingConfigmap }}
+            - configMapRef:
+                name: {{ include "mastodon.extraConfigmapName" . }}
+            {{- end }}
+            {{- if or .Values.extraSecretConfig .Values.extraConfigExistingSecret }}
             - secretRef:
                 name: {{ include "mastodon.extraSecretName" . }}
+            {{- end }}
             {{- if .Values.sidekiq.extraEnvVarsCM }}
             - configMapRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.sidekiq.extraEnvVarsCM "context" $) }}

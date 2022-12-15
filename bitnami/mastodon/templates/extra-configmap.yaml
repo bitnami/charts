@@ -1,4 +1,4 @@
-{{- if not .Values.extraConfigExistingConfigmap }}
+{{- if and .Values.extraConfig (not .Values.extraConfigExistingConfigmap) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
