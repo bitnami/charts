@@ -11,17 +11,17 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://chasidekiq.bitnami.com/bitnami
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/mastodon
 ```
 
 ## Introduction
 
-Bitnami chasidekiq for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
+Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
 This chart bootstraps an [Mastodon](https://www.mastodon.com/) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami chasidekiq can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Chasidekiq in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm charts in clusters.
 
 [Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/mastodon/get-started/).
 
@@ -63,7 +63,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                                                                                         | Value                |
@@ -87,7 +86,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullSecrets`      | Mastodon image pull secrets                                                                                                                         | `[]`                 |
 | `image.debug`            | Enable Mastodon image debug mode                                                                                                                    | `false`              |
 
-
 ### Mastodon common parameters
 
 | Name                           | Description                                                                    | Value              |
@@ -107,7 +105,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `enableS3`                     | Enable the S3 storage engine                                                   | `true`             |
 | `webDomain`                    | Web domain for Mastodon                                                        | `""`               |
 | `s3AliasHost`                  | S3 alias host for Mastodon (will use http://webDomain/bucket if not set)       | `""`               |
-
 
 ### Mastodon Web Parameters
 
@@ -174,7 +171,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.sidecars`                                          | Add additional sidecar containers to the Mastodon web pod(s)                                                             | `[]`             |
 | `web.initContainers`                                    | Add additional init containers to the Mastodon web pod(s)                                                                | `[]`             |
 
-
 ### Mastodon Web Traffic Exposure Parameters
 
 | Name                                   | Description                                                                             | Value       |
@@ -190,7 +186,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.service.extraPorts`               | Extra ports to expose in Mastodon web service (normally used with the `sidecars` value) | `[]`        |
 | `web.service.sessionAffinity`          | Control where web requests go, to the same pod or round-robin                           | `None`      |
 | `web.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                             | `{}`        |
-
 
 ### Mastodon Sidekiq Parameters
 
@@ -255,7 +250,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidekiq.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Mastodon sidekiq container(s)                           | `[]`             |
 | `sidekiq.sidecars`                                          | Add additional sidecar containers to the Mastodon sidekiq pod(s)                                                         | `[]`             |
 | `sidekiq.initContainers`                                    | Add additional init containers to the Mastodon sidekiq pod(s)                                                            | `[]`             |
-
 
 ### Mastodon Streaming Parameters
 
@@ -322,7 +316,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `streaming.sidecars`                                          | Add additional sidecar containers to the Mastodon streaming pod(s)                                                       | `[]`             |
 | `streaming.initContainers`                                    | Add additional init containers to the Mastodon streaming pod(s)                                                          | `[]`             |
 
-
 ### Mastodon Streaming Traffic Exposure Parameters
 
 | Name                                         | Description                                                                                   | Value       |
@@ -338,7 +331,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `streaming.service.extraPorts`               | Extra ports to expose in Mastodon streaming service (normally used with the `sidecars` value) | `[]`        |
 | `streaming.service.sessionAffinity`          | Control where streaming requests go, to the same pod or round-robin                           | `None`      |
 | `streaming.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                   | `{}`        |
-
 
 ### Mastodon Migration job Parameters
 
@@ -370,7 +362,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initJob.podLabels`                                         | Additional pod labels                                                                                                          | `{}`             |
 | `initJob.podAnnotations`                                    | Additional pod annotations                                                                                                     | `{}`             |
 
-
 ### Persistence Parameters (only when S3 is disabled)
 
 | Name                        | Description                                                                                             | Value               |
@@ -386,7 +377,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.selector`      | Selector to match an existing Persistent Volume for WordPress data PVC                                  | `{}`                |
 | `persistence.dataSource`    | Custom PVC data source                                                                                  | `{}`                |
 
-
 ### Init Container Parameters
 
 | Name                                                   | Description                                                                                     | Value                   |
@@ -400,7 +390,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
 | `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
-
 
 ### Other Parameters
 
@@ -418,7 +407,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.existingSecret`             | Name of an existing secret resource containing the database credentials | `""`          |
 | `externalDatabase.existingSecretPasswordKey`  | Name of an existing secret key containing the database credentials      | `db-password` |
 
-
 ### External Redis parameters
 
 | Name                                      | Description                                                          | Value  |
@@ -428,7 +416,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalRedis.password`                  | Password for the Redis                                               | `""`   |
 | `externalRedis.existingSecret`            | Name of an existing secret resource containing the Redis credentials | `""`   |
 | `externalRedis.existingSecretPasswordKey` | Name of an existing secret key containing the Redis credentials      | `""`   |
-
 
 ### External S3 parameters
 
@@ -445,7 +432,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalS3.bucket`                       | External S3 bucket                                                 | `mastodon`      |
 | `externalS3.region`                       | External S3 region                                                 | `us-east-1`     |
 
-
 ### External elasticsearch configuration
 
 | Name                                              | Description                                                                  | Value                    |
@@ -455,7 +441,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalElasticsearch.password`                  | Password for the external elasticsearch server                               | `""`                     |
 | `externalElasticsearch.existingSecret`            | Name of an existing secret resource containing the elasticsearch credentials | `""`                     |
 | `externalElasticsearch.existingSecretPasswordKey` | Name of an existing secret key containing the elasticsearch credentials      | `elasticsearch-password` |
-
 
 ### Redis sub-chart parameters
 
@@ -469,7 +454,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `redis.auth.password`              | Redis password                                 | `""`         |
 | `redis.auth.existingSecret`        | Name of a secret containing the Redis password | `""`         |
 
-
 ### PostgreSQL chart configuration
 
 | Name                                          | Description                                               | Value              |
@@ -481,7 +465,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `postgresql.auth.existingSecret`              | Name of existing secret to use for PostgreSQL credentials | `""`               |
 | `postgresql.architecture`                     | PostgreSQL architecture (`standalone` or `replication`)   | `standalone`       |
 | `postgresql.primary.service.ports.postgresql` | PostgreSQL service port                                   | `5432`             |
-
 
 ### MinIO&reg; chart parameters
 
@@ -500,7 +483,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `minio.service.loadBalancerIP`     | MinIO&reg; service LoadBalancer IP                                                                                                | `""`                                                   |
 | `minio.service.ports.api`          | MinIO&reg; service port                                                                                                           | `80`                                                   |
 
-
 ### Elasticsearch chart configuration
 
 | Name                                        | Description                                                                | Value   |
@@ -515,7 +497,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `elasticsearch.data.replicaCount`           | Desired number of Elasticsearch data nodes                                 | `1`     |
 | `elasticsearch.ingest.replicaCount`         | Desired number of Elasticsearch ingest nodes                               | `1`     |
 | `elasticsearch.service.ports.restAPI`       | Elasticsearch REST API port                                                | `9200`  |
-
 
 ### Apache chart configuration
 
@@ -532,7 +513,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `apache.startupProbe.path`      | Apache startup probe path                                       | `/api/v1/streaming/health` |
 | `apache.ingress.enabled`        | Enable ingress                                                  | `false`                    |
 | `apache.ingress.hostname`       | Ingress hostname                                                | `mastodon.local`           |
-
 
 The above parameters map to the env variables defined in [bitnami/mastodon](https://github.com/bitnami/containers/tree/main/bitnami/mastodon). For more information please refer to the [bitnami/mastodon](https://github.com/bitnami/containers/tree/main/bitnami/mastodon) image documentation.
 
@@ -613,7 +593,7 @@ externalS3.accessKeySecret=secret
 
 ### Ingress
 
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/chasidekiq/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/chasidekiq/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
 
 To enable Ingress integration, set `apache.ingress.enabled` to `true`. The `apache.ingress.hostname` property can be used to set the host name. The `apache.ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/mastodon/configuration/configure-use-ingress/).
 
@@ -646,11 +626,11 @@ If additional containers are needed in the same pod as mastodon (such as additio
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/chasidekiq/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters inside the `web`, `streaming` and `sidekiq` sections.
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters inside the `web`, `streaming` and `sidekiq` sections.
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami's Helm chasidekiq in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## License
 
