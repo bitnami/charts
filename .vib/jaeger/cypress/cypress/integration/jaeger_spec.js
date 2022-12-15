@@ -11,10 +11,8 @@ it('lists and retrieves jaeger traces', () => {
   // Ensure page contains Traces in an H2 tag
   cy.contains('h2', 'Traces');
 
-  let traceIDLink = '';
-  cy.get('a.ResultItemTitle--item.ub-flex-auto').then((href) => {
-    traceIDLink = href[0].href;
-    const traceID = traceIDLink.substring(traceIDLink.lastIndexOf('/') + 1, traceIDLink.length);
+  cy.get('a.ResultItemTitle--item.ub-flex-auto').invoke('attr', 'href').then((href) => {
+    const traceID = href.substring(href.lastIndexOf('/') + 1, href.length);
 
     cy.request({
       method: 'GET',
