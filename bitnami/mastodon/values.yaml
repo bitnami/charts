@@ -1300,7 +1300,7 @@ postgresql:
 ##
 minio:
   ## @param minio.enabled Enable/disable MinIO&reg; chart installation
-  ## to be used as an objstore for Thanos
+  ## to be used as an objstore for Mastodon
   ##
   enabled: true
   ## MinIO&reg; authentication parameters
@@ -1345,7 +1345,7 @@ minio:
 ## https://github.com/bitnami/charts/blob/main/bitnami/elasticsearch/values.yaml
 ##
 elasticsearch:
-  ## @param elasticsearch.enabled Whether to deploy a elasticsearch server to use as magento's search engine
+  ## @param elasticsearch.enabled Whether to deploy a elasticsearch server to use as Mastodon's search engine
   ## To use an external server set this to false and configure the externalElasticsearch parameters
   ##
   enabled: true

@@ -6,7 +6,7 @@ import {
 it.only('allows to publish a tweet with an image', () => {
   cy.login();
   cy.get('[type="file"]').selectFile('cypress/fixtures/images/test_image.jpeg', {force: true});
-  cy.fixture('tweet').then((tweet) => {
+  cy.fixture('tweets').then((tweet) => {
     // There is another hidden textarea so we need to use the *compose* class
     cy.get('[class*="compose"] textarea').type(`${tweet.text} ${random}`, {
       force: true,

@@ -19,7 +19,6 @@ streaming:
 
 apache:
   service:
-    type: LoadBalancer
     ports:
       http: 80
 

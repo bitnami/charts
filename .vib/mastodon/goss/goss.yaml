@@ -1,16 +1,3 @@
-addr:
-  tcp://mastodon-elasticsearch:{{ .Vars.elasticsearch.service.ports.restAPI }}:
-    reachable: true
-    timeout: 500
-  tcp://mastodon-redis-master:{{ .Vars.redis.master.service.ports.redis }}:
-    reachable: true
-    timeout: 500
-  tcp://mastodon-postgresql:{{ .Vars.postgresql.primary.service.ports.postgresql }}:
-    reachable: true
-    timeout: 500
-  tcp://mastodon-minio:{{ .Vars.minio.service.ports.api }}:
-    reachable: true
-    timeout: 500
 command:
   check-user-info:
     exec: id
@@ -18,12 +5,36 @@ command:
     stdout:
       - uid={{ .Vars.web.containerSecurityContext.runAsUser }}
       - /groups=.*{{ .Vars.web.podSecurityContext.fsGroup }}/
+  check-no-capabilities:
+    exec: cat /proc/1/status
+    exit-status: 0
+    stdout:
+    - "CapInh:	0000000000000000"
+    - "CapPrm:	0000000000000000"
+    - "CapEff:	0000000000000000"
+    - "CapBnd:	0000000000000000"
+    - "CapAmb:	0000000000000000"
+  conf-vars:
+    exec: |
+      bash -ec ". /opt/bitnami/scripts/mastodon-env.sh && env"
+    exit-status: 0
+    stdout:
+    - /ES_HOST.*mastodon-elasticsearch/
+    - /ES_PORT.*{{ .Vars.elasticsearch.service.ports.restAPI }}/
+    - /DB_HOST.*mastodon-postgresql/
+    - /DB_PORT.*{{ .Vars.postgresql.primary.service.ports.postgresql }}/
+    - /REDIS_HOST.*mastodon-redis/
+    - /REDIS_PORT.*{{ .Vars.redis.master.service.ports.redis }}/
+    - /S3_ENDPOINT.*http://mastodon-minio:{{ .Vars.minio.service.ports.api }}/
+
 file:
   /var/run/secrets/kubernetes.io/serviceaccount:
     exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
     filetype: directory
     mode: "3777"
 http:
+  http://127.0.0.1:{{ .Vars.web.containerPorts.http }}/health:
+    status: 200
   http://mastodon-web:{{ .Vars.web.service.ports.http }}/health:
     status: 200
   http://mastodon-streaming:{{ .Vars.streaming.service.ports.http }}/api/v1/streaming/health:
