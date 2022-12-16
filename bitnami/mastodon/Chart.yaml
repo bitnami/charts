@@ -42,4 +42,4 @@ name: mastodon
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/mastodon
   - https://github.com/mastodon/mastodon/
-version: 0.1.0
+version: 0.1.1
