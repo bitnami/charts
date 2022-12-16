@@ -1316,21 +1316,21 @@ objstoreConfig: |-
   type: s3
   config:
     bucket: thanos
-    endpoint: {{ include "thanos.minio.fullname" . }}.monitoring.svc.cluster.local:9000
+    endpoint: thanos-minio.monitoring.svc.cluster.local:9000
     access_key: minio
     secret_key: minio123
     insecure: true
-query:
+ query:
   dnsDiscovery:
-    sidecarsService: kube-prometheus-prometheus-thanos
+    sidecarsService: bitnami-kube-prometheus-prometheus-thanos
     sidecarsNamespace: monitoring
-bucketweb:
+ bucketweb:
   enabled: true
-compactor:
+ compactor:
   enabled: true
-storegateway:
+ storegateway:
   enabled: true
-ruler:
+ ruler:
   enabled: true
   alertmanagers:
     - http://kube-prometheus-alertmanager.monitoring.svc.cluster.local:9093
@@ -1340,16 +1340,16 @@ ruler:
         rules:
           - alert: "PrometheusDown"
             expr: absent(up{prometheus="monitoring/kube-prometheus"})
-metrics:
-  enabled: true
-  serviceMonitor:
-    enabled: true
-minio:
-  enabled: true
+ minio:
   auth:
-    rootUser: "admin"
-    rootPassword: "minio123"
-  defaultBuckets: "thanos"
+    rootPassword: minio123
+    rootUser: minio
+  monitoringBuckets: thanos
+  enabled: true
+  accessKey:
+    password: minio
+  secretKey:
+    password: minio123
 ```
 
 - Install Prometheus Operator and Thanos charts:
