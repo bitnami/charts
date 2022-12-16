@@ -503,18 +503,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Elasticsearch chart configuration
 
-| Name                                        | Description                                                                | Value   |
-| ------------------------------------------- | -------------------------------------------------------------------------- | ------- |
-| `elasticsearch.enabled`                     | Whether to deploy a elasticsearch server to use as magento's search engine | `true`  |
-| `elasticsearch.sysctlImage.enabled`         | Enable kernel settings modifier image for Elasticsearch                    | `true`  |
-| `elasticsearch.security.enabled`            | Enable security settings for Elasticsearch                                 | `false` |
-| `elasticsearch.security.existingSecret`     | Name of an existing secret containing the elasticsearch credentials        | `""`    |
-| `elasticsearch.security.tls.restEncryption` | Enable TLS encryption for REST API                                         | `false` |
-| `elasticsearch.master.replicaCount`         | Desired number of Elasticsearch master-eligible nodes                      | `1`     |
-| `elasticsearch.coordinating.replicaCount`   | Desired number of Elasticsearch coordinating-only nodes                    | `1`     |
-| `elasticsearch.data.replicaCount`           | Desired number of Elasticsearch data nodes                                 | `1`     |
-| `elasticsearch.ingest.replicaCount`         | Desired number of Elasticsearch ingest nodes                               | `1`     |
-| `elasticsearch.service.ports.restAPI`       | Elasticsearch REST API port                                                | `9200`  |
+| Name                                        | Description                                                                 | Value   |
+| ------------------------------------------- | --------------------------------------------------------------------------- | ------- |
+| `elasticsearch.enabled`                     | Whether to deploy a elasticsearch server to use as Mastodon's search engine | `true`  |
+| `elasticsearch.sysctlImage.enabled`         | Enable kernel settings modifier image for Elasticsearch                     | `true`  |
+| `elasticsearch.security.enabled`            | Enable security settings for Elasticsearch                                  | `false` |
+| `elasticsearch.security.existingSecret`     | Name of an existing secret containing the elasticsearch credentials         | `""`    |
+| `elasticsearch.security.tls.restEncryption` | Enable TLS encryption for REST API                                          | `false` |
+| `elasticsearch.master.replicaCount`         | Desired number of Elasticsearch master-eligible nodes                       | `1`     |
+| `elasticsearch.coordinating.replicaCount`   | Desired number of Elasticsearch coordinating-only nodes                     | `1`     |
+| `elasticsearch.data.replicaCount`           | Desired number of Elasticsearch data nodes                                  | `1`     |
+| `elasticsearch.ingest.replicaCount`         | Desired number of Elasticsearch ingest nodes                                | `1`     |
+| `elasticsearch.service.ports.restAPI`       | Elasticsearch REST API port                                                 | `9200`  |
 
 
 ### Apache chart configuration
