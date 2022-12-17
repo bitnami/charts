@@ -1015,6 +1015,8 @@ cache:
 ## Keycloak logging configuration
 ## ref: https://www.keycloak.org/server/logging
 ## @param logging.output Alternates between the default log output format or json format
+## @param logging.level Allowed values as documented: FATAL, ERROR, WARN, INFO, DEBUG, TRACE, ALL, OFF
 ##
 logging:
   output: default
+  level: INFO

@@ -53,5 +53,6 @@ data:
   {{- end }}
   {{- if .Values.logging }}
   KEYCLOAK_LOG_OUTPUT: {{ .Values.logging.output | quote }}
+  KC_LOG_LEVEL: {{ .Values.logging.level | quote }}
   {{- end }}
 
