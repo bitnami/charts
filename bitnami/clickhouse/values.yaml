@@ -1043,7 +1043,7 @@ externalZookeeper:
 ##
 zookeeper:
   enabled: true
-  replicaCount: 2
+  replicaCount: 3
   service:
     ports:
       client: 2181
