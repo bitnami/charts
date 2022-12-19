@@ -10,9 +10,17 @@ agent:
   service:
     ports:
       admin: 14272
+  containerPorts:
+    config: 5779
+    admin: 14272
   podSecurityContext:
     fsGroup: 1002
   containerSecurityContext:
     runAsUser: 1002
   serviceAccount:
     automountServiceAccountToken: true
+cassandra:
+  keyspace: bitnami_test_jaeger
+  dbUser:
+    user: bn_test_jaeger
+    password: bn_test_jaeger
