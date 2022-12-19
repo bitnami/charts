@@ -27800,6 +27800,37 @@ entries:
   - annotations:
       category: Infrastructure
     apiVersion: v2
+    appVersion: 2.7.1
+    created: "2022-12-19T19:20:21.844001872Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: HAProxy is a TCP proxy and a HTTP reverse proxy. It supports SSL
+      termination and offloading, TCP and HTTP normalization, traffic regulation,
+      caching and protection against DDoS attacks.
+    digest: 131b7d667d24d29c55f8394e6d15ee1ffa14ffaf310221c45a844722d883bc6d
+    home: https://www.haproxy.org/
+    icon: https://bitnami.com/assets/stacks/haproxy/img/haproxy-stack-220x234.png
+    keywords:
+    - haproxy
+    - proxy
+    - infrastructure
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: haproxy
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/haproxy
+    - https://github.com/haproxytech/haproxy
+    urls:
+    - https://charts.bitnami.com/bitnami/haproxy-0.6.5.tgz
+    version: 0.6.5
+  - annotations:
+      category: Infrastructure
+    apiVersion: v2
     appVersion: 2.7.0
     created: "2022-12-01T17:41:23.365887207Z"
     dependencies:
@@ -98394,4 +98425,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2022-12-19T16:09:40.171721827Z"
+generated: "2022-12-19T19:20:21.83768056Z"
