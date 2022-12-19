@@ -57805,6 +57805,38 @@ entries:
       category: MachineLearning
     apiVersion: v2
     appVersion: 1.9.1
+    created: "2022-12-19T16:09:40.175513507Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Apache MXNet (Incubating) is a flexible and efficient library for
+      deep learning designed to work as a neural network. Bitnami image ships OpenBLAS
+      as math library.
+    digest: 8b529eb51a4cbcd963e1fa1aad2a9986cc6776774cb818f6dc43d50c37c1a29d
+    home: https://github.com/bitnami/charts/tree/main/bitnami/mxnet
+    icon: https://bitnami.com/assets/stacks/mxnet/img/mxnet-stack-220x234.png
+    keywords:
+    - mxnet
+    - python
+    - machine
+    - learning
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: mxnet
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/mxnet
+    - https://mxnet.apache.org/
+    urls:
+    - https://charts.bitnami.com/bitnami/mxnet-3.1.8.tgz
+    version: 3.1.8
+  - annotations:
+      category: MachineLearning
+    apiVersion: v2
+    appVersion: 1.9.1
     created: "2022-11-19T15:54:41.031748765Z"
     dependencies:
     - name: common
@@ -98362,4 +98394,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2022-12-19T16:07:57.136934438Z"
+generated: "2022-12-19T16:09:40.171721827Z"
