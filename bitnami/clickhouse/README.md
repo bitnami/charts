@@ -96,6 +96,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `shards`                                            | Number of ClickHouse shards to deploy                                                                      | `2`                    |
 | `replicaCount`                                      | Number of ClickHouse replicas per shard to deploy                                                          | `3`                    |
 | `containerPorts.http`                               | ClickHouse HTTP container port                                                                             | `8123`                 |
+| `containerPorts.https`                              | ClickHouse HTTPS container port                                                                            | `8443`                 |
 | `containerPorts.tcp`                                | ClickHouse TCP container port                                                                              | `9000`                 |
 | `containerPorts.tcpSecure`                          | ClickHouse TCP (secure) container port                                                                     | `9440`                 |
 | `containerPorts.keeper`                             | ClickHouse keeper TCP container port                                                                       | `2181`                 |
@@ -198,6 +199,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                                    | ClickHouse service type                                                                                                          | `ClusterIP`              |
 | `service.ports.http`                              | ClickHouse service HTTP port                                                                                                     | `8123`                   |
+| `service.ports.https`                             | ClickHouse service HTTPS port                                                                                                    | `443`                    |
 | `service.ports.tcp`                               | ClickHouse service TCP port                                                                                                      | `9000`                   |
 | `service.ports.tcpSecure`                         | ClickHouse service TCP (secure) port                                                                                             | `9440`                   |
 | `service.ports.keeper`                            | ClickHouse keeper TCP container port                                                                                             | `2181`                   |
@@ -208,6 +210,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.ports.interserver`                       | ClickHouse service Interserver port                                                                                              | `9009`                   |
 | `service.ports.metrics`                           | ClickHouse service metrics port                                                                                                  | `8001`                   |
 | `service.nodePorts.http`                          | Node port for HTTP                                                                                                               | `""`                     |
+| `service.nodePorts.https`                         | Node port for HTTPS                                                                                                              | `""`                     |
 | `service.nodePorts.tcp`                           | Node port for TCP                                                                                                                | `""`                     |
 | `service.nodePorts.tcpSecure`                     | Node port for TCP (with TLS)                                                                                                     | `""`                     |
 | `service.nodePorts.keeper`                        | ClickHouse keeper TCP container port                                                                                             | `""`                     |
@@ -228,6 +231,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalAccess.enabled`                          | Enable Kubernetes external cluster access to ClickHouse                                                                          | `false`                  |
 | `externalAccess.service.type`                     | Kubernetes Service type for external access. It can be NodePort, LoadBalancer or ClusterIP                                       | `LoadBalancer`           |
 | `externalAccess.service.ports.http`               | ClickHouse service HTTP port                                                                                                     | `80`                     |
+| `externalAccess.service.ports.https`              | ClickHouse service HTTPS port                                                                                                    | `443`                    |
 | `externalAccess.service.ports.tcp`                | ClickHouse service TCP port                                                                                                      | `9000`                   |
 | `externalAccess.service.ports.tcpSecure`          | ClickHouse service TCP (secure) port                                                                                             | `9440`                   |
 | `externalAccess.service.ports.keeper`             | ClickHouse keeper TCP container port                                                                                             | `2181`                   |
@@ -241,6 +245,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalAccess.service.loadBalancerAnnotations`  | Array of load balancer annotations for each ClickHouse . Length must be the same as replicaCount                                 | `[]`                     |
 | `externalAccess.service.loadBalancerSourceRanges` | Address(es) that are allowed when service is LoadBalancer                                                                        | `[]`                     |
 | `externalAccess.service.nodePorts.http`           | Node port for HTTP                                                                                                               | `[]`                     |
+| `externalAccess.service.nodePorts.https`          | Node port for HTTPS                                                                                                              | `[]`                     |
 | `externalAccess.service.nodePorts.tcp`            | Node port for TCP                                                                                                                | `[]`                     |
 | `externalAccess.service.nodePorts.tcpSecure`      | Node port for TCP (with TLS)                                                                                                     | `[]`                     |
 | `externalAccess.service.nodePorts.keeper`         | ClickHouse keeper TCP container port                                                                                             | `[]`                     |
