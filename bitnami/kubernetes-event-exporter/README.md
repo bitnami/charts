@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replicaCount`                                    | Desired number of pod replicas                                                                                      | `1`                                 |
 | `image.registry`                                  | Container image registry                                                                                            | `docker.io`                         |
 | `image.repository`                                | Container image name                                                                                                | `bitnami/kubernetes-event-exporter` |
-| `image.tag`                                       | Container image tag                                                                                                 | `1.0.0-debian-11-r20`               |
+| `image.tag`                                       | Container image tag                                                                                                 | `1.1.0-debian-11-r0`                |
 | `image.digest`                                    | Container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag           | `""`                                |
 | `image.pullPolicy`                                | Container image pull policy                                                                                         | `IfNotPresent`                      |
 | `image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                    | `[]`                                |
