@@ -185,6 +185,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `schedulerName`                                     | Name of the k8s scheduler (other than default)                                            | `""`            |
 | `priorityClassName`                                 | Name of the priority class to be used by etcd pods                                        | `""`            |
 | `runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                            | `""`            |
+| `shareProcessNamespace`                             | Enable shared process namespace in a pod.                                                 | `false`         |
 | `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                            | `[]`            |
 | `persistentVolumeClaimRetentionPolicy.enabled`      | Controls if and how PVCs are deleted during the lifecycle of a StatefulSet                | `false`         |
 | `persistentVolumeClaimRetentionPolicy.whenScaled`   | Volume retention behavior when the replica count of the StatefulSet is reduced            | `Retain`        |
