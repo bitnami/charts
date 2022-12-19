@@ -2,7 +2,7 @@
 
 it('lists and retrieves jaeger traces', () => {
 
-  // The container we use to create traces, usea 'redis' as a service name
+  // The container we use to create traces, uses 'redis' as a service name
   const testService = 'redis';
   const currentDate = new Date();
   const timestampMillis = currentDate.getTime() * 1000;
@@ -14,11 +14,10 @@ it('lists and retrieves jaeger traces', () => {
 
     cy.request({
       method: 'GET',
-      url: '/api/traces/' + traceID
+      url: `/api/traces/${traceID}`
     }).then((response) => {
       expect(response.status).to.eq(200);
       expect(response.body.data[0].traceID).to.eq(traceID);
     });
   })
-
 });
