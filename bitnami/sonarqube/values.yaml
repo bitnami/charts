@@ -913,7 +913,7 @@ postgresql:
   persistence:
     ## @param postgresql.persistence.enabled Use PVCs when deploying the PostgreSQL chart
     ##
-    enabled: true
+    enabled: false
     ## @param postgresql.persistence.existingClaim Use an existing PVC when deploying the PostgreSQL chart
     ##
     existingClaim: ""
