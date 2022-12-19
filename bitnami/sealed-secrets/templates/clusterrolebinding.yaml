@@ -2,7 +2,7 @@
 kind: ClusterRoleBinding
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
-  name: {{ template "common.names.fullname" . }}
+  name: {{ template "common.names.fullname.namespace" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
@@ -14,7 +14,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ printf "%s-unsealer" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-unsealer" (include "common.names.fullname.namespace" .) }}
 subjects:
   - kind: ServiceAccount
     name: {{ template "sealed-secrets.serviceAccountName" . }}

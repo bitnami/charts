@@ -1,0 +1,24 @@
+file:
+  /bitnami/promtail/conf/promtail.yaml:
+    mode: "0644"
+    filetype: file
+    exists: true
+    owner: root
+    contains:
+    - /http_listen_port.*{{ .Vars.promtail.containerPorts.http }}/
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    exists: {{ .Vars.promtail.serviceAccount.automountServiceAccountToken }}
+    filetype: directory
+    mode: "3777"
+http:
+  http://grafana-loki-promtail:{{ .Vars.promtail.service.ports.http }}/config:
+    status: 200
+    body:
+    - /log_level.*{{ .Vars.promtail.logLevel }}/
+command:
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+      - uid={{ .Vars.promtail.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.promtail.podSecurityContext.fsGroup }}/

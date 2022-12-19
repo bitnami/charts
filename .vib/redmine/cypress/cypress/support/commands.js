@@ -15,10 +15,9 @@ for (const command of ['click']) {
 Cypress.Commands.add(
   'login',
   (username = Cypress.env('username'), password = Cypress.env('password')) => {
-    cy.visit('/');
-    cy.contains('Sign in').click();
-    cy.get('input#username').type(username);
-    cy.get('input#password').type(password);
-    cy.get('input[type="submit"]').click();
+    cy.visit('/login');
+    cy.get('#username').type(username);
+    cy.get('#password').type(password);
+    cy.get('#login-submit').click();
   }
 );

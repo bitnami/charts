@@ -1,0 +1,1435 @@
+## @section Global parameters
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
+##
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass: ""
+
+## @section Common parameters
+##
+
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
+## @param nameOverride String to partially override common.names.name
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+
+## Bitnami Mastodon image
+## ref: https://hub.docker.com/r/bitnami/mastodon/tags/
+## @param image.registry Mastodon image registry
+## @param image.repository Mastodon image repository
+## @param image.tag Mastodon image tag (immutable tags are recommended)
+## @param image.digest Mastodon image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
+## @param image.pullPolicy Mastodon image pull policy
+## @param image.pullSecrets Mastodon image pull secrets
+## @param image.debug Enable Mastodon image debug mode
+##
+image:
+  registry: docker.io
+  repository: bitnami/mastodon
+  tag: 4.0.2-debian-11-r7
+  digest: ""
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Enable debug mode
+  ##
+  debug: false
+
+## @section Mastodon common parameters
+##
+
+## @param adminUser Mastodon admin username
+##
+adminUser: "user"
+## @param adminEmail Mastodon admin email
+##
+adminEmail: "user@example.com"
+## @param adminPassword Mastodon admin password
+##
+adminPassword: ""
+
+## @param defaultConfig [string] Default configuration for Mastodon in the form of environment variables
+##
+defaultConfig: |
+  MASTODON_ADMIN_USERNAME: {{ .Values.adminUser | quote }}
+  MASTODON_ADMIN_EMAIL: {{ .Values.adminEmail | quote }}
+  DB_HOST: {{ include "mastodon.database.host" . | quote }}
+  DB_PORT: {{ include "mastodon.database.port" . | quote }}
+  DB_NAME: {{ include "mastodon.database.name" . | quote }}
+  DB_USER: {{ include "mastodon.database.user" . | quote }}
+  ES_ENABLED: {{ .Values.enableSearches | quote }}
+  ES_HOST: {{ include "mastodon.elasticsearch.host" . | quote }}
+  ES_PORT: {{ include "mastodon.elasticsearch.port" . | quote }}
+  WEB_DOMAIN: {{ include "mastodon.web.domain" . | quote }}
+  STREAMING_API_BASE_URL: {{ include "mastodon.streaming.url" . | quote }}
+  REDIS_HOST: {{ include "mastodon.redis.host" . | quote }}
+  REDIS_PORT: {{ include "mastodon.redis.port" . | quote }}
+  {{- if .Values.enableS3 }}
+  S3_ENABLED: "true"
+  S3_BUCKET: {{ include "mastodon.s3.bucket" . | quote }}
+  S3_ENDPOINT: {{ include "mastodon.s3.endpoint" . | quote }}
+  S3_HOSTNAME: {{ include "mastodon.s3.host" . | quote }}
+  S3_REGION: {{ include "mastodon.s3.region" . | quote }}
+  S3_ALIAS_HOST: {{ include "mastodon.s3.aliasHost" . | quote }}
+  S3_PROTOCOL: {{ include "mastodon.s3.protocol" . | quote }}
+  {{- end }}
+
+## @param defaultSecretConfig [string] Default secret configuration for Mastodon in the form of environment variables
+##
+defaultSecretConfig: |
+  MASTODON_ADMIN_PASSWORD: {{ include "common.secrets.passwords.manage" (dict "secret" (printf "%s-default" (include "common.names.fullname" .)) "key" "MASTODON_ADMIN_PASSWORD" "providedValues" (list "adminPassword") "context" $) }}
+  SECRET_KEY_BASE: {{ include "common.secrets.passwords.manage" (dict "secret" (printf "%s-default" (include "common.names.fullname" .)) "key" "SECRET_KEY_BASE" "providedValues" (list "secretKeyBase") "context" $) }}
+  OTP_SECRET: {{ include "common.secrets.passwords.manage" (dict "secret" (printf "%s-default" (include "common.names.fullname" .)) "key" "OTP_SECRET" "providedValues" (list "otpSecret") "context" $) }}
+
+## @param extraConfig Extra configuration for Mastodon in the form of environment variables
+##
+extraConfig: {}
+
+## @param extraSecretConfig Extra secret configuration for Mastodon in the form of environment variables
+##
+extraSecretConfig: {}
+
+## @param existingConfigmap The name of an existing ConfigMap with your default configuration for Mastodon
+##
+existingConfigmap: ""
+
+## @param existingSecret The name of an existing Secret with your default configuration for Mastodon
+##
+existingSecret: ""
+
+## @param extraConfigExistingConfigmap The name of an existing ConfigMap with your extra configuration for Mastodon
+##
+extraConfigExistingConfigmap: ""
+
+## @param extraConfigExistingSecret The name of an existing Secret with your extra configuration for Mastodon
+##
+extraConfigExistingSecret: ""
+
+## @param enableSearches Enable the search engine (uses Elasticsearch under the hood)
+##
+enableSearches: true
+
+## @param enableS3 Enable the S3 storage engine
+##
+enableS3: true
+
+## @param webDomain Web domain for Mastodon
+##
+webDomain: ""
+
+## @param s3AliasHost S3 alias host for Mastodon (will use http://webDomain/bucket if not set)
+##
+s3AliasHost: ""
+
+## @section Mastodon Web Parameters
+##
+web:
+  ## @param web.replicaCount Number of Mastodon web replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param web.containerPorts.http Mastodon web HTTP container port
+  ##
+  containerPorts:
+    http: 3000
+  ## Configure extra options for Mastodon web containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param web.livenessProbe.enabled Enable livenessProbe on Mastodon web containers
+  ## @param web.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param web.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param web.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param web.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param web.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param web.readinessProbe.enabled Enable readinessProbe on Mastodon web containers
+  ## @param web.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param web.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param web.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param web.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param web.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param web.startupProbe.enabled Enable startupProbe on Mastodon web containers
+  ## @param web.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param web.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param web.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param web.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param web.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param web.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param web.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param web.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## Mastodon web resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param web.resources.limits The resources limits for the Mastodon web containers
+  ## @param web.resources.requests The requested resources for the Mastodon web containers
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param web.podSecurityContext.enabled Enabled Mastodon web pods' Security Context
+  ## @param web.podSecurityContext.fsGroup Set Mastodon web pod's Security Context fsGroup
+  ## @param web.podSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param web.containerSecurityContext.enabled Enabled Mastodon web containers' Security Context
+  ## @param web.containerSecurityContext.runAsUser Set Mastodon web containers' Security Context runAsUser
+  ## @param web.containerSecurityContext.runAsNonRoot Set Mastodon web containers' Security Context runAsNonRoot
+  ## @param web.containerSecurityContext.readOnlyRootFilesystem Set Mastodon web containers' Security Context runAsNonRoot
+  ## @param web.containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
+  ## @param web.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+
+  ## @param web.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param web.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param web.hostAliases Mastodon web pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param web.podLabels Extra labels for Mastodon web pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param web.podAnnotations Annotations for Mastodon web pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param web.podAffinityPreset Pod affinity preset. Ignored if `web.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param web.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `web.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node web.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param web.nodeAffinityPreset.type Node affinity preset type. Ignored if `web.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param web.nodeAffinityPreset.key Node label key to match. Ignored if `web.affinity` is set
+    ##
+    key: ""
+    ## @param web.nodeAffinityPreset.values Node label values to match. Ignored if `web.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param web.affinity Affinity for Mastodon web pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `web.podAffinityPreset`, `web.podAntiAffinityPreset`, and `web.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param web.nodeSelector Node labels for Mastodon web pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param web.tolerations Tolerations for Mastodon web pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param web.updateStrategy.type Mastodon web statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+
+  ## @param web.priorityClassName Mastodon web pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param web.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param web.schedulerName Name of the k8s scheduler (other than default) for Mastodon web pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param web.terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param web.lifecycleHooks for the Mastodon web container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param web.extraEnvVars Array with extra environment variables to add to Mastodon web nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param web.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Mastodon web nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param web.extraEnvVarsSecret Name of existing Secret containing extra env vars for Mastodon web nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param web.extraVolumes Optionally specify extra list of additional volumes for the Mastodon web pod(s)
+  ##
+  extraVolumes: []
+  ## @param web.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Mastodon web container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param web.sidecars Add additional sidecar containers to the Mastodon web pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param web.initContainers Add additional init containers to the Mastodon web pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+
+  ## @section Mastodon Web Traffic Exposure Parameters
+  ##
+  service:
+    ## @param web.service.type Mastodon web service type
+    ##
+    type: ClusterIP
+    ## @param web.service.ports.http Mastodon web service HTTP port
+    ##
+    ports:
+      http: 80
+    ## Node ports to expose
+    ## @param web.service.nodePorts.http Node port for HTTP
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      http: ""
+    ## @param web.service.clusterIP Mastodon web service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param web.service.loadBalancerIP Mastodon web service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param web.service.loadBalancerSourceRanges Mastodon web service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param web.service.externalTrafficPolicy Mastodon web service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-web-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param web.service.annotations Additional custom annotations for Mastodon web service
+    ##
+    annotations: {}
+    ## @param web.service.extraPorts Extra ports to expose in Mastodon web service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param web.service.sessionAffinity Control where web requests go, to the same pod or round-robin
+    ## Values: WebIP or None
+    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ##
+    sessionAffinity: None
+    ## @param web.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   webIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+
+## @section Mastodon Sidekiq Parameters
+##
+##
+sidekiq:
+  ## @param sidekiq.replicaCount Number of Mastodon sidekiq replicas to deploy
+  ##
+  replicaCount: 1
+
+  ## Configure extra options for Mastodon sidekiq containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param sidekiq.livenessProbe.enabled Enable livenessProbe on Mastodon sidekiq containers
+  ## @param sidekiq.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param sidekiq.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param sidekiq.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param sidekiq.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param sidekiq.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param sidekiq.readinessProbe.enabled Enable readinessProbe on Mastodon sidekiq containers
+  ## @param sidekiq.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param sidekiq.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param sidekiq.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param sidekiq.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param sidekiq.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param sidekiq.startupProbe.enabled Enable startupProbe on Mastodon sidekiq containers
+  ## @param sidekiq.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param sidekiq.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param sidekiq.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param sidekiq.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param sidekiq.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param sidekiq.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param sidekiq.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param sidekiq.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## Mastodon sidekiq resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param sidekiq.resources.limits The resources limits for the Mastodon sidekiq containers
+  ## @param sidekiq.resources.requests The requested resources for the Mastodon sidekiq containers
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param sidekiq.podSecurityContext.enabled Enabled Mastodon sidekiq pods' Security Context
+  ## @param sidekiq.podSecurityContext.fsGroup Set Mastodon sidekiq pod's Security Context fsGroup
+  ## @param sidekiq.podSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param sidekiq.containerSecurityContext.enabled Enabled Mastodon sidekiq containers' Security Context
+  ## @param sidekiq.containerSecurityContext.runAsUser Set Mastodon sidekiq containers' Security Context runAsUser
+  ## @param sidekiq.containerSecurityContext.runAsNonRoot Set Mastodon sidekiq containers' Security Context runAsNonRoot
+  ## @param sidekiq.containerSecurityContext.readOnlyRootFilesystem Set Mastodon sidekiq containers' Security Context runAsNonRoot
+  ## @param sidekiq.containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
+  ## @param sidekiq.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+
+  ## @param sidekiq.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param sidekiq.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param sidekiq.hostAliases Mastodon sidekiq pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param sidekiq.podLabels Extra labels for Mastodon sidekiq pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param sidekiq.podAnnotations Annotations for Mastodon sidekiq pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param sidekiq.podAffinityPreset Pod affinity preset. Ignored if `sidekiq.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param sidekiq.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `sidekiq.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node sidekiq.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param sidekiq.nodeAffinityPreset.type Node affinity preset type. Ignored if `sidekiq.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param sidekiq.nodeAffinityPreset.key Node label key to match. Ignored if `sidekiq.affinity` is set
+    ##
+    key: ""
+    ## @param sidekiq.nodeAffinityPreset.values Node label values to match. Ignored if `sidekiq.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param sidekiq.affinity Affinity for Mastodon sidekiq pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `sidekiq.podAffinityPreset`, `sidekiq.podAntiAffinityPreset`, and `sidekiq.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param sidekiq.nodeSelector Node labels for Mastodon sidekiq pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param sidekiq.tolerations Tolerations for Mastodon sidekiq pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param sidekiq.updateStrategy.type Mastodon sidekiq statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+
+  ## @param sidekiq.priorityClassName Mastodon sidekiq pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param sidekiq.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param sidekiq.schedulerName Name of the k8s scheduler (other than default) for Mastodon sidekiq pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param sidekiq.terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param sidekiq.lifecycleHooks for the Mastodon sidekiq container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param sidekiq.extraEnvVars Array with extra environment variables to add to Mastodon sidekiq nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param sidekiq.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Mastodon sidekiq nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param sidekiq.extraEnvVarsSecret Name of existing Secret containing extra env vars for Mastodon sidekiq nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param sidekiq.extraVolumes Optionally specify extra list of additional volumes for the Mastodon sidekiq pod(s)
+  ##
+  extraVolumes: []
+  ## @param sidekiq.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Mastodon sidekiq container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param sidekiq.sidecars Add additional sidecar containers to the Mastodon sidekiq pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param sidekiq.initContainers Add additional init containers to the Mastodon sidekiq pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+
+## @section Mastodon Streaming Parameters
+##
+##
+streaming:
+  ## @param streaming.replicaCount Number of Mastodon streaming replicas to deploy
+  ##
+  replicaCount: 1
+
+  ## @param streaming.containerPorts.http Mastodon streaming HTTP container port
+  ##
+  containerPorts:
+    http: 8080
+  ## Configure extra options for Mastodon streaming containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param streaming.livenessProbe.enabled Enable livenessProbe on Mastodon streaming containers
+  ## @param streaming.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param streaming.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param streaming.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param streaming.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param streaming.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param streaming.readinessProbe.enabled Enable readinessProbe on Mastodon streaming containers
+  ## @param streaming.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param streaming.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param streaming.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param streaming.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param streaming.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param streaming.startupProbe.enabled Enable startupProbe on Mastodon streaming containers
+  ## @param streaming.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param streaming.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param streaming.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param streaming.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param streaming.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param streaming.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param streaming.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param streaming.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## Mastodon streaming resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param streaming.resources.limits The resources limits for the Mastodon streaming containers
+  ## @param streaming.resources.requests The requested resources for the Mastodon streaming containers
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param streaming.podSecurityContext.enabled Enabled Mastodon streaming pods' Security Context
+  ## @param streaming.podSecurityContext.fsGroup Set Mastodon streaming pod's Security Context fsGroup
+  ## @param streaming.podSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param streaming.containerSecurityContext.enabled Enabled Mastodon streaming containers' Security Context
+  ## @param streaming.containerSecurityContext.runAsUser Set Mastodon streaming containers' Security Context runAsUser
+  ## @param streaming.containerSecurityContext.runAsNonRoot Set Mastodon streaming containers' Security Context runAsNonRoot
+  ## @param streaming.containerSecurityContext.readOnlyRootFilesystem Set Mastodon streaming containers' Security Context runAsNonRoot
+  ## @param streaming.containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
+  ## @param streaming.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+
+  ## @param streaming.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param streaming.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param streaming.hostAliases Mastodon streaming pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param streaming.podLabels Extra labels for Mastodon streaming pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param streaming.podAnnotations Annotations for Mastodon streaming pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param streaming.podAffinityPreset Pod affinity preset. Ignored if `streaming.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param streaming.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `streaming.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node streaming.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param streaming.nodeAffinityPreset.type Node affinity preset type. Ignored if `streaming.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param streaming.nodeAffinityPreset.key Node label key to match. Ignored if `streaming.affinity` is set
+    ##
+    key: ""
+    ## @param streaming.nodeAffinityPreset.values Node label values to match. Ignored if `streaming.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param streaming.affinity Affinity for Mastodon streaming pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `streaming.podAffinityPreset`, `streaming.podAntiAffinityPreset`, and `streaming.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param streaming.nodeSelector Node labels for Mastodon streaming pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param streaming.tolerations Tolerations for Mastodon streaming pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param streaming.updateStrategy.type Mastodon streaming statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+
+  ## @param streaming.priorityClassName Mastodon streaming pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param streaming.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param streaming.schedulerName Name of the k8s scheduler (other than default) for Mastodon streaming pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param streaming.terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param streaming.lifecycleHooks for the Mastodon streaming container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param streaming.extraEnvVars Array with extra environment variables to add to Mastodon streaming nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param streaming.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Mastodon streaming nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param streaming.extraEnvVarsSecret Name of existing Secret containing extra env vars for Mastodon streaming nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param streaming.extraVolumes Optionally specify extra list of additional volumes for the Mastodon streaming pod(s)
+  ##
+  extraVolumes: []
+  ## @param streaming.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Mastodon streaming container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param streaming.sidecars Add additional sidecar containers to the Mastodon streaming pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param streaming.initContainers Add additional init containers to the Mastodon streaming pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+
+  ## @section Mastodon Streaming Traffic Exposure Parameters
+  ##
+  service:
+    ## @param streaming.service.type Mastodon streaming service type
+    ##
+    type: ClusterIP
+    ## @param streaming.service.ports.http Mastodon streaming service HTTP port
+    ##
+    ports:
+      http: 80
+    ## Node ports to expose
+    ## @param streaming.service.nodePorts.http Node port for HTTP
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      http: ""
+    ## @param streaming.service.clusterIP Mastodon streaming service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param streaming.service.loadBalancerIP Mastodon streaming service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param streaming.service.loadBalancerSourceRanges Mastodon streaming service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param streaming.service.externalTrafficPolicy Mastodon streaming service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-streaming-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param streaming.service.annotations Additional custom annotations for Mastodon streaming service
+    ##
+    annotations: {}
+    ## @param streaming.service.extraPorts Extra ports to expose in Mastodon streaming service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param streaming.service.sessionAffinity Control where streaming requests go, to the same pod or round-robin
+    ## Values: StreamingIP or None
+    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ##
+    sessionAffinity: None
+    ## @param streaming.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   rtsIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+
+## @section Mastodon Migration job Parameters
+##
+
+initJob:
+  ## @param initJob.precompileAssets Execute rake assets:precompile as part of the job
+  ##
+  precompileAssets: true
+  ## @param initJob.migrateDB Execute rake db:migrate as part of the job
+  ##
+  migrateDB: true
+  ## @param initJob.migrateElasticsearch Execute rake chewy:upgrade as part of the job
+  ##
+  migrateElasticsearch: true
+  ## @param initJob.createAdmin Create admin user as part of the job
+  ##
+  createAdmin: true
+  ## @param initJob.backoffLimit set backoff limit of the job
+  ##
+  backoffLimit: 10
+  ## @param initJob.extraVolumes Optionally specify extra list of additional volumes for the Mastodon init job
+  ##
+  extraVolumes: []
+
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param initJob.containerSecurityContext.enabled Enabled Mastodon init job containers' Security Context
+  ## @param initJob.containerSecurityContext.runAsUser Set Mastodon init job containers' Security Context runAsUser
+  ## @param initJob.containerSecurityContext.runAsNonRoot Set Mastodon init job containers' Security Context runAsNonRoot
+  ## @param initJob.containerSecurityContext.readOnlyRootFilesystem Set Mastodon init job containers' Security Context runAsNonRoot
+  ## @param initJob.containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
+  ## @param initJob.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param initJob.podSecurityContext.enabled Enabled Mastodon init job pods' Security Context
+  ## @param initJob.podSecurityContext.fsGroup Set Mastodon init job pod's Security Context fsGroup
+  ## @param initJob.podSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## @param initJob.extraEnvVars Array containing extra env vars to configure the Mastodon init job
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: GF_DEFAULT_INSTANCE_NAME
+  ##    value: my-instance
+  ##
+  extraEnvVars: []
+  ## @param initJob.extraEnvVarsCM ConfigMap containing extra env vars to configure the Mastodon init job
+  ##
+  extraEnvVarsCM: ""
+  ## @param initJob.extraEnvVarsSecret Secret containing extra env vars to configure the Mastodon init job (in case of sensitive data)
+  ##
+  extraEnvVarsSecret: ""
+  ## @param initJob.extraVolumeMounts Array of extra volume mounts to be added to the Mastodon Container (evaluated as template). Normally used with `extraVolumes`.
+  ##
+  extraVolumeMounts: []
+  ## Container resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param initJob.resources.limits The resources limits for the container
+  ## @param initJob.resources.requests The requested resources for the container
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## @param initJob.hostAliases Add deployment host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param initJob.annotations [object] Add annotations to the job
+  ##
+  annotations:
+    helm.sh/hook: post-install, pre-upgrade
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+    # This should be executed after the minio provisioning job
+    helm.sh/hook-weight: "10"
+
+  ## @param initJob.podLabels Additional pod labels
+  ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param initJob.podAnnotations Additional pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+
+## @section Persistence Parameters (only when S3 is disabled)
+## Enable persistence using Persistent Volume Claims
+## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+persistence:
+  ## @param persistence.enabled Enable persistence using Persistent Volume Claims
+  ##
+  enabled: false
+  ## @param persistence.mountPath Path to mount the volume at.
+  ##
+  mountPath: /bitnami/mastodon
+  ## @param persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
+  ##
+  subPath: ""
+  ## @param persistence.storageClass Storage class of backing PVC
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  storageClass: ""
+  ## @param persistence.annotations Persistent Volume Claim annotations
+  ##
+  annotations: {}
+  ## @param persistence.accessModes Persistent Volume Access Modes
+  ##
+  accessModes:
+    - ReadWriteOnce
+  ## @param persistence.size Size of data volume
+  ##
+  size: 8Gi
+  ## @param persistence.existingClaim The name of an existing PVC to use for persistence
+  ##
+  existingClaim: ""
+  ## @param persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
+  ## If set, the PVC can't have a PV dynamically provisioned for it
+  ## E.g.
+  ## selector:
+  ##   matchLabels:
+  ##     app: my-app
+  ##
+  selector: {}
+  ## @param persistence.dataSource Custom PVC data source
+  ##
+  dataSource: {}
+
+## @section Init Container Parameters
+##
+## 'volumePermissions' init container parameters
+## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
+##   based on the *podSecurityContext/*containerSecurityContext parameters
+##
+volumePermissions:
+  ## @param volumePermissions.enabled Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`
+  ##
+  enabled: false
+  ## Bitnami Shell image
+  ## ref: https://hub.docker.com/r/bitnami/bitnami-shell/tags/
+  ## @param volumePermissions.image.registry Bitnami Shell image registry
+  ## @param volumePermissions.image.repository Bitnami Shell image repository
+  ## @param volumePermissions.image.tag Bitnami Shell image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.pullPolicy Bitnami Shell image pull policy
+  ## @param volumePermissions.image.pullSecrets Bitnami Shell image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/bitnami-shell
+    tag: 11-debian-11-r62
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Init container's resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param volumePermissions.resources.limits The resources limits for the init container
+  ## @param volumePermissions.resources.requests The requested resources for the init container
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Init container Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
+  ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
+  ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
+  ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
+  ##
+  containerSecurityContext:
+    runAsUser: 0
+
+## @section Other Parameters
+##
+
+## ServiceAccount configuration
+##
+serviceAccount:
+  ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
+  ##
+  create: true
+  ## @param serviceAccount.name The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the common.names.fullname template
+  ##
+  name: ""
+  ## @param serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+  ##
+  annotations: {}
+  ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ##
+  automountServiceAccountToken: true
+
+## External PostgreSQL configuration
+## All of these values are only used when postgresql.enabled is set to false
+## @param externalDatabase.host Database host
+## @param externalDatabase.port Database port number
+## @param externalDatabase.user Non-root username for JupyterHub
+## @param externalDatabase.password Password for the non-root username for JupyterHub
+## @param externalDatabase.database JupyterHub database name
+## @param externalDatabase.existingSecret Name of an existing secret resource containing the database credentials
+## @param externalDatabase.existingSecretPasswordKey Name of an existing secret key containing the database credentials
+##
+externalDatabase:
+  host: ""
+  port: 5432
+  user: postgres
+  database: mastodon
+  password: ""
+  existingSecret: ""
+  existingSecretPasswordKey: "db-password"
+
+## @section External Redis parameters
+## All of these values are only used when redis.enabled is set to false
+## @param externalRedis.host Redis host
+## @param externalRedis.port Redis port number
+## @param externalRedis.password Password for the Redis
+## @param externalRedis.existingSecret Name of an existing secret resource containing the Redis credentials
+## @param externalRedis.existingSecretPasswordKey Name of an existing secret key containing the Redis credentials
+##
+externalRedis:
+  host: ""
+  port: 6379
+  password: ""
+  existingSecret: ""
+  existingSecretPasswordKey: ""
+
+## @section External S3 parameters
+## All of these values are only used when redis.enabled is set to false
+## @param externalS3.host External S3 host
+## @param externalS3.port External S3 port number
+## @param externalS3.accessKeyID External S3 access key ID
+## @param externalS3.accessKeySecret External S3 access key secret
+## @param externalS3.existingSecret Name of an existing secret resource containing the S3 credentials
+## @param externalS3.existingSecretAccessKeyIDKey Name of an existing secret key containing the S3 access key ID
+## @param externalS3.existingSecretKeySecretKey Name of an existing secret key containing the S3 access key secret
+## @param externalS3.protocol External S3 protocol
+## @param externalS3.bucket External S3 bucket
+## @param externalS3.region External S3 region
+##
+externalS3:
+  host: ""
+  port: 443
+  accessKeyID: ""
+  accessKeySecret: ""
+  existingSecret: ""
+  existingSecretAccessKeyIDKey: "root-user"
+  existingSecretKeySecretKey: "root-password"
+  protocol: "https"
+  bucket: "mastodon"
+  region: "us-east-1"
+
+## @section External elasticsearch configuration
+##
+## @param externalElasticsearch.host Host of the external elasticsearch server
+## @param externalElasticsearch.port Port of the external elasticsearch server
+## @param externalElasticsearch.password Password for the external elasticsearch server
+## @param externalElasticsearch.existingSecret Name of an existing secret resource containing the elasticsearch credentials
+## @param externalElasticsearch.existingSecretPasswordKey Name of an existing secret key containing the elasticsearch credentials
+##
+externalElasticsearch:
+  host: ""
+  port: ""
+  password: ""
+  existingSecret: ""
+  existingSecretPasswordKey: "elasticsearch-password"
+
+## @section Redis sub-chart parameters
+##
+redis:
+  ## @param redis.enabled Deploy Redis subchart
+  ##
+  enabled: true
+  ## @param redis.architecture Set Redis architecture
+  ##
+  architecture: standalone
+  ## @param redis.existingSecret Name of a secret containing redis credentials
+  ##
+  existingSecret: ""
+  ## @param redis.master.service.ports.redis Redis port
+  ##
+  master:
+    service:
+      ports:
+        redis: 6379
+
+  ## @param redis.auth.enabled Enable Redis auth
+  ## @param redis.auth.password Redis password
+  ## @param redis.auth.existingSecret Name of a secret containing the Redis password
+  ##
+  auth:
+    enabled: true
+    password: ""
+    existingSecret: ""
+
+## @section PostgreSQL chart configuration
+## ref: https://github.com/bitnami/charts/blob/main/bitnami/postgresql/values.yaml
+## @param postgresql.enabled Switch to enable or disable the PostgreSQL helm chart
+## @param postgresql.auth.username Name for a custom user to create
+## @param postgresql.auth.password Password for the custom user to create
+## @param postgresql.auth.database Name for a custom database to create
+## @param postgresql.auth.existingSecret Name of existing secret to use for PostgreSQL credentials
+## @param postgresql.architecture PostgreSQL architecture (`standalone` or `replication`)
+## @param postgresql.primary.service.ports.postgresql PostgreSQL service port
+##
+postgresql:
+  enabled: true
+  auth:
+    username: bn_mastodon
+    password: ""
+    database: bitnami_mastodon
+    existingSecret: ""
+  architecture: standalone
+  primary:
+    service:
+      ports:
+        postgresql: 5432
+
+## @section MinIO&reg; chart parameters
+## @extra minio For full list of MinIO&reg; values configurations please refere [here](https://github.com/bitnami/charts/tree/main/bitnami/minio)
+##
+minio:
+  ## @param minio.enabled Enable/disable MinIO&reg; chart installation
+  ## to be used as an objstore for Mastodon
+  ##
+  enabled: true
+  ## MinIO&reg; authentication parameters
+  ##
+  auth:
+    ## @param minio.auth.rootUser MinIO&reg; root username
+    ##
+    rootUser: admin
+    ## @param minio.auth.rootPassword Password for MinIO&reg; root user
+    ##
+    rootPassword: ""
+    ## @param minio.auth.existingSecret Name of an existing secret containing the MinIO&reg; credentials
+    ##
+    existingSecret: ""
+  ## @param minio.defaultBuckets Comma, semi-colon or space separated list of MinIO&reg; buckets to create
+  ##
+  defaultBuckets: "s3storage"
+
+  ## @param minio.provisioning.enabled Enable/disable MinIO&reg; provisioning job
+  ## @param minio.provisioning.extraCommands Extra commands to run on MinIO&reg; provisioning job
+  ##
+  provisioning:
+    enabled: true
+    # We need to allow downloads in order for the UI to work
+    extraCommands: ["mc anonymous set download provisioning/s3storage"]
+
+  ## @param minio.tls.enabled Enable/disable MinIO&reg; TLS support
+  ##
+  tls:
+    enabled: false
+  ## @param minio.service.type MinIO&reg; service type
+  ## @param minio.service.loadBalancerIP MinIO&reg; service LoadBalancer IP
+  ## @param minio.service.ports.api MinIO&reg; service port
+  ##
+  service:
+    type: ClusterIP
+    loadBalancerIP: ""
+    ports:
+      api: 80
+
+## @section Elasticsearch chart configuration
+## https://github.com/bitnami/charts/blob/main/bitnami/elasticsearch/values.yaml
+##
+elasticsearch:
+  ## @param elasticsearch.enabled Whether to deploy a elasticsearch server to use as Mastodon's search engine
+  ## To use an external server set this to false and configure the externalElasticsearch parameters
+  ##
+  enabled: true
+  ## @param elasticsearch.sysctlImage.enabled Enable kernel settings modifier image for Elasticsearch
+  ##
+  sysctlImage:
+    enabled: true
+
+  ## @param elasticsearch.security.enabled Enable security settings for Elasticsearch
+  ## @param elasticsearch.security.existingSecret Name of an existing secret containing the elasticsearch credentials
+  ## @param elasticsearch.security.tls.restEncryption Enable TLS encryption for REST API
+  ##
+  security:
+    enabled: false
+    existingSecret: ""
+    tls:
+      restEncryption: false
+  ## Elasticsearch master-eligible node parameters
+  ## @param elasticsearch.master.replicaCount Desired number of Elasticsearch master-eligible nodes
+  ##
+  master:
+    replicaCount: 1
+  ## Elasticsearch coordinating-only node parameters
+  ## @param elasticsearch.coordinating.replicaCount Desired number of Elasticsearch coordinating-only nodes
+  ##
+  coordinating:
+    replicaCount: 1
+  ## Elasticsearch data node parameters
+  ## @param elasticsearch.data.replicaCount Desired number of Elasticsearch data nodes
+  ##
+  data:
+    replicaCount: 1
+  ## Elasticsearch ingest node parameters
+  ## @param elasticsearch.ingest.replicaCount Desired number of Elasticsearch ingest nodes
+  ##
+  ingest:
+    replicaCount: 1
+  ## @param elasticsearch.service.ports.restAPI Elasticsearch REST API port
+  ##
+  service:
+    ports:
+      restAPI: 9200
+
+## @section Apache chart configuration
+##
+apache:
+  ## @param apache.enabled Enable Apache chart
+  ##
+  enabled: true
+
+  ## @param apache.containerPorts.http Apache container port
+  ##
+  containerPorts:
+    http: 8080
+  ## @param apache.service.type Apache service type
+  ## @param apache.service.loadBalancerIP Apache service LoadBalancer IP
+  ## @param apache.service.ports.http Apache service port
+  ##
+  service:
+    type: LoadBalancer
+    loadBalancerIP: ""
+    ports:
+      http: 80
+  ## @param apache.vhostsConfigMap [string] Name of the ConfigMap containing the Apache vhost configuration
+  ##
+  vhostsConfigMap: '{{ include "mastodon.apache.vhostconfigmap" . }}'
+  # We need to change the liveness probe to use the Mastodon streaming health checkpoint
+  # We use the streaming because it is the last service to be initialized together with
+  # sidekiq
+  ## @param apache.livenessProbe.path Apache liveness probe path
+  ##
+  livenessProbe:
+    path: "/api/v1/streaming/health"
+  ## @param apache.readinessProbe.path Apache readiness probe path
+  ##
+  readinessProbe:
+    path: "/api/v1/streaming/health"
+  ## @param apache.startupProbe.path Apache startup probe path
+  ##
+  startupProbe:
+    path: "/api/v1/streaming/health"
+  ## @param apache.ingress.enabled Enable ingress
+  ## @param apache.ingress.hostname Ingress hostname
+  ##
+  ingress:
+    enabled: false
+    hostname: "mastodon.local"

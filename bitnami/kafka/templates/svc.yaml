@@ -47,7 +47,7 @@ spec:
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    {{- if and .Values.externalAccess.enabled (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) }}
+    {{- if .Values.externalAccess.enabled }}
     - name: tcp-external
       port: {{ .Values.service.ports.external }}
       protocol: TCP

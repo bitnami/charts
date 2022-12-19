@@ -1,0 +1,8 @@
+{
+  "baseUrl": "http://localhost/",
+  "env": {
+    "repoName": "bitnami",
+    "repoURL": "https://charts.bitnami.com/bitnami"
+  },
+  "defaultCommandTimeout": 30000
+}
