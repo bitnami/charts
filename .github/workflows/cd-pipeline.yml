@@ -35,6 +35,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/haproxy-intel/**'
       - 'bitnami/harbor/**'
       - 'bitnami/influxdb/**'
+      - 'bitnami/jaeger/**'
       - 'bitnami/jasperreports/**'
       - 'bitnami/jenkins/**'
       - 'bitnami/joomla/**'

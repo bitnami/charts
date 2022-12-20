@@ -1,0 +1,30 @@
+annotations:
+  category: Infrastructure
+apiVersion: v2
+appVersion: 1.39.0
+dependencies:
+  - condition: cassandra.enabled
+    name: cassandra
+    repository: https://charts.bitnami.com/bitnami
+    version: 9.x.x
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 2.x.x
+description: Distributed tracing platform for monitoring microservices-based distributed systems.
+engine: gotpl
+home: https://github.com/bitnami/charts/tree/main/bitnami/jaeger
+icon: https://bitnami.com/assets/stacks/jaeger/img/jaeger-stack-220x234.png
+keywords:
+  - jaeger
+  - tracing
+  - monitoring
+maintainers:
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
+name: jaeger
+sources:
+  - https://github.com/jaegertracing/jaeger
+  - https://www.jaegertracing.io/
+version: 0.1.0
