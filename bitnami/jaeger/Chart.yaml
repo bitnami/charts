@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 1.39.0
+appVersion: 1.40.0
 dependencies:
   - condition: cassandra.enabled
     name: cassandra
@@ -12,7 +12,7 @@ dependencies:
     tags:
       - bitnami-common
     version: 2.x.x
-description: Distributed tracing platform for monitoring microservices-based distributed systems.
+description: Jaeger is a distributed tracing system. It is used for monitoring and troubleshooting microservices-based distributed systems.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/main/bitnami/jaeger
 icon: https://bitnami.com/assets/stacks/jaeger/img/jaeger-stack-220x234.png
@@ -27,4 +27,4 @@ name: jaeger
 sources:
   - https://github.com/jaegertracing/jaeger
   - https://www.jaegertracing.io/
-version: 0.1.0
+version: 0.1.1
