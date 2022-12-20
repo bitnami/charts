@@ -525,22 +525,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Exporters
 
-| Name                                               | Description                                                                                            | Value         |
-| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------- |
-| `exporters.node-exporter.enabled`                  | Enable node-exporter                                                                                   | `true`        |
-| `exporters.kube-state-metrics.enabled`             | Enable kube-state-metrics                                                                              | `true`        |
-| `node-exporter`                                    | Node Exporter deployment configuration                                                                 | `{}`          |
-| `kube-state-metrics`                               | Kube State Metrics deployment configuration                                                            | `{}`          |
-| `kubelet.enabled`                                  | Create a ServiceMonitor to scrape kubelet service                                                      | `true`        |
-| `kubelet.namespace`                                | Namespace where kubelet service is deployed. Related configuration `operator.kubeletService.namespace` | `kube-system` |
-| `kubelet.serviceMonitor.https`                     | Enable scraping of the kubelet over HTTPS                                                              | `true`        |
-| `kubelet.serviceMonitor.interval`                  | Scrape interval (use by default, falling back to Prometheus' default)                                  | `""`          |
-| `kubelet.serviceMonitor.metricRelabelings`         | Metric relabeling                                                                                      | `[]`          |
-| `kubelet.serviceMonitor.relabelings`               | Relabel configs                                                                                        | `[]`          |
-| `kubelet.serviceMonitor.cAdvisorMetricRelabelings` | Metric relabeling for scraping cAdvisor                                                                | `[]`          |
-| `kubelet.serviceMonitor.cAdvisorRelabelings`       | Relabel configs for scraping cAdvisor                                                                  | `[]`          |
-| `kubelet.serviceMonitor.labels`                    | Extra labels for the ServiceMonitor                                                                    | `{}`          |
-| `kubelet.serviceMonitor.annotations`               | Extra annotations for the ServiceMonitor                                                               | `{}`          |
+| Name                                               | Description                                                                                            | Value                        |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ---------------------------- |
+| `exporters.node-exporter.enabled`                  | Enable node-exporter                                                                                   | `true`                       |
+| `exporters.kube-state-metrics.enabled`             | Enable kube-state-metrics                                                                              | `true`                       |
+| `node-exporter`                                    | Node Exporter deployment configuration                                                                 | `{}`                         |
+| `kube-state-metrics`                               | Kube State Metrics deployment configuration                                                            | `{}`                         |
+| `kubelet.enabled`                                  | Create a ServiceMonitor to scrape kubelet service                                                      | `true`                       |
+| `kubelet.namespace`                                | Namespace where kubelet service is deployed. Related configuration `operator.kubeletService.namespace` | `kube-system`                |
+| `kubelet.serviceMonitor.https`                     | Enable scraping of the kubelet over HTTPS                                                              | `true`                       |
+| `kubelet.serviceMonitor.interval`                  | Scrape interval (use by default, falling back to Prometheus' default)                                  | `""`                         |
+| `kubelet.serviceMonitor.resource`                  | Enable scraping /metrics/resource from kubelet's service                                               | `false`                      |
+| `kubelet.serviceMonitor.resourcePath`              | From kubernetes 1.18, /metrics/resource/v1alpha1 was renamed to /metrics/resource                      | `/metrics/resource/v1alpha1` |
+| `kubelet.serviceMonitor.resourceRelabelings`       | Metric relabeling                                                                                      | `[]`                         |
+| `kubelet.serviceMonitor.resourceMetricRelabelings` | Metric relabeling                                                                                      | `[]`                         |
+| `kubelet.serviceMonitor.metricRelabelings`         | Metric relabeling                                                                                      | `[]`                         |
+| `kubelet.serviceMonitor.relabelings`               | Relabel configs                                                                                        | `[]`                         |
+| `kubelet.serviceMonitor.cAdvisor`                  | Enable scraping /metrics/cadvisor from kubelet's service                                               | `true`                       |
+| `kubelet.serviceMonitor.cAdvisorMetricRelabelings` | Metric relabeling for scraping cAdvisor                                                                | `[]`                         |
+| `kubelet.serviceMonitor.cAdvisorRelabelings`       | Relabel configs for scraping cAdvisor                                                                  | `[]`                         |
+| `kubelet.serviceMonitor.labels`                    | Extra labels for the ServiceMonitor                                                                    | `{}`                         |
+| `kubelet.serviceMonitor.annotations`               | Extra annotations for the ServiceMonitor                                                               | `{}`                         |
 
 
 ### Blackbox Exporter Deployment Parameters
