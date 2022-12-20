@@ -21,13 +21,7 @@ it('import and check user information', () => {
   cy.get('[data-testid="openPartialImportModal"]').click();
   const importFile = 'cypress/fixtures/import-data.json';
   cy.fixture('users').then((user) => {
-    cy.readFile(importFile).then((obj) => {
-      obj.users[0].username = `${user.importedUser.username}.${random}`;
-      obj.users[0].email = `${random}.${user.importedUser.email}`;
-      obj.users[0].lastName = `${user.importedUser.lastName}-${random}`;
-      const jsonText = JSON.stringify(obj);
-      cy.get('.view-line').type(jsonText, { parseSpecialCharSequences: false, delay: 1 });
-    });
+    cy.get('input#partial-import-file-filename').selectFile('cypress/fixtures/import-data.json', { action: 'drag-drop' });
     cy.get('[data-testid="users-checkbox"]').click();
     cy.get('[data-testid="import-button"]').click();
     cy.contains('record added');
