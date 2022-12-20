@@ -482,7 +482,7 @@ spec:
         {{- if and .Values.metrics.enabled .Values.metrics.customMetrics }}
         - name: custom-metrics
           configMap:
-            name: {{ printf "%s-metrics" (include "common.names.fullname" .) }}
+            name: {{ printf "%s-metrics" (include "postgresql.readReplica.fullname" .) }}
         {{- end }}
         {{- if .Values.shmVolume.enabled }}
         - name: dshm
