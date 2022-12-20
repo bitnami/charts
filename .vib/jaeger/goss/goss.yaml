@@ -1,0 +1,33 @@
+addr:
+  tcp://localhost:{{ .Vars.agent.containerPorts.config }}:
+    reachable: true
+http:
+  http://jaeger--agent:{{ .Vars.agent.service.ports.admin }}/:
+    status: 200
+    body:
+      - Server available
+  http://jaeger-collector:{{ .Vars.collector.service.ports.admin }}/:
+    status: 200
+    body:
+      - Server available
+  http://jaeger-query:{{ .Vars.query.service.ports.admin }}/:
+    status: 200
+    body:
+      - Server available
+  http://localhost:{{ .Vars.agent.containerPorts.admin }}/:
+    status: 200
+file:
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    exists: {{ .Vars.agent.serviceAccount.automountServiceAccountToken }}
+    filetype: directory
+    mode: "3777"
+command:
+  check-cassandra-auth:
+    exec: \[ $CASSANDRA_USERNAME = {{ .Vars.cassandra.dbUser.user }} ] && [ $CASSANDRA_PASSWORD = {{ .Vars.cassandra.dbUser.password }} ] && [ $CASSANDRA_KEYSPACE = {{ .Vars.cassandra.keyspace }} ];
+    exit-status: 0
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+      - uid={{ .Vars.agent.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.agent.podSecurityContext.fsGroup }}/
