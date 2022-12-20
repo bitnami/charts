@@ -80,6 +80,16 @@ spec:
     - port: {{ printf "%s-metrics" $scheme }}
       scheme: {{$scheme}}
       path: {{ .Values.kubelet.serviceMonitor.resourcePath }}
+      {{- if .Values.kubelet.serviceMonitor.https }}
+      tlsConfig:
+        caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        serverName: kubernetes
+        insecureSkipVerify: true
+      bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+      {{- else }}
+      tlsConfig:
+        insecureSkipVerify: false
+      {{- end }}
       {{- if .Values.kubelet.serviceMonitor.resourceRelabelings }}
       relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.kubelet.serviceMonitor.resourceRelabelings "context" .) | nindent 4 }}
       {{- end }}
