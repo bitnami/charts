@@ -1949,7 +1949,7 @@ kubelet:
     ##
     resourcePath: "/metrics/resource/v1alpha1"
     ## @param kubelet.serviceMonitor.resourceRelabelings Metric relabeling
-    ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#relabelconfig
     ##
     resourceRelabelings: []
     ## @param kubelet.serviceMonitor.resourceMetricRelabelings Metric relabeling
