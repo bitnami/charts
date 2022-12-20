@@ -25,7 +25,7 @@ it('import and check user information', () => {
       obj.users[0].username = `${user.importedUser.username}.${random}`;
       obj.users[0].email = `${random}.${user.importedUser.email}`;
       obj.users[0].lastName = `${user.importedUser.lastName}-${random}`;
-      cy.writeFile(importFile, JSON.stringify(obj));
+      cy.writeFile(importFile, obj);
     });
     cy.get('#partial-import-file-filename').selectFile(importFile, { action: 'drag-drop' });
     cy.get('[data-testid="users-checkbox"]').click();
