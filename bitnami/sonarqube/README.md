@@ -317,7 +317,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `postgresql.auth.username`             | Username to create when deploying the PostgreSQL chart                             | `bn_sonarqube`      |
 | `postgresql.auth.database`             | Database to create when deploying the PostgreSQL chart                             | `bitnami_sonarqube` |
 | `postgresql.service.ports.postgresql`  | PostgreSQL service port                                                            | `5432`              |
-| `postgresql.persistence.enabled`       | Use PVCs when deploying the PostgreSQL chart                                       | `false`             |
+| `postgresql.persistence.enabled`       | Use PVCs when deploying the PostgreSQL chart                                       | `true`              |
 | `postgresql.persistence.existingClaim` | Use an existing PVC when deploying the PostgreSQL chart                            | `""`                |
 | `postgresql.persistence.storageClass`  | storageClass of the created PVCs                                                   | `""`                |
 | `postgresql.persistence.accessMode`    | Access mode of the created PVCs                                                    | `ReadWriteOnce`     |
