@@ -31366,6 +31366,41 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/influxdb-5.3.2.tgz
     version: 5.3.2
+  jaeger:
+  - annotations:
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 1.39.0
+    created: "2022-12-20T12:24:18.436787528Z"
+    dependencies:
+    - condition: cassandra.enabled
+      name: cassandra
+      repository: https://charts.bitnami.com/bitnami
+      version: 9.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Distributed tracing platform for monitoring microservices-based distributed
+      systems.
+    digest: 4eac3b1132d801b3662647fd1b9b149a2d85fe863cebd34856d77c0ab895d801
+    home: https://github.com/bitnami/charts/tree/main/bitnami/jaeger
+    icon: https://bitnami.com/assets/stacks/jaeger/img/jaeger-stack-220x234.png
+    keywords:
+    - jaeger
+    - tracing
+    - monitoring
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: jaeger
+    sources:
+    - https://github.com/jaegertracing/jaeger
+    - https://www.jaegertracing.io/
+    urls:
+    - https://charts.bitnami.com/bitnami/jaeger-0.1.0.tgz
+    version: 0.1.0
   jasperreports:
   - annotations:
       category: Infrastructure
@@ -98561,4 +98596,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2022-12-20T11:35:10.429088304Z"
+generated: "2022-12-20T12:24:18.429579109Z"
