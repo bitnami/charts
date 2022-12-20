@@ -51,9 +51,14 @@ spec:
       {{- if .Values.kubelet.serviceMonitor.relabelings }}
       relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.kubelet.serviceMonitor.relabelings "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.kubelet.serviceMonitor.cAdvisor }}
     - port: {{ printf "%s-metrics" $scheme }}
       scheme: {{$scheme}}
       path: /metrics/cadvisor
+      {{- if .Values.kubelet.serviceMonitor.interval }}
+      interval: {{ .Values.kubelet.serviceMonitor.interval }}
+      {{- end }}
+      honorLabels: true
       {{- if .Values.kubelet.serviceMonitor.https }}
       tlsConfig:
         caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
@@ -64,14 +69,22 @@ spec:
       tlsConfig:
         insecureSkipVerify: false
       {{- end }}
-      honorLabels: true
-      {{- if .Values.kubelet.serviceMonitor.interval }}
-      interval: {{ .Values.kubelet.serviceMonitor.interval }}
       {{- end }}
       {{- if .Values.kubelet.serviceMonitor.cAdvisorMetricRelabelings }}
       metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.kubelet.serviceMonitor.cAdvisorMetricRelabelings "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.kubelet.serviceMonitor.cAdvisorRelabelings }}
       relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.kubelet.serviceMonitor.cAdvisorRelabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.kubelet.serviceMonitor.resource }}
+    - port: {{ printf "%s-metrics" $scheme }}
+      scheme: {{$scheme}}
+      path: {{ .Values.kubelet.serviceMonitor.resourcePath }}
+      {{- if .Values.kubelet.serviceMonitor.resourceRelabelings }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.kubelet.serviceMonitor.resourceRelabelings "context" .) | nindent 4 }}
+      {{- end }}
+      {{- if .Values.kubelet.serviceMonitor.resourceMetricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.kubelet.serviceMonitor.resourceMetricRelabelings "context" .) | nindent 4 }}
+      {{- end }}
       {{- end }}
 {{- end }}
