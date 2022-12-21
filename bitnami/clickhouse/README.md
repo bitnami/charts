@@ -333,7 +333,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                             | Description                   | Value  |
 | -------------------------------- | ----------------------------- | ------ |
 | `zookeeper.enabled`              | Deploy Zookeeper subchart     | `true` |
-| `zookeeper.replicaCount`         | Number of Zookeeper instances | `2`    |
+| `zookeeper.replicaCount`         | Number of Zookeeper instances | `3`    |
 | `zookeeper.service.ports.client` | Zookeeper client port         | `2181` |
 
 
