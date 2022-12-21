@@ -41,7 +41,7 @@ Return the proper service name for Argo CD controller adding the working namespa
 {{- end -}}
 
 {{/*
-Return the proper service name for Argo CD controller
+Return the proper service name for Argo CD applicationSet controller
 */}}
 {{- define "argocd.applicationSet" -}}
   {{- printf "%s-applicationset-controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
