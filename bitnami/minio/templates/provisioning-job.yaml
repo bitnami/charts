@@ -21,7 +21,7 @@ spec:
   parallelism: 1
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "minio.labels.provisioning" . | nindent 8 }}
         app.kubernetes.io/component: minio-provisioning
         {{- if .Values.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}

@@ -213,6 +213,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.size`          | Size of data volume                                                    | `8Gi`               |
 | `persistence.annotations`   | Persistence annotations for Solr                                       | `{}`                |
 | `persistence.mountPath`     | Persistence mount path for Solr                                        | `/bitnami/solr`     |
+| `persistence.subPath`       | Path within the volume from which the container's                      | `""`                |
+| `persistence.subPathExpr`   | Expanded path within the volume from which                             | `""`                |
 | `persistence.selector`      | Selector to match an existing Persistent Volume for WordPress data PVC | `{}`                |
 
 

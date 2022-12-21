@@ -2,11 +2,11 @@
 
 # SonarQube(TM) packaged by Bitnami
 
-SonarQube&trade; is an open source quality management platform that analyzes and measures code's technical quality. It enables developers to detect code issues, vulnerabilities, and bugs in early stages.
+SonarQube(TM) is an open source quality management platform that analyzes and measures code's technical quality. It enables developers to detect code issues, vulnerabilities, and bugs in early stages.
 
 [Overview of SonarQube&trade;](http://www.sonarqube.org)
 
-Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement. SonarQube is a registered trademark of SonarSource SA. 
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement. SonarQube is a registered trademark of SonarSource SA.
                            
 ## TL;DR
 
@@ -25,8 +25,6 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 - Kubernetes 1.19+
 - Helm 3.2.0+
-- PV provisioner support in the underlying infrastructure
-- ReadWriteMany volumes for deployment scaling
 
 ## Installing the Chart
 
@@ -79,15 +77,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### SonarQube&trade; Image parameters
 
-| Name                | Description                                                                                                      | Value                 |
-| ------------------- | ---------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`    | SonarQube&trade; image registry                                                                                  | `docker.io`           |
-| `image.repository`  | SonarQube&trade; image repository                                                                                | `bitnami/sonarqube`   |
-| `image.tag`         | SonarQube&trade; image tag (immutable tags are recommended)                                                      | `9.7.1-debian-11-r10` |
-| `image.digest`      | SonarQube&trade; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `image.pullPolicy`  | SonarQube&trade; image pull policy                                                                               | `IfNotPresent`        |
-| `image.pullSecrets` | SonarQube&trade; image pull secrets                                                                              | `[]`                  |
-| `image.debug`       | Enable SonarQube&trade; image debug mode                                                                         | `false`               |
+| Name                | Description                                                                                                      | Value                |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------- | -------------------- |
+| `image.registry`    | SonarQube&trade; image registry                                                                                  | `docker.io`          |
+| `image.repository`  | SonarQube&trade; image repository                                                                                | `bitnami/sonarqube`  |
+| `image.tag`         | SonarQube&trade; image tag (immutable tags are recommended)                                                      | `9.8.0-debian-11-r0` |
+| `image.digest`      | SonarQube&trade; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
+| `image.pullPolicy`  | SonarQube&trade; image pull policy                                                                               | `IfNotPresent`       |
+| `image.pullSecrets` | SonarQube&trade; image pull secrets                                                                              | `[]`                 |
+| `image.debug`       | Enable SonarQube&trade; image debug mode                                                                         | `false`              |
 
 
 ### SonarQube&trade; Configuration parameters
@@ -236,7 +234,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r56`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r63`      |
 | `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -252,7 +250,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctl.enabled`            | Enable kernel settings modifier image                                                                         | `true`                  |
 | `sysctl.image.registry`     | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `sysctl.image.repository`   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `sysctl.image.tag`          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r56`      |
+| `sysctl.image.tag`          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r63`      |
 | `sysctl.image.digest`       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `sysctl.image.pullPolicy`   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `sysctl.image.pullSecrets`  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -283,7 +281,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.jmx.enabled`                               | Whether or not to expose JMX metrics to Prometheus                                                           | `false`                |
 | `metrics.jmx.image.registry`                        | JMX exporter image registry                                                                                  | `docker.io`            |
 | `metrics.jmx.image.repository`                      | JMX exporter image repository                                                                                | `bitnami/jmx-exporter` |
-| `metrics.jmx.image.tag`                             | JMX exporter image tag (immutable tags are recommended)                                                      | `0.17.2-debian-11-r22` |
+| `metrics.jmx.image.tag`                             | JMX exporter image tag (immutable tags are recommended)                                                      | `0.17.2-debian-11-r29` |
 | `metrics.jmx.image.digest`                          | JMX exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `metrics.jmx.image.pullPolicy`                      | JMX exporter image pull policy                                                                               | `IfNotPresent`         |
 | `metrics.jmx.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                             | `[]`                   |
