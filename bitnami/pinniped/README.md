@@ -369,7 +369,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 0.4.0
 
-This version updates Pinniped to its newest version, 0.20.x. For more information, please refer to [the release notes](https://github.com/vmware-tanzu/pinniped/releases/tag/v0.20.0).
+This version updates Pinniped to its newest version, 0.21.x. For more information, please refer to [the release notes](https://github.com/vmware-tanzu/pinniped/releases/tag/v0.20.0).
 
 ## License
 
