@@ -152,9 +152,9 @@ spec:
           args:
             - argocd-repo-server
             - --logformat
-            - {{ .Values.repoServer.logFormat }}
+            - {{ .Values.repoServer.logFormat | quote }}
             - --loglevel
-            - {{ .Values.repoServer.logLevel }}
+            - {{ .Values.repoServer.logLevel | quote }}
             - --redis
             - {{ include "argocd.redisHost" . }}:{{ include "argocd.redisPort" . }}
             {{- if .Values.repoServer.extraArgs }}
