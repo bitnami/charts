@@ -25,4 +25,4 @@ name: clickhouse
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/clickhouse
   - https://github.com/ClickHouse/ClickHouse
-version: 2.1.1
+version: 2.2.0
