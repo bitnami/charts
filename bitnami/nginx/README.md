@@ -84,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------- | ----------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`     | NGINX image registry                                                                                  | `docker.io`           |
 | `image.repository`   | NGINX image repository                                                                                | `bitnami/nginx`       |
-| `image.tag`          | NGINX image tag (immutable tags are recommended)                                                      | `1.23.3-debian-11-r2` |
+| `image.tag`          | NGINX image tag (immutable tags are recommended)                                                      | `1.23.3-debian-11-r3` |
 | `image.digest`       | NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`   | NGINX image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets`  | Specify docker-registry secret names as an array                                                      | `[]`                  |
@@ -179,7 +179,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cloneStaticSiteFromGit.enabled`           | Get the server static content from a Git repository                                                 | `false`               |
 | `cloneStaticSiteFromGit.image.registry`    | Git image registry                                                                                  | `docker.io`           |
 | `cloneStaticSiteFromGit.image.repository`  | Git image repository                                                                                | `bitnami/git`         |
-| `cloneStaticSiteFromGit.image.tag`         | Git image tag (immutable tags are recommended)                                                      | `2.39.0-debian-11-r2` |
+| `cloneStaticSiteFromGit.image.tag`         | Git image tag (immutable tags are recommended)                                                      | `2.39.0-debian-11-r3` |
 | `cloneStaticSiteFromGit.image.digest`      | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `cloneStaticSiteFromGit.image.pullPolicy`  | Git image pull policy                                                                               | `IfNotPresent`        |
 | `cloneStaticSiteFromGit.image.pullSecrets` | Specify docker-registry secret names as an array                                                    | `[]`                  |
