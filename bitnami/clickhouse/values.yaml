@@ -190,7 +190,7 @@ resources:
 ## @param podSecurityContext.enabled Enabled ClickHouse pods' Security Context
 ## @param podSecurityContext.fsGroup Set ClickHouse pod's Security Context fsGroup
 ## @param podSecurityContext.seccompProfile.type Set ClickHouse container's Security Context seccomp profile
-##
+## If use Kubernetes 1.18, need commented podSecurityContext.seccompProfile
 podSecurityContext:
   enabled: true
   fsGroup: 1001
