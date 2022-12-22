@@ -2080,6 +2080,43 @@ entries:
   - annotations:
       category: CMS
     apiVersion: v2
+    appVersion: 1.8.14
+    created: "2022-12-22T10:50:44.202030706Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 17.x.x
+    - condition: mongodb.enabled
+      name: mongodb
+      repository: https://charts.bitnami.com/bitnami
+      version: 13.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Appsmith is an open source platform for building and maintaining
+      internal tools, such as custom dashboards, admin panels or CRUD apps.
+    digest: b46ab41ef331f8a9739a0692c8f36e6073e5834df03c96ed6ba97997ce2fd259
+    home: https://www.appsmith.com/
+    icon: https://bitnami.com/assets/stacks/appsmith/img/appsmith-stack-220x234.png
+    keywords:
+    - development
+    - dashboards
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: appsmith
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/appsmith
+    - https://github.com/appsmithorg/appsmith/
+    urls:
+    - https://charts.bitnami.com/bitnami/appsmith-0.1.6.tgz
+    version: 0.1.6
+  - annotations:
+      category: CMS
+    apiVersion: v2
     appVersion: 1.8.13
     created: "2022-12-19T11:34:23.131011302Z"
     dependencies:
@@ -99134,4 +99171,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2022-12-22T09:15:02.168744073Z"
+generated: "2022-12-22T10:50:44.182976763Z"
