@@ -435,7 +435,16 @@ extraConfiguration: |-
 ##                               {management,    {constant, true}}]}
 ##   ]}].
 ##
+## If both, advancedConfiguration and advancedConfigurationExistingSecret are set, then advancedConfiguration
+## will be used instead of the secret.
+#
 advancedConfiguration: |-
+
+## @param advancedConfigurationExistingSecret Existing secret with the advanced configuration file.
+## Use this as additional configuration in classic config format (Erlang term configuration format) as in advancedConfiguration
+## Do not use in combination with advancedConfiguration, will be ignored
+##
+advancedConfigurationExistingSecret: ""
 
 ## LDAP configuration
 ##
