@@ -44,7 +44,7 @@ kubeVersion: ""
 ## @param watchReleaseNamespace Watch only namepsace used for the release
 ##
 watchReleaseNamespace: false
-## @param Use a DaemonSet or Deployment
+## @param kind Use a DaemonSet or Deployment
 ##
 kind: Deployment
 

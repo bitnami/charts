@@ -1,4 +1,4 @@
-****<!--- app-name: ExternalDNS -->
+<!--- app-name: ExternalDNS -->
 
 # ExternalDNS packaged by Bitnami
 
