@@ -23354,6 +23354,43 @@ entries:
   - annotations:
       category: Analytics
     apiVersion: v2
+    appVersion: 1.17.4
+    created: "2022-12-22T09:15:02.178969978Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Gitea is a lightweight code hosting solution. Written in Go, features
+      low resource consumption, easy upgrades and multiple databases.
+    digest: 11aeba964ff1f2bd7612b42c05d5616e30d2f3b4926fe1d991140916937fdd50
+    home: https://github.com/bitnami/charts/tree/main/bitnami/gitea
+    icon: https://bitnami.com/assets/stacks/gitea/img/gitea-stack-220x234.png
+    keywords:
+    - gitea
+    - analytics
+    - http
+    - web
+    - application
+    - php
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: gitea
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/gitea
+    - https://gitea.io/
+    urls:
+    - https://charts.bitnami.com/bitnami/gitea-0.1.2.tgz
+    version: 0.1.2
+  - annotations:
+      category: Analytics
+    apiVersion: v2
     appVersion: 1.17.3
     created: "2022-11-28T14:16:54.365875832Z"
     dependencies:
@@ -99097,4 +99134,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2022-12-22T09:02:02.697661845Z"
+generated: "2022-12-22T09:15:02.168744073Z"
