@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: {{ .Values.kind }}
 metadata:
   name: {{ template "external-dns.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
@@ -11,7 +11,9 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{ if (eq .Values.kind "Deployment") -}}
   replicas: {{ coalesce .Values.replicas .Values.replicaCount }}
+  {{- end }}
   {{- if .Values.updateStrategy }}
   strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
   {{- end }}
