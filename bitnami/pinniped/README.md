@@ -367,6 +367,12 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 1.0.0
+
+This version brings a breaking change into the configuration, eliminating abused reuse of Pinniped service parameters.
+The `supervisor.service` object is now separated into `supervisor.service.api` which configures the service used by Pinniped internally, and `supervisor.service.public` which configures the service the users interact with.
+In case configuration was specified in the `supervisor.service` object, now it needs to be redistributed into the two new objects. Keep in mind that the API service default service type was also changed to `ClusterIP` to reflect more on how the API service is used by default. Also the formerly `supervisor.service.ports.aggregatedAPIService` parameter is now only available under the API service configuration, because it is not a relevant parameter for the user-facing service.
+
 ### To 0.4.0
 
 This version updates Pinniped to its newest version, 0.20.x. For more information, please refer to [the release notes](https://github.com/vmware-tanzu/pinniped/releases/tag/v0.20.0).
