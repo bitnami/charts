@@ -1,4 +1,4 @@
-<!--- app-name: ExternalDNS -->
+****<!--- app-name: ExternalDNS -->
 
 # ExternalDNS packaged by Bitnami
 
@@ -7,7 +7,7 @@ ExternalDNS is a Kubernetes addon that configures public DNS servers with inform
 [Overview of ExternalDNS](https://github.com/kubernetes-incubator/external-dns)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -70,6 +70,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraDeploy`           | Array of extra objects to deploy with the release (evaluated as a template).                 | `[]`            |
 | `kubeVersion`           | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
 | `watchReleaseNamespace` | Watch only namepsace used for the release                                                    | `false`         |
+| `kind`                  | Use a DaemonSet or Deployment                                                                | `Deployment`    |
 
 
 ### external-dns parameters
