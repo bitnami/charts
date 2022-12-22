@@ -3752,6 +3752,9 @@ externalDatabase:
 ## @param redis.auth.password Redis&reg; password
 ## @param redis.auth.existingSecret The name of an existing secret with Redis&reg; credentials
 ## @param redis.architecture Redis&reg; architecture. Allowed values: `standalone` or `replication`
+## @param redis.sentinel.enabled Use Redis&reg; Sentinel on Redis&reg; pods.
+## @param redis.sentinel.masterSet Master set name
+## @param redis.sentinel.service.ports.sentinel Redis&reg; service port for Redis&reg; Sentinel
 ##
 redis:
   enabled: true
@@ -3765,6 +3768,12 @@ redis:
     password: ""
     existingSecret: ""
   architecture: standalone
+  sentinel:
+    enabled: false
+    masterSet: mymaster
+    service:
+      ports:
+        sentinel: 26379
 
 ## External Redis&reg; configuration
 ## All of these values are only used when redis.enabled is set to false

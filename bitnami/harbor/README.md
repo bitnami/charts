@@ -1144,6 +1144,9 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `redis.auth.password`                     | Redis&reg; password                                                    | `""`         |
 | `redis.auth.existingSecret`               | The name of an existing secret with Redis&reg; credentials             | `""`         |
 | `redis.architecture`                      | Redis&reg; architecture. Allowed values: `standalone` or `replication` | `standalone` |
+| `redis.sentinel.enabled`                  | Use Redis&reg; Sentinel on Redis&reg; pods.                            | `false`      |
+| `redis.sentinel.masterSet`                | Master set name                                                        | `mymaster`   |
+| `redis.sentinel.service.ports.sentinel`   | Redis&reg; service port for Redis&reg; Sentinel                        | `26379`      |
 | `externalRedis.host`                      | Redis&reg; host                                                        | `localhost`  |
 | `externalRedis.port`                      | Redis&reg; port number                                                 | `6379`       |
 | `externalRedis.password`                  | Redis&reg; password                                                    | `""`         |
