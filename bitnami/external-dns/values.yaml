@@ -44,9 +44,10 @@ kubeVersion: ""
 ## @param watchReleaseNamespace Watch only namepsace used for the release
 ##
 watchReleaseNamespace: false
-## @param kind Use a DaemonSet or Deployment
+## @param useDaemonset Use ExternalDNS in Daemonset mode
+## If set to false, Deployment will be used.
 ##
-kind: Deployment
+useDaemonset: false
 
 ## @section external-dns parameters
 ##

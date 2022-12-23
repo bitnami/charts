@@ -1,5 +1,9 @@
 apiVersion: apps/v1
-kind: {{ .Values.kind }}
+{{- if .Values.useDaemonset }}
+kind: DaemonSet
+{{- else }}
+kind: Deployment
+{{- end }}
 metadata:
   name: {{ template "external-dns.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
@@ -11,7 +15,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{ if (eq .Values.kind "Deployment") -}}
+  {{ if .Values.useDaemonset -}}
   replicas: {{ coalesce .Values.replicas .Values.replicaCount }}
   {{- end }}
   {{- if .Values.updateStrategy }}
