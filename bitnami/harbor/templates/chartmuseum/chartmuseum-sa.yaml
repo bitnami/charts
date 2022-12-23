@@ -8,4 +8,5 @@ metadata:
   {{- if .Values.chartmuseum.serviceAccount.annotations }}
   annotations: {{ toYaml .Values.chartmuseum.serviceAccount.annotations | nindent 4 }}
   {{- end }}
+automountServiceAccountToken: {{ .Values.chartmuseum.serviceAccount.automountServiceAccountToken }}
 {{- end }}

@@ -8,4 +8,5 @@ metadata:
   {{- if .Values.portal.serviceAccount.annotations }}
   annotations: {{ toYaml .Values.portal.serviceAccount.annotations | nindent 4 }}
   {{- end }}
+automountServiceAccountToken: {{ .Values.portal.serviceAccount.automountServiceAccountToken }}
 {{- end }}

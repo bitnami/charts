@@ -8,4 +8,5 @@ metadata:
   {{- if .Values.registry.serviceAccount.annotations }}
   annotations: {{ toYaml .Values.registry.serviceAccount.annotations | nindent 4 }}
   {{- end }}
+automountServiceAccountToken: {{ .Values.registry.serviceAccount.automountServiceAccountToken }}
 {{- end }}

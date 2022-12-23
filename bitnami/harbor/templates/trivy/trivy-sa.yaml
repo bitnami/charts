@@ -8,4 +8,5 @@ metadata:
   {{- if .Values.trivy.serviceAccount.annotations }}
   annotations: {{ toYaml .Values.trivy.serviceAccount.annotations | nindent 4 }}
   {{- end }}
+automountServiceAccountToken: {{ .Values.trivy.serviceAccount.automountServiceAccountToken }}
 {{- end }}
