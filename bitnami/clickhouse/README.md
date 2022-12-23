@@ -32,7 +32,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
-> **Tip**: If use Kubernetes 1.18, need commented follow code in values
+> If you are using Kubernetes 1.18, the following code needs to be commented out.
 > seccompProfile:
 >    type: "RuntimeDefault"
 
