@@ -2055,18 +2055,18 @@ registry:
   ## ServiceAccount parameters
   ##
   serviceAccount:
-    ## @param core.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ## @param registry.serviceAccount.create Specifies whether a ServiceAccount should be created
     ##
     create: true
-    ## @param core.serviceAccount.name Override Hub service account name
+    ## @param registry.serviceAccount.name Override Hub service account name
     ## If not set and create is true, a name is generated using the fullname template
     ##
     name: ""
-    ## @param core.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+    ## @param registry.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
     ## Can be set to false if pods using this serviceAccount do not need to use K8s API
     ##
     automountServiceAccountToken: false
-    ## @param core.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ## @param registry.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: { }
   ## Harbor Registry main container parameters
@@ -2658,18 +2658,18 @@ chartmuseum:
   ## ServiceAccount parameters
   ##
   serviceAccount:
-    ## @param core.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ## @param chartmuseum.serviceAccount.create Specifies whether a ServiceAccount should be created
     ##
     create: true
-    ## @param core.serviceAccount.name Override Hub service account name
+    ## @param chartmuseum.serviceAccount.name Override Hub service account name
     ## If not set and create is true, a name is generated using the fullname template
     ##
     name: ""
-    ## @param core.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+    ## @param chartmuseum.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
     ## Can be set to false if pods using this serviceAccount do not need to use K8s API
     ##
     automountServiceAccountToken: false
-    ## @param core.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ## @param chartmuseum.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
   ## Chartmuseum service configuration
@@ -2936,18 +2936,18 @@ notary:
     ## ServiceAccount parameters
     ##
     serviceAccount:
-      ## @param core.serviceAccount.create Specifies whether a ServiceAccount should be created
+      ## @param notary.server.serviceAccount.create Specifies whether a ServiceAccount should be created
       ##
       create: true
-      ## @param core.serviceAccount.name Override Hub service account name
+      ## @param notary.server.serviceAccount.name Override Hub service account name
       ## If not set and create is true, a name is generated using the fullname template
       ##
       name: ""
-      ## @param core.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+      ## @param notary.server.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
       ## Can be set to false if pods using this serviceAccount do not need to use K8s API
       ##
       automountServiceAccountToken: false
-      ## @param core.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+      ## @param notary.server.serviceAccount.annotations Additional custom annotations for the ServiceAccount
       ##
       annotations: { }
   signer:
@@ -3187,18 +3187,18 @@ notary:
     ## ServiceAccount parameters
     ##
     serviceAccount:
-      ## @param core.serviceAccount.create Specifies whether a ServiceAccount should be created
+      ## @param notary.signer.serviceAccount.create Specifies whether a ServiceAccount should be created
       ##
       create: true
-      ## @param core.serviceAccount.name Override Hub service account name
+      ## @param notary.signer.serviceAccount.name Override Hub service account name
       ## If not set and create is true, a name is generated using the fullname template
       ##
       name: ""
-      ## @param core.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+      ## @param notary.signer.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
       ## Can be set to false if pods using this serviceAccount do not need to use K8s API
       ##
       automountServiceAccountToken: false
-      ## @param core.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+      ## @param notary.signer.serviceAccount.annotations Additional custom annotations for the ServiceAccount
       ##
       annotations: { }
   ## Harbor Notary service configuration
@@ -3511,18 +3511,18 @@ trivy:
   ## ServiceAccount parameters
   ##
   serviceAccount:
-    ## @param core.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ## @param trivy.serviceAccount.create Specifies whether a ServiceAccount should be created
     ##
     create: true
-    ## @param core.serviceAccount.name Override Hub service account name
+    ## @param trivy.serviceAccount.name Override Hub service account name
     ## If not set and create is true, a name is generated using the fullname template
     ##
     name: ""
-    ## @param core.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+    ## @param trivy.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
     ## Can be set to false if pods using this serviceAccount do not need to use K8s API
     ##
     automountServiceAccountToken: false
-    ## @param core.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ## @param trivy.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: { }
   service:
