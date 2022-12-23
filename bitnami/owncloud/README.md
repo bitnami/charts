@@ -4,6 +4,10 @@
 
 ownCloud is an open source content collaboration platform used to store and share files from any device. It grants data privacy, synchronization between devices, and file access control.
 
+## This Helm chart is deprecated
+
+The upstream project has been discontinued and no new features will be added.
+
 [Overview of ownCloud](http://owncloud.org)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
