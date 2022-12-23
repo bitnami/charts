@@ -70,7 +70,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraDeploy`           | Array of extra objects to deploy with the release (evaluated as a template).                 | `[]`            |
 | `kubeVersion`           | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
 | `watchReleaseNamespace` | Watch only namepsace used for the release                                                    | `false`         |
-| `kind`                  | Use a DaemonSet or Deployment                                                                | `Deployment`    |
+| `useDaemonset`          | Use ExternalDNS in Daemonset mode                                                            | `false`         |
 
 
 ### external-dns parameters
