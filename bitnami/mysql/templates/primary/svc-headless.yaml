@@ -2,26 +2,28 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "mysql.primary.fullname" . }}-headless
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: primary
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- if or .Values.primary.service.headless.annotations .Values.commonAnnotations }}
   annotations:
+    {{- if .Values.primary.service.headless.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.primary.service.headless.annotations "context" $) | nindent 4 }}
+    {{- end }}
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
-    {{- if .Values.primary.service.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.primary.service.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- end }}
 spec:
   type: ClusterIP
   clusterIP: None
   publishNotReadyAddresses: true
   ports:
     - name: mysql
-      port: {{ .Values.primary.service.port }}
+      port: {{ .Values.primary.service.ports.mysql }}
       targetPort: mysql
   selector: {{ include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: primary

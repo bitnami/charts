@@ -1,0 +1,14 @@
+server:
+  containerPorts:
+    http: 1338
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 1002
+serviceAccount:
+  automountServiceAccountToken: true
+mongodb:
+  auth:
+    username: bn_test_parse
+    password: "M0ngoP4ss"
+    database: bitnami_parse

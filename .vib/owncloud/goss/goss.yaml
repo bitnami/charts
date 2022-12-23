@@ -1,0 +1,36 @@
+http:
+  https://owncloud:{{ .Vars.service.ports.https }}:
+    ## A http 400 status code is expected here because HTTPS can only be accessed
+    ## using the domain name.
+    status: 400
+    allow-insecure: true
+command:
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+      - uid={{ .Vars.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
+file:
+  /bitnami/owncloud/:
+    mode: "2775"
+    filetype: directory
+    exists: true
+  /opt/bitnami/owncloud/config/config.php:
+    mode: "0777"
+    filetype: symlink
+    exists: true
+    contains:
+      - /dbname.*{{ .Vars.mariadb.auth.database }}/
+      - /dbuser.*{{ .Vars.mariadb.auth.username }}/
+      - /dbpassword.*{{ .Vars.mariadb.auth.password }}/
+  /etc/hosts:
+    exists: true
+    filetype: file
+    contains:
+    {{ range .Vars.hostAliases }}
+    {{ $ip := .ip }}
+    {{ range $host := .hostnames }}
+      - /{{ $ip }}.*{{ $host }}/
+    {{ end }}
+    {{ end }}

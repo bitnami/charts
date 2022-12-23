@@ -1,0 +1,16 @@
+file:
+  {{ .Vars.persistence.mountPath }}:
+    exists: true
+    filetype: directory
+    mode: "2777"
+    owner: root
+command:
+  run-git-example:
+    exec: python {{ .Vars.entrypoint.workDir }}/example/memcost/inception_memcost.py
+    exit-status: 0
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+      - uid={{ .Vars.standalone.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.standalone.podSecurityContext.fsGroup }}/

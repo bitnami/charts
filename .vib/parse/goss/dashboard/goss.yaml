@@ -1,0 +1,25 @@
+file:
+  /bitnami/parse-dashboard:
+    exists: true
+    filetype: directory
+    mode: "2777"
+    owner: root
+  /opt/bitnami/parse-dashboard/config.json:
+    exists: true
+    filetype: file
+    mode: "0644"
+    contains:
+      - /masterKey.*{{ .Vars.server.masterKey }}/
+      - /user.*{{ .Vars.dashboard.username }}/
+      - /pass.*{{ .Vars.dashboard.password }}/
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
+    filetype: directory
+    mode: "3777"
+command:
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+    - uid={{ .Vars.dashboard.containerSecurityContext.runAsUser }}
+    - /groups=.*{{ .Vars.dashboard.podSecurityContext.fsGroup }}/

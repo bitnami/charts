@@ -1,8 +1,0 @@
-architecture: replicaset
-replicaCount: 3
-pdb:
-  create: true
-rbac:
-  create: true
-serviceAccount:
-  create: true

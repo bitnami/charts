@@ -1,0 +1,9 @@
+serviceAccount:
+  automountServiceAccountToken: true
+podSecurityContext:
+  fsGroup: 1002
+containerSecurityContext:
+  runAsUser: 1002
+service:
+  ports:
+    metrics: 80

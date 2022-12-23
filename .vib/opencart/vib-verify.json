@@ -1,0 +1,70 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/opencart"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/opencart"
+        },
+        "runtime_parameters": "b3BlbmNhcnRIb3N0OiB2bXdhcmUtb3BlbmNhcnQubXkKb3BlbmNhcnRVc2VybmFtZTogb3BlbmNhcnRVc2VyCm9wZW5jYXJ0UGFzc3dvcmQ6IFBhc3N3b3JkMTIzITQKc2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGh0dHA6IDgwCiAgICBodHRwczogNDQ0Cmhvc3RBbGlhc2VzOgogIC0gaXA6ICIxMjcuMC4wLjEiCiAgICBob3N0bmFtZXM6CiAgICAgIC0gInN0YXR1cy5sb2NhbGhvc3QiCmNvbnRhaW5lclBvcnRzOgogIGh0dHA6IDgwODEKICBodHRwczogODQ0NApwb2RTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIGZzR3JvdXA6IDEwMDIKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBydW5Bc1VzZXI6IDEwMDIKbWFyaWFkYjoKICBhdXRoOgogICAgZGF0YWJhc2U6IHRlc3Rfb2NfZGF0YWJhc2UKICAgIHVzZXJuYW1lOiB0ZXN0X29jX3VzZXJuYW1lCiAgICBwYXNzd29yZDogdGVzdF9vY19wYXNzd29yZA==",
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "M4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "health-check",
+          "params": {
+            "endpoint": "lb-opencart-http",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/opencart/goss"
+            },
+            "vars_file": "vars.yaml",
+            "remote": {
+              "workload": "deploy-opencart"
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/opencart/cypress"
+            },
+            "endpoint": "lb-opencart-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "username": "opencartUser",
+              "password": "Password123!4"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

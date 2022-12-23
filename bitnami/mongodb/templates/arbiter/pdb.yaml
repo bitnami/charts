@@ -1,11 +1,17 @@
 {{- if and (include "mongodb.arbiter.enabled" .) .Values.arbiter.pdb.create }}
-apiVersion: policy/v1beta1
+apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
-  name: {{ include "mongodb.fullname" . }}-arbiter
-  namespace: {{ include "mongodb.namespace" . }}
+  name: {{ printf "%s-arbiter" (include "mongodb.fullname" .) }}
+  namespace: {{ include "mongodb.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: arbiter
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   {{- if .Values.arbiter.pdb.minAvailable }}
   minAvailable: {{ .Values.arbiter.pdb.minAvailable }}

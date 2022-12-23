@@ -22,8 +22,8 @@ service:
   port:
     {{- if typeIs "string" .servicePort }}
     name: {{ .servicePort }}
-    {{- else if typeIs "int" .servicePort }}
-    number: {{ .servicePort }}
+    {{- else if or (typeIs "int" .servicePort) (typeIs "float64" .servicePort) }}
+    number: {{ .servicePort | int }}
     {{- end }}
 {{- end -}}
 {{- end -}}
@@ -38,5 +38,31 @@ Usage:
 {{- print "false" -}}
 {{- else -}}
 {{- print "true" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns true if the ingressClassname field is supported
+Usage:
+{{ include "common.ingress.supportsIngressClassname" . }}
+*/}}
+{{- define "common.ingress.supportsIngressClassname" -}}
+{{- if semverCompare "<1.18-0" (include "common.capabilities.kubeVersion" .) -}}
+{{- print "false" -}}
+{{- else -}}
+{{- print "true" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if cert-manager required annotations for TLS signed
+certificates are set in the Ingress annotations
+Ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+Usage:
+{{ include "common.ingress.certManagerRequest" ( dict "annotations" .Values.path.to.the.ingress.annotations ) }}
+*/}}
+{{- define "common.ingress.certManagerRequest" -}}
+{{ if or (hasKey .annotations "cert-manager.io/cluster-issuer") (hasKey .annotations "cert-manager.io/issuer") (hasKey .annotations "kubernetes.io/tls-acme") }}
+    {{- true -}}
 {{- end -}}
 {{- end -}}

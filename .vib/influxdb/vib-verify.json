@@ -1,0 +1,72 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/influxdb"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/influxdb"
+        },
+        "runtime_parameters": "YXV0aDoKICBlbmFibGVkOiB0cnVlCiAgYWRtaW46CiAgICB1c2VybmFtZTogImluZmx1eEFkbWluIgogICAgcGFzc3dvcmQ6ICJSb290UDRzc3cwcmQiCiAgICB0b2tlbjogIjRkbTFuVDBrM24iCiAgICBvcmc6IHByaW1hcnkKICAgIGJ1Y2tldDogcHJpbWFyeQogIGNyZWF0ZVVzZXJUb2tlbjogdHJ1ZQogIHVzZXI6CiAgICB1c2VybmFtZTogInRlc3RVc2VyIgogICAgcGFzc3dvcmQ6ICJDb21wbGljYXRlZFBhc3N3b3JkMTIzITQiCiAgICBvcmc6ICJ0ZXN0T3JnYW5pemF0aW9uIgogICAgYnVja2V0OiAidGVzdEJ1Y2tldCIKaW5mbHV4ZGI6CiAgc2VydmljZToKICAgIHR5cGU6IExvYWRCYWxhbmNlcgogICAgcG9ydHM6CiAgICAgIGh0dHA6IDgwCiAgICAgIHJwYzogODA4OQogIGNvbnRhaW5lclBvcnRzOgogICAgaHR0cDogODA4NgogICAgcnBjOiA4MDg5CiAgY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogICAgZW5hYmxlZDogdHJ1ZQogICAgcnVuQXNVc2VyOiAxMDAyCiAgcG9kU2VjdXJpdHlDb250ZXh0OgogICAgZW5hYmxlZDogdHJ1ZQogICAgZnNHcm91cDogMTAwMgpzZXJ2aWNlQWNjb3VudDoKICBjcmVhdGU6IHRydWUKICBhdXRvbW91bnRTZXJ2aWNlQWNjb3VudFRva2VuOiB0cnVlCg==",
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "health-check",
+          "params": {
+            "endpoint": "lb-influxdb-http",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/influxdb/goss"
+            },
+            "remote": {
+              "workload": "deploy-influxdb"
+            },
+            "vars_file": "vars.yaml"
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/influxdb/cypress"
+            },
+            "endpoint": "lb-influxdb-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "username": "influxAdmin",
+              "password": "RootP4ssw0rd",
+              "bucket": "primary",
+              "org": "primary"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

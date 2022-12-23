@@ -1,88 +1,122 @@
+## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
 ##
-# global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
-#   storageClass: myStorageClass
 
-## Force target Kubernetes version (using Helm capabilites if not set)
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
-kubeVersion:
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass: ""
 
-## Bitnami HashiCorp Consul image version
+## @section Common parameters
+##
+
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
+## @param nameOverride String to partially override common.names.fullname
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride: ""
+## @param commonLabels Labels to add to all deployed objects (sub-charts are not considered)
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects (sub-charts are not considered)
+##
+commonAnnotations: {}
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+
+## @section HashiCorp Consul parameters
+##
+
+## Bitnami HashiCorp Consul image
 ## ref: https://hub.docker.com/r/bitnami/consul/tags/
+## @param image.registry HashiCorp Consul image registry
+## @param image.repository HashiCorp Consul image repository
+## @param image.tag HashiCorp Consul image tag (immutable tags are recommended)
+## @param image.digest HashiCorp Consul image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param image.pullPolicy HashiCorp Consul image pull policy
+## @param image.pullSecrets HashiCorp Consul image pull secrets
+## @param image.debug Enable image debug mode
 ##
 image:
   registry: docker.io
   repository: bitnami/consul
-  tag: 1.9.4-debian-10-r0
+  tag: 1.14.2-debian-11-r0
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
   ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
-
-  ## Set to true if you would like to see extra information on logs
+  pullSecrets: []
+  ## Enable debug mode
   ##
   debug: false
-
-## String to partially override consul.fullname template (will maintain the release name)
+## @param datacenterName Datacenter name for Consul. If not supplied, will use the Consul
 ##
-# nameOverride:
-
-## String to fully override consul.fullname template
+datacenterName: dc1
+## @param domain Consul domain name
 ##
-# fullnameOverride:
-
-## Consul cluster domain
+domain: consul
+## @param raftMultiplier Multiplier used to scale key Raft timing parameters
 ##
-clusterDomain: cluster.local
-
-## Common annotations to add to all HashiCorp Consul resources (sub-charts are not considered). Evaluated as a template
+raftMultiplier: "1"
+## @param gossipKey Gossip key for all members. The key must be 16-bytes, can be generated with $(consul keygen)
+## Example:
+## gossipKey: 887Syd/BOvbtvRAKviazMg==
 ##
-commonAnnotations: {}
-
-## Common labels to add to all HashiCorp Consul resources (sub-charts are not considered). Evaluated as a template
+gossipKey: ""
+## @param tlsEncryptionSecretName Name of existing secret with TLS encryption data
+## Use TLS to verify the authenticity of servers and clients.
+## Check README for more information.
+## Example:
+## tlsEncryptionSecretName: your-already-created-secret
 ##
-commonLabels: {}
-
-## Deployment pod host aliases
+tlsEncryptionSecretName: ""
+## @param hostAliases Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-
-## Datacenter name for consul. If not supplied, will use the consul
-##
-datacenterName: dc1
-
-## Consul domain name
-##
-domain: consul
-
-## Consul raft multiplier.
-##
-raftMultiplier: '1'
-
-## Predefined value for gossip key.
-## The key must be 16-bytes, can be generated with $(consul keygen)
-##
-# gossipKey: 887Syd/BOvbtvRAKviazMg==
-
-## Use TLS to verify the authenticity of servers and clients.
-## Check README for more information.
-##
-# tlsEncryptionSecretName: your-already-created-secret
-
-## HashiCorp Consul configuration
+## @param configuration HashiCorp Consul configuration to be injected as ConfigMap
 ## Example:
 ## configuration: |-
 ##   {
@@ -106,12 +140,10 @@ raftMultiplier: '1'
 ##   }
 ##
 configuration: ""
-
-## ConfigMap with HashiCorp Consul configuration
+## @param existingConfigmap ConfigMap with HashiCorp Consul configuration
 ##
-# existingConfigmap:
-
-## Extra configuration that will be added to the default one.
+existingConfigmap: ""
+## @param localConfig Extra configuration that will be added to the default one
 ## Example:
 ## localConfig: |-
 ##   {
@@ -119,241 +151,54 @@ configuration: ""
 ##   }
 ##
 localConfig: ""
-
-## Command and args for running the container (set to default if not set). Use array form
+## @param podLabels Pod labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+## @param priorityClassName Priority class assigned to the Pods
+##
+priorityClassName: ""
+## @param runtimeClassName Name of the runtime class to be used by pod(s)
+## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+##
+runtimeClassName: ""
+## @param schedulerName Alternative scheduler
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param terminationGracePeriodSeconds In seconds, time the given to the Consul pod needs to terminate gracefully
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+##
+terminationGracePeriodSeconds: ""
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
+## @param command Command for running the container (set to default if not set). Use array form
 ##
 command: []
+## @param args Args for running the container (set to default if not set). Use array form
+##
 args: []
-
-## An array to add extra env vars
+## @param extraEnvVars Extra environment variables to be set on HashiCorp Consul container
 ## For example:
 ##
 extraEnvVars: []
 #  - name: FOO
 #    value: BAR
-
-## ConfigMap with extra environment variables
+## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars
 ##
-extraEnvVarsCM:
-
-## Secret with extra environment variables
+extraEnvVarsCM: ""
+## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
-extraEnvVarsSecret:
-
-## Extra volumes to add to the deployment
-##
-extraVolumes: []
-
-## Extra volume mounts to add to the container
-##
-extraVolumeMounts: []
-
-## Extra init containers to add to the deployment
-##
-initContainers: []
-
-## Extra sidecar containers to add to the deployment
-##
-sidecars: []
-
-## Number of HashiCorp Consul replicas to deploy
-##
-replicaCount: 3
-
-## updateStrategy for HashiCorp Consul statefulset
-## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
-##
-updateStrategy: RollingUpdate
-
-## Partition update strategy
-## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
-##
-# rollingUpdatePartition:
-
-## StatefulSet pod management policy
-##
-podManagementPolicy: Parallel
-
-## Pod annotations
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-##
-podAnnotations: {}
-
-## Pod affinity preset
-## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
-##
-podAffinityPreset: ""
-
-## Pod anti-affinity preset
-## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
-##
-podAntiAffinityPreset: soft
-
-## Node affinity preset
-## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-## Allowed values: soft, hard
-##
-nodeAffinityPreset:
-  ## Node affinity type
-  ## Allowed values: soft, hard
-  ##
-  type: ""
-  ## Node label key to match
-  ## E.g.
-  ## key: "kubernetes.io/e2e-az-name"
-  ##
-  key: ""
-  ## Node label values to match
-  ## E.g.
-  ## values:
-  ##   - e2e-az1
-  ##   - e2e-az2
-  ##
-  values: []
-
-## Affinity for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
-##
-affinity: {}
-
-## Node labels for pod assignment
-## Ref: https://kubernetes.io/docs/user-guide/node-selection/
-##
-nodeSelector: {}
-
-## Tolerations for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-##
-tolerations: []
-
-## Pod security context
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-##
-podSecurityContext:
-  enabled: true
-  fsGroup: 1001
-
-## HashiCorp Consul  container security context
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-##
-containerSecurityContext:
-  enabled: true
-  runAsUser: 1001
-
-## HashiCorp Consul container's resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-##
-resources:
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  limits: {}
-  #   memory: 256Mi
-  #   cpu: 100m
-  requests: {}
-  #   memory: 256Mi
-  #   cpu: 100m
-
-## HashiCorp Consul container's liveness and readiness probes
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-##
-livenessProbe:
-  enabled: true
-  initialDelaySeconds: 30
-  periodSeconds: 10
-  timeoutSeconds: 5
-  failureThreshold: 6
-  successThreshold: 1
-readinessProbe:
-  enabled: true
-  initialDelaySeconds: 5
-  periodSeconds: 10
-  timeoutSeconds: 5
-  failureThreshold: 6
-  successThreshold: 1
-
-## Custom Liveness probe
-##
-customLivenessProbe: {}
-
-## Custom Rediness probe
-##
-customReadinessProbe: {}
-
-## Enable persistence using Persistent Volume Claims
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
-##
-persistence:
-  ## If true, use a Persistent Volume Claim, If false, use emptyDir
-  ##
-  enabled: true
-  ## Persistent Volume Storage Class
-  ## If defined, storageClassName: <storageClass>
-  ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClassName spec is
-  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-  ##   GKE, AWS & OpenStack)
-  ##
-  # storageClass: "-"
-  ## Persistent Volume Claim annotations
-  ##
-  annotations: {}
-  ## Persistent Volume Access Mode
-  ##
-  accessModes:
-    - ReadWriteOnce
-  ## Persistent Volume size
-  ##
-  size: 8Gi
-
-## Init containers parameters:
-## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the podSecurityContext section.
-##
-volumePermissions:
-  enabled: false
-  image:
-    registry: docker.io
-    repository: bitnami/bitnami-shell
-    tag: "10"
-    pullPolicy: Always
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-  ## Init container' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-    requests: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-
-## HashiCorp Consul Pod Disruption Budget configuration
-## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
-##
-pdb:
-  create: false
-  ## Min number of pods that must still be available after the eviction
-  ##
-  minAvailable: 1
-  ## Max number of pods that can be unavailable after the eviction
-  ##
-  # maxUnavailable: 1
-
+extraEnvVarsSecret: ""
 ## HashiCorp Consul container ports to open
+## @param containerPorts.http Port to open for HTTP in Consul
+## @param containerPorts.dns Port to open for DNS server in Consul
+## @param containerPorts.rpc Port to open for RPC in Consul
+## @param containerPorts.rpcServer Port to open for RPC Server in Consul
+## @param containerPorts.serfLAN Port to open for Serf LAN in Consul
 ##
 containerPorts:
   http: 8500
@@ -362,91 +207,330 @@ containerPorts:
   rpcServer: 8300
   serfLAN: 8301
 
+## @param lifecycleHooks Add lifecycle hooks to the deployment
+##
+lifecycleHooks: {}
+
+## @section Statefulset parameters
+##
+
+## @param replicaCount Number of HashiCorp Consul replicas to deploy
+##
+replicaCount: 3
+## @param updateStrategy.type Update strategy type for the HashiCorp Consul statefulset
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+##
+updateStrategy:
+  type: RollingUpdate
+## @param podManagementPolicy StatefulSet pod management policy
+##
+podManagementPolicy: Parallel
+## @param podAnnotations Additional pod annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAffinityPreset: ""
+## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAntiAffinityPreset: soft
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+##
+nodeAffinityPreset:
+  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ##
+  type: ""
+  ## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set.
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+## @param affinity Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+##
+affinity: {}
+## @param nodeSelector Node labels for pod assignment
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+## @param tolerations Tolerations for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+## Pod security context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param podSecurityContext.enabled Enable security context for HashiCorp Consul pods
+## @param podSecurityContext.fsGroup Group ID for the volumes of the pod
+##
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
+## Container security context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+## @param containerSecurityContext.enabled HashiCorp Consul Container securityContext
+## @param containerSecurityContext.runAsUser User ID for the HashiCorp Consul container
+## @param containerSecurityContext.runAsNonRoot Force the container to be run as non root
+## @param containerSecurityContext.allowPrivilegeEscalation Force the child process to be run as nonprivilege
+##
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
+  runAsNonRoot: true
+  allowPrivilegeEscalation: false
+## Container's resource requests and limits
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## We usually recommend not to specify default resources and to leave this as a conscious
+## choice for the user. This also increases chances charts run on environments with little
+## resources, such as Minikube. If you do want to specify resources, uncomment the following
+## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+## @param resources.limits The resources limits for HashiCorp Consul containers
+## @param resources.requests The requested resources for HashiCorp Consul containers
+##
+resources:
+  ## Example:
+  ## limits:
+  ##    cpu: 100m
+  ##    memory: 128Mi
+  ##
+  limits: {}
+  ## Examples:
+  ## requests:
+  ##    cpu: 100m
+  ##    memory: 128Mi
+  ##
+  requests: {}
+## Configure extra options for HashiCorp Consul containers' liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param livenessProbe.enabled Enable livenessProbe
+## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+## @param livenessProbe.periodSeconds Period seconds for livenessProbe
+## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
+## @param livenessProbe.successThreshold Success threshold for livenessProbe
+##
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+## @param readinessProbe.enabled Enable readinessProbe
+## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+## @param readinessProbe.periodSeconds Period seconds for readinessProbe
+## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
+## @param readinessProbe.successThreshold Success threshold for readinessProbe
+##
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+## Configure extra options for startup probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 0
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 60
+## @param customLivenessProbe Override default liveness probe
+##
+customLivenessProbe: {}
+## @param customReadinessProbe Override default readiness probe
+##
+customReadinessProbe: {}
+## @param customStartupProbe Override default startup probe
+##
+customStartupProbe: {}
+## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for Hashicorp Consul container
+##
+extraVolumeMounts: []
+## @param extraVolumes Optionally specify extra list of additional volumes for Hashicorp Consul container
+##
+extraVolumes: []
+## @param initContainers Add additional init containers to the Hashicorp Consul pods
+##
+initContainers: []
+## @param sidecars Add additional sidecar containers to the Hashicorp Consul pods
+##
+sidecars: []
+## HashiCorp Consul Pod Disruption Budget configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+##
+pdb:
+  ## @param pdb.create Enable/disable a Pod Disruption Budget creation
+  ##
+  create: false
+  ## @param pdb.minAvailable Minimum number of pods that must still be available after the eviction
+  ##
+  minAvailable: 1
+  ## @param pdb.maxUnavailable Max number of pods that can be unavailable after the eviction
+  ##
+  maxUnavailable: ""
+
+## @section Exposure parameters
+##
+
 ## HashiCorp Consul UI service parameters
 ##
 service:
-  enabled: true
-  ## HashiCorp Consul UI svc port
+  ## @param service.enabled Use a service to access HashiCorp Consul Ui
   ##
-  port: 80
-  ## Service type
+  enabled: true
+  ## @param service.ports.http HashiCorp Consul UI svc port
+  ##
+  ports:
+    http: 80
+  ## @param service.type HashiCorp Consul UI Service Type
   ##
   type: ClusterIP
   ## Specify the nodePort value for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ## @param service.nodePorts.http Node port for HashiCorp Consul UI
   ##
-  nodePort: ""
+  nodePorts:
+    http: ""
+  ## @param service.clusterIP Consul service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
+  ##
+  clusterIP: ""
+  ## @param service.loadBalancerIP HashiCorp Consul UI service Load Balancer IP
   ## Set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
-  # loadBalancerIP:
+  loadBalancerIP: ""
+  ## @param service.loadBalancerSourceRanges Consul service Load Balancer sources
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
   ## Provide any additional annotations which may be required. This can be used to
   ## set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ## @param service.annotations Annotations for HashiCorp Consul UI service
   ##
   annotations: {}
-
+  ## @param service.externalTrafficPolicy Service external traffic policy
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
+  ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
+  ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  ## If "ClientIP", consecutive client requests will be directed to the same Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
 ## Configure the ingress resource that allows you to access the Consul UI
-## ref: http://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
-  ## Set to true to enable ingress record generation
+  ## @param ingress.enabled Enable ingress resource for Management console
   ##
   enabled: false
-
-  ## Path for the default host
+  ## @param ingress.path Path for the default host
   ##
   path: /
-
-  ## Override API Version (automatically detected if not set)
+  ## @param ingress.apiVersion Override API Version (automatically detected if not set)
   ##
-  apiVersion:
-
-  ## Ingress Path type
+  apiVersion: ""
+  ## @param ingress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific
-
-  ## Set this to true in order to add the corresponding annotations for cert-manager
+  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
+  ## certManager: false
   ##
-  certManager: false
 
-  ## When the ingress is enabled, a host pointing to this will be created
+  ## @param ingress.hostname Default host for the ingress resource, a host pointing to this will be created
   ##
   hostname: consul-ui.local
-
-  ## Ingress annotations done as key:value pairs
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
-  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
-
-  ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
-  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
+  ## @param ingress.ingressClassName Set the ingerssClassName on the ingress record for k8s 1.18+
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
+  ## @param ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname | trunc 63 | trimSuffix "-" }}
   ## or a custom one if you use the tls.existingSecret parameter
   ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
-  ##
-  tls: false
+  ## Example:
   ## existingSecret: name-of-existing-secret
   ##
-
-  ## The list of additional hostnames to be covered with this ingress record.
+  tls: false
+  ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
   ## extraHosts:
   ## - name: consul-ui.local
   ##   path: /
   ##
-
-  ## The tls configuration for additional hostnames to be covered with this ingress record.
+  extraHosts: []
+  ## @param ingress.extraPaths Any additional arbitrary paths that may need to be added to the ingress under the main host.
+  ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
+  ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+  ##
+  selfSigned: false
+  ## @param ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## extraTls:
   ## - hosts:
   ##     - consul-ui.local
   ##   secretName: rconsul-ui.local-tls
   ##
-
-  ## If you're providing your own certificates, please use this to add the certificates as secrets
+  extraTls: []
+  ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or
   ## -----BEGIN RSA PRIVATE KEY-----
   ##
@@ -455,95 +539,231 @@ ingress:
   ##
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
-  ##
-  secrets: []
+  ## Example:
   ## - name: consul-ui.local-tls
   ##   key:
   ##   certificate:
   ##
+  secrets: []
+  ## @param ingress.existingSecret It is you own the certificate as secret.
+  existingSecret: ""
+  ## @param ingress.extraRules Additional rules to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g:
+  ## extraRules:
+  ## - host: example.local
+  ##     http:
+  ##       path: /
+  ##       backend:
+  ##         service:
+  ##           name: example-svc
+  ##           port:
+  ##             name: http
+  ##
+  extraRules: []
 
-## Prometheus Exporter / Metrics
+## @section Persistence parameters
 ##
-metrics:
+
+## Enable persistence using Persistent Volume Claims
+## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+persistence:
+  ## @param persistence.enabled Enable HashiCorp Consul data persistence using PVC, use a Persistent Volume Claim, If false, use emptyDir
+  ##
+  enabled: true
+  ## @param persistence.storageClass Persistent Volume storage class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  storageClass: ""
+  ## @param persistence.annotations Persistent Volume Claim annotations
+  ##
+  annotations: {}
+  ## @param persistence.accessModes Persistent Volume Access Mode
+  ##
+  accessModes:
+    - ReadWriteOnce
+  ## @param persistence.size PVC Storage Request for HashiCorp Consul data volume
+  ##
+  size: 8Gi
+
+## @section Volume Permissions parameters
+##
+
+## Init containers parameters:
+## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the podSecurityContext section.
+##
+volumePermissions:
+  ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume
+  ##
   enabled: false
-  ## Bitnami HashiCorp Consul Prometheus Exporter image
-  ## ref: https://hub.docker.com/r/bitnami/consul-exporter/tags/
+  ## Bitnami Shell image
+  ## ref: https://hub.docker.com/r/bitnami/bitnami-shell/tags/
+  ## @param volumePermissions.image.registry Bitnami Shell image registry
+  ## @param volumePermissions.image.repository Bitnami Shell image repository
+  ## @param volumePermissions.image.tag Bitnami Shell image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.digest Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param volumePermissions.image.pullPolicy Bitnami Shell image pull policy
+  ## @param volumePermissions.image.pullSecrets Bitnami Shell image pull secrets
   ##
   image:
     registry: docker.io
-    repository: bitnami/consul-exporter
-    tag: 0.7.1-debian-10-r213
+    repository: bitnami/bitnami-shell
+    tag: 11-debian-11-r57
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
     ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
+    pullSecrets: []
+  ## Init container' resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param volumePermissions.resources.limits The resources limits for the container
+  ## @param volumePermissions.resources.requests The requested resources for the container
+  ##
+  resources:
+    ## Example:
+    ## limits:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    ##
+    limits: {}
+    ## Examples:
+    ## requests:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    ##
+    requests: {}
+
+## @section Metrics parameters
+##
+
+## Prometheus Exporter / Metrics
+##
+metrics:
+  ## @param metrics.enabled Start a side-car prometheus exporter
+  ##
+  enabled: false
+  ## Bitnami HashiCorp Consul Prometheus Exporter image
+  ## ref: https://hub.docker.com/r/bitnami/consul-exporter/tags/
+  ## @param metrics.image.registry HashiCorp Consul Prometheus Exporter image registry
+  ## @param metrics.image.repository HashiCorp Consul Prometheus Exporter image repository
+  ## @param metrics.image.tag HashiCorp Consul Prometheus Exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.digest HashiCorp Consul Prometheus Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param metrics.image.pullPolicy HashiCorp Consul Prometheus Exporter image pull policy
+  ## @param metrics.image.pullSecrets HashiCorp Consul Prometheus Exporter image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/consul-exporter
+    tag: 0.9.0-debian-11-r0
+    digest: ""
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Container security context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param metrics.containerSecurityContext.enabled HashiCorp Consul Prometheus Exporter securityContext
+  ## @param metrics.containerSecurityContext.runAsUser User ID for the HashiCorp Consul Prometheus Exporter
+  ## @param metrics.containerSecurityContext.runAsNonRoot Force the container to be run as non root
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
   ## Consul Prometheus exporter service type
   ##
   service:
+    ## @param metrics.service.type Kubernetes Service type
+    ##
     type: ClusterIP
-    ## Provide any additional annotations which may be required. This can be used to
-    ## set the LoadBalancer service type to internal only.
+    ## @param metrics.service.loadBalancerIP Service Load Balancer IP
+    ## Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank
+    ##
+    loadBalancerIP: ""
+    ## @param metrics.service.annotations [object] Provide any additional annotations which may be required.
+    ## This can be used to set the LoadBalancer service type to internal only.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
-    ## Use serviceLoadBalancerIP to request a specific static IP,
-    ## otherwise leave blank
-    # loadBalancerIP:
     annotations:
       prometheus.io/scrape: "true"
       prometheus.io/port: "9107"
-  ## Metrics exporter pod Annotation and Labels
+  ## @param metrics.podAnnotations [object] Metrics exporter pod Annotation and Labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9107"
   ## HashiCorp Consul Prometheus exporter resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param metrics.resources.limits The resources limits for the container
+  ## @param metrics.resources.requests The requested resources for the container
   ##
   resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## Example:
+    ## limits:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    ##
     limits: {}
-    #   cpu: 100m
-    #   memory: 128Mi
+    ## Examples:
+    ## requests:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    ##
     requests: {}
-    #   cpu: 100m
-    #   memory: 128Mi
   ## Prometheus Service Monitor
   ## ref: https://github.com/coreos/prometheus-operator
   ##
   serviceMonitor:
-    ## If the operator is installed in your cluster, set to true to create a Service Monitor Entry
+    ## @param metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator, set to true to create a Service Monitor Entry
     ##
     enabled: false
-    ## Specify the namespace in which the serviceMonitor resource will be created
+    ## @param metrics.serviceMonitor.namespace The namespace in which the ServiceMonitor will be created
     ##
-    # namespace: ""
-    ## Specify the interval at which metrics should be scraped
+    namespace: ""
+    ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped
     ##
     interval: 30s
-    ## Specify the timeout after which the scrape is ended
+    ## @param metrics.serviceMonitor.scrapeTimeout The timeout after which the scrape is ended
     ##
-    # scrapeTimeout: 30s
-    ## Specify Metric Relabellings to add to the scrape endpoint
+    scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.metricRelabelings Metrics relabelings to add to the scrape endpoint
     ##
-    # relabellings:
-    ## Specify honorLabels parameter to add the scrape endpoint
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
     ##
     honorLabels: false
-    ## Specify the release for ServiceMonitor. Sometimes it should be custom for prometheus operator to work
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
     ##
-    # release: ""
-    ## Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with
+    jobLabel: ""
+    ## @param metrics.serviceMonitor.selector ServiceMonitor selector labels
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+    ##
+    ## selector:
+    ##   prometheus: my-prometheus
+    ##
+    selector: {}
+    ## DEPRECATED: metrics.serviceMonitor.additionalLabels will be removed in a future release, plese use metrics.serviceMonitor.labels instead
+    ## @param metrics.serviceMonitor.labels Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
     ##
-    additionalLabels: {}
-
-## Array with extra yaml to deploy with the chart. Evaluated as a template
-##
-extraDeploy: []
+    labels: {}

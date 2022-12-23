@@ -1,131 +1,191 @@
+## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
 ##
-# global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+
+## @section Common parameters
+
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion: ""
+## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname template
+##
+fullnameOverride: ""
+## @param commonLabels Add labels to all the deployed resources
+##
+commonLabels: {}
+## @param commonAnnotations Add annotations to all the deployed resources
+##
+commonAnnotations: {}
+## @param clusterDomain Kubernetes Cluster Domain
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+
+## @section phpMyAdmin parameters
 
 ## Bitnami WordPress image version
 ## ref: https://hub.docker.com/r/bitnami/phpmyadmin/tags/
+## @param image.registry phpMyAdmin image registry
+## @param image.repository phpMyAdmin image repository
+## @param image.tag phpMyAdmin image tag (immutable tags are recommended)
+## @param image.digest phpMyAdmin image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param image.pullPolicy Image pull policy
+## @param image.pullSecrets Specify docker-registry secret names as an array
+## @param image.debug Enable phpmyadmin image debug mode
 ##
 image:
   registry: docker.io
   repository: bitnami/phpmyadmin
-  tag: 5.1.0-debian-10-r1
+  tag: 5.2.0-debian-11-r58
+  digest: ""
   ## Specify a imagePullPolicy
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## Example:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
   ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
-
-## Force target Kubernetes version (using Helm capabilites if not set)
-##
-kubeVersion:
-
-## String to partially override common.names.fullname template (will maintain the release name)
-##
-# nameOverride:
-
-## String to fully override common.names.fullname template
-##
-# fullnameOverride:
-
-## Add labels to all the deployed resources
-##
-commonLabels: {}
-
-## Add annotations to all the deployed resources
-##
-commonAnnotations: {}
-
-## Kubernetes Cluster Domain
-##
-clusterDomain: cluster.local
-
-## Extra objects to deploy (value evaluated as a template)
-##
-extraDeploy: []
-
-## Command and args for running the container (set to default if not set). Use array form
+  pullSecrets: []
+  ## Enable debug mode
+  ##
+  debug: false
+## @param command Override default container command (useful when using custom images)
 ##
 command: []
+## @param args Override default container args (useful when using custom images)
+##
 args: []
+## @param lifecycleHooks for the phpmyadmin container(s) to automate configuration before or after startup
+##
+lifecycleHooks: {}
+## @param extraEnvVars Extra environment variables to be set on PhpMyAdmin container
+## For example:
+## extraEnvVars:
+## - name: PHP_UPLOAD_MAX_FILESIZE
+##   value: "80M"
+##
+extraEnvVars: []
+## @param extraEnvVarsCM Name of a existing ConfigMap containing extra env vars
+##
+extraEnvVarsCM: ""
+## @param extraEnvVarsSecret Name of a existing Secret containing extra env vars
+##
+extraEnvVarsSecret: ""
 
-## Deployment pod host aliases
+## @section phpMyAdmin deployment parameters
+
+## @param hostAliases [array] Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases:
-  # Necessary for apache-exporter to work
+  ## Necessary for apache-exporter to work
+  ##
   - ip: "127.0.0.1"
     hostnames:
       - "status.localhost"
-
-## An array to add extra env vars to configure phpMyAdmin
-## For example:
-# extraEnvVars:
-# - name: PHP_UPLOAD_MAX_FILESIZE
-#   value: "80M"
-extraEnvVars: {}
-
-## Name of a ConfigMap containing extra env vars
-##
-extraEnvVarsCM:
-
-## Secret with extra environment variables
-##
-extraEnvVarsSecret:
-
 ## phpMyAdmin container ports to open
+## @param containerPorts.http HTTP port to expose at container level
+## @param containerPorts.https HTTPS port to expose at container level
 ##
 containerPorts:
   http: 8080
   https: 8443
-
-## Strategy to use to update Pods
+## @param updateStrategy.type Strategy to use to update Pods
 ##
 updateStrategy:
   ## StrategyType
   ## Can be set to RollingUpdate or OnDelete
   ##
   type: RollingUpdate
-
 ## phpMyAdmin pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param podSecurityContext.enabled Enable phpMyAdmin pods' Security Context
+## @param podSecurityContext.fsGroup User ID for the container
 ##
 podSecurityContext:
   enabled: true
   fsGroup: 1001
-
 ## phpMyAdmin containers' Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+## @param containerSecurityContext.enabled Enable phpMyAdmin containers' Security Context
+## @param containerSecurityContext.runAsUser Group ID for the volumes of the pod
+## @param containerSecurityContext.runAsNonRoot Set phpmyadmin container's Security Context runAsNonRoot
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
-
+  runAsNonRoot: true
 ## phpMyAdmin containers' resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources
+## ref: https://kubernetes.io/docs/user-guide/compute-resources
+## We usually recommend not to specify default resources and to leave this as a conscious
+## choice for the user. This also increases chances charts run on environments with little
+## resources, such as Minikube. If you do want to specify resources, uncomment the following
+## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+## @param resources.limits The resources limits for the PhpMyAdmin container
+## @param resources.requests The requested resources for the PhpMyAdmin container
 ##
 resources:
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## Example:
+  ## limits:
+  ##    cpu: 100m
+  ##    memory: 128Mi
   limits: {}
-  #  cpu: 100m
-  #  memory: 128Mi
+  ## Examples:
+  ## requests:
+  ##    cpu: 100m
+  ##    memory: 128Mi
   requests: {}
-  #  cpu: 100m
-  #  memory: 128Mi
-
-## phpMyAdmin containers' liveness and readiness probes. Evaluated as a template.
+## phpMyAdmin containers' startup probe. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.httpGet.path Request path for startupProbe
+## @param startupProbe.httpGet.port Port for startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 30
+  timeoutSeconds: 30
+  periodSeconds: 10
+  successThreshold: 1
+  failureThreshold: 6
+  httpGet:
+    path: /
+    port: http
+## phpMyAdmin containers' liveness probe. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+## @param livenessProbe.enabled Enable livenessProbe
+## @param livenessProbe.httpGet.path Request path for livenessProbe
+## @param livenessProbe.httpGet.port Port for livenessProbe
+## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+## @param livenessProbe.periodSeconds Period seconds for livenessProbe
+## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
+## @param livenessProbe.successThreshold Success threshold for livenessProbe
 ##
 livenessProbe:
   enabled: true
@@ -137,6 +197,17 @@ livenessProbe:
   httpGet:
     path: /
     port: http
+## phpMyAdmin containers' readiness probes. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+## @param readinessProbe.enabled Enable readinessProbe
+## @param readinessProbe.httpGet.path Request path for readinessProbe
+## @param readinessProbe.httpGet.port Port for readinessProbe
+## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+## @param readinessProbe.periodSeconds Period seconds for readinessProbe
+## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
+## @param readinessProbe.successThreshold Success threshold for readinessProbe
+##
 readinessProbe:
   enabled: true
   initialDelaySeconds: 30
@@ -147,84 +218,82 @@ readinessProbe:
   httpGet:
     path: /
     port: http
-
-## Custom Liveness probes for phpMyAdmin
+## @param customStartupProbe Override default startup probe
+##
+customStartupProbe: {}
+## @param customLivenessProbe Override default liveness probe
 ##
 customLivenessProbe: {}
-
-## Custom Rediness probes phpMyAdmin
+## @param customReadinessProbe Override default readiness probe
 ##
 customReadinessProbe: {}
-
-## Pod extra labels
+## @param podLabels Extra labels for PhpMyAdmin pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
-
-## Annotations for server pods.
+## @param podAnnotations Annotations for PhpMyAdmin pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
-
-## Pod affinity preset
+## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
 ##
 podAffinityPreset: ""
-
-## Pod anti-affinity preset
+## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
 ##
 podAntiAffinityPreset: soft
-
 ## Node affinity preset
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-## Allowed values: soft, hard
 ##
 nodeAffinityPreset:
-  ## Node affinity type
-  ## Allowed values: soft, hard
+  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ##
   type: ""
-  ## Node label key to match
+  ## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set.
   ## E.g.
   ## key: "kubernetes.io/e2e-az-name"
   ##
   key: ""
-  ## Node label values to match
+  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.
   ## E.g.
   ## values:
   ##   - e2e-az1
   ##   - e2e-az2
   ##
   values: []
-
-## Affinity for pod assignment. Evaluated as a template.
+## @param affinity Affinity for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
-
-## Node labels for pod assignment. Evaluated as a template.
+## @param nodeSelector Node labels for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-
-## Tolerations for pod assignment. Evaluated as a template.
+## @param tolerations Tolerations for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
-## Extra volumes to add to the deployment
+## @param priorityClassName phpmyadmin pods' priorityClassName
+##
+priorityClassName: ""
+## @param schedulerName Name of the k8s scheduler (other than default)
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
+## @param extraVolumes Optionally specify extra list of additional volumes for PhpMyAdmin pods
 ##
 extraVolumes: []
-
-## Extra volume mounts to add to the container
+## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for PhpMyAdmin container(s)
 ##
 extraVolumeMounts: []
-
-## Add init containers to the Magento pods.
+## @param initContainers Add init containers to the PhpMyAdmin pods
 ## Example:
 ## initContainers:
 ##   - name: your-image-name
@@ -234,9 +303,8 @@ extraVolumeMounts: []
 ##       - name: portname
 ##         containerPort: 1234
 ##
-initContainers: {}
-
-## Add sidecars to the Magento pods.
+initContainers: []
+## @param sidecars Add sidecar containers to the PhpMyAdmin pods
 ## Example:
 ## sidecars:
 ##   - name: your-image-name
@@ -246,83 +314,119 @@ initContainers: {}
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars: {}
+sidecars: []
+
+## @section Traffic Exposure parameters
 
 ## Service configuration
 ##
 service:
-  ## Service type.
+  ## @param service.type Kubernetes Service type
   ##
   type: ClusterIP
-  ## HTTP Port
+  ## @param service.ports.http Service HTTP port
+  ## @param service.ports.https Service HTTPS port
   ##
-  port: 80
-  ## HTTPS Port
-  ##
-  httpsPort: 443
-  ## Specify the nodePort values for the LoadBalancer and NodePort service types.
+  ports:
+    http: 80
+    https: 443
+  ## Specify the nodePort values for the LoadBalancer and NodePort service types
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ## @param service.nodePorts.http Kubernetes http node port
+  ## @param service.nodePorts.https Kubernetes https node port
   ##
   nodePorts:
     http: ""
     https: ""
-  ## Service clusterIP.
+  ## @param service.clusterIP PhpMyAdmin service clusterIP IP
+  ## e.g:
+  ## clusterIP: None
   ##
-  # clusterIP: None
-  ## loadBalancerIP for the phpMyAdmin Service (optional, cloud specific)
-  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  clusterIP: ""
+  ## @param service.loadBalancerIP Load balancer IP for the phpMyAdmin Service (optional, cloud specific)
+  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
-  # loadBalancerIP:
-  ## Load Balancer sources
+  loadBalancerIP: ""
+  ## @param service.loadBalancerSourceRanges Addresses that are allowed when service is LoadBalancer
   ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ## Example:
   ## loadBalancerSourceRanges:
   ##   - 10.10.10.0/24
   ##
   loadBalancerSourceRanges: []
-  ## Enable client source IP preservation
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ## @param service.externalTrafficPolicy Enable client source IP preservation
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
-  ## Provide any additional annotations which may be required (evaluated as a template).
+  ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
+  ## @param service.annotations Provide any additional annotations that may be required for the PhpMyAdmin service
   ##
   annotations: {}
+  ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  ## If "ClientIP", consecutive client requests will be directed to the same Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
 
 ## Ingress configuration
 ##
 ingress:
-  ## Set to true to enable ingress record generation
+  ## @param ingress.enabled Set to true to enable ingress record generation
   ##
   enabled: false
-
-  ## Set this to true in order to add the corresponding annotations for cert-manager
+  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
-  certManager: false
+  apiVersion: ""
+  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
+  ## certManager: false
+  ##
 
-  ## When the ingress is enabled, a host pointing to this will be created
+  ## @param ingress.hostname When the ingress is enabled, a host pointing to this will be created
   ##
   hostname: phpmyadmin.local
-
-  ## Ingress Path type
+  ## @param ingress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific
-
-  ## Ingress annotations done as key:value pairs
+  ## @param ingress.path Default path for the ingress record
+  ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+  ##
+  path: /
+  ## @param ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+  ## e.g:
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
-  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
-
-  ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
+  ## @param ingress.tls Enable TLS configuration for the hostname defined at `ingress.hostname` parameter
   ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
   ## You can use the ingress.secrets parameter to create this TLS secret, relay on cert-manager to create it, or
   ## let the chart create self-signed certificates for you
   ##
   tls: false
-
-  ## The list of additional hostnames to be covered with this ingress record.
+  ## @param ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
   ## Example:
   ## extraHosts:
@@ -330,8 +434,7 @@ ingress:
   ##     path: /
   ##
   extraHosts: []
-
-  ## The tls configuration for additional hostnames to be covered with this ingress record.
+  ## @param ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## Example:
   ## extraTls:
@@ -340,9 +443,9 @@ ingress:
   ##   secretName: phpmyadmin.local-tls
   ##
   extraTls: []
-
-  ## If you're providing your own certificates, please use this to add the certificates as secrets
-  ## key and certificate should start with -----BEGIN CERTIFICATE----- or -----BEGIN RSA PRIVATE KEY-----
+  ## @param ingress.secrets If you're providing your own certificates and want to manage the secret via helm,
+  ## please use this to add the certificates as secrets key and certificate should start with
+  ## -----BEGIN CERTIFICATE----- or -----BEGIN RSA PRIVATE KEY-----
   ## name should line up with a secretName set further up
   ##
   ## If it is not set and you're using cert-manager, this is unneeded, as it will create the secret for you
@@ -357,129 +460,298 @@ ingress:
   ##     certificate: ""
   ##
   secrets: []
+  ## @param ingress.existingSecretName If you're providing your own certificate and want to manage the secret yourself,
+  ## please provide the name of the secret with this parameter. This secret will then be used for tls termination.
+  ## It has higher priority than the cert-manager or the generation of the certificate from the chart.
+  ##
+  ## Example:
+  ## existingSecretName: "byo-phpmyadmin-tls"
+  ##
+  existingSecretName: ""
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
+  ## @param ingress.extraRules Additional rules to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g:
+  ## extraRules:
+  ## - host: phpmyadmin.local
+  ##     http:
+  ##       path: /
+  ##       backend:
+  ##         service:
+  ##           name: phpmyadmin-svc
+  ##           port:
+  ##             name: http
+  ##
+  extraRules: []
+
+## @section Database parameters
+
+## Database configuration
+##
+db:
+  ## @param db.allowArbitraryServer Enable connection to arbitrary MySQL server
+  ## If you do not want the user to be able to specify an arbitrary MySQL server at login time, set this to false
+  ##
+  allowArbitraryServer: true
+  ## @param db.port Database port to use to connect
+  ##
+  port: 3306
+  ## @param db.chartName Database suffix if included in the same release
+  ## If you are deploying phpMyAdmin as part of a release and the database is part
+  ## of the release, you can pass a suffix that will be used to find the database
+  ## in releasename-dbSuffix. Please note that this setting precedes db.host
+  ## e.g:
+  ## chartName: mariadb
+  ##
+  chartName: ""
+  ## @param db.host Database Hostname. Ignored when `db.chartName` is set.
+  ## e.g:
+  ## host: foo
+  ##
+  host: ""
+  ## @param db.bundleTestDB Deploy a MariaDB instance for testing purposes
+  ##
+  bundleTestDB: false
+  ## @param db.enableSsl Enable SSL for the connection between phpMyAdmin and the database
+  ##
+  enableSsl: false
+  ssl:
+    ## @param db.ssl.clientKey Client key file when using SSL
+    ##
+    clientKey: |-
+    ## @param db.ssl.clientCertificate Client certificate file when using SSL
+    ##
+    clientCertificate: |-
+    ## @param db.ssl.caCertificate CA file when using SSL
+    ##
+    caCertificate: |-
+    ## @param db.ssl.ciphers List of allowable ciphers for connections when using SSL
+    ##
+    ciphers: []
+    ## @param db.ssl.verify Enable SSL certificate validation
+    ##
+    verify: true
+## @param mariadb MariaDB chart configuration
+## https://github.com/bitnami/charts/blob/main/bitnami/mariadb/values.yaml
+##
+mariadb: {}
+
+## @section Metrics parameters
 
 ## Prometheus Exporter / Metrics
 ##
 metrics:
+  ## @param metrics.enabled Start a side-car prometheus exporter
+  ##
   enabled: false
+  ## @param metrics.image.registry Apache exporter image registry
+  ## @param metrics.image.repository Apache exporter image repository
+  ## @param metrics.image.tag Apache exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.digest Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param metrics.image.pullPolicy Image pull policy
+  ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
+  ##
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r313
+    tag: 0.11.0-debian-11-r61
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
     ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-
-  ## Metrics exporter resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    pullSecrets: []
+  ## @param metrics.resources Metrics exporter resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
-
   ## Prometheus Exporter service configuration
   ##
   service:
+    ## @param metrics.service.type Prometheus metrics service type
+    ##
     type: ClusterIP
+    ## @param metrics.service.port Prometheus metrics service port
+    ##
     port: 9117
-    ## Annotations for Prometheus Exporter pods. Evaluated as a template.
+    ## @param metrics.service.annotations [object] Annotations for Prometheus metrics service
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-    ##
-    ##
-    ## Use serviceLoadBalancerIP to request a specific static IP,
-    ## otherwise leave blank
-    # loadBalancerIP:
     annotations:
       prometheus.io/scrape: "true"
       prometheus.io/port: "{{ .Values.metrics.service.port }}"
+    ## @param metrics.service.clusterIP phpmyadmin service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param metrics.service.loadBalancerIP Load Balancer IP if the Prometheus metrics server type is `LoadBalancer`
+    ## Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank
+    ##
+    loadBalancerIP: ""
+    ## @param metrics.service.loadBalancerSourceRanges phpmyadmin service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param metrics.service.externalTrafficPolicy phpmyadmin service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param metrics.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
 
   ## Prometheus Service Monitor
   ## ref: https://github.com/coreos/prometheus-operator
   ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
   ##
   serviceMonitor:
-    ## If the operator is installed in your cluster, set to true to create a Service Monitor Entry
+    ## @param metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator
     ##
     enabled: false
-    ## Specify the namespace in which the serviceMonitor resource will be created
-    # namespace: ""
-    ## The name of the label on the target service to use as the job name in prometheus
-    # jobLabel:
-    ## Specify the interval at which metrics should be scraped
+    ## @param metrics.serviceMonitor.namespace Specify the namespace in which the serviceMonitor resource will be created
+    ##
+    namespace: ""
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: ""
+    ## @param metrics.serviceMonitor.interval Specify the interval at which metrics should be scraped
     ##
     interval: 30s
-    ## Specify the timeout after which the scrape is ended
-    # scrapeTimeout: 30s
-    ## Relabeling (before scrape)
+    ## @param metrics.serviceMonitor.scrapeTimeout Specify the timeout after which the scrape is ended
+    ## e.g:
+    ## scrapeTimeout: 30s
+    ##
+    scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
-    # relabellings:
-    ## Specify honorLabels parameter to add the scrape endpoint
-    ##
-    ## Metric relabeling
+    relabelings: []
+    ## @param metrics.serviceMonitor.metricRelabelings Specify Metric Relabelings to add to the scrape endpoint
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
-    # metricRelabelings:
-    ## Specify honorLabels parameter to add the scrape endpoint
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
     ##
     honorLabels: false
-    ## Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with
-    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+    ## @param metrics.serviceMonitor.selector ServiceMonitor selector labels
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ##
-    additionalLabels: {}
+    ## selector:
+    ##   prometheus: my-prometheus
+    ##
+    selector: {}
 
-## Database configuration
+## @section NetworkPolicy parameters
+
+## Add networkpolicies
 ##
-db:
-  ## If you do not want the user to be able to specify an arbitrary MySQL server
-  ## at login time, set this to false
+networkPolicy:
+  ## @param networkPolicy.enabled Enable network policies
+  ## If ingress.enabled or metrics.enabled are true, configure networkPolicy.ingress and networkPolicy.metrics selectors respectively to allow communication
   ##
-  allowArbitraryServer: true
-
-  ## Database port
+  enabled: false
+  ## @param networkPolicy.metrics.enabled Enable network policy for metrics (prometheus)
+  ## @param networkPolicy.metrics.namespaceSelector Monitoring namespace selector labels. These labels will be used to identify the prometheus' namespace.
+  ## @param networkPolicy.metrics.podSelector Monitoring pod selector labels. These labels will be used to identify the Prometheus pods.
   ##
-  port: 3306
-
-  ## If you are deploying phpMyAdmin as part of a release and the database is part
-  ## of the release, you can pass a suffix that will be used to find the database
-  ## in releasename-dbSuffix. Please note that this setting precedes db.host
-  ##
-  # chartName: mariadb
-
-  ## Database Hostname. Ignored when db.chartName is set.
-  ##
-  # host: foo
-
-  ## If you want to test phpMyAdmin, you can set it to bundle a MariaDB
-  ## instance
-  ##
-  bundleTestDB: false
-
-  ## Whether to enable SSL for the connection between phpMyAdmin and the MySQL server to secure the connection
-  ##
-  enableSsl: false
-  ssl:
-    ## Client key file when using SSL
+  metrics:
+    enabled: false
+    ## e.g:
+    ## podSelector:
+    ##   label: monitoring
     ##
-    clientKey: |-
-    ## Client certificate file when using SSL
+    podSelector: {}
+    ## e.g:
+    ## namespaceSelector:
+    ##   label: monitoring
     ##
-    clientCertificate: |-
-    ## CA file when using SSL
+    namespaceSelector: {}
+  ## @param networkPolicy.ingress.enabled Enable network policy for Ingress Proxies
+  ## @param networkPolicy.ingress.namespaceSelector Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.
+  ## @param networkPolicy.ingress.podSelector Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.
+  ##
+  ingress:
+    enabled: false
+    ## e.g:
+    ## podSelector:
+    ##   label: ingress
     ##
-    caCertificate: |-
-    ## List of allowable ciphers for connections when using SSL
+    podSelector: {}
+    ## e.g:
+    ## namespaceSelector:
+    ##   label: ingress
     ##
-    # ciphers:
-    ## Enable SSL certificate validation
+    namespaceSelector: {}
+  ## @param networkPolicy.ingressRules.backendOnlyAccessibleByFrontend Enable ingress rule that makes the backend (mariadb) only accessible by phpMyAdmin's pods.
+  ## @param networkPolicy.ingressRules.customBackendSelector Backend selector labels. These labels will be used to identify the backend pods.
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.enabled Enable ingress rule that makes phpMyAdmin only accessible from a particular origin
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector Namespace selector label that is allowed to access phpMyAdmin. This label will be used to identified the allowed namespace(s).
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.podSelector Pods selector label that is allowed to access phpMyAdmin. This label will be used to identified the allowed pod(s).
+  ## @param networkPolicy.ingressRules.customRules Custom network policy ingress rule
+  ##
+  ingressRules:
+    ## mariadb backend only can be accessed from phpMyAdmin
     ##
-    verify: true
-
-##
-## MariaDB chart configuration
-##
-## https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
-##
-mariadb: {}
+    backendOnlyAccessibleByFrontend: false
+    customBackendSelector: {}
+    ## Allow only from the indicated:
+    ##
+    accessOnlyFrom:
+      enabled: false
+      ## e.g:
+      ## namespaceSelector:
+      ##   label: ingress
+      ##
+      namespaceSelector: {}
+      ## e.g:
+      ## podSelector:
+      ##   label: access
+      ##
+      podSelector: {}
+    ## custom ingress rules
+    ## e.g:
+    ## customRules:
+    ##   - from:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    ##
+    customRules: {}
+  ## @param networkPolicy.egressRules.denyConnectionsToExternal Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).
+  ## @param networkPolicy.egressRules.customRules Custom network policy rule
+  ##
+  egressRules:
+    ## Deny connections to external. This is not compatible with an external database.
+    ##
+    denyConnectionsToExternal: false
+    ## Additional custom egress rules
+    ## e.g:
+    ## customRules:
+    ##   - to:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    ##
+    customRules: {}

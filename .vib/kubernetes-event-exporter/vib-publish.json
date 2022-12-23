@@ -1,0 +1,77 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/kubernetes-event-exporter"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/kubernetes-event-exporter"
+        },
+        "runtime_parameters": "Y29uZmlnOgogIGxvZ0xldmVsOiBkZWJ1ZwogIGxvZ0Zvcm1hdDogcHJldHR5CiAgcmVjZWl2ZXJzOgogICAgLSBuYW1lOiAiZHVtcCIKICAgICAgZmlsZToKICAgICAgICBwYXRoOiAiL2Rldi9zdGRvdXQiCiAgICAgICAgbGF5b3V0OiB7fQogIHJvdXRlOgogICAgcm91dGVzOgogICAgICAtIG1hdGNoOgogICAgICAgICAgLSByZWNlaXZlcjogImR1bXAiCnJiYWM6CiAgY3JlYXRlOiB0cnVlCnNlcnZpY2VBY2NvdW50OgogIGNyZWF0ZTogdHJ1ZQogIGF1dG9tb3VudFNlcnZpY2VBY2NvdW50VG9rZW46IHRydWUKcG9kU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBmc0dyb3VwOiAxMDAyCmNvbnRhaW5lclNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgcmVhZE9ubHlSb290RmlsZXN5c3RlbTogZmFsc2UKICBjYXBhYmlsaXRpZXM6CiAgICBhZGQ6IFtdCiAgICBkcm9wOgogICAgICAtIEFMTAogIHJ1bkFzVXNlcjogMTAwMg==",
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/kubernetes-event-exporter/goss"
+            },
+            "remote": {
+              "workload": "deploy-kubernetes-event-exporter"
+            },
+            "vars_file": "vars.yaml"
+          }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/kubernetes-event-exporter/ginkgo"
+
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}"
+            }
+          }
+        }
+      ]
+    },
+    "publish": {
+      "actions": [
+        {
+          "action_id": "helm-publish",
+          "params": {
+            "repository": {
+              "kind": "S3",
+              "url": "{VIB_ENV_S3_URL}",
+              "username": "{VIB_ENV_S3_USERNAME}",
+              "password": "{VIB_ENV_S3_PASSWORD}"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

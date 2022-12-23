@@ -1,9 +1,9 @@
 dependencies:
+- name: mysql
+  repository: https://charts.bitnami.com/bitnami
+  version: 9.4.4
 - name: common
   repository: https://charts.bitnami.com/bitnami
-  version: 1.4.1
-- name: mariadb
-  repository: https://charts.bitnami.com/bitnami
-  version: 9.3.4
-digest: sha256:5f189bdc79dcd434b7ee41274131c5e3209ef0bfb5525babc9cc6e064dd5343c
-generated: "2021-02-23T14:19:20.731735996Z"
+  version: 2.2.1
+digest: sha256:69c927ab3057cb21c819cef2e53dcffd40119166090431766f301c39de2d5a65
+generated: "2022-11-25T16:45:15.261843317Z"

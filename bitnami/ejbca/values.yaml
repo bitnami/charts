@@ -1,114 +1,97 @@
+## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
-# global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
-#   storageClass: myStorageClass
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass: ""
+
+## @section Common parameters
+
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion: ""
+## @param nameOverride String to partially override ebjca.fullname template (will maintain the release name)
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override ebjca.fullname template
+##
+fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
+## @param commonLabels Add labels to all the deployed resources
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to be added to all deployed resources
+##
+commonAnnotations: {}
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+
+## @section EJBCA parameters
 
 ## Bitnami EJBCA image version
 ## ref: https://hub.docker.com/r/bitnami/ejbca/tags/
+## @param image.registry EJBCA image registry
+## @param image.repository EJBCA image name
+## @param image.tag EJBCA image tag
+## @param image.digest EJBCA image image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param image.pullPolicy EJBCA image pull policy
+## @param image.pullSecrets Specify docker-registry secret names as an array
+## @param image.debug Enable image debug mode
 ##
 image:
   registry: docker.io
   repository: bitnami/ejbca
-  tag: 6.15.2-6-debian-10-r165
+  tag: 7.10.0-2-debian-11-r0
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
   ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
-  ## Set to true if you would like to see extra information on logs
+  pullSecrets: []
+  ## Enable debug mode
   ##
-
-## Force target Kubernetes version (using Helm capabilites if not set)
-##
-kubeVersion:
-
-## String to partially override ebjca.fullname template (will maintain the release name)
-##
-# nameOverride:
-
-## String to fully override ebjca.fullname template
-##
-# fullnameOverride:
-
-## Deployment pod host aliases
-## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-##
-hostAliases: []
-
-## Number of EJBCA replicas to deploy.
+  debug: false
+## @param replicaCount Number of EJBCA replicas to deploy
 ##
 replicaCount: 1
-
-## Admin of the application
-## ref: https://github.com/bitnami/bitnami-docker-ejbca#environment-variables
-##
-ejbcaAdminUsername: bitnami
-
-## Password for the administrator account
-## If the password is not specified, a random one will be generated
-##
-# ejbcaAdminPassword:
-
-## Alternatively, you can provide the name of an existing secret containing
-## a key named "ejbca-admin-password"
-## NOTE: This will override the password defined at ejbcaAdminPassword
-##
-# existingSecret:
-
-## Options used to launch the WildFly server
-## E.g. ejbcaJavaOpts: "-Xms2048m -Xmx2048m"
-# ejbcaJavaOpts:
-
-## Details regarding the CA that EJBCA will instantiate
-##
-ejbcaCA:
-  ## The name of the CA
-  ##
-  name: "ManagementCA"
-
-  ## The base DomainName of the CA
-  ##
-  ## e.g. baseDN: "O=Example CA,C=SE,UID=c-5ca04c9328c8208704310f7c2ed16414"
-  ##
-  baseDN:
-
-## Name of an existing Secret containing a Keystore object
-## to be imported by EBJCA.
-##
-## It should contain at the following two keys:
-##
-## "keystore.jks" --> The actual keystore object
-## "keystore-password" --> Password used to encrypt keystore.jks
-##
-## ejbcaKeystoreExistingSecret:
-##
-
-## Additional container environment variables
-## extraEnv:
-##   - name:
-##     value:
-##
-extraEnv: []
-
-## Custom command to override image cmd
-##
-# command: []
-
-## Custom args for the custom command:
-# args: []
-
-## Additional volume mounts
+## @param extraVolumeMounts Additional volume mounts (used along with `extraVolumes`)
 ## Example: Mount CA file
 ## extraVolumeMounts
 ##   - name: ca-cert
@@ -116,8 +99,7 @@ extraEnv: []
 ##     mountPath: /path/to/ca_cert
 ##
 extraVolumeMounts: []
-
-## Additional volumes
+## @param extraVolumes Array of extra volumes to be added deployment. Requires setting `extraVolumeMounts`
 ## Example: Add secret volume
 ## extraVolumes:
 ##  - name: ca-cert
@@ -128,254 +110,82 @@ extraVolumeMounts: []
 ##          path: ca_cert
 ##
 extraVolumes: []
-
-## EJBCA containers' resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-##
-resources:
-  limits: {}
-  requests:
-    memory: 512Mi
-    cpu: 300m
-
-## Pod annotations
+## @param podAnnotations Additional pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
-
-## Additional pod labels
+## @param podLabels Additional pod labels
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
-
-## Add labels to all the deployed resources
-##
-commonLabels: {}
-
-## Add annotations to all the deployed resources
-##
-commonAnnotations: {}
-
 ## K8s Security Context for EJBCA pods
 ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+## @param podSecurityContext.enabled Enable security context for EJBCA container
+## @param podSecurityContext.fsGroup Group ID for the volumes of the pod
 ##
 podSecurityContext:
   enabled: true
   fsGroup: 1001
-
-## K8s Security Context for EJBCA container
-##
-containerSecurityContext:
-  enabled: true
-  runAsUser: 1001
-
-## Pod affinity preset
+## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ## Allowed values: soft, hard
 ##
 podAffinityPreset: ""
-
-## Pod anti-affinity preset
+## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ## Allowed values: soft, hard
 ##
 podAntiAffinityPreset: soft
-
 ## Node affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-## Allowed values: soft, hard
+## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## @param nodeAffinityPreset.key Node label key to match Ignored if `affinity` is set.
+## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.
 ##
 nodeAffinityPreset:
-  ## Node affinity type
-  ## Allowed values: soft, hard
-  ##
   type: ""
-  ## Node label key to match
   ## E.g.
   ## key: "kubernetes.io/e2e-az-name"
   ##
   key: ""
-  ## Node label values to match
   ## E.g.
   ## values:
   ##   - e2e-az1
   ##   - e2e-az2
   ##
   values: []
-
-## Affinity for pod assignment
+## @param affinity Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
-
-## Node labels for pod assignment
+## @param nodeSelector Node labels for pod assignment
 ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-
-## Tolerations for pod assignment
+## @param tolerations Tolerations for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
-## EJBCA pod extra options for liveness and readiness probes
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+## @param updateStrategy.type EJBCA deployment strategy type.
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+## e.g:
+## updateStrategy:
+##  type: RollingUpdate
+##  rollingUpdate:
+##    maxSurge: 25%
+##    maxUnavailable: 25%
 ##
-livenessProbe:
-  enabled: true
-  initialDelaySeconds: 500
-  periodSeconds: 10
-  timeoutSeconds: 5
-  failureThreshold: 6
-  successThreshold: 1
-
-readinessProbe:
-  enabled: true
-  initialDelaySeconds: 500
-  periodSeconds: 10
-  timeoutSeconds: 5
-  failureThreshold: 6
-  successThreshold: 1
-
-## Custom liveness and readiness probes (evaluated as a template)
-##
-customLivenessProbe: {}
-customReadinessProbe: {}
-
-## EJBCA Container ports to open
-##
-containerPorts:
-  http: 8080
-  https: 8443
-
-## Kubernetes configuration
-## For minikube, set this to NodePort, elsewhere use LoadBalancer or ClusterIP
-##
-service:
-  type: LoadBalancer
-  ## HTTP Port
-  ##
-  port: 8080
-  ## HTTPS Port
-  ##
-  # httpsPort: 8443
-  httpsPort: 8443
-  ## HTTPS Advertised port
-  ##
-  advertisedHttpsPort: 443
-
-  ## HTTPS Target Port
-  ## defaults to https unless overridden to the specified port.
-  ## if you want the target port to be "http" or "80" you can specify that here.
-  ##
-  httpsTargetPort: https
-  ## Node Ports to expose
-  ## nodePorts:
-  ##   http: <to set explicitly, choose port between 30000-32767>
-  ##   https: <to set explicitly, choose port between 30000-32767>
-  ##
-  nodePorts:
-    http: ""
-    https: ""
-  ## Enable client source IP preservation
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
-  ##
-  externalTrafficPolicy: Cluster
-  annotations: {}
-  ## Limits which cidr blocks can connect to service's load balancer
-  ## Only valid if service.type: LoadBalancer
-  ##
-  loadBalancerSourceRanges: []
-  ## Extra ports to expose (normally used with the `sidecar` value)
-  # extraPorts:
-
-## Configure the ingress resource that allows you to access the
-## EJBCA installation. Set up the URL
-## ref: http://kubernetes.io/docs/user-guide/ingress/
-##
-ingress:
-  ## Set to true to enable ingress record generation
-  ##
-  enabled: false
-
-  ## Set this to true in order to add the corresponding annotations for cert-manager
-  ##
-  certManager: false
-
-  ## Ingress Path type
-  ##
-  pathType: ImplementationSpecific
-
-  ## Override API Version (automatically detected if not set)
-  ##
-  apiVersion:
-
-  ## When the ingress is enabled, a host pointing to this will be created
-  ##
-  hostname: ejbca.local
-
-  ## The Path to EJBCA. You may need to set this to '/*' in order to use this
-  ## with ALB ingress controllers.
-  ##
-  path: /
-
-  ## Ingress annotations done as key:value pairs
-  ## For a full list of possible ingress annotations, please see
-  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
-  ##
-  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
-  ##
-  annotations: {}
-
-  ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
-  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
-  ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
-  ##
-  tls: false
-
-  ## The list of additional hostnames to be covered with this ingress record.
-  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
-  ## extraHosts:
-  ## - name: ejbca.local
-  ##   path: /
-  ##
-
-  ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
-  ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
-  ## extraPaths:
-  ## - path: /*
-  ##   backend:
-  ##     serviceName: ssl-redirect
-  ##     servicePort: use-annotation
-  ##
-
-  ## The tls configuration for additional hostnames to be covered with this ingress record.
-  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-  ## extraTls:
-  ## - hosts:
-  ##     - ejbca.local
-  ##   secretName: ejbca.local-tls
-  ##
-
-  ## If you're providing your own certificates, please use this to add the certificates as secrets
-  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
-  ## -----BEGIN RSA PRIVATE KEY-----
-  ##
-  ## name should line up with a tlsSecret set further up
-  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
-  ##
-  ## It is also possible to create and manage the certificates outside of this helm chart
-  ## Please see README.md for more information
-  ##
-  secrets: []
-  ## - name: ejbca.local-tls
-  ##   key:
-  ##   certificate:
-  ##
-
+updateStrategy:
+  type: RollingUpdate
 ## Enable persistence using Persistent Volume Claims
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+## @param persistence.enabled Whether to enable persistence based on Persistent Volume Claims
+## @param persistence.accessModes [array] Persistent Volume access modes
+## @param persistence.size Size of the PVC to request
+## @param persistence.storageClass PVC Storage Class
+## @param persistence.existingClaim Name of an existing PVC to reuse
+## @param persistence.annotations Persistent Volume Claim annotations
 ##
 persistence:
   enabled: true
@@ -386,46 +196,394 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  # storageClass: "-"
+  storageClass: ""
+  ## If you want to reuse an existing claim, you can pass the name of the PVC using the existingClaim variable
+  ## e.g:
+  ## existingClaim: your-claim
   ##
-  ## If you want to reuse an existing claim, you can pass the name of the PVC using
-  ## the existingClaim variable
-  # existingClaim: your-claim
-  accessMode: ReadWriteOnce
+  existingClaim: ""
+  accessModes:
+    - ReadWriteOnce
   size: 2Gi
+  annotations: {}
+## @param sidecars Attach additional sidecar containers to the pod
+## Example:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: []
+## @param initContainers Additional init containers to add to the pods
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+## Example:
+## initContainers:
+##  - name: your-image-name
+##    image: your-image
+##    imagePullPolicy: Always
+##
+initContainers: []
+## @param hostAliases Add deployment host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+## @param priorityClassName EJBCA pods' priorityClassName
+## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+##
+priorityClassName: ""
+## @param schedulerName Name of the k8s scheduler (other than default)
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
+## @param ejbcaAdminUsername EJBCA administrator username
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/ejbca#environment-variables
+##
+ejbcaAdminUsername: bitnami
+## @param ejbcaAdminPassword Password for the administrator account
+## If the password is not specified, a random one will be generated
+##
+ejbcaAdminPassword: ""
+## @param existingSecret Alternatively, you can provide the name of an existing secret containing
+## a key named "ejbca-admin-password"
+## NOTE: This will override the password defined at ejbcaAdminPassword
+##
+existingSecret: ""
+## @param ejbcaJavaOpts Options used to launch the WildFly server
+## E.g. ejbcaJavaOpts: "-Xms2048m -Xmx2048m"
+ejbcaJavaOpts: ""
+## Details regarding the CA that EJBCA will instantiate
+## @param ejbcaCA.name Name of the CA EJBCA will instantiate by default
+## @param ejbcaCA.baseDN Base DomainName of the CA EJBCA will instantiate by default
+##
+ejbcaCA:
+  name: "ManagementCA"
+  ## e.g. baseDN: "O=Example CA,C=SE,UID=c-5ca04c9328c8208704310f7c2ed16414"
+  ##
+  baseDN: ""
+## @param ejbcaKeystoreExistingSecret Name of an existing Secret containing a Keystore object
+## to be imported by EBJCA.
+##
+## It should contain at the following two keys:
+##
+## "keystore.jks" --> The actual keystore object
+## "keystore-password" --> Password used to encrypt keystore.jks
+##
+ejbcaKeystoreExistingSecret: ""
+## @param extraEnvVars Array with extra environment variables to add to EJBCA nodes
+## e.g:
+## extraEnvVars:
+##   - name: FOO
+##     value: "bar"
+##
+extraEnvVars: []
+## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars for EJBCA nodes
+##
+extraEnvVarsCM: ""
+## @param extraEnvVarsSecret Name of existing Secret containing extra env vars for EJBCA nodes
+##
+extraEnvVarsSecret: ""
+## @param command Custom command to override image cmd
+##
+command: []
+## @param args Custom args for the custom command
+##
+args: []
+## @param lifecycleHooks for the EJBCA container(s) to automate configuration before or after startup
+##
+lifecycleHooks: {}
+## EJBCA containers' resource requests and limits
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## @param resources.limits The resources limits for the container
+## @param resources.requests [object] The requested resources for the container
+##
+resources:
+  limits: {}
+  requests:
+    memory: 512Mi
+    cpu: 300m
+## K8s Security Context for EJBCA container
+## @param containerSecurityContext.enabled Enabled EJBCA containers' Security Context
+## @param containerSecurityContext.runAsUser Set EJBCA containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set EJBCA container's Security Context runAsNonRoot
+##
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
+  runAsNonRoot: true
+## EJBCA pod extra options for startup probe
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+## @param startupProbe.enabled Enable/disable startupProbe
+## @param startupProbe.initialDelaySeconds Delay before startup probe is initiated
+## @param startupProbe.periodSeconds How often to perform the probe
+## @param startupProbe.timeoutSeconds When the probe times out
+## @param startupProbe.failureThreshold Minimum consecutive failures for the probe
+## @param startupProbe.successThreshold Minimum consecutive successes for the probe
+##
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 500
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+## EJBCA pod extra options for liveness probe
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+## @param livenessProbe.enabled Enable/disable livenessProbe
+## @param livenessProbe.initialDelaySeconds Delay before liveness probe is initiated
+## @param livenessProbe.periodSeconds How often to perform the probe
+## @param livenessProbe.timeoutSeconds When the probe times out
+## @param livenessProbe.failureThreshold Minimum consecutive failures for the probe
+## @param livenessProbe.successThreshold Minimum consecutive successes for the probe
+##
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 500
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+## EJBCA pod extra options for readiness probe
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+## @param readinessProbe.enabled Enable/disable readinessProbe
+## @param readinessProbe.initialDelaySeconds Delay before readiness probe is initiated
+## @param readinessProbe.periodSeconds How often to perform the probe
+## @param readinessProbe.timeoutSeconds When the probe times out
+## @param readinessProbe.failureThreshold Minimum consecutive failures for the probe
+## @param readinessProbe.successThreshold Minimum consecutive successes for the probe
+##
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 500
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+## @param customStartupProbe Custom startup probe to execute (when the main one is disabled)
+##
+customStartupProbe: {}
+## @param customLivenessProbe Custom liveness probe to execute (when the main one is disabled)
+##
+customLivenessProbe: {}
+## @param customReadinessProbe Custom readiness probe to execute (when the main one is disabled)
+##
+customReadinessProbe: {}
+## @param containerPorts [object] EJBCA Container ports to open
+##
+containerPorts:
+  http: 8080
+  https: 8443
 
+## @section Service parameters
+
+## Kubernetes configuration. For minikube, set this to NodePort, elsewhere use LoadBalancer or ClusterIP
 ##
+service:
+  ## @param service.type Kubernetes Service type
+  ##
+  type: LoadBalancer
+  ## @param service.ports.http Service HTTP port
+  ## @param service.ports.https Service HTTPS port
+  ##
+  ports:
+    http: 8080
+    https: 8443
+  ## @param service.advertisedHttpsPort Port number used in the rendered URLs for the admistrator login.
+  ##
+  advertisedHttpsPort: 443
+  ## @param service.httpsTargetPort Service Target HTTPS port
+  ## defaults to https unless overridden to the specified port.
+  ## if you want the target port to be "http" or "80" you can specify that here.
+  ##
+  httpsTargetPort: https
+  ## @param service.nodePorts [object] Node Ports to expose
+  ## nodePorts:
+  ##   http: <to set explicitly, choose port between 30000-32767>
+  ##   https: <to set explicitly, choose port between 30000-32767>
+  ##
+  nodePorts:
+    http: ""
+    https: ""
+  ## @param service.clusterIP EJBCA service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
+  ##
+  clusterIP: ""
+  ## @param service.loadBalancerIP EJBCA service Load Balancer IP
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+  ##
+  loadBalancerIP: ""
+  ## @param service.externalTrafficPolicy Enable client source IP preservation
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
+  ## @param service.annotations Service annotations
+  ##
+  annotations: {}
+  ## @param service.loadBalancerSourceRanges Limits which cidr blocks can connect to service's load balancer
+  ## Only valid if service.type: LoadBalancer
+  ##
+  loadBalancerSourceRanges: []
+  ## @param service.extraPorts Extra ports to expose in the service (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
+  ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  ## If "ClientIP", consecutive client requests will be directed to the same Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  sessionAffinityConfig: {}
+
+## @section Ingress parameters
+
+## Configure the ingress resource that allows you to access the
+## EJBCA installation. Set up the URL
+## ref: https://kubernetes.io/docs/user-guide/ingress/
+##
+ingress:
+  ## @param ingress.enabled Enable ingress controller resource
+  ##
+  enabled: false
+  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
+  ## certManager: false
+  ##
+
+  ## @param ingress.pathType Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+  ## @param ingress.apiVersion Override API Version (automatically detected if not set)
+  ##
+  apiVersion: ""
+  ## @param ingress.hostname Default host for the ingress resource
+  ##
+  hostname: ejbca.local
+  ## @param ingress.path The Path to EJBCA. You may need to set this to '/*' in order to use this
+  ## with ALB ingress controllers.
+  ##
+  path: /
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+  ## For a full list of possible ingress annotations, please see
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+  ##
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+  ##
+  annotations: {}
+  ## @param ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
+  ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
+  ##
+  tls: false
+  ## @param ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
+  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+  ## extraHosts:
+  ## - name: ejbca.local
+  ##   path: /
+  extraHosts: []
+  ## @param ingress.extraPaths Any additional arbitrary paths that may need to be added to the ingress under the main host.
+  ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  extraPaths: []
+  ## @param ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
+  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## extraTls:
+  ## - hosts:
+  ##     - ejbca.local
+  ##   secretName: ejbca.local-tls
+  extraTls: []
+  ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
+  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
+  ## -----BEGIN RSA PRIVATE KEY-----
+  ##
+  ## name should line up with a tlsSecret set further up
+  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
+  ##
+  ## It is also possible to create and manage the certificates outside of this helm chart
+  ## Please see README.md for more information
+  ## Example:
+  ## - name: ejbca.local-tls
+  ##   key:
+  ##   certificate:
+  ##
+  secrets: []
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
+  ## @param ingress.extraRules Additional rules to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g:
+  ## extraRules:
+  ## - host: example.local
+  ##     http:
+  ##       path: /
+  ##       backend:
+  ##         service:
+  ##           name: example-svc
+  ##           port:
+  ##             name: http
+  ##
+  extraRules: []
+
+## @section Database parameters
+
 ## MariaDB chart configuration
-##
-## https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
+## https://github.com/bitnami/charts/blob/main/bitnami/mariadb/values.yaml
 ##
 mariadb:
-  ## Whether to deploy a mariadb server to satisfy the applications database requirements. To use an external database set this to false and configure the externalDatabase parameters
+  ## @param mariadb.enabled Whether to deploy a mariadb server to satisfy the applications database requirements.
+  ## To use an external database set this to false and configure the externalDatabase parameters
   ##
   enabled: true
-
-  ## MariaDB architecture. Allowed values: standalone or replication
+  ## @param mariadb.architecture MariaDB architecture (`standalone` or `replication`)
   ##
   architecture: standalone
-
   ## MariaDB Authentication parameters
+  ## @param mariadb.auth.rootPassword Password for the MariaDB `root` user
+  ## @param mariadb.auth.database Database name to create
+  ## @param mariadb.auth.username Database user to create
+  ## @param mariadb.auth.password Password for the database
   ##
   auth:
-    ## MariaDB root password
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
+    ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb#setting-the-root-password-on-first-run
     ##
     rootPassword: ""
-    ## MariaDB custom user and database
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+    ## ref: https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-on-first-run
     ##
     database: bitnami_ejbca
+    ## ref: https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-user-on-first-run
+    ##
     username: bn_ejbca
     password: ""
-
   primary:
     ## Enable persistence using Persistent Volume Claims
-    ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+    ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+    ## @param mariadb.primary.persistence.enabled Enable database persistence using PVC
+    ## @param mariadb.primary.persistence.storageClass MariaDB primary persistent volume storage Class
+    ## @param mariadb.primary.persistence.accessMode Persistent Volume access mode
+    ## @param mariadb.primary.persistence.size Database Persistent Volume Size
+    ## @param mariadb.primary.persistence.hostPath Set path in case you want to use local host path volumes (not recommended in production)
+    ## @param mariadb.primary.persistence.existingClaim Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas
     ##
     persistence:
       enabled: true
@@ -436,60 +594,101 @@ mariadb:
       ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
       ##   GKE, AWS & OpenStack)
       ##
-      storageClass:
+      storageClass: ""
       accessMode: ReadWriteOnce
       size: 8Gi
-      ## Set path in case you want to use local host path volumes (not recommended in production)
-      ##
-      hostPath:
-      ## Use an existing PVC
-      ##
-      existingClaim:
-
-##
+      hostPath: ""
+      existingClaim: ""
 ## External Database Configuration
-##
 ## All of these values are only used when mariadb.enabled is set to false
+## @param externalDatabase.host Host of the external database
+## @param externalDatabase.user non-root Username for EJBCA Database
+## @param externalDatabase.password Password for the above username
+## @param externalDatabase.existingSecret Name of an existing secret resource containing the DB password in a 'mariadb-password' key
+## @param externalDatabase.database Name of the existing database
+## @param externalDatabase.port Database port number
 ##
 externalDatabase:
-  ## Database host
-  ##
   host: localhost
-  ## non-root Username for EJBCA Database
-  ##
   user: bn_ejbca
-  ## Database password
-  ##
   password: ""
-  ## Name of an existing secret resource containing the DB password in a 'mariadb-password' key
-  ##
   existingSecret: ""
-  ## Database name
-  ##
   database: bitnami_ejbca
-
-  ## Database port number
-  ##
   port: 3306
 
-## Add sidecars to the pod.
-## Example:
-## sidecars:
-##   - name: your-image-name
-##     image: your-image
-##     imagePullPolicy: Always
-##     ports:
-##       - name: portname
-##         containerPort: 1234
-##
-sidecars: {}
+## @section NetworkPolicy parameters
 
-## Add init containers to the pod.
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-## Example:
-## initContainers:
-##  - name: your-image-name
-##    image: your-image
-##    imagePullPolicy: Always
+## Add networkpolicies
 ##
-initContainers: {}
+networkPolicy:
+  ## @param networkPolicy.enabled Enable network policies
+  ## If ingress.enabled or metrics.enabled are true, configure networkPolicy.ingress and networkPolicy.metrics selectors respectively to allow communication
+  ##
+  enabled: false
+  ## @param networkPolicy.ingress.enabled Enable network policy for Ingress Proxies
+  ## @param networkPolicy.ingress.namespaceSelector Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.
+  ## @param networkPolicy.ingress.podSelector Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.
+  ##
+  ingress:
+    enabled: false
+    ## e.g:
+    ## podSelector:
+    ##   label: ingress
+    ##
+    podSelector: {}
+    ## e.g:
+    ## namespaceSelector:
+    ##   label: ingress
+    ##
+    namespaceSelector: {}
+  ## @param networkPolicy.ingressRules.backendOnlyAccessibleByFrontend Enable ingress rule that makes the backend (mariadb) only accessible by EJBCA's pods.
+  ## @param networkPolicy.ingressRules.customBackendSelector Backend selector labels. These labels will be used to identify the backend pods.
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.enabled Enable ingress rule that makes EJBCA only accessible from a particular origin
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector Namespace selector label that is allowed to access EJBCA. This label will be used to identified the allowed namespace(s).
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.podSelector Pods selector label that is allowed to access EJBCA. This label will be used to identified the allowed pod(s).
+  ## @param networkPolicy.ingressRules.customRules Custom network policy ingress rule
+  ##
+  ingressRules:
+    ## mariadb backend only can be accessed from EJBCA
+    ##
+    backendOnlyAccessibleByFrontend: false
+    customBackendSelector: {}
+    ## Allow only from the indicated:
+    ##
+    accessOnlyFrom:
+      enabled: false
+      ## e.g:
+      ## namespaceSelector:
+      ##   label: ingress
+      ##
+      namespaceSelector: {}
+      ## e.g:
+      ## podSelector:
+      ##   label: access
+      ##
+      podSelector: {}
+    ## custom ingress rules
+    ## e.g:
+    ## customRules:
+    ##   - from:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    ##
+    customRules: {}
+  ## @param networkPolicy.egressRules.denyConnectionsToExternal Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).
+  ## @param networkPolicy.egressRules.customRules Custom network policy rule
+  ##
+  egressRules:
+    ## Deny connections to external. This is not compatible with an external database.
+    ##
+    denyConnectionsToExternal: false
+    ## Additional custom egress rules
+    ## e.g:
+    ## customRules:
+    ##   - to:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    ##
+    customRules: {}

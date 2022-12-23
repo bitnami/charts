@@ -3,7 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ printf "%s-custom-proxy-headers" (include "common.names.fullname" .) }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
     {{- if .Values.commonLabels }}
@@ -15,7 +15,7 @@ metadata:
 data:
 {{- if .Values.proxySetHeaders }}
 {{- include "common.tplvalues.render" (dict "value" .Values.proxySetHeaders "context" $) | nindent 2 }}
-{{- else if and .Values.headers (not .Values.proxySetHeaders) }}
+{{- else if .Values.headers }}
 {{- include "common.tplvalues.render" (dict "value" .Values.headers "context" $) | nindent 2 }}
 {{- end }}
 {{- end }}

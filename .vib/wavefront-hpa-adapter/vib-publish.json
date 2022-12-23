@@ -1,0 +1,74 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/wavefront-hpa-adapter"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/wavefront-hpa-adapter"
+        },
+        "runtime_parameters": "Y29udGFpbmVyUG9ydHM6CiAgaHR0cHM6IDY0NDQKd2F2ZWZyb250OgogIHVybDogaHR0cHM6Ly9mYWtlLndhdmVmcm9udC5jb20KICB0b2tlbjogRkFLRV9BUElfVE9LRU4Kc2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGh0dHBzOiA0NDMKcmJhYzoKICBjcmVhdGU6IHRydWUKYXBpU2VydmljZToKICBjcmVhdGU6IHRydWUKZXh0cmFEZXBsb3k6Ci0gYXBpVmVyc2lvbjogYXV0b3NjYWxpbmcvdjJiZXRhMQogIGtpbmQ6IEhvcml6b250YWxQb2RBdXRvc2NhbGVyCiAgbWV0YWRhdGE6CiAgICBuYW1lOiB2aWItaHBhLWN1c3RvbS1tZXRyaWNzCiAgc3BlYzoKICAgIG1pblJlcGxpY2FzOiAxCiAgICBtYXhSZXBsaWNhczogNQogICAgbWV0cmljczoKICAgIC0gdHlwZTogRXh0ZXJuYWwKICAgICAgZXh0ZXJuYWw6CiAgICAgICAgbWV0cmljTmFtZTogdmliLnZtLmNwdQogICAgICAgIHRhcmdldEF2ZXJhZ2VWYWx1ZTogMTgwMG0KICAgIHNjYWxlVGFyZ2V0UmVmOgogICAgICBhcGlWZXJzaW9uOiBhcHBzL3YxCiAgICAgIGtpbmQ6IERlcGxveW1lbnQKICAgICAgbmFtZTogd2F2ZWZyb250LWhwYS1hZGFwdGVy",
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "health-check",
+          "params": {
+            "endpoint": "lb-wavefront-hpa-adapter-https",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/wavefront-hpa-adapter/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "servingPort": "6444",
+              "wavefrontURL": "https://fake.wavefront.com",
+              "externalMetric": "vib.vm.cpu"
+            }
+          }
+        }
+      ]
+    },
+    "publish": {
+      "actions": [
+        {
+          "action_id": "helm-publish",
+          "params": {
+            "repository": {
+              "kind": "S3",
+              "url": "{VIB_ENV_S3_URL}",
+              "username": "{VIB_ENV_S3_USERNAME}",
+              "password": "{VIB_ENV_S3_PASSWORD}"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

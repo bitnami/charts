@@ -1,0 +1,21 @@
+addr:
+  tcp://ve-testing:{{ .Vars.rabbitmq.service.ports.amqp }}:
+    reachable: true
+http:
+  http://rmq-op-webhook:{{ .Vars.msgTopologyOperator.service.ports.webhook }}:
+    status: 400
+  http://ve-testing:{{ .Vars.rabbitmq.service.ports.manager }}:
+    status: 200
+file:
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    exists: true
+    filetype: directory
+    mode: "3777"
+command:
+  rabbitmqctl-cluster-status:
+    exec: rabbitmqctl cluster_status
+    exit-status: 0
+    stdout:
+    {{ range $e, $i := until .Vars.rabbitmq.replicaCount }}
+      - /ve-testing-server-{{ $i }}.ve-testing-nodes/
+    {{ end }}

@@ -1,0 +1,50 @@
+{{- if and .Values.controller.metrics.enabled .Values.controller.metrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "argocd.application-controller" . }}
+  {{- if .Values.controller.metrics.serviceMonitor.namespace }}
+  namespace: {{ .Values.controller.metrics.serviceMonitor.namespace | quote }}
+  {{- else }}
+  namespace: {{ .Release.Namespace | quote }}
+  {{- end }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.controller.metrics.serviceMonitor.selector }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.controller.metrics.serviceMonitor.selector "context" $) | nindent 4 }}
+    {{- end }}
+    app.kubernetes.io/component: controller
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  endpoints:
+    - port: http-metrics
+      path: /metrics
+      {{- if .Values.controller.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.controller.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.controller.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.controller.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.controller.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.controller.metrics.serviceMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.controller.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.controller.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.controller.metrics.serviceMonitor.relabelings }}
+      relabelings: {- include "common.tplvalues.render" ( dict "value" .Values.controller.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+      {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: metrics
+      app.kubernetes.io/part-of: controller
+{{- end }}
+

@@ -1,432 +1,702 @@
+## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  #   imageRegistry: myRegistryName
-  #   imagePullSecrets:
-  #     - myRegistryKeySecretName
-  #   storageClass: myStorageClass
-
-  labels: {}
-  # foo: bar
-
-## String to partially override prometheus.fullname template (will maintain the release name)
-##
-# nameOverride:
-
-## String to fully override prometheus.fullname template
-##
-# fullnameOverride:
-
-## Role Based Access
-## ref: https://kubernetes.io/docs/admin/authorization/rbac/
-##
-rbac:
-  create: true
-
-  ## RBAC API version
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
   ##
-  apiVersion: v1beta1
+  imagePullSecrets: []
+  storageClass: ""
 
-  ## Podsecuritypolicy
-  ##
-  pspEnabled: true
+## @section Common parameters
+##
+
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion: ""
+## @param nameOverride String to partially override `kube-prometheus.name` template with a string (will prepend the release name)
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override `kube-prometheus.fullname` template with a string
+##
+fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
+
+## @section Prometheus Operator Parameters
+##
 
 operator:
+  ## @param operator.enabled Deploy Prometheus Operator to the cluster
+  ##
   enabled: true
-
   ## Bitnami Prometheus Operator image version
   ## ref: https://hub.docker.com/r/bitnami/prometheus-operator/tags/
+  ## @param operator.image.registry Prometheus Operator image registry
+  ## @param operator.image.repository Prometheus Operator image repository
+  ## @param operator.image.tag Prometheus Operator image tag (immutable tags are recommended)
+  ## @param operator.image.digest Prometheus Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param operator.image.pullPolicy Prometheus Operator image pull policy
+  ## @param operator.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.46.0-debian-10-r0
+    tag: 0.61.1-debian-11-r0
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
     ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
+    pullSecrets: []
+  ## @param operator.extraArgs Additional arguments passed to Prometheus Operator
+  ## Example:
+  ## extraArgs:
+  ##   - --namespaces={{ include "common.names.namespace" . }}
+  ##
+  extraArgs: []
+  ## @param operator.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param operator.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param operator.lifecycleHooks for the Prometheus Operator container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param operator.extraEnvVars Array with extra environment variables to add to Prometheus Operator nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param operator.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Prometheus Operator nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param operator.extraEnvVarsSecret Name of existing Secret containing extra env vars for Prometheus Operator nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param operator.extraVolumes Optionally specify extra list of additional volumes for the Prometheus Operator pod(s)
+  ##
+  extraVolumes: []
+  ## @param operator.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Prometheus Operator container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param operator.sidecars Add additional sidecar containers to the Prometheus Operator pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
 
-  ## Deployment pod host aliases
+  ## @param operator.initContainers Add additional init containers to the Prometheus Operator pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## @param operator.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-
   ## Service account for Prometheus Operator to use.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ##
   serviceAccount:
-    ## Specifies whether a ServiceAccount should be created
+    ## @param operator.serviceAccount.create Specify whether to create a ServiceAccount for Prometheus Operator
     ##
     create: true
-    ## The name of the ServiceAccount to use.
+    ## @param operator.serviceAccount.name The name of the ServiceAccount to create
     ## If not set and create is true, a name is generated using the kube-prometheus.operator.fullname template
-    # name:
-
-  ## Use an alternate scheduler, e.g. "stork".
+    ##
+    name: ""
+    ## @param operator.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: true
+    ## @param operator.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+    ##
+    annotations: {}
+  ## @param operator.schedulerName Name of the Kubernetess scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
-  # schedulerName:
-
-  ## SecurityContext configuration
+  schedulerName: ""
+  ## @param operator.terminationGracePeriodSeconds In seconds, time the given to the Prometheus Operator pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
-  securityContext:
+  terminationGracePeriodSeconds: ""
+  ## @param operator.topologySpreadConstraints Topology Spread Constraints for pod assignment
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
+  ## Prometheus Operator pods' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param operator.podSecurityContext.enabled Enable pod security context
+  ## @param operator.podSecurityContext.runAsUser User ID for the container
+  ## @param operator.podSecurityContext.fsGroup Group ID for the container filesystem
+  ##
+  podSecurityContext:
     enabled: true
     runAsUser: 1001
     fsGroup: 1001
-
+  ## Prometheus Operator containers' Security Context (only main container)
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param operator.containerSecurityContext.enabled Enable container security context
+  ## @param operator.containerSecurityContext.capabilities.drop [array] Linux Kernel capabilities which should be dropped
+  ## @param operator.containerSecurityContext.runAsNonRoot Force the container to run as a non root user
+  ## @param operator.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off
+  ## @param operator.containerSecurityContext.readOnlyRootFilesystem Mount / (root) as a readonly filesystem
+  ##
+  containerSecurityContext:
+    enabled: true
+    capabilities:
+      drop:
+      - ALL
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
   ## Prometheus Operator Service
   ##
   service:
-    ## Kubernetes service type and port number
+    ## @param operator.service.type Kubernetes service type
     ##
     type: ClusterIP
-    port: 8080
-    # clusterIP: None
-
-    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ## @param operator.service.ports.http Prometheus Operator service port
     ##
-    # nodePort: 30080
-
-    ## Set the LoadBalancer service type to internal only.
+    ports:
+      http: 8080
+    ## @param operator.service.clusterIP Specific cluster IP when service type is cluster IP. Use `None` for headless service
+    ## e.g:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param operator.service.nodePorts.http Kubernetes Service nodePort
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ## e.g:
+    ## nodePort: 30080
+    ##
+    nodePorts:
+      http: ""
+    ## @param operator.service.loadBalancerIP `loadBalancerIP` if service type is `LoadBalancer`
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
-    # loadBalancerIP:
-
-    ## Load Balancer sources
+    loadBalancerIP: ""
+    ## @param operator.service.loadBalancerSourceRanges Address that are allowed when svc is `LoadBalancer`
+    ## Set the LoadBalancer service type to internal only
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ## - 10.10.10.0/24
     ##
-    # loadBalancerSourceRanges:
-    # - 10.10.10.0/24
-
-    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints.
+    loadBalancerSourceRanges: []
+    ## @param operator.service.externalTrafficPolicy Enable client source IP preservation
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
     ## There are two available options: Cluster (default) and Local.
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
-
-    ## Specifies the health check node port (numeric port number) for the service
-    ## if externalTrafficPolicy is set to Local.
+    ## @param operator.service.healthCheckNodePort Specifies the health check node port (numeric port number) for the service if `externalTrafficPolicy` is set to Local.
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
-    # healthCheckNodePort:
-
-    ## Provide any additional annotations which may be required.
+    healthCheckNodePort: ""
+    ## @param operator.service.annotations Additional annotations for Prometheus Operator service
     ##
     annotations: {}
-
+    ## @param operator.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
+    ## @param operator.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param operator.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
   ## Create a servicemonitor for the operator
   ##
   serviceMonitor:
-    ## Creates a ServiceMonitor to monitor Prometheus Operator
+    ## @param operator.serviceMonitor.enabled Creates a ServiceMonitor to monitor Prometheus Operator
     ##
     enabled: true
-
-    ## Scrape interval. If not set, the Prometheus default scrape interval is used.
+    ## @param operator.serviceMonitor.interval Scrape interval (use by default, falling back to Prometheus' default)
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     interval: ""
-
-    ## Metric relabeling
+    ## @param operator.serviceMonitor.metricRelabelings Metric relabeling
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
     ##
     metricRelabelings: []
-
-    ## Relabel configs
+    ## @param operator.serviceMonitor.relabelings Relabel configs
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
     ##
     relabelings: []
-
-  ## Configure resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## @param operator.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    scrapeTimeout: ""
+    ## @param operator.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param operator.serviceMonitor.annotations Extra annotations for the ServiceMonitor
+    ##
+    annotations: {}
+  ## @param operator.resources Configure resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
-
-  ## Pod affinity preset
+  ## @param operator.podAffinityPreset Pod affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAffinityPreset: ""
-
-  ## Pod anti-affinity preset
+  ## @param operator.podAntiAffinityPreset Prometheus Operator Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAntiAffinityPreset: soft
-
   ## Node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
   ##
   nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
+    ## @param operator.nodeAffinityPreset.type Prometheus Operator Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## Node label key to match
+    ## @param operator.nodeAffinityPreset.key Prometheus Operator Node label key to match Ignored if `affinity` is set.
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
     key: ""
-    ## Node label values to match
+    ## @param operator.nodeAffinityPreset.values Prometheus Operator Node label values to match. Ignored if `affinity` is set.
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-
-  ## Affinity for pod assignment
+  ## @param operator.affinity Prometheus Operator Affinity for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: operator.podAffinityPreset, operator.podAntiAffinityPreset, and operator.nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-
-  ## Node labels for pod assignment
+  ## @param operator.nodeSelector Prometheus Operator Node labels for pod assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
-  ## Tolerations for pod assignment
+  ## @param operator.tolerations Prometheus Operator Tolerations for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
-  ## Priority class assigned to the Pods
+  ## @param operator.podAnnotations Annotations for Prometheus Operator pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param operator.podLabels Extra labels for Prometheus Operator pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param operator.priorityClassName Priority class assigned to the Pods
   ##
   priorityClassName: ""
-
-  ## Configure extra options for liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+  ## Configure extra options for liveness probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param operator.livenessProbe.enabled Turn on and off liveness probe
+  ## @param operator.livenessProbe.initialDelaySeconds Delay before liveness probe is initiated
+  ## @param operator.livenessProbe.periodSeconds How often to perform the probe
+  ## @param operator.livenessProbe.timeoutSeconds When the probe times out
+  ## @param operator.livenessProbe.failureThreshold Minimum consecutive failures for the probe
+  ## @param operator.livenessProbe.successThreshold Minimum consecutive successes for the probe
   ##
   livenessProbe:
+    enabled: true
     initialDelaySeconds: 120
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
-
+  ## Configure extra options for readiness probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param operator.readinessProbe.enabled Turn on and off readiness probe
+  ## @param operator.readinessProbe.initialDelaySeconds Delay before readiness probe is initiated
+  ## @param operator.readinessProbe.periodSeconds How often to perform the probe
+  ## @param operator.readinessProbe.timeoutSeconds When the probe times out
+  ## @param operator.readinessProbe.failureThreshold Minimum consecutive failures for the probe
+  ## @param operator.readinessProbe.successThreshold Minimum consecutive successes for the probe
+  ##
   readinessProbe:
+    enabled: true
     initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
-
-  ## Log level for Prometheus Operator
+  ## Configure extra options for startup probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param operator.startupProbe.enabled Turn on and off startup probe
+  ## @param operator.startupProbe.initialDelaySeconds Delay before startup probe is initiated
+  ## @param operator.startupProbe.periodSeconds How often to perform the probe
+  ## @param operator.startupProbe.timeoutSeconds When the probe times out
+  ## @param operator.startupProbe.failureThreshold Minimum consecutive failures for the probe
+  ## @param operator.startupProbe.successThreshold Minimum consecutive successes for the probe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param operator.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param operator.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param operator.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param operator.logLevel Log level for Prometheus Operator
   ##
   logLevel: info
-
-  ## Log format for Prometheus Operator
+  ## @param operator.logFormat Log format for Prometheus Operator
   ##
   logFormat: logfmt
-
-  ## Set the prometheus config reloader side-car CPU limit. If unset, uses the prometheus-operator project default
+  ## @param operator.configReloaderResources Set the prometheus config reloader side-car CPU and memory requests and limits.
+  ## configReloaderResources:
+  ##   limits:
+  ##     cpu: 200m
+  ##     memory: 100Mi
+  ##   requests:
+  ##     cpu: 100m
+  ##     memory: 50Mi
   ##
-  # configReloaderCpu: 100m
-
-  ## Set the prometheus config reloader side-car memory limit. If unset, uses the prometheus-operator project default
-  ##
-  # configReloaderMemory: 25Mi
-
-  ## If true, the operator will create and maintain a service for scraping kubelets
+  configReloaderResources: {}
+  ## @param operator.kubeletService.enabled If true, the operator will create and maintain a service for scraping kubelets
+  ## @param operator.kubeletService.namespace Namespace to deploy the kubelet service
   ##
   kubeletService:
     enabled: true
     namespace: kube-system
-
   ## Prometheus Configmap-reload image to use for reloading configmaps
   ## defaults to Bitnami Prometheus Operator (ref: https://hub.docker.com/r/bitnami/prometheus-operator/tags/)
   ##
   prometheusConfigReloader:
-    image: {}
-    # registry:
-    # repository:
-    # tag:
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## @param operator.prometheusConfigReloader.image Prometheus Config Reloader image. If not set, the same as `operator.image.registry`
+    ## registry:
+    ## repository:
+    ## tag:
+    ## digest: ""
+    ## pullSecrets:
     ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
+    image: {}
+    ## Prometheus config reload container's securityContext
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.enabled Enable container security context
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.runAsNonRoot Force the container to run as a non root user
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.capabilities.drop [array] Linux Kernel capabilities which should be dropped
+    ##
+    containerSecurityContext:
+      enabled: true
+      readOnlyRootFilesystem: false
+      allowPrivilegeEscalation: false
+      runAsNonRoot: true
+      capabilities:
+        drop:
+          - ALL
+    ## Configure extra options for liveness probe
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+    ## @param operator.prometheusConfigReloader.livenessProbe.enabled Turn on and off liveness probe
+    ## @param operator.prometheusConfigReloader.livenessProbe.initialDelaySeconds Delay before liveness probe is initiated
+    ## @param operator.prometheusConfigReloader.livenessProbe.periodSeconds How often to perform the probe
+    ## @param operator.prometheusConfigReloader.livenessProbe.timeoutSeconds When the probe times out
+    ## @param operator.prometheusConfigReloader.livenessProbe.failureThreshold Minimum consecutive failures for the probe
+    ## @param operator.prometheusConfigReloader.livenessProbe.successThreshold Minimum consecutive successes for the probe
+    ##
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 6
+      successThreshold: 1
+    ## Configure extra options for readiness probe
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+    ## @param operator.prometheusConfigReloader.readinessProbe.enabled Turn on and off readiness probe
+    ## @param operator.prometheusConfigReloader.readinessProbe.initialDelaySeconds Delay before readiness probe is initiated
+    ## @param operator.prometheusConfigReloader.readinessProbe.periodSeconds How often to perform the probe
+    ## @param operator.prometheusConfigReloader.readinessProbe.timeoutSeconds When the probe times out
+    ## @param operator.prometheusConfigReloader.readinessProbe.failureThreshold Minimum consecutive failures for the probe
+    ## @param operator.prometheusConfigReloader.readinessProbe.successThreshold Minimum consecutive successes for the probe
+    ##
+    readinessProbe:
+      enabled: true
+      initialDelaySeconds: 15
+      periodSeconds: 20
+      timeoutSeconds: 5
+      failureThreshold: 6
+      successThreshold: 1
+  ## Restrict the namespaces that the operator watches
+  ## ref: `-namespaces` in https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/operator.md
+  ## @param operator.namespaces Optional comma-separated list of namespaces to watch (default=all).
+  ##
+  namespaces: ""
+
+## @section Prometheus Parameters
+##
 
 ## Deploy a Prometheus instance
 ##
 prometheus:
+  ## @param prometheus.enabled Deploy Prometheus to the cluster
+  ##
   enabled: true
-
   ## Bitnami Prometheus image version
   ## ref: https://hub.docker.com/r/bitnami/prometheus/tags/
+  ## @param prometheus.image.registry Prometheus image registry
+  ## @param prometheus.image.repository Prometheus image repository
+  ## @param prometheus.image.tag Prometheus image tag (immutable tags are recommended)
+  ## @param prometheus.image.digest Prometheus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param prometheus.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.25.0-debian-10-r6
+    tag: 2.40.3-debian-11-r0
+    digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
     ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-
+    pullSecrets: []
   ## Service account for Prometheus to use.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ##
   serviceAccount:
-    ## Specifies whether a ServiceAccount should be created
+    ## @param prometheus.serviceAccount.create Specify whether to create a ServiceAccount for Prometheus
     ##
     create: true
-    ## The name of the ServiceAccount to use.
+    ## @param prometheus.serviceAccount.name The name of the ServiceAccount to create
     ## If not set and create is true, a name is generated using the kube-prometheus.prometheus.fullname template
-    # name:
-
-    ## Annotations to add to the ServiceAccount (evaluated as a template)
-    # annotations:
-    #   eks.amazonaws.com/role-arn: arn:aws:iam::ACCOUNT:role/prometheus
-
-  ## SecurityContext configuration
+    ##
+    name: ""
+    ## @param prometheus.serviceAccount.annotations Additional annotations for created Prometheus ServiceAccount
+    ## annotations:
+    ##   eks.amazonaws.com/role-arn: arn:aws:iam::ACCOUNT:role/prometheus
+    ##
+    annotations: {}
+    ## @param prometheus.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: true
+  ## Prometheus pods' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param prometheus.podSecurityContext.enabled Enable security context
+  ## @param prometheus.podSecurityContext.runAsUser User ID for the container
+  ## @param prometheus.podSecurityContext.fsGroup Group ID for the container filesystem
   ##
-  securityContext:
+  podSecurityContext:
     enabled: true
     runAsUser: 1001
     fsGroup: 1001
-
+  ## Prometheus containers' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param prometheus.containerSecurityContext.enabled Enable container security context
+  ## @param prometheus.containerSecurityContext.readOnlyRootFilesystem Mount / (root) as a readonly filesystem
+  ## @param prometheus.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off
+  ## @param prometheus.containerSecurityContext.runAsNonRoot Force the container to run as a non root user
+  ## @param prometheus.containerSecurityContext.capabilities.drop [array] Linux Kernel capabilities which should be dropped
+  ##
+  containerSecurityContext:
+    enabled: true
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    runAsNonRoot: true
+    capabilities:
+      drop:
+        - ALL
   ## Configure pod disruption budgets for Prometheus
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/#specifying-a-poddisruptionbudget
+  ## @param prometheus.pdb.create Create a pod disruption budget for Prometheus
+  ## @param prometheus.pdb.minAvailable Minimum number / percentage of pods that should remain scheduled
+  ## @param prometheus.pdb.maxUnavailable Maximum number / percentage of pods that may be made unavailable
   ##
-  podDisruptionBudget:
-    enabled: false
+  pdb:
+    create: false
     minAvailable: 1
-    # maxUnavailable:
-
+    maxUnavailable: ""
   ## Prometheus Service
   ##
   service:
-    ## Kubernetes service type and port number
+    ## @param prometheus.service.type Kubernetes service type
     ##
     type: ClusterIP
-    port: 9090
-    # clusterIP: None
-
-    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ## @param prometheus.service.ports.http Prometheus service port
     ##
-    # nodePort: 30090
-
-    ## Set the LoadBalancer service type to internal only.
+    ports:
+      http: 9090
+    ## @param prometheus.service.clusterIP Specific cluster IP when service type is cluster IP. Use `None` for headless service
+    ## e.g: clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param prometheus.service.nodePorts.http Specify the nodePort value for the LoadBalancer and NodePort service types.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ## e.g:
+    ## nodePort: 30090
+    ##
+    nodePorts:
+      http: ""
+    ## @param prometheus.service.loadBalancerIP `loadBalancerIP` if service type is `LoadBalancer`
+    ## Set the LoadBalancer service type to internal only
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
-    # loadBalancerIP:
-
-    ## Load Balancer sources
+    loadBalancerIP: ""
+    ## @param prometheus.service.loadBalancerSourceRanges Address that are allowed when service is `LoadBalancer`
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ##
-    # loadBalancerSourceRanges:
-    # - 10.10.10.0/24
-
-    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints.
-    ## There are two available options: Cluster (default) and Local.
+    ## loadBalancerSourceRanges:
+    ## - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param prometheus.service.externalTrafficPolicy Enable client source IP preservation
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
+    ## There are two available options: Cluster (default) and Local
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
-
-    ## Specifies the health check node port (numeric port number) for the service
+    ## @param prometheus.service.healthCheckNodePort Specifies the health check node port
     ## if externalTrafficPolicy is set to Local.
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
-    # healthCheckNodePort:
-
-    ## Session Affinity
-    ## Set stickySessions to true to enable Session Affinity
-    # stickySessions: true
-
-    ## Provide any additional annotations which may be required.
+    healthCheckNodePort: ""
+    ## @param prometheus.service.annotations Additional annotations for Prometheus service  (this value is evaluated as a template)
     ##
     annotations: {}
-
+    ## @param prometheus.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param prometheus.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
   serviceMonitor:
-    ## Creates a ServiceMonitor to monitor Prometheus itself
+    ## @param prometheus.serviceMonitor.enabled Creates a ServiceMonitor to monitor Prometheus itself
     ##
     enabled: true
-
-    ## Scrape interval. If not set, the Prometheus default scrape interval is used.
+    ## @param prometheus.serviceMonitor.interval Scrape interval (use by default, falling back to Prometheus' default)
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     interval: ""
-
-    ## Metric relabeling
+    ## @param prometheus.serviceMonitor.metricRelabelings Metric relabeling
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
     ##
     metricRelabelings: []
-
-    ## Relabel configs
+    ## @param prometheus.serviceMonitor.relabelings Relabel configs
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
     ##
     relabelings: []
 
   ## Configure the ingress resource that allows you to access the
   ## Alertmanager installation. Set up the URL
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/user-guide/ingress/
   ##
   ingress:
-    ## Set to true to enable ingress record generation
+    ## @param prometheus.ingress.enabled Enable ingress controller resource
     ##
     enabled: false
-
-    ## Set this to true in order to add the corresponding annotations for cert-manager
-    ##
-    certManager: false
-
-    ## Ingress Path type
+    ## @param prometheus.ingress.pathType Ingress Path type
     ##
     pathType: ImplementationSpecific
-
-    ## Override API Version (automatically detected if not set)
+    ## @param prometheus.ingress.apiVersion Override API Version (automatically detected if not set)
     ##
     apiVersion: ""
-
-    ## When the ingress is enabled, a host pointing to this will be created
+    ## @param prometheus.ingress.hostname Default host for the ingress resource
     ##
     hostname: prometheus.local
-
-    ## The Path to Prometheus. You may need to set this to '/*' in order to use this
-    ## with ALB ingress controllers.
+    ## @param prometheus.ingress.path The Path to Prometheus. You may need to set this to '/*' in order to use this with ALB ingress controllers
     ##
     path: /
-
-    ## Ingress annotations done as key:value pairs
+    ## @param prometheus.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
-    ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
-    ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations: {}
-    #  kubernetes.io/ingress.class: nginx
-
-    ## Enable TLS configuration for the hostname defined at prometheus.ingress.hostname parameter
+    ## @param prometheus.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
+    ## @param prometheus.ingress.tls Enable TLS configuration for the hostname defined at prometheus.ingress.hostname parameter
     ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.prometheus.ingress.hostname }}
     ## You can use the prometheus.ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
     ##
     tls: false
-
-    ## The list of additional hostnames to be covered with this ingress record.
+    ## @param prometheus.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
+    ## @param prometheus.ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
     ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
     ## extraHosts:
     ## - name: prometheus.local
     ##   path: /
     ##
-
-    ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
+    extraHosts: []
+    ## @param prometheus.ingress.extraPaths Additional arbitrary path/backend objects
     ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
     ## extraPaths:
     ## - path: /*
@@ -434,16 +704,16 @@ prometheus:
     ##     serviceName: ssl-redirect
     ##     servicePort: use-annotation
     ##
-
-    ## The tls configuration for additional hostnames to be covered with this ingress record.
+    extraPaths: []
+    ## @param prometheus.ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
     ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
     ## extraTls:
     ## - hosts:
     ##     - prometheus.local
     ##   secretName: prometheus.local-tls
     ##
-
-    ## If you're providing your own certificates, please use this to add the certificates as secrets
+    extraTls: []
+    ## @param prometheus.ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
     ## key and certificate should start with -----BEGIN CERTIFICATE----- or
     ## -----BEGIN RSA PRIVATE KEY-----
     ##
@@ -452,321 +722,365 @@ prometheus:
     ##
     ## It is also possible to create and manage the certificates outside of this helm chart
     ## Please see README.md for more information
-    ##
-    secrets: []
+    ## e.g:
+    ## secrets:
     ## - name: prometheus.local-tls
     ##   key:
     ##   certificate:
     ##
-
+    ## NOTE: the secret name MUST match {{ingress.hostname}}-tls to be used if selfSigned is false or no certManager is used
+    secrets: []
+    ## @param prometheus.ingress.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend:
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
+  ## @param prometheus.externalUrl External URL used to access Prometheus
   ## If not creating an ingress but still exposing the service some other way (like a proxy)
   ## let Prometheus know what its external URL is so that it can properly create links
-  #
-  # externalUrl: https://prometheus.example.com
-
-  ## Configure resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## externalUrl: https://prometheus.example.com
+  ##
+  externalUrl: ""
+  ## @param prometheus.resources CPU/Memory resource requests/limits for node
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
-
-  ## Pod affinity preset
+  ## @param prometheus.podAffinityPreset Prometheus Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAffinityPreset: ""
-
-  ## Pod anti-affinity preset
+  ## @param prometheus.podAntiAffinityPreset Prometheus Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAntiAffinityPreset: soft
-
   ## Node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
   ##
   nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
+    ## @param prometheus.nodeAffinityPreset.type Prometheus Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## Node label key to match
+    ## @param prometheus.nodeAffinityPreset.key Prometheus Node label key to match Ignored if `affinity` is set.
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
     key: ""
-    ## Node label values to match
+    ## @param prometheus.nodeAffinityPreset.values Prometheus Node label values to match. Ignored if `affinity` is set.
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-
-  ## Affinity for pod assignment
+  ## @param prometheus.affinity Prometheus Affinity for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: prometheus.podAffinityPreset, prometheus.podAntiAffinityPreset, and prometheus.nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-
-  ## Node labels for pod assignment
+  ## @param prometheus.nodeSelector Prometheus Node labels for pod assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
-  ## Tolerations for pod assignment
+  ## @param prometheus.tolerations Prometheus Tolerations for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
-  ## Interval between consecutive scrapes.
+  ## @param prometheus.scrapeInterval Interval between consecutive scrapes
   ##
   scrapeInterval: ""
-
-  ## Interval between consecutive evaluations.
+  ## @param prometheus.evaluationInterval Interval between consecutive evaluations
   ##
   evaluationInterval: ""
-
-  ## ListenLocal makes the Prometheus server listen on loopback, so that it does not bind against the Pod IP.
+  ## @param prometheus.listenLocal ListenLocal makes the Prometheus server listen on loopback
   ##
   listenLocal: false
-
-  ## Enable Prometheus adminitrative API
+  ## Configure extra options for liveness probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param prometheus.livenessProbe.enabled Turn on and off liveness probe
+  ## @param prometheus.livenessProbe.path Path of the HTTP service for checking the healthy state
+  ## @param prometheus.livenessProbe.initialDelaySeconds Delay before liveness probe is initiated
+  ## @param prometheus.livenessProbe.periodSeconds How often to perform the probe
+  ## @param prometheus.livenessProbe.timeoutSeconds When the probe times out
+  ## @param prometheus.livenessProbe.failureThreshold Minimum consecutive failures for the probe
+  ## @param prometheus.livenessProbe.successThreshold Minimum consecutive successes for the probe
+  ##
+  livenessProbe:
+    enabled: true
+    path: /-/healthy
+    initialDelaySeconds: 0
+    failureThreshold: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 3
+  ## Configure extra options for readiness probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param prometheus.readinessProbe.enabled Turn on and off readiness probe
+  ## @param prometheus.readinessProbe.path Path of the HTTP service for checking the ready state
+  ## @param prometheus.readinessProbe.initialDelaySeconds Delay before readiness probe is initiated
+  ## @param prometheus.readinessProbe.periodSeconds How often to perform the probe
+  ## @param prometheus.readinessProbe.timeoutSeconds When the probe times out
+  ## @param prometheus.readinessProbe.failureThreshold Minimum consecutive failures for the probe
+  ## @param prometheus.readinessProbe.successThreshold Minimum consecutive successes for the probe
+  ##
+  readinessProbe:
+    enabled: true
+    path: /-/ready
+    initialDelaySeconds: 0
+    failureThreshold: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 3
+  ## Configure extra options for startup probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param prometheus.startupProbe.enabled Turn on and off readiness probe
+  ## @param prometheus.startupProbe.path Path of the HTTP service for checking the ready state
+  ## @param prometheus.startupProbe.initialDelaySeconds Delay before readiness probe is initiated
+  ## @param prometheus.startupProbe.periodSeconds How often to perform the probe
+  ## @param prometheus.startupProbe.timeoutSeconds When the probe times out
+  ## @param prometheus.startupProbe.failureThreshold Minimum consecutive failures for the probe
+  ## @param prometheus.startupProbe.successThreshold Minimum consecutive successes for the probe
+  ##
+  startupProbe:
+    enabled: true
+    path: /-/ready
+    initialDelaySeconds: 0
+    failureThreshold: 60
+    periodSeconds: 15
+    successThreshold: 1
+    timeoutSeconds: 3
+  ## @param prometheus.enableAdminAPI Enable Prometheus adminitrative API
   ## ref: https://prometheus.io/docs/prometheus/latest/querying/api/#tsdb-admin-apis
   ##
   enableAdminAPI: false
-
-  ## Alertmanagers to which alerts will be sent
+  ## @param prometheus.enableFeatures Enable access to Prometheus disabled features.
+  ## ref: https://prometheus.io/docs/prometheus/latest/disabled_features/
+  ##
+  enableFeatures: []
+  ## @param prometheus.alertingEndpoints Alertmanagers to which alerts will be sent
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#alertmanagerendpoints
   ##
   alertingEndpoints: []
-
-  ## External labels to add to any time series or alerts when communicating with external systems
+  ## @param prometheus.externalLabels External labels to add to any time series or alerts when communicating with external systems
   ##
   externalLabels: {}
-
-  ## Name of the external label used to denote replica name
+  ## @param prometheus.replicaExternalLabelName Name of the external label used to denote replica name
   ##
   replicaExternalLabelName: ""
-
-  ## If true, the Operator won't add the external label used to denote replica name
+  ## @param prometheus.replicaExternalLabelNameClear Clear external label used to denote replica name
   ##
   replicaExternalLabelNameClear: false
-
-  ## Prefix used to register routes, overriding externalUrl route.
+  ## @param prometheus.routePrefix Prefix used to register routes, overriding externalUrl route
   ## Useful for proxies that rewrite URLs.
   ##
   routePrefix: /
-
-  ## Name of the external label used to denote Prometheus instance name
+  ## @param prometheus.prometheusExternalLabelName Name of the external label used to denote Prometheus instance name
   ##
   prometheusExternalLabelName: ""
-
-  ## If true, the Operator won't add the external label used to denote Prometheus instance name
+  ## @param prometheus.prometheusExternalLabelNameClear Clear external label used to denote Prometheus instance name
   ##
   prometheusExternalLabelNameClear: false
-
-  ## Secrets that should be mounted into the Prometheus Pods
+  ## @param prometheus.secrets Secrets that should be mounted into the Prometheus Pods
   ##
   secrets: []
-
-  ## ConfigMaps that should be mounted into the Prometheus Pods
+  ## @param prometheus.configMaps ConfigMaps that should be mounted into the Prometheus Pods
   ##
   configMaps: []
-
-  ## The query command line flags when starting Prometheus
+  ## @param prometheus.querySpec The query command line flags when starting Prometheus
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#queryspec
   ##
   querySpec: {}
-
-  ## Namespaces to be selected for PrometheusRules discovery
+  ## @param prometheus.ruleNamespaceSelector Namespaces to be selected for PrometheusRules discovery
   ## See https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#namespaceselector for usage
   ##
   ruleNamespaceSelector: {}
-
-  ## PrometheusRules to be selected for target discovery.
+  ## @param prometheus.ruleSelector PrometheusRules to be selected for target discovery
   ## If {}, select all ServiceMonitors
   ##
   ruleSelector: {}
-
-  ## ServiceMonitors to be selected for target discovery.
+  ## @param prometheus.serviceMonitorSelector ServiceMonitors to be selected for target discovery
   ## If {}, select all ServiceMonitors
   ##
   serviceMonitorSelector: {}
-  # matchLabels:
-  #   foo: bar
-
-  ## Namespaces to be selected for ServiceMonitor discovery.
+  ## @param prometheus.serviceMonitorNamespaceSelector Namespaces to be selected for ServiceMonitor discovery
   ## See https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#namespaceselector for usage
   ##
   serviceMonitorNamespaceSelector: {}
-
-  ## PodMonitors to be selected for target discovery.
+  ## @param prometheus.podMonitorSelector PodMonitors to be selected for target discovery.
   ## If {}, select all PodMonitors
   ##
   podMonitorSelector: {}
-
-  ## Namespaces to be selected for PodMonitor discovery
+  ## @param prometheus.podMonitorNamespaceSelector Namespaces to be selected for PodMonitor discovery
   ## See https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#namespaceselector for usage
   ##
   podMonitorNamespaceSelector: {}
-
-  ## Probes to be selected for target discovery.
+  ## @param prometheus.probeSelector Probes to be selected for target discovery.
   ## If {}, select all Probes
   ##
   probeSelector: {}
-
-  ## Namespaces to be selected for Probe discovery
+  ## @param prometheus.probeNamespaceSelector Namespaces to be selected for Probe discovery
   ## See https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#namespaceselector for usage
   ##
   probeNamespaceSelector: {}
-
-  ## How long to retain metrics
+  ## @param prometheus.retention Metrics retention days
   ##
   retention: 10d
-
-  ## Maximum size of metrics
+  ## @param prometheus.retentionSize Maximum size of metrics
   ##
   retentionSize: ""
-
-  ## Disable the compaction of the Prometheus TSDB
+  ## @param prometheus.disableCompaction Disable the compaction of the Prometheus TSDB
   ## See https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
   ## ref: https://prometheus.io/docs/prometheus/latest/storage/#compaction
   ##
   disableCompaction: false
-
-  ## Enable compression of the write-ahead log using Snappy.
+  ## @param prometheus.walCompression Enable compression of the write-ahead log using Snappy
   ##
   walCompression: false
-
-  ## If true, the Operator won't process any Prometheus configuration changes
+  ## @param prometheus.paused If true, the Operator won't process any Prometheus configuration changes
   ##
   paused: false
-
-  ## Desired number of Prometheus nodes
+  ## @param prometheus.replicaCount Number of Prometheus replicas desired
   ##
   replicaCount: 1
-
-  ## Log level for Prometheus
+  ## @param prometheus.shards Number of Prometheus shards desired
+  ##
+  shards: 1
+  ## @param prometheus.logLevel Log level for Prometheus
   ##
   logLevel: info
-
-  ## Log format for Prometheus
+  ## @param prometheus.logFormat Log format for Prometheus
   ##
   logFormat: logfmt
-
-  ## Standard object’s metadata
+  ## @param prometheus.podMetadata [object] Standard object's metadata
   ## ref: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#metadata
   ##
   podMetadata:
+    ## labels:
+    ##   app: prometheus
+    ##   k8s-app: prometheus
+    ##
     labels: {}
-    # app: prometheus
-    # k8s-app: prometheus
     annotations: {}
-
-  ## The remote_read spec configuration for Prometheus.
+  ## @param prometheus.remoteRead The remote_read spec configuration for Prometheus
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#remotereadspec
+  ## remoteRead:
+  ## - url: http://remote1/read
   ##
   remoteRead: []
-  # - url: http://remote1/read
-
-  ## The remote_write spec configuration for Prometheus.
+  ## @param prometheus.remoteWrite The remote_write spec configuration for Prometheus
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#remotewritespec
+  ## remoteWrite:
+  ## - url: http://remote1/push
   ##
   remoteWrite: []
-  # - url: http://remote1/push
-
-  ## Prometheus StorageSpec for persistent data
+  ## @param prometheus.storageSpec Prometheus StorageSpec for persistent data
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/storage.md
   ##
   storageSpec: {}
-
   ## Prometheus persistence parameters
   ##
   persistence:
-    ## The storageSpec takes precedence before this persistence configuration.
-    ## If you want to use this configuration make sure the storageSpec is not provided.
+    ## @param prometheus.persistence.enabled Use PVCs to persist data. If the storageSpec is provided this will not take effect.
     ##
     enabled: false
-    ## Persistent Volume Storage Class
+    ## @param prometheus.persistence.storageClass Persistent Volume Storage Class
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
     ## If undefined (the default) or set to null, no storageClassName spec is
     ## set, choosing the default provisioner.
     ##
-    # storageClass: "-"
-    ## Persistent Volume Access Mode
+    storageClass: ""
+    ## @param prometheus.persistence.accessModes Persistent Volume Access Modes
     ##
     accessModes:
       - ReadWriteOnce
-    ## Persistent Volume Claim size
+    ## @param prometheus.persistence.size Persistent Volume Size
     ##
     size: 8Gi
-
-  ## Priority class assigned to the Pods
+    ## @param prometheus.persistence.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
+  ## @param prometheus.priorityClassName Priority class assigned to the Pods
   ##
   priorityClassName: ""
-
-  ## Containers allows injecting additional containers
+  ## @param prometheus.containers Containers allows injecting additional containers
   ##
   containers: []
-
-  ## Volumes allows configuration of additional volumes
+  ## @param prometheus.initContainers Add additional init containers to the prometheus pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## @param prometheus.volumes Volumes allows configuration of additional volumes
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
   ##
   volumes: []
-
-  ## VolumeMounts allows configuration of additional VolumeMounts. Evaluated as a template
+  ## @param prometheus.volumeMounts VolumeMounts allows configuration of additional VolumeMounts. Evaluated as a template
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
   ##
   volumeMounts: []
-
-  ## PrometheusRule defines recording and alerting rules for a Prometheus instance.
+  ## @param prometheus.additionalPrometheusRules PrometheusRule defines recording and alerting rules for a Prometheus instance.
+  ## - name: custom-recording-rules
+  ##   groups:
+  ##     - name: sum_node_by_job
+  ##       rules:
+  ##         - record: job:kube_node_labels:sum
+  ##           expr: sum(kube_node_labels) by (job)
+  ##     - name: sum_prometheus_config_reload_by_pod
+  ##       rules:
+  ##         - record: job:prometheus_config_last_reload_successful:sum
+  ##           expr: sum(prometheus_config_last_reload_successful) by (pod)
+  ## - name: custom-alerting-rules
+  ##   groups:
+  ##     - name: prometheus-config
+  ##       rules:
+  ##         - alert: PrometheusConfigurationReload
+  ##           expr: prometheus_config_last_reload_successful > 0
+  ##           for: 1m
+  ##           labels:
+  ##             severity: error
+  ##           annotations:
+  ##             summary: "Prometheus configuration reload (instance {{ $labels.instance }})"
+  ##             description: "Prometheus configuration reload error\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+  ##     - name: custom-node-exporter-alerting-rules
+  ##       rules:
+  ##         - alert: PhysicalComponentTooHot
+  ##           expr: node_hwmon_temp_celsius > 75
+  ##           for: 5m
+  ##           labels:
+  ##             severity: warning
+  ##           annotations:
+  ##             summary: "Physical component too hot (instance {{ $labels.instance }})"
+  ##             description: "Physical hardware component too hot\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+  ##         - alert: NodeOvertemperatureAlarm
+  ##           expr: node_hwmon_temp_alarm == 1
+  ##           for: 5m
+  ##           labels:
+  ##             severity: critical
+  ##           annotations:
+  ##             summary: "Node overtemperature alarm (instance {{ $labels.instance }})"
+  ##             description: "Physical node temperature alarm triggered\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
   ##
   additionalPrometheusRules: []
-  # - name: custom-recording-rules
-  #   groups:
-  #     - name: sum_node_by_job
-  #       rules:
-  #         - record: job:kube_node_labels:sum
-  #           expr: sum(kube_node_labels) by (job)
-  #     - name: sum_prometheus_config_reload_by_pod
-  #       rules:
-  #         - record: job:prometheus_config_last_reload_successful:sum
-  #           expr: sum(prometheus_config_last_reload_successful) by (pod)
-  # - name: custom-alerting-rules
-  #   groups:
-  #     - name: prometheus-config
-  #       rules:
-  #         - alert: PrometheusConfigurationReload
-  #           expr: prometheus_config_last_reload_successful > 0
-  #           for: 1m
-  #           labels:
-  #             severity: error
-  #           annotations:
-  #             summary: "Prometheus configuration reload (instance {{ $labels.instance }})"
-  #             description: "Prometheus configuration reload error\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
-  #     - name: custom-node-exporter-alerting-rules
-  #       rules:
-  #         - alert: PhysicalComponentTooHot
-  #           expr: node_hwmon_temp_celsius > 75
-  #           for: 5m
-  #           labels:
-  #             severity: warning
-  #           annotations:
-  #             summary: "Physical component too hot (instance {{ $labels.instance }})"
-  #             description: "Physical hardware component too hot\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
-  #         - alert: NodeOvertemperatureAlarm
-  #           expr: node_hwmon_temp_alarm == 1
-  #           for: 5m
-  #           labels:
-  #             severity: critical
-  #           annotations:
-  #             summary: "Node overtemperature alarm (instance {{ $labels.instance }})"
-  #             description: "Physical node temperature alarm triggered\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
-
-  ## Enable additional scrape configs that are managed externally to this chart
   ## Note that the prometheus will fail to provision if the correct secret does not exist.
+  ## @param prometheus.additionalScrapeConfigs.enabled Enable additional scrape configs
+  ## @param prometheus.additionalScrapeConfigs.type Indicates if the cart should use external additional scrape configs or internal configs
+  ## @param prometheus.additionalScrapeConfigs.external.name Name of the secret that Prometheus should use for the additional external scrape configuration
+  ## @param prometheus.additionalScrapeConfigs.external.key Name of the key inside the secret to be used for the additional external scrape configuration
+  ## @param prometheus.additionalScrapeConfigs.internal.jobList A list of Prometheus scrape jobs
   ##
   additionalScrapeConfigs:
     enabled: false
@@ -780,332 +1094,551 @@ prometheus:
       key: ""
     internal:
       jobList: []
-
-  ## NOTE additionalScrapeConfigsExternal is deprecated. Please see README.md
+  ## @param prometheus.additionalScrapeConfigsExternal.enabled Deprecated: Enable additional scrape configs that are managed externally to this chart
+  ## @param prometheus.additionalScrapeConfigsExternal.name Deprecated: Name of the secret that Prometheus should use for the additional scrape configuration
+  ## @param prometheus.additionalScrapeConfigsExternal.key Deprecated: Name of the key inside the secret to be used for the additional scrape configuration
   ##
   additionalScrapeConfigsExternal:
     enabled: false
-    ## Name of the secret that Prometheus should use for the additional scrape configuration
-    ##
-    # name:
-    ## Name of the key inside the secret to be used for the additional scrape configuration.
-    ##
-    # key:
-
+    name: ""
+    key: ""
   ## Enable additional Prometheus alert relabel configs that are managed externally to this chart
   ## Note that the prometheus will fail to provision if the correct secret does not exist.
+  ## @param prometheus.additionalAlertRelabelConfigsExternal.enabled Enable additional Prometheus alert relabel configs that are managed externally to this chart
+  ## @param prometheus.additionalAlertRelabelConfigsExternal.name Name of the secret that Prometheus should use for the additional Prometheus alert relabel configuration
+  ## @param prometheus.additionalAlertRelabelConfigsExternal.key Name of the key inside the secret to be used for the additional Prometheus alert relabel configuration
   ##
   additionalAlertRelabelConfigsExternal:
     enabled: false
-    ## Name of the secret that Prometheus should use for the additional alert relabel configuration.
-    ##
-    # name:
-    ## Name of the key inside the secret to be used for the additional alert relabel configuration.
-    ##
-    # key:
-
+    name: ""
+    key: ""
   ## Thanos sidecar container configuration
   ##
   thanos:
-    ## Create a Thanos Sidecar container
+    ## @param prometheus.thanos.create Create a Thanos sidecar container
     ##
     create: false
     ## Bitnami Thanos image
     ## ref: https://hub.docker.com/r/bitnami/thanos/tags/
+    ## @param prometheus.thanos.image.registry Thanos image registry
+    ## @param prometheus.thanos.image.repository Thanos image name
+    ## @param prometheus.thanos.image.tag Thanos image tag
+    ## @param prometheus.thanos.image.digest Thanos image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+    ## @param prometheus.thanos.image.pullPolicy Thanos image pull policy
+    ## @param prometheus.thanos.image.pullSecrets Specify docker-registry secret names as an array
     ##
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.18.0-scratch-r3
+      tag: 0.29.0-scratch-r0
+      digest: ""
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-      ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
       ##
       pullPolicy: IfNotPresent
-      ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
+      ## Optionally specify an array of imagePullSecrets.
+      ## Secrets must be manually created in the namespace.
       ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+      ## Example:
+      ## pullSecrets:
+      ##   - myRegistryKeySecretName
       ##
-      # pullSecrets:
-      #   - myRegistryKeySecretName
-
-    ## Extra arguments passed to thanos sidecar 'args' section
+      pullSecrets: []
+    ## Thanos Sidecar container's securityContext
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param prometheus.thanos.containerSecurityContext.enabled Enable container security context
+    ## @param prometheus.thanos.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem
+    ## @param prometheus.thanos.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off
+    ## @param prometheus.thanos.containerSecurityContext.runAsNonRoot Force the container to run as a non root user
+    ## @param prometheus.thanos.containerSecurityContext.capabilities.drop [array] Linux Kernel capabilities which should be dropped
+    ##
+    containerSecurityContext:
+      enabled: true
+      readOnlyRootFilesystem: false
+      allowPrivilegeEscalation: false
+      runAsNonRoot: true
+      capabilities:
+        drop:
+          - ALL
+    ## @param prometheus.thanos.prometheusUrl Override default prometheus url `http://localhost:9090`
+    ##
+    prometheusUrl: ""
+    ## @param prometheus.thanos.extraArgs Additional arguments passed to the thanos sidecar container
+    ## extraArgs:
+    ## - --log.level=debug
+    ## - --tsdb.path=/data/
     ##
     extraArgs: []
-    # - --log.level=debug
-    # - --tsdb.path=/data/
-
-    ## Support mounting a Secret for the objectStorageConfig of the sideCar container.
+    ## @param prometheus.thanos.objectStorageConfig Support mounting a Secret for the objectStorageConfig of the sideCar container.
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/thanos.md
+    ## objectStorageConfig:
+    ##    secretName: thanos-objstore-config
+    ##    secretKey: thanos.yaml
     ##
     objectStorageConfig: {}
-    #   secretName: thanos-objstore-config
-    #   secretKey: thanos.yaml
-
+    ## ref: https://github.com/thanos-io/thanos/blob/main/docs/components/sidecar.md
+    ## @param prometheus.thanos.extraVolumeMounts Additional volumeMounts from `prometheus.volumes` for thanos sidecar container
+    ## extraVolumeMounts:
+    ## - name: my-secret-volume
+    ##   mountPath: /etc/thanos/secrets/my-secret
+    ##
+    extraVolumeMounts: []
     ## Thanos sidecar container resource requests and limits.
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param prometheus.thanos.resources.limits The resources limits for the Thanos sidecar container
+    ## @param prometheus.thanos.resources.requests The resources requests for the Thanos sidecar container
     ##
     resources:
-      ## We usually recommend not to specify default resources and to leave this as a conscious
-      ## choice for the user. This also increases chances charts run on environments with little
-      ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-      ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      ## Example:
+      ## limits:
+      ##    cpu: 100m
+      ##    memory: 128Mi
       ##
       limits: {}
-      #   cpu: 100m
-      #   memory: 128Mi
+      ## Examples:
+      ## requests:
+      ##    cpu: 100m
+      ##    memory: 128Mi
+      ##
       requests: {}
-      #   cpu: 100m
-      #   memory: 128Mi
-
+    ## Configure extra options for liveness probe
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+    ## @param prometheus.thanos.livenessProbe.enabled Turn on and off liveness probe
+    ## @param prometheus.thanos.livenessProbe.path Path of the HTTP service for checking the healthy state
+    ## @param prometheus.thanos.livenessProbe.initialDelaySeconds Delay before liveness probe is initiated
+    ## @param prometheus.thanos.livenessProbe.periodSeconds How often to perform the probe
+    ## @param prometheus.thanos.livenessProbe.timeoutSeconds When the probe times out
+    ## @param prometheus.thanos.livenessProbe.failureThreshold Minimum consecutive failures for the probe
+    ## @param prometheus.thanos.livenessProbe.successThreshold Minimum consecutive successes for the probe
+    ##
+    livenessProbe:
+      enabled: true
+      path: /-/healthy
+      initialDelaySeconds: 0
+      periodSeconds: 5
+      timeoutSeconds: 3
+      failureThreshold: 120
+      successThreshold: 1
+    ## Configure extra options for readiness probe
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+    ## @param prometheus.thanos.readinessProbe.enabled Turn on and off readiness probe
+    ## @param prometheus.thanos.readinessProbe.path Path of the HTTP service for checking the ready state
+    ## @param prometheus.thanos.readinessProbe.initialDelaySeconds Delay before readiness probe is initiated
+    ## @param prometheus.thanos.readinessProbe.periodSeconds How often to perform the probe
+    ## @param prometheus.thanos.readinessProbe.timeoutSeconds When the probe times out
+    ## @param prometheus.thanos.readinessProbe.failureThreshold Minimum consecutive failures for the probe
+    ## @param prometheus.thanos.readinessProbe.successThreshold Minimum consecutive successes for the probe
+    ##
+    readinessProbe:
+      enabled: true
+      path: /-/ready
+      initialDelaySeconds: 0
+      periodSeconds: 5
+      timeoutSeconds: 3
+      failureThreshold: 120
+      successThreshold: 1
     ## Thanos Sidecar Service
     ##
     service:
-      ## Kubernetes service type and port number
+      ## @param prometheus.thanos.service.type Kubernetes service type
       ##
       type: ClusterIP
-      port: 10901
-      ## Use a "headless" service by default so it returns every pod's IP
-      ## instead of loadbalancing requests.
+      ## @param prometheus.thanos.service.ports.grpc Thanos service port
+      ##
+      ports:
+        grpc: 10901
+      ## @param prometheus.thanos.service.clusterIP Specific cluster IP when service type is cluster IP. Use `None` to create headless service by default.
+      ## Use a "headless" service by default so it returns every pod's IP instead of loadbalancing requests.
       ##
       clusterIP: None
-
-      ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+      ## @param prometheus.thanos.service.nodePorts.grpc Specify the nodePort value for the LoadBalancer and NodePort service types.
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+      ## e.g:
+      ## nodePort: 30901
       ##
-      # nodePort: 30901
-
-      ## Set the LoadBalancer service type to internal only.
+      nodePorts:
+        grpc: ""
+      ## @param prometheus.thanos.service.loadBalancerIP `loadBalancerIP` if service type is `LoadBalancer`
+      ## Set the LoadBalancer service type to internal only
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
       ##
-      # loadBalancerIP:
-
-      ## Load Balancer sources
+      loadBalancerIP: ""
+      ## @param prometheus.thanos.service.loadBalancerSourceRanges Address that are allowed when svc is `LoadBalancer`
       ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+      ## e.g:
+      ## loadBalancerSourceRanges:
+      ## - 10.10.10.0/24
       ##
-      # loadBalancerSourceRanges:
-      # - 10.10.10.0/24
-
-      ## Provide any additional annotations which may be required.
+      loadBalancerSourceRanges: []
+      ## @param prometheus.thanos.service.annotations Additional annotations for Prometheus service
       ##
       annotations: {}
-
-      ## Extra ports to expose from the Thanos sidecar container
+      ## @param prometheus.thanos.service.extraPorts Additional ports to expose from the Thanos sidecar container
+      ## extraPorts:
+      ##   - name: http
+      ##     port: 10902
+      ##     targetPort: http
+      ##     protocol: TCP
       ##
-      # extraPorts:
-      #   - name: http
-      #     port: 10902
-      #     targetPort: http
-      #     protocol: TCP
       extraPorts: []
-
+      ## @param prometheus.thanos.service.externalTrafficPolicy Prometheus service external traffic policy
+      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ##
+      externalTrafficPolicy: Cluster
+      ## @param prometheus.thanos.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+      ## If "ClientIP", consecutive client requests will be directed to the same Pod
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+      ##
+      sessionAffinity: None
+      ## @param prometheus.thanos.service.sessionAffinityConfig Additional settings for the sessionAffinity
+      ## sessionAffinityConfig:
+      ##   clientIP:
+      ##     timeoutSeconds: 300
+      ##
+      sessionAffinityConfig: {}
     ## Configure the ingress resource that allows you to access the
     ## Thanos Sidecar installation. Set up the URL
-    ## ref: http://kubernetes.io/docs/user-guide/ingress/
+    ## ref: https://kubernetes.io/docs/user-guide/ingress/
     ##
     ingress:
-      ## Set to true to enable ingress record generation
+      ## @param prometheus.thanos.ingress.enabled Enable ingress controller resource
       ##
       enabled: false
-
-      ## Set this to true in order to add the corresponding annotations for cert-manager
+      ## @param prometheus.thanos.ingress.pathType Ingress path type
       ##
-      certManager: false
-
-      ## Ingress annotations done as key:value pairs
+      pathType: ImplementationSpecific
+      ## @param prometheus.thanos.ingress.apiVersion Force Ingress API version (automatically detected if not set)
+      ##
+      apiVersion: ""
+      ## @param prometheus.thanos.ingress.hostname Default host for the ingress record
+      ##
+      hostname: thanos.prometheus.local
+      ## @param prometheus.thanos.ingress.path Default path for the ingress record
+      ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+      ##
+      path: /
+      ## @param prometheus.thanos.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
       ## For a full list of possible ingress annotations, please see
       ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+      ## Use this parameter to set the required annotations for cert-manager, see
+      ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
       ##
-      ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
-      ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+      ## Examples:
+      ## kubernetes.io/ingress.class: nginx
+      ## cert-manager.io/cluster-issuer: cluster-issuer-name
       ##
       annotations: {}
-      #  kubernetes.io/ingress.class: nginx
-      #  nginx.ingress.kubernetes.io/backend-protocol: "GRPCS"
-
-      ## The list of hostnames to be covered with this ingress record.
-      ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
+      ## @param prometheus.thanos.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+      ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+      ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
       ##
-      hosts:
-        - name: thanos.prometheus.local
-          path: /
-
-      ## The tls configuration for the ingress
-      ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-      ## tls:
+      ingressClassName: ""
+      ## @param prometheus.thanos.ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+      ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+      ## You can:
+      ##   - Use the `ingress.secrets` parameter to create this TLS secret
+      ##   - Relay on cert-manager to create it by setting `ingress.certManager=true`
+      ##   - Relay on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
+      ##
+      tls: false
+      ## @param prometheus.thanos.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+      ##
+      selfSigned: false
+      ## @param prometheus.thanos.ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+      ## e.g:
+      ## extraHosts:
+      ##   - name: thanos.prometheus.local
+      ##     path: /
+      ##
+      extraHosts: []
+      ## @param prometheus.thanos.ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+      ## e.g:
+      ## extraPaths:
+      ## - path: /*
+      ##   backend:
+      ##     serviceName: ssl-redirect
+      ##     servicePort: use-annotation
+      ##
+      extraPaths: []
+      ## @param prometheus.thanos.ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+      ## e.g:
+      ## extraTls:
       ## - hosts:
       ##     - thanos.prometheus.local
       ##   secretName: thanos.prometheus.local-tls
       ##
-      tls: {}
-
-  ## Port name used for the pods and governing service. This defaults to web
+      extraTls: []
+      ## @param prometheus.thanos.ingress.secrets Custom TLS certificates as secrets
+      ## NOTE: 'key' and 'certificate' are expected in PEM format
+      ## NOTE: 'name' should line up with a 'secretName' set further up
+      ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+      ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+      ## It is also possible to create and manage the certificates outside of this helm chart
+      ## Please see README.md for more information
+      ## e.g:
+      ## secrets:
+      ##   - name: thanos.prometheus.local-tls
+      ##     key: |-
+      ##       -----BEGIN RSA PRIVATE KEY-----
+      ##       ...
+      ##       -----END RSA PRIVATE KEY-----
+      ##     certificate: |-
+      ##       -----BEGIN CERTIFICATE-----
+      ##       ...
+      ##       -----END CERTIFICATE-----
+      ##
+      secrets: []
+      ## @param prometheus.thanos.ingress.extraRules The list of additional rules to be added to this ingress record. Evaluated as a template
+      ## Useful when looking for additional customization, such as using different backend
+      ##
+      extraRules: []
+  ## @param prometheus.portName Port name used for the pods and governing service. This defaults to web
   ##
   portName: web
+
+## @section Alertmanager Parameters
+##
 
 ## Configuration for alertmanager
 ## ref: https://prometheus.io/docs/alerting/alertmanager/
 ##
 alertmanager:
+  ## @param alertmanager.enabled Deploy Alertmanager to the cluster
+  ##
   enabled: true
-
   ## Bitnami Alertmanager image version
   ## ref: https://hub.docker.com/r/bitnami/prometheus-operator/tags/
+  ## @param alertmanager.image.registry Prometheus image registry
+  ## @param alertmanager.image.repository Prometheus image repository
+  ## @param alertmanager.image.tag Prometheus image tag (immutable tags are recommended)
+  ## @param alertmanager.image.digest Prometheus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param alertmanager.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.21.0-debian-10-r232
+    tag: 0.24.0-debian-11-r61
+    digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
     ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-
+    pullSecrets: []
   ## Service account for Alertmanager to use.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ##
   serviceAccount:
-    ## Specifies whether a ServiceAccount should be created
+    ## @param alertmanager.serviceAccount.create Specify whether to create a ServiceAccount for Alertmanager
     ##
     create: true
-    ## The name of the ServiceAccount to use.
+    ## @param alertmanager.serviceAccount.name The name of the ServiceAccount to create
     ## If not set and create is true, a name is generated using the kube-prometheus.alertmanager.fullname template
-    # name:
-
-  ## SecurityContext configuration
+    ##
+    name: ""
+    ## @param alertmanager.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: true
+    ## @param alertmanager.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+    ##
+    annotations: {}
+  ## Prometheus Alertmanager pods' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param alertmanager.podSecurityContext.enabled Enable security context
+  ## @param alertmanager.podSecurityContext.runAsUser User ID for the container
+  ## @param alertmanager.podSecurityContext.fsGroup Group ID for the container filesystem
   ##
-  securityContext:
+  podSecurityContext:
     enabled: true
     runAsUser: 1001
     fsGroup: 1001
-
+  ## Prometheus Alertmanager container's securityContext
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param alertmanager.containerSecurityContext.enabled Enable container security context
+  ## @param alertmanager.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem
+  ## @param alertmanager.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off
+  ## @param alertmanager.containerSecurityContext.runAsNonRoot Force the container to run as a non root user
+  ## @param alertmanager.containerSecurityContext.capabilities.drop [array] Linux Kernel capabilities which should be dropped
+  ##
+  containerSecurityContext:
+    enabled: true
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    runAsNonRoot: true
+    capabilities:
+      drop:
+        - ALL
   ## Configure pod disruption budgets for Alertmanager
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/#specifying-a-poddisruptionbudget
+  ## @param alertmanager.pdb.create Create a pod disruption budget for Alertmanager
+  ## @param alertmanager.pdb.minAvailable Minimum number / percentage of pods that should remain scheduled
+  ## @param alertmanager.pdb.maxUnavailable Maximum number / percentage of pods that may be made unavailable
   ##
-  podDisruptionBudget:
-    enabled: false
+  pdb:
+    create: false
     minAvailable: 1
-    # maxUnavailable:
-
+    maxUnavailable: ""
   ## Alertmanager Service
   ##
   service:
-    ## Kubernetes service type and port number
+    ## @param alertmanager.service.type Kubernetes service type
     ##
     type: ClusterIP
-    port: 9093
-    # clusterIP: None
-
-    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ## @param alertmanager.service.ports.http Alertmanager service port
     ##
-    # nodePort: 30093
-
-    ## Set the LoadBalancer service type to internal only.
+    ports:
+      http: 9093
+    ## @param alertmanager.service.clusterIP Specific cluster IP when service type is cluster IP. Use `None` for headless service
+    ## e.g:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param alertmanager.service.nodePorts.http Specify the nodePort value for the LoadBalancer and NodePort service types.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ## e.g:
+    ## nodePort: 30903
+    ##
+    nodePorts:
+      http: ""
+    ## @param alertmanager.service.loadBalancerIP `loadBalancerIP` if service type is `LoadBalancer`
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
-    # loadBalancerIP:
-
-    ## Load Balancer sources
+    loadBalancerIP: ""
+    ## @param alertmanager.service.loadBalancerSourceRanges Address that are allowed when svc is `LoadBalancer`
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ## - 10.10.10.0/24
     ##
-    # loadBalancerSourceRanges:
-    # - 10.10.10.0/24
-
-    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints.
+    loadBalancerSourceRanges: []
+    ## @param alertmanager.service.externalTrafficPolicy Enable client source IP preservation
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
     ## There are two available options: Cluster (default) and Local.
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
-
-    ## Specifies the health check node port (numeric port number) for the service
-    ## if externalTrafficPolicy is set to Local.
+    ## @param alertmanager.service.healthCheckNodePort Specifies the health check node port
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
-    # healthCheckNodePort:
-
-    ## Session Affinity
-    ## Set stickySessions to true to enable Session Affinity
-    # stickySessions: true
-
-    ## Provide any additional annotations which may be required.
+    healthCheckNodePort: ""
+    ## @param alertmanager.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
+    ## @param alertmanager.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param alertmanager.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+    ## @param alertmanager.service.annotations Additional annotations for Alertmanager service (this value is evaluated as a template)
     ##
     annotations: {}
-
   ## If true, create a serviceMonitor for alertmanager
   ##
   serviceMonitor:
-    ## Creates a ServiceMonitor to monitor Alertmanager
+    ## @param alertmanager.serviceMonitor.enabled Creates a ServiceMonitor to monitor Alertmanager
     ##
     enabled: true
-
-    ## Scrape interval. If not set, the Prometheus default scrape interval is used.
+    ## @param alertmanager.serviceMonitor.interval Scrape interval. If not set, the Prometheus default scrape interval is used.
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     interval: ""
-
-    ## Metric relabeling
+    ## @param alertmanager.serviceMonitor.metricRelabelings Metric relabeling
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
     ##
     metricRelabelings: []
-
-    ## Relabel configs
+    ## @param alertmanager.serviceMonitor.relabelings Relabel configs
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
     ##
     relabelings: []
-
-  ## Configure the ingress resource that allows you to access the
-  ## Alertmanager installation. Set up the URL
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
-  ##
-  ingress:
-    ## Set to true to enable ingress record generation
-    enabled: false
-
-    ## Set this to true in order to add the corresponding annotations for cert-manager
-    certManager: false
-
-    ## Ingress Path type
+    ## @param alertmanager.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
     ##
-    pathType: ImplementationSpecific
-
-    ## Override API Version (automatically detected if not set)
+    jobLabel: ""
+    ## @param alertmanager.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
-    apiVersion:
-
-    ## When the ingress is enabled, a host pointing to this will be created
+    scrapeTimeout: ""
+    ## @param alertmanager.serviceMonitor.selector ServiceMonitor selector labels
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ##
-    hostname: alertmanager.local
-
-    ## The Path to Alert Manager. You may need to set this to '/*' in order to use this
-    ## with ALB ingress controllers.
+    ## selector:
+    ##   prometheus: my-prometheus
     ##
-    path: /
-
-    ## Ingress annotations done as key:value pairs
-    ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    selector: {}
+    ## @param alertmanager.serviceMonitor.labels Extra labels for the ServiceMonitor
     ##
-    ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
-    ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+    labels: {}
+    ## @param alertmanager.serviceMonitor.annotations Extra annotations for the ServiceMonitor
     ##
     annotations: {}
-    #  kubernetes.io/ingress.class: nginx
-
-    ## Enable TLS configuration for the hostname defined at alertmanager.ingress.hostname parameter
+    ## @param alertmanager.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+    ##
+    honorLabels: false
+  ## Configure the ingress resource that allows you to access the
+  ## Alertmanager installation. Set up the URL
+  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ##
+  ingress:
+    ## @param alertmanager.ingress.enabled Enable ingress controller resource
+    ##
+    enabled: false
+    ## @param alertmanager.ingress.pathType Ingress Path type
+    ##
+    pathType: ImplementationSpecific
+    ## @param alertmanager.ingress.apiVersion Override API Version (automatically detected if not set)
+    ##
+    apiVersion: ""
+    ## @param alertmanager.ingress.hostname Default host for the ingress resource
+    ##
+    hostname: alertmanager.local
+    ## @param alertmanager.ingress.path The Path to Alert Manager. You may need to set this to '/*' in order to use this with ALB ingress controllers.
+    ##
+    path: /
+    ## @param alertmanager.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+    ## For a full list of possible ingress annotations, please see
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+    ##
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+    ##
+    annotations: {}
+    ## @param alertmanager.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
+    ## @param alertmanager.ingress.tls Enable TLS configuration for the hostname defined at alertmanager.ingress.hostname parameter
     ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.alertmanager.ingress.hostname }}
     ## You can use the alertmanager.ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
     ##
     tls: false
-
-    ## The list of additional hostnames to be covered with this ingress record.
+    ## @param alertmanager.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
+    ## @param alertmanager.ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
     ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
     ## extraHosts:
     ## - name: alertmanager.local
     ##   path: /
     ##
-
-    ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
+    extraHosts: []
+    ## @param alertmanager.ingress.extraPaths Additional arbitrary path/backend objects
     ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
     ## extraPaths:
     ## - path: /*
@@ -1113,16 +1646,16 @@ alertmanager:
     ##     serviceName: ssl-redirect
     ##     servicePort: use-annotation
     ##
-
-    ## The tls configuration for additional hostnames to be covered with this ingress record.
+    extraPaths: []
+    ## @param alertmanager.ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
     ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
     ## extraTls:
     ## - hosts:
     ##     - alertmanager.local
     ##   secretName: alertmanager.local-tls
     ##
-
-    ## If you're providing your own certificates, please use this to add the certificates as secrets
+    extraTls: []
+    ## @param alertmanager.ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
     ## key and certificate should start with -----BEGIN CERTIFICATE----- or
     ## -----BEGIN RSA PRIVATE KEY-----
     ##
@@ -1131,75 +1664,81 @@ alertmanager:
     ##
     ## It is also possible to create and manage the certificates outside of this helm chart
     ## Please see README.md for more information
-    ##
-    secrets: []
+    ## secrets:
     ## - name: alertmanager.local-tls
     ##   key:
     ##   certificate:
     ##
-
-  ## If not creating an ingress but still exposing the service some other way (like a proxy)
-  ## let Alertmanager know what its external URL is so that it can properly create links
-  #
-  # externalUrl: https://alertmanager.example.com
-
-  ## Configure resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    secrets: []
+    ## @param alertmanager.ingress.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend:
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
+  ## @param alertmanager.externalUrl External URL used to access Alertmanager
+  ## e.g:
+  ## externalUrl: https://alertmanager.example.com
+  ##
+  externalUrl: ""
+  ## @param alertmanager.resources CPU/Memory resource requests/limits for node
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
-
-  ## Pod affinity preset
+  ## @param alertmanager.podAffinityPreset Alertmanager Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAffinityPreset: ""
-
-  ## Pod anti-affinity preset
+  ## @param alertmanager.podAntiAffinityPreset Alertmanager Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAntiAffinityPreset: soft
-
   ## Node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
   ##
   nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
+    ## @param alertmanager.nodeAffinityPreset.type Alertmanager Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## Node label key to match
+    ## @param alertmanager.nodeAffinityPreset.key Alertmanager Node label key to match Ignored if `affinity` is set.
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
     key: ""
-    ## Node label values to match
+    ## @param alertmanager.nodeAffinityPreset.values Alertmanager Node label values to match. Ignored if `affinity` is set.
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-
-  ## Affinity for pod assignment
+  ## @param alertmanager.affinity Alertmanager Affinity for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: alertmanager.podAffinityPreset, alertmanager.podAntiAffinityPreset, and alertmanager.nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-
-  ## Node labels for pod assignment
+  ## @param alertmanager.nodeSelector Alertmanager Node labels for pod assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
-  ## Tolerations for pod assignment
+  ## @param alertmanager.tolerations Alertmanager Tolerations for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
   ## Alertmanager configuration
   ## ref: https://prometheus.io/docs/alerting/configuration/#configuration-file
+  ## @param alertmanager.config [object] Alertmanager configuration directive
+  ## @skip alertmanager.config.route.group_by
+  ## @skip alertmanager.config.route.routes
+  ## @skip alertmanager.config.receivers
   ##
   config:
     global:
@@ -1216,408 +1755,824 @@ alertmanager:
           receiver: 'null'
     receivers:
       - name: 'null'
-
-  ## Alertmanager configuration is created externally
-  ## If true, `alertmanager.config` is ignored, and a secret will not be created.
+  ## @param alertmanager.templateFiles Extra files to be added inside the `alertmanager-{{ template "kube-prometheus.alertmanager.fullname" . }}` secret.
   ##
+  templateFiles: {}
+  ## @param alertmanager.externalConfig Alertmanager configuration is created externally. If true, `alertmanager.config` is ignored, and a secret will not be created.
   ## Alertmanager requires a secret named `alertmanager-{{ template "kube-prometheus.alertmanager.fullname" . }}`
   ## It must contain:
   ##     alertmanager.yaml: <config>
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/alerting.md#alerting
   ##
   externalConfig: false
-
-  ## Desired number of Alertmanager nodes
+  ## @param alertmanager.replicaCount Number of Alertmanager replicas desired
   ##
   replicaCount: 1
-
-  ## Log level for Alertmanager
+  ## Configure extra options for liveness probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param alertmanager.livenessProbe.enabled Turn on and off liveness probe
+  ## @param alertmanager.livenessProbe.path Path of the HTTP service for checking the healthy state
+  ## @param alertmanager.livenessProbe.initialDelaySeconds Delay before liveness probe is initiated
+  ## @param alertmanager.livenessProbe.periodSeconds How often to perform the probe
+  ## @param alertmanager.livenessProbe.timeoutSeconds When the probe times out
+  ## @param alertmanager.livenessProbe.failureThreshold Minimum consecutive failures for the probe
+  ## @param alertmanager.livenessProbe.successThreshold Minimum consecutive successes for the probe
+  ##
+  livenessProbe:
+    enabled: true
+    path: /-/healthy
+    initialDelaySeconds: 0
+    periodSeconds: 5
+    timeoutSeconds: 3
+    failureThreshold: 120
+    successThreshold: 1
+  ## Configure extra options for readiness probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param alertmanager.readinessProbe.enabled Turn on and off readiness probe
+  ## @param alertmanager.readinessProbe.path Path of the HTTP service for checking the ready state
+  ## @param alertmanager.readinessProbe.initialDelaySeconds Delay before readiness probe is initiated
+  ## @param alertmanager.readinessProbe.periodSeconds How often to perform the probe
+  ## @param alertmanager.readinessProbe.timeoutSeconds When the probe times out
+  ## @param alertmanager.readinessProbe.failureThreshold Minimum consecutive failures for the probe
+  ## @param alertmanager.readinessProbe.successThreshold Minimum consecutive successes for the probe
+  ##
+  readinessProbe:
+    enabled: true
+    path: /-/ready
+    initialDelaySeconds: 0
+    periodSeconds: 5
+    timeoutSeconds: 3
+    failureThreshold: 120
+    successThreshold: 1
+  ## @param alertmanager.logLevel Log level for Alertmanager
   ##
   logLevel: info
-
-  ## Log format for Alertmanager
+  ## @param alertmanager.logFormat Log format for Alertmanager
   ##
   logFormat: logfmt
-
-  ## Standard object's metadata.
+  ## @param alertmanager.podMetadata [object] Standard object's metadata.
   ## ref: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#metadata
   ##
   podMetadata:
     labels: {}
     annotations: {}
-
-  ## Secrets that should be mounted into the Alertmanager Pods
+  ## @param alertmanager.secrets Secrets that should be mounted into the Alertmanager Pods
   ##
   secrets: []
-
-  ## ConfigMaps that should be mounted into the Alertmanager Pods
+  ## @param alertmanager.configMaps ConfigMaps that should be mounted into the Alertmanager Pods
   ##
   configMaps: []
-
-  ## Metrics retention
+  ## @param alertmanager.retention Metrics retention days
   ##
   retention: 120h
-
-  ## Alertmanager StorageSpec for persistent data
+  ## @param alertmanager.storageSpec Alertmanager StorageSpec for persistent data
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/storage.md
   ##
   storageSpec: {}
-
   ## Alertmanager persistence parameters
   ##
   persistence:
-    ## The storageSpec takes precedence before this persistence configuration.
+    ## @param alertmanager.persistence.enabled Use PVCs to persist data. If the storageSpec is provided this will not take effect.
     ## If you want to use this configuration make sure the storageSpec is not provided.
     ##
     enabled: false
-    ## Persistent Volume Storage Class
+    ## @param alertmanager.persistence.storageClass Persistent Volume Storage Class
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
     ## If undefined (the default) or set to null, no storageClassName spec is
     ## set, choosing the default provisioner.
     ##
-    # storageClass: "-"
-    ## Persistent Volume Access Mode
+    storageClass: ""
+    ## @param alertmanager.persistence.accessModes Persistent Volume Access Modes
     ##
     accessModes:
       - ReadWriteOnce
-    ## Persistent Volume Claim size
+    ## @param alertmanager.persistence.size Persistent Volume Size
     ##
     size: 8Gi
-
-  ## If true, the Operator won't process any Alertmanager configuration changes
+    ## @param alertmanager.persistence.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
+  ## @param alertmanager.paused If true, the Operator won't process any Alertmanager configuration changes
   ##
   paused: false
-
-  ## ListenLocal makes the Alertmanager server listen on loopbac
+  ## @param alertmanager.listenLocal ListenLocal makes the Alertmanager server listen on loopback
   ##
   listenLocal: false
-
-  ## Containers allows injecting additional containers
+  ## @param alertmanager.containers Containers allows injecting additional containers
   ##
   containers: []
-
-  ## Volumes allows configuration of additional volumes. Evaluated as a template
+  ## @param alertmanager.volumes Volumes allows configuration of additional volumes. Evaluated as a template
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#alertmanagerspec
   ##
   volumes: []
-
-  ## VolumeMounts allows configuration of additional VolumeMounts. Evaluated as a template
+  ## @param alertmanager.volumeMounts VolumeMounts allows configuration of additional VolumeMounts. Evaluated as a template
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/pi.md#alertmanagerspec
   ##
   volumeMounts: []
-
-  ## Priority class assigned to the Pods
+  ## @param alertmanager.priorityClassName Priority class assigned to the Pods
   ##
   priorityClassName: ""
-
-  ## AdditionalPeers allows injecting a set of additional Alertmanagers to peer with to form a highly available cluster.
+  ## @param alertmanager.additionalPeers AdditionalPeers allows injecting a set of additional Alertmanagers to peer with to form a highly available cluster
   ##
   additionalPeers: []
-
-  ## Prefix used to register routes, overriding externalUrl route.
+  ## @param alertmanager.routePrefix Prefix used to register routes, overriding externalUrl route
   ## Useful for proxies that rewrite URLs.
   ##
   routePrefix: /
-
-  ## Port name used for the pods and governing service. This defaults to web
+  ## @param alertmanager.portName Port name used for the pods and governing service. This defaults to web
   ##
   portName: web
+  ## @param alertmanager.configNamespaceSelector AlertmanagerConfigs to be selected for to merge and configure Alertmanager with. This defaults to {}
+  ##
+  configNamespaceSelector: {}
+  ## @param alertmanager.configSelector Namespaces to be selected for AlertmanagerConfig discovery. If nil, only check own namespace. This defaults to {}
+  ##
+  configSelector: {}
+  ## @param alertmanager.configuration EXPERIMENTAL: alertmanagerConfiguration specifies the global Alertmanager configuration. If defined, it takes precedence over the `configSecret` field. This field may change in future releases. The specified global alertmanager config will not force add a namespace label in routes and inhibitRules
+  ##
+  configuration: {}
+
+## @section Exporters
+##
 
 ## Exporters
 ##
 exporters:
   node-exporter:
-    ## Enable node-exporter
+    ## @param exporters.node-exporter.enabled Enable node-exporter
     ##
     enabled: true
-
   kube-state-metrics:
-    ## Enable kube-state-metrics
+    ## @param exporters.kube-state-metrics.enabled Enable kube-state-metrics
     ##
     enabled: true
-
-## Node Exporter deployment configuration
+## @param node-exporter [object] Node Exporter deployment configuration
 ##
 node-exporter:
   service:
     labels:
       jobLabel: node-exporter
-
   serviceMonitor:
     enabled: true
     jobLabel: jobLabel
-
   extraArgs:
     collector.filesystem.ignored-mount-points: "^/(dev|proc|sys|var/lib/docker/.+)($|/)"
     collector.filesystem.ignored-fs-types: "^(autofs|binfmt_misc|cgroup|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$"
-
+## @param kube-state-metrics [object] Kube State Metrics deployment configuration
+##
 kube-state-metrics:
   serviceMonitor:
     enabled: true
+    honorLabels: true
+## Component scraping for kubelet and kubelet hosted cAdvisor
+##
+kubelet:
+  ## @param kubelet.enabled Create a ServiceMonitor to scrape kubelet service
+  ##
+  enabled: true
+  ## @param kubelet.namespace Namespace where kubelet service is deployed. Related configuration `operator.kubeletService.namespace`
+  ##
+  namespace: kube-system
+  serviceMonitor:
+    ## @param kubelet.serviceMonitor.https Enable scraping of the kubelet over HTTPS
+    ##
+    https: true
+    ## @param kubelet.serviceMonitor.interval Scrape interval (use by default, falling back to Prometheus' default)
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    interval: ""
+    ## @param kubelet.serviceMonitor.metricRelabelings Metric relabeling
+    ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
+    ##
+    metricRelabelings: []
+    ## @param kubelet.serviceMonitor.relabelings Relabel configs
+    ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
+    ##
+    relabelings: []
+    ## @param kubelet.serviceMonitor.cAdvisorMetricRelabelings Metric relabeling for scraping cAdvisor
+    ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
+    ##
+    cAdvisorMetricRelabelings: []
+    ## @param kubelet.serviceMonitor.cAdvisorRelabelings Relabel configs for scraping cAdvisor
+    ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
+    ##
+    cAdvisorRelabelings: []
+    ## @param kubelet.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param kubelet.serviceMonitor.annotations Extra annotations for the ServiceMonitor
+    ##
+    annotations: {}
+
+## @section Blackbox Exporter Deployment Parameters
+##
+blackboxExporter:
+  ## @param blackboxExporter.enabled Enable Blackbox Exporter deployment
+  ##
+  enabled: true
+  ## Bitnami Alertmanager image version
+  ## ref: https://hub.docker.com/r/bitnami/prometheus-operator/tags/
+  ## @param blackboxExporter.image.registry Blackbox Exporter image registry
+  ## @param blackboxExporter.image.repository Blackbox Exporter image repository
+  ## @param blackboxExporter.image.pullPolicy Blackbox Exporter image pull policy
+  ## @param blackboxExporter.image.tag Blackbox Exporter image tag (immutable tags are recommended)
+  ## @param blackboxExporter.image.digest Blackbox Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param blackboxExporter.image.pullSecrets Specify docker-registry secret names as an array
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/blackbox-exporter
+    tag: 0.22.0-debian-11-r38
+    digest: ""
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+
+  ## @param blackboxExporter.extraEnvVars Array with extra environment variables to add to blackboxExporter nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param blackboxExporter.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for blackboxExporter nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param blackboxExporter.extraEnvVarsSecret Name of existing Secret containing extra env vars for blackboxExporter nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param blackboxExporter.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param blackboxExporter.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param blackboxExporter.replicaCount Number of Blackbox Exporter replicas to deploy
+  ##
+  replicaCount: 1
+  ## Configure extra options for Blackbox Exporter container liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param blackboxExporter.livenessProbe.enabled Enable livenessProbe on Blackbox Exporter nodes
+  ## @param blackboxExporter.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param blackboxExporter.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param blackboxExporter.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param blackboxExporter.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param blackboxExporter.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param blackboxExporter.readinessProbe.enabled Enable readinessProbe on Blackbox Exporter nodes
+  ## @param blackboxExporter.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param blackboxExporter.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param blackboxExporter.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param blackboxExporter.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param blackboxExporter.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param blackboxExporter.startupProbe.enabled Enable startupProbe on Blackbox Exporter containers
+  ## @param blackboxExporter.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param blackboxExporter.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param blackboxExporter.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param blackboxExporter.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param blackboxExporter.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param blackboxExporter.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param blackboxExporter.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param blackboxExporter.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param blackboxExporter.configuration [object] Blackbox Exporter configuration
+  ##
+  configuration:  |
+    "modules":
+      "http_2xx":
+        "http":
+          "preferred_ip_protocol": "ip4"
+        "prober": "http"
+      "http_post_2xx":
+        "http":
+          "method": "POST"
+          "preferred_ip_protocol": "ip4"
+        "prober": "http"
+      "irc_banner":
+        "prober": "tcp"
+        "tcp":
+          "preferred_ip_protocol": "ip4"
+          "query_response":
+          - "send": "NICK prober"
+          - "send": "USER prober prober prober :prober"
+          - "expect": "PING :([^ ]+)"
+            "send": "PONG ${1}"
+          - "expect": "^:[^ ]+ 001"
+      "pop3s_banner":
+        "prober": "tcp"
+        "tcp":
+          "preferred_ip_protocol": "ip4"
+          "query_response":
+          - "expect": "^+OK"
+          "tls": true
+          "tls_config":
+            "insecure_skip_verify": false
+      "ssh_banner":
+        "prober": "tcp"
+        "tcp":
+          "preferred_ip_protocol": "ip4"
+          "query_response":
+          - "expect": "^SSH-2.0-"
+      "tcp_connect":
+        "prober": "tcp"
+        "tcp":
+          "preferred_ip_protocol": "ip4"
+
+  ## @param blackboxExporter.existingConfigMap ConfigMap pointing to the Blackbox Exporter configuration
+  ##
+  existingConfigMap: ""
+  ## @param blackboxExporter.containerPorts.http Blackbox Exporter HTTP container port
+  ##
+  containerPorts:
+    http: 19115
+
+  serviceAccount:
+    ## @param blackboxExporter.serviceAccount.create Enable creation of ServiceAccount for WordPress pod
+    ##
+    create: true
+    ## @param blackboxExporter.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param blackboxExporter.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+    ## Can be set to false if pods using this serviceAccount do not need to use K8s API
+    ##
+    automountServiceAccountToken: true
+    ## @param blackboxExporter.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ##
+    annotations: {}
+
+  ## Blackbox Exporter resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param blackboxExporter.resources.limits The resources limits for the blackboxExporter containers
+  ## @param blackboxExporter.resources.requests The requested resources for the blackboxExporter containers
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param blackboxExporter.podSecurityContext.enabled Enabled Blackbox Exporter pods' Security Context
+  ## @param blackboxExporter.podSecurityContext.fsGroup Set Blackbox Exporter pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param blackboxExporter.containerSecurityContext.enabled Enabled Blackbox Exporter containers' Security Context
+  ## @param blackboxExporter.containerSecurityContext.runAsUser Set Blackbox Exporter containers' Security Context runAsUser
+  ## @param blackboxExporter.containerSecurityContext.runAsNonRoot Set Blackbox Exporter containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  ## @param blackboxExporter.lifecycleHooks for the blackboxExporter container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param blackboxExporter.hostAliases blackboxExporter pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param blackboxExporter.podLabels Extra labels for blackboxExporter pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param blackboxExporter.podAnnotations Annotations for blackboxExporter pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param blackboxExporter.podAffinityPreset Pod affinity preset. Ignored if `blackboxExporter.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param blackboxExporter.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `blackboxExporter.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node blackboxExporter.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param blackboxExporter.nodeAffinityPreset.type Node affinity preset type. Ignored if `blackboxExporter.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param blackboxExporter.nodeAffinityPreset.key Node label key to match. Ignored if `blackboxExporter.affinity` is set
+    ##
+    key: ""
+    ## @param blackboxExporter.nodeAffinityPreset.values Node label values to match. Ignored if `blackboxExporter.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param blackboxExporter.affinity Affinity for Blackbox Exporter pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `blackboxExporter.podAffinityPreset`, `blackboxExporter.podAntiAffinityPreset`, and `blackboxExporter.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param blackboxExporter.nodeSelector Node labels for Blackbox Exporter pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param blackboxExporter.tolerations Tolerations for Blackbox Exporter pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param blackboxExporter.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param blackboxExporter.priorityClassName Blackbox Exporter pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param blackboxExporter.schedulerName Kubernetes pod scheduler registry
+  ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param blackboxExporter.terminationGracePeriodSeconds In seconds, time the given to the Blackbox Exporter pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param blackboxExporter.updateStrategy.type Blackbox Exporter statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    type: RollingUpdate
+  ## @param blackboxExporter.extraVolumes Optionally specify extra list of additional volumes for the Blackbox Exporter pod(s)
+  ##
+  extraVolumes: []
+  ## @param blackboxExporter.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Blackbox Exporter container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param blackboxExporter.sidecars Add additional sidecar containers to the Blackbox Exporter pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param blackboxExporter.initContainers Add additional init containers to the Blackbox Exporter pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+
+  ## @section Blackbox Exporter Traffic Exposure Parameters
+  ##
+
+  ## blackboxExporter service parameters
+  ##
+  service:
+    ## @param blackboxExporter.service.type Blackbox Exporter service type
+    ##
+    type: ClusterIP
+    ## @param blackboxExporter.service.ports.http Blackbox Exporter HTTP service port
+    ##
+    ports:
+      http: 19115
+    ## Node ports to expose
+    ## NOTE: choose port between <30000-32767>
+    ## @param blackboxExporter.service.nodePorts.http Node port for HTTP
+    ##
+    nodePorts:
+      http: ""
+    ## @param blackboxExporter.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ##
+    sessionAffinity: None
+    ## @param blackboxExporter.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+    ## @param blackboxExporter.service.clusterIP Blackbox Exporter service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param blackboxExporter.service.loadBalancerIP Blackbox Exporter service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param blackboxExporter.service.loadBalancerSourceRanges Blackbox Exporter service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param blackboxExporter.service.externalTrafficPolicy Blackbox Exporter service external traffic policy
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param blackboxExporter.service.annotations Additional custom annotations for Blackbox Exporter service
+    ##
+    annotations: {}
+    ## @param blackboxExporter.service.extraPorts Extra ports to expose in the Blackbox Exporter service
+    ##
+    extraPorts: []
 
 ## Component scraping the kube-apiserver
 ##
 kubeApiServer:
-  ## Create a ServiceMonitor to scrape kube-apiserver service
+  ## @param kubeApiServer.enabled Create a ServiceMonitor to scrape kube-apiserver service
   ##
   enabled: true
-
   serviceMonitor:
-    ## Scrape interval. If not set, the Prometheus default scrape interval is used.
+    ## @param kubeApiServer.serviceMonitor.interval Scrape interval. If not set, the Prometheus default scrape interval is used.
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     interval: ""
-
-    ## Metric relabeling
+    ## @param kubeApiServer.serviceMonitor.metricRelabelings Metric relabeling
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
     ##
     metricRelabelings: []
-
-    ## Relabel configs
+    ## @param kubeApiServer.serviceMonitor.relabelings Relabel configs
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
     ##
     relabelings: []
-
 ## Component scraping the kube-controller-manager
 ##
 kubeControllerManager:
-  ## Create a ServiceMonitor to scrape kube-controller-manager service
+  ## @param kubeControllerManager.enabled Create a ServiceMonitor to scrape kube-controller-manager service
   ##
   enabled: true
-
-  ## If your kube controller manager is not deployed as a pod, specify IPs it can be found on
+  ## @param kubeControllerManager.endpoints If your kube controller manager is not deployed as a pod, specify IPs it can be found on
+  ## endpoints:
+  ##  - 10.141.4.22
+  ##  - 10.141.4.23
+  ##  - 10.141.4.24
   ##
   endpoints: []
-  # - 10.141.4.22
-  # - 10.141.4.23
-  # - 10.141.4.24
-
-  ## Namespace where kube-controller-manager service is deployed
+  ## @param kubeControllerManager.namespace Namespace where kube-controller-manager service is deployed.
   ##
   namespace: kube-system
-
   ## Service ports and selector information
+  ## @param kubeControllerManager.service.enabled Whether or not to create a Service object for kube-controller-manager
+  ## @param kubeControllerManager.service.ports.http Listening port of the kube-controller-manager Service object
+  ## @param kubeControllerManager.service.targetPorts.http Port to target on the kube-controller-manager Pods. This should be the port that kube-controller-manager is exposing metrics on
+  ## @param kubeControllerManager.service.selector Optional PODs Label selector for the service
   ##
   service:
     enabled: true
-    port: 10252
-    targetPort: 10252
-    # selector:
-    #   component: kube-controller-manager
-
+    ports:
+      http: 10252
+    targetPorts:
+      http: 10252
+    ## selector:
+    ##   component: kube-controller-manager
+    ##
+    selector: {}
   serviceMonitor:
-    ## Scrape interval. If not set, the Prometheus default scrape interval is used.
+    ## @param kubeControllerManager.serviceMonitor.interval Scrape interval (use by default, falling back to Prometheus' default)
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     interval: ""
-
-    ## Enable scraping kube-controller-manager over https.
+    ## @param kubeControllerManager.serviceMonitor.https Enable scraping kube-controller-manager over https
     ## Requires proper certs (not self-signed) and delegated authentication/authorization checks
     ##
     https: false
-
-    # Skip TLS certificate validation when scraping
-    insecureSkipVerify: null
-
-    # Name of the server to use when validating TLS certificate
-    serverName: null
-
-    ## Metric relabeling
+    ## @param kubeControllerManager.serviceMonitor.insecureSkipVerify Skip TLS certificate validation when scraping
+    ##
+    insecureSkipVerify: ""
+    ## @param kubeControllerManager.serviceMonitor.serverName Name of the server to use when validating TLS certificate
+    ##
+    serverName: ""
+    ## @param kubeControllerManager.serviceMonitor.metricRelabelings Metric relabeling
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
     ##
     metricRelabelings: []
-
-    ## Relabel configs
+    ## @param kubeControllerManager.serviceMonitor.relabelings Relabel configs
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
     ##
     relabelings: []
-
 ## Component scraping kube scheduler
 ##
 kubeScheduler:
-  ## Create a ServiceMonitor to scrape kube-scheduler service
+  ## @param kubeScheduler.enabled Create a ServiceMonitor to scrape kube-scheduler service
   ##
   enabled: true
-
-  ## If your kube scheduler is not deployed as a pod, specify IPs it can be found on
+  ## @param kubeScheduler.endpoints If your kube scheduler is not deployed as a pod, specify IPs it can be found on
+  ## endpoints:
+  ##  - 10.141.4.22
+  ##  - 10.141.4.23
+  ##  - 10.141.4.24
   ##
   endpoints: []
-  # - 10.141.4.22
-  # - 10.141.4.23
-  # - 10.141.4.24
-
-  ## Namespace where kube-scheduler service is deployed
+  ## @param kubeScheduler.namespace Namespace where kube-scheduler service is deployed.
   ##
   namespace: kube-system
-
   ## If using kubeScheduler.endpoints only the port and targetPort are used
+  ## @param kubeScheduler.service.enabled Whether or not to create a Service object for kube-scheduler
+  ## @param kubeScheduler.service.ports.http Listening port of the kube scheduler Service object
+  ## @param kubeScheduler.service.targetPorts.http Port to target on the kube scheduler Pods. This should be the port that kube scheduler is exposing metrics on
+  ## @param kubeScheduler.service.selector Optional PODs Label selector for the service
   ##
   service:
     enabled: true
-    port: 10251
-    targetPort: 10251
-    # selector:
-    #   component: kube-scheduler
-
+    ports:
+      http: 10251
+    targetPorts:
+      http: 10251
+    ## selector:
+    ##   component: kube-scheduler
+    ##
+    selector: {}
   serviceMonitor:
-    ## Scrape interval. If not set, the Prometheus default scrape interval is used.
+    ## @param kubeScheduler.serviceMonitor.interval Scrape interval (use by default, falling back to Prometheus' default)
     ##
     interval: ""
-    ## Enable scraping kube-scheduler over https.
+    ## @param kubeScheduler.serviceMonitor.https Enable scraping kube-scheduler over https
     ## Requires proper certs (not self-signed) and delegated authentication/authorization checks
     ##
     https: false
-
-    ## Skip TLS certificate validation when scraping
+    ## @param kubeScheduler.serviceMonitor.insecureSkipVerify Skip TLS certificate validation when scraping
     ##
-    insecureSkipVerify: null
-
-    ## Name of the server to use when validating TLS certificate
+    insecureSkipVerify: ""
+    ## @param kubeScheduler.serviceMonitor.serverName Name of the server to use when validating TLS certificate
     ##
-    serverName: null
-
-    ##  metric relabel configs to apply to samples before ingestion.
+    serverName: ""
+    ## @param kubeScheduler.serviceMonitor.metricRelabelings Metric relabeling
+    ## metricRelabelings:
+    ##  - action: keep
+    ##    regex: 'kube_(daemonset|deployment|pod|namespace|node|statefulset).+'
+    ##    sourceLabels: [__name__]
     ##
     metricRelabelings: []
-    # - action: keep
-    #   regex: 'kube_(daemonset|deployment|pod|namespace|node|statefulset).+'
-    #   sourceLabels: [__name__]
-
-    #   relabel configs to apply to samples before ingestion.
+    ## @param kubeScheduler.serviceMonitor.relabelings Relabel configs
+    ## relabelings:
+    ##  - sourceLabels: [__meta_kubernetes_pod_node_name]
+    ##    separator: ;
+    ##    regex: ^(.*)$
+    ##    targetLabel: nodename
+    ##    replacement: $1
+    ##    action: replace
     ##
     relabelings: []
-    # - sourceLabels: [__meta_kubernetes_pod_node_name]
-    #   separator: ;
-    #   regex: ^(.*)$
-    #   targetLabel: nodename
-    #   replacement: $1
-    #   action: replace
-
+    ## @param kubeScheduler.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param kubeScheduler.serviceMonitor.annotations Extra annotations for the ServiceMonitor
+    ##
+    annotations: {}
 ## Component scraping coreDns
 ##
 coreDns:
+  ## @param coreDns.enabled Create a ServiceMonitor to scrape coredns service
+  ##
   enabled: true
-
-  ## Namespace where coreDns service is deployed
+  ## @param coreDns.namespace Namespace where core dns service is deployed.
   ##
   namespace: kube-system
-
   ## Create a ServiceMonitor to scrape coredns service
+  ## @param coreDns.service.enabled Whether or not to create a Service object for coredns
+  ## @param coreDns.service.ports.http Listening port of the coredns Service object
+  ## @param coreDns.service.targetPorts.http Port to target on the coredns Pods. This should be the port that coredns is exposing metrics on
+  ## @param coreDns.service.selector Optional PODs Label selector for the service
   ##
   service:
     enabled: true
-    port: 9153
-    targetPort: 9153
-    # selector:
-    #   k8s-app: kube-dns
-
+    ports:
+      http: 9153
+    targetPorts:
+      http: 9153
+    ## selector:
+    ##   component: kube-dns
+    ##
+    selector: {}
   serviceMonitor:
-    ## Scrape interval. If not set, the Prometheus default scrape interval is used.
+    ## @param coreDns.serviceMonitor.interval Scrape interval. If not set, the Prometheus default scrape interval is used.
     ##
     interval: ""
-
-    ##  metric relabel configs to apply to samples before ingestion.
+    ## @param coreDns.serviceMonitor.metricRelabelings Metric relabel configs to apply to samples before ingestion.
+    ## metricRelabelings:
+    ##  - action: keep
+    ##    regex: 'kube_(daemonset|deployment|pod|namespace|node|statefulset).+'
+    ##    sourceLabels: [__name__]
     ##
     metricRelabelings: []
-    # - action: keep
-    #   regex: 'kube_(daemonset|deployment|pod|namespace|node|statefulset).+'
-    #   sourceLabels: [__name__]
-
-    #   relabel configs to apply to samples before ingestion.
+    ## @param coreDns.serviceMonitor.relabelings Relabel configs to apply to samples before ingestion.
+    ## relabelings:
+    ##  - sourceLabels: [__meta_kubernetes_pod_node_name]
+    ##    separator: ;
+    ##    regex: ^(.*)$
+    ##    targetLabel: nodename
+    ##    replacement: $1
+    ##    action: replace
     ##
     relabelings: []
-    # - sourceLabels: [__meta_kubernetes_pod_node_name]
-    #   separator: ;
-    #   regex: ^(.*)$
-    #   targetLabel: nodename
-    #   replacement: $1
-    #   action: replace
-
 ## Component scraping the kube-proxy
 ##
 kubeProxy:
-  ## Create a ServiceMonitor to scrape kube-proxy service
+  ## @param kubeProxy.enabled Create a ServiceMonitor to scrape the kube-proxy Service
   ##
   enabled: true
-
-  ## If your kube-proxy is not deployed as a pod, specify IPs it can be found on
+  ## @param kubeProxy.endpoints If your kube-proxy is not deployed as a pod, specify IPs it can be found on
+  ## endpoints:
+  ##  - 10.141.4.22
+  ##  - 10.141.4.23
+  ##  - 10.141.4.24
   ##
   endpoints: []
-  # - 10.141.4.22
-  # - 10.141.4.23
-  # - 10.141.4.24
-
-  ## Namespace where kube-proxy service is deployed
+  ## @param kubeProxy.namespace Namespace where kube-proxy service is deployed.
   ##
   namespace: kube-system
-
-  ## Service ports and selector information
+  ## @param kubeProxy.service.enabled Whether or not to create a Service object for kube-proxy
+  ## @param kubeProxy.service.ports.http Listening port of the kube-proxy Service object
+  ## @param kubeProxy.service.targetPorts.http Port to target on the kube-proxy Pods. This should be the port that kube-proxy is exposing metrics on
+  ## @param kubeProxy.service.selector Optional PODs Label selector for the service
   ##
   service:
     enabled: true
-    port: 10249
-    targetPort: 10249
-    # selector:
-    #   k8s-app: kube-proxy
-
+    ports:
+      http: 10249
+    targetPorts:
+      http: 10249
+    ## selector:
+    ##   k8s-app: kube-proxy
+    ##
+    selector: {}
   serviceMonitor:
-    ## Enable scraping kube-proxy over https.
+    ## @param kubeProxy.serviceMonitor.https Enable scraping kube-proxy over https.
     ## Requires proper certs (not self-signed) and delegated authentication/authorization checks
     ##
     https: false
-
-    ## Scrape interval. If not set, the Prometheus default scrape interval is used.
+    ## @param kubeProxy.serviceMonitor.interval Scrape interval (use by default, falling back to Prometheus' default)
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     interval: ""
-
-    ## Metric relabeling
+    ## @param kubeProxy.serviceMonitor.metricRelabelings Metric relabeling
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
     ##
     metricRelabelings: []
-
-    ## Relabel configs
+    ## @param kubeProxy.serviceMonitor.relabelings Relabel configs
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
     ##
     relabelings: []
-
-# Component scraping for kubelet and kubelet hosted cAdvisor
-kubelet:
-  ## Create a ServiceMonitor to scrape kubelet service
-  ##
-  enabled: true
-
-  ## Namespace where kubelet service is deployed
-  ##
-  namespace: kube-system
-
-  serviceMonitor:
-    ## Scrape kubelet over https
+    ## @param kubeProxy.serviceMonitor.labels Extra labels for the ServiceMonitor
     ##
-    https: true
-
-    ## Scrape interval. If not set, the Prometheus default scrape interval is used.
-    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    labels: {}
+    ## @param kubeProxy.serviceMonitor.annotations Extra annotations for the ServiceMonitor
     ##
-    interval: ""
+    annotations: {}
 
-    ## Metric relabeling
-    ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
-    ##
-    metricRelabelings: []
+## @section RBAC parameters
+##
 
-    ## Relabel configs
-    ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
-    ##
-    relabelings: []
-
-    ## Metric relabeling for scraping cAdvisor
-    ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
-    ##
-    cAdvisorMetricRelabelings: []
-
-    ## Relabel configs for scraping cAdvisor
-    ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
-    ##
-    cAdvisorRelabelings: []
+## Role Based Access
+## ref: https://kubernetes.io/docs/admin/authorization/rbac/
+## @param rbac.create Whether to create and use RBAC resources or not
+## @param rbac.pspEnabled Whether to create a PodSecurityPolicy and bound it with RBAC. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
+##
+rbac:
+  create: true
+  pspEnabled: true

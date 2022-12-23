@@ -1,0 +1,76 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/metallb"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/metallb"
+        },
+        "runtime_parameters": "Y29udHJvbGxlcjoKICBwb2RTZWN1cml0eUNvbnRleHQ6CiAgICBlbmFibGVkOiB0cnVlCiAgICBmc0dyb3VwOiAxMDAyCiAgY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogICAgZW5hYmxlZDogdHJ1ZQogICAgcnVuQXNVc2VyOiAxMDAyCiAgICByZWFkT25seVJvb3RGaWxlc3lzdGVtOiBmYWxzZQogICAgY2FwYWJpbGl0aWVzOgogICAgICBkcm9wOgogICAgICAgIC0gQUxMCiAgc2VydmljZUFjY291bnQ6CiAgICBjcmVhdGU6IHRydWUKICAgIGF1dG9tb3VudFNlcnZpY2VBY2NvdW50VG9rZW46IHRydWU=",
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/metallb/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}"
+            }
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/metallb/goss"
+            },
+            "vars_file": "vars.yaml",
+            "remote": {
+              "workload": "deploy-metallb-controller"
+            }
+          }
+        }
+      ]
+    },
+    "publish": {
+      "actions": [
+        {
+          "action_id": "helm-publish",
+          "params": {
+            "repository": {
+              "kind": "S3",
+              "url": "{VIB_ENV_S3_URL}",
+              "username": "{VIB_ENV_S3_USERNAME}",
+              "password": "{VIB_ENV_S3_PASSWORD}"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

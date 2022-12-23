@@ -1,0 +1,22 @@
+service:
+  ports:
+    http: 80
+    tcp: 9001
+auth:
+  username: test_user
+  password: bitnami1234
+
+containerPorts:
+  tcp: 9001
+
+containerSecurityContext:
+  runAsUser: 1002
+
+podSecurityContext:
+  fsGroup: 1002
+
+shards: 2
+replicaCount: 2
+
+serviceAccount:
+  automountServiceAccountToken: true

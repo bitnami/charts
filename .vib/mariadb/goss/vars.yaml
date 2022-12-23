@@ -1,0 +1,13 @@
+auth:
+  database: test_database
+  username: "user"
+  password: "ComplicatedPassword123!4"
+  rootPassword: "R0ot)Password"
+primary:
+  service:
+    ports:
+      mysql: 80
+secondary:
+  service:
+    ports:
+      mysql: 3306

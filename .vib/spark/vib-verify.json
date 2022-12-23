@@ -1,0 +1,69 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/spark"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/spark"
+        },
+        "runtime_parameters": "InNlcnZpY2UiOgogICJ0eXBlIjogIkxvYWRCYWxhbmNlciIKICAicG9ydHMiOgogICAgImh0dHAiOiA4MAoid29ya2VyIjoKICAicmVwbGljYUNvdW50IjogMg==",
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "health-check",
+          "params": {
+            "endpoint": "lb-spark-master-svc-http",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/spark/goss"
+            },
+            "remote": {
+              "workload": "sts-spark-worker"
+            },
+            "vars_file": "vars.yaml"
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/spark/cypress"
+            },
+            "endpoint": "lb-spark-master-svc-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "expectedWorkers": "2"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

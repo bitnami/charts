@@ -1,31 +1,50 @@
-{{- if .Values.envoy.enabled }}
----
+{{- if and .Values.envoy.enabled (eq .Values.envoy.kind "daemonset") }}
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: {{ include "common.names.fullname" . }}-envoy
-  namespace: {{ .Release.Namespace }}
+  name: {{ printf "%s-envoy" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: envoy
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
-  updateStrategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 10%
+  {{- if .Values.envoy.updateStrategy }}
+  updateStrategy: {{- toYaml .Values.envoy.updateStrategy | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: envoy
   template:
     metadata:
-      {{- if .Values.envoy.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.podAnnotations "context" $) | nindent 8 }}
+      {{- if or .Values.envoy.podAnnotations .Values.commonAnnotations }}
+      annotations:
+        {{- if .Values.envoy.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.envoy.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: envoy
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.envoy.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.envoy.podLabels "context" $) | nindent 8 }}
+        {{- end }}
     spec:
       {{- include "common.images.pullSecrets" ( dict "images" (list .Values.contour.image .Values.envoy.image) "global" .Values.global) | nindent 6 }}
       {{- if .Values.envoy.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.envoy.priorityClassName }}
+      priorityClassName: {{ .Values.envoy.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.envoy.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.affinity "context" $) | nindent 8 }}
@@ -38,7 +57,7 @@ spec:
       {{- if .Values.envoy.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.envoy.tolerations}}
+      {{- if .Values.envoy.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.tolerations "context" $) | nindent 8 }}
       {{- end }}
       terminationGracePeriodSeconds: {{ .Values.envoy.terminationGracePeriodSeconds }}
@@ -53,6 +72,7 @@ spec:
         {{- end }}
       {{- end }}
       containers:
+        {{- if .Values.envoy.shutdownManager.enabled }}
         - command:
             - contour
           args:
@@ -64,17 +84,20 @@ spec:
           env:
             {{- include "common.tplvalues.render" (dict "value" .Values.contour.extraEnvVars "context" $) | nindent 12 }}
           {{- end }}
-          {{- if or .Values.contour.extraEnvVarsConfigMap .Values.contour.extraEnvVarsSecret }}
+          {{- if or .Values.contour.extraEnvVarsCM .Values.contour.extraEnvVarsSecret }}
           envFrom:
-            {{- if .Values.contour.extraEnvVarsConfigMap }}
+            {{- if .Values.contour.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsConfigMap "context" $ ) }}
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsCM "context" $ ) }}
             {{- end }}
             {{- if .Values.contour.extraEnvVarsSecret }}
             - secretRef:
                 name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
           {{- end }}
+          {{- if .Values.envoy.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.lifecycleHooks "context" $) | nindent 12 }}
+          {{- else }}
           lifecycle:
             preStop:
               exec:
@@ -82,6 +105,7 @@ spec:
                   - contour
                   - envoy
                   - shutdown
+          {{- end }}
           {{- if .Values.contour.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
@@ -94,21 +118,36 @@ spec:
             failureThreshold: {{ .Values.contour.livenessProbe.failureThreshold }}
           {{- end }}
           name: shutdown-manager
-          {{- if .Values.envoy.extraVolumeMounts }}
+          resources: {{- toYaml .Values.envoy.shutdownManager.resources | nindent 12 }}
           volumeMounts:
+            - name: envoy-admin
+              mountPath: /admin
+          {{- if .Values.envoy.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.extraVolumeMounts "context" $ ) | nindent 12 }}
           {{- end }}
-        - command:
+        {{- end }}
+        - name: envoy
+          {{- if .Values.envoy.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
             - envoy
+          {{- end }}
+          {{- if .Values.envoy.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.args "context" $) | nindent 12 }}
+          {{- else }}
           args:
             - -c
             - /config/envoy.json
             - --service-cluster $(CONTOUR_NAMESPACE)
             - --service-node $(ENVOY_POD_NAME)
             - --log-level {{ .Values.envoy.logLevel }}
+            {{- if .Values.envoy.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.envoy.extraArgs "context" $) | nindent 12 }}
+            {{- end }}
+          {{- end }}
           image: {{ include "common.images.image" ( dict "imageRoot" .Values.envoy.image "global" .Values.global ) }}
           imagePullPolicy: {{ .Values.envoy.image.pullPolicy }}
-          name: envoy
           {{- if .Values.envoy.containerSecurityContext.enabled }}
           securityContext:
             runAsUser: {{ .Values.envoy.containerSecurityContext.runAsUser }}
@@ -127,11 +166,11 @@ spec:
           {{- if .Values.envoy.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.envoy.extraEnvVars "context" $) | nindent 12 }}
           {{- end }}
-          {{- if or .Values.envoy.extraEnvVarsConfigMap .Values.envoy.extraEnvVarsSecret }}
+          {{- if or .Values.envoy.extraEnvVarsCM .Values.envoy.extraEnvVarsSecret }}
           envFrom:
-            {{- if .Values.envoy.extraEnvVarsConfigMap }}
+            {{- if .Values.envoy.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ include "common.tplvalues.render" ( dict "value" .Values.envoy.extraEnvVarsConfigMap "context" $ ) }}
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.envoy.extraEnvVarsCM "context" $ ) }}
             {{- end }}
             {{- if .Values.envoy.extraEnvVarsSecret }}
             - secretRef:
@@ -143,11 +182,17 @@ spec:
               {{- if .Values.envoy.useHostPort }}
               hostPort: {{ .Values.envoy.hostPorts.http }}
               {{- end }}
+              {{- if .Values.envoy.useHostIP }}
+              hostIP: {{ .Values.envoy.hostIPs.http }}
+              {{- end }}
               name: http
               protocol: TCP
             - containerPort: {{ .Values.envoy.containerPorts.https }}
               {{- if .Values.envoy.useHostPort }}
               hostPort: {{ .Values.envoy.hostPorts.https }}
+              {{- end }}
+              {{- if .Values.envoy.useHostIP }}
+              hostIP: {{ .Values.envoy.hostIPs.https }}
               {{- end }}
               name: https
               protocol: TCP
@@ -182,15 +227,28 @@ spec:
               mountPath: /config
             - name: envoycert
               mountPath: /certs
+            - name: envoy-admin
+              mountPath: /admin
             {{- if .Values.envoy.extraVolumeMounts }}
               {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
           lifecycle:
             preStop:
+              {{- if .Values.envoy.shutdownManager.enabled }}
               httpGet:
                 path: /shutdown
                 port: 8090
                 scheme: HTTP
+              {{- else }}
+              exec:
+                command:
+                  - sh
+                  - '-c'
+                  - sleep {{ .Values.envoy.terminationGracePeriodSeconds }}; kill 1
+              {{- end }}
+        {{- if .Values.envoy.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.sidecars "context" $ ) | nindent 8 }}
+        {{- end }}
       initContainers:
         - command:
             - contour
@@ -198,7 +256,7 @@ spec:
             - bootstrap
             - /config/envoy.json
             - --xds-address={{ template "common.names.fullname" . }}
-            - --xds-port=8001
+            - --xds-port={{ .Values.contour.service.ports.xds }}
             - --resources-dir=/config/resources
             - --envoy-cafile=/certs/ca.crt
             - --envoy-cert-file=/certs/tls.crt
@@ -213,6 +271,8 @@ spec:
             - name: envoycert
               mountPath: /certs
               readOnly: true
+            - name: envoy-admin
+              mountPath: /admin
             {{- if .Values.envoy.extraVolumeMounts }}
               {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
@@ -224,11 +284,11 @@ spec:
             {{- if .Values.contour.extraEnvVars }}
               {{- include "common.tplvalues.render" (dict "value" .Values.contour.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
-          {{- if or .Values.contour.extraEnvVarsConfigMap .Values.contour.extraEnvVarsSecret }}
+          {{- if or .Values.contour.extraEnvVarsCM .Values.contour.extraEnvVarsSecret }}
           envFrom:
-            {{- if .Values.contour.extraEnvVarsConfigMap }}
+            {{- if .Values.contour.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsConfigMap "context" $ ) }}
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsCM "context" $ ) }}
             {{- end }}
             {{- if .Values.contour.extraEnvVarsSecret }}
             - secretRef:
@@ -238,9 +298,11 @@ spec:
       {{- if .Values.envoy.initContainers }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.initContainers "context" $ ) | nindent 8 }}
       {{- end }}
-      automountServiceAccountToken: false
+      automountServiceAccountToken: {{ .Values.envoy.serviceAccount.automountServiceAccountToken }}
       serviceAccountName: {{ include "envoy.envoyServiceAccountName" . }}
       volumes:
+        - name: envoy-admin
+          emptyDir: {}
         - name: envoy-config
           emptyDir: {}
         - name: envoycert

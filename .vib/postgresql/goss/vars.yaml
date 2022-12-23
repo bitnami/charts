@@ -1,0 +1,23 @@
+auth:
+  postgresPassword: "ComplicatedPassword123!4"
+  username: test_user
+  password: test_password
+  database: test_database
+  replicationUsername: test_repl_user
+containerPorts:
+  postgresql: 5433
+postgresqlSharedPreloadLibraries: "pgaudit, pg_stat_statements"
+primary:
+  name: ptest
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 1002
+  service:
+    ports:
+      postgresql: 5433
+  persistence:
+    mountPath: /bitnami/postgresql
+readReplicas:
+  name: rtest
+  replicaCount: 2

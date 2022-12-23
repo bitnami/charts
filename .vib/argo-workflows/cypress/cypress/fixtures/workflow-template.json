@@ -1,0 +1,55 @@
+{
+  "metadata": {
+    "name": "vib-testing-template-7t1b6",
+    "namespace": "default",
+    "labels": {
+      "vib": "testing"
+    }
+  },
+  "spec": {
+    "workflowMetadata": {
+      "labels": {
+        "vib": "testing"
+      }
+    },
+    "entrypoint": "argosay",
+    "arguments": {
+      "parameters": [
+        {
+          "name": "message",
+          "value": "hello argo"
+        }
+      ]
+    },
+    "templates": [
+      {
+        "name": "argosay",
+        "inputs": {
+          "parameters": [
+            {
+              "name": "message",
+              "value": "{{workflow.parameters.message}}"
+            }
+          ]
+        },
+        "container": {
+          "name": "main",
+          "image": "argoproj/argosay:v2",
+          "command": [
+            "/argosay"
+          ],
+          "args": [
+            "echo",
+            "{{inputs.parameters.message}}"
+          ]
+        }
+      }
+    ],
+    "ttlStrategy": {
+      "secondsAfterCompletion": 300
+    },
+    "podGC": {
+      "strategy": "OnPodCompletion"
+    }
+  }
+}

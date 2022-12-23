@@ -1,0 +1,13 @@
+service:
+  ports:
+    https: 444
+podSecurityContext:
+  fsGroup: 1002
+containerSecurityContext:
+  runAsUser: 1002
+serviceAccount:
+  automountServiceAccountToken: true
+hostAliases:
+  - ip: 127.0.0.1
+    hostnames:
+      - status.testhost

@@ -17,15 +17,17 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: migration
-      annotations:
+        {{- if .Values.migration.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.migration.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       {{- if .Values.migration.podAnnotations }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.migration.podAnnotations "context" $) | nindent 8 }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.migration.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
       {{- include "kong.imagePullSecrets" . | nindent 6 }}
       restartPolicy: OnFailure
-      {{- if .Values.podSecurityContext }}
-      securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.podSecurityContext "context" $) | nindent 8 }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.migration.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.migration.hostAliases "context" $) | nindent 8 }}
@@ -40,44 +42,46 @@ spec:
           {{- if .Values.migration.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.migration.args "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.containerSecurityContext }}
-          securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.containerSecurityContext "context" $) | nindent 12 }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           env:
             - name: KONG_MIGRATE
               value: "yes"
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: KONG_EXIT_AFTER_MIGRATE
               value: "yes"
-            {{- if (eq .Values.database "postgresql") }}
             - name: KONG_DATABASE
-              value: "postgres"
-            {{- if .Values.postgresql.usePasswordFile }}
+              value: {{ ternary "postgres" "cassandra" (eq .Values.database "postgresql") | quote }}
+            {{- if (eq .Values.database "postgresql") }}
+            {{- if .Values.postgresql.auth.usePasswordFiles }}
             - name: KONG_POSTGRESQL_PASSWORD_FILE
-              value: "/bitnami/kong/secrets/postgresql-password"
+              value: {{ printf "/bitnami/kong/secrets/%s" (include "kong.postgresql.databaseSecretKey" .) }}
             {{- else }}
             - name: KONG_PG_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "kong.postgresql.secretName" . }}
-                  key: postgresql-password
+                  key: {{ include "kong.postgresql.databaseSecretKey" . }}
             {{- end }}
             - name: KONG_PG_HOST
               value: {{ include "kong.postgresql.host" . }}
+            - name: KONG_PG_PORT
+              value: {{ include "kong.postgresql.port" . }}
             - name: KONG_PG_USER
               value: {{ include "kong.postgresql.user" . }}
             {{- end }}
             {{- if (eq .Values.database "cassandra") }}
-            - name: KONG_DATABASE
-              value: "cassandra"
             {{- if .Values.cassandra.usePasswordFile }}
             - name: KONG_CASSANDRA_PASSWORD_FILE
-              value: "/bitnami/kong/secrets/cassandra-password"
+              value: {{ printf "/bitnami/kong/secrets/%s" (include "kong.cassandra.databaseSecretKey" .) }}
             {{- else }}
             - name: KONG_CASSANDRA_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "kong.cassandra.secretName" . }}
-                  key: cassandra-password
+                  key: {{ include "kong.cassandra.databaseSecretKey" . }}
             {{- end }}
             - name: KONG_CASSANDRA_CONTACT_POINTS
               value: {{ include "kong.cassandra.contactPoints" . }}

@@ -1,0 +1,7 @@
+{
+  "baseUrl": "http://localhost",
+  "env": {
+    "appId": "testApp",
+    "masterKey": "M4ster#K3y"
+  }
+}

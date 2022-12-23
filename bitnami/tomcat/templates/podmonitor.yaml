@@ -1,0 +1,41 @@
+{{- if and .Values.metrics.jmx.enabled .Values.metrics.podMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: {{ template "common.names.fullname" . }}
+  namespace: {{ default .Release.Namespace .Values.metrics.podMonitor.namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.metrics.podMonitor.additionalLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.podMonitor.additionalLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.metrics.podMonitor.podTargetLabels }}
+  podTargetLabels: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.podMonitor.podTargetLabels "context" $ ) | nindent 4 }}
+  {{- end }}
+  podMetricsEndpoints:
+{{- range $key, $val := .Values.metrics.jmx.ports }}
+    - port: {{ $key | quote }}
+      path: /metrics
+      {{- if $.Values.metrics.podMonitor.interval }}
+      interval: {{ $.Values.metrics.podMonitor.interval }}
+      {{- end }}
+      {{- if $.Values.metrics.podMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ $.Values.metrics.podMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if $.Values.metrics.podMonitor.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" (dict "value" $.Values.metrics.podMonitor.relabelings "context" $) | nindent 8 }}
+      {{- end }}
+{{- end }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+      {{- include "common.labels.matchLabels" . | nindent 6 }}
+{{- end }}

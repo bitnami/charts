@@ -1,0 +1,6 @@
+file:
+  /bitnami/matomo:
+    exists: true
+    mode: "2775"
+    owner: root
+    filetype: directory

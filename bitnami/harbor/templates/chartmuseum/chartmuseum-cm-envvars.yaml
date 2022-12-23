@@ -2,7 +2,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "harbor.chartmuseum" . }}-envvars
+  name: {{ printf "%s-envvars" (include "harbor.chartmuseum" .) }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -12,7 +13,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  PORT: {{ include "harbor.chartmuseum.containerPort" .  | quote }}
+  PORT: {{ ternary .Values.chartmuseum.containerPorts.https .Values.chartmuseum.containerPorts.http .Values.internalTLS.enabled | quote }}
   {{- if .Values.internalTLS.enabled }}
   TLS_CERT: "/etc/harbor/ssl/chartmuseum/tls.crt"
   TLS_KEY: "/etc/harbor/ssl/chartmuseum/tls.key"
@@ -28,7 +29,7 @@ data:
   CHART_URL: {{ printf "%s/%s" ( include "harbor.externalUrl" . )  .Values.chartmuseum.chartRepoName | quote }}
   {{- end }}
   DEPTH: {{ .Values.chartmuseum.depth | quote }}
-  {{- if or (eq .Values.logLevel "debug") .Values.chartMuseumImage.debug }}
+  {{- if or (eq .Values.logLevel "debug") .Values.chartmuseum.image.debug }}
   DEBUG: "true"
   {{- else }}
   DEBUG: "false"

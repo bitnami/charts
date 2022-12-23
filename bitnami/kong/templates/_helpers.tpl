@@ -17,9 +17,20 @@ Return the proper kong migration image name
 */}}
 {{- define "kong.migration.image" -}}
 {{- if .Values.migration.image -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.migration.image "global" .Values.global) }}
+    {{- include "common.images.image" (dict "imageRoot" .Values.migration.image "global" .Values.global) -}}
 {{- else -}}
-{{- template "kong.image" . -}}
+    {{- template "kong.image" . -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper Docker Image Registry Secret Names
+*/}}
+{{- define "kong.imagePullSecrets" -}}
+{{- if .Values.migration.image -}}
+    {{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.ingressController.image .Values.migration.image) "global" .Values.global) -}}
+{{- else -}}
+    {{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.ingressController.image) "global" .Values.global) -}}
 {{- end -}}
 {{- end -}}
 
@@ -28,7 +39,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "kong.postgresql.fullname" -}}
-{{- printf "%s-%s" .Release.Name "postgresql" | trunc 63 | trimSuffix "-" -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "postgresql" "chartValues" .Values.postgresql "context" $) -}}
 {{- end -}}
 
 {{/*
@@ -36,18 +47,14 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "kong.cassandra.fullname" -}}
-{{- printf "%s-%s" .Release.Name "cassandra" | trunc 63 | trimSuffix "-" -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "cassandra" "chartValues" .Values.cassandra "context" $) -}}
 {{- end -}}
 
 {{/*
 Get Cassandra port
 */}}
 {{- define "kong.cassandra.port" -}}
-{{- if .Values.cassandra.enabled -}}
-{{- .Values.cassandra.service.port -}}
-{{- else -}}
-{{- .Values.cassandra.external.port -}}
-{{- end -}}
+{{- ternary "9042" .Values.cassandra.external.port .Values.cassandra.enabled | quote -}}
 {{- end -}}
 
 {{/*
@@ -56,7 +63,7 @@ Get Cassandra contact points
 {{- define "kong.cassandra.contactPoints" -}}
 {{- $global := . -}}
 {{- if .Values.cassandra.enabled -}}
-  {{- $replicas := int .Values.cassandra.cluster.replicaCount -}}
+  {{- $replicas := int .Values.cassandra.replicaCount -}}
   {{- $domain := .Values.clusterDomain -}}
   {{- range $i, $e := until $replicas }}
     {{- include "kong.cassandra.fullname" $global }}-{{ $i }}.{{ include "kong.cassandra.fullname" $global }}-headless.{{ $global.Release.Namespace }}.svc.{{ $domain }}
@@ -79,21 +86,32 @@ Get Cassandra contact points
 Get PostgreSQL host
 */}}
 {{- define "kong.postgresql.host" -}}
-{{- if .Values.postgresql.enabled -}}
-  {{- template "kong.postgresql.fullname" . -}}
-{{- else -}}
-  {{ .Values.postgresql.external.host }}
+{{- ternary (include "kong.postgresql.fullname" .) .Values.postgresql.external.host .Values.postgresql.enabled | quote -}}
 {{- end -}}
+
+{{/*
+Get PostgreSQL port
+*/}}
+{{- define "kong.postgresql.port" -}}
+{{- ternary "5432" .Values.postgresql.external.port .Values.postgresql.enabled | quote -}}
 {{- end -}}
 
 {{/*
 Get PostgreSQL user
 */}}
 {{- define "kong.postgresql.user" -}}
-{{- if .Values.postgresql.enabled -}}
-  {{- .Values.postgresql.postgresqlUsername -}}
+{{- if .Values.postgresql.enabled }}
+    {{- if .Values.global.postgresql }}
+        {{- if .Values.global.postgresql.auth }}
+            {{- coalesce .Values.global.postgresql.auth.username .Values.postgresql.auth.username | quote -}}
+        {{- else -}}
+            {{- .Values.postgresql.auth.username | quote -}}
+        {{- end -}}
+    {{- else -}}
+        {{- .Values.postgresql.auth.username | quote -}}
+    {{- end -}}
 {{- else -}}
-  {{ .Values.postgresql.external.user }}
+    {{- .Values.postgresql.external.user | quote -}}
 {{- end -}}
 {{- end -}}
 
@@ -101,10 +119,10 @@ Get PostgreSQL user
 Get Cassandra user
 */}}
 {{- define "kong.cassandra.user" -}}
-{{- if .Values.postgresql.enabled -}}
-  {{- .Values.cassandra.dbUser.user -}}
+{{- if .Values.cassandra.enabled -}}
+    {{- .Values.cassandra.dbUser.user | quote -}}
 {{- else -}}
-  {{ .Values.cassandra.external.user }}
+    {{- .Values.cassandra.external.user | quote -}}
 {{- end -}}
 {{- end -}}
 
@@ -112,12 +130,29 @@ Get Cassandra user
 Get Cassandra secret
 */}}
 {{- define "kong.cassandra.secretName" -}}
-{{- if .Values.cassandra.existingSecret -}}
-  {{- .Values.cassandra.existingSecret -}}
-{{- else if .Values.cassandra.enabled }}
-  {{- template "kong.cassandra.fullname" . -}}
+{{- if .Values.cassandra.enabled -}}
+    {{- default (include "kong.cassandra.fullname" .) (tpl .Values.cassandra.dbUser.existingSecret $) -}}
 {{- else -}}
-  {{- printf "%s-external-secret" ( include "common.names.fullname" . ) -}}
+    {{- printf "%s-external-secret" ( include "common.names.fullname" . ) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Add environment variables to configure database values
+*/}}
+{{- define "kong.cassandra.databaseSecretKey" -}}
+{{- if .Values.cassandra.enabled -}}
+    {{- print "cassandra-password" -}}
+{{- else -}}
+    {{- if .Values.cassandra.external.existingSecret -}}
+        {{- if .Values.cassandra.external.existingSecretPasswordKey -}}
+            {{- printf "%s" .Values.cassandra.external.existingSecretPasswordKey -}}
+        {{- else -}}
+            {{- print "cassandra-password" -}}
+        {{- end -}}
+    {{- else -}}
+        {{- print "cassandra-password" -}}
+    {{- end -}}
 {{- end -}}
 {{- end -}}
 
@@ -125,27 +160,49 @@ Get Cassandra secret
 Get PostgreSQL secret
 */}}
 {{- define "kong.postgresql.secretName" -}}
-{{- if .Values.postgresql.existingSecret -}}
-  {{- .Values.postgresql.existingSecret -}}
-{{- else if .Values.postgresql.enabled }}
-  {{- template "kong.postgresql.fullname" . -}}
+{{- if .Values.postgresql.enabled }}
+    {{- if .Values.global.postgresql }}
+        {{- if .Values.global.postgresql.auth }}
+            {{- if .Values.global.postgresql.auth.existingSecret }}
+                {{- tpl .Values.global.postgresql.auth.existingSecret $ -}}
+            {{- else -}}
+               {{- default (include "kong.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
+            {{- end -}}
+        {{- else -}}
+            {{- default (include "kong.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
+        {{- end -}}
+    {{- else -}}
+        {{- default (include "kong.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
+    {{- end -}}
 {{- else -}}
-  {{- printf "%s-external-secret" ( include "common.names.fullname" . ) -}}
+    {{- default (printf "%s-external-secret" (include "common.names.fullname" .)) (tpl .Values.postgresql.external.existingSecret $) -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Return the proper Docker Image Registry Secret Names
+Add environment variables to configure database values
 */}}
-{{- define "kong.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.ingressController.image) "global" .Values.global) }}
+{{- define "kong.postgresql.databaseSecretKey" -}}
+{{- if .Values.postgresql.enabled -}}
+    {{- print "password" -}}
+{{- else -}}
+    {{- if .Values.postgresql.external.existingSecret -}}
+        {{- if .Values.postgresql.external.existingSecretPasswordKey -}}
+            {{- printf "%s" .Values.postgresql.external.existingSecretPasswordKey -}}
+        {{- else -}}
+            {{- print "password" -}}
+        {{- end -}}
+    {{- else -}}
+        {{- print "password" -}}
+    {{- end -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
 Return true if a secret for a external database should be created
 */}}
 {{- define "kong.createExternalDBSecret" -}}
-{{- if and (not .Values.postgresql.enabled) (not .Values.cassandra.enabled) (not .Values.cassandra.existingSecret) (not .Values.postgresql.existingSecret) -}}
+{{- if or (and (eq .Values.database "postgresql") (not .Values.postgresql.enabled) (not .Values.postgresql.external.existingSecret)) (and (eq .Values.database "cassandra") (not .Values.cassandra.enabled) (not .Values.cassandra.external.existingSecret)) -}}
   {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -153,11 +210,11 @@ Return true if a secret for a external database should be created
 {{/*
 Get proper service account
 */}}
-{{- define "kong.serviceAccount" -}}
-{{- if .Values.ingressController.rbac.existingServiceAccount -}}
-{{ .Values.ingressController.rbac.existingServiceAccount }}
+{{- define "kong.ingressController.serviceAccountName" -}}
+{{- if .Values.ingressController.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.ingressController.serviceAccount.name }}
 {{- else -}}
-{{- include "common.names.fullname" . -}}
+    {{ default "default" .Values.ingressController.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 
@@ -168,6 +225,8 @@ Validate values for kong.
 {{- $messages := list -}}
 {{- $messages := append $messages (include "kong.validateValues.database" .) -}}
 {{- $messages := append $messages (include "kong.validateValues.rbac" .) -}}
+{{- $messages := append $messages (include "kong.validateValues.ingressController" .) -}}
+{{- $messages := append $messages (include "kong.validateValues.daemonset" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -180,12 +239,13 @@ Validate values for kong.
 Function to validate the RBAC
 */}}
 {{- define "kong.validateValues.rbac" -}}
-{{- if and .Values.ingressController.enabled (not .Values.ingressController.rbac.existingServiceAccount) (not .Values.ingressController.rbac.create) -}}
+{{- if and .Values.ingressController.enabled (not .Values.ingressController.serviceAccount.create) (not .Values.ingressController.serviceAccount.name) (not .Values.ingressController.rbac.create) -}}
 INVALID RBAC: You enabled the Kong Ingress Controller sidecar without creating RBAC objects and not
-specifying an existing Service Account. Specify an existing Service Account in ingressController.rbac.existingServiceAccount
+specifying an existing Service Account. Specify an existing Service Account in ingressController.serviceAccount.name
 or allow the chart to create the proper RBAC objects with ingressController.rbac.create
 {{- end -}}
 {{- end -}}
+
 {{/*
 Function to validate the external database
 */}}
@@ -204,7 +264,6 @@ NO DATABASE: You disabled the Cassandra sub-chart but did not specify external C
 NO DATABASE: You disabled the PostgreSQL sub-chart but did not specify an external PostgreSQL host. Either deploy the PostgreSQL sub-chart by setting postgresql.enabled=true or set a value for postgresql.external.host.
 {{- end }}
 
-
 {{- if and (eq .Values.database "postgresql") .Values.postgresql.enabled .Values.postgresql.external.host -}}
 CONFLICT: You specified to deploy the PostgreSQL sub-chart and also specified an external
 PostgreSQL instance. Only one of postgresql.enabled (deploy sub-chart) and postgresql.external.host can be set
@@ -213,5 +272,23 @@ PostgreSQL instance. Only one of postgresql.enabled (deploy sub-chart) and postg
 {{- if and (eq .Values.database "cassandra") .Values.cassandra.enabled .Values.cassandra.external.hosts -}}
 CONFLICT: You specified to deploy the Cassandra sub-chart and also specified external
 Cassandra hosts. Only one of cassandra.enabled (deploy sub-chart) and cassandra.external.hosts can be set
-{{- end }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Function to validate the ingress controller
+*/}}
+{{- define "kong.validateValues.ingressController" -}}
+{{- if (and (eq .Values.database "cassandra") .Values.ingressController.enabled) -}}
+INGRESS AND CASANDRA: Cassandra-backed deployments of Kong managed by Kong Ingress Controller are no longer supported. You must migrate to a Postgres-backed deployment or disable Kong Ingress Controller.
+{{- end -}}
+{{- end -}}
+
+{{/*
+Function to validate incompatibilities with deploying Kong as a daemonset
+*/}}
+{{- define "kong.validateValues.daemonset" -}}
+{{- if and .Values.useDaemonset (or .Values.pdb.create .Values.autoscaling.enabled) -}}
+INVALID SETUP: Deploying a HorizontalPodAutoscaler or a PodDisruptionBudget is not compatible with deploying Kong as a daemonset.
+{{- end -}}
 {{- end -}}

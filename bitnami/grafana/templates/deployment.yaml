@@ -1,22 +1,31 @@
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
     app.kubernetes.io/component: grafana
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.grafana.replicaCount }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: grafana
-  {{- if .Values.updateStrategy }}
-  strategy: {{ toYaml .Values.updateStrategy | nindent 4 }}
+  {{- if .Values.grafana.updateStrategy }}
+  strategy: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.updateStrategy "context" $) | nindent 4 }}
   {{- end }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: grafana
+        {{- if .Values.grafana.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.grafana.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       annotations:
         {{- if (include "grafana.createAdminSecret" .) }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
@@ -26,48 +35,98 @@ spec:
         {{- end }}
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         checksum/dashboard-provider: {{ include (print $.Template.BasePath "/dashboard-provider.yaml") . | sha256sum }}
-        {{- if .Values.podAnnotations }}
-        {{- toYaml .Values.podAnnotations | nindent 8 }}
+        {{- if and .Values.ldap.enabled (or (not (empty .Values.ldap.configuration)) (not (empty .Values.ldap.uri))) (empty .Values.ldap.configMapName) (empty .Values.ldap.secretName) }}
+        checksum/ldap: {{ include (print $.Template.BasePath "/ldap-secret.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.grafana.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.grafana.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
       {{- include "grafana.imagePullSecrets" . | nindent 6 }}
-      {{- if .Values.hostAliases }}
-      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      {{- if .Values.grafana.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.hostAliases "context" $) | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ template "grafana.serviceAccountName" . }}
-      {{- if .Values.schedulerName }}
-      schedulerName: {{ .Values.schedulerName | quote }}
+      serviceAccountName: {{ include "grafana.serviceAccountName" . }}
+      {{- if .Values.grafana.schedulerName }}
+      schedulerName: {{ .Values.grafana.schedulerName | quote }}
       {{- end }}
-      {{- if .Values.priorityClassName }}
-      priorityClassName: {{ .Values.priorityClassName | quote }}
+      {{- if .Values.grafana.priorityClassName }}
+      priorityClassName: {{ .Values.grafana.priorityClassName | quote }}
       {{- end }}
-      {{- if .Values.affinity }}
-      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- if .Values.grafana.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "component" "grafana" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "grafana" "context" $) | nindent 10 }}
-        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.grafana.podAffinityPreset "component" "grafana" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.grafana.podAntiAffinityPreset "component" "grafana" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.grafana.nodeAffinityPreset.type "key" .Values.grafana.nodeAffinityPreset.key "values" .Values.grafana.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
-      {{- if .Values.nodeSelector }}
-      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- if .Values.grafana.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.tolerations }}
-      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- if .Values.grafana.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.securityContext.enabled }}
-      securityContext:
-        runAsUser: {{ .Values.securityContext.runAsUser }}
-        fsGroup: {{ .Values.securityContext.fsGroup }}
-        runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
+      {{- if .Values.grafana.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.grafana.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.grafana.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.grafana.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.grafana.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.volumePermissions.enabled }}
+        - name: volume-permissions
+          image: {{ include "volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              mkdir -p /bitnami/grafana
+              find /bitnami/grafana -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.grafana.containerSecurityContext.runAsUser }}:{{ .Values.grafana.podSecurityContext.fsGroup }}
+          securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.resources "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: /bitnami/grafana
+        {{- end }}
+        {{- if .Values.grafana.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.grafana.initContainers "context" $) | nindent 8 }}
+        {{- end }}
       containers:
         - name: grafana
-          image: {{ template "grafana.image" . }}
+          image: {{ include "grafana.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.grafana.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.grafana.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.grafana.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.grafana.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.args "context" $) | nindent 12 }}
+          {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ include "common.names.fullname" . }}-envvars
+            {{- if .Values.grafana.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.grafana.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.extraEnvVarsSecret "context" $) }}
+            {{- end }}
           env:
             - name: GF_SECURITY_ADMIN_PASSWORD
               valueFrom:
@@ -81,6 +140,18 @@ spec:
             - name: GF_SMTP_HOST
               value: {{ .Values.smtp.host }}
             {{- end }}
+            {{- if .Values.smtp.fromAddress }}
+            - name: GF_SMTP_FROM_ADDRESS
+              value: {{ .Values.smtp.fromAddress }}
+            {{- end }}
+            {{- if .Values.smtp.fromName }}
+            - name: GF_SMTP_FROM_NAME
+              value: {{ .Values.smtp.fromName }}
+            {{- end }}
+            {{- if .Values.smtp.skipVerify }}
+            - name: GF_SMTP_SKIP_VERIFY
+              value: "{{ .Values.smtp.skipVerify }}"
+            {{- end }}
             - name: GF_SMTP_USER
               valueFrom:
                 secretKeyRef:
@@ -92,8 +163,8 @@ spec:
                   name: {{ include "grafana.smtpSecretName" . }}
                   key: {{ include "grafana.smtpSecretPasswordKey" . }}
             {{- end }}
-            {{- if .Values.extraEnvVars }}
-            {{- toYaml .Values.extraEnvVars | nindent 12 }}
+            {{- if .Values.grafana.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           volumeMounts:
             {{- if .Values.config.useGrafanaIniFile }}
@@ -101,79 +172,122 @@ spec:
               mountPath: /opt/bitnami/grafana/conf/grafana.ini
               subPath: grafana.ini
             {{- end }}
-            {{- if .Values.persistence.enabled }}
             - name: data
               mountPath: /opt/bitnami/grafana/data
-            {{- end }}
             {{- if .Values.dashboardsProvider.enabled }}
             - name: dashboards-provider
               mountPath: /opt/bitnami/grafana/conf/provisioning/dashboards
             {{- end }}
             {{- range .Values.dashboardsConfigMaps }}
             - name: {{ .configMapName }}
+            {{- if .folderName }}
+              mountPath: /opt/bitnami/grafana/dashboards/{{ .folderName }}/{{ .fileName }}
+            {{- else }}
               mountPath: /opt/bitnami/grafana/dashboards/{{ .fileName }}
+            {{- end }}
               subPath: {{ .fileName }}
             {{- end }}
-            {{- if .Values.datasources.secretName }}
+            {{- if or (.Values.datasources.secretName) (.Values.datasources.secretDefinition) }}
             - name: datasources
               mountPath: /opt/bitnami/grafana/conf/provisioning/datasources
             {{- end }}
-            {{- if and .Values.ldap.enabled .Values.ldap.configMapName }}
+            {{- if .Values.notifiers.configMapName }}
+            - name: notifiers
+              mountPath: /opt/bitnami/grafana/conf/provisioning/notifiers
+            {{- end }}
+            {{- if .Values.ldap.enabled }}
             - name: ldap
               mountPath: /opt/bitnami/grafana/conf/ldap.toml
               subPath: ldap.toml
             {{- end }}
-            {{- range .Values.extraConfigmaps }}
+            {{- if and .Values.ldap.tls.enabled .Values.ldap.tls.certificatesSecret }}
+            - name: ldap-tls
+              mountPath: {{ .Values.ldap.tls.certificatesMountPath }}
+            {{- end }}
+            {{- range .Values.grafana.extraConfigmaps }}
             - name: {{ .name }}
               mountPath: {{ .mountPath }}
               subPath: {{ .subPath | default "" }}
               readOnly: {{ .readOnly }}
             {{- end }}
-            {{- if .Values.extraVolumeMounts }}
-            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+            {{- if .Values.grafana.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
           ports:
             - name: dashboard
-              containerPort: 3000
+              containerPort: {{ .Values.grafana.containerPorts.grafana }}
               protocol: TCP
-          {{- if .Values.livenessProbe.enabled }}
+          {{- if .Values.grafana.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.grafana.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /api/health
+              path: {{ .Values.grafana.livenessProbe.path }}
               port: dashboard
-            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+              scheme: {{ .Values.grafana.livenessProbe.scheme }}
+            initialDelaySeconds: {{ .Values.grafana.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.grafana.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.grafana.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.grafana.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.grafana.livenessProbe.failureThreshold }}
           {{- end }}
-          {{- if .Values.readinessProbe.enabled }}
+          {{- if .Values.grafana.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.grafana.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: /api/health
+              path: {{ .Values.grafana.readinessProbe.path }}
               port: dashboard
-            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+              scheme: {{ .Values.grafana.readinessProbe.scheme }}
+            initialDelaySeconds: {{ .Values.grafana.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.grafana.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.grafana.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.grafana.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.grafana.readinessProbe.failureThreshold }}
           {{- end }}
-          {{- if .Values.resources }}
-          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.grafana.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.grafana.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: {{ .Values.grafana.startupProbe.path }}
+              port: dashboard
+              scheme: {{ .Values.grafana.startupProbe.scheme }}
+            initialDelaySeconds: {{ .Values.grafana.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.grafana.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.grafana.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.grafana.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.grafana.startupProbe.failureThreshold }}
           {{- end }}
-        {{- if .Values.sidecars }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
+          {{- if .Values.grafana.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.grafana.resources }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.resources "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.grafana.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.grafana.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        {{- if .Values.persistence.enabled }}
         - name: data
+        {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
             claimName: {{ .Values.persistence.existingClaim | default (include "common.names.fullname" .) }}
+        {{- else }}
+          emptyDir: {}
         {{- end }}
-        {{- if and .Values.ldap.enabled .Values.ldap.configMapName }}
+        {{- if .Values.ldap.enabled }}
         - name: ldap
+          {{- if not (empty .Values.ldap.configMapName) }}
           configMap:
             name: {{ .Values.ldap.configMapName }}
+          {{- else if not (empty .Values.ldap.secretName) }}
+          secret:
+            secretName: {{ .Values.ldap.secretName }}
+          {{- else }}
+          secret:
+            secretName: {{ printf "%s-ldap-conf" (include "common.names.fullname" .) }}
+          {{- end }}
         {{- end }}
         {{- if .Values.dashboardsProvider.enabled }}
         - name: dashboards-provider
@@ -193,6 +307,15 @@ spec:
         - name: datasources
           secret:
             secretName: {{ .Values.datasources.secretName }}
+        {{- else if .Values.datasources.secretDefinition }}
+        - name: datasources
+          secret:
+            secretName: {{ include "common.names.fullname" . }}-datasources
+        {{- end }}
+        {{- if .Values.notifiers.configMapName }}
+        - name: notifiers
+          configMap:
+            name: {{ .Values.notifiers.configMapName }}
         {{- end }}
         {{- if .Values.config.useGrafanaIniFile }}
         - name: grafana-ini
@@ -204,11 +327,16 @@ spec:
             secretName: {{ .Values.config.grafanaIniSecret }}
           {{- end }}
         {{- end }}
-        {{- range .Values.extraConfigmaps }}
+        {{- if and .Values.ldap.tls.enabled .Values.ldap.tls.certificatesSecret }}
+        - name: ldap-tls
+          secret:
+            secretName: {{ .Values.ldap.tls.certificatesSecret }}
+        {{- end }}
+        {{- range .Values.grafana.extraConfigmaps }}
         - name: {{ .name }}
           configMap:
             name: {{ .name }}
         {{- end }}
-        {{- if .Values.extraVolumes }}
-        {{- toYaml .Values.extraVolumes | nindent 8 }}
+        {{- if .Values.grafana.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraVolumes  "context" $) | nindent 8 }}
         {{- end }}

@@ -1,265 +1,315 @@
+## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
 ##
-# global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
-#   storageClass: myStorageClass
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
+##
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass: ""
+
+## @section Common parameters
+##
+
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion: ""
+## @param nameOverride String to partially override common.names.fullname
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param clusterDomain Default Kubernetes cluster domain
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+
+## @section JasperReports parameters
+##
 
 ## Bitnami JasperReports image version
 ## ref: https://hub.docker.com/r/bitnami/dokuwiki/tags/
+## @param image.registry JasperReports image registry
+## @param image.repository JasperReports image repository
+## @param image.tag JasperReports image tag (immutable tags are recommended)
+## @param image.digest JasperReports image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param image.pullPolicy JasperReports image pull policy
+## @param image.pullSecrets Specify docker-registry secret names as an array
 ##
 image:
   registry: docker.io
   repository: bitnami/jasperreports
-  tag: 7.8.0-debian-10-r147
+  tag: 8.1.0-debian-11-r29
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ## Example:
+  ## e.g:
   ## pullSecrets:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-
-## Force target Kubernetes version (using Helm capabilites if not set)
+## @param jasperreportsUsername JasperReports user
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/jasperreports#configuration
 ##
-kubeVersion:
-
-## Deployment pod host aliases
-## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-##
-hostAliases: []
-
-## String to partially override common.names.fullname template (will maintain the release name)
-##
-# nameOverride:
-
-## String to fully override common.names.fullname template
-##
-# fullnameOverride:
-
-## Add labels to all the deployed resources
-##
-commonLabels: {}
-
-## Add annotations to all the deployed resources
-##
-commonAnnotations: {}
-
-## Kubernetes Cluster Domain
-##
-clusterDomain: cluster.local
-
-## Extra objects to deploy (value evaluated as a template)
-##
-extraDeploy: []
-
-## User of the application
-## ref: https://github.com/bitnami/bitnami-docker-jasperreports#configuration
-##
-jasperreportsUsername: user
-
-## Application password
+jasperreportsUsername: jasperadmin
+## @param jasperreportsPassword JasperReports password
 ## Defaults to a random 10-character alphanumeric string if not set
-## ref: https://github.com/bitnami/bitnami-docker-jasperreports#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/jasperreports#configuration
 ##
-# jasperreportsPassword:
-
-## Application mail
-## ref: https://github.com/bitnami/bitnami-docker-jasperreports#configuration
+jasperreportsPassword: ""
+## @param jasperreportsEmail JasperReports user email
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/jasperreports#configuration
 ##
 jasperreportsEmail: user@example.com
-
-## Set to `yes` to allow the container to be started with blank passwords
-## ref: https://github.com/bitnami/bitnami-docker-jasperreports#environment-variables
+## @param allowEmptyPassword Set to `yes` to allow the container to be started with blank passwords
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/jasperreports#environment-variables
 ##
-allowEmptyPassword: "yes"
-
+allowEmptyPassword: "no"
 ## SMTP mail delivery configuration
-## ref: https://github.com/bitnami/bitnami-docker-jasperreports#smtp-configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/jasperreports#smtp-configuration
+## @param smtpHost SMTP host
+## @param smtpPort SMTP port
+## @param smtpEmail SMTP email
+## @param smtpUser SMTP user
+## @param smtpPassword SMTP password
+## @param smtpProtocol SMTP protocol [`ssl`, `none`]
 ##
-# smtpHost:
-# smtpPort:
-# smtpEmail:
-# smtpUser:
-# smtpPassword:
-# smtpProtocol:
-
-## Command and args for running the container (set to default if not set). Use array form
+smtpHost: ""
+smtpPort: ""
+smtpEmail: ""
+smtpUser: ""
+smtpPassword: ""
+smtpProtocol: ""
+## @param command Override default container command (useful when using custom images)
 ##
 command: []
+## @param args Override default container args (useful when using custom images)
+##
 args: []
-
-## An array to add extra env vars
+## @param extraEnvVars Extra environment variables to be set on Jasperreports container
 ## Example:
 ## extraEnvVars:
 ##   - name: FOO
 ##     value: "bar"
 ##
 extraEnvVars: []
-
-## ConfigMap with extra environment variables
+## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars
 ##
-extraEnvVarsCM:
-
-## Secret with extra environment variables
+extraEnvVarsCM: ""
+## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
-extraEnvVarsSecret:
-
+extraEnvVarsSecret: ""
 ## Strategy to use to update Pods
 ##
 updateStrategy:
-  ## StrategyType
+  ## @param updateStrategy.type StrategyType
   ## Can be set to RollingUpdate or OnDelete
   ##
   type: RollingUpdate
 
-## JasperReports container ports to open
+## @section Jasperreports deployment parameters
 ##
-containerPort: 8080
 
+## @param hostAliases Add deployment host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+## @param containerPorts.http HTTP port to expose at container level
+##
+containerPorts:
+  http: 8080
 ## JasperReports pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+## @param podSecurityContext.enabled Enable pod's Security Context
+## @param podSecurityContext.fsGroup Set pod's Security Context fsGroup
 ##
 podSecurityContext:
   enabled: true
-  fsGroup: 0
-
+  fsGroup: 1001
 ## JasperReports containers' SecurityContext
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param containerSecurityContext.enabled Enable container's Security Context
+## @param containerSecurityContext.runAsUser Set container's Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ##
 containerSecurityContext:
   enabled: true
-  runAsUser: 0
-
+  runAsUser: 1001
+  runAsNonRoot: true
 ## JasperReports resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## We usually recommend not to specify default resources and to leave this as a conscious
+## choice for the user. This also increases chances charts run on environments with little
+## resources, such as Minikube. If you do want to specify resources, uncomment the following
+## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+## @param resources.limits The resources limits for the Jasperreports container
+## @param resources.requests [object] The requested resources for the Jasperreports container
 ##
 resources:
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## Example:
+  ## limits:
+  ##    cpu: 200m
+  ##    memory: 256Mi
+  ##
   limits: {}
-  #   cpu: 200m
-  #   memory: 256Mi
   requests:
     memory: 512Mi
     cpu: 300m
-
-## JasperReports containers' liveness and readiness probes.
+## JasperReports containers' liveness, readiness and startup probes.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.path Request path for startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
 ##
-livenessProbe:
-  enabled: true
-  httpGet:
-    path: /jasperserver/login.html
-    port: http
-  initialDelaySeconds: 300
+startupProbe:
+  enabled: false
+  path: /jasperserver/login.html
+  initialDelaySeconds: 450
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
+## @param livenessProbe.enabled Enable livenessProbe
+## @param livenessProbe.path Request path for livenessProbe
+## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+## @param livenessProbe.periodSeconds Period seconds for livenessProbe
+## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
+## @param livenessProbe.successThreshold Success threshold for livenessProbe
+##
+livenessProbe:
+  enabled: true
+  path: /jasperserver/login.html
+  initialDelaySeconds: 450
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+## JasperReports containers' readiness probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param readinessProbe.enabled Enable readinessProbe
+## @param readinessProbe.path Request path for readinessProbe
+## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+## @param readinessProbe.periodSeconds Period seconds for readinessProbe
+## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
+## @param readinessProbe.successThreshold Success threshold for readinessProbe
+##
 readinessProbe:
   enabled: true
-  httpGet:
-    path: /jasperserver/login.html
-    port: http
+  path: /jasperserver/login.html
   initialDelaySeconds: 30
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
-
-## Custom Liveness probes for JasperReports
+## @param customStartupProbe Override default startup probe
+##
+customStartupProbe: {}
+## @param customLivenessProbe Override default liveness probe
 ##
 customLivenessProbe: {}
-
-## Custom Rediness probes JasperReports
+## @param customReadinessProbe Override default readiness probe
 ##
 customReadinessProbe: {}
-
-## Pod extra labels
+## @param podLabels Extra labels for Jasperreports pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
-
-## Annotations for server pods.
+## @param podAnnotations Annotations for Jasperreports pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
-
-## Pod affinity preset
+## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
 ##
 podAffinityPreset: ""
-
-## Pod anti-affinity preset
+## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
 ##
 podAntiAffinityPreset: soft
-
 ## Node affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-## Allowed values: soft, hard
 ##
 nodeAffinityPreset:
-  ## Node affinity type
-  ## Allowed values: soft, hard
+  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ##
   type: ""
-  ## Node label key to match
+  ## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set.
   ## E.g.
   ## key: "kubernetes.io/e2e-az-name"
   ##
   key: ""
-  ## Node label values to match
+  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.
   ## E.g.
   ## values:
   ##   - e2e-az1
   ##   - e2e-az2
   ##
   values: []
-
-## Affinity for pod assignment. Evaluated as a template.
+## @param affinity Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
-
-## Node labels for pod assignment. Evaluated as a template.
+## @param nodeSelector Node labels for pod assignment
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-
-## Tolerations for pod assignment. Evaluated as a template.
+## @param tolerations Tolerations for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
-## lifecycleHooks for JasperReports container to automate configuration before or after startup.
+## @param priorityClassName JasperReports pods' priorityClassName
+##
+priorityClassName: ""
+## @param schedulerName Name of the k8s scheduler (other than default)
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
+## @param lifecycleHooks LifecycleHooks to set additional configuration at startup.
 ##
 lifecycleHooks: {}
-
-## Extra volumes to add to the deployment
+## @param extraVolumes Optionally specify extra list of additional volumes for Jasperreports pods
 ##
 extraVolumes: []
-
-## Extra volume mounts to add to the container
+## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for Jasperreports container(s)
 ##
 extraVolumeMounts: []
-
-## Add init containers to the JasperReports pods.
+## @param initContainers Add additional init containers to the Jasperreports pods
 ## Example:
 ## initContainers:
 ##   - name: your-image-name
@@ -269,9 +319,8 @@ extraVolumeMounts: []
 ##       - name: portname
 ##         containerPort: 1234
 ##
-initContainers: {}
-
-## Add sidecars to the JasperReports pods.
+initContainers: []
+## @param sidecars Add additional sidecar containers to the Jasperreports pods
 ## Example:
 ## sidecars:
 ##   - name: your-image-name
@@ -281,110 +330,144 @@ initContainers: {}
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars: {}
-
+sidecars: []
 ## Enable persistence using Persistent Volume Claims
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
+  ## @param persistence.enabled Enable persistence using PVC
+  ##
   enabled: true
-  ## JasperReports data Persistent Volume Storage Class
+  ## @param persistence.storageClass PVC Storage Class for Jasperreports volume
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
   ## If undefined (the default) or set to null, no storageClassName spec is
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  # storageClass: "-"
-  ## Persistent Volume Access Mode
+  storageClass: ""
+  ## @param persistence.accessModes Persistent Volume Access Mode
   ##
   accessModes:
     - ReadWriteOnce
-  ## Persistent Volume size
+  ## @param persistence.size PVC Storage Request for Jasperreports volume
   ##
   size: 8Gi
-  ## A manually managed Persistent Volume and Claim
+  ## @param persistence.existingClaim An Existing PVC name for Jasperreports volume
   ## Requires persistence.enabled: true
   ## If defined, PVC must be created manually before volume will be bound
   ##
   existingClaim: ""
+  ## @param persistence.annotations Persistent Volume Claim annotations
+  ##
+  annotations: {}
+
+## @section Exposure parameters
+##
 
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
 ##
 service:
-  type: LoadBalancer
-  ## HTTP Port
+  ## @param service.type Kubernetes Service type
   ##
-  port: 80
-  ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+  type: LoadBalancer
+  ## @param service.ports.http Service HTTP port
+  ##
+  ports:
+    http: 80
+  ## @param service.nodePorts.http Kubernetes http node port
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  nodePort: ""
-  ## Use serviceLoadBalancerIP to request a specific static IP,
-  ## otherwise leave blank
+  nodePorts:
+    http: ""
+  ## @param service.clusterIP Jarperreports service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
   ##
-  # loadBalancerIP:
-  ## Enable client source IP preservation
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  clusterIP: ""
+  ## @param service.loadBalancerIP Kubernetes LoadBalancerIP to request
+  ##
+  loadBalancerIP: ""
+  ## @param service.loadBalancerSourceRanges Jasperreports service Load Balancer sources
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
+  ## @param service.externalTrafficPolicy Enable client source IP preservation
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
-  ## Provide any additional annotations which may be required
+  ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
+  ## @param service.annotations Annotations for Jasperreports service
   ##
   annotations: {}
+  ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  ## If "ClientIP", consecutive client requests will be directed to the same Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
 
 ## Configure the ingress resource that allows you to access the
 ## JasperReports installation. Set up the URL
-## ref: http://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
-  ## Set to true to enable ingress record generation
+  ## @param ingress.enabled Enable ingress controller resource
   ##
   enabled: false
-
-  ## Set this to true in order to add the corresponding annotations for cert-manager
+  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
+  ## certManager: false
   ##
-  certManager: false
 
-  ## Ingress Path type
+  ## @param ingress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific
-
-  ## Override API Version (automatically detected if not set)
+  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
-  apiVersion:
-
-  ## When the ingress is enabled, a host pointing to this will be created
+  apiVersion: ""
+  ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: jasperreports.local
-
-  ## The Path to JasperReports. You may need to set this to '/*' in order to use this
-  ## with ALB ingress controllers.
+  ## @param ingress.path Ingress path
+  ## You may need to set this to '/*' in order to use this with ALB ingress controllers.
   ##
   path: /
-
-  ## Ingress annotations done as key:value pairs
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
-  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
-
-  ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
+  ## @param ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter
   ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
   ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
   ##
   tls: false
-
-  ## The list of additional hostnames to be covered with this ingress record.
+  ## @param ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
   ## extraHosts:
   ## - name: jasperreports.local
   ##   path: /
   ##
-
-  ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
+  extraHosts: []
+  ## @param ingress.extraPaths Any additional arbitrary paths that may need to be added to the ingress under the main host.
   ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
   ## extraPaths:
   ## - path: /*
@@ -392,16 +475,16 @@ ingress:
   ##     serviceName: ssl-redirect
   ##     servicePort: use-annotation
   ##
-
-  ## The tls configuration for additional hostnames to be covered with this ingress record.
+  extraPaths: []
+  ## @param ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## extraTls:
   ## - hosts:
   ##     - jasperreports.local
   ##   secretName: jasperreports.local-tls
   ##
-
-  ## If you're providing your own certificates, please use this to add the certificates as secrets
+  extraTls: []
+  ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or
   ## -----BEGIN RSA PRIVATE KEY-----
   ##
@@ -410,74 +493,72 @@ ingress:
   ##
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
-  ##
-  secrets: []
   ## - name: jasperreports.local-tls
   ##   key:
   ##   certificate:
   ##
+  secrets: []
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
+  ## @param ingress.extraRules Additional rules to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g:
+  ## extraRules:
+  ## - host: example.local
+  ##     http:
+  ##       path: /
+  ##       backend:
+  ##         service:
+  ##           name: example-svc
+  ##           port:
+  ##             name: http
+  ##
+  extraRules: []
 
+## @section Database parameters
 ##
-## External database configuration
-##
-externalDatabase:
-  ## Use existing secret (ignores previous password)
-  ## must contain key `mariadb-password`
-  ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
-  # existingSecret:
 
-  ## Database host
-  ##
-  host:
-
-  ## Database host
-  ##
-  port: 3306
-
-  ## Database user
-  ##
-  user: bn_jasperreports
-
-  ## Database password
-  ##
-  password:
-
-  ## Database name
-  ##
-  database: bitnami_jasperreports
-
-##
 ## MariaDB chart configuration
-##
-## https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
+## https://github.com/bitnami/charts/blob/main/bitnami/mariadb/values.yaml
 ##
 mariadb:
-  ## Whether to deploy a mariadb server to satisfy the applications database requirements. To use an external database set this to false and configure the externalDatabase parameters
+  ## @param mariadb.enabled Whether to use the MariaDB chart
+  ## To use an external database set this to false and configure the externalDatabase parameters
   ##
   enabled: true
-
-  ## MariaDB architecture. Allowed values: standalone or replication
+  ## @param mariadb.architecture MariaDB architecture (`standalone` or `replication`)
   ##
   architecture: standalone
-
   ## MariaDB Authentication parameters
   ##
   auth:
-    ## MariaDB root password
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
+    ## @param mariadb.auth.rootPassword Password for the MariaDB `root` user
+    ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb#setting-the-root-password-on-first-run
     ##
     rootPassword: ""
-    ## MariaDB custom user and database
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+    ## @param mariadb.auth.database Database name to create
+    ## ref: https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-on-first-run
     ##
     database: bitnami_jasperreports
+    ## @param mariadb.auth.username Database user to create
+    ## ref: https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-user-on-first-run
+    ##
     username: bn_jasperreports
+    ## @param mariadb.auth.password Password for the database
+    ##
     password: ""
-
   primary:
     ## Enable persistence using Persistent Volume Claims
-    ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+    ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+    ## @param mariadb.primary.persistence.enabled Enable database persistence using PVC
+    ## @param mariadb.primary.persistence.storageClass PVC Storage Class
+    ## @param mariadb.primary.persistence.accessModes Access mode of persistent volume
+    ## @param mariadb.primary.persistence.size Database Persistent Volume Size
+    ## @param mariadb.primary.persistence.hostPath Host mount path for MariaDB volume
+    ## @param mariadb.primary.persistence.existingClaim Enable persistence using an existing PVC
     ##
     persistence:
       enabled: true
@@ -488,13 +569,115 @@ mariadb:
       ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
       ##   GKE, AWS & OpenStack)
       ##
-      storageClass:
+      storageClass: ""
       accessModes:
         - ReadWriteOnce
       size: 8Gi
       ## Set path in case you want to use local host path volumes (not recommended in production)
       ##
-      hostPath:
+      hostPath: ""
       ## Use an existing PVC
       ##
-      existingClaim:
+      existingClaim: ""
+## External database configuration
+##
+externalDatabase:
+  ## @param externalDatabase.existingSecret Name of the database existing Secret Object
+  ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
+  ##
+  existingSecret: ""
+  ## @param externalDatabase.host Host of the existing database
+  ##
+  host: ""
+  ## @param externalDatabase.port Port of the existing database
+  ##
+  port: 3306
+  ## @param externalDatabase.user Existing username in the external db
+  ##
+  user: bn_jasperreports
+  ## @param externalDatabase.password Password for the above username
+  ##
+  password: ""
+  ## @param externalDatabase.database Name of the existing database
+  ##
+  database: bitnami_jasperreports
+  ## @param externalDatabase.type Type of the existing database, allowed values: mariadb, mysql, postgresql
+  ##
+  type: mariadb
+
+## @section NetworkPolicy parameters
+
+## Add networkpolicies
+##
+networkPolicy:
+  ## @param networkPolicy.enabled Enable network policies
+  ## If ingress.enabled or metrics.enabled are true, configure networkPolicy.ingress and networkPolicy.metrics selectors respectively to allow communication
+  ##
+  enabled: false
+  ## @param networkPolicy.ingress.enabled Enable network policy for Ingress Proxies
+  ## @param networkPolicy.ingress.namespaceSelector Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.
+  ## @param networkPolicy.ingress.podSelector Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.
+  ##
+  ingress:
+    enabled: false
+    ## e.g:
+    ## podSelector:
+    ##   label: ingress
+    ##
+    podSelector: {}
+    ## e.g:
+    ## namespaceSelector:
+    ##   label: ingress
+    ##
+    namespaceSelector: {}
+  ## @param networkPolicy.ingressRules.backendOnlyAccessibleByFrontend Enable ingress rule that makes the backend (mariadb) only accessible by Jasperreports' pods.
+  ## @param networkPolicy.ingressRules.customBackendSelector Backend selector labels. These labels will be used to identify the backend pods.
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.enabled Enable ingress rule that makes Jasperreports only accessible from a particular origin
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector Namespace selector label that is allowed to access Jasperreports. This label will be used to identified the allowed namespace(s).
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.podSelector Pods selector label that is allowed to access Jasperreports. This label will be used to identified the allowed pod(s).
+  ## @param networkPolicy.ingressRules.customRules Custom network policy ingress rule
+  ##
+  ingressRules:
+    ## mariadb backend only can be accessed from Jasperreports
+    ##
+    backendOnlyAccessibleByFrontend: false
+    customBackendSelector: {}
+    ## Allow only from the indicated:
+    ##
+    accessOnlyFrom:
+      enabled: false
+      ## e.g:
+      ## namespaceSelector:
+      ##   label: ingress
+      ##
+      namespaceSelector: {}
+      ## e.g:
+      ## podSelector:
+      ##   label: access
+      ##
+      podSelector: {}
+    ## custom ingress rules
+    ## e.g:
+    ## customRules:
+    ##   - from:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    ##
+    customRules: {}
+  ## @param networkPolicy.egressRules.denyConnectionsToExternal Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).
+  ## @param networkPolicy.egressRules.customRules Custom network policy rule
+  ##
+  egressRules:
+    ## Deny connections to external. This is not compatible with an external database.
+    ##
+    denyConnectionsToExternal: false
+    ## Additional custom egress rules
+    ## e.g:
+    ## customRules:
+    ##   - to:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    ##
+    customRules: {}

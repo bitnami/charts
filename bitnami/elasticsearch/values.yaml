@@ -1,147 +1,125 @@
+## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.elasticsearch.service.name Elasticsearch service name to be used in the Kibana subchart (ignored if kibanaEnabled=false)
+## @param global.elasticsearch.service.ports.restAPI Elasticsearch service restAPI port to be used in the Kibana subchart (ignored if kibanaEnabled=false)
+## @param global.kibanaEnabled Whether or not to enable Kibana
 ##
 global:
-  # imageRegistry: myRegistryName
-  # imagePullSecrets:
-  #   - myRegistryKeySecretName
-  # storageClass: myStorageClass
-  ## Coordinating name to be used in the Kibana subchart (service name)
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
   ##
-  coordinating:
-    name: coordinating-only
+  imagePullSecrets: []
+  storageClass: ""
+  elasticsearch:
+    service:
+      name: elasticsearch
+      ports:
+        restAPI: 9200
   kibanaEnabled: false
 
-## Bitnami Elasticsearch image version
-## ref: https://hub.docker.com/r/bitnami/elasticsearch/tags/
-##
-image:
-  registry: docker.io
-  repository: bitnami/elasticsearch
-  tag: 7.10.2-debian-10-r40
-  ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
-  ## Set to true if you would like to see extra information on logs
-  ##
-  debug: false
+## @section Common parameters
 
-## String to partially override elasticsearch.fullname template (will maintain the release name)
+## @param kubeVersion Override Kubernetes version
 ##
-# nameOverride:
-
-## String to fully override elasticsearch.fullname template
+kubeVersion: ""
+## @param nameOverride String to partially override common.names.fullname
 ##
-# fullnameOverride:
-
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname
 ##
-sysctlImage:
-  enabled: true
-  registry: docker.io
-  repository: bitnami/bitnami-shell
-  tag: "10"
-  ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: Always
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
-  ## Init container' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-    requests: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-
-## Init containers parameters:
-## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
+fullnameOverride: ""
+## @param commonLabels Labels to add to all deployed objects
 ##
-volumePermissions:
-  enabled: false
-  image:
-    registry: docker.io
-    repository: bitnami/bitnami-shell
-    tag: "10"
-    pullPolicy: Always
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-  ## Init container' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-    requests: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-
-## Cluster domain
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param clusterDomain Kubernetes cluster domain name
 ##
 clusterDomain: cluster.local
-
-## Elasticsearch cluster name
+## @param extraDeploy Array of extra objects to deploy with the release
 ##
-name: elastic
-
-## Comma, semi-colon or space separated list of plugins to install at initialization
-## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
+extraDeploy: []
+## @param namespaceOverride String to fully override common.names.namespace
 ##
-# plugins:
+namespaceOverride: ""
 
-## File System snapshot repository path
-## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
+## Enable diagnostic mode in the deployment
 ##
-# snapshotRepoPath:
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
 
-## Customize elasticsearch configuration
+## @section Elasticsearch cluster Parameters
+
+## @param clusterName Elasticsearch cluster name
+##
+clusterName: elastic
+## @param containerPorts.restAPI Elasticsearch REST API port
+## @param containerPorts.transport Elasticsearch Transport port
+##
+containerPorts:
+  restAPI: 9200
+  transport: 9300
+## @param plugins Comma, semi-colon or space separated list of plugins to install at initialization
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/elasticsearch#environment-variables
+##
+plugins: ""
+## @param snapshotRepoPath File System snapshot repository path
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/elasticsearch#environment-variables
+##
+snapshotRepoPath: ""
+## @param config Override elasticsearch configuration
+##
+config: {}
+## @param extraConfig Append extra configuration to the elasticsearch node configuration
+## Use this instead of `config` to add more configuration
+## See below example:
+## extraConfig:
+##   node:
+##     store:
+##       allow_mmap: false
 ## ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html
 ##
-# config:
-
-## extraVolumes and extraVolumeMounts allows you to mount other volumes
+extraConfig: {}
+## @param extraHosts A list of external hosts which are part of this cluster
+## Example Use Case: When you have a cluster with nodes spaned acorss multiple K8s or namespaces
+## extraHosts:
+##   - datacenter2-elasticsearch-master-hl.namespace2.svc
+##   - datacenter2-elasticsearch-data-hl.namespace2.svc
+extraHosts: []
+## @param extraVolumes A list of volumes to be added to the pod
 ## Example Use Case: mount ssl certificates when elasticsearch has tls enabled
-# extraVolumes:
-#   - name: es-certs
-#     secret:
-#       defaultMode: 420
-#       secretName: es-certs
-# extraVolumeMounts:
-#   - name: es-certs
-#     mountPath: /certs
-#     readOnly: true
-
-## initdb scripts
+## extraVolumes:
+##   - name: es-certs
+##     secret:
+##       defaultMode: 420
+##       secretName: es-certs
+extraVolumes: []
+## @param extraVolumeMounts A list of volume mounts to be added to the pod
+## extraVolumeMounts:
+##   - name: es-certs
+##     mountPath: /certs
+##     readOnly: true
+extraVolumeMounts: []
+## @param initScripts Dictionary of init scripts. Evaluated as a template.
 ## Specify dictionary of scripts to be run at first boot
 ## Alternatively, you can put your scripts under the files/docker-entrypoint-initdb.d directory
 ## For example:
@@ -150,1058 +128,2062 @@ name: elastic
 ##      #!/bin/sh
 ##      echo "Do something."
 ##
-initScripts:
-
-## ConfigMap with scripts to be run at first boot
+initScripts: {}
+## @param initScriptsCM ConfigMap with the init scripts. Evaluated as a template.
 ## Note: This will override initScripts
 ##
-initScriptsCM:
-
-## Secret with init scripts to execute (for sensitive data)
+initScriptsCM: ""
+## @param initScriptsSecret Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template.
 ##
-initScriptsSecret:
-
-## An array to add extra env vars
+initScriptsSecret: ""
+## @param extraEnvVars Array containing extra env vars to be added to all pods (evaluated as a template)
 ## For example:
 ## extraEnvVars:
 ##  - name: MY_ENV_VAR
 ##    value: env_var_value
 ##
 extraEnvVars: []
-
-## Name of a ConfigMap containing extra env vars
+## @param extraEnvVarsCM ConfigMap containing extra env vars to be added to all pods (evaluated as a template)
 ##
-extraEnvVarsConfigMap:
-
-## Name of a Secret containing extra env vars
+extraEnvVarsCM: ""
+## @param extraEnvVarsSecret Secret containing extra env vars to be added to all pods (evaluated as a template)
 ##
-extraEnvVarsSecret:
-
-## Elasticsearch master-eligible node parameters
+extraEnvVarsSecret: ""
+## @param sidecars Add additional sidecar containers to the all elasticsearch node pod(s)
+## e.g:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
 ##
-master:
-  name: master
-  ## Number of master-eligible node(s) replicas to deploy
+sidecars: []
+## @param initContainers Add additional init containers to the all elasticsearch node pod(s)
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+## e.g:
+## initContainers:
+##  - name: your-image-name
+##    image: your-image
+##    imagePullPolicy: Always
+##    command: ['sh', '-c', 'echo "hello world"']
+##
+initContainers: []
+## @param useIstioLabels Use this variable to add Istio labels to all pods
+##
+useIstioLabels: true
+
+## Bitnami Elasticsearch image
+## @param image.registry Elasticsearch image registry
+## @param image.repository Elasticsearch image repository
+## @param image.tag Elasticsearch image tag (immutable tags are recommended)
+## @param image.digest Elasticsearch image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param image.pullPolicy Elasticsearch image pull policy
+## @param image.pullSecrets Elasticsearch image pull secrets
+## @param image.debug Enable Elasticsearch image debug mode
+##
+image:
+  registry: docker.io
+  repository: bitnami/elasticsearch
+  tag: 8.5.2-debian-11-r0
+  digest: ""
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
-  replicas: 2
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Enable debug mode
+  ##
+  debug: false
 
-  ## updateStrategy for ElasticSearch master statefulset
+## X-Pack security parameters
+## Note: TLS configuration is required in order to configure password authentication
+##
+security:
+  ## @param security.enabled Enable X-Pack Security settings
+  ##
+  enabled: false
+  ## @param security.elasticPassword Password for 'elastic' user
+  ## Ref: https://github.com/bitnami/containers/tree/main/bitnami/elasticsearch#security
+  ##
+  elasticPassword: ""
+  ## @param security.existingSecret Name of the existing secret containing the Elasticsearch password and
+  ##
+  existingSecret: ""
+  ## FIPS mode
+  ## @param security.fipsMode Configure elasticsearch with FIPS 140 compliant mode
+  ## Ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/fips-140-compliance.html
+  ##
+  fipsMode: false
+  ## TLS configuration
+  ##
+  tls:
+    ## @param security.tls.restEncryption Enable SSL/TLS encryption for Elasticsearch REST API.
+    ##
+    restEncryption: true
+    ## @param security.tls.autoGenerated Create self-signed TLS certificates.
+    ## Note: Currently only supports PEM certificates.
+    ##
+    autoGenerated: false
+    ## @param security.tls.verificationMode Verification mode for SSL communications.
+    ## Supported values: full, certificate, none.
+    ## Ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/security-settings.html
+    ##
+    verificationMode: "full"
+    ## @param security.tls.master.existingSecret Existing secret containing the certificates for the master nodes
+    ## @param security.tls.data.existingSecret Existing secret containing the certificates for the data nodes
+    ## @param security.tls.ingest.existingSecret Existing secret containing the certificates for the ingest nodes
+    ## @param security.tls.coordinating.existingSecret Existing secret containing the certificates for the coordinating nodes
+    ##
+    master:
+      existingSecret: ""
+    data:
+      existingSecret: ""
+    ingest:
+      existingSecret: ""
+    coordinating:
+      existingSecret: ""
+    ## @param security.tls.keystoreFilename Name of the keystore file
+    ##
+    keystoreFilename: elasticsearch.keystore.jks
+    ## @param security.tls.truststoreFilename Name of the truststore
+    ##
+    truststoreFilename: elasticsearch.truststore.jks
+    ## @param security.tls.usePemCerts Use this variable if your secrets contain PEM certificates instead of JKS/PKCS12
+    ## Ignored when using autoGenerated certs.
+    ##
+    usePemCerts: false
+    ## @param security.tls.passwordsSecret Existing secret containing the Keystore and Truststore passwords, or key password if PEM certs are used
+    ##
+    passwordsSecret: ""
+    ## @param security.tls.keystorePassword Password to access the JKS/PKCS12 keystore or PEM key when they are password-protected.
+    ## Ignored if security.tls.passwordsSecret is provided.
+    ##
+    keystorePassword: ""
+    ## @param security.tls.truststorePassword Password to access the JKS/PKCS12 truststore when they are password-protected.
+    ## Ignored if security.tls.passwordsSecret is provided.
+    ##
+    truststorePassword: ""
+    ## @param security.tls.keyPassword Password to access the PEM key when they are password-protected.
+    ## Ignored if security.tls.passwordsSecret is provided.
+    ##
+    keyPassword: ""
+    ## @param security.tls.secretKeystoreKey Name of the secret key containing the Keystore password
+    ##
+    secretKeystoreKey: ""
+    ## @param security.tls.secretTruststoreKey Name of the secret key containing the Truststore password
+    ##
+    secretTruststoreKey: ""
+    ## @param security.tls.secretKey Name of the secret key containing the PEM key password
+    ##
+    secretKey: ""
+
+## @section Traffic Exposure Parameters
+##
+
+## Elasticsearch service parameters
+##
+service:
+  ## @param service.type Elasticsearch service type
+  ##
+  type: ClusterIP
+  ## @param service.ports.restAPI Elasticsearch service REST API port
+  ## @param service.ports.transport Elasticsearch service transport port
+  ##
+  ports:
+    restAPI: 9200
+    transport: 9300
+  ## Node ports to expose
+  ## @param service.nodePorts.restAPI Node port for REST API
+  ## @param service.nodePorts.transport Node port for REST API
+  ## NOTE: choose port between <30000-32767>
+  ##
+  nodePorts:
+    restAPI: ""
+    transport: ""
+  ## @param service.clusterIP Elasticsearch service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
+  ##
+  clusterIP: ""
+  ## @param service.loadBalancerIP Elasticsearch service Load Balancer IP
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+  ##
+  loadBalancerIP: ""
+  ## @param service.loadBalancerSourceRanges Elasticsearch service Load Balancer sources
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
+  ## @param service.externalTrafficPolicy Elasticsearch service external traffic policy
+  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
+  ## @param service.annotations Additional custom annotations for Elasticsearch service
+  ##
+  annotations: {}
+  ## @param service.extraPorts Extra ports to expose in Elasticsearch service (normally used with the `sidecars` value)
+  ##
+  extraPorts: []
+  ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  ## If "ClientIP", consecutive client requests will be directed to the same Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
+
+## Elasticsearch ingress parameters
+## ref: http://kubernetes.io/docs/user-guide/ingress/
+##
+ingress:
+  ## @param ingress.enabled Enable ingress record generation for Elasticsearch
+  ##
+  enabled: false
+  ## @param ingress.pathType Ingress path type
+  ##
+  pathType: ImplementationSpecific
+  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
+  ##
+  apiVersion: ""
+  ## @param ingress.hostname Default host for the ingress record
+  ##
+  hostname: elasticsearch.local
+  ## @param ingress.path Default path for the ingress record
+  ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+  ##
+  path: /
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+  ##
+  annotations: {}
+  ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+  ## You can:
+  ##   - Use the `ingress.secrets` parameter to create this TLS secret
+  ##   - Rely on cert-manager to create it by setting the corresponding annotations
+  ##   - Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
+  ##
+  tls: false
+  ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+  ##
+  selfSigned: false
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
+  ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+  ## e.g:
+  ## extraHosts:
+  ##   - name: elasticsearch.local
+  ##     path: /
+  ##
+  extraHosts: []
+  ## @param ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+  ## e.g:
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
+  ## @param ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## e.g:
+  ## extraTls:
+  ## - hosts:
+  ##     - elasticsearch.local
+  ##   secretName: elasticsearch.local-tls
+  ##
+  extraTls: []
+  ## @param ingress.secrets Custom TLS certificates as secrets
+  ## NOTE: 'key' and 'certificate' are expected in PEM format
+  ## NOTE: 'name' should line up with a 'secretName' set further up
+  ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+  ## It is also possible to create and manage the certificates outside of this helm chart
+  ## Please see README.md for more information
+  ## e.g:
+  ## secrets:
+  ##   - name: elasticsearch.local-tls
+  ##     key: |-
+  ##       -----BEGIN RSA PRIVATE KEY-----
+  ##       ...
+  ##       -----END RSA PRIVATE KEY-----
+  ##     certificate: |-
+  ##       -----BEGIN CERTIFICATE-----
+  ##       ...
+  ##       -----END CERTIFICATE-----
+  ##
+  secrets: []
+  ## @param ingress.extraRules Additional rules to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g:
+  ## extraRules:
+  ## - host: example.local
+  ##     http:
+  ##       path: /
+  ##       backend:
+  ##         service:
+  ##           name: example-svc
+  ##           port:
+  ##             name: http
+  ##
+  extraRules: []
+
+## @section Master-elegible nodes parameters
+
+master:
+  ## @param master.masterOnly Deploy the Elasticsearch master-elegible nodes as master-only nodes. Recommended for high-demand deployments.
+  ## If you are
+  masterOnly: true
+  ## @param master.replicaCount Number of master-elegible replicas to deploy
+  ##
+  replicaCount: 2
+  ## @param master.nameOverride String to partially override elasticsearch.master.fullname
+  ##
+  nameOverride: ""
+  ## @param master.fullnameOverride String to fully override elasticsearch.master.fullname
+  ##
+  fullnameOverride: ""
+  ## @param master.servicenameOverride String to fully override elasticsearch.master.servicename
+  ##
+  servicenameOverride: ""
+  ## @param master.annotations [object] Annotations for the master statefulset
+  ##
+  annotations: {}
+  ## @param master.updateStrategy.type Master-elegible nodes statefulset stategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
-
-  ## Deployment pod host aliases
+  ## Elasticsearch resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param master.resources.limits The resources limits for the master-elegible containers
+  ## @param master.resources.requests [object] The requested resources for the master-elegible containers
+  ##
+  resources:
+    limits: {}
+    requests:
+      cpu: 25m
+      memory: 256Mi
+  ## @param master.heapSize Elasticsearch master-eligible node heap size.
+  ## Note: The recommended heapSize is half of the container's memory.
+  ## If omitted, it will be automatically set.
+  ## Example:
+  ##   heapSize: 128m
+  ##
+  heapSize: 128m
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param master.podSecurityContext.enabled Enabled master-elegible pods' Security Context
+  ## @param master.podSecurityContext.fsGroup Set master-elegible pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param master.containerSecurityContext.enabled Enabled master-elegible containers' Security Context
+  ## @param master.containerSecurityContext.runAsUser Set master-elegible containers' Security Context runAsUser
+  ## @param master.containerSecurityContext.runAsNonRoot Set master-elegible containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  ## @param master.hostAliases master-elegible pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-
-  ## Use an alternate scheduler, e.g. "stork".
-  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-  ##
-  # schedulerName:
-
-  heapSize: 128m
-  ## Provide annotations for master-eligible pods.
-  ##
-  podAnnotations: {}
-
-  ## Extra labels to add to Pod
+  ## @param master.podLabels Extra labels for master-elegible pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-
-  ## Pod Security Context for master-eligible pods.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param master.podAnnotations Annotations for master-elegible pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
-  securityContext:
-    enabled: true
-    fsGroup: 1001
-    runAsUser: 1001
-  ## Pod affinity preset
+  podAnnotations: {}
+  ## @param master.podAffinityPreset Pod affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAffinityPreset: ""
-
-  ## Pod anti-affinity preset
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
+  ## @param master.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: ""
-
-  ## Node affinity preset
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
+  ## Node master.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
   nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
+    ## @param master.nodeAffinityPreset.type Node affinity preset type. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## Node label key to match
-    ## E.g.
-    ## key: "kubernetes.io/e2e-az-name"
+    ## @param master.nodeAffinityPreset.key Node label key to match. Ignored if `master.affinity` is set
     ##
     key: ""
-    ## Node label values to match
+    ## @param master.nodeAffinityPreset.values Node label values to match. Ignored if `master.affinity` is set
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-
-  ## Affinity for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+  ## @param master.affinity Affinity for master-elegible pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `master.podAffinityPreset`, `master.podAntiAffinityPreset`, and `master.nodeAffinityPreset` will be ignored when it's set
   ##
   affinity: {}
-
-  ## Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## @param master.nodeSelector Node labels for master-elegible pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
-  ## Tolerations for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ## @param master.tolerations Tolerations for master-elegible pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## Elasticsearch master-eligible container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param master.priorityClassName master-elegible pods' priorityClassName
   ##
-  resources:
-    ## We usually recommend not to specify default resources and to leave this as a conscious
-    ## choice for the user. This also increases chances charts run on environments with little
-    ## resources, such as Minikube.
-    ##
-    limits: {}
-    #   cpu: 100m
-    #   memory: 384Mi
-    requests:
-      cpu: 25m
-      memory: 256Mi
-  ## Elasticsearch master-eligible container's liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  priorityClassName: ""
+  ## @param master.schedulerName Name of the k8s scheduler (other than default) for master-elegible pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param master.terminationGracePeriodSeconds In seconds, time the given to the Elasticsearch Master pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param master.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param master.podManagementPolicy podManagementPolicy to manage scaling operation of Elasticsearch master pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: "Parallel"
+  ## Configure extra options for Elasticsearch master-elegible containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param master.startupProbe.enabled Enable/disable the startup probe (master nodes pod)
+  ## @param master.startupProbe.initialDelaySeconds Delay before startup probe is initiated (master nodes pod)
+  ## @param master.startupProbe.periodSeconds How often to perform the probe (master nodes pod)
+  ## @param master.startupProbe.timeoutSeconds When the probe times out (master nodes pod)
+  ## @param master.startupProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (master nodes pod)
+  ## @param master.startupProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param master.livenessProbe.enabled Enable/disable the liveness probe (master-eligible nodes pod)
+  ## @param master.livenessProbe.initialDelaySeconds Delay before liveness probe is initiated (master-eligible nodes pod)
+  ## @param master.livenessProbe.periodSeconds How often to perform the probe (master-eligible nodes pod)
+  ## @param master.livenessProbe.timeoutSeconds When the probe times out (master-eligible nodes pod)
+  ## @param master.livenessProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (master-eligible nodes pod)
+  ## @param master.livenessProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
   ##
   livenessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param master.readinessProbe.enabled Enable/disable the readiness probe (master-eligible nodes pod)
+  ## @param master.readinessProbe.initialDelaySeconds Delay before readiness probe is initiated (master-eligible nodes pod)
+  ## @param master.readinessProbe.periodSeconds How often to perform the probe (master-eligible nodes pod)
+  ## @param master.readinessProbe.timeoutSeconds When the probe times out (master-eligible nodes pod)
+  ## @param master.readinessProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (master-eligible nodes pod)
+  ## @param master.readinessProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
   readinessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
-
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param master.customStartupProbe Override default startup probe
+  ##
+  customStartupProbe: {}
+  ## @param master.customLivenessProbe Override default liveness probe
+  ##
+  customLivenessProbe: {}
+  ## @param master.customReadinessProbe Override default readiness probe
+  ##
+  customReadinessProbe: {}
+  ## @param master.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param master.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param master.lifecycleHooks for the master-elegible container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param master.extraEnvVars Array with extra environment variables to add to master-elegible nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param master.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for master-elegible nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param master.extraEnvVarsSecret Name of existing Secret containing extra env vars for master-elegible nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param master.extraVolumes Optionally specify extra list of additional volumes for the master-elegible pod(s)
+  ##
+  extraVolumes: []
+  ## @param master.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the master-elegible container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param master.sidecars Add additional sidecar containers to the master-elegible pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param master.initContainers Add additional init containers to the master-elegible pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
   ## Enable persistence using Persistent Volume Claims
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
-    ## If true, use a Persistent Volume Claim, If false, use emptyDir
+    ## @param master.persistence.enabled Enable persistence using a `PersistentVolumeClaim`
     ##
     enabled: true
-    ## Persistent Volume Storage Class
+    ## @param master.persistence.storageClass Persistent Volume Storage Class
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
     ## If undefined (the default) or set to null, no storageClassName spec is
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
     ##
-    # storageClass: "-"
-    ## If persistence is enable, and this value is defined,
+    storageClass: ""
+    ## @param master.persistence.existingClaim Existing Persistent Volume Claim
     ## then accept the value as an existing Persistent Volume Claim to which
     ## the container should be bound
     ##
-    # existingClaim: my-persistent-volume-claim
-    ## If persistence is enable, and this value is defined, then
-    ## accept the value as an existing Persistent Volume to which
-    ## should be added as match label selector to the volumeClaimTemplate
-    ## Ignored if `selector` is set.
+    existingClaim: ""
+    ## @param master.persistence.existingVolume Existing Persistent Volume for use as volume match label selector to the `volumeClaimTemplate`. Ignored when `master.persistence.selector` is set.
     ##
-    # existingVolume: my-persistent-volume
-    ## Configure custom selector for volumeClaimTemplate.
-    ## Current example is equivalent to `existingVolume` setting.
-    ## Using this setting will overwrite `existingVolume`
-    # selector:
-    #   matchLabels:
-    #     volume:
-    ## Persistent Volume Claim annotations
+    existingVolume: ""
+    ## @param master.persistence.selector Configure custom selector for existing Persistent Volume. Overwrites `master.persistence.existingVolume`
+    ## selector:
+    ##   matchLabels:
+    ##     volume:
+    ##
+    selector: {}
+    ## @param master.persistence.annotations Persistent Volume Claim annotations
     ##
     annotations: {}
-    ## Persistent Volume Access Mode
+    ## @param master.persistence.accessModes Persistent Volume Access Modes
     ##
     accessModes:
       - ReadWriteOnce
-    ## Persistent Volume size
+    ## @param master.persistence.size Persistent Volume Size
     ##
     size: 8Gi
-
-  ## Service parameters for master-eligible node(s)
-  ##
-  service:
-    ## master-eligible service type
-    ##
-    type: ClusterIP
-    ## Elasticsearch transport port
-    ##
-    port: 9300
-    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-    ##
-    # nodePort:
-    ## Provide any additional annotations which may be required. This can be used to
-    ## set the LoadBalancer service type to internal only.
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
-    ##
-    annotations: {}
-    ## Set the LoadBalancer service type to internal only.
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
-    ##
-    # loadBalancerIP:
-  ## Provide functionality to use RBAC
+  ## Pods Service Account
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  ## @param master.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param master.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+  ## @param master.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ## @param master.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
   ##
   serviceAccount:
-    ## Specifies whether a ServiceAccount should be created for the master node
-    ##
     create: false
-    ## The name of the ServiceAccount to use.
-    ## If not set and create is true, a name is generated using the fullname template
-    # name:
-
-## Elasticsearch coordinating-only node parameters
-##
-coordinating:
-  ## Number of coordinating-only node(s) replicas to deploy
-  ##
-  replicas: 2
-
-  ## Deployment pod host aliases
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-  ##
-  hostAliases: []
-
-  ## Use an alternate scheduler, e.g. "stork".
-  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-  ##
-  # schedulerName:
-
-  ## updateStrategy for ElasticSearch coordinating deployment
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
-  ##
-  updateStrategy:
-    type: RollingUpdate
-
-  heapSize: 128m
-  ## Provide annotations for the coordinating-only pods.
-  ##
-  podAnnotations: {}
-
-  ## Extra labels to add to Pod
-  ##
-  podLabels: {}
-
-  ## Pod Security Context for coordinating-only pods.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ##
-  securityContext:
-    enabled: true
-    fsGroup: 1001
-    runAsUser: 1001
-  ## Pod affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
-  ##
-  podAffinityPreset: ""
-
-  ## Pod anti-affinity preset
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
-  ##
-  podAntiAffinityPreset: ""
-
-  ## Node affinity preset
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
-  ##
-  nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
-    ##
-    type: ""
-    ## Node label key to match
-    ## E.g.
-    ## key: "kubernetes.io/e2e-az-name"
-    ##
-    key: ""
-    ## Node label values to match
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-
-  ## Affinity for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
-  ##
-  affinity: {}
-
-  ## Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector: {}
-
-  ## Tolerations for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-  ## Elasticsearch coordinating-only container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources:
-    ## We usually recommend not to specify default resources and to leave this as a conscious
-    ## choice for the user. This also increases chances charts run on environments with little
-    ## resources, such as Minikube.
-    ##
-    limits: {}
-    #   cpu: 100m
-    #   memory: 384Mi
-    requests:
-      cpu: 25m
-      memory: 256Mi
-  ## Elasticsearch coordinating-only container's liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-  ##
-  livenessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
-  readinessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
-  ## Service parameters for coordinating-only node(s)
-  ##
-  service:
-    ## coordinating-only service type
-    ##
-    type: ClusterIP
-    ## Elasticsearch tREST API port
-    ##
-    port: 9200
-    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-    ##
-    # nodePort:
-    ## Provide any additional annotations which may be required. This can be used to
-    ## set the LoadBalancer service type to internal only.
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
-    ##
+    name: ""
+    automountServiceAccountToken: true
     annotations: {}
-    ## Set the LoadBalancer service type to internal only.
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
-    ##
-    # loadBalancerIP:
-  ## Provide functionality to use RBAC
+  ## Enable HorizontalPodAutoscaler for Elasticsearch Master pods
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  ## @param master.autoscaling.enabled Whether enable horizontal pod autoscale
+  ## @param master.autoscaling.minReplicas Configure a minimum amount of pods
+  ## @param master.autoscaling.maxReplicas Configure a maximum amount of pods
+  ## @param master.autoscaling.targetCPU Define the CPU target to trigger the scaling actions (utilization percentage)
+  ## @param master.autoscaling.targetMemory Define the memory target to trigger the scaling actions (utilization percentage)
   ##
-  serviceAccount:
-    ## Specifies whether a ServiceAccount should be created for the coordinating node
-    ##
-    create: false
-    ## The name of the ServiceAccount to use.
-    ## If not set and create is true, a name is generated using the fullname template
-    ##
-    # name:
+  autoscaling:
+    enabled: false
+    minReplicas: 3
+    maxReplicas: 11
+    targetCPU: ""
+    targetMemory: ""
 
-## Elasticsearch data node parameters
-##
+## @section Data-only nodes parameters
+
 data:
-  name: data
-  ## Number of data node(s) replicas to deploy
+  ## @param data.replicaCount Number of data-only replicas to deploy
   ##
-  replicas: 2
-  ## Deployment pod host aliases
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  replicaCount: 2
+  ## @param data.nameOverride String to partially override elasticsearch.data.fullname
   ##
-  hostAliases: []
-
-  ## Use an alternate scheduler, e.g. "stork".
-  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  nameOverride: ""
+  ## @param data.fullnameOverride String to fully override elasticsearch.data.fullname
   ##
-  # schedulerName:
-
-  ## updateStrategy for ElasticSearch Data statefulset
+  fullnameOverride: ""
+  ## @param data.servicenameOverride String to fully override elasticsearch.data.servicename
+  ##
+  servicenameOverride: ""
+  ## @param data.annotations [object] Annotations for the data statefulset
+  ##
+  annotations: {}
+  ## @param data.updateStrategy.type Data-only nodes statefulset stategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
-    # rollingUpdatePartition
-  heapSize: 1024m
-  ## Provide annotations for the data pods.
-  ##
-  podAnnotations: {}
-
-  ## Extra labels to add to Pod
-  ##
-  podLabels: {}
-
-  ## Pod Security Context for data pods.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ##
-  securityContext:
-    enabled: true
-    fsGroup: 1001
-    runAsUser: 1001
-  ## Pod affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
-  ##
-  podAffinityPreset: ""
-
-  ## Pod anti-affinity preset
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
-  ##
-  podAntiAffinityPreset: ""
-
-  ## Node affinity preset
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
-  ##
-  nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
-    ##
-    type: ""
-    ## Node label key to match
-    ## E.g.
-    ## key: "kubernetes.io/e2e-az-name"
-    ##
-    key: ""
-    ## Node label values to match
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-
-  ## Affinity for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
-  ##
-  affinity: {}
-
-  ## Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector: {}
-
-  ## Tolerations for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-  ## Elasticsearch data container's resource requests and limits
+  ## Elasticsearch resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param data.resources.limits The resources limits for the data containers
+  ## @param data.resources.requests [object] The requested resources for the data containers
   ##
   resources:
-    ## We usually recommend not to specify default resources and to leave this as a conscious
-    ## choice for the user. This also increases chances charts run on environments with little
-    ## resources, such as Minikube.
-    ##
     limits: {}
-    #   cpu: 100m
-    #   memory: 2176Mi
     requests:
       cpu: 25m
       memory: 2048Mi
-  ## Elasticsearch data container's liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param data.heapSize Elasticsearch data node heap size.
+  ## Note: The recommended heapSize is half of the container's memory.
+  ## If omitted, it will be automatically set.
+  ## Example:
+  ##   heapSize: 128m
+  ##
+  heapSize: 1024m
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param data.podSecurityContext.enabled Enabled data pods' Security Context
+  ## @param data.podSecurityContext.fsGroup Set data pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param data.containerSecurityContext.enabled Enabled data containers' Security Context
+  ## @param data.containerSecurityContext.runAsUser Set data containers' Security Context runAsUser
+  ## @param data.containerSecurityContext.runAsNonRoot Set data containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  ## @param data.hostAliases data pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param data.podLabels Extra labels for data pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param data.podAnnotations Annotations for data pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param data.podAffinityPreset Pod affinity preset. Ignored if `data.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param data.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `data.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: ""
+  ## Node data.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param data.nodeAffinityPreset.type Node affinity preset type. Ignored if `data.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param data.nodeAffinityPreset.key Node label key to match. Ignored if `data.affinity` is set
+    ##
+    key: ""
+    ## @param data.nodeAffinityPreset.values Node label values to match. Ignored if `data.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param data.affinity Affinity for data pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `data.podAffinityPreset`, `data.podAntiAffinityPreset`, and `data.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param data.nodeSelector Node labels for data pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param data.tolerations Tolerations for data pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param data.priorityClassName data pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param data.schedulerName Name of the k8s scheduler (other than default) for data pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param data.terminationGracePeriodSeconds In seconds, time the given to the Elasticsearch data pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param data.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param data.podManagementPolicy podManagementPolicy to manage scaling operation of Elasticsearch data pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: "Parallel"
+  ## Configure extra options for Elasticsearch data containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param data.startupProbe.enabled Enable/disable the startup probe (data nodes pod)
+  ## @param data.startupProbe.initialDelaySeconds Delay before startup probe is initiated (data nodes pod)
+  ## @param data.startupProbe.periodSeconds How often to perform the probe (data nodes pod)
+  ## @param data.startupProbe.timeoutSeconds When the probe times out (data nodes pod)
+  ## @param data.startupProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (data nodes pod)
+  ## @param data.startupProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param data.livenessProbe.enabled Enable/disable the liveness probe (data nodes pod)
+  ## @param data.livenessProbe.initialDelaySeconds Delay before liveness probe is initiated (data nodes pod)
+  ## @param data.livenessProbe.periodSeconds How often to perform the probe (data nodes pod)
+  ## @param data.livenessProbe.timeoutSeconds When the probe times out (data nodes pod)
+  ## @param data.livenessProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (data nodes pod)
+  ## @param data.livenessProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
   ##
   livenessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param data.readinessProbe.enabled Enable/disable the readiness probe (data nodes pod)
+  ## @param data.readinessProbe.initialDelaySeconds Delay before readiness probe is initiated (data nodes pod)
+  ## @param data.readinessProbe.periodSeconds How often to perform the probe (data nodes pod)
+  ## @param data.readinessProbe.timeoutSeconds When the probe times out (data nodes pod)
+  ## @param data.readinessProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (data nodes pod)
+  ## @param data.readinessProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
   readinessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param data.customStartupProbe Override default startup probe
+  ##
+  customStartupProbe: {}
+  ## @param data.customLivenessProbe Override default liveness probe
+  ##
+  customLivenessProbe: {}
+  ## @param data.customReadinessProbe Override default readiness probe
+  ##
+  customReadinessProbe: {}
+  ## @param data.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param data.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param data.lifecycleHooks for the data container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param data.extraEnvVars Array with extra environment variables to add to data nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param data.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for data nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param data.extraEnvVarsSecret Name of existing Secret containing extra env vars for data nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param data.extraVolumes Optionally specify extra list of additional volumes for the data pod(s)
+  ##
+  extraVolumes: []
+  ## @param data.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the data container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param data.sidecars Add additional sidecar containers to the data pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param data.initContainers Add additional init containers to the data pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
   ## Enable persistence using Persistent Volume Claims
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
-    ## If true, use a Persistent Volume Claim, If false, use emptyDir
+    ## @param data.persistence.enabled Enable persistence using a `PersistentVolumeClaim`
     ##
     enabled: true
-    ## Persistent Volume Storage Class
+    ## @param data.persistence.storageClass Persistent Volume Storage Class
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
     ## If undefined (the default) or set to null, no storageClassName spec is
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
     ##
-    # storageClass: "-"
-    ## If persistence is enable, and this value is defined,
+    storageClass: ""
+    ## @param data.persistence.existingClaim Existing Persistent Volume Claim
     ## then accept the value as an existing Persistent Volume Claim to which
     ## the container should be bound
     ##
-    # existingClaim: my-persistent-volume-claim
-    ## If persistence is enable, and this value is defined, then
-    ## accept the value as an existing Persistent Volume to which
-    ## should be added as match label selector to the volumeClaimTemplate
-    ## Ignored if `selector` is set.
+    existingClaim: ""
+    ## @param data.persistence.existingVolume Existing Persistent Volume for use as volume match label selector to the `volumeClaimTemplate`. Ignored when `data.persistence.selector` is set.
     ##
-    # existingVolume: my-persistent-volume
-    ## Configure custom selector for volumeClaimTemplate.
-    ## Current example is equivalent to `existingVolume` setting.
-    ## Using this setting will overwrite `existingVolume`
-    # selector:
-    #   matchLabels:
-    #     volume:
-    ## Persistent Volume Claim annotations
+    existingVolume: ""
+    ## @param data.persistence.selector Configure custom selector for existing Persistent Volume. Overwrites `data.persistence.existingVolume`
+    ## selector:
+    ##   matchLabels:
+    ##     volume:
+    ##
+    selector: {}
+    ## @param data.persistence.annotations Persistent Volume Claim annotations
     ##
     annotations: {}
-    ## Persistent Volume Access Mode
+    ## @param data.persistence.accessModes Persistent Volume Access Modes
     ##
     accessModes:
       - ReadWriteOnce
-    ## Persistent Volume size
+    ## @param data.persistence.size Persistent Volume Size
     ##
     size: 8Gi
-  ## Provide functionality to use RBAC
+  ## Pods Service Account
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  ## @param data.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param data.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+  ## @param data.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ## @param data.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
   ##
   serviceAccount:
-    ## Specifies whether a ServiceAccount should be created for the data node
-    ##
     create: false
-    ## The name of the ServiceAccount to use.
-    ## If not set and create is true, a name is generated using the fullname template
-    ##
-    # name:
+    name: ""
+    automountServiceAccountToken: true
+    annotations: {}
+  ## Enable HorizontalPodAutoscaler for Elasticsearch data pods
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  ## @param data.autoscaling.enabled Whether enable horizontal pod autoscale
+  ## @param data.autoscaling.minReplicas Configure a minimum amount of pods
+  ## @param data.autoscaling.maxReplicas Configure a maximum amount of pods
+  ## @param data.autoscaling.targetCPU Define the CPU target to trigger the scaling actions (utilization percentage)
+  ## @param data.autoscaling.targetMemory Define the memory target to trigger the scaling actions (utilization percentage)
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: 3
+    maxReplicas: 11
+    targetCPU: ""
+    targetMemory: ""
 
-## Elasticsearch ingest node parameters
-##
-ingest:
-  enabled: false
-  name: ingest
-  ## Number of ingest node(s) replicas to deploy
-  ##
-  replicas: 2
-  heapSize: 128m
-  ## Provide annotations for the ingest pods.
-  ##
-  podAnnotations: {}
+## @section Coordinating-only nodes parameters
 
-  ## Deployment pod host aliases
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+coordinating:
+  ## @param coordinating.replicaCount Number of coordinating-only replicas to deploy
   ##
-  hostAliases: []
-
-  ## Use an alternate scheduler, e.g. "stork".
-  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  replicaCount: 2
+  ## @param coordinating.nameOverride String to partially override elasticsearch.coordinating.fullname
   ##
-  # schedulerName:
-
-  ## Extra labels to add to Pod
+  nameOverride: ""
+  ## @param coordinating.fullnameOverride String to fully override elasticsearch.coordinating.fullname
   ##
-  podLabels: {}
-
-  ## Pod Security Context for ingest pods.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  fullnameOverride: ""
+  ## @param coordinating.servicenameOverride String to fully override elasticsearch.coordinating.servicename
   ##
-  securityContext:
-    enabled: true
-    fsGroup: 1001
-    runAsUser: 1001
-  ## Pod affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
+  servicenameOverride: ""
+  ## @param coordinating.annotations [object] Annotations for the coordinating-only statefulset
   ##
-  podAffinityPreset: ""
-
-  ## Pod anti-affinity preset
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
+  annotations: {}
+  ## @param coordinating.updateStrategy.type Coordinating-only nodes statefulset stategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
-  podAntiAffinityPreset: ""
-
-  ## Node affinity preset
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
-  ##
-  nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
-    ##
-    type: ""
-    ## Node label key to match
-    ## E.g.
-    ## key: "kubernetes.io/e2e-az-name"
-    ##
-    key: ""
-    ## Node label values to match
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-
-  ## Affinity for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
-  ##
-  affinity: {}
-
-  ## Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector: {}
-
-  ## Tolerations for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-  ## Elasticsearch ingest container's resource requests and limits
+  updateStrategy:
+    type: RollingUpdate
+  ## Elasticsearch resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param coordinating.resources.limits The resources limits for the coordinating-only containers
+  ## @param coordinating.resources.requests [object] The requested resources for the coordinating-only containers
   ##
   resources:
-    ## We usually recommend not to specify default resources and to leave this as a conscious
-    ## choice for the user. This also increases chances charts run on environments with little
-    ## resources, such as Minikube.
-    ##
     limits: {}
-    #   cpu: 100m
-    #   memory: 384Mi
     requests:
       cpu: 25m
       memory: 256Mi
-  ## Elasticsearch ingest container's liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param coordinating.heapSize Elasticsearch coordinating node heap size.
+  ## Note: The recommended heapSize is half of the container's memory.
+  ## If omitted, it will be automatically set.
+  ## Example:
+  ##   heapSize: 128m
   ##
-  livenessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
-  readinessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
-  ## Service parameters for ingest node(s)
+  heapSize: 128m
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param coordinating.podSecurityContext.enabled Enabled coordinating-only pods' Security Context
+  ## @param coordinating.podSecurityContext.fsGroup Set coordinating-only pod's Security Context fsGroup
   ##
-  service:
-    ## ingest service type
-    ##
-    type: ClusterIP
-    ## Elasticsearch transport port
-    ##
-    port: 9300
-    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-    ##
-    # nodePort:
-    ## Provide any additional annotations which may be required. This can be used to
-    ## set the LoadBalancer service type to internal only.
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
-    ##
-    annotations: {}
-    ## Set the LoadBalancer service type to internal only.
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
-    ##
-    # loadBalancerIP:
-
-## Elasticsearch curator parameters
-##
-curator:
-  enabled: false
-  name: curator
-  image:
-    registry: docker.io
-    repository: bitnami/elasticsearch-curator
-    tag: 5.8.3-debian-10-r72
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-
-  cronjob:
-    # At 01:00 every day
-    schedule: "0 1 * * *"
-    annotations: {}
-    concurrencyPolicy: ""
-    failedJobsHistoryLimit: ""
-    successfulJobsHistoryLimit: ""
-    jobRestartPolicy: Never
-
-  ## Use an alternate scheduler, e.g. "stork".
-  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param coordinating.containerSecurityContext.enabled Enabled coordinating-only containers' Security Context
+  ## @param coordinating.containerSecurityContext.runAsUser Set coordinating-only containers' Security Context runAsUser
+  ## @param coordinating.containerSecurityContext.runAsNonRoot Set coordinating-only containers' Security Context runAsNonRoot
   ##
-  # schedulerName:
-
-  ## Provide annotations for the data pods.
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  ## @param coordinating.hostAliases coordinating-only pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
-  podAnnotations: {}
-
-  ## Extra labels to add to Pod
+  hostAliases: []
+  ## @param coordinating.podLabels Extra labels for coordinating-only pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-
-  ## Pod affinity preset
+  ## @param coordinating.podAnnotations Annotations for coordinating-only pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param coordinating.podAffinityPreset Pod affinity preset. Ignored if `coordinating.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAffinityPreset: ""
-
-  ## Pod anti-affinity preset
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
+  ## @param coordinating.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `coordinating.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: ""
-
-  ## Node affinity preset
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
+  ## Node coordinating.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
   nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
+    ## @param coordinating.nodeAffinityPreset.type Node affinity preset type. Ignored if `coordinating.affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## Node label key to match
-    ## E.g.
-    ## key: "kubernetes.io/e2e-az-name"
+    ## @param coordinating.nodeAffinityPreset.key Node label key to match. Ignored if `coordinating.affinity` is set
     ##
     key: ""
-    ## Node label values to match
+    ## @param coordinating.nodeAffinityPreset.values Node label values to match. Ignored if `coordinating.affinity` is set
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-
-  ## Affinity for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+  ## @param coordinating.affinity Affinity for coordinating-only pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `coordinating.podAffinityPreset`, `coordinating.podAntiAffinityPreset`, and `coordinating.nodeAffinityPreset` will be ignored when it's set
   ##
   affinity: {}
-
-  ## Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## @param coordinating.nodeSelector Node labels for coordinating-only pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
-  ## Tolerations for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ## @param coordinating.tolerations Tolerations for coordinating-only pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
-  rbac:
-    # Specifies whether RBAC should be enabled
+  ## @param coordinating.priorityClassName coordinating-only pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param coordinating.schedulerName Name of the k8s scheduler (other than default) for coordinating-only pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param coordinating.terminationGracePeriodSeconds In seconds, time the given to the Elasticsearch coordinating pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param coordinating.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param coordinating.podManagementPolicy podManagementPolicy to manage scaling operation of Elasticsearch coordinating pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: "Parallel"
+  ## Configure extra options for Elasticsearch coordinating-only containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param coordinating.startupProbe.enabled Enable/disable the startup probe (coordinating-only nodes pod)
+  ## @param coordinating.startupProbe.initialDelaySeconds Delay before startup probe is initiated (coordinating-only nodes pod)
+  ## @param coordinating.startupProbe.periodSeconds How often to perform the probe (coordinating-only nodes pod)
+  ## @param coordinating.startupProbe.timeoutSeconds When the probe times out (coordinating-only nodes pod)
+  ## @param coordinating.startupProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (coordinating-only nodes pod)
+  ## @param coordinating.startupProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
+  startupProbe:
     enabled: false
-
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param coordinating.livenessProbe.enabled Enable/disable the liveness probe (coordinating-only nodes pod)
+  ## @param coordinating.livenessProbe.initialDelaySeconds Delay before liveness probe is initiated (coordinating-only nodes pod)
+  ## @param coordinating.livenessProbe.periodSeconds How often to perform the probe (coordinating-only nodes pod)
+  ## @param coordinating.livenessProbe.timeoutSeconds When the probe times out (coordinating-only nodes pod)
+  ## @param coordinating.livenessProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (coordinating-only nodes pod)
+  ## @param coordinating.livenessProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param coordinating.readinessProbe.enabled Enable/disable the readiness probe (coordinating-only nodes pod)
+  ## @param coordinating.readinessProbe.initialDelaySeconds Delay before readiness probe is initiated (coordinating-only nodes pod)
+  ## @param coordinating.readinessProbe.periodSeconds How often to perform the probe (coordinating-only nodes pod)
+  ## @param coordinating.readinessProbe.timeoutSeconds When the probe times out (coordinating-only nodes pod)
+  ## @param coordinating.readinessProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (coordinating-only nodes pod)
+  ## @param coordinating.readinessProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param coordinating.customStartupProbe Override default startup probe
+  ##
+  customStartupProbe: {}
+  ## @param coordinating.customLivenessProbe Override default liveness probe
+  ##
+  customLivenessProbe: {}
+  ## @param coordinating.customReadinessProbe Override default readiness probe
+  ##
+  customReadinessProbe: {}
+  ## @param coordinating.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param coordinating.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param coordinating.lifecycleHooks for the coordinating-only container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param coordinating.extraEnvVars Array with extra environment variables to add to coordinating-only nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param coordinating.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for coordinating-only nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param coordinating.extraEnvVarsSecret Name of existing Secret containing extra env vars for coordinating-only nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param coordinating.extraVolumes Optionally specify extra list of additional volumes for the coordinating-only pod(s)
+  ##
+  extraVolumes: []
+  ## @param coordinating.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the coordinating-only container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param coordinating.sidecars Add additional sidecar containers to the coordinating-only pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param coordinating.initContainers Add additional init containers to the coordinating-only pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Pods Service Account
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  ## @param coordinating.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param coordinating.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+  ## @param coordinating.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ## @param coordinating.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+  ##
   serviceAccount:
-    # Specifies whether a ServiceAccount should be created
-    create: true
-    # The name of the ServiceAccount to use.
-    # If not set and create is true, a name is generated using the fullname template
-    name:
-
-  psp:
-    # Specifies whether a podsecuritypolicy should be created
     create: false
+    name: ""
+    automountServiceAccountToken: true
+    annotations: {}
+  ## Enable HorizontalPodAutoscaler for Elasticsearch coordinating pods
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  ## @param coordinating.autoscaling.enabled Whether enable horizontal pod autoscale
+  ## @param coordinating.autoscaling.minReplicas Configure a minimum amount of pods
+  ## @param coordinating.autoscaling.maxReplicas Configure a maximum amount of pods
+  ## @param coordinating.autoscaling.targetCPU Define the CPU target to trigger the scaling actions (utilization percentage)
+  ## @param coordinating.autoscaling.targetMemory Define the memory target to trigger the scaling actions (utilization percentage)
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: 3
+    maxReplicas: 11
+    targetCPU: ""
+    targetMemory: ""
 
-  hooks:
-    install: false
-    upgrade: false
+## @section Ingest-only nodes parameters
 
-  # run curator in dry-run mode
-  dryrun: false
-
-  command: ["curator"]
-  env: {}
-
-  configMaps:
-    # Delete indices older than 90 days
-    action_file_yml: |-
-      ---
-      actions:
-        1:
-          action: delete_indices
-          description: "Clean up ES by deleting old indices"
-          options:
-            timeout_override:
-            continue_if_exception: False
-            disable_action: False
-            ignore_empty_list: True
-          filters:
-          - filtertype: age
-            source: name
-            direction: older
-            timestring: '%Y.%m.%d'
-            unit: days
-            unit_count: 90
-            field:
-            stats_result:
-            epoch:
-            exclude: False
-    # Default config (this value is evaluated as a template)
-    config_yml: |-
-      ---
-      client:
-        hosts:
-          - {{ template "elasticsearch.coordinating.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
-        port: {{ .Values.coordinating.service.port }}
-        # url_prefix:
-        # use_ssl: True
-        # certificate:
-        # client_cert:
-        # client_key:
-        # ssl_no_validate: True
-        # http_auth:
-        # timeout: 30
-        # master_only: False
-      # logging:
-      #   loglevel: INFO
-      #   logfile:
-      #   logformat: default
-      #   blacklist: ['elasticsearch', 'urllib3']
-
-  ## Curator resources requests and limits
+ingest:
+  ## @param ingest.enabled Enable ingest nodes
+  ##
+  enabled: true
+  ## @param ingest.replicaCount Number of ingest-only replicas to deploy
+  ##
+  replicaCount: 2
+  ## @param ingest.nameOverride String to partially override elasticsearch.ingest.fullname
+  ##
+  nameOverride: ""
+  ## @param ingest.fullnameOverride String to fully override elasticsearch.ingest.fullname
+  ##
+  fullnameOverride: ""
+  ## @param ingest.servicenameOverride String to fully override ingest.master.servicename
+  ##
+  servicenameOverride: ""
+  ## @param ingest.annotations [object] Annotations for the ingest statefulset
+  ##
+  annotations: {}
+  ## @param ingest.containerPorts.restAPI Elasticsearch REST API port
+  ## @param ingest.containerPorts.transport Elasticsearch Transport port
+  ##
+  containerPorts:
+    restAPI: 9200
+    transport: 9300
+  ## @param ingest.updateStrategy.type Ingest-only nodes statefulset stategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    type: RollingUpdate
+  ## Elasticsearch resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param ingest.resources.limits The resources limits for the ingest-only containers
+  ## @param ingest.resources.requests [object] The requested resources for the ingest-only containers
   ##
   resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
     limits: {}
-    #  cpu: 100m
-    #  memory: 128Mi
-    requests: {}
-    #  cpu: 100m
-    #  memory: 128Mi
-
+    requests:
+      cpu: 25m
+      memory: 256Mi
+  ## @param ingest.heapSize Elasticsearch ingest-only node heap size.
+  ## Note: The recommended heapSize is half of the container's memory.
+  ## If omitted, it will be automatically set.
+  ## Example:
+  ##   heapSize: 128m
+  ##
+  heapSize: 128m
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param ingest.podSecurityContext.enabled Enabled ingest-only pods' Security Context
+  ## @param ingest.podSecurityContext.fsGroup Set ingest-only pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param ingest.containerSecurityContext.enabled Enabled ingest-only containers' Security Context
+  ## @param ingest.containerSecurityContext.runAsUser Set ingest-only containers' Security Context runAsUser
+  ## @param ingest.containerSecurityContext.runAsNonRoot Set ingest-only containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  ## @param ingest.hostAliases ingest-only pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param ingest.podLabels Extra labels for ingest-only pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param ingest.podAnnotations Annotations for ingest-only pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param ingest.podAffinityPreset Pod affinity preset. Ignored if `ingest.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param ingest.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `ingest.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: ""
+  ## Node ingest.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param ingest.nodeAffinityPreset.type Node affinity preset type. Ignored if `ingest.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param ingest.nodeAffinityPreset.key Node label key to match. Ignored if `ingest.affinity` is set
+    ##
+    key: ""
+    ## @param ingest.nodeAffinityPreset.values Node label values to match. Ignored if `ingest.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param ingest.affinity Affinity for ingest-only pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `ingest.podAffinityPreset`, `ingest.podAntiAffinityPreset`, and `ingest.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param ingest.nodeSelector Node labels for ingest-only pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param ingest.tolerations Tolerations for ingest-only pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param ingest.priorityClassName ingest-only pods' priorityClassName
+  ##
   priorityClassName: ""
-
-  # extraVolumes and extraVolumeMounts allows you to mount other volumes
-  # Example Use Case: mount ssl certificates when elasticsearch has tls enabled
-  # extraVolumes:
-  #   - name: es-certs
-  #     secret:
-  #       defaultMode: 420
-  #       secretName: es-certs
-  # extraVolumeMounts:
-  #   - name: es-certs
-  #     mountPath: /certs
-  #     readOnly: true
-
-  ## Add your own init container or uncomment and modify the given example.
+  ## @param ingest.schedulerName Name of the k8s scheduler (other than default) for ingest-only pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
-  extraInitContainers: {}
-  ## Don't configure S3 repository till Elasticsearch is reachable.
-  ## Ensure that it is available at http://elasticsearch:9200
+  schedulerName: ""
+  ## @param ingest.terminationGracePeriodSeconds In seconds, time the given to the Elasticsearch ingest pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
-  # elasticsearch-s3-repository:
-  #   image: bitnami/minideb
-  #   imagePullPolicy: "IfNotPresent"
-  #   command:
-  #   - "/bin/bash"
-  #   - "-c"
-  #   args:
-  #   - |
-  #     ES_HOST=elasticsearch
-  #     ES_PORT=9200
-  #     ES_REPOSITORY=backup
-  #     S3_REGION=us-east-1
-  #     S3_BUCKET=bucket
-  #     S3_BASE_PATH=backup
-  #     S3_COMPRESS=true
-  #     S3_STORAGE_CLASS=standard
-  #     install_packages curl && \
-  #     ( counter=0; while (( counter++ < 120 )); do curl -s http://${ES_HOST}:${ES_PORT} >/dev/null 2>&1 && break; echo "Waiting for elasticsearch $counter/120"; sleep 1; done ) && \
-  #     cat <<EOF | curl -sS -XPUT -H "Content-Type: application/json" -d @- http://${ES_HOST}:${ES_PORT}/_snapshot/${ES_REPOSITORY} \
-  #     {
-  #       "type": "s3",
-  #       "settings": {
-  #         "bucket": "${S3_BUCKET}",
-  #         "base_path": "${S3_BASE_PATH}",
-  #         "region": "${S3_REGION}",
-  #         "compress": "${S3_COMPRESS}",
-  #         "storage_class": "${S3_STORAGE_CLASS}"
-  #       }
-  #     }
+  terminationGracePeriodSeconds: ""
+  ## @param ingest.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param ingest.podManagementPolicy podManagementPolicy to manage scaling operation of Elasticsearch ingest pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: "Parallel"
+  ## Configure extra options for Elasticsearch ingest-only containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param ingest.startupProbe.enabled Enable/disable the startup probe (ingest-only nodes pod)
+  ## @param ingest.startupProbe.initialDelaySeconds Delay before startup probe is initiated (ingest-only nodes pod)
+  ## @param ingest.startupProbe.periodSeconds How often to perform the probe (ingest-only nodes pod)
+  ## @param ingest.startupProbe.timeoutSeconds When the probe times out (ingest-only nodes pod)
+  ## @param ingest.startupProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (ingest-only nodes pod)
+  ## @param ingest.startupProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param ingest.livenessProbe.enabled Enable/disable the liveness probe (ingest-only nodes pod)
+  ## @param ingest.livenessProbe.initialDelaySeconds Delay before liveness probe is initiated (ingest-only nodes pod)
+  ## @param ingest.livenessProbe.periodSeconds How often to perform the probe (ingest-only nodes pod)
+  ## @param ingest.livenessProbe.timeoutSeconds When the probe times out (ingest-only nodes pod)
+  ## @param ingest.livenessProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (ingest-only nodes pod)
+  ## @param ingest.livenessProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param ingest.readinessProbe.enabled Enable/disable the readiness probe (ingest-only nodes pod)
+  ## @param ingest.readinessProbe.initialDelaySeconds Delay before readiness probe is initiated (ingest-only nodes pod)
+  ## @param ingest.readinessProbe.periodSeconds How often to perform the probe (ingest-only nodes pod)
+  ## @param ingest.readinessProbe.timeoutSeconds When the probe times out (ingest-only nodes pod)
+  ## @param ingest.readinessProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (ingest-only nodes pod)
+  ## @param ingest.readinessProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param ingest.customStartupProbe Override default startup probe
+  ##
+  customStartupProbe: {}
+  ## @param ingest.customLivenessProbe Override default liveness probe
+  ##
+  customLivenessProbe: {}
+  ## @param ingest.customReadinessProbe Override default readiness probe
+  ##
+  customReadinessProbe: {}
+  ## @param ingest.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param ingest.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param ingest.lifecycleHooks for the ingest-only container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param ingest.extraEnvVars Array with extra environment variables to add to ingest-only nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param ingest.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for ingest-only nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param ingest.extraEnvVarsSecret Name of existing Secret containing extra env vars for ingest-only nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param ingest.extraVolumes Optionally specify extra list of additional volumes for the ingest-only pod(s)
+  ##
+  extraVolumes: []
+  ## @param ingest.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the ingest-only container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param ingest.sidecars Add additional sidecar containers to the ingest-only pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param ingest.initContainers Add additional init containers to the ingest-only pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Pods Service Account
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  ## @param ingest.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param ingest.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+  ## @param ingest.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ## @param ingest.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+  ##
+  serviceAccount:
+    create: false
+    name: ""
+    automountServiceAccountToken: true
+    annotations: {}
+  ## Enable HorizontalPodAutoscaler for Elasticsearch ingest-only pods
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  ## @param ingest.autoscaling.enabled Whether enable horizontal pod autoscale
+  ## @param ingest.autoscaling.minReplicas Configure a minimum amount of pods
+  ## @param ingest.autoscaling.maxReplicas Configure a maximum amount of pods
+  ## @param ingest.autoscaling.targetCPU Define the CPU target to trigger the scaling actions (utilization percentage)
+  ## @param ingest.autoscaling.targetMemory Define the memory target to trigger the scaling actions (utilization percentage)
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: 3
+    maxReplicas: 11
+    targetCPU: ""
+    targetMemory: ""
+
+  ## Elasticsearch Ingest-only Service
+  ## Recommended for heavy ingestion, improves performance by sending ingest traffic directly into the ingest nodes.
+  ## NOTE: Ingest nodes will only accept index requests with an associated pipeline, any other request won't be rerouted.
+  ##
+  service:
+    ## @param ingest.service.enabled Enable Ingest-only service
+    ##
+    enabled: false
+    ## @param ingest.service.type Elasticsearch ingest-only service type
+    ##
+    type: ClusterIP
+    ## @param ingest.service.ports.restAPI Elasticsearch service REST API port
+    ## @param ingest.service.ports.transport Elasticsearch service transport port
+    ##
+    ports:
+      restAPI: 9200
+      transport: 9300
+    ## Node ports to expose
+    ## @param ingest.service.nodePorts.restAPI Node port for REST API
+    ## @param ingest.service.nodePorts.transport Node port for REST API
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      restAPI: ""
+      transport: ""
+    ## @param ingest.service.clusterIP Elasticsearch ingest-only service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param ingest.service.loadBalancerIP Elasticsearch ingest-only service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param ingest.service.loadBalancerSourceRanges Elasticsearch ingest-only service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param ingest.service.externalTrafficPolicy Elasticsearch ingest-only service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param ingest.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
+    ## @param ingest.service.annotations Additional custom annotations for Elasticsearch ingest-only service
+    ##
+    annotations: {}
+    ## @param ingest.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param ingest.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+  ## Elasticsearch Ingest-only ingress parameters
+  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ##
+  ingress:
+    ## @param ingest.ingress.enabled Enable ingress record generation for Elasticsearch
+    ##
+    enabled: false
+    ## @param ingest.ingress.pathType Ingress path type
+    ##
+    pathType: ImplementationSpecific
+    ## @param ingest.ingress.apiVersion Force Ingress API version (automatically detected if not set)
+    ##
+    apiVersion: ""
+    ## @param ingest.ingress.hostname Default host for the ingress record
+    ##
+    hostname: elasticsearch-ingest.local
+    ## @param ingest.ingress.path Default path for the ingress record
+    ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+    ##
+    path: /
+    ## @param ingest.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+    ##
+    annotations: {}
+    ## @param ingest.ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+    ## You can:
+    ##   - Use the `ingress.secrets` parameter to create this TLS secret
+    ##   - Rely on cert-manager to create it by setting the corresponding annotations
+    ##   - Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
+    ##
+    tls: false
+    ## @param ingest.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
+    ## @param ingest.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
+    ## @param ingest.ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+    ## e.g:
+    ## extraHosts:
+    ##   - name: elasticsearch.local
+    ##     path: /
+    ##
+    extraHosts: []
+    ## @param ingest.ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+    ## e.g:
+    ## extraPaths:
+    ## - path: /*
+    ##   backend:
+    ##     serviceName: ssl-redirect
+    ##     servicePort: use-annotation
+    ##
+    extraPaths: []
+    ## @param ingest.ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+    ## e.g:
+    ## extraTls:
+    ## - hosts:
+    ##     - elasticsearch.local
+    ##   secretName: elasticsearch.local-tls
+    ##
+    extraTls: []
+    ## @param ingest.ingress.secrets Custom TLS certificates as secrets
+    ## NOTE: 'key' and 'certificate' are expected in PEM format
+    ## NOTE: 'name' should line up with a 'secretName' set further up
+    ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+    ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+    ## It is also possible to create and manage the certificates outside of this helm chart
+    ## Please see README.md for more information
+    ## e.g:
+    ## secrets:
+    ##   - name: elasticsearch.local-tls
+    ##     key: |-
+    ##       -----BEGIN RSA PRIVATE KEY-----
+    ##       ...
+    ##       -----END RSA PRIVATE KEY-----
+    ##     certificate: |-
+    ##       -----BEGIN CERTIFICATE-----
+    ##       ...
+    ##       -----END CERTIFICATE-----
+    ##
+    secrets: []
+    ## @param ingest.ingress.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend:
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
+
+
+## @section Metrics parameters
 
 ## Elasticsearch Prometheus exporter configuration
 ## ref: https://hub.docker.com/r/bitnami/elasticsearch-exporter/tags/
 ##
 metrics:
+  ## @param metrics.enabled Enable prometheus exporter
+  ##
   enabled: false
-  name: metrics
+  ## @param metrics.nameOverride Metrics pod name
+  ##
+  nameOverride: ""
+  ## @param metrics.fullnameOverride String to fully override common.names.fullname
+  ##
+  fullnameOverride: ""
+  ## @param metrics.image.registry Metrics exporter image registry
+  ## @param metrics.image.repository Metrics exporter image repository
+  ## @param metrics.image.tag Metrics exporter image tag
+  ## @param metrics.image.digest Metrics exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param metrics.image.pullPolicy Metrics exporter image pull policy
+  ## @param metrics.image.pullSecrets Metrics exporter image pull secrets
+  ##
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-exporter
-    tag: 1.1.0-debian-10-r368
+    tag: 1.5.0-debian-11-r41
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
     ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-
-  ## Deployment pod host aliases
+    pullSecrets: []
+  ## @param metrics.annotations [object] Annotations for metrics
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  annotations:
+    helm.sh/hook: "post-install,post-upgrade"
+    helm.sh/hook-weight: "5"
+  ## @param metrics.extraArgs Extra arguments to add to the default exporter command
+  ## ref: https://github.com/justwatchcom/elasticsearch_exporter
+  ## e.g
+  ## extraArgs:
+  ##   - --es.snapshots
+  ##   - --es.indices
+  ##
+  extraArgs: []
+  ## @param metrics.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-
-  ## Use an alternate scheduler, e.g. "stork".
+  ## @param metrics.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
-  # schedulerName:
-
+  schedulerName: ""
+  ## @param metrics.priorityClassName Elasticsearch metrics exporter pods' priorityClassName
+  ##
+  priorityClassName: ""
   ## Elasticsearch Prometheus exporter service type
   ##
   service:
+    ## @param metrics.service.type Metrics exporter endpoint service type
+    ##
     type: ClusterIP
-    ## Provide any additional annotations which may be required. This can be used to
-    ## set the LoadBalancer service type to internal only.
+    ## @param metrics.service.port Metrics exporter endpoint service port
+    ##
+    port: 9114
+    ## @param metrics.service.annotations [object] Provide any additional annotations which may be required.
+    ## This can be used to set the LoadBalancer service type to internal only.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
     annotations:
       prometheus.io/scrape: "true"
       prometheus.io/port: "9114"
-
-  ## Pod affinity preset
+  ## @param metrics.podAffinityPreset Metrics Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAffinityPreset: ""
-
-  ## Pod anti-affinity preset
+  ## @param metrics.podAntiAffinityPreset Metrics Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAntiAffinityPreset: ""
-
   ## Node affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
+  ## @param metrics.nodeAffinityPreset.type Metrics Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## @param metrics.nodeAffinityPreset.key Metrics Node label key to match Ignored if `affinity` is set.
+  ## @param metrics.nodeAffinityPreset.values Metrics Node label values to match. Ignored if `affinity` is set.
   ##
   nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
-    ##
     type: ""
-    ## Node label key to match
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
     key: ""
-    ## Node label values to match
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-
-  ## Affinity for pod assignment
+  ## @param metrics.affinity Metrics Affinity for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-
-  ## Node labels for pod assignment
+  ## @param metrics.nodeSelector Metrics Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
-  ## Tolerations for pod assignment
+  ## @param metrics.tolerations Metrics Tolerations for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
+  ## @param metrics.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
   ## Elasticsearch Prometheus exporter resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param metrics.resources.limits The resources limits for the container
+  ## @param metrics.resources.requests The requested resources for the container
   ##
   resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## Example:
+    ## limits:
+    ##    cpu: 100m
+    ##    memory: 128Mi
     limits: {}
-    #   cpu: 100m
-    #   memory: 128Mi
+    ## Examples:
+    ## requests:
+    ##    cpu: 100m
+    ##    memory: 128Mi
     requests: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-  ## Metrics exporter pod Annotation and Labels
+  ## Elasticsearch metrics container's liveness probe
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param metrics.livenessProbe.enabled Enable/disable the liveness probe (metrics pod)
+  ## @param metrics.livenessProbe.initialDelaySeconds Delay before liveness probe is initiated (metrics pod)
+  ## @param metrics.livenessProbe.periodSeconds How often to perform the probe (metrics pod)
+  ## @param metrics.livenessProbe.timeoutSeconds When the probe times out (metrics pod)
+  ## @param metrics.livenessProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ## @param metrics.livenessProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (metrics pod)
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## Elasticsearch metrics container's readiness probe
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param metrics.readinessProbe.enabled Enable/disable the readiness probe (metrics pod)
+  ## @param metrics.readinessProbe.initialDelaySeconds Delay before readiness probe is initiated (metrics pod)
+  ## @param metrics.readinessProbe.periodSeconds How often to perform the probe (metrics pod)
+  ## @param metrics.readinessProbe.timeoutSeconds When the probe times out (metrics pod)
+  ## @param metrics.readinessProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ## @param metrics.readinessProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (metrics pod)
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 5
+  ## Elasticsearch metrics container's startup probe
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param metrics.startupProbe.enabled Enable/disable the startup probe (metrics pod)
+  ## @param metrics.startupProbe.initialDelaySeconds Delay before startup probe is initiated (metrics pod)
+  ## @param metrics.startupProbe.periodSeconds How often to perform the probe (metrics pod)
+  ## @param metrics.startupProbe.timeoutSeconds When the probe times out (metrics pod)
+  ## @param metrics.startupProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ## @param metrics.startupProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (metrics pod)
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param metrics.customStartupProbe Custom liveness probe for the Web component
+  ##
+  customStartupProbe: {}
+  ## @param metrics.customLivenessProbe Custom liveness probe for the Web component
+  ##
+  customLivenessProbe: {}
+  ## @param metrics.customReadinessProbe Custom readiness probe for the Web component
+  ##
+  customReadinessProbe: {}
+  ## @param metrics.podAnnotations [object] Metrics exporter pod Annotation and Labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9114"
-
-  ## Extra labels to add to Pod
+  ## @param metrics.podLabels Extra labels to add to Pod
   ##
   podLabels: {}
-
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param metrics.podSecurityContext.enabled Enabled Elasticsearch metrics exporter pods' Security Context
+  ## @param metrics.podSecurityContext.fsGroup Set Elasticsearch metrics exporter pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param metrics.containerSecurityContext.enabled Enabled Elasticsearch metrics exporter containers' Security Context
+  ## @param metrics.containerSecurityContext.runAsUser Set Elasticsearch metrics exporter containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set Elasticsearch metrics exporter container's Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  ## @param metrics.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param metrics.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param metrics.extraEnvVars Array with extra environment variables to add to Elasticsearch metrics exporter nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param metrics.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Elasticsearch metrics exporter nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param metrics.extraEnvVarsSecret Name of existing Secret containing extra env vars for Elasticsearch metrics exporter nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param metrics.extraVolumes Optionally specify extra list of additional volumes for the Elasticsearch metrics exporter pod(s)
+  ##
+  extraVolumes: []
+  ## @param metrics.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Elasticsearch metrics exporter container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param metrics.sidecars Add additional sidecar containers to the Elasticsearch metrics exporter pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param metrics.initContainers Add additional init containers to the Elasticsearch metrics exporter pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
+    ## @param metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator
+    ##
     enabled: false
-    ## Namespace in which Prometheus is running
+    ## @param metrics.serviceMonitor.namespace Namespace which Prometheus is running in
+    ## e.g:
+    ## namespace: monitoring
     ##
-    # namespace: monitoring
-
-    ## Interval at which metrics should be scraped.
+    namespace: ""
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: ""
+    ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
-    # interval: 10s
-
-    ## Timeout after which the scrape is ended
+    interval: ""
+    ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
-    # scrapeTimeout: 10s
-
-    ## ServiceMonitor selector labels
-    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
-    # selector:
-    #   prometheus: my-prometheus
+    relabelings: []
+    ## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.selector ServiceMonitor selector labels
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+    ##
+    ## selector:
+    ##   prometheus: my-prometheus
+    ##
+    selector: {}
+    ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+    ##
+    honorLabels: false
+  ## Prometheus Operator PrometheusRule configuration
+  ##
+  prometheusRule:
+    ## @param metrics.prometheusRule.enabled Creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`)
+    ##
+    enabled: false
+    ## @param metrics.prometheusRule.namespace Namespace for the PrometheusRule Resource (defaults to the Release Namespace)
+    ##
+    namespace: ""
+    ## @param metrics.prometheusRule.additionalLabels Additional labels that can be used so PrometheusRule will be discovered by Prometheus
+    ##
+    additionalLabels: {}
+    ## @param metrics.prometheusRule.rules Prometheus Rule definitions
+      # - alert: es cluster error
+      #   annotations:
+      #     summary: "es cluster error"
+      #     description: "es cluster error, cluster state {{`{{`}} $labels.color {{`}}`}}"
+      #   expr: elasticsearch_cluster_health_status{color="red"} ==1 or elasticsearch_cluster_health_status{color="yellow"} ==1
+      #   for: 1m
+      #   labels:
+      #     severity: critical
+      #     group: PaaS
+    ##
+    rules: []
+
+## @section Init Container Parameters
+
+## 'volumePermissions' init container parameters
+## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
+##   based on the *podSecurityContext/*containerSecurityContext parameters
+##
+volumePermissions:
+  ## @param volumePermissions.enabled Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work)
+  ##
+  enabled: false
+  ## @param volumePermissions.image.registry Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository Init container volume-permissions image name
+  ## @param volumePermissions.image.tag Init container volume-permissions image tag
+  ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
+  ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/bitnami-shell
+    tag: 11-debian-11-r54
+    digest: ""
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Init container' resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param volumePermissions.resources.limits The resources limits for the container
+  ## @param volumePermissions.resources.requests The requested resources for the container
+  ##
+  resources:
+    ## Example:
+    ## limits:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    limits: {}
+    ## Examples:
+    ## requests:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    requests: {}
+
+## Kernel settings modifier image
+##
+sysctlImage:
+  ## @param sysctlImage.enabled Enable kernel settings modifier image
+  ##
+  enabled: true
+  ## @param sysctlImage.registry Kernel settings modifier image registry
+  ## @param sysctlImage.repository Kernel settings modifier image repository
+  ## @param sysctlImage.tag Kernel settings modifier image tag
+  ## @param sysctlImage.digest Kernel settings modifier image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param sysctlImage.pullPolicy Kernel settings modifier image pull policy
+  ## @param sysctlImage.pullSecrets Kernel settings modifier image pull secrets
+  ##
+  registry: docker.io
+  repository: bitnami/bitnami-shell
+  tag: 11-debian-11-r54
+  digest: ""
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Init container' resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param sysctlImage.resources.limits The resources limits for the container
+  ## @param sysctlImage.resources.requests The requested resources for the container
+  ##
+  resources:
+    ## Example:
+    ## limits:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    limits: {}
+    ## Examples:
+    ## requests:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    requests: {}
+
+## @section Kibana Parameters
 
 ## Bundled Kibana parameters
+## @param kibana.elasticsearch.hosts [array] Array containing hostnames for the ES instances. Used to generate the URL
+## @param kibana.elasticsearch.port Port to connect Kibana and ES instance. Used to generate the URL
 ##
 kibana:
   elasticsearch:
     hosts:
-      - '{{ include "elasticsearch.coordinating.fullname" . }}'
-    port: 9200
+      - '{{ include "elasticsearch.service.name" . }}'
+    port: '{{ include "elasticsearch.service.ports.restAPI" . }}'

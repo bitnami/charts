@@ -1,0 +1,18 @@
+containerPorts:
+  http: 8081
+service:
+  ports:
+    https: 444
+podSecurityContext:
+  fsGroup: 1002
+containerSecurityContext:
+  runAsUser: 1002
+hostAliases:
+  - ip: 127.0.0.1
+    hostnames:
+      - status.testhost
+mariadb:
+  auth:
+    database: test_osclass_database
+    username: test_osclass_username
+    password: test_osclass_password

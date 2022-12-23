@@ -1,0 +1,16 @@
+auth:
+  rootUser: test_admin
+  rootPassword: ComplicatedPassword123!4
+containerPorts:
+  console: 9003
+podSecurityContext:
+  fsGroup: 1002
+containerSecurityContext:
+  runAsUser: 1002
+service:
+  ports:
+    api: 9002
+persistence:
+  mountPath: /data
+serviceAccount:
+  automountServiceAccountToken: true

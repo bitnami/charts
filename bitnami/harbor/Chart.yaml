@@ -1,22 +1,24 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 2.1.3
+appVersion: 2.6.2
 dependencies:
-  - condition: postgresql.enabled
-    name: postgresql
-    repository: https://charts.bitnami.com/bitnami
-    version: 10.x.x
   - condition: redis.enabled
     name: redis
+    repository: https://charts.bitnami.com/bitnami
+    version: 17.x.x
+  - condition: postgresql.enabled
+    name: postgresql
     repository: https://charts.bitnami.com/bitnami
     version: 12.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
-    version: 1.x.x
-description: Harbor is an an open source trusted cloud native registry project that stores, signs, and scans content
+    tags:
+      - bitnami-common
+    version: 2.x.x
+description: Harbor is an open source trusted cloud-native registry to store, sign, and scan content. It adds functionalities like security, identity, and management to the open source Docker distribution.
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/harbor
+home: https://github.com/bitnami/charts/tree/main/bitnami/harbor
 icon: https://bitnami.com/assets/stacks/harbor-core/img/harbor-core-stack-220x234.png
 keywords:
   - docker
@@ -24,14 +26,14 @@ keywords:
   - vulnerability
   - scan
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: harbor
 sources:
-  - https://github.com/bitnami/bitnami-docker-harbor-core
-  - https://github.com/bitnami/bitnami-docker-harbor-portal
-  - https://github.com/bitnami/bitnami-docker-harbor-jobservice
-  - https://github.com/bitnami/bitnami-docker-harbor-registry
-  - https://github.com/bitnami/bitnami-docker-harbor-registryctl
+  - https://github.com/bitnami/containers/tree/main/bitnami/harbor-core
+  - https://github.com/bitnami/containers/tree/main/bitnami/harbor-portal
+  - https://github.com/bitnami/containers/tree/main/bitnami/harbor-jobservice
+  - https://github.com/bitnami/containers/tree/main/bitnami/harbor-registry
+  - https://github.com/bitnami/containers/tree/main/bitnami/harbor-registryctl
   - https://goharbor.io/
-version: 9.6.3
+version: 16.0.4

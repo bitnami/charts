@@ -1,0 +1,70 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/phpmyadmin"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/phpmyadmin"
+        },
+        "runtime_parameters": "aG9zdEFsaWFzZXM6CiAgLSBpcDogMTI3LjAuMC4xCiAgICBob3N0bmFtZXM6CiAgICAgIC0gc3RhdHVzLnRlc3Rob3N0CmNvbnRhaW5lclNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgcnVuQXNVc2VyOiAxMDAyCnBvZFNlY3VyaXR5Q29udGV4dDoKICBmc0dyb3VwOiAxMDAyCiAgZW5hYmxlZDogdHJ1ZQpzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgaHR0cDogODAKICAgIGh0dHBzOiA0NDQKZGI6CiAgaG9zdDogbWFyaWFkYgogIGFsbG93QXJiaXRyYXJ5U2VydmVyOiB0cnVlCiAgcG9ydDogMzMwNgogIGJ1bmRsZVRlc3REQjogdHJ1ZQptYXJpYWRiOgogIGF1dGg6CiAgICByb290UGFzc3dvcmQ6IHJvb3RQYXNzd29yZA==",
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "M4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "health-check",
+          "params": {
+            "endpoint": "lb-phpmyadmin-http",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/phpmyadmin/goss"
+            },
+            "vars_file": "vars.yaml",
+            "remote": {
+              "workload": "deploy-phpmyadmin"
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/phpmyadmin/cypress"
+            },
+            "endpoint": "lb-phpmyadmin-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "username": "root",
+              "password": "rootPassword"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

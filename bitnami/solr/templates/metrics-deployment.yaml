@@ -1,0 +1,204 @@
+{{- if .Values.metrics.enabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ printf "%s-exporter" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: solr-exporter
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: 1
+  {{- if .Values.metrics.updateStrategy }}
+  strategy: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.updateStrategy "context" $) | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: metrics
+  template:
+    metadata:
+      annotations:
+        {{- if .Values.metrics.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: metrics
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.metrics.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ include "solr.serviceAccountName" . }}
+      {{- include "solr.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.metrics.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.metrics.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.metrics.podAffinityPreset "component" "metrics" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.metrics.podAntiAffinityPreset "component" "metrics" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.metrics.nodeAffinityPreset.type "key" .Values.metrics.nodeAffinityPreset.key "values" .Values.metrics.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.metrics.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.metrics.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.metrics.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.metrics.priorityClassName }}
+      priorityClassName: {{ .Values.metrics.priorityClassName }}
+      {{- end }}
+      {{- if .Values.metrics.schedulerName }}
+      schedulerName: {{ .Values.metrics.schedulerName }}
+      {{- end }}
+      {{- if .Values.metrics.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.metrics.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.metrics.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.auth.enabled }}
+        - name: init-auth-config
+          image: {{ include "solr.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.metrics.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          command:
+            - "/bin/bash"
+            - "-c"
+            - |-
+                /bin/bash
+                printf '%s%s\n' 'httpBasicAuthUser=' $SOLR_ADMIN_USERNAME 'httpBasicAuthPassword=' $SOLR_ADMIN_PASSWORD > /basicauth-properties/basicauth.properties
+          env:
+            - name: SOLR_ADMIN_USERNAME
+              value: {{ .Values.auth.adminUsername | quote }}
+            - name: SOLR_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "solr.secretName" . }}
+                  key: {{ include "solr.secretPasswordKey" . }}
+          volumeMounts:
+            - name: basicauth-properties
+              mountPath: /basicauth-properties/
+              readOnly: false
+        {{- end }}
+      containers:
+        - name: solr-exporter
+          image: {{ include "solr.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.metrics.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - solr-exporter
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - -p
+            - {{ .Values.metrics.containerPorts.http | quote }}
+            - -z
+            - "{{ include "solr.zookeeper.host" . }}/solr"
+            - -n
+            - {{ .Values.metrics.threads | quote }}
+            - -f
+            - {{ .Values.metrics.configFile | quote }}
+          {{- end }}
+          env:
+          {{- if .Values.metrics.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraEnvVars "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.auth.enabled }}
+            - name: JAVA_OPTS
+              value: "-Dsolr.httpclient.builder.factory=org.apache.solr.client.solrj.impl.PreemptiveBasicAuthClientBuilderFactory -Dsolr.httpclient.config=/basicauth-properties/basicauth.properties"
+            - name: CLASSPATH_PREFIX
+              value: "../server/solr-webapp/webapp/WEB-INF/lib/"
+          {{- end }}
+          {{- if or .Values.metrics.extraEnvVarsCM .Values.metrics.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.metrics.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.metrics.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.metrics.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.metrics.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.metrics.containerPorts.http }}
+          {{- if .Values.metrics.resources }}
+          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.metrics.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: "/metrics"
+              port: {{ .Values.metrics.containerPorts.http }}
+          {{- end }}
+          {{- if .Values.metrics.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: "/metrics"
+              port: {{ .Values.metrics.containerPorts.http }}
+          {{- end }}
+          {{- if .Values.metrics.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: {{ .Values.metrics.containerPorts.http }}
+          {{- end }}
+          {{- end }}
+          volumeMounts:
+            {{- if .Values.auth.enabled }}
+            - name: basicauth-properties
+              mountPath: /basicauth-properties/
+              readOnly: true
+            {{- end }}
+            {{- if .Values.metrics.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.metrics.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        {{- if .Values.auth.enabled }}
+        - name: basicauth-properties
+          emptyDir: {}
+        {{- end }}
+        {{- if .Values.metrics.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

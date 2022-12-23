@@ -1,0 +1,66 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/spring-cloud-dataflow"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/spring-cloud-dataflow"
+        },
+        "runtime_parameters": "c2VydmVyOgogIGNvbnRhaW5lclBvcnQ6IDgwODEKICBjb25maWd1cmF0aW9uOgogICAgYmF0Y2hFbmFibGVkOiB0cnVlCiAgICBhY2NvdW50TmFtZTogdGVzdF9kZWZhdWx0CiAgcG9kU2VjdXJpdHlDb250ZXh0OgogICAgZW5hYmxlZDogdHJ1ZQogICAgZnNHcm91cDogMTAwMgogIGNvbnRhaW5lclNlY3VyaXR5Q29udGV4dDoKICAgIGVuYWJsZWQ6IHRydWUKICAgIHJ1bkFzVXNlcjogMTAwMgogIHNlcnZpY2U6CiAgICB0eXBlOiBMb2FkQmFsYW5jZXIKICAgIHBvcnQ6IDgwCnNraXBwZXI6CiAgZW5hYmxlZDogdHJ1ZQogIHBvZFNlY3VyaXR5Q29udGV4dDoKICAgIGVuYWJsZWQ6IHRydWUKICAgIGZzR3JvdXA6IDEwMDIKICBjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgICBlbmFibGVkOiB0cnVlCiAgICBydW5Bc1VzZXI6IDEwMDIKICBzZXJ2aWNlOgogICAgdHlwZTogQ2x1c3RlcklQCiAgICBwb3J0OiA4MApkZXBsb3llcjoKICBwb2RTZWN1cml0eUNvbnRleHQ6CiAgICBlbmFibGVkOiB0cnVlCiAgICBydW5Bc1VzZXI6IDEwMDIKc2VydmljZUFjY291bnQ6CiAgY3JlYXRlOiB0cnVlCiAgYXV0b21vdW50U2VydmljZUFjY291bnRUb2tlbjogdHJ1ZQptYXJpYWRiOgogIGVuYWJsZWQ6IHRydWUKICBhdXRoOgogICAgdXNlcm5hbWU6IHVzZXJfZGF0YWZsb3cKICAgIHBhc3N3b3JkOiBDb21wbGljYXRlZFBhc3N3b3JkMTIzITQKICAgIGRhdGFiYXNlOiB0ZXN0X2RhdGFmbG93CiAgaW5pdGRiU2NyaXB0czoKICAgIGNyZWF0ZV9kYXRhYmFzZXMuc3FsOiB8CiAgICAgIENSRUFURSBPUiBSRVBMQUNFIFVTRVIgJ3NraXBwZXInQCclJyBpZGVudGlmaWVkIGJ5ICdDb21wbGljYXRlZFBhc3N3b3JkMTIzITQnOwogICAgICBDUkVBVEUgREFUQUJBU0UgSUYgTk9UIEVYSVNUUyBgc2tpcHBlcmA7CiAgICAgIEdSQU5UIEFMTCBPTiBza2lwcGVyLiogdG8gJ3NraXBwZXInQCclJzsKICAgICAgRkxVU0ggUFJJVklMRUdFUzs=",
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "health-check",
+          "params": {
+            "endpoint": "lb-spring-cloud-dataflow-server-http",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/spring-cloud-dataflow/goss"
+            },
+            "remote": {
+              "workload": "deploy-spring-cloud-dataflow-server"
+            },
+            "vars_file": "vars.yaml"
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/spring-cloud-dataflow/cypress"
+            },
+            "endpoint": "lb-spring-cloud-dataflow-server-http",
+            "app_protocol": "HTTP"
+          }
+        }
+      ]
+    }
+  }
+}

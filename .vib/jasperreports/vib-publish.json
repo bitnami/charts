@@ -1,0 +1,85 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/jasperreports"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/jasperreports"
+        },
+        "runtime_parameters": "amFzcGVycmVwb3J0c1VzZXJuYW1lOiBqYXNwZXJ2aWJhZG1pbgpqYXNwZXJyZXBvcnRzUGFzc3dvcmQ6ICJDb21wbGljYXRlZFBhc3N3b3JkMTIzITQiCnBvZFNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgZnNHcm91cDogMTAwMgpjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIHJ1bkFzVXNlcjogMTAwMgpwZXJzaXN0ZW5jZToKICBlbmFibGVkOiB0cnVlCnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCiAgcG9ydHM6CiAgICBodHRwOiA4MAptYXJpYWRiOgogIGVuYWJsZWQ6IHRydWUKICBhdXRoOgogICAgZGF0YWJhc2U6IGJpdG5hbWlfdGVzdF9qYXNwZXJyZXBvcnRzCiAgICB1c2VybmFtZTogYm5fdGVzdF9qYXNwZXJyZXBvcnRzCiAgICBwYXNzd29yZDogYml0bmFtaV90ZXN0X3Bhc3N3b3Jk",
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "health-check",
+          "params": {
+            "endpoint": "lb-jasperreports-http",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/jasperreports/goss"
+            },
+            "remote": {
+              "workload": "deploy-jasperreports"
+            },
+            "vars_file": "vars.yaml"
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/jasperreports/cypress"
+            },
+            "endpoint": "lb-jasperreports-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "username": "jaspervibadmin",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
+        }
+      ]
+    },
+    "publish": {
+      "actions": [
+        {
+          "action_id": "helm-publish",
+          "params": {
+            "repository": {
+              "kind": "S3",
+              "url": "{VIB_ENV_S3_URL}",
+              "username": "{VIB_ENV_S3_USERNAME}",
+              "password": "{VIB_ENV_S3_PASSWORD}"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

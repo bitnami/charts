@@ -1,108 +1,50 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
 {{- if or .Values.mariadb.enabled .Values.externalDatabase.host -}}
 
-{{- if empty (include "osclass.host" .) -}}
-###############################################################################
-### ERROR: You did not provide an external host in your 'helm install' call ###
-###############################################################################
+** Please be patient while the chart is being deployed **
 
-This deployment will be incomplete until you configure Osclass with a resolvable
-host. To configure Osclass with the URL of your service:
-
-1. Get the Osclass URL by running:
-
-  {{- if contains "NodePort" .Values.service.type }}
-
-  export APP_PORT=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.spec.ports[0].nodePort}")
-  export APP_HOST=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-
-  {{- else if contains "LoadBalancer" .Values.service.type }}
-
-  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
-
-  export APP_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
-  {{- end }}
-
-2. Get Osclas and database credentials:
-
-  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.osclass-password}" | base64 --decode)
-  export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default osclass-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
-  export MARIADB_PASSWORD=$(kubectl get secret --namespace default osclass-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
-
-3. Complete your Osclass deployment by running:
-
-{{- if .Values.mariadb.enabled }}
-
-  helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
-    --set osclassHost=$APP_HOST,osclassPassword=$APP_PASSWORD,service.type={{ .Values.service.type }},mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD{{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
-{{- else }}
-
-  ## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
-
-  helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
-    --set osclassPassword=$APP_PASSWORD,osclassHost=$APP_HOST,service.type={{ .Values.service.type }},mariadb.enabled=false{{- if not (empty .Values.externalDatabase.host) }},externalDatabase.host={{ .Values.externalDatabase.host }}{{- end }}{{- if not (empty .Values.externalDatabase.user) }},externalDatabase.user={{ .Values.externalDatabase.user }}{{- end }}{{- if not (empty .Values.externalDatabase.password) }},externalDatabase.password={{ .Values.externalDatabase.password }}{{- end }}{{- if not (empty .Values.externalDatabase.database) }},externalDatabase.database={{ .Values.externalDatabase.database }}{{- end }}{{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
-{{- end }}
-
-{{- else -}}
+1. Get the Osclass URL:
 
 {{- if .Values.ingress.enabled }}
 
-1. Get the Osclass URL and associate its hostname to your cluster external IP:
+  You should be able to access your new Osclass installation through
 
-   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
-   echo "Osclass URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ .Values.ingress.hostname }}"
-   echo "Osclass Admin URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ .Values.ingress.hostname }}/oc-admin"
-   echo "$CLUSTER_IP  {{ .Values.ingress.hostname }}" | sudo tee -a /etc/hosts
+  http://{{- .Values.ingress.hostname }}/
 
-{{- else }}
-
-1. Get the Osclass URL by running:
-
-{{- if contains "NodePort" .Values.service.type }}
-
-  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
-  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-  echo "Osclass URL: http://$NODE_IP:$NODE_PORT/"
-  echo "Osclass Admin URL: http://$NODE_IP:$NODE_PORT/oc-admin"
-
-{{- else if contains "LoadBalancer" .Values.service.type }}
+{{- else if eq .Values.service.type "LoadBalancer" }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "common.names.fullname" . }}'
 
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
 
-  {{- $port:=.Values.service.port | toString }}
-  echo "Osclass URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/"
-  echo "Osclass Admin URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/oc-admin"
+{{- $port:=(coalesce .Values.service.ports.http .Values.service.port) | toString }}
+  echo "Osclass URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ coalesce .Values.service.ports.http .Values.service.port }}{{ end }}/"
 
-{{- else if contains "ClusterIP"  .Values.service.type }}
+{{- else if eq .Values.service.type "ClusterIP" }}
 
   echo "Osclass URL: http://127.0.0.1:8080/"
-  echo "Osclass Admin URL: http://127.0.0.1:8080/oc-admin"
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} 8080:{{ .Values.service.port }}
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} 8080:{{ coalesce .Values.service.ports.http .Values.service.port }}
 
 {{- end }}
-{{- end }}
-{{- end }}
 
-2. Get your Osclass admin credentials by running:
+{{- if eq .Values.service.type "NodePort" }}
 
-    echo Username: {{ .Values.osclassUsername }}
-    echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.osclass-password}" | base64 --decode)
+  Or running:
 
-{{- if .Values.metrics.enabled }}
-
-You can access Apache Prometheus metrics following the steps below:
-
-1. Get the Apache Prometheus metrics URL by running:
-
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ printf "%s-metrics" (include "common.names.fullname" .) }} {{ .Values.metrics.service.port }}:{{ .Values.metrics.service.port }} &
-    echo "Apache Prometheus metrics URL: http://127.0.0.1:{{ .Values.metrics.service.port }}/metrics"
-
-2. Open a browser and access Apache Prometheus metrics using the obtained URL.
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo "Osclass URL: http://$NODE_IP:$NODE_PORT/"
 
 {{- end }}
+
+2. Get your Osclass login credentials by running:
+
+  echo Username: {{ .Values.osclassUsername }}
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "osclass.secretName" . }} -o jsonpath="{.data.osclass-password}" | base64 -d)
 
 {{- else -}}
 
@@ -115,17 +57,30 @@ host. To configure Osclass to use and external database host:
 
 1. Complete your Osclass deployment by running:
 
-  helm upgrade {{ .Release.Name }} --set service.type={{ .Values.service.type }},mariadb.enabled=false,externalDatabase.host=YOUR_EXTERNAL_DATABASE_HOST bitnami/osclass
+  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "osclass.secretName" . }} -o jsonpath="{.data.osclass-password}" | base64 -d)
+
+  ## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
+
+  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} my-repo/{{ .Chart.Name }} \
+    --set osclassPassword=$APP_PASSWORD,service.type={{ .Values.service.type }},mariadb.enabled=false{{- if not (empty .Values.externalDatabase.user) }},externalDatabase.user={{ .Values.externalDatabase.user }}{{- end }}{{- if not (empty .Values.externalDatabase.password) }},externalDatabase.password={{ .Values.externalDatabase.password }}{{- end }}{{- if not (empty .Values.externalDatabase.database) }},externalDatabase.database={{ .Values.externalDatabase.database }}{{- end }},externalDatabase.host=YOUR_EXTERNAL_DATABASE_HOST{{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
 
 {{- end }}
 
-{{- include "osclass.checkRollingTags" . }}
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.metrics.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
+{{- include "common.warnings.rollingTag" .Values.certificates.image }}
+
 {{- $passwordValidationErrors := list -}}
-{{- $secretName := include "common.names.fullname" . -}}
-{{- $requiredOsclassPassword := dict "valueKey" "osclassPassword" "secret" $secretName "field" "osclass-password" "context" $ -}}
-{{- $requiredOsclassPasswordError := include "common.validations.values.single.empty" $requiredOsclassPassword -}}
-{{- $passwordValidationErrors = append $passwordValidationErrors $requiredOsclassPasswordError -}}
+{{- if not .Values.existingSecret -}}
+    {{- $secretName := include "osclass.secretName" . -}}
+    {{- $requiredOsclassPassword := dict "valueKey" "osclassPassword" "secret" $secretName "field" "osclass-password" "context" $ -}}
+    {{- $requiredOsclassPasswordError := include "common.validations.values.single.empty" $requiredOsclassPassword -}}
+    {{- $passwordValidationErrors = append $passwordValidationErrors $requiredOsclassPasswordError -}}
+{{- end -}}
+
 {{- $mariadbSecretName := include "osclass.databaseSecretName" . -}}
 {{- $mariadbPasswordValidationErrors := include "common.validations.values.mariadb.passwords" (dict "secret" $mariadbSecretName "subchart" true "context" $) -}}
 {{- $passwordValidationErrors = append $passwordValidationErrors $mariadbPasswordValidationErrors -}}
+
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}

@@ -8,6 +8,7 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+  namespace: {{ .Release.Namespace }}
   annotations:
     {{- if .Values.server.ingress.certManager }}
     kubernetes.io/tls-acme: "true"
@@ -19,19 +20,22 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
+  {{- if and .Values.server.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  ingressClassName: {{ .Values.server.ingress.ingressClassName | quote }}
+  {{- end }}
   rules:
     {{- if .Values.server.ingress.hostname }}
     - host: {{ .Values.server.ingress.hostname }}
       http:
         paths:
-          {{- if .Values.server.ingress.extraPaths }}
-          {{- toYaml .Values.server.ingress.extraPaths | nindent 10 }}
-          {{- end }}
           - path: {{ .Values.server.ingress.path }}
             {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.server.ingress.pathType }}
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-server" (include "common.names.fullname" .)) "servicePort" "http" "context" $)  | nindent 14 }}
+          {{- if .Values.server.ingress.extraPaths }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.server.ingress.extraPaths "context" $) | nindent 10 }}
+          {{- end }}
     {{- end }}
     {{- range .Values.server.ingress.extraHosts }}
     - host: {{ .name }}
@@ -43,6 +47,9 @@ spec:
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-server" (include "common.names.fullname" $)) "servicePort" "http" "context" $)  | nindent 14 }}
     {{- end }}
+    {{- if .Values.server.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.server.ingress.extraRules "context" $) | nindent 4 }}
+    {{- end }}
   {{- if or .Values.server.ingress.tls .Values.server.ingress.extraTls .Values.server.ingress.hosts }}
   tls:
     {{- if .Values.server.ingress.tls }}
@@ -51,7 +58,7 @@ spec:
       secretName: {{ printf "%s-tls" .Values.server.ingress.hostname }}
     {{- end }}
     {{- if .Values.server.ingress.extraTls }}
-    {{- toYaml .Values.server.ingress.extraTls | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.server.ingress.extraTls "context" $) | nindent 4 }}
     {{- end }}
   {{- end }}
 {{- end }}

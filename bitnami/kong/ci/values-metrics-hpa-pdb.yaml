@@ -1,7 +1,0 @@
-metrics:
-  enabled: true
-autoscaling:
-  enabled: true
-
-pdb:
-  enabled: true

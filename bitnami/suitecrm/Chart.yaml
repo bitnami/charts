@@ -1,20 +1,20 @@
 annotations:
   category: CRM
 apiVersion: v2
-appVersion: 7.11.18
+appVersion: 7.12.8
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
     repository: https://charts.bitnami.com/bitnami
-    version: 9.x.x
+    version: 11.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
-    version: 1.x.x
-description: SuiteCRM is a completely open source enterprise-grade Customer Relationship Management (CRM) application. SuiteCRM is a software fork of the popular customer relationship management (CRM) system SugarCRM.
+    version: 2.x.x
+description: SuiteCRM is a completely open source, enterprise-grade Customer Relationship Management (CRM) application. SuiteCRM is a fork of the popular SugarCRM application.
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/suitecrm
+home: https://github.com/bitnami/charts/tree/main/bitnami/suitecrm
 icon: https://bitnami.com/assets/stacks/suitecrm/img/suitecrm-stack-220x234.png
 keywords:
   - suitecrm
@@ -23,10 +23,10 @@ keywords:
   - web
   - php
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: suitecrm
 sources:
-  - https://github.com/bitnami/bitnami-docker-suitecrm
+  - https://github.com/bitnami/containers/tree/main/bitnami/suitecrm
   - https://www.suitecrm.com/
-version: 9.3.3
+version: 11.2.6

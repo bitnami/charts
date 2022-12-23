@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-scripts" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: solr
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  init-certs.sh: |-
+    #!/bin/bash
+
+    . /opt/bitnami/scripts/liblog.sh
+
+    if [[ -f "/certs/keystore.p12" ]] && [[ -f "/certs/truststore.p12" ]]; then
+        # the user provided keystore.p12 and truststore.p12 files (prefered)
+        cp "/certs/keystore.p12" "/opt/bitnami/solr/certs/keystore.p12"
+        cp "/certs/truststore.p12" "/opt/bitnami/solr/certs/truststore.p12"
+    elif [[ -f "/certs/ca.crt" ]] && [[ -f "/certs/tls.key" ]] && [[ -f "/certs/tls.crt" ]]; then
+        # the user provided ca.crt & tls.key & tls.crt so we "calculate" keystore.p12 and truststore.p12
+        openssl pkcs12 -export -in "/certs/tls.crt" \
+            -inkey "/certs/tls.key" -out "/tmp/keystore.p12" \
+            -passin pass:"/certs/tls.key" -passout pass:"${SOLR_SSL_KEY_STORE_PASSWORD}"
+        keytool -importkeystore -srckeystore "/tmp/keystore.p12" \
+            -srcstoretype PKCS12 \
+            -srcstorepass "${SOLR_SSL_KEY_STORE_PASSWORD}" \
+            -deststorepass "${SOLR_SSL_KEY_STORE_PASSWORD}" \
+            -destkeystore "/opt/bitnami/solr/certs/keystore.p12"
+        rm "/tmp/keystore.p12"
+        keytool -import -file "/certs/ca.crt" -keystore "/opt/bitnami/solr/certs/truststore.p12" -storepass "${SOLR_SSL_TRUST_STORE_PASSWORD}" -noprompt
+    else
+        info "No certificate files provided ... nothing to do ..."
+    fi
+  setup.sh: |-
+    #!/bin/bash
+
+    {{- if .Values.cloudBootstrap }}
+    NODE_ID="${MY_POD_NAME#"{{ include "common.names.fullname" . }}-"}"
+    if [[ "$NODE_ID" -eq "0" ]]; then
+        export SOLR_CLOUD_BOOTSTRAP=yes
+    fi
+    {{- end }}
+    # Use hostname instead of IP to register in ZooKeeper
+    export SOLR_HOST="${MY_POD_NAME}.{{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+    /opt/bitnami/scripts/solr/entrypoint.sh /opt/bitnami/scripts/solr/run.sh

@@ -20,11 +20,11 @@ data:
 
     info "Enabling prometheus plugin"
 
-    if curl --silent http://localhost:8001/ | grep -Eo '"prometheus":false' > /dev/null; then
-      if ! curl --silent http://localhost:8001/plugins -d name=prometheus; then
+    if curl --silent http://localhost:{{ .Values.kong.containerPorts.adminHttp }}/ | grep -Eo '"prometheus":false' > /dev/null; then
+      if ! curl --silent http://localhost:{{ .Values.kong.containerPorts.adminHttp }}/plugins -d name=prometheus; then
          info "Issue enabling prometheus plugin, this could be due to a race condition with another kong node. Checking status"
       fi
-      if curl http://localhost:8001/ | grep -Eo '"prometheus":true' > /dev/null; then
+      if curl http://localhost:{{ .Values.kong.containerPorts.adminHttp }}/ | grep -Eo '"prometheus":true' > /dev/null; then
          info "Prometheus metrics plugin enabled"
       else
          error "Error enabling Prometheus plugin"

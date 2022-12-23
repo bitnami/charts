@@ -1,19 +1,25 @@
-{{- if and .Values.prometheus.enabled .Values.prometheus.podDisruptionBudget.enabled }}
-apiVersion: policy/v1beta1
+{{- if and .Values.prometheus.enabled .Values.prometheus.pdb.create }}
+apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
   name: {{ template "kube-prometheus.prometheus.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "kube-prometheus.prometheus.labels" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   selector:
     matchLabels:
-      app: prometheus
+      app.kubernetes.io/name: prometheus
       prometheus: {{ template "kube-prometheus.prometheus.fullname" . }}
-  {{- if .Values.prometheus.podDisruptionBudget.minAvailable }}
-  minAvailable: {{ .Values.prometheus.podDisruptionBudget.minAvailable }}
+  {{- if .Values.prometheus.pdb.minAvailable }}
+  minAvailable: {{ .Values.prometheus.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.prometheus.podDisruptionBudget.maxUnavailable }}
-  maxUnavailable: {{ .Values.prometheus.podDisruptionBudget.maxUnavailable }}
+  {{- if .Values.prometheus.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.prometheus.pdb.maxUnavailable }}
   {{- end }}
 {{- end }}

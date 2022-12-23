@@ -1,23 +1,34 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 2.2.1
+appVersion: 2.6.2
 dependencies:
-  - name: postgresql
+  - condition: packaging.flux.enabled
+    name: redis
     repository: https://charts.bitnami.com/bitnami
-    version: '10.X.X'
-description: Kubeapps is a dashboard for your Kubernetes cluster that makes it easy to deploy and manage applications in your cluster using Helm
-home: https://kubeapps.com
-icon: https://raw.githubusercontent.com/kubeapps/kubeapps/master/docs/img/logo.png
+    version: 17.x.x
+  - condition: packaging.helm.enabled
+    name: postgresql
+    repository: https://charts.bitnami.com/bitnami
+    version: 12.x.x
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 2.x.x
+description: Kubeapps is a web-based UI for launching and managing applications on Kubernetes. It allows users to deploy trusted applications and operators to control users access to the cluster.
+home: https://kubeapps.dev
+icon: https://bitnami.com/assets/stacks/kubeapps/img/kubeapps-stack-220x234.png
 keywords:
   - helm
   - dashboard
   - service catalog
   - deployment
+kubeVersion: ">=1.21.0-0"
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: kubeapps
 sources:
-  - https://github.com/kubeapps/kubeapps
-version: 5.2.2
+  - https://github.com/vmware-tanzu/kubeapps
+version: 12.1.2

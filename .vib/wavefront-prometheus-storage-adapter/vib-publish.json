@@ -1,0 +1,84 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/wavefront-prometheus-storage-adapter"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/wavefront-prometheus-storage-adapter"
+        },
+        "runtime_parameters": "Y29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBydW5Bc1VzZXI6IDEwMDIKcG9kU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBmc0dyb3VwOiAxMDAyCmNvbnRhaW5lclBvcnRzOgogIGh0dHA6IDEyMzUKc2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGh0dHA6IDgwCndhdmVmcm9udDoKICBlbmFibGVkOiB0cnVlCiAgd2F2ZWZyb250OgogICAgdXJsOiBodHRwczovL1lPVVJfQ0xVU1RFUi53YXZlZnJvbnQuY29tCiAgICB0b2tlbjogWU9VUl9BUElfVE9LRU4gCiAgcHJveHk6CiAgICBlbmFibGVkOiB0cnVlCiAgICBwb3J0OiAyODc4",
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "health-check",
+          "params": {
+            "endpoint": "lb-wavefront-prometheus-storage-adapter-http",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/wavefront-prometheus-storage-adapter/goss"
+            },
+            "remote": {
+              "workload": "deploy-wavefront-prometheus-storage-adapter"
+            },
+            "vars_file": "vars.yaml"
+          }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/wavefront-prometheus-storage-adapter/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "proxy-port": "2878"
+            }
+          }
+        }
+      ]
+    },
+    "publish": {
+      "actions": [
+        {
+          "action_id": "helm-publish",
+          "params": {
+            "repository": {
+              "kind": "S3",
+              "url": "{VIB_ENV_S3_URL}",
+              "username": "{VIB_ENV_S3_USERNAME}",
+              "password": "{VIB_ENV_S3_PASSWORD}"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

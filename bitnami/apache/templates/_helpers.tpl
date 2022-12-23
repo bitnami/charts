@@ -93,7 +93,7 @@ apache: htdocs-git-branch
 Validate values of Apache - Incorrect extra volume settings
 */}}
 {{- define "apache.validateValues.extraVolumes" -}}
-{{- if and (.Values.extraVolumes) (not .Values.extraVolumeMounts) -}}
+{{- if and (.Values.extraVolumes) (not (or .Values.extraVolumeMounts .Values.cloneHtdocsFromGit.extraVolumeMounts)) -}}
 apache: missing-extra-volume-mounts
     You specified extra volumes but not mount points for them. Please set
     the extraVolumeMounts value
@@ -114,7 +114,7 @@ Get the vhosts config map name.
 {{- if .Values.vhostsConfigMap -}}
     {{- printf "%s" (tpl .Values.vhostsConfigMap $) -}}
 {{- else -}}
-    {{- printf "%s-vhosts" (include "common.names.fullname" . ) -}}
+    {{- printf "%s-vhosts" (include "common.names.fullname" . ) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 
@@ -125,6 +125,6 @@ Get the httpd.conf config map name.
 {{- if .Values.httpdConfConfigMap -}}
     {{- printf "%s" (tpl .Values.httpdConfConfigMap $) -}}
 {{- else -}}
-    {{- printf "%s-httpd-conf" (include "common.names.fullname" . ) -}}
+    {{- printf "%s-httpd-conf" (include "common.names.fullname" . ) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}

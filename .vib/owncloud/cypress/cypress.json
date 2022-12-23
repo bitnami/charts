@@ -1,0 +1,13 @@
+{
+  "pageLoadTimeout": 240000,
+  "defaultCommandTimeout": 8000,
+  "viewportWidth": 1200,
+  "viewportHeight": 860,
+  "env": {
+    "username": "test_user",
+    "password": "ComplicatedPassword123!4"
+  },
+  "hosts": {
+    "vmware-owncloud.my": "{{ TARGET_IP }}"
+  }
+}

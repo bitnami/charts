@@ -2,51 +2,50 @@
 
 {{- define "mysql.primary.fullname" -}}
 {{- if eq .Values.architecture "replication" }}
-{{- printf "%s-%s" (include "common.names.fullname" .) "primary" | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) .Values.primary.name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
 {{- include "common.names.fullname" . -}}
 {{- end -}}
 {{- end -}}
 
 {{- define "mysql.secondary.fullname" -}}
-{{- printf "%s-%s" (include "common.names.fullname" .) "secondary" | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) .Values.secondary.name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Return the proper MySQL image name
 */}}
 {{- define "mysql.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
+{{- include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
 Return the proper metrics image name
 */}}
 {{- define "mysql.metrics.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.metrics.image "global" .Values.global) }}
+{{- include "common.images.image" (dict "imageRoot" .Values.metrics.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
 Return the proper image name (for the init container volume-permissions image)
 */}}
 {{- define "mysql.volumePermissions.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.volumePermissions.image "global" .Values.global) }}
+{{- include "common.images.image" (dict "imageRoot" .Values.volumePermissions.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "mysql.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image .Values.volumePermissions.image) "global" .Values.global) }}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image .Values.volumePermissions.image) "global" .Values.global) }}
 {{- end -}}
 
-{{ template "mysql.initdbScriptsCM" . }}
 {{/*
 Get the initialization scripts ConfigMap name.
 */}}
 {{- define "mysql.initdbScriptsCM" -}}
 {{- if .Values.initdbScriptsConfigMap -}}
-    {{- printf "%s" .Values.initdbScriptsConfigMap -}}
+    {{- printf "%s" (tpl .Values.initdbScriptsConfigMap $) -}}
 {{- else -}}
     {{- printf "%s-init-scripts" (include "mysql.primary.fullname" .) -}}
 {{- end -}}
@@ -112,7 +111,7 @@ Return the secret with MySQL credentials
 */}}
 {{- define "mysql.secretName" -}}
     {{- if .Values.auth.existingSecret -}}
-        {{- printf "%s" .Values.auth.existingSecret -}}
+        {{- printf "%s" (tpl .Values.auth.existingSecret $) -}}
     {{- else -}}
         {{- printf "%s" (include "common.names.fullname" .) -}}
     {{- end -}}
@@ -127,11 +126,25 @@ Return true if a secret object should be created for MySQL
 {{- end -}}
 {{- end -}}
 
+{{/*
+Returns the available value for certain key in an existing secret (if it exists),
+otherwise it generates a random value.
+*/}}
+{{- define "getValueFromSecret" }}
+    {{- $len := (default 16 .Length) | int -}}
+    {{- $obj := (lookup "v1" "Secret" .Namespace .Name).data -}}
+    {{- if $obj }}
+        {{- index $obj .Key | b64dec -}}
+    {{- else -}}
+        {{- randAlphaNum $len -}}
+    {{- end -}}
+{{- end }}
 
 {{/* Check if there are rolling tags in the images */}}
 {{- define "mysql.checkRollingTags" -}}
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- end -}}
 
 {{/*

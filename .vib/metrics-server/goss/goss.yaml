@@ -1,0 +1,18 @@
+http:
+  https://metrics-server:{{ .Vars.service.ports.https }}/metrics:
+    status: 200
+    allow-insecure: true
+    body:
+    - metrics_server_storage_points
+file:
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
+    filetype: directory
+    mode: "1777"
+    owner: root
+command:
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+    - uid={{ .Vars.containerSecurityContext.runAsUser }}

@@ -1,8 +1,9 @@
-{{- if and .Values.serviceAccount.create .Values.rbac.create }}
+{{- if .Values.rbac.create }}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
-  name: {{ template "kafka.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: kafka
     {{- if .Values.commonLabels }}
@@ -13,7 +14,7 @@ metadata:
   {{- end }}
 roleRef:
   kind: Role
-  name: {{ template "kafka.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   apiGroup: rbac.authorization.k8s.io
 subjects:
   - kind: ServiceAccount

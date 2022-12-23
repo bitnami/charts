@@ -1,308 +1,348 @@
+## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
 ##
-# global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
-#   storageClass: myStorageClass
 
-## String to partially override kafka.fullname template (will maintain the release name)
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
-# nameOverride:
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass: ""
 
-## String to fully override solr.fullname template
+## @section Common parameters
 ##
-# fullnameOverride:
 
-## Kubernetes Cluster Domain
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
+## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname template
+##
+fullnameOverride: ""
+## @param clusterDomain Kubernetes cluster domain
 ##
 clusterDomain: cluster.local
-
-## Deployment pod host aliases
-## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-##
-hostAliases: []
-
-## Add labels to all the deployed resources
+## @param commonLabels Add labels to all the deployed resources
 ##
 commonLabels: {}
-
-## Add annotations to all the deployed resources
+## @param commonAnnotations Add annotations to all the deployed resources
 ##
 commonAnnotations: {}
-
-## Extra objects to deploy (value evaluated as a template)
+## @param extraDeploy Extra objects to deploy (value evaluated as a template)
 ##
 extraDeploy: []
-
-## Number of solr instances to run
+## Enable diagnostic mode in the statefulset
 ##
-replicaCount: 3
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the statefulset
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the statefulset
+  ##
+  args:
+    - infinity
 
-service:
-  type: ClusterIP
-  port: 8983
-  annotations: {}
-  labels: {}
-  ## loadBalancerIP for the SuiteCRM Service (optional, cloud specific)
-  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
-  ##
-  ## loadBalancerIP:
-  ##
-  ## nodePorts:
-  ##   http: <to set explicitly, choose port between 30000-32767>
-  ##   https: <to set explicitly, choose port between 30000-32767>
-  nodePorts:
-    http: ""
-    https: ""
+## @section Solr parameters
+##
 
 ## Bitnami Solr image version
 ## ref: https://hub.docker.com/r/bitnami/solr/tags
+## @param image.registry Solr image registry
+## @param image.repository Solr image repository
+## @param image.tag Solr image tag (immutable tags are recommended)
+## @param image.digest Solr image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param image.pullPolicy image pull policy
+## @param image.pullSecrets Specify docker-registry secret names as an array
+## @param image.debug Specify if debug values should be set
 ##
 image:
   registry: docker.io
   repository: bitnami/solr
-  tag: 8.8.1-debian-10-r0
+  tag: 9.1.0-debian-11-r0
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
   ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
-
-## Configure extra options for liveness and readiness probes
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-##
-livenessProbe:
-  enabled: true
-  initialDelaySeconds: 30
-  periodSeconds: 10
-  timeoutSeconds: 5
-  failureThreshold: 6
-  successThreshold: 1
-readinessProbe:
-  enabled: true
-  initialDelaySeconds: 5
-  periodSeconds: 10
-  timeoutSeconds: 5
-  failureThreshold: 6
-  successThreshold: 1
-
-## Solr core name to be created
-##
-coreName: my-core
-## Enable Solr cloud
-##
-cloudEnabled: true
-## Enable cloud bootstrap. It will be performed from the node 0.
-##
-cloudBootstrap: true
-## Solr collection name
-##
-collection: my-collection
-## Solr number fo collection shards
-##
-collectionShards: 1
-## Solr number of collection replicas
-##
-collectionReplicas: 2
-## Port number for the Solr container
-##
-containerPort: 8983
-## Solr server directory
-##
-serverDirectory: "server"
-## Java memmory options
-##
-javaMem:
-## Java Heap options
-##
-heap:
-
-authentication:
-  ## Enabled Solr authentication
+  pullSecrets: []
+  ## Set to true if you would like to see extra information on logs
+  ##
+  debug: false
+auth:
+  ## @param auth.enabled Enable Solr authentication
   ##
   enabled: true
-  ## Solr admin username
+  ## @param auth.adminUsername Solr admin username
   ##
   adminUsername: admin
-  ## Solr admin password
+  ## @param auth.adminPassword Solr admin password. Autogenerated if not provided.
   ##
-  adminPassword:
-
-## Secret with Solr password
-##
-# existingSecret:
-
-##
-## TLS configuration
-##
-tls:
-  ## Enable TLS traffic
-  enabled: false
-  ## Name of the secret that contains the certificates
-  ## It should contains two keys called "keystore.p12" and "trustore.p12" with the files in JKS or P12 format.
-  ##   certificatesSecretName: cert-files
+  adminPassword: ""
+  ## @param auth.existingSecret Existing secret with Solr password
   ##
-  # certificatesSecretName:
-
-  ## Name of the secret that contains the passwords for the certificate storage files. It should contains two keys called "tls-keystore-password" and "tls-truststore-password".
-  ## passwordsSecretName: my-passwords
-  # passwordsSecretName:
-
-## Container Command (set to default if not set).
+  existingSecret: ""
+  ## @param auth.existingSecretPasswordKey Password key to be retrieved from existing secret
+  ## NOTE: ignored unless `auth.existingSecret` parameter is set
+  ##
+  existingSecretPasswordKey: "solr-password"
+## @param coreNames Solr core names to be created
 ##
-command: []
-## Container args (set to default if not set).
+coreNames:
+  - my-core
+## @param cloudEnabled Enable Solr cloud mode
+##
+cloudEnabled: true
+## @param cloudBootstrap Enable cloud bootstrap. It will be performed from the node 0.
+##
+cloudBootstrap: true
+## @param collection Solr collection name
+##
+collection: my-collection
+## @param collectionShards Number of collection shards
+##
+collectionShards: 1
+## @param collectionReplicas Number of collection replicas
+##
+collectionReplicas: 2
+## @param serverDirectory Name of the created directory for the server
+##
+serverDirectory: "server"
+## @param javaMem Java memory options to pass to the Solr container
+##
+javaMem: ""
+## @param heap Java Heap options to pass to the Solr container
+##
+heap: ""
+## @param command Override Solr entrypoint string
+##
+command:
+  - /scripts/setup.sh
+## @param args Arguments for the provided command if needed
 ##
 args: []
-
-## Solr resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-##
-resources:
-  ## We usually recommend not to specify default resources and to leave this as a conscious
-  ## choice for the user. This also increases chances charts run on environments with little
-  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  limits: {}
-  #   cpu: 200m
-  #   memory: 256Mi
-  requests: {}
-  #   cpu: 200m
-  #   memory: 10Mi
-
-## Solr containers' Security Context
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-##
-containerSecurityContext:
-  enabled: true
-  runAsUser: 1001
-  runAsNonRoot: true
-
-## Solr pods' Security Context
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-##
-podSecurityContext:
-  enabled: true
-  fsGroup: 1001
-
-## Pod affinity preset
-## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
-##
-podAffinityPreset: ""
-
-## Pod anti-affinity preset
-## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
-##
-podAntiAffinityPreset: soft
-
-## Node affinity preset
-## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-## Allowed values: soft, hard
-##
-nodeAffinityPreset:
-  ## Node affinity type
-  ## Allowed values: soft, hard
-  type: ""
-  ## Node label key to match
-  ## E.g.
-  ## key: "kubernetes.io/e2e-az-name"
-  ##
-  key: ""
-  ## Node label values to match
-  ## E.g.
-  ## values:
-  ##   - e2e-az1
-  ##   - e2e-az2
-  ##
-  values: []
-
-## Affinity for pod assignment. Evaluated as a template.
-## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-##
-affinity: {}
-
-## Node labels for pod assignment. Evaluated as a template.
-## ref: https://kubernetes.io/docs/user-guide/node-selection/
-##
-nodeSelector: {}
-
-## Tolerations for pod assignment. Evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-##
-tolerations: []
-
-## Pod extra labels
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-##
-podLabels: {}
-
-## Annotations for server pods.
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-##
-podAnnotations: {}
-
-## Solr pods' priority.
-## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
-##
-# priorityClassName: ""
-
-## lifecycleHooks for the Solr container to automate configuration before or after startup.
-##
-lifecycleHooks: {}
-
-## Custom Liveness probes for Solr
-##
-customLivenessProbe: {}
-
-## Custom Rediness probes Solr
-##
-customReadinessProbe: {}
-
-## Update strategy - only really applicable for deployments with RWO PVs attached
-## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
-## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
-## terminate the single previous pod, so that the new, incoming pod can attach to the PV
-##
-updateStrategy:
-  type: RollingUpdate
-  rollingUpdate: {}
-
-## Additional environment variables to set
+## @param extraEnvVars Additional environment variables to set
 ## Example:
 ## extraEnvVars:
 ##   - name: FOO
 ##     value: "bar"
 ##
 extraEnvVars: []
-
-## ConfigMap with extra environment variables
+## @param extraEnvVarsCM ConfigMap with extra environment variables
 ##
-extraEnvVarsCM:
-
-## Secret with extra environment variables
+extraEnvVarsCM: ""
+## @param extraEnvVarsSecret Secret with extra environment variables
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 
-## Extra volumes to add to the deployment
+## @section Solr statefulset parameters
+##
+
+## @param replicaCount Number of solr replicas
+##
+replicaCount: 3
+## @param containerPorts.http Solr HTTP container port
+##
+containerPorts:
+  http: 8983
+## Configure extra options for Solr containers' liveness, readiness and startup probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+## @param livenessProbe.enabled Enable livenessProbe on Solr containers
+## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+## @param livenessProbe.periodSeconds Period seconds for livenessProbe
+## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
+## @param livenessProbe.successThreshold Success threshold for livenessProbe
+##
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 40
+  periodSeconds: 10
+  timeoutSeconds: 15
+  failureThreshold: 6
+  successThreshold: 1
+## @param readinessProbe.enabled Enable readinessProbe on Solr containers
+## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+## @param readinessProbe.periodSeconds Period seconds for readinessProbe
+## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
+## @param readinessProbe.successThreshold Success threshold for readinessProbe
+##
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 60
+  periodSeconds: 10
+  timeoutSeconds: 15
+  failureThreshold: 6
+  successThreshold: 1
+## @param startupProbe.enabled Enable startupProbe on Solr containers
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 40
+  periodSeconds: 10
+  timeoutSeconds: 15
+  failureThreshold: 15
+  successThreshold: 1
+## @param customLivenessProbe Custom livenessProbe that overrides the default one
+##
+customLivenessProbe: {}
+## @param customReadinessProbe Custom readinessProbe that overrides the default one
+##
+customReadinessProbe: {}
+## @param customStartupProbe Custom startupProbe that overrides the default one
+##
+customStartupProbe: {}
+## @param lifecycleHooks lifecycleHooks for the Solr container to automate configuration before or after startup
+##
+lifecycleHooks: {}
+## Solr resource requests and limits
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## @param resources.limits The resources limits for the container
+## @param resources.requests The requested resources for the container
+##
+resources:
+  limits: {}
+  requests: {}
+## Solr pods' Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param podSecurityContext.enabled Enable Solr pods' Security Context
+## @param podSecurityContext.fsGroup Set Solr pod's Security Context fsGroup
+##
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
+## Solr containers' Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+## @param containerSecurityContext.enabled Enable Solr containers' Security Context
+## @param containerSecurityContext.runAsUser Set Solr containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set Solr containers' Security Context runAsNonRoot
+##
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
+  runAsNonRoot: true
+## @param hostAliases Solr pods host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+## @param podLabels Extra labels for Solr pods
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+## @param podAnnotations Annotations for Solr pods
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+## @param podAffinityPreset Solr pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAffinityPreset: ""
+## @param podAntiAffinityPreset Solr pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAntiAffinityPreset: soft
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+##
+nodeAffinityPreset:
+  ## @param nodeAffinityPreset.type Solr node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ##
+  type: ""
+  ## @param nodeAffinityPreset.key Solr node label key to match Ignored if `affinity` is set.
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## @param nodeAffinityPreset.values Solr node label values to match. Ignored if `affinity` is set.
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+## @param affinity Affinity settings for Solr pod assignment. Evaluated as a template
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+affinity: {}
+## @param nodeSelector Node labels for Solr pods assignment. Evaluated as a template
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+## @param tolerations Tolerations for Solr pods assignment. Evaluated as a template
+## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+##
+topologySpreadConstraints: []
+## @param podManagementPolicy Management Policy for Solr StatefulSet
+## StatefulSet controller supports relaxing its ordering guarantees while preserving its uniqueness and identity guarantees
+## There are two valid pod management policies: OrderedReady and Parallel
+## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#pod-management-policy
+##
+podManagementPolicy: Parallel
+## @param priorityClassName Solr pods' priority.
+## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+##
+priorityClassName: ""
+## @param schedulerName Kubernetes pod scheduler registry
+## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param updateStrategy.type Solr statefulset strategy type
+## @param updateStrategy.rollingUpdate Solr statefulset rolling update configuration parameters
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+##
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate: {}
+
+## Solr Pod Disruption Budget configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+## @param pdb.create Enable a Pod Disruption Budget creation
+## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+##
+pdb:
+  create: false
+  minAvailable: 1
+  maxUnavailable: ""
+
+## @param extraVolumes Optionally specify extra list of additional volumes for the Solr pod(s)
 ##
 extraVolumes: []
-
-## Extra volume mounts to add to the container
+## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Solr container(s)
 ##
 extraVolumeMounts: []
-
-## Add init containers to the Solr pods.
+## @param initContainers Add init containers to the Solr pod(s)
 ## Example:
 ## initContainers:
 ##   - name: your-image-name
@@ -313,8 +353,7 @@ extraVolumeMounts: []
 ##         containerPort: 1234
 ##
 initContainers: []
-
-## Add sidecars to the Solr pods.
+## @param sidecars Add sidecars to the Solr pod(s)
 ## Example:
 ## sidecars:
 ##   - name: your-image-name
@@ -324,131 +363,369 @@ initContainers: []
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars: {}
+sidecars: []
 
-## Init containers parameters:
-## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
+## @section Traffic Exposure parameters
 ##
-volumePermissions:
-  enabled: false
-  image:
-    registry: docker.io
-    repository: bitnami/bitnami-shell
-    tag: "10"
-    pullPolicy: Always
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ##
-    pullSecrets: []
-    ##   - myRegistryKeySecretName
-  ## Init containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources:
-    ## We usually recommend not to specify default resources and to leave this as a conscious
-    ## choice for the user. This also increases chances charts run on environments with little
-    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    ##
-    limits: {}
-    ##   cpu: 100m
-    ##   memory: 128Mi
-    ##
-    requests: {}
-    ##   cpu: 100m
-    ##   memory: 128Mi
-    ##
-  ## Container security context
-  ##
-  containerSecurityContext:
-    enabled: true
-    runAsUser: 1001
-    runAsNonRoot: true
 
-## Persistence parameters
+service:
+  ## @param service.type Kubernetes Service type
+  ##
+  type: ClusterIP
+  ## @param service.ports.http Solr HTTP service port
+  ##
+  ports:
+    http: 8983
+  ## @param service.nodePorts.http Node port for the HTTP service
+  ## NOTE: choose port between <30000-32767>
+  ##
+  nodePorts:
+    http: ""
+  ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
+  ## Values: ClientIP or None
+  ## ref: https://kubernetes.io/docs/user-guide/services/
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
+  ## @param service.clusterIP Solr service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
+  ##
+  clusterIP: ""
+  ## @param service.loadBalancerIP Solr service Load Balancer IP
+  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ##
+  loadBalancerIP: ""
+  ## @param service.loadBalancerSourceRanges Solr service Load Balancer sources
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
+  ## @param service.externalTrafficPolicy Solr service external traffic policy
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
+  ## @param service.annotations Additional custom annotations for Solr service
+  ##
+  annotations: {}
+  ## @param service.extraPorts Extra ports to expose in the Solr service (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
+## Solr ingress parameters
+## ref: https://kubernetes.io/docs/user-guide/ingress/
+##
+ingress:
+  ## @param ingress.enabled Enable ingress record generation for Apache Geode
+  ##
+  enabled: false
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
+  ## @param ingress.pathType Ingress path type
+  ##
+  pathType: ImplementationSpecific
+  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
+  ##
+  apiVersion: ""
+  ## @param ingress.hostname Default host for the ingress record
+  ##
+  hostname: solr.local
+  ## @param ingress.path Default path for the ingress record
+  ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+  ##
+  path: /
+  ## @param ingress.annotations [object] Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+  ##
+  annotations: {}
+  ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+  ## You can:
+  ##   - Use the `ingress.secrets` parameter to create this TLS secret
+  ##   - Rely on cert-manager to create it by setting the corresponding annotations
+  ##   - Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
+  ##
+  tls: false
+  ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+  ##
+  selfSigned: false
+  ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+  ## e.g:
+  ## extraHosts:
+  ##   - name: solr.local
+  ##     path: /
+  ##
+  extraHosts: []
+  ## @param ingress.extraPaths Any additional arbitrary paths that may need to be added to the ingress under the main host.
+  ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
+  ## @param ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
+  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## extraTls:
+  ## - hosts:
+  ##     - solr.local
+  ##   secretName: solr.local-tls
+  ##
+  extraTls: []
+  ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
+  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
+  ## -----BEGIN RSA PRIVATE KEY-----
+  ##
+  ## name should line up with a tlsSecret set further up
+  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
+  ##
+  ## It is also possible to create and manage the certificates outside of this helm chart
+  ## Please see README.md for more information
+  ## e.g:
+  ## - name: solr.local-tls
+  ##   key:
+  ##   certificate:
+  ##
+  secrets: []
+  ## @param ingress.extraRules Additional rules to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g:
+  ## extraRules:
+  ## - host: solr.local
+  ##     http:
+  ##       path: /
+  ##       backend:
+  ##         service:
+  ##           name: solr-svc
+  ##           port:
+  ##             name: http
+  ##
+  extraRules: []
+
+## @section Persistence parameters
+##
+
+## Enable persistence using Persistent Volume Claims
+## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
+  ## @param persistence.enabled Use a PVC to persist data.
+  ##
   enabled: true
-  ## A manually managed Persistent Volume and Claim
+  ## @param persistence.existingClaim A manually managed Persistent Volume and Claim
   ## If defined, PVC must be created manually before volume will be bound
   ## The value is evaluated as a template
   ##
-  # existingClaim:
-  ## PV Storage Class
+  existingClaim: ""
+  ## @param persistence.storageClass Storage class of backing PVC
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
   ## If undefined (the default) or set to null, no storageClassName spec is
   ## set, choosing the default provisioner.
   ##
-  # storageClass: "-"
-  ## PV Access Mode
+  storageClass: ""
+  ## @param persistence.accessModes Persistent Volume Access Modes
   ##
   accessModes:
     - ReadWriteOnce
-  ## PVC size
+  ## @param persistence.size Size of data volume
   ##
   size: 8Gi
-  ## PVC annotations
+  ## @param persistence.annotations Persistence annotations for Solr
   ##
   annotations: {}
-  ## Mount point for persistence
+  ## @param persistence.mountPath Persistence mount path for Solr
   ##
   mountPath: /bitnami/solr
-
-## Specifies whether a ServiceAccount should be created
-##
-serviceAccount:
-  create: false
-  ## The name of the ServiceAccount to use.
-  ## If not set and create is true, a name is generated using the fullname template
+  ## @param persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
+  ## If set, the PVC can't have a PV dynamically provisioned for it
+  ## E.g.
+  ## selector:
+  ##   matchLabels:
+  ##     app: my-app
   ##
-  name:
+  selector: {}
+## @section Volume Permissions parameters
+##
 
+## Init containers parameters:
+## volumePermissions: Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each node
 ##
-## Zookeeper chart configuration
-##
-## https://github.com/bitnami/charts/blob/master/bitnami/zookeeper/values.yaml
-##
-zookeeper:
-  enabled: true
-  persistence:
-    enabled: true
-  port: 2181
-  replicaCount: 3
-  fourlwCommandsWhitelist: srvr,mntr,conf,ruok
-  service:
-    publishNotReadyAddresses: true
-
-## This value is only used when zookeeper.enabled is set to false
-##
-externalZookeeper:
-  ## Server or list of external zookeeper servers to use.
+volumePermissions:
+  ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume
   ##
-  servers: []
-
-## Configuration for the solr prometheus exporter
-##
-exporter:
   enabled: false
+  ## @param volumePermissions.image.registry Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository Init container volume-permissions image repository
+  ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
+  ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
+  ##
   image:
     registry: docker.io
-    repository: bitnami/solr
-    tag: 8.8.0-debian-10-r15
-    ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-    ##
+    repository: bitnami/bitnami-shell
+    tag: 11-debian-11-r54
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
     ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
+    pullSecrets: []
+  ## Init container resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param volumePermissions.resources.limits Init container volume-permissions resource limits
+  ## @param volumePermissions.resources.requests Init container volume-permissions resource requests
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Init container' Security Context
+  ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
+  ## and not the below volumePermissions.containerSecurityContext.runAsUser
+  ## @param volumePermissions.containerSecurityContext.runAsUser User ID for the init container
+  ##
+  containerSecurityContext:
+    runAsUser: 0
 
-  ## Configure extra options for liveness and readiness probes
+## @section Other Parameters
+##
+
+## Service account for Solr to use.
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## @param serviceAccount.create Enable creation of ServiceAccount for Solr pod
+  ##
+  create: false
+  ## @param serviceAccount.name The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the common.names.fullname template
+  ##
+  name: ""
+  ## @param serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+  ## Can be set to false if pods using this serviceAccount do not need to use K8s API
+  ##
+  automountServiceAccountToken: true
+  ## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
+  ##
+  annotations: {}
+
+## @section Solr TLS parameters
+##
+
+## TLS configuration
+##
+tls:
+  ## @param tls.enabled Enable the TLS/SSL configuration
+  ##
+  enabled: false
+  ## @param tls.autoGenerated Create self-signed TLS certificates. Currently only supports PEM certificates
+  ##
+  autoGenerated: false
+  ## @param tls.certificatesSecretName Name of the secret that contains the certificates
+  ## It should contain two keys called "keystore.p12" and "trustore.p12" with the files in JKS or P12 format
+  ##   certificatesSecretName: cert-files
+  ##
+  certificatesSecretName: ""
+  ## @param tls.passwordsSecretName Set the name of the secret that contains the passwords for the certificate files
+  ## It should contain two keys called "tls-keystore-password" and "tls-truststore-password".
+  ## e.g:
+  ## passwordsSecretName: my-passwords
+  ##
+  passwordsSecretName: ""
+  ## @param tls.keystorePassword Password to access the keystore when it's password-protected
+  ##
+  keystorePassword: ""
+  ## @param tls.truststorePassword Password to access the truststore when it's password-protected
+  ##
+  truststorePassword: ""
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param tls.resources.limits The resources limits for the TLS init container
+  ## @param tls.resources.requests The requested resources for the TLS init container
+  ##
+  resources:
+    ## Example:
+    ## limits:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    ##
+    limits: {}
+    ## Examples:
+    ## requests:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    ##
+    requests: {}
+
+## @section Metrics parameters
+##
+
+## Configuration for the Solr Prometheus exporter
+##
+metrics:
+  ## @param metrics.enabled Deploy a Solr Prometheus exporter deployment to expose metrics
+  ##
+  enabled: false
+  ## @param metrics.configFile Config file with metrics to export by the Solr prometheus metrics. To change it mount a different file using `extraConfigMaps`
+  ##
+  configFile: "/opt/bitnami/solr/prometheus-exporter/conf/solr-exporter-config.xml"
+  ## @param metrics.threads Number of Solr exporter threads
+  ##
+  threads: 7
+  ## @param metrics.command Override Solr entrypoint string.
+  ##
+  command: []
+  ## @param metrics.args Arguments for the provided command if needed
+  ##
+  args: []
+  ## @param metrics.extraEnvVars Additional environment variables to set
+  ## Example:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param metrics.extraEnvVarsCM ConfigMap with extra environment variables
+  ##
+  extraEnvVarsCM: ""
+  ## @param metrics.extraEnvVarsSecret Secret with extra environment variables
+  ##
+  extraEnvVarsSecret: ""
+  ## @param metrics.containerPorts.http Solr Prometheus exporter HTTP container port
+  ##
+  containerPorts:
+    http: 9231
+  ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param metrics.livenessProbe.enabled Enable livenessProbe on Solr Prometheus exporter containers
+  ## @param metrics.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param metrics.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param metrics.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param metrics.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param metrics.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
   livenessProbe:
     enabled: true
     initialDelaySeconds: 10
@@ -456,6 +733,13 @@ exporter:
     timeoutSeconds: 15
     failureThreshold: 15
     successThreshold: 1
+  ## @param metrics.readinessProbe.enabled Enable readinessProbe on Solr Prometheus exporter containers
+  ## @param metrics.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param metrics.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param metrics.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param metrics.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param metrics.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
   readinessProbe:
     enabled: true
     initialDelaySeconds: 10
@@ -463,154 +747,132 @@ exporter:
     timeoutSeconds: 15
     failureThreshold: 15
     successThreshold: 15
-
-  ## Path to the Solr exporter config file defining metrics to export. To change it mount a different file using extraConfigMaps
+  ## @param metrics.startupProbe.enabled Enable startupProbe on Solr Prometheus exporter containers
+  ## @param metrics.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param metrics.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param metrics.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param metrics.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param metrics.startupProbe.successThreshold Success threshold for startupProbe
   ##
-  configFile: "/opt/bitnami/solr/contrib/prometheus-exporter/conf/solr-exporter-config.xml"
-
-  ## Solr exporter port
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param metrics.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
-  port: 9983
-
-  ## Number of Solr exporter threads
+  customLivenessProbe: {}
+  ## @param metrics.customReadinessProbe Custom readinessProbe that overrides the default one
   ##
-  threads: 7
-
-  ## Command and args for running the container (set to default if not set). Use array form
+  customReadinessProbe: {}
+  ## @param metrics.customStartupProbe Custom startupProbe that overrides the default one
   ##
-  command: []
-  args: []
-
-  ## Solr resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  customStartupProbe: {}
+  ## Solr Prometheus exporter resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param metrics.resources.limits The resources limits for the container
+  ## @param metrics.resources.requests The requested resources for the container
   ##
   resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
     limits: {}
-    #   cpu: 200m
-    #   memory: 256Mi
     requests: {}
-    #   cpu: 200m
-    #   memory: 10Mi
-
-  ## Solr exporter containers' Security Context
+  ## Solr Prometheus exporter containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param metrics.containerSecurityContext.enabled Enable Solr Prometheus exporter containers' Security Context
+  ## @param metrics.containerSecurityContext.runAsUser User ID for the containers.
+  ## @param metrics.containerSecurityContext.runAsNonRoot Enable Solr Prometheus exporter containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
-
-  ## Solr exporter pods' Security Context
+  ## Solr Prometheus exporter pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param metrics.podSecurityContext.enabled Enable Solr Prometheus exporter pods' Security Context
+  ## @param metrics.podSecurityContext.fsGroup Group ID for the pods.
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-
-  ## Pod affinity preset
+  ## @param metrics.podLabels Additional labels for Solr Prometheus exporter pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param metrics.podAnnotations Additional annotations for Solr Prometheus exporter pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param metrics.podAffinityPreset Solr Prometheus exporter pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAffinityPreset: ""
-
-  ## Pod anti-affinity preset
+  ## @param metrics.podAntiAffinityPreset Solr Prometheus exporter pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAntiAffinityPreset: soft
-
   ## Node affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
   ##
   nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
+    ## @param metrics.nodeAffinityPreset.type Solr Prometheus exporter node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+    ##
     type: ""
-    ## Node label key to match
+    ## @param metrics.nodeAffinityPreset.key Solr Prometheus exporter node label key to match Ignored if `affinity` is set.
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
     key: ""
-    ## Node label values to match
+    ## @param metrics.nodeAffinityPreset.values Solr Prometheus exporter node label values to match. Ignored if `affinity` is set.
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-
-  ## Affinity for pod assignment. Evaluated as a template.
+  ## @param metrics.affinity Affinity settings for Solr Prometheus exporter pod assignment. Evaluated as a template
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
   affinity: {}
-
-  ## Node labels for pod assignment. Evaluated as a template.
+  ## @param metrics.nodeSelector Node labels for Solr Prometheus exporter pods assignment. Evaluated as a template
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
-  ## Tolerations for pod assignment. Evaluated as a template.
+  ## @param metrics.tolerations Tolerations for Solr Prometheus exporter pods assignment. Evaluated as a template
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
-  ## Pod extra labels
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ## @param metrics.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  podLabels: {}
-
-  ## Annotations for server pods.
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  topologySpreadConstraints: []
+  ## @param metrics.priorityClassName Solr Prometheus exporter pods' priority.
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
-  podAnnotations: {}
-
-  ## Custom Liveness probes for %%MAIN_CONTAINER_NAME%%
+  priorityClassName: ""
+  ## @param metrics.schedulerName Kubernetes pod scheduler registry
+  ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
-  customLivenessProbe: {}
-
-  ## Custom Rediness probes %%MAIN_CONTAINER_NAME%%
+  schedulerName: ""
+  ## @param metrics.hostAliases Solr Prometheus exporter pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
-  customReadinessProbe: {}
-
-  ## Update strategy - only really applicable for deployments with RWO PVs attached
-  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
-  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
-  ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+  hostAliases: []
+  ## @param metrics.updateStrategy.type Solr Prometheus exporter deployment strategy type
+  ## @param metrics.updateStrategy.rollingUpdate Solr Prometheus exporter deployment rolling update configuration parameters
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
     rollingUpdate: {}
-
-  ## Additional environment variables to set
-  ## Example:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: "bar"
-  ##
-  extraEnvVars: []
-
-  ## ConfigMap with extra environment variables
-  ##
-  extraEnvVarsCM:
-
-  ## Secret with extra environment variables
-  ##
-  extraEnvVarsSecret:
-
-  ## Extra volumes to add to the deployment
+  ## @param metrics.extraVolumes Optionally specify extra list of additional volumes for the Solr Prometheus exporter pod(s)
   ##
   extraVolumes: []
-
-  ## Extra volume mounts to add to the container
+  ## @param metrics.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Solr Prometheus exporter container(s)
   ##
   extraVolumeMounts: []
-
-  ## Add init containers to the %%MAIN_CONTAINER_NAME%% pods.
+  ## @param metrics.initContainers Add init containers to the Solr Prometheus exporter pod(s)
   ## Example:
   ## initContainers:
   ##   - name: your-image-name
@@ -620,9 +882,8 @@ exporter:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  initContainers: {}
-
-  ## Add sidecars to the %%MAIN_CONTAINER_NAME%% pods.
+  initContainers: []
+  ## @param metrics.sidecars Add sidecars to the Solr Prometheus exporter pod(s)
   ## Example:
   ## sidecars:
   ##   - name: your-image-name
@@ -632,115 +893,133 @@ exporter:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
-
-  ## Service for the Solr exporter deployment
+  sidecars: []
+  ## Service for the Solr Prometheus exporter deployment
   ##
   service:
-    type: ClusterIP
+    ## @param metrics.service.type Kubernetes Service type
+    ##
+    type: "ClusterIP"
+    ## @param metrics.service.ports.http Solr Prometheus exporter HTTP service port
+    ##
+    ports:
+      http: 9231
+    ## @param metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ##
+    sessionAffinity: None
+    ## @param metrics.service.clusterIP Solr Prometheus exporter service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param metrics.service.annotations annotations for Solr Prometheus exporter service
+    ##
     annotations: {}
+    ## @param metrics.service.labels Additional labels for Solr Prometheus exporter service
+    ##
     labels: {}
-    # HTTP Port
-    port: 9983
-    ## loadBalancerIP for the SuiteCRM Service (optional, cloud specific)
-    ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
-    ##
-    ## loadBalancerIP:
-    ##
-    ## nodePorts:
-    ##   http: <to set explicitly, choose port between 30000-32767>
-    ##   https: <to set explicitly, choose port between 30000-32767>
-    nodePorts:
-      http: ""
-      https: ""
-    ## LoadBalancer source ranges
-    ##
-    loadBalancerSourceRanges:
-  ## Deployment pod host aliases
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ## Prometheus Operator ServiceMonitor configuration
   ##
-  hostAliases: []
+  serviceMonitor:
+    ## @param metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using Prometheus Operator
+    ##
+    enabled: false
+    ## @param metrics.serviceMonitor.namespace Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)
+    ##
+    namespace: ""
+    ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    interval: ""
+    ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.additionalLabels Additional labels that can be used so ServiceMonitor will be discovered by Prometheus
+    ##
+    additionalLabels: {}
+    ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+    ##
+    selector: {}
+    ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+    ##
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
+    ##
+    honorLabels: false
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: ""
+  ## Custom PrometheusRule to be defined
+  ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions
+  ##
+  prometheusRule:
+    ## @param metrics.prometheusRule.enabled Create a custom prometheusRule Resource for scraping metrics using PrometheusOperator
+    ##
+    enabled: false
+    ## @param metrics.prometheusRule.namespace The namespace in which the prometheusRule will be created
+    ##
+    namespace: ""
+    ## @param metrics.prometheusRule.additionalLabels Additional labels for the prometheusRule
+    ##
+    additionalLabels: {}
+    ## @param metrics.prometheusRule.rules Custom Prometheus rules
+    ## e.g:
+    ## rules:
+    ##   - alert: SolrDown
+    ##     expr: solr_up{service="{{ template "common.names.fullname" . }}-exporter"} == 0
+    ##     for: 2m
+    ##     labels:
+    ##       severity: error
+    ##     annotations:
+    ##       summary: Solr instance {{ "{{ $labels.instance }}" }} down
+    ##       description: Solr instance {{ "{{ $labels.instance }}" }} is down
+    ##
+    rules: []
 
-## Configure the ingress resource that allows you to access the
-## Solr installation. Set up the URL
-## ref: http://kubernetes.io/docs/user-guide/ingress/
+## @section ZooKeeper parameters
 ##
-ingress:
-  ## Set to true to enable ingress record generation
-  ##
-  enabled: false
 
-  ## Set this to true in order to add the corresponding annotations for cert-manager
+## ZooKeeper chart configuration
+## ref: https://github.com/bitnami/charts/blob/main/bitnami/zookeeper/values.yaml
+##
+zookeeper:
+  ## @param zookeeper.enabled Enable ZooKeeper deployment. Needed for Solr cloud
   ##
-  certManager: false
-
-  ## Ingress Path type
+  enabled: true
+  ## @param zookeeper.fourlwCommandsWhitelist A list of comma separated Four Letter Words commands that can be executed
   ##
-  pathType: ImplementationSpecific
-
-  ## Override API Version (automatically detected if not set)
+  fourlwCommandsWhitelist: srvr,mntr,conf,ruok
+  ## @param zookeeper.containerPorts.client ZooKeeper client container port
   ##
-  apiVersion:
-
-  ## When the ingress is enabled, a host pointing to this will be created
+  containerPorts:
+    client: 2181
+  ## @param zookeeper.replicaCount Number of ZooKeeper nodes
   ##
-  hostname: solr.local
-
-  ## The Path to Solr. You may need to set this to '/*' in order to use this
-  ## with ALB ingress controllers.
+  replicaCount: 3
+  ## ZooKeeper Persistence parameters
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## @param zookeeper.persistence.enabled Enable persistence on ZooKeeper using PVC(s)
+  ## @param zookeeper.persistence.storageClass Persistent Volume storage class
+  ## @param zookeeper.persistence.accessModes Persistent Volume access modes
+  ## @param zookeeper.persistence.size Persistent Volume size
   ##
-  path: /
-
-  ## Ingress annotations done as key:value pairs
-  ## For a full list of possible ingress annotations, please see
-  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  persistence:
+    enabled: true
+    storageClass: ""
+    accessModes:
+      - ReadWriteOnce
+    size: 8Gi
+## External Zookeeper Configuration
+## All of these values are only used if `zookeeper.enabled=false`
+##
+externalZookeeper:
+  ## @param externalZookeeper.servers List of external zookeeper servers to use
   ##
-  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
-  ##
-  annotations: {}
-
-  ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
-  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
-  ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
-  ##
-  tls: false
-
-  ## The list of additional hostnames to be covered with this ingress record.
-  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
-  ## extraHosts:
-  ## - name: solr.local
-  ##   path: /
-  ##
-
-  ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
-  ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
-  ## extraPaths:
-  ## - path: /*
-  ##   backend:
-  ##     serviceName: ssl-redirect
-  ##     servicePort: use-annotation
-  ##
-
-  ## The tls configuration for additional hostnames to be covered with this ingress record.
-  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-  ## extraTls:
-  ## - hosts:
-  ##     - solr.local
-  ##   secretName: solr.local-tls
-  ##
-
-  ## If you're providing your own certificates, please use this to add the certificates as secrets
-  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
-  ## -----BEGIN RSA PRIVATE KEY-----
-  ##
-  ## name should line up with a tlsSecret set further up
-  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
-  ##
-  ## It is also possible to create and manage the certificates outside of this helm chart
-  ## Please see README.md for more information
-  ##
-  secrets: []
-  ## - name: solr.local-tls
-  ##   key:
-  ##   certificate:
-  ##
+  servers: []

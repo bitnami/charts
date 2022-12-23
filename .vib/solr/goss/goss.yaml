@@ -1,0 +1,34 @@
+command:
+  {{- $auth := printf "SOLR_AUTH_TYPE=basic SOLR_AUTHENTICATION_OPTS=-Dbasicauth=%s:%s" .Vars.auth.adminUsername .Vars.auth.adminPassword }}
+  {{- $collection := printf "test.%s" (randNumeric 5) }}
+  {{- $replicas := .Vars.replicaCount }}
+  solr-manage-collection:
+    exec: |
+      export {{ $auth }} && \
+      solr create_collection -p {{ .Vars.containerPorts.http }} -replicationFactor {{ $replicas }} -c {{ $collection }} && \
+      solr healthcheck -z solr-zookeeper:2181/solr -c {{ $collection }}
+    exit-status: 0
+    stdout:
+      - healthy
+    {{ range $e, $i := until $replicas }}
+      - /solr-{{ $i }}/
+    {{ end }}
+    timeout: 30000
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+    - uid={{ .Vars.containerSecurityContext.runAsUser }}
+    - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
+file:
+  {{ .Vars.persistence.mountPath }}:
+    filetype: directory
+    exists: true
+    mode: "2775"
+    owner: root
+  /scripts/setup.sh:
+    mode: "0755"
+    filetype: file
+    exists: true
+    contains:
+    - SOLR_CLOUD_BOOTSTRAP={{ if .Vars.cloudBootstrap }}yes{{ else }}no{{ end }}

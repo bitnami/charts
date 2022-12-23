@@ -1,0 +1,3 @@
+replicaCount: 3
+containerPorts:
+  http: 8500

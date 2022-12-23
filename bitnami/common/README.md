@@ -7,7 +7,7 @@ A [Helm Library Chart](https://helm.sh/docs/topics/library_charts/#helm) for gro
 ```yaml
 dependencies:
   - name: common
-    version: 0.x.x
+    version: 1.x.x
     repository: https://charts.bitnami.com/bitnami
 ```
 
@@ -28,12 +28,12 @@ data:
 
 This chart provides a common template helpers which can be used to develop new charts using [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 
 ## Parameters
 
@@ -43,22 +43,28 @@ The following table lists the helpers available in the library which are scoped 
 
 | Helper identifier             | Description                                          | Expected Input                                 |
 |-------------------------------|------------------------------------------------------|------------------------------------------------|
-| `common.affinities.node.soft` | Return a soft nodeAffinity definition                | `dict "key" "FOO" "values" (list "BAR" "BAZ")` |
-| `common.affinities.node.hard` | Return a hard nodeAffinity definition                | `dict "key" "FOO" "values" (list "BAR" "BAZ")` |
-| `common.affinities.pod.soft`  | Return a soft podAffinity/podAntiAffinity definition | `dict "component" "FOO" "context" $`           |
-| `common.affinities.pod.hard`  | Return a hard podAffinity/podAntiAffinity definition | `dict "component" "FOO" "context" $`           |
+| `common.affinities.nodes.soft`  | Return a soft nodeAffinity definition                 | `dict "key" "FOO" "values" (list "BAR" "BAZ")`  |
+| `common.affinities.nodes.hard`  | Return a hard nodeAffinity definition                 | `dict "key" "FOO" "values" (list "BAR" "BAZ")`  |
+| `common.affinities.pods.soft`   | Return a soft podAffinity/podAntiAffinity definition  | `dict "component" "FOO" "context" $`            |
+| `common.affinities.pods.hard`   | Return a hard podAffinity/podAntiAffinity definition  | `dict "component" "FOO" "context" $`            |
+| `common.affinities.topologyKey` | Return a topologyKey definition                       | `dict "topologyKey" "FOO"`                      |
 
 ### Capabilities
 
-| Helper identifier                            | Description                                                                                    | Expected Input    |
-|----------------------------------------------|------------------------------------------------------------------------------------------------|-------------------|
-| `common.capabilities.kubeVersion`            | Return the target Kubernetes version (using client default if .Values.kubeVersion is not set). | `.` Chart context |
-| `common.capabilities.deployment.apiVersion`  | Return the appropriate apiVersion for deployment.                                              | `.` Chart context |
-| `common.capabilities.statefulset.apiVersion` | Return the appropriate apiVersion for statefulset.                                             | `.` Chart context |
-| `common.capabilities.ingress.apiVersion`     | Return the appropriate apiVersion for ingress.                                                 | `.` Chart context |
-| `common.capabilities.rbac.apiVersion`        | Return the appropriate apiVersion for RBAC resources.                                          | `.` Chart context |
-| `common.capabilities.crd.apiVersion`         | Return the appropriate apiVersion for CRDs.                                                    | `.` Chart context |
-| `common.capabilities.supportsHelmVersion`    | Returns true if the used Helm version is 3.3+                                                  | `.` Chart context |
+| Helper identifier                              | Description                                                                                    | Expected Input    |
+|------------------------------------------------|------------------------------------------------------------------------------------------------|-------------------|
+| `common.capabilities.kubeVersion`              | Return the target Kubernetes version (using client default if .Values.kubeVersion is not set). | `.` Chart context |
+| `common.capabilities.cronjob.apiVersion`       | Return the appropriate apiVersion for cronjob.                                                 | `.` Chart context |
+| `common.capabilities.deployment.apiVersion`    | Return the appropriate apiVersion for deployment.                                              | `.` Chart context |
+| `common.capabilities.statefulset.apiVersion`   | Return the appropriate apiVersion for statefulset.                                             | `.` Chart context |
+| `common.capabilities.ingress.apiVersion`       | Return the appropriate apiVersion for ingress.                                                 | `.` Chart context |
+| `common.capabilities.rbac.apiVersion`          | Return the appropriate apiVersion for RBAC resources.                                          | `.` Chart context |
+| `common.capabilities.crd.apiVersion`           | Return the appropriate apiVersion for CRDs.                                                    | `.` Chart context |
+| `common.capabilities.policy.apiVersion`        | Return the appropriate apiVersion for podsecuritypolicy.                                       | `.` Chart context |
+| `common.capabilities.networkPolicy.apiVersion` | Return the appropriate apiVersion for networkpolicy.                                           | `.` Chart context |
+| `common.capabilities.apiService.apiVersion`    | Return the appropriate apiVersion for APIService.                                              | `.` Chart context |
+| `common.capabilities.hpa.apiVersion`           | Return the appropriate apiVersion for Horizontal Pod Autoscaler                                | `.` Chart context |
+| `common.capabilities.supportsHelmVersion`      | Returns true if the used Helm version is 3.3+                                                  | `.` Chart context |
 
 ### Errors
 
@@ -71,43 +77,49 @@ The following table lists the helpers available in the library which are scoped 
 | Helper identifier           | Description                                          | Expected Input                                                                                          |
 |-----------------------------|------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
 | `common.images.image`       | Return the proper and full image name                | `dict "imageRoot" .Values.path.to.the.image "global" $`, see [ImageRoot](#imageroot) for the structure. |
-| `common.images.pullSecrets` | Return the proper Docker Image Registry Secret Names | `dict "images" (list .Values.path.to.the.image1, .Values.path.to.the.image2) "global" .Values.global`   |
+| `common.images.pullSecrets` | Return the proper Docker Image Registry Secret Names (deprecated: use common.images.renderPullSecrets instead) | `dict "images" (list .Values.path.to.the.image1, .Values.path.to.the.image2) "global" .Values.global` |
+| `common.images.renderPullSecrets` | Return the proper Docker Image Registry Secret Names (evaluates values as templates) | `dict "images" (list .Values.path.to.the.image1, .Values.path.to.the.image2) "context" $` |
 
 ### Ingress
 
-| Helper identifier        | Description                                                          | Expected Input                                                                                                                                                                   |
-|--------------------------|----------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `common.ingress.backend` | Generate a proper Ingress backend entry depending on the API version | `dict "serviceName" "foo" "servicePort" "bar"`, see the [Ingress deprecation notice](https://kubernetes.io/blog/2019/07/18/api-deprecations-in-1-16/) for the syntax differences |
+| Helper identifier                         | Description                                                                                                       | Expected Input                                                                                                                                                                   |
+|-------------------------------------------|-------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `common.ingress.backend`                  | Generate a proper Ingress backend entry depending on the API version                                              | `dict "serviceName" "foo" "servicePort" "bar"`, see the [Ingress deprecation notice](https://kubernetes.io/blog/2019/07/18/api-deprecations-in-1-16/) for the syntax differences |
+| `common.ingress.supportsPathType`         | Prints "true" if the pathType field is supported                                                                  | `.` Chart context                                                                                                                                                                |
+| `common.ingress.supportsIngressClassname` | Prints "true" if the ingressClassname field is supported                                                          | `.` Chart context                                                                                                                                                                |
+| `common.ingress.certManagerRequest`       | Prints "true" if required cert-manager annotations for TLS signed certificates are set in the Ingress annotations | `dict "annotations" .Values.path.to.the.ingress.annotations`                                                                                                                     |
 
 ### Labels
 
-| Helper identifier           | Description                                          | Expected Input    |
-|-----------------------------|------------------------------------------------------|-------------------|
-| `common.labels.standard`    | Return Kubernetes standard labels                    | `.` Chart context |
-| `common.labels.matchLabels` | Return the proper Docker Image Registry Secret Names | `.` Chart context |
+| Helper identifier           | Description                                                                 | Expected Input    |
+|-----------------------------|-----------------------------------------------------------------------------|-------------------|
+| `common.labels.standard`    | Return Kubernetes standard labels                                           | `.` Chart context |
+| `common.labels.matchLabels` | Labels to use on `deploy.spec.selector.matchLabels` and `svc.spec.selector` | `.` Chart context |
 
 ### Names
 
-| Helper identifier       | Description                                                | Expected Inpput   |
-|-------------------------|------------------------------------------------------------|-------------------|
-| `common.names.name`     | Expand the name of the chart or use `.Values.nameOverride` | `.` Chart context |
-| `common.names.fullname` | Create a default fully qualified app name.                 | `.` Chart context |
-| `common.names.chart`    | Chart name plus version                                    | `.` Chart context |
+| Helper identifier                 | Description                                                           | Expected Input    |
+|-----------------------------------|-----------------------------------------------------------------------|-------------------|
+| `common.names.name`               | Expand the name of the chart or use `.Values.nameOverride`            | `.` Chart context |
+| `common.names.fullname`           | Create a default fully qualified app name.                            | `.` Chart context |
+| `common.names.namespace`          | Allow the release namespace to be overridden                          | `.` Chart context |
+| `common.names.fullname.namespace` | Create a fully qualified app name adding the installation's namespace | `.` Chart context |
+| `common.names.chart`              | Chart name plus version                                               | `.` Chart context |
 
 ### Secrets
 
-| Helper identifier         | Description                                                  | Expected Input                                                                                                                                                                                                                  |
-|---------------------------|--------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `common.secrets.name`     | Generate the name of the secret.                             | `dict "existingSecret" .Values.path.to.the.existingSecret "defaultNameSuffix" "mySuffix" "context" $` see [ExistingSecret](#existingsecret) for the structure.                                                                  |
-| `common.secrets.key`      | Generate secret key.                                         | `dict "existingSecret" .Values.path.to.the.existingSecret "key" "keyName"` see [ExistingSecret](#existingsecret) for the structure.                                                                                             |
-| `common.passwords.manage` | Generate secret password or retrieve one if already created. | `dict "secret" "secret-name" "key" "keyName" "providedValues" (list "path.to.password1" "path.to.password2") "length" 10 "strong" false "chartName" "chartName" "context" $`, length, strong and chartNAme fields are optional. |
-| `common.secrets.exists`   | Returns whether a previous generated secret already exists.  | `dict "secret" "secret-name" "context" $`                                                                                                                                                                                       |
+| Helper identifier                 | Description                                                  | Expected Input                                                                                                                                                                                                                  |
+|-----------------------------------|--------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `common.secrets.name`             | Generate the name of the secret.                             | `dict "existingSecret" .Values.path.to.the.existingSecret "defaultNameSuffix" "mySuffix" "context" $` see [ExistingSecret](#existingsecret) for the structure.                                                                  |
+| `common.secrets.key`              | Generate secret key.                                         | `dict "existingSecret" .Values.path.to.the.existingSecret "key" "keyName"` see [ExistingSecret](#existingsecret) for the structure.                                                                                             |
+| `common.secrets.passwords.manage` | Generate secret password or retrieve one if already created. | `dict "secret" "secret-name" "key" "keyName" "providedValues" (list "path.to.password1" "path.to.password2") "length" 10 "strong" false "chartName" "chartName" "context" $`, length, strong and chartNAme fields are optional. |
+| `common.secrets.exists`           | Returns whether a previous generated secret already exists.  | `dict "secret" "secret-name" "context" $`                                                                                                                                                                                       |
 
 ### Storage
 
 | Helper identifier             | Description                           | Expected Input                                                                                                      |
 |-------------------------------|---------------------------------------|---------------------------------------------------------------------------------------------------------------------|
-| `common.affinities.node.soft` | Return a soft nodeAffinity definition | `dict "persistence" .Values.path.to.the.persistence "global" $`, see [Persistence](#persistence) for the structure. |
+| `common.storage.class` | Return  the proper Storage Class | `dict "persistence" .Values.path.to.the.persistence "global" $`, see [Persistence](#persistence) for the structure. |
 
 ### TplValues
 
@@ -131,8 +143,9 @@ The following table lists the helpers available in the library which are scoped 
 | `common.validations.values.single.empty`         | Validate a value must not be empty.                                                                                           | `dict "valueKey" "path.to.value" "secret" "secret.name" "field" "my-password" "subchart" "subchart" "context" $` secret, field and subchart are optional. In case they are given, the helper will generate a how to get instruction. See [ValidateValue](#validatevalue) |
 | `common.validations.values.multiple.empty`       | Validate a multiple values must not be empty. It returns a shared error for all the values.                                   | `dict "required" (list $validateValueConf00 $validateValueConf01) "context" $`. See [ValidateValue](#validatevalue)                                                                                                                                                      |
 | `common.validations.values.mariadb.passwords`    | This helper will ensure required password for MariaDB are not empty. It returns a shared error for all the values.            | `dict "secret" "mariadb-secret" "subchart" "true" "context" $` subchart field is optional and could be true or false it depends on where you will use mariadb chart and the helper.                                                                                      |
+| `common.validations.values.mysql.passwords`      | This helper will ensure required password for MySQL are not empty. It returns a shared error for all the values.              | `dict "secret" "mysql-secret" "subchart" "true" "context" $` subchart field is optional and could be true or false it depends on where you will use mysql chart and the helper.                                                                                      |
 | `common.validations.values.postgresql.passwords` | This helper will ensure required password for PostgreSQL are not empty. It returns a shared error for all the values.         | `dict "secret" "postgresql-secret" "subchart" "true" "context" $` subchart field is optional and could be true or false it depends on where you will use postgresql chart and the helper.                                                                                |
-| `common.validations.values.redis.passwords`      | This helper will ensure required password for Redis<sup>TM</sup> are not empty. It returns a shared error for all the values. | `dict "secret" "redis-secret" "subchart" "true" "context" $` subchart field is optional and could be true or false it depends on where you will use redis chart and the helper.                                                                                          |
+| `common.validations.values.redis.passwords`      | This helper will ensure required password for Redis&reg; are not empty. It returns a shared error for all the values. | `dict "secret" "redis-secret" "subchart" "true" "context" $` subchart field is optional and could be true or false it depends on where you will use redis chart and the helper.                                                                                          |
 | `common.validations.values.cassandra.passwords`  | This helper will ensure required password for Cassandra are not empty. It returns a shared error for all the values.          | `dict "secret" "cassandra-secret" "subchart" "true" "context" $` subchart field is optional and could be true or false it depends on where you will use cassandra chart and the helper.                                                                                  |
 | `common.validations.values.mongodb.passwords`    | This helper will ensure required password for MongoDB&reg; are not empty. It returns a shared error for all the values.            | `dict "secret" "mongodb-secret" "subchart" "true" "context" $` subchart field is optional and could be true or false it depends on where you will use mongodb chart and the helper.                                                                                      |
 
@@ -170,7 +183,7 @@ pullSecrets:
   type: array
   items:
     type: string
-  description: Optionally specify an array of imagePullSecrets.
+  description: Optionally specify an array of imagePullSecrets (evaluated as templates).
 
 debug:
   type: boolean
@@ -290,11 +303,11 @@ If we force those values to be empty we will see some alerts
 $ helm install test mychart --set path.to.value00="",path.to.value01=""
     'path.to.value00' must not be empty, please add '--set path.to.value00=$PASSWORD_00' to the command. To get the current value:
 
-        export PASSWORD_00=$(kubectl get secret --namespace default secretName -o jsonpath="{.data.password-00}" | base64 --decode)
+        export PASSWORD_00=$(kubectl get secret --namespace default secretName -o jsonpath="{.data.password-00}" | base64 -d)
 
     'path.to.value01' must not be empty, please add '--set path.to.value01=$PASSWORD_01' to the command. To get the current value:
 
-        export PASSWORD_01=$(kubectl get secret --namespace default secretName -o jsonpath="{.data.password-01}" | base64 --decode)
+        export PASSWORD_01=$(kubectl get secret --namespace default secretName -o jsonpath="{.data.password-01}" | base64 -d)
 ```
 
 ## Upgrading
@@ -320,3 +333,19 @@ $ helm install test mychart --set path.to.value00="",path.to.value01=""
 - https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
 - https://helm.sh/docs/topics/v2_v3_migration/
 - https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

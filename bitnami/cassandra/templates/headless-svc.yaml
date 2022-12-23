@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "common.names.fullname" . }}-headless
-  namespace: {{ .Release.Namespace }}
+  name: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -30,11 +30,6 @@ spec:
       port: 7199
       targetPort: jmx
     - name: cql
-      port: {{ .Values.service.port }}
+      port: {{ .Values.service.ports.cql }}
       targetPort: cql
-    {{- if .Values.cluster.enableRPC }}
-    - name: thrift
-      port: {{ .Values.service.thriftPort }}
-      targetPort: thrift
-    {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}

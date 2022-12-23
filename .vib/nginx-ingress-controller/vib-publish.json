@@ -1,0 +1,86 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/nginx-ingress-controller"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/nginx-ingress-controller"
+        },
+        "runtime_parameters": "Y29udGFpbmVyUG9ydHM6CiAgaHR0cDogODAKICBodHRwczogNDQzCmluZ3Jlc3NDbGFzc1Jlc291cmNlOgogIG5hbWU6IG5naW54CiAgZW5hYmxlZDogdHJ1ZQogIGRlZmF1bHQ6IGZhbHNlCiAgY29udHJvbGxlckNsYXNzOiAiazhzLmlvL2luZ3Jlc3MtbmdpbngiCmtpbmQ6IERlcGxveW1lbnQKcG9kU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBmc0dyb3VwOiAxMDAyCmNvbnRhaW5lclNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgcnVuQXNVc2VyOiAxMDAyCiAgY2FwYWJpbGl0aWVzOgogICAgZHJvcDogWyJBTEwiXQogICAgYWRkOiBbIk5FVF9CSU5EX1NFUlZJQ0UiXQpkZWZhdWx0QmFja2VuZDoKICBlbmFibGVkOiB0cnVlCiAgY29udGFpbmVyUG9ydDogODA4MAogIHNlcnZlckJsb2NrQ29uZmlnOiB8LQogICAgbG9jYXRpb24gL2hlYWx0aHogewogICAgICByZXR1cm4gMjAwOwogICAgfQogICAgbG9jYXRpb24gLyB7CiAgICAgIHJldHVybiA0MDQ7CiAgICB9CnNlcnZpY2U6CiAgcG9ydHM6IAogICAgaHR0cDogODAKICAgIGh0dHBzOiA0NDQKICB0eXBlOiBMb2FkQmFsYW5jZXIKc2VydmljZUFjY291bnQ6CiAgY3JlYXRlOiB0cnVlCiAgYXV0b21vdW50U2VydmljZUFjY291bnRUb2tlbjogdHJ1ZQpyYmFjOgogIGNyZWF0ZTogdHJ1ZQpleHRyYURlcGxveToKLSBhcGlWZXJzaW9uOiBhcHBzL3YxCiAga2luZDogRGVwbG95bWVudAogIG1ldGFkYXRhOgogICAgbGFiZWxzOgogICAgICBhcHA6IGt1YXJkCiAgICBuYW1lOiBrdWFyZAogIHNwZWM6CiAgICByZXBsaWNhczogMQogICAgc2VsZWN0b3I6CiAgICAgIG1hdGNoTGFiZWxzOgogICAgICAgIGFwcDoga3VhcmQKICAgIHRlbXBsYXRlOgogICAgICBtZXRhZGF0YToKICAgICAgICBsYWJlbHM6CiAgICAgICAgICBhcHA6IGt1YXJkCiAgICAgIHNwZWM6CiAgICAgICAgY29udGFpbmVyczoKICAgICAgICAtIGltYWdlOiBnY3IuaW8va3Vhci1kZW1vL2t1YXJkLWFtZDY0OjEKICAgICAgICAgIG5hbWU6IGt1YXJkCi0gYXBpVmVyc2lvbjogdjEKICBraW5kOiBTZXJ2aWNlCiAgbWV0YWRhdGE6CiAgICBsYWJlbHM6CiAgICAgIGFwcDoga3VhcmQKICAgIG5hbWU6IGt1YXJkLXZpYgogIHNwZWM6CiAgICBwb3J0czoKICAgIC0gcG9ydDogODAKICAgICAgcHJvdG9jb2w6IFRDUAogICAgICB0YXJnZXRQb3J0OiA4MDgwCiAgICAgIG5hbWU6IGh0dHAKICAgIC0gcG9ydDogNDQzCiAgICAgIHByb3RvY29sOiBUQ1AKICAgICAgdGFyZ2V0UG9ydDogNDQzCiAgICAgIG5hbWU6IGh0dHBzCiAgICBzZWxlY3RvcjoKICAgICAgYXBwOiBrdWFyZAogICAgc2Vzc2lvbkFmZmluaXR5OiBOb25lCiAgICB0eXBlOiBDbHVzdGVySVA=",
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "health-check",
+          "params": {
+            "endpoint": "lb-nginx-ingress-controller-http",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/nginx-ingress-controller/goss"
+            },
+            "remote": {
+              "workload": "deploy-nginx-ingress-controller"
+            },
+            "vars_file": "vars.yaml"
+          }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/nginx-ingress-controller/ginkgo"
+
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "service-name": "kuard-vib",
+              "service-port": "80"
+            }
+          }
+        }
+      ]
+    },
+    "publish": {
+      "actions": [
+        {
+          "action_id": "helm-publish",
+          "params": {
+            "repository": {
+              "kind": "S3",
+              "url": "{VIB_ENV_S3_URL}",
+              "username": "{VIB_ENV_S3_USERNAME}",
+              "password": "{VIB_ENV_S3_PASSWORD}"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

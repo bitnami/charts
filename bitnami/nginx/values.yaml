@@ -1,22 +1,81 @@
+## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
 ##
-# global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+
+## @section Common parameters
+
+## @param nameOverride String to partially override nginx.fullname template (will maintain the release name)
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override nginx.fullname template
+##
+fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion: ""
+## @param clusterDomain Kubernetes Cluster Domain
+##
+clusterDomain: cluster.local
+## @param extraDeploy Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
+## @param commonLabels Add labels to all the deployed resources
+##
+commonLabels: {}
+## @param commonAnnotations Add annotations to all the deployed resources
+##
+commonAnnotations: {}
+
+## Enable diagnostic mode in the deployment(s)/statefulset(s)
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the the deployment(s)/statefulset(s)
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the the deployment(s)/statefulset(s)
+  ##
+  args:
+    - infinity
+
+## @section NGINX parameters
 
 ## Bitnami NGINX image version
 ## ref: https://hub.docker.com/r/bitnami/nginx/tags/
+## @param image.registry NGINX image registry
+## @param image.repository NGINX image repository
+## @param image.tag NGINX image tag (immutable tags are recommended)
+## @param image.digest NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param image.pullPolicy NGINX image pull policy
+## @param image.pullSecrets Specify docker-registry secret names as an array
+## @param image.debug Set to true if you would like to see extra information on logs
 ##
 image:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.19.7-debian-10-r6
+  tag: 1.23.2-debian-11-r11
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -30,103 +89,396 @@ image:
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
-
-## String to partially override nginx.fullname template (will maintain the release name)
-##
-# nameOverride:
-
-## String to fully override nginx.fullname template
-##
-# fullnameOverride:
-
-## Force target Kubernetes version (using Helm capabilites if not set)
-##
-kubeVersion:
-
-## Deployment pod host aliases
+## @param hostAliases Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-
-## Kubernetes Cluster Domain
-##
-clusterDomain: cluster.local
-
-## Extra objects to deploy (value evaluated as a template)
-##
-extraDeploy: []
-
-## Add labels to all the deployed resources
-##
-commonLabels: {}
-
-## Add annotations to all the deployed resources
-##
-commonAnnotations: {}
-
 ## Command and args for running the container (set to default if not set). Use array form
+## @param command Override default container command (useful when using custom images)
+## @param args Override default container args (useful when using custom images)
 ##
-# command:
-# args:
-
-## Additional environment variables to set
+command: []
+args: []
+## @param extraEnvVars Extra environment variables to be set on NGINX containers
 ## E.g:
 ## extraEnvVars:
 ##   - name: FOO
 ##     value: BAR
 ##
 extraEnvVars: []
-
-## ConfigMap with extra environment variables
+## @param extraEnvVarsCM ConfigMap with extra environment variables
 ##
-# extraEnvVarsCM:
-
-## Secret with extra environment variables
+extraEnvVarsCM: ""
+## @param extraEnvVarsSecret Secret with extra environment variables
 ##
-# extraEnvVarsSecret:
+extraEnvVarsSecret: ""
+
+## @section NGINX deployment parameters
+
+## @param replicaCount Number of NGINX replicas to deploy
+##
+replicaCount: 1
+## @param updateStrategy.type NGINX deployment strategy type
+## @param updateStrategy.rollingUpdate NGINX deployment rolling update configuration parameters
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+##
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate: {}
+## @param podLabels Additional labels for NGINX pods
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+## @param podAnnotations Annotations for NGINX pods
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAffinityPreset: ""
+## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAntiAffinityPreset: soft
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+##
+nodeAffinityPreset:
+  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ##
+  type: ""
+  ## @param nodeAffinityPreset.key Node label key to match Ignored if `affinity` is set.
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+## @param affinity Affinity for pod assignment
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+##
+affinity: {}
+## @param hostNetwork Specify if host network should be enabled for NGINX pod
+##
+hostNetwork: false
+## @param hostIPC Specify if host IPC should be enabled for NGINX pod
+##
+hostIPC: false
+## @param nodeSelector Node labels for pod assignment. Evaluated as a template.
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+## @param tolerations Tolerations for pod assignment. Evaluated as a template.
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+## @param priorityClassName NGINX pods' priorityClassName
+##
+priorityClassName: ""
+## @param schedulerName Name of the k8s scheduler (other than default)
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param terminationGracePeriodSeconds In seconds, time the given to the NGINX pod needs to terminate gracefully
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+##
+terminationGracePeriodSeconds: ""
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
+## NGINX pods' Security Context.
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param podSecurityContext.enabled Enabled NGINX pods' Security Context
+## @param podSecurityContext.fsGroup Set NGINX pod's Security Context fsGroup
+## @param podSecurityContext.sysctls sysctl settings of the NGINX pods
+##
+podSecurityContext:
+  enabled: false
+  fsGroup: 1001
+  ## sysctl settings
+  ## Example:
+  ## sysctls:
+  ## - name: net.core.somaxconn
+  ##   value: "10000"
+  ##
+  sysctls: []
+## NGINX containers' Security Context.
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+## @param containerSecurityContext.enabled Enabled NGINX containers' Security Context
+## @param containerSecurityContext.runAsUser Set NGINX container's Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set NGINX container's Security Context runAsNonRoot
+##
+containerSecurityContext:
+  enabled: false
+  runAsUser: 1001
+  runAsNonRoot: true
+## Configures the ports NGINX listens on
+## @param containerPorts.http Sets http port inside NGINX container
+## @param containerPorts.https Sets https port inside NGINX container
+##
+containerPorts:
+  http: 8080
+  https: ""
+## @param extraContainerPorts Array of additional container ports for the Nginx container
+## e.g:
+## extraContainerPorts:
+##   - name: grpc
+##     containerPort: 4317
+##
+extraContainerPorts: []
+## NGINX containers' resource requests and limits
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## We usually recommend not to specify default resources and to leave this as a conscious
+## choice for the user. This also increases chances charts run on environments with little
+## resources, such as Minikube. If you do want to specify resources, uncomment the following
+## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+## @param resources.limits The resources limits for the NGINX container
+## @param resources.requests The requested resources for the NGINX container
+##
+resources:
+  ## Example:
+  ## limits:
+  ##    cpu: 100m
+  ##    memory: 128Mi
+  limits: {}
+  ## Examples:
+  ## requests:
+  ##    cpu: 100m
+  ##    memory: 128Mi
+  requests: {}
+
+## NGINX containers' lifecycleHooks
+## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/
+## If you do want to specify lifecycleHooks, uncomment the following
+## lines, adjust them as necessary, and remove the curly braces on 'lifecycle:{}'.
+## @param lifecycleHooks Optional lifecycleHooks for the NGINX container
+lifecycleHooks: {}
+  ## Example:
+  ## postStart:
+  ##   exec:
+  ##     command: ["/bin/sh", "-c", "echo Hello from the postStart handler > /usr/share/message"]
+  ## Example:
+  ## preStop:
+  ##   exec:
+  ##     command: ["/bin/sleep", "20"]
+  ##     command: ["/bin/sh","-c","nginx -s quit; while killall -0 nginx; do sleep 1; done"]
+
+## NGINX containers' startup probe.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 30
+  timeoutSeconds: 5
+  periodSeconds: 10
+  failureThreshold: 6
+  successThreshold: 1
+## NGINX containers' liveness probe.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+## @param livenessProbe.enabled Enable livenessProbe
+## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+## @param livenessProbe.periodSeconds Period seconds for livenessProbe
+## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
+## @param livenessProbe.successThreshold Success threshold for livenessProbe
+##
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 30
+  timeoutSeconds: 5
+  periodSeconds: 10
+  failureThreshold: 6
+  successThreshold: 1
+## NGINX containers' readiness probe.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+## @param readinessProbe.enabled Enable readinessProbe
+## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+## @param readinessProbe.periodSeconds Period seconds for readinessProbe
+## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
+## @param readinessProbe.successThreshold Success threshold for readinessProbe
+##
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  timeoutSeconds: 3
+  periodSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+## @param customStartupProbe Custom liveness probe for the Web component
+##
+customStartupProbe: {}
+## @param customLivenessProbe Override default liveness probe
+##
+customLivenessProbe: {}
+## @param customReadinessProbe Override default readiness probe
+##
+customReadinessProbe: {}
+## Autoscaling parameters
+## @param autoscaling.enabled Enable autoscaling for NGINX deployment
+## @param autoscaling.minReplicas Minimum number of replicas to scale back
+## @param autoscaling.maxReplicas Maximum number of replicas to scale out
+## @param autoscaling.targetCPU Target CPU utilization percentage
+## @param autoscaling.targetMemory Target Memory utilization percentage
+##
+autoscaling:
+  enabled: false
+  minReplicas: ""
+  maxReplicas: ""
+  targetCPU: ""
+  targetMemory: ""
+## @param extraVolumes Array to add extra volumes
+##
+extraVolumes: []
+## @param extraVolumeMounts Array to add extra mount
+##
+extraVolumeMounts: []
+## Pods Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## @param serviceAccount.create Enable creation of ServiceAccount for nginx pod
+  ##
+  create: false
+  ## @param serviceAccount.name The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the `common.names.fullname` template
+  name: ""
+  ## @param serviceAccount.annotations Annotations for service account. Evaluated as a template.
+  ## Only used if `create` is `true`.
+  ##
+  annotations: {}
+  ## @param serviceAccount.automountServiceAccountToken Auto-mount the service account token in the pod
+  ##
+  automountServiceAccountToken: false
+## @param sidecars Sidecar parameters
+## e.g:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: []
+
+## @param sidecarSingleProcessNamespace Enable sharing the process namespace with sidecars
+## This will switch pod.spec.shareProcessNamespace parameter
+##
+sidecarSingleProcessNamespace: false
+
+## @param initContainers Extra init containers
+##
+initContainers: []
+## Pod Disruption Budget configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+##
+pdb:
+  ## @param pdb.create Created a PodDisruptionBudget
+  ##
+  create: false
+  ## @param pdb.minAvailable Min number of pods that must still be available after the eviction
+  ##
+  minAvailable: 1
+  ## @param pdb.maxUnavailable Max number of pods that can be unavailable after the eviction
+  ##
+  maxUnavailable: 0
+
+## @section Custom NGINX application parameters
 
 ## Get the server static content from a git repository
 ## NOTE: This will override staticSiteConfigmap and staticSitePVC
 ##
 cloneStaticSiteFromGit:
+  ## @param cloneStaticSiteFromGit.enabled Get the server static content from a Git repository
+  ##
   enabled: false
   ## Bitnami Git image version
   ## ref: https://hub.docker.com/r/bitnami/git/tags/
+  ## @param cloneStaticSiteFromGit.image.registry Git image registry
+  ## @param cloneStaticSiteFromGit.image.repository Git image repository
+  ## @param cloneStaticSiteFromGit.image.tag Git image tag (immutable tags are recommended)
+  ## @param cloneStaticSiteFromGit.image.digest Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param cloneStaticSiteFromGit.image.pullPolicy Git image pull policy
+  ## @param cloneStaticSiteFromGit.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.30.1-debian-10-r13
+    tag: 2.38.1-debian-11-r11
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
     ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-  ## Repository to clone static content from
+    pullSecrets: []
+  ## @param cloneStaticSiteFromGit.repository Git Repository to clone static content from
   ##
-  # repository:
-  ## Branch inside the git repository
+  repository: ""
+  ## @param cloneStaticSiteFromGit.branch Git branch to checkout
   ##
-  # branch:
-  ## Interval for sidecar container pull from the repository
+  branch: ""
+  ## @param cloneStaticSiteFromGit.interval Interval for sidecar container pull from the Git repository
   ##
   interval: 60
-
-  ## Additional environment variables to set for the in the containers that clone static site from git
+  ## Additional configuration for git-clone-repository initContainer
+  ##
+  gitClone:
+    ## @param cloneStaticSiteFromGit.gitClone.command Override default container command for git-clone-repository
+    ##
+    command: []
+    ## @param cloneStaticSiteFromGit.gitClone.args Override default container args for git-clone-repository
+    ##
+    args: []
+  ## Additional configuration for the git-repo-syncer container
+  ##
+  gitSync:
+    ## @param cloneStaticSiteFromGit.gitSync.command Override default container command for git-repo-syncer
+    ##
+    command: []
+    ## @param cloneStaticSiteFromGit.gitSync.args Override default container args for git-repo-syncer
+    ##
+    args: []
+  ## @param cloneStaticSiteFromGit.extraEnvVars Additional environment variables to set for the in the containers that clone static site from git
   ## E.g:
   ## extraEnvVars:
   ##   - name: FOO
   ##     value: BAR
   ##
   extraEnvVars: []
-
-## Custom server block to be added to NGINX configuration
+  ## @param cloneStaticSiteFromGit.extraVolumeMounts Add extra volume mounts for the Git containers
+  ## Useful to mount keys to connect through ssh. (normally used with extraVolumes)
+  ## E.g:
+  ## extraVolumeMounts:
+  ##   - name: ssh-dir
+  ##     mountPath: /root/.ssh/
+  ##
+  extraVolumeMounts: []
+## @param serverBlock Custom server block to be added to NGINX configuration
 ## PHP-FPM example server block:
 ## serverBlock: |-
 ##   server {
@@ -142,440 +494,139 @@ cloneStaticSiteFromGit:
 ##     }
 ##   }
 ##
-# serverBlock:
-
-## ConfigMap with custom server block to be added to NGINX configuration
+serverBlock: ""
+## @param existingServerBlockConfigmap ConfigMap with custom server block to be added to NGINX configuration
 ## NOTE: This will override serverBlock
 ##
-# existingServerBlockConfigmap:
-
-## Name of existing ConfigMap with the server static site content
+existingServerBlockConfigmap: ""
+## @param staticSiteConfigmap Name of existing ConfigMap with the server static site content
 ##
-# staticSiteConfigmap
-
-## Name of existing PVC with the server static site content
+staticSiteConfigmap: ""
+## @param staticSitePVC Name of existing PVC with the server static site content
 ## NOTE: This will override staticSiteConfigmap
 ##
-# staticSitePVC
+staticSitePVC: ""
 
-## Number of replicas to deploy
-##
-replicaCount: 1
-
-## Pod extra labels
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-##
-podLabels: {}
-
-## Pod annotations
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-##
-podAnnotations: {}
-
-## Pod affinity preset
-## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
-##
-podAffinityPreset: ""
-
-## Pod anti-affinity preset
-## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
-##
-podAntiAffinityPreset: soft
-
-## Node affinity preset
-## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-## Allowed values: soft, hard
-##
-nodeAffinityPreset:
-  ## Node affinity type
-  ## Allowed values: soft, hard
-  ##
-  type: ""
-  ## Node label key to match
-  ## E.g.
-  ## key: "kubernetes.io/e2e-az-name"
-  ##
-  key: ""
-  ## Node label values to match
-  ## E.g.
-  ## values:
-  ##   - e2e-az1
-  ##   - e2e-az2
-  ##
-  values: []
-
-## Affinity for pod assignment
-## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
-##
-affinity: {}
-
-## Node labels for pod assignment. Evaluated as a template.
-## Ref: https://kubernetes.io/docs/user-guide/node-selection/
-##
-nodeSelector: {}
-
-## Tolerations for pod assignment. Evaluated as a template.
-## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-##
-tolerations: {}
-
-## NGINX pods' Security Context.
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-##
-podSecurityContext:
-  enabled: false
-  fsGroup: 1001
-
-## NGINX Core containers' Security Context (only main container).
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-##
-containerSecurityContext:
-  enabled: false
-  runAsUser: 1001
-  runAsNonRoot: true
-  ## sysctl settings
-  ## Example:
-  ## sysctls:
-  ## - name: net.core.somaxconn
-  ##   value: "10000"
-  ##
-  sysctls: {}
-
-## Configures the ports NGINX listens on
-##
-containerPorts:
-  http: 8080
-  # https: 8443
-
-## NGINX containers' resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-##
-resources:
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  limits: {}
-  #   cpu: 100m
-  #   memory: 128Mi
-  requests: {}
-  #   cpu: 100m
-  #   memory: 128Mi
-
-## NGINX containers' liveness and readiness probes.
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-##
-livenessProbe:
-  enabled: true
-  initialDelaySeconds: 30
-  timeoutSeconds: 5
-  periodSeconds: 10
-  failureThreshold: 6
-  successThreshold: 1
-readinessProbe:
-  enabled: true
-  initialDelaySeconds: 5
-  timeoutSeconds: 3
-  periodSeconds: 5
-  failureThreshold: 3
-  successThreshold: 1
-
-## Custom Liveness probe
-##
-customLivenessProbe: {}
-
-## Custom Rediness probe
-##
-customReadinessProbe: {}
-
-## Autoscaling parameters
-##
-autoscaling:
-  enabled: false
-  # minReplicas: 1
-  # maxReplicas: 10
-  # targetCPU: 50
-  # targetMemory: 50
-
-## Array to add extra volumes (evaluated as a template)
-##
-extraVolumes: []
-
-## Array to add extra mounts (normally used with extraVolumes, evaluated as a template)
-##
-extraVolumeMounts: []
-
-## Pods Service Account
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
-##
-serviceAccount:
-  ## Specifies whether a ServiceAccount should be created
-  ##
-  create: false
-  ## The name of the ServiceAccount to use.
-  ## If not set and create is true, a name is generated using the `common.names.fullname` template
-  # name:
-
-  ## Annotations for service account. Evaluated as a template.
-  ## Only used if `create` is `true`.
-  ##
-  annotations: {}
+## @section Traffic Exposure parameters
 
 ## NGINX Service properties
 ##
 service:
-  ## Service type
+  ## @param service.type Service type
   ##
   type: LoadBalancer
-
-  ## HTTP Port
+  ## @param service.ports.http Service HTTP port
+  ## @param service.ports.https Service HTTPS port
   ##
-  port: 80
-
-  ## HTTPS Port
+  ports:
+    http: 80
+    https: 443
   ##
-  httpsPort: 443
-
-  ## Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.
+  ## @param service.nodePorts [object] Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
   nodePorts:
     http: ""
     https: ""
-
-  ## Target port reference value for the Loadbalancer service types can be specified explicitly.
+  ## @param service.targetPort [object] Target port reference value for the Loadbalancer service types can be specified explicitly.
   ## Listeners for the Loadbalancer can be custom mapped to the http or https service.
   ## Example: Mapping the https listener to targetPort http [http: https]
   ##
   targetPort:
     http: http
     https: https
-
-  ## Set the LoadBalancer service type to internal only.
+  ## @param service.clusterIP NGINX service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
+  ##
+  clusterIP: ""
+  ## @param service.loadBalancerIP LoadBalancer service IP address
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
-  # loadBalancerIP:
-
-  ## Provide any additional annotations which may be required. This can be used to
-  ## set the LoadBalancer service type to internal only.
+  loadBalancerIP: ""
+  ## @param service.loadBalancerSourceRanges NGINX service Load Balancer sources
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
+  ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
+  ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  ## If "ClientIP", consecutive client requests will be directed to the same Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
+  ## @param service.annotations Service annotations
+  ## This can be used to set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
   annotations: {}
-
-  ## Enable client source IP preservation
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ## @param service.externalTrafficPolicy Enable client source IP preservation
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
-
-## LDAP Auth Daemon Properties
-##
-## Daemon that will proxy LDAP requests
-## between NGINX and a given LDAP Server
-##
-ldapDaemon:
-
-  enabled: false
-
-  ## Bitnami NGINX LDAP Auth Daemon image
-  ## ref: https://hub.docker.com/r/bitnami/nginx-ldap-auth-daemon/tags/
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/nginx-ldap-auth-daemon
-    tag: 0.20200116.0-debian-10-r262
-    pullPolicy: IfNotPresent
-
-  ## LDAP Daemon port
-  ##
-  port: 8888
-
-  ## LDAP Auth Daemon Configuration
-  ##
-  ## These different properties define the form of requests performed
-  ## against the given LDAP server
-  ##
-  ## BEWARE THAT THESE VALUES WILL BE IGNORED IF A CUSTOM LDAP SERVER BLOCK
-  ## ALREADY SPECIFIES THEM.
-  ##
-  ##
-  ldapConfig:
-
-    ## LDAP URI where to query the server
-    ## Must follow the pattern -> ldap[s]:/<hostname>:<port>
-    ##
-    uri: ""
-
-    ## LDAP search base DN
-    ##
-    baseDN: ""
-
-    ## LDAP bind DN
-    ##
-    bindDN: ""
-
-    ## LDAP bind Password
-    ##
-    bindPassword: ""
-
-    ## LDAP search filter
-    ##
-    filter: ""
-
-    ## LDAP auth realm
-    ##
-    httpRealm: ""
-
-    ## LDAP cookie name
-    ##
-    httpCookieName: ""
-
-  ## NGINX Configuration File containing the directives (that define
-  ## how LDAP requests are performed) and tells NGINX to use the LDAP Daemon
-  ## as proxy. Besides, it defines the routes that will require of LDAP auth
-  ## in order to be accessed.
-  ##
-  ## If LDAP directives are provided, they will take precedence over
-  ## the ones specified in ldapConfig.
-  ##
-  ## This will be evaluated as a template.
-  ##
-  ##
-
-  nginxServerBlock: |-
-    server {
-    listen 0.0.0.0:{{ .Values.containerPorts.http }};
-
-    # You can provide a special subPath or the root
-    location = / {
-        auth_request /auth-proxy;
-    }
-
-    location = /auth-proxy {
-        internal;
-
-        proxy_pass http://127.0.0.1:{{ .Values.ldapDaemon.port }};
-
-        ###############################################################
-        # YOU SHOULD CHANGE THE FOLLOWING TO YOUR LDAP CONFIGURATION  #
-        ###############################################################
-
-        # URL and port for connecting to the LDAP server
-        # proxy_set_header X-Ldap-URL "ldap://YOUR_LDAP_SERVER_IP:YOUR_LDAP_SERVER_PORT";
-
-        # Base DN
-        # proxy_set_header X-Ldap-BaseDN "dc=example,dc=org";
-
-        # Bind DN
-        # proxy_set_header X-Ldap-BindDN "cn=admin,dc=example,dc=org";
-
-        # Bind password
-        # proxy_set_header X-Ldap-BindPass "adminpassword";
-    }
-    }
-
-  ## Use an existing Secret holding an NGINX Configuration file that
-  ## configures LDAP requests. (will be evaluated as a template)
-  ##
-  ## If provided, both nginxServerBlock and ldapConfig properties are ignored.
-  ##
-  existingNginxServerBlockSecret:
-
-  ## LDAP Auth Daemon containers' liveness and readiness probes.
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-  ##
-  livenessProbe:
-    enabled: true
-    initialDelaySeconds: 30
-    timeoutSeconds: 5
-    periodSeconds: 10
-    failureThreshold: 6
-    successThreshold: 1
-  readinessProbe:
-    enabled: true
-    initialDelaySeconds: 5
-    timeoutSeconds: 3
-    periodSeconds: 5
-    failureThreshold: 3
-    successThreshold: 1
-
-  ## Custom Liveness probe
-  ##
-  customLivenessProbe: {}
-
-  ## Custom Rediness probe
-  ##
-  customReadinessProbe: {}
-
-## Sidecar parameters
-##
-# sidecars:
-#   - name: your-image-name
-#     image: your-image
-#     imagePullPolicy: Always
-#     ports:
-#       - name: portname
-#         containerPort: 1234
-sidecars:
-
-## Extra init containers
-##
-initContainers:
-
 ## Configure the ingress resource that allows you to access the
 ## Nginx installation. Set up the URL
-## ref: http://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
-  ## Set to true to enable ingress record generation
+  ## @param ingress.enabled Set to true to enable ingress record generation
   ##
   enabled: false
-
-  ## Set this to true in order to add the corresponding annotations for cert-manager
+  ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
   ##
-  certManager: false
-
-  ## Ingress Path type
+  selfSigned: false
+  ## @param ingress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific
-
-  ## Override API Version (automatically detected if not set)
+  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
-  apiVersion:
-
-  ## When the ingress is enabled, a host pointing to this will be created
+  apiVersion: ""
+  ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: nginx.local
-
-  ## The Path to Nginx. You may need to set this to '/*' in order to use this
-  ## with ALB ingress controllers.
+  ## @param ingress.path The Path to Nginx. You may need to set this to '/*' in order to use this with ALB ingress controllers.
   ##
   path: /
-
-  ## Ingress annotations done as key:value pairs
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
-  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
-
-  ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
+  ## @param ingress.ingressClassName Set the ingerssClassName on the ingress record for k8s 1.18+
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
+  ## @param ingress.tls Create TLS Secret
   ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
   ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
   ##
   tls: false
-
-  ## The list of additional hostnames to be covered with this ingress record.
+  ## @param ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
   ## extraHosts:
   ## - name: nginx.local
   ##   path: /
   ##
-
-  ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
+  extraHosts: []
+  ## @param ingress.extraPaths Any additional arbitrary paths that may need to be added to the ingress under the main host.
   ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
   ## extraPaths:
   ## - path: /*
@@ -583,16 +634,16 @@ ingress:
   ##     serviceName: ssl-redirect
   ##     servicePort: use-annotation
   ##
-
-  ## The tls configuration for additional hostnames to be covered with this ingress record.
+  extraPaths: []
+  ## @param ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## extraTls:
   ## - hosts:
   ##     - nginx.local
   ##   secretName: nginx.local-tls
   ##
-
-  ## If you're providing your own certificates, please use this to add the certificates as secrets
+  extraTls: []
+  ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or
   ## -----BEGIN RSA PRIVATE KEY-----
   ##
@@ -601,57 +652,70 @@ ingress:
   ##
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
-  ##
-  secrets: []
+  ## e.g:
   ## - name: nginx.local-tls
   ##   key:
   ##   certificate:
   ##
-
+  secrets: []
+  ## @param ingress.extraRules The list of additional rules to be added to this ingress record. Evaluated as a template
+  ## Useful when looking for additional customization, such as using different backend
+  ##
+  extraRules: []
 ## Health Ingress parameters
 ##
 healthIngress:
-  ## Set to true to enable health ingress record generation
+  ## @param healthIngress.enabled Set to true to enable health ingress record generation
   ##
   enabled: false
-
-  ## Set this to true in order to add the corresponding annotations for cert-manager
+  ## @param healthIngress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
   ##
-  certManager: false
-
-  ## Ingress Path type
+  selfSigned: false
+  ## @param healthIngress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific
-
-  ## When the health ingress is enabled, a host pointing to this will be created
+  ## @param healthIngress.hostname When the health ingress is enabled, a host pointing to this will be created
   ##
   hostname: example.local
-
-  ## Health Ingress annotations done as key:value pairs
+  ## @param healthIngress.path Default path for the ingress record
+  ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+  ##
+  path: /
+  ## @param healthIngress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
-  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
-
-  ## Enable TLS configuration for the hostname defined at healthIngress.hostname parameter
+  ## @param healthIngress.tls Enable TLS configuration for the hostname defined at `healthIngress.hostname` parameter
   ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.healthIngress.hostname }}
   ## You can use the healthIngress.secrets parameter to create this TLS secret, relay on cert-manager to create it, or
   ## let the chart create self-signed certificates for you
   ##
   tls: false
-
-  ## The list of additional hostnames to be covered with this health ingress record.
-  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
-  ## E.g.
+  ## @param healthIngress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+  ## e.g:
   ## extraHosts:
   ##   - name: example.local
   ##     path: /
   ##
   extraHosts: []
-
-  ## The tls configuration for additional hostnames to be covered with this health ingress record.
+  ## @param healthIngress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+  ## e.g:
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
+  ## @param healthIngress.extraTls TLS configuration for additional hostnames to be covered
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## E.g.
   ## extraTls:
@@ -660,7 +724,7 @@ healthIngress:
   ##     secretName: example.local-tls
   ##
   extraTls: []
-
+  ## @param healthIngress.secrets TLS Secret configuration
   ## If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or -----BEGIN RSA PRIVATE KEY-----
   ## name should line up with a secretName set further up
@@ -676,91 +740,156 @@ healthIngress:
   ##     certificate:
   ##
   secrets: []
+  ## @param healthIngress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
+  ## @param healthIngress.extraRules The list of additional rules to be added to this ingress record. Evaluated as a template
+  ## Useful when looking for additional customization, such as using different backend
+  ##
+  extraRules: []
+
+## @section Metrics parameters
 
 ## Prometheus Exporter / Metrics
 ##
 metrics:
+  ## @param metrics.enabled Start a Prometheus exporter sidecar container
+  ##
   enabled: false
-
+  ## @param metrics.port NGINX Container Status Port scraped by Prometheus Exporter
+  ## Defaults to specified http port
+  port: ""
   ## Bitnami NGINX Prometheus Exporter image
   ## ref: https://hub.docker.com/r/bitnami/nginx-exporter/tags/
+  ## @param metrics.image.registry NGINX Prometheus exporter image registry
+  ## @param metrics.image.repository NGINX Prometheus exporter image repository
+  ## @param metrics.image.tag NGINX Prometheus exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.digest NGINX Prometheus exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param metrics.image.pullPolicy NGINX Prometheus exporter image pull policy
+  ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/nginx-exporter
-    tag: 0.8.0-debian-10-r232
+    tag: 0.11.0-debian-11-r22
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
     ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-
-  ## Prometheus exporter pods' annotation and labels
+    pullSecrets: []
+  ## @param metrics.podAnnotations Additional annotations for NGINX Prometheus exporter pod(s)
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-
+  ## Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param metrics.securityContext.enabled Enabled NGINX Exporter containers' Security Context
+  ## @param metrics.securityContext.runAsUser Set NGINX Exporter container's Security Context runAsUser
+  ##
+  securityContext:
+    enabled: false
+    runAsUser: 1001
   ## Prometheus exporter service parameters
   ##
   service:
-    ## NGINX Prometheus exporter port
+    ## @param metrics.service.port NGINX Prometheus exporter service port
     ##
     port: 9113
-    ## Annotations for the Prometheus exporter service
+    ## @param metrics.service.annotations [object] Annotations for the Prometheus exporter service
     ##
     annotations:
       prometheus.io/scrape: "true"
       prometheus.io/port: "{{ .Values.metrics.service.port }}"
-
   ## NGINX Prometheus exporter resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param metrics.resources.limits The resources limits for the NGINX Prometheus exporter container
+  ## @param metrics.resources.requests The requested resources for the NGINX Prometheus exporter container
   ##
   resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## Example:
+    ## limits:
+    ##    cpu: 100m
+    ##    memory: 128Mi
     limits: {}
-    #   cpu: 100m
-    #   memory: 128Mi
+    ## Examples:
+    ## requests:
+    ##    cpu: 100m
+    ##    memory: 128Mi
     requests: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
+    ## @param metrics.serviceMonitor.enabled Creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+    ##
     enabled: false
-    ## Namespace in which Prometheus is running
+    ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
     ##
-    # namespace: monitoring
-
-    ## Interval at which metrics should be scraped.
+    namespace: ""
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: ""
+    ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## interval: 10s
     ##
-    # interval: 10s
-
-    ## Timeout after which the scrape is ended
+    interval: ""
+    ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## scrapeTimeout: 10s
     ##
-    # scrapeTimeout: 10s
-
-    ## ServiceMonitor selector labels
-    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ##
-    # selector:
-    #   prometheus: my-prometheus
-
-## Pod Disruption Budget configuration
-## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
-##
-pdb:
-  create: false
-  ## Min number of pods that must still be available after the eviction
+    ## selector:
+    ##   prometheus: my-prometheus
+    ##
+    selector: {}
+    ## @param metrics.serviceMonitor.labels Additional labels that can be used so PodMonitor will be discovered by Prometheus
+    ##
+    labels: {}
+    ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+    ##
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+    ##
+    honorLabels: false
+  ## Prometheus Operator PrometheusRule configuration
   ##
-  minAvailable: 1
-  ## Max number of pods that can be unavailable after the eviction
-  ##
-  # maxUnavailable: 1
+  prometheusRule:
+    ## @param metrics.prometheusRule.enabled if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`)
+    ##
+    enabled: false
+    ## @param metrics.prometheusRule.namespace Namespace for the PrometheusRule Resource (defaults to the Release Namespace)
+    ##
+    namespace: ""
+    ## @param metrics.prometheusRule.additionalLabels Additional labels that can be used so PrometheusRule will be discovered by Prometheus
+    ##
+    additionalLabels: {}
+    ## @param metrics.prometheusRule.rules Prometheus Rule definitions
+    ##   - alert: LowInstance
+    ##     expr: up{service="{{ template "common.names.fullname" . }}"} < 1
+    ##     for: 1m
+    ##     labels:
+    ##       severity: critical
+    ##     annotations:
+    ##       description: Service {{ template "common.names.fullname" . }} Tomcat is down since 1m.
+    ##       summary: Tomcat instance is down.
+    ##
+    rules: []

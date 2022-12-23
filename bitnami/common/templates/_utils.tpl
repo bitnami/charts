@@ -6,7 +6,7 @@ Usage:
 */}}
 {{- define "common.utils.secret.getvalue" -}}
 {{- $varname := include "common.utils.fieldToEnvVar" . -}}
-export {{ $varname }}=$(kubectl get secret --namespace {{ .context.Release.Namespace | quote }} {{ .secret }} -o jsonpath="{.data.{{ .field }}}" | base64 --decode)
+export {{ $varname }}=$(kubectl get secret --namespace {{ .context.Release.Namespace | quote }} {{ .secret }} -o jsonpath="{.data.{{ .field }}}" | base64 -d)
 {{- end -}}
 
 {{/*

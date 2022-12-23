@@ -1,0 +1,29 @@
+file:
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
+    filetype: directory
+    mode: "3777"
+  /bitnami/kibana:
+    exists: true
+    filetype: directory
+    mode: "2775"
+    owner: root
+  /bitnami/kibana/conf:
+    exists: true
+    filetype: directory
+    mode: "2777"
+    owner: root
+  /opt/bitnami/kibana/config/kibana.yml:
+    mode: "0664"
+    filetype: file
+    exists: true
+    group: root
+    contains:
+    - "csp.strict: {{ .Vars.extraConfiguration.csp_strict }}"
+command:
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+    - uid={{ .Vars.containerSecurityContext.runAsUser }}
+    - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/

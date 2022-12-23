@@ -1,16 +1,16 @@
 annotations:
   category: Database
 apiVersion: v2
-appVersion: 8.0.23
+appVersion: 8.0.31
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
-    version: 1.x.x
-description: Chart to create a Highly available MySQL cluster
+    version: 2.x.x
+description: MySQL is a fast, reliable, scalable, and easy to use open source relational database system. Designed to handle mission-critical, heavy-load production applications.
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/mysql
+home: https://github.com/bitnami/charts/tree/main/bitnami/mysql
 icon: https://bitnami.com/assets/stacks/mysql/img/mysql-stack-220x234.png
 keywords:
   - mysql
@@ -19,10 +19,10 @@ keywords:
   - cluster
   - high availability
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: mysql
 sources:
-  - https://github.com/bitnami/bitnami-docker-mysql
+  - https://github.com/bitnami/containers/tree/main/bitnami/mysql
   - https://mysql.com
-version: 8.4.4
+version: 9.4.4

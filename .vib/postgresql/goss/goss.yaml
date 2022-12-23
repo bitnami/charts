@@ -1,0 +1,49 @@
+command:
+  {{- $dbUser := .Vars.auth.username }}
+  {{- $dbPassword := .Vars.auth.password }}
+  {{- $dbName := .Vars.auth.database }}
+  {{- $lb_port := .Vars.primary.service.ports.postgresql }}
+  {{- $hl_svc_bn := printf "postgresql-%s" .Vars.readReplicas.name }}
+  {{- $port := .Vars.containerPorts.postgresql }}
+  {{- $replica_nodes := .Vars.readReplicas.replicaCount }}
+  {{- $table := printf "test_%s" (randAlpha 5) }}
+  postgresql-check-replication:
+    exec: export PGPASSWORD='{{ $dbPassword }}' && psql -U '{{ $dbUser }}' -d '{{ $dbName }}' -p {{ $lb_port }} -h postgresql-{{ .Vars.primary.name }} -c "CREATE TABLE {{ $table }} (id int, first_name VARCHAR(50));" && sleep 1 {{ range $e, $i := until $replica_nodes }} && psql -U '{{ $dbUser }}' -d '{{ $dbName }}' -p {{ $port }} -h {{ $hl_svc_bn }}-{{ $i }}.{{ $hl_svc_bn }}-hl -c "SELECT * FROM {{ $table }};"{{ end }}
+    exit-status: 0
+  {{ range $e, $i := until $replica_nodes }}
+  postgresql-only-read-node-{{ $i }}:
+    exec: PGPASSWORD='{{ $dbPassword }}' psql -U '{{ $dbUser }}' -d '{{ $dbName }}' -p {{ $port }} -h {{ $hl_svc_bn }}-{{ $i }}.{{ $hl_svc_bn }}-hl -c "CREATE TABLE rep_table_test (id int);"
+    exit-status: 1
+    stderr:
+      - /.*read-only transaction.*/
+  {{ end }}
+  cluster-size:
+    exec: PGPASSWORD='{{ .Vars.auth.postgresPassword }}' psql -tA -U postgres -p {{ $port }} -h postgresql-{{ .Vars.primary.name }} -c "SELECT COUNT(*) FROM pg_stat_replication WHERE usename='{{ .Vars.auth.replicationUsername }}';"
+    exit-status: 0
+    stdout:
+      - '2'
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+    - uid={{ .Vars.primary.containerSecurityContext.runAsUser }}
+    - /groups=.*{{ .Vars.primary.podSecurityContext.fsGroup }}/
+file:
+  {{ .Vars.primary.persistence.mountPath }}:
+    exists: true
+    filetype: directory
+    mode: "2775"
+    owner: root
+  /dev/shm:
+    exists: true
+    filetype: directory
+    mode: "3777"
+    owner: root
+  /opt/bitnami/postgresql/conf/postgresql.conf:
+    exists: true
+    filetype: file
+    mode: "0664"
+    group: root
+    contains:
+      - /shared_preload_libraries.*{{ .Vars.postgresqlSharedPreloadLibraries }}/
+      - /port.*{{ $port }}/

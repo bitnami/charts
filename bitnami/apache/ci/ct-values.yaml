@@ -1,4 +1,0 @@
-service:
-  type: ClusterIP
-
-hostAliases: []

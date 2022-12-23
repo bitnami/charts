@@ -1,5 +1,5 @@
-{{- if .Values.autoscaling.enabled }}
-apiVersion: {{ .Values.autoscaling.apiVersion }}
+{{- if and .Values.autoscaling.enabled (not .Values.useDaemonset) }}
+apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ ) }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "common.names.fullname" . }}
@@ -19,6 +19,5 @@ spec:
     name: {{ include "common.names.fullname" . }}
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}
-  metrics:
-    {{- include "common.tplvalues.render" (dict "value" .Values.autoscaling.metrics "context" $) | nindent 4 }}
+  metrics: {{- include "common.tplvalues.render" (dict "value" .Values.autoscaling.metrics "context" $) | nindent 4 }}
 {{- end }}

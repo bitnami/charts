@@ -3,7 +3,7 @@ apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
   name: {{ template "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
@@ -39,8 +39,8 @@ rules:
       - update
       - watch
   - apiGroups:
-      - extensions
-      - "networking.k8s.io"
+      {{- include "nginx-ingress-controller.role.extensions.apiGroup" . | nindent 6 }}
+      - networking.k8s.io
     resources:
       - ingresses
     verbs:
@@ -48,18 +48,26 @@ rules:
       - list
       - watch
   - apiGroups:
-      - extensions
-      - "networking.k8s.io"
+      {{- include "nginx-ingress-controller.role.extensions.apiGroup" . | nindent 6 }}
+      - networking.k8s.io
     resources:
       - ingresses/status
     verbs:
       - update
   - apiGroups:
+      - networking.k8s.io
+    resources:
+      - ingressclasses
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
       - ""
     resources:
       - configmaps
     resourceNames:
-      - {{ .Values.electionID }}-{{ .Values.ingressClass }}
+      - {{ .Values.electionID }}
     verbs:
       - get
       - update
@@ -69,14 +77,6 @@ rules:
       - configmaps
     verbs:
       - create
-  - apiGroups:
-      - ""
-    resources:
-      - endpoints
-    verbs:
-      - create
-      - get
-      - update
   - apiGroups:
       - ""
     resources:
@@ -84,14 +84,37 @@ rules:
     verbs:
       - create
       - patch
-  {{- if .Values.podSecurityPolicy.enabled }}
-  - apiGroups:
-      - 'extensions'
-    resources:
-      - 'podsecuritypolicies'
-    verbs:
-      - 'use'
-    resourceNames:
-      - {{ template "common.names.fullname" . }}
+  {{- if .Values.rbac.rules }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.rbac.rules "context" $ ) | nindent 2 }}
   {{- end }}
+  {{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
+  {{- if and $pspAvailable .Values.podSecurityPolicy.enabled }}
+  - apiGroups: [{{ template "nginx-ingress-controller.podSecurityPolicy.apiGroup" . }}]
+    resources: ['podsecuritypolicies']
+    verbs: ['use']
+    resourceNames: [{{ template "common.names.fullname" . }}]
+  {{- end }}
+  - apiGroups:
+      - discovery.k8s.io
+    resources:
+      - endpointslices
+    verbs:
+      - list
+      - watch
+      - get
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    verbs:
+      - create
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    resourceNames:
+      - {{ .Values.electionID }}
+    verbs:
+      - get
+      - update
 {{- end -}}

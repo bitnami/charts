@@ -1,0 +1,15 @@
+http:
+  http://grafana-service:3000:
+    status: 200
+file:
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    exists: {{ .Vars.operator.serviceAccount.automountServiceAccountToken }}
+    filetype: directory
+    mode: "3777"
+command:
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+    - uid={{ .Vars.operator.containerSecurityContext.runAsUser }}
+    - /groups=.*{{ .Vars.operator.containerSecurityContext.runAsGroup }}/

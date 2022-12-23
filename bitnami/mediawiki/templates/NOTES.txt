@@ -1,3 +1,9 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+
 {{- if or .Values.mariadb.enabled .Values.externalDatabase.host -}}
 
 {{- if empty (include "mediawiki.host" .) -}}
@@ -21,21 +27,21 @@ host. To configure Mediawiki with the URL of your service:
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
   export APP_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
-  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.mediawiki-password}" | base64 --decode)
-  export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default mediawiki-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)  {{- end }}
-  export MARIADB_PASSWORD=$(kubectl get secret --namespace default mediawiki-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.mediawiki-password}" | base64 -d)
+  export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "mediawiki.mariadb.fullname" . }} -o jsonpath="{.data.mariadb-root-password}" | base64 -d)  {{- end }}
+  export MARIADB_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "mediawiki.mariadb.fullname" . }} -o jsonpath="{.data.mariadb-password}" | base64 -d)
 
 2. Complete your Mediawiki deployment by running:
 
 {{- if .Values.mariadb.enabled }}
 
-  helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} my-repo/{{ .Chart.Name }} \
     --set mediawikiHost=$APP_HOST,mediawikiPassword=$APP_PASSWORD,mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD{{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
 {{- else }}
 
   ## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
 
-  helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} my-repo/{{ .Chart.Name }} \
     --set mediawikiPassword=$APP_PASSWORD,mediawikiHost=$APP_HOST,service.type={{ .Values.service.type }},mariadb.enabled=false{{- if not (empty .Values.externalDatabase.host) }},externalDatabase.host={{ .Values.externalDatabase.host }}{{- end }}{{- if not (empty .Values.externalDatabase.user) }},externalDatabase.user={{ .Values.externalDatabase.user }}{{- end }}{{- if not (empty .Values.externalDatabase.password) }},externalDatabase.password={{ .Values.externalDatabase.password }}{{- end }}{{- if not (empty .Values.externalDatabase.database) }},externalDatabase.database={{ .Values.externalDatabase.database }}{{- end }}{{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
 {{- end }}
 
@@ -64,15 +70,15 @@ host. To configure Mediawiki with the URL of your service:
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
 
-{{- $port:=.Values.service.port | toString }}
-  echo "Mediawiki URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/"
+{{- $port:= ( coalesce .Values.service.ports.http .Values.service.port) | toString }}
+  echo "Mediawiki URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ coalesce .Values.service.ports.http .Values.service.port }}{{ end }}/"
 
 {{- else if contains "ClusterIP"  .Values.service.type }}
 
   echo "Mediawiki URL: http://127.0.0.1:8080/"
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} 8080:{{ .Values.service.port }}
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} 8080:{{ coalesce .Values.service.ports.http .Values.service.port }}
 
 {{- end }}
 {{- end }}
@@ -81,7 +87,7 @@ host. To configure Mediawiki with the URL of your service:
 2. Get your MediaWiki login credentials by running:
 
     echo Username: {{ .Values.mediawikiUser }}
-    echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.mediawiki-password}" | base64 --decode)
+    echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.mediawiki-password}" | base64 -d)
 
 {{- else -}}
 
@@ -94,9 +100,9 @@ host. To configure MediaWiki to use and external database host:
 
 1. Complete your MediaWiki deployment by running:
 
-  helm upgrade {{ .Release.Name }} --set service.type={{ .Values.service.type }},mariadb.enabled=false,externalDatabase.host=YOUR_EXTERNAL_DATABASE_HOST bitnami/mediawiki
+  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} --set service.type={{ .Values.service.type }},mariadb.enabled=false,externalDatabase.host=YOUR_EXTERNAL_DATABASE_HOST my-repo/mediawiki
 
-{{- end}}
+{{- end }}
 
 {{- include "mediawiki.checkRollingTags" . }}
 {{- $passwordValidationErrors := list -}}
@@ -110,3 +116,5 @@ host. To configure MediaWiki to use and external database host:
     {{- $passwordValidationErrors = append $passwordValidationErrors $mariadbPasswordValidationErrors -}}
 {{- end }}
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
+
+{{ include "mediawiki.validateValues" . }}

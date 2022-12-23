@@ -1,0 +1,54 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+    /opt/bitnami/haproxy/sbin/haproxy -f /bitnami/haproxy/conf/haproxy.cfg
+
+{{- else }}
+
+{{- if .Values.service.ports }}
+1. HAproxy has been started. You can find out the port numbers being used by HAProxy by running:
+
+    $ kubectl describe svc {{ include "common.names.fullname" . }} --namespace {{ .Release.Namespace }}
+
+{{- if eq .Values.service.type "LoadBalancer" }}
+2. Get HAProxy's load balancer IP/hostname:
+
+    NOTE: It may take a few minutes for this to become available.
+
+    You can watch the status by running:
+
+        $ kubectl get svc {{ include "common.names.fullname" . }} --namespace {{ .Release.Namespace }} -w
+
+    Once 'EXTERNAL-IP' is no longer '<pending>':
+
+        $ kubectl describe svc {{ include "common.names.fullname" . }} --namespace {{ .Release.Namespace }} | grep Ingress | awk '{print $3}'
+
+3. Configure DNS records corresponding to Kubernetes ingress resources to point to the load balancer IP/hostname found in step 3
+{{- end }}
+{{- else }}
+1. HAProxy has been started. As no ports in service.ports were specified, no service object was created. You can find out the ports used by the container by running
+    $ kubectl describe deploy {{ include "common.names.fullname" . }} --namespace {{ .Release.Namespace }}
+{{- end }}
+{{- end }}
+
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "haproxy.validateValues" . }}

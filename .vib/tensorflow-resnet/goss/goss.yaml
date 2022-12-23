@@ -1,0 +1,21 @@
+addr:
+  tcp://tensorflow-resnet:{{ .Vars.service.ports.server }}:
+    reachable: true
+port:
+  tcp:{{ .Vars.containerPorts.server }}:
+    listening: true
+  tcp:{{ .Vars.containerPorts.restApi }}:
+    listening: true
+file:
+  /bitnami/model-data:
+    exists: true
+    filetype: directory
+    mode: "2777"
+    owner: root
+command:
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+      - uid={{ .Vars.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/

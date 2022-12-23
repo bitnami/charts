@@ -1,0 +1,11 @@
+file:   
+ /opt/bitnami/elasticsearch/config/elasticsearch.yml:
+    mode: "0644"
+    filetype: file
+    contains: 
+     - /port.*{{ .Vars.containerPorts.transport }}/
+    exists: true
+/bitnami/elasticsearch/data:
+    mode: "0644"
+    filetype: directory
+    exists: true  

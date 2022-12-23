@@ -1,20 +1,20 @@
 annotations:
   category: E-Commerce
 apiVersion: v2
-appVersion: 3.0.3-6
+appVersion: 4.0.1-1
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
     repository: https://charts.bitnami.com/bitnami
-    version: 9.x.x
+    version: 11.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
-    version: 1.x.x
-description: A free and open source e-commerce platform for online merchants. It provides a professional and reliable foundation for a successful online store.
+    version: 2.x.x
+description: OpenCart is free open source ecommerce platform for online merchants. OpenCart provides a professional and reliable foundation from which to build a successful online store.
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/opencart
+home: https://github.com/bitnami/charts/tree/main/bitnami/opencart
 icon: https://bitnami.com/assets/stacks/opencart/img/opencart-stack-220x234.png
 keywords:
   - opencart
@@ -23,10 +23,10 @@ keywords:
   - web
   - php
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: opencart
 sources:
-  - https://github.com/bitnami/bitnami-docker-opencart
+  - https://github.com/bitnami/containers/tree/main/bitnami/opencart
   - https://opencart.com/
-version: 10.0.3
+version: 13.0.5

@@ -1,0 +1,52 @@
+{{- if .Values.repoServer.metrics.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "argocd.repo-server" . }}-metrics
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: metrics
+    app.kubernetes.io/part-of: repo-server
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.repoServer.metrics.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.repoServer.metrics.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
+spec:
+  type: {{ .Values.repoServer.metrics.service.type }}
+  {{- if and .Values.repoServer.metrics.service.clusterIP (eq .Values.repoServer.metrics.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.repoServer.metrics.service.clusterIP }}
+  {{- end }}
+  {{- if (or (eq .Values.repoServer.metrics.service.type "LoadBalancer") (eq .Values.repoServer.metrics.service.type "NodePort")) }}
+  externalTrafficPolicy: {{ .Values.repoServer.metrics.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if eq .Values.repoServer.metrics.service.type "LoadBalancer" }}
+  loadBalancerSourceRanges: {{ .Values.repoServer.metrics.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if (and (eq .Values.repoServer.metrics.service.type "LoadBalancer") (not (empty .Values.repoServer.metrics.service.loadBalancerIP))) }}
+  loadBalancerIP: {{ .Values.repoServer.metrics.service.loadBalancerIP }}
+  {{- end }}
+  {{- if .Values.repoServer.metrics.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.repoServer.metrics.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.repoServer.metrics.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.metrics.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  ports:
+    - name: http-metrics
+      targetPort: metrics
+      port: {{ .Values.repoServer.metrics.service.port }}
+      protocol: TCP
+      {{- if (and (or (eq .Values.repoServer.service.type "NodePort") (eq .Values.repoServer.service.type "LoadBalancer")) (not (empty .Values.repoServer.metrics.service.nodePort))) }}
+      nodePort: {{ .Values.repoServer.metrics.service.nodePort }}
+      {{- else if eq .Values.repoServer.metrics.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: repo-server
+{{- end }}

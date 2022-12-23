@@ -1,0 +1,54 @@
+name: '[Support] Organizing cards based on comments'
+on:
+  issue_comment:
+    types:
+      - created
+permissions:
+  repository-projects: write
+  issues: write
+  pull-requests: write
+jobs:
+  comments_handler:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repo checkout
+        uses: actions/checkout@v3
+      - name: Load .env file
+        uses: xom9ikk/dotenv@v2
+        with:
+          path: .github/workflows/
+      - name: Move into From Build Maintenance
+        uses: peter-evans/create-or-update-project-card@v2
+        # The comment was created by bitnami-bot in a pull_request created by bitnami-bot
+        if: ${{ github.actor == 'bitnami-bot' && github.event.issue.user.login == 'bitnami-bot' && github.event.issue.pull_request != null }}
+        with:
+          project-name: Support
+          column-name: Build Maintenance
+          # Required to trigger moving-cards.yml workflow (clean labels and assign people to work on it)
+          token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
+      - name: Move into Pending
+        uses: peter-evans/create-or-update-project-card@v2
+        if: |
+          (github.actor != 'bitnami-bot' || github.event.issue.user.login != 'bitnami-bot' || github.event.issue.pull_request == null) &&
+          (!contains(github.event.issue.labels.*.name, 'bitnami')) && contains(fromJson(env.BITNAMI_TEAM), github.actor)
+        with:
+          project-name: Support
+          column-name: Pending
+      - name: Move into In Progress
+        uses: peter-evans/create-or-update-project-card@v2
+        if: |
+          (github.actor != 'bitnami-bot' || github.event.issue.user.login != 'bitnami-bot' || github.event.issue.pull_request == null) &&
+          contains(github.event.issue.labels.*.name, 'in-progress') && (!contains(fromJson(env.BITNAMI_TEAM), github.actor))
+        with:
+          project-name: Support
+          column-name: In progress
+      - name: Move into Triage
+        uses: peter-evans/create-or-update-project-card@v2
+        if: |
+          (github.actor != 'bitnami-bot' || github.event.issue.user.login != 'bitnami-bot' || github.event.issue.pull_request == null) &&
+          ((contains(github.event.issue.labels.*.name, 'triage')) || (contains(github.event.issue.labels.*.name, 'solved'))) && (!contains(fromJson(env.BITNAMI_TEAM), github.actor))
+        with:
+          project-name: Support
+          column-name: Triage
+          # Needs reasignation of the task
+          token: "${{ secrets.BITNAMI_BOT_TOKEN }}"

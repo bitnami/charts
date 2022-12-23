@@ -1,8 +1,8 @@
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
-  name: {{ template "keycloak.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  name: {{ template "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: keycloak
     {{- if .Values.commonLabels }}
@@ -12,9 +12,11 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
-  podManagementPolicy: Parallel
-  serviceName: {{ printf "%s-headless" (include "keycloak.fullname" .) }}
+  {{- end }}
+  podManagementPolicy: {{ .Values.podManagementPolicy }}
+  serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   updateStrategy:
     {{- include "common.tplvalues.render" (dict "value" .Values.updateStrategy "context" $ ) | nindent 4 }}
   selector:
@@ -24,7 +26,7 @@ spec:
     metadata:
       annotations:
         checksum/configmap-env-vars: {{ include (print $.Template.BasePath "/configmap-env-vars.yaml") . | sha256sum }}
-        {{- if and (not .Values.auth.existingSecret) (not .Values.auth.existingSecretPerPassword) }}
+        {{- if not .Values.auth.existingSecret  }}
         checksum/secrets: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
         {{- end }}
         {{- if (include "keycloak.createConfigmap" .) }}
@@ -58,53 +60,25 @@ spec:
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" .) | nindent 8 }}
       {{- end }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      {{- if or .Values.initContainers .Values.auth.tls.enabled }}
-      initContainers: 
+      {{- if .Values.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
-        {{- if .Values.auth.tls.enabled }}
-        {{- $fullname := include "keycloak.fullname" . }}
-        - name: init-certs
-          image: {{ include "keycloak.auth.tls.image" . }}
-          imagePullPolicy: {{ .Values.auth.tls.image.pullPolicy | quote }}
-          {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
-          {{- end }}
-          command:
-          - /bin/bash
-          - -ec
-          - |-
-            ID="${MY_POD_NAME#"{{ $fullname }}-"}"
-            if [[ -f "/certs/keycloak.truststore.jks" ]] && [[ -f "/certs/keycloak-${ID}.keystore.jks" ]]; then
-                cp "/certs/keycloak.truststore.jks" "/opt/bitnami/keycloak/certs/keycloak.truststore.jks"
-                cp "/certs/keycloak-${ID}.keystore.jks" "/opt/bitnami/keycloak/certs/keycloak.keystore.jks"
-            else
-                echo "Couldn't find the expected Java Key Stores (JKS) files! They are mandatory when encryption via TLS is enabled."
-                exit 1
-            fi
-          env:
-          - name: MY_POD_NAME
-            valueFrom:
-              fieldRef:
-                apiVersion: v1
-                fieldPath: metadata.name
-          {{- if .Values.auth.tls.resources }}
-          resources: {{- toYaml .Values.auth.tls.resources | nindent 12 }}
-          {{- end }}
-          volumeMounts:
-          - name: certificates
-            mountPath: /certs
-          - name: shared-certs
-            mountPath: /opt/bitnami/keycloak/certs
-        {{- end }}
-      {{- end }}
       containers:
         - name: keycloak
           image: {{ template "keycloak.image" . }}
@@ -115,10 +89,14 @@ spec:
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- end }}
           env:
@@ -129,63 +107,39 @@ spec:
                   fieldPath: metadata.namespace
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
-            {{- $globalSecretName := include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecret "context" $) }}
             - name: KEYCLOAK_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
-                {{- if .Values.auth.existingSecretPerPassword }}
-                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecretPerPassword.adminPassword "context" $) }}
-                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecretPerPassword "key" "adminPassword") }}
-                {{- else }}
-                  name: {{ $globalSecretName }}
-                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecret "key" "admin-password") }}
-                {{- end }}
-            - name: KEYCLOAK_MANAGEMENT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                {{- if .Values.auth.existingSecretPerPassword }}
-                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecretPerPassword.managementPassword "context" $) }}
-                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecretPerPassword "key" "managementPassword") }}
-                {{- else }}
-                  name: {{ $globalSecretName }}
-                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecret "key" "management-password") }}
-                {{- end }}
+                  name: {{ include "keycloak.secretName" . }}
+                  key: {{ include "keycloak.secretKey" . }}
             - name: KEYCLOAK_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                {{- if .Values.auth.existingSecretPerPassword }}
-                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecretPerPassword.databasePassword "context" $) }}
-                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecretPerPassword "key" "databasePassword") }}
-                {{- else }}
-                  name: {{ $globalSecretName }}
-                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecret "key" "database-password") }}
-                {{- end }}
-            {{- if .Values.auth.tls.enabled }}
-            {{- if or .Values.auth.tls.keystorePassword .Values.auth.existingSecretPerPassword }}
-            - name: KEYCLOAK_TLS_KEYSTORE_PASSWORD
+                  name: {{ include "keycloak.databaseSecretName" . }}
+                  key: {{ include "keycloak.databaseSecretKey" . }}
+            {{- if and .Values.tls.enabled (or .Values.tls.keystorePassword .Values.tls.passwordsSecret) }}
+            - name: KEYCLOAK_HTTPS_KEY_STORE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                {{- if .Values.auth.existingSecretPerPassword }}
-                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecretPerPassword.tlsKeystorePassword "context" $) }}
-                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecretPerPassword "key" "tlsKeystorePassword") }}
-                {{- else }}
-                  name: {{ $globalSecretName }}
-                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecret "key" "tls-keystore-password") }}
-                {{- end }}
+                  name: {{ include "keycloak.tlsPasswordsSecretName" . }}
+                  key: "tls-keystore-password"
             {{- end }}
-            {{- if or .Values.auth.tls.truststorePassword .Values.auth.existingSecretPerPassword }}
-            - name: KEYCLOAK_TLS_TRUSTSTORE_PASSWORD
+            {{- if and .Values.tls.enabled (or .Values.tls.truststorePassword .Values.tls.passwordsSecret) }}
+            - name: KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                {{- if .Values.auth.existingSecretPerPassword }}
-                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecretPerPassword.tlsTruststorePassword "context" $) }}
-                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecretPerPassword "key" "tlsKeystorePassword") }}
-                {{- else }}
-                  name: {{ $globalSecretName }}
-                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecret "key" "tls-truestore-password") }}
-                {{- end }}
+                  name: {{ include "keycloak.tlsPasswordsSecretName" . }}
+                  key: "tls-truststore-password"
             {{- end }}
+            {{- if and .Values.spi.existingSecret (or .Values.spi.truststorePassword .Values.spi.passwordsSecret) }}
+            - name: KEYCLOAK_SPI_TRUSTSTORE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "keycloak.spiPasswordsSecretName" . }}
+                  key: "spi-truststore-password"
             {{- end }}
+            - name: KEYCLOAK_HTTP_RELATIVE_PATH
+              value: {{ .Values.httpRelativePath | quote }}
             {{- if .Values.extraStartupArgs }}
             - name: KEYCLOAK_EXTRA_ARGS
               value: {{ .Values.extraStartupArgs | quote }}
@@ -195,7 +149,7 @@ spec:
             {{- end }}
           envFrom:
             - configMapRef:
-                name: {{ printf "%s-env-vars" (include "keycloak.fullname" .) }}
+                name: {{ printf "%s-env-vars" (include "common.names.fullname" .) }}
             {{- if .Values.extraEnvVarsCM }}
             - configMapRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsCM "context" $) }}
@@ -204,6 +158,10 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
             {{- end }}
+            {{- if and .Values.externalDatabase.existingSecret (not .Values.postgresql.enabled) }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.externalDatabase.existingSecret "context" $) }}
+            {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
@@ -211,31 +169,54 @@ spec:
             - name: http
               containerPort: {{ .Values.containerPorts.http }}
               protocol: TCP
+            {{- if .Values.tls.enabled }}
             - name: https
               containerPort: {{ .Values.containerPorts.https }}
               protocol: TCP
-            - name: http-management
-              containerPort: 9990
-              protocol: TCP
-          {{- if .Values.livenessProbe.enabled }}
-          livenessProbe: {{- omit .Values.livenessProbe "enabled" | toYaml | nindent 12 }}
-          {{- else if .Values.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if .Values.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.startupProbe.enabled }}
+          startupProbe: {{- omit .Values.startupProbe "enabled" | toYaml | nindent 12 }}
+            httpGet:
+              path: {{ .Values.httpRelativePath }}
+              port: http
           {{- end }}
-          {{- if .Values.readinessProbe.enabled }}
-          readinessProbe: {{- omit .Values.readinessProbe "enabled" | toYaml | nindent 12 }}
-          {{- else if .Values.customReadinessProbe }}
+          {{- if .Values.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.livenessProbe.enabled }}
+          livenessProbe: {{- omit .Values.livenessProbe "enabled" | toYaml | nindent 12 }}
+            httpGet:
+              path: {{ .Values.httpRelativePath }}
+              port: http
+          {{- end }}
+          {{- if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.readinessProbe.enabled }}
+          readinessProbe: {{- omit .Values.readinessProbe "enabled" | toYaml | nindent 12 }}
+            httpGet:
+              path: {{ .Values.httpRelativePath }}realms/master
+              port: http
+          {{- end }}
           {{- end }}
           volumeMounts:
             {{- if or .Values.configuration .Values.existingConfigmap }}
             - name: keycloak-config
-              mountPath: /bitnami/keycloak/configuration/standalone-ha.xml
-              subPath: standalone-ha.xml
+              mountPath: /bitnami/keycloak/conf/keycloak.conf
+              subPath: keycloak.conf
             {{- end }}
-            {{- if .Values.auth.tls.enabled }}
-            - name: shared-certs
+            {{- if .Values.tls.enabled }}
+            - name: certificates
               mountPath: /opt/bitnami/keycloak/certs
+              readOnly: true
+            {{- end }}
+            {{- if .Values.spi.existingSecret }}
+            - name: spi-certificates
+              mountPath: /opt/bitnami/keycloak/spi-certs
               readOnly: true
             {{- end }}
             {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
@@ -254,13 +235,17 @@ spec:
           configMap:
             name: {{ include "keycloak.configmapName" . }}
         {{- end }}
-        {{- if .Values.auth.tls.enabled }}
+        {{- if .Values.tls.enabled }}
         - name: certificates
           secret:
-            secretName: {{ printf "%s" (tpl .Values.auth.tls.jksSecret $) }}
+            secretName: {{ include "keycloak.tlsSecretName" . }}
             defaultMode: 420
-        - name: shared-certs
-          emptyDir: {}
+        {{- end }}
+        {{- if .Values.spi.existingSecret }}
+        - name: spi-certificates
+          secret:
+            secretName: {{ .Values.spi.existingSecret }}
+            defaultMode: 420
         {{- end }}
         {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
         - name: custom-init-scripts

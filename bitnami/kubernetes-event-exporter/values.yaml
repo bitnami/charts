@@ -1,33 +1,93 @@
+## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry, imagePullSecrets
-##
-# global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
 
-## String to partially override kubernetes-event-exporter.fullname include (will maintain the release name)
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
 ##
-# nameOverride:
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
 
-## String to fully override kubernetes-event-exporter.fullname template
+## @section Common parameters
+
+## @param kubeVersion Override Kubernetes version
 ##
-# fullnameOverride:
-
-## Common annotations to add to all resources. Evaluated as a template
+kubeVersion: ""
+## @param nameOverride String to partially override kubernetes-event-exporter.fullname include (will maintain the release name)
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override kubernetes-event-exporter.fullname template
+##
+fullnameOverride: ""
+## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
-
-## Common labels to add to all resources. Evaluated as a template
+## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template)
+##
+extraDeploy: []
 
-## Deployment pod host aliases
+## @section Kubernetes Event Exporter parameters
+
+## @param replicaCount Desired number of pod replicas
+replicaCount: 1
+
+image:
+  ## @param image.registry Container image registry
+  ## @param image.repository Container image name
+  ## @param image.tag Container image tag
+  ## @param image.digest Container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param image.pullPolicy Container image pull policy
+  ## @param image.pullSecrets Specify docker-registry secret names as an array
+  ##
+  registry: docker.io
+  repository: bitnami/kubernetes-event-exporter
+  tag: 1.0.0-debian-11-r20
+  digest: ""
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## Example:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-
+## @param config.logLevel Verbosity of the logs (options: `fatal`, `error`, `warn`, `info` or `debug`)
+## @param config.logFormat How the logs are formatted. Allowed values: `pretty` or `json`
+## @param config.receivers [array] Array containing event receivers
+## @param config.route.routes [array] Array containing event route configuration
+##
 config:
   logLevel: debug
   logFormat: pretty
@@ -35,59 +95,61 @@ config:
     - name: "dump"
       file:
         path: "/dev/stdout"
-        # layout:
-        #   message: "{{ .Message }}"
-        #   reason: "{{ .Reason }}"
-        #   type: "{{ .Type }}"
-        #   count: "{{ .Count }}"
-        #   kind: "{{ .InvolvedObject.Kind }}"
-        #   name: "{{ .InvolvedObject.Name }}"
-        #   namespace: "{{ .Namespace }}"
-        #   component: "{{ .Source.Component }}"
-        #   host: "{{ .Source.Host }}"
+        ## Example:
+        ## layout:
+        ##   message: "{{ .Message }}"
+        ##   reason: "{{ .Reason }}"
+        ##   type: "{{ .Type }}"
+        ##   count: "{{ .Count }}"
+        ##   kind: "{{ .InvolvedObject.Kind }}"
+        ##   name: "{{ .InvolvedObject.Name }}"
+        ##   namespace: "{{ .Namespace }}"
+        ##   component: "{{ .Source.Component }}"
+        ##   host: "{{ .Source.Host }}"
+        ##
+        layout: {}
   route:
     routes:
       - match:
           - receiver: "dump"
-
 rbac:
-  # create specifies whether to install and use RBAC rules.
+  ## @param rbac.create Create the RBAC roles for API accessibility
+  ##
   create: true
-
+## Pods Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+## @param serviceAccount.create Specifies whether a ServiceAccount should be created
+## @param serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+## @param serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+##
 serviceAccount:
-  # Specifies whether a ServiceAccount should be created
   create: true
-  # The name of the ServiceAccount to use.  If not set and create is
-  # true, a name is generated using the fullname template
   name: ""
-
-image:
-  registry: docker.io
-  repository: bitnami/kubernetes-event-exporter
-  tag: 0.9.0-debian-10-r90
-  ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
-
-## Pod annotations
+  automountServiceAccountToken: true
+  annotations: {}
+## @param podAnnotations Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
-
+## @param podLabels Pod labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
 ## SecurityContext holds pod-level security attributes and common container settings.
+## @param podSecurityContext.enabled Enable security context
+## @param podSecurityContext.fsGroup Group ID for the container
 ##
 podSecurityContext:
   enabled: true
   fsGroup: 1001
-
+## @param containerSecurityContext.enabled Enable container security context
+## @param containerSecurityContext.capabilities.add [array] Add capabilities for the securityContext
+## @param containerSecurityContext.capabilities.drop [array] Drop capabilities for the securityContext
+## @param containerSecurityContext.readOnlyRootFilesystem Allows the pod to mount the RootFS as ReadOnly only
+## @param containerSecurityContext.runAsNonRoot If the pod should run as a non root container.
+## @param containerSecurityContext.runAsUser Define the uid with which the pod will run
+##
 containerSecurityContext:
   enabled: true
   capabilities:
@@ -97,103 +159,131 @@ containerSecurityContext:
   readOnlyRootFilesystem: true
   runAsNonRoot: true
   runAsUser: 1001
-
+## @param command Override default container command (useful when using custom images)
+##
+command: []
+## @param args Override default container args (useful when using custom images)
+##
+args: []
+## @param lifecycleHooks Lifecycle for the container to automate configuration before or after startup
+##
+lifecycleHooks: {}
 ## Container resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## We usually recommend not to specify default resources and to leave this as a conscious
+## choice for the user. This also increases chances charts run on environments with little
+## resources, such as Minikube. If you do want to specify resources, uncomment the following
+## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+## @param resources.limits Specify resource limits which the container is not allowed to succeed.
+## @param resources.requests Specify resource requests which the container needs to spawn.
 ##
 resources:
-  ## We usually recommend not to specify default resources and to leave this as a conscious
-  ## choice for the user. This also increases chances charts run on environments with little
-  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ##
+  ## Example:
+  ## limits:
+  ##    cpu: 400m
+  ##    memory: 250Mi
   limits: {}
-  #   cpu: 400m
-  #   memory: 250Mi
+  ## Examples:
+  ## requests:
+  ##    cpu: 100m
+  ##    memory: 25Mi
   requests: {}
-  #   cpu: 100m
-  #   memory: 25Mi
 
-## Node labels for pod assignment
+## Configure extra custom startup, liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param customStartupProbe Configure startup probe for Kubernetes event exporter pod
+##
+customStartupProbe: {}
+## @param customLivenessProbe Configure liveness probe for Kubernetes event exporter pod
+##
+customLivenessProbe: {}
+## @param customReadinessProbe Configure readiness probe for Kubernetes event exporter pod
+##
+customReadinessProbe: {}
+## @param nodeSelector Node labels for pod assignment
 ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-
-## Set Priority Class Name to allow priority control over other pods
+## @param priorityClassName Set Priority Class Name to allow priority control over other pods
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
 priorityClassName: ""
-
-## Tolerations for pod assignment
+## @param schedulerName Name of the k8s scheduler (other than default)
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
+## @param tolerations Tolerations for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
-## Pod affinity preset
+## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
 ##
 podAffinityPreset: ""
-
-## Pod anti-affinity preset
+## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
 ##
 podAntiAffinityPreset: soft
-
 ## Node affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-## Allowed values: soft, hard
 ##
 nodeAffinityPreset:
-  ## Node affinity type
-  ## Allowed values: soft, hard
+  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ##
   type: ""
-  ## Node label key to match
+  ## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set.
   ## E.g.
   ## key: "kubernetes.io/e2e-az-name"
   ##
   key: ""
-  ## Node label values to match
+  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.
   ## E.g.
   ## values:
   ##   - e2e-az1
   ##   - e2e-az2
   ##
   values: []
-
-## Affinity for pod assignment
+## @param affinity Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
-
-## An array to add extra env vars
+## @param updateStrategy.type Deployment strategy type.
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+## e.g:
+## updateStrategy:
+##  type: RollingUpdate
+##  rollingUpdate:
+##    maxSurge: 25%
+##    maxUnavailable: 25%
+##
+updateStrategy:
+  type: RollingUpdate
+## @param extraEnvVars Array containing extra env vars to be added to all containers
 ## For example:
 ## extraEnvVars:
 ##  - name: MY_ENV_VAR
 ##    value: env_var_value
 ##
 extraEnvVars: []
-
-## Name of a ConfigMap containing extra env vars
+## @param extraEnvVarsCM ConfigMap containing extra env vars to be added to all containers
 ##
-extraEnvVarsConfigMap: ""
-
-## Name of a Secret containing extra env vars
+extraEnvVarsCM: ""
+## @param extraEnvVarsSecret Secret containing extra env vars to be added to all containers
 ##
 extraEnvVarsSecret: ""
-
-## Array to add extra mounts (normally used with extraVolumes)
+## @param extraVolumeMounts Array to add extra mounts (normally used with extraVolumes)
 ##
 extraVolumeMounts: []
-
-## Array to add extra volumes
+## @param extraVolumes Array to add extra volumes
 ##
 extraVolumes: []
-
-## Add init containers to the pod
+## @param initContainers Attach additional init containers to pods
 ## For example:
 ## initContainers:
 ##   - name: your-image-name
@@ -201,7 +291,14 @@ extraVolumes: []
 ##     imagePullPolicy: Always
 ##
 initContainers: []
-
-## Array with extra yaml to deploy with the chart. Evaluated as a template
+## @param sidecars Add additional sidecar containers to pods
+## e.g:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
 ##
-extraDeploy: []
+sidecars: []

@@ -3,7 +3,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
     {{- if .Values.commonLabels }}
@@ -57,29 +57,30 @@ spec:
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" .) | nindent 8 }}
       {{- end }}
-      {{- if .Values.podSecurityContext }}
+      {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       hostNetwork: {{ .Values.hostNetwork }}
       {{- if .Values.topologySpreadConstraints }}
       topologySpreadConstraints: {{- toYaml .Values.topologySpreadConstraints | nindent 8 }}
       {{- end }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName | quote }}
+      {{- end }}
       serviceAccountName: {{ template "nginx-ingress-controller.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- if .Values.initContainers }}
-      initContainers: {{- toYaml .Values.initContainers | nindent 8 }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: controller
           image: {{ include "nginx-ingress-controller.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
-          # yamllint disable rule:indentation
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
-          # yamllint enable rule:indentation
           {{- end }}
-          {{- if .Values.lifecycle }}
-          lifecycle: {{- toYaml .Values.lifecycle | nindent 12 }}
+          {{- if .Values.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
@@ -89,27 +90,30 @@ spec:
           {{- else }}
           args:
             - /nginx-ingress-controller
-            - --default-backend-service={{ if .Values.defaultBackend.enabled }}{{ .Release.Namespace }}/{{ include "nginx-ingress-controller.defaultBackend.fullname" . }}{{ else }}{{ .Values.defaultBackendService }}{{ end }}
+            - --default-backend-service={{ ternary (printf "%s/%s" (include "common.names.namespace" .) (include "nginx-ingress-controller.defaultBackend.fullname" .)) .Values.defaultBackendService .Values.defaultBackend.enabled }}
           {{- if .Values.publishService.enabled }}
             - --publish-service={{ include "nginx-ingress-controller.publishServicePath" . }}
           {{- end }}
             - --election-id={{ .Values.electionID }}
-            - --ingress-class={{ .Values.ingressClass }}
-            - --configmap={{ default .Release.Namespace .Values.configMapNamespace }}/{{ include "common.names.fullname" . }}
+            - --controller-class={{ .Values.ingressClassResource.controllerClass }}
+            - --configmap={{ default (include "common.names.namespace" .) .Values.configMapNamespace }}/{{ include "common.names.fullname" . }}
           {{- if .Values.tcp }}
-            - --tcp-services-configmap={{ default .Release.Namespace .Values.tcpConfigMapNamespace }}/{{ include "common.names.fullname" . }}-tcp
+            - --tcp-services-configmap={{ default (include "common.names.namespace" .) .Values.tcpConfigMapNamespace }}/{{ include "common.names.fullname" . }}-tcp
           {{- end }}
           {{- if .Values.udp }}
-            - --udp-services-configmap={{ default .Release.Namespace .Values.udpConfigMapNamespace }}/{{ include "common.names.fullname" . }}-udp
+            - --udp-services-configmap={{ default (include "common.names.namespace" .) .Values.udpConfigMapNamespace }}/{{ include "common.names.fullname" . }}-udp
           {{- end }}
           {{- if .Values.scope.enabled }}
-            - --watch-namespace={{ default .Release.Namespace .Values.scope.namespace }}
+            - --watch-namespace={{ default (include "common.names.namespace" .) .Values.scope.namespace }}
           {{- end }}
           {{- if .Values.maxmindLicenseKey }}
             - --maxmind-license-key={{ .Values.maxmindLicenseKey }}
           {{- end }}
           {{- if and (.Values.reportNodeInternalIp) (.Values.hostNetwork) }}
             - --report-node-internal-ip-address={{ .Values.reportNodeInternalIp }}
+          {{- end }}
+          {{- if .Values.watchIngressWithoutClass }}
+            - --watch-ingress-without-class=true
           {{- end }}
           {{- range $key, $value := .Values.extraArgs }}
             {{- if $value }}
@@ -131,7 +135,6 @@ spec:
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
-          {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
           envFrom:
             {{- if .Values.extraEnvVarsCM }}
             - configMapRef:
@@ -141,16 +144,30 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
             {{- end }}
-          {{- end }}
-          {{- if .Values.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
-          {{- else if .Values.customLivenessProbe }}
+          {{- if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /healthz
+              port: 10254
+              scheme: HTTP
           {{- end }}
-          {{- if .Values.readinessProbe.enabled }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
-          {{- else if .Values.customReadinessProbe }}
+          {{- if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /healthz
+              port: 10254
+              scheme: HTTP
+          {{- end }}
+          {{- if .Values.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: 10254
           {{- end }}
           ports:
             - name: http
@@ -177,7 +194,6 @@ spec:
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
-          {{- if or .Values.customTemplate.configMapName .Values.extraVolumeMounts }}
           volumeMounts:
             {{- if .Values.customTemplate.configMapName }}
             - mountPath: /etc/nginx/template
@@ -187,11 +203,9 @@ spec:
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
-          {{- end }}
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
-      {{- if (or .Values.customTemplate.configMapName .Values.extraVolumes) }}
       volumes:
         {{- if .Values.customTemplate.configMapName }}
         - name: nginx-template-volume
@@ -204,5 +218,4 @@ spec:
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
-      {{- end }}
 {{- end }}

@@ -1,0 +1,19 @@
+shards: 3
+auth:
+  rootUser: root
+  rootPassword: Password123!4
+  replicaSetKey: SetPassword1234
+common:
+  containerPorts:
+    mongodb: 27017
+mongos:
+  replicaCount: 2
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 1002
+  servicePerReplica:
+    port: 80
+shardsvr:
+  dataNode:
+    replicaCount: 2

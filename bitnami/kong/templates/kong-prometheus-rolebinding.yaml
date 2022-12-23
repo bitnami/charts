@@ -2,18 +2,14 @@
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
-  name: {{ template "common.names.fullname" . }}-prometheus
+  name: {{ printf "%s-prometheus" (include "common.names.fullname" .) }}
   namespace: {{ .Release.Namespace }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ template "common.names.fullname" . }}-prometheus
+  name: {{ printf "%s-prometheus" (include "common.names.fullname" .) }}
 subjects:
-  {{- if .Values.metrics.serviceMonitor.namespace }}
-  - namespace: {{ .Values.metrics.serviceMonitor.namespace }}
-  {{- else }}
-  - namespace: {{ .Release.Namespace }}
-  {{- end }}
-  kind: ServiceAccount
-  name: {{ required "A valid .Values.metrics.serviceMonitor.serviceAccount entry required!" .Values.metrics.serviceMonitor.serviceAccount }}
+  - namespace: {{ default .Release.Namespace .Values.metrics.serviceMonitor.namespace }}
+    kind: ServiceAccount
+    name: {{ required "A valid .Values.metrics.serviceMonitor.serviceAccount entry required!" .Values.metrics.serviceMonitor.serviceAccount }}
 {{- end }}

@@ -1,0 +1,10 @@
+{
+  "streams": [
+    {
+      "stream": {
+        "label": "value"
+      },
+      "values": [["timestamp_placeholder", "value"]]
+    }
+  ]
+}

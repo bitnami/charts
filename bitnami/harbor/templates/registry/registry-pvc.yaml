@@ -4,24 +4,33 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ include "harbor.registry" . }}
-  {{- if eq .Values.persistence.resourcePolicy "keep" }}
-  annotations:
-    helm.sh/resource-policy: keep
-  {{- end }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
     app.kubernetes.io/component: registry
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-  {{- end }}
+  annotations:
+    {{- if eq .Values.persistence.resourcePolicy "keep" }}
+    helm.sh/resource-policy: keep
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.persistence.persistentVolumeClaim.registry.annotations }}
+    {{- toYaml .Values.persistence.persistentVolumeClaim.registry.annotations | nindent 4 }}
+    {{- end }}
 spec:
   accessModes:
-    - {{ .Values.persistence.persistentVolumeClaim.registry.accessMode }}
+  {{- range .Values.persistence.persistentVolumeClaim.registry.accessModes }}
+    - {{ . | quote }}
+  {{- end }}
   resources:
     requests:
       storage: {{ .Values.persistence.persistentVolumeClaim.registry.size }}
-  {{- include "harbor.registry.storageClass" . | nindent 2 }}
+  {{- if .Values.persistence.persistentVolumeClaim.registry.selector }}
+  selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.persistentVolumeClaim.registry.selector "context" $) | nindent 2 }}
+  {{- end }}
+  {{- include "common.storage.class" ( dict "persistence" .Values.persistence.persistentVolumeClaim.registry "global" .Values.global ) | nindent 2 }}
 {{- end }}
 {{- end }}

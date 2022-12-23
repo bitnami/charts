@@ -4,7 +4,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: {{ .name }}
-  namespace: {{ $.Release.Namespace }}
+  namespace: {{ $.Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" $ | nindent 4 }}
     {{- if $.Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" $.Values.commonLabels "context" $ ) | nindent 4 }}
@@ -19,14 +19,55 @@ data:
 ---
 {{- end }}
 {{- end }}
-{{- if and (not .Values.tls.existingSecret) ( .Values.tls.enabled) }}
+{{- if (include "fluentd.createTlsSecret" .) }}
+{{- $ca := genCA "fluentd-ca" 365 }}
+{{- $releaseNamespace := .Release.Namespace }}
+{{- $clusterDomain := .Values.clusterDomain }}
+{{- $fullname := include "common.names.fullname" . }}
+{{- $headlessServiceName := printf "%s-headless" ( include "common.names.fullname" . ) | trunc 63 | trimSuffix "-" }}
+{{- $aggregatorServiceName := printf "%s-aggregator" ( include "common.names.fullname" . ) | trunc 63 | trimSuffix "-"  }}
+{{- $altNames := list (printf "*.%s.%s.svc.%s" $headlessServiceName $releaseNamespace $clusterDomain) (printf "%s.%s.svc.%s" $headlessServiceName $releaseNamespace $clusterDomain) (printf "*.%s.%s.svc.%s" $aggregatorServiceName $releaseNamespace $clusterDomain) (printf "%s.%s.svc.%s" $aggregatorServiceName $releaseNamespace $clusterDomain) $fullname }}
+{{- $crt := genSignedCert $fullname nil $altNames 365 $ca }}
+{{- if .Values.aggregator.enabled }}
 apiVersion: v1
 kind: Secret
 metadata:
-  name: {{ include "fluentd.fullname" . }}-tls
-  labels: {{- include "fluentd.labels" . | nindent 4 }}
+  name: {{ printf "%s-agg-crt" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 type: kubernetes.io/tls
 data:
-  tls.crt: {{ required "A valid .Values.tls.certificate entry required!" .Values.tls.certificate | b64enc }}
-  tls.key: {{ required "A valid .Values.tls.key entry required!" .Values.tls.key | b64enc }}
+  ca.crt: {{ $ca.Cert | b64enc | quote }}
+  tls.crt: {{ $crt.Cert | b64enc | quote }}
+  tls.key: {{ $crt.Key | b64enc | quote }}
+{{- end }}
+{{- if .Values.forwarder.enabled }}
+{{- $forwarderServiceName := printf "%s-forwarder" ( include "common.names.fullname" . ) | trunc 63 | trimSuffix "-" }}
+{{- $altNames := list (printf "*.%s.%s.svc.%s" $forwarderServiceName $releaseNamespace $clusterDomain) (printf "%s.%s.svc.%s" $forwarderServiceName $releaseNamespace $clusterDomain) $fullname }}
+{{- $crt := genSignedCert $fullname nil $altNames 365 $ca }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ printf "%s-fwd-crt" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+type: kubernetes.io/tls
+data:
+  ca.crt: {{ $ca.Cert | b64enc | quote }}
+  tls.crt: {{ $crt.Cert | b64enc | quote }}
+  tls.key: {{ $crt.Key | b64enc | quote }}
+{{- end }}
 {{- end }}

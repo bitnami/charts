@@ -1,0 +1,33 @@
+http:
+  http://etcd:{{ .Vars.service.ports.peer }}/version:
+    status: 200
+file:
+  /bitnami/etcd:
+    exists: true
+    filetype: directory
+    mode: "2775"
+command:
+  {{- $auth := printf "--user=root --password=%s" .Vars.auth.rbac.rootPassword }}
+  {{- $svc_endpoint := printf "--endpoints=etcd:%d" .Vars.service.ports.client }}
+  cluster-members:
+    exec: etcdctl {{ $auth }} {{ $svc_endpoint }} member list
+    exit-status: 0
+    stdout:
+    {{- range $e, $i := until .Vars.replicaCount }}
+      - etcd-{{ $i }}
+    {{- end }}
+  {{- range $e, $i := until .Vars.replicaCount }}
+  {{- $key := printf "key_%s" (randAlpha 5) }}
+  {{- $value := printf "value_%s" (randAlpha 5) }}
+  manage-db-{{ $i }}:
+    exec: etcdctl {{ $auth }} {{ $svc_endpoint }} put {{ $key }} {{ $value }} && etcdctl {{ $auth }} --endpoints=etcd-{{ $i }}.etcd-headless:{{ $.Vars.containerPorts.client }} get {{ $key }}
+    exit-status: 0
+    stdout:
+    - {{ $key }}
+  {{- end }}
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+      - uid={{ .Vars.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/

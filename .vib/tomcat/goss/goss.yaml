@@ -1,0 +1,13 @@
+command:
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+    - uid={{ .Vars.containerSecurityContext.runAsUser }}
+    - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
+file:
+  /bitnami/tomcat:
+    exists: true
+    filetype: directory
+    mode: "2775"
+    owner: root

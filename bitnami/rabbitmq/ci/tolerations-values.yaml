@@ -1,4 +1,0 @@
-tolerations:
-  - key: foo
-    operator: "Equal"
-    value: bar

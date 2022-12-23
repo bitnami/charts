@@ -1,3 +1,7 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
 {{- $query := (include "thanos.query.values" . | fromYaml) -}}
 ** Please be patient while the chart is being deployed **
 
@@ -23,7 +27,7 @@ Thanos chart was deployed enabling the following components:
 
 Thanos Query can be accessed through following DNS name from within your cluster:
 
-    {{ include "common.names.fullname" . }}-query.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ $query.service.http.port }})
+    {{ include "common.names.fullname" . }}-query.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ if $query.service.http }}{{ coalesce $query.service.ports.http $query.service.http.port }}{{ else }}{{ $query.service.ports.http }}{{ end }})
 
 To access Thanos Query from outside the cluster execute the following commands:
 

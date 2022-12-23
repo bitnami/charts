@@ -1,0 +1,20 @@
+command:
+  which-ghost:
+    exec: which ghost
+    exit-status: 0
+    stdout:
+      - "/opt/bitnami/ghost/bin/ghost"
+    stderr: [ ]
+    timeout: 40000
+file:
+  /opt/bitnami/ghost/content:
+    filetype: symlink
+    linked-to: /bitnami/ghost/content
+    exists: true
+  /bitnami/ghost/config.production.json:
+    mode: "0644"
+    filetype: file
+    exists: true
+user:
+  ghost:
+    exists: true

@@ -1,0 +1,11 @@
+hostAliases:
+  - ip: 127.0.0.1
+    hostnames:
+      - status.testhost
+containerSecurityContext:
+  runAsUser: 1002
+podSecurityContext:
+  fsGroup: 1002
+service:
+  ports:
+    https: 444

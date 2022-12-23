@@ -1,22 +1,22 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 10.6.0
+appVersion: 10.11.0
 dependencies:
-  - name: common
-    repository: https://charts.bitnami.com/bitnami
-    tags:
-      - bitnami-common
-    version: 1.x.x
   - condition: mariadb.enabled
     name: mariadb
     repository: https://charts.bitnami.com/bitnami
     tags:
       - owncloud-database
-    version: 9.x.x
-description: A file sharing server that puts the control and security of your own data back into your hands.
+    version: 11.x.x
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 2.x.x
+description: ownCloud is an open source content collaboration platform used to store and share files from any device. It grants data privacy, synchronization between devices, and file access control.
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/owncloud
+home: https://github.com/bitnami/charts/tree/main/bitnami/owncloud
 icon: https://bitnami.com/assets/stacks/owncloud/img/owncloud-stack-220x234.png
 keywords:
   - owncloud
@@ -25,10 +25,10 @@ keywords:
   - web
   - php
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: owncloud
 sources:
-  - https://github.com/bitnami/bitnami-docker-owncloud
+  - https://github.com/bitnami/containers/tree/main/bitnami/owncloud
   - https://owncloud.org/
-version: 10.2.4
+version: 12.2.7

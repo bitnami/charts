@@ -1,0 +1,27 @@
+http:
+  https://suitecrm:{{ .Vars.service.ports.https }}:
+    status: 200
+    allow-insecure: true
+command:
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+      - uid={{ .Vars.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
+file:
+  /bitnami/suitecrm:
+    exists: true
+    filetype: directory
+    mode: '2775'
+    owner: root
+  /etc/hosts:
+    exists: true
+    filetype: file
+    contains:
+    {{ range .Vars.hostAliases }}
+    {{ $ip := .ip }}
+    {{ range $host := .hostnames }}
+      - /{{ $ip }}.*{{$host}}/
+    {{ end }}
+    {{ end }}

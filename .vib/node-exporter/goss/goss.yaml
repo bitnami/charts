@@ -1,0 +1,22 @@
+file:
+  /host/proc:
+    exists: true
+    filetype: directory
+    mode: "0555"
+    owner: root
+  /host/sys:
+    exists: true
+    filetype: directory
+    mode: "0555"
+    owner: root
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
+    filetype: directory
+    mode: "3777"
+command:
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+    - uid={{ .Vars.containerSecurityContext.runAsUser }}
+    - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/

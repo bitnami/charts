@@ -1,35 +1,41 @@
-# Logstash
+<!--- app-name: Logstash -->
 
-[Logstash](https://www.elastic.co/products/logstash) is an open source, server-side data processing pipeline that ingests data from a multitude of sources simultaneously, transforms it, and then sends it to your favorite "stash".
+# Logstash packaged by Bitnami
 
+Logstash is an open source data processing engine. It ingests data from multiple sources, processes it, and sends the output to final destination in real-time. It is a core component of the ELK stack.
+
+[Overview of Logstash](http://logstash.net)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/logstash
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/logstash
 ```
 
 ## Introduction
 
-This chart bootstraps a [logstash](https://github.com/bitnami/bitnami-docker-logstash) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [logstash](https://github.com/bitnami/containers/tree/main/bitnami/logstash) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 
 ## Installing the Chart
 
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/logstash
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/logstash
 ```
 
-These commands deploy logstash on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+These commands deploy logstash on the Kubernetes cluster in the default configuration. The [configuration](#configuration-and-installation-details) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -45,109 +51,162 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
-The following tables lists the configurable parameters of the Logstash chart and their default values.
+### Global parameters
 
-| Parameter                                  | Description                                                                                                          | Default                                                 |
-|--------------------------------------------|----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `global.imageRegistry`                     | Global Docker image registry                                                                                         | `nil`                                                   |
-| `global.imagePullSecrets`                  | Global Docker registry secret names as an array                                                                      | `[]` (does not add image pull secrets to deployed pods) |
-| `global.storageClass`                      | Global storage class for dynamic provisioning                                                                        | `nil`                                                   |
-| `image.registry`                           | Logstash image registry                                                                                              | `docker.io`                                             |
-| `image.repository`                         | Logstash image name                                                                                                  | `bitnami/logstash`                                      |
-| `image.tag`                                | Logstash image tag                                                                                                   | `{TAG_NAME}`                                            |
-| `image.pullPolicy`                         | Logstash image pull policy                                                                                           | `IfNotPresent`                                          |
-| `image.pullSecrets`                        | Specify docker-registry secret names as an array                                                                     | `[]` (does not add image pull secrets to deployed pods) |
-| `image.debug`                              | Specify if debug logs should be enabled                                                                              | `false`                                                 |
-| `kubeVersion`                              | Force target Kubernetes version (using Helm capabilities if not set)                                                 | `nil`                                                   |
-| `hostAliases`                              | Add deployment host aliases                                                                                          | `[]`                                                    |
-| `nameOverride`                             | String to partially override logstash.fullname template with a string (will prepend the release name)                | `nil`                                                   |
-| `fullnameOverride`                         | String to fully override logstash.fullname template with a string                                                    | `nil`                                                   |
-| `clusterDomain`                            | Default Kubernetes cluster domain                                                                                    | `cluster.local`                                         |
-| `configFileName`                           | Logstash configuration file name. It must match the name of the configuration file mounted as a configmap.           | `logstash.conf`                                         |
-| `enableMonitoringAPI`                      | Whether to enable the Logstash Monitoring API or not  Kubernetes cluster domain                                      | `true`                                                  |
-| `monitoringAPIPort`                        | Logstash Monitoring API Port                                                                                         | `9600`                                                  |
-| `extraEnvVars`                             | Array containing extra env vars to configure Logstash                                                                | `nil`                                                   |
-| `input`                                    | Input Plugins configuration                                                                                          | `Check values.yaml file`                                |
-| `filter`                                   | Filter Plugins configuration                                                                                         | `nil`                                                   |
-| `output`                                   | Output Plugins configuration                                                                                         | `Check values.yaml file`                                |
-| `existingConfiguration`                    | Name of existing ConfigMap object with the Logstash configuration (`input`, `filter`, and `output` will be ignored). | `nil`                                                   |
-| `enableMultiplePipelines`                  | Allows user to use multiple pipelines                                                                                | `false`                                                 |
-| `containerPorts`                           | Array containing the ports to open in the Logstash container                                                         | `Check values.yaml file`                                |
-| `extraVolumes`                             | Array to add extra volumes (evaluated as a template)                                                                 | `[]`                                                    |
-| `extraVolumeMounts`                        | Array to add extra mounts (normally used with extraVolumes, evaluated as a template)                                 | `[]`                                                    |
-| `replicaCount`                             | The number of Logstash replicas to deploy                                                                            | `1`                                                     |
-| `updateStrategy`                           | Update strategy (`RollingUpdate`, or `OnDelete`)                                                                     | `RollingUpdate`                                         |
-| `podManagementPolicy`                      | Pod management policy                                                                                                | `OrderedReady`                                          |
-| `podAnnotations`                           | Pod annotations                                                                                                      | `{}` (The value is evaluated as a template)             |
-| `podAffinityPreset`                        | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                  | `""`                                                    |
-| `podAntiAffinityPreset`                    | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `soft`                                                  |
-| `nodeAffinityPreset.type`                  | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                            | `""`                                                    |
-| `nodeAffinityPreset.key`                   | Node label key to match. Ignored if `affinity` is set.                                                               | `""`                                                    |
-| `nodeAffinityPreset.values`                | Node label values to match. Ignored if `affinity` is set.                                                            | `[]`                                                    |
-| `affinity`                                 | Affinity for pod assignment                                                                                          | `{}` (evaluated as a template)                          |
-| `nodeSelector`                             | Node labels for pod assignment                                                                                       | `{}` (evaluated as a template)                          |
-| `tolerations`                              | Tolerations for pod assignment                                                                                       | `[]` (evaluated as a template)                          |
-| `priorityClassName`                        | Controller priorityClassName                                                                                         | `nil`                                                   |
-| `securityContext.enabled`                  | Enable security context for Logstash                                                                                 | `true`                                                  |
-| `securityContext.fsGroup`                  | Group ID for the Logstash filesystem                                                                                 | `1001`                                                  |
-| `securityContext.runAsUser`                | User ID for the Logstash container                                                                                   | `1001`                                                  |
-| `resources.limits`                         | The resources limits for the Logstash container                                                                      | `{}`                                                    |
-| `resources.requests`                       | The requested resources for the Logstash container                                                                   | `{}`                                                    |
-| `livenessProbe`                            | Liveness probe configuration for Logstash                                                                            | `Check values.yaml file`                                |
-| `readinessProbe`                           | Readiness probe configuration for Logstash                                                                           | `Check values.yaml file`                                |
-| `service.type`                             | Kubernetes service type (`ClusterIP`, `NodePort`, or `LoadBalancer`)                                                 | `ClusterIP`                                             |
-| `service.ports`                            | Array containing the Logstash service ports                                                                          | `Check values.yaml file`                                |
-| `service.annotations`                      | Annotations for Logstash service                                                                                     | `{}`                                                    |
-| `service.loadBalancerIP`                   | loadBalancerIP if service type is `LoadBalancer`                                                                     | `nil`                                                   |
-| `service.loadBalancerSourceRanges`         | Address that are allowed when service is LoadBalancer                                                                | `[]`                                                    |
-| `service.clusterIP`                        | Static clusterIP or None for headless services                                                                       | `nil`                                                   |
-| `service.externalTrafficPolicy`            | External traffic policy, configure to Local to preserve client source IP when using an external loadBalancer.      | `Cluster`                                               |
-| `ingress.enabled`                          | Enable ingress controller resource                                                                                   | `false`                                                 |
-| `ingress.certManager`                      | Add annotations for cert-manager                                                                                     | `false`                                                 |
-| `ingress.hostname`                         | Default host for the ingress resource                                                                                | `logstash.local`                                        |
-| `ingress.path`                             | Default path for the ingress resource                                                                                | `/`                                                     |
-| `ingress.tls`                              | Create TLS Secret                                                                                                    | `false`                                                 |
-| `ingress.annotations`                      | Ingress annotations                                                                                                  | `[]` (evaluated as a template)                          |
-| `ingress.extraHosts[0].name`               | Additional hostnames to be covered                                                                                   | `nil`                                                   |
-| `ingress.extraHosts[0].path`               | Additional hostnames to be covered                                                                                   | `nil`                                                   |
-| `ingress.extraPaths`                       | Additional arbitrary path/backend objects                                                                            | `nil`                                                   |
-| `ingress.extraTls[0].hosts[0]`             | TLS configuration for additional hostnames to be covered                                                             | `nil`                                                   |
-| `ingress.extraTls[0].secretName`           | TLS configuration for additional hostnames to be covered                                                             | `nil`                                                   |
-| `ingress.secrets[0].name`                  | TLS Secret Name                                                                                                      | `nil`                                                   |
-| `ingress.secrets[0].certificate`           | TLS Secret Certificate                                                                                               | `nil`                                                   |
-| `ingress.secrets[0].key`                   | TLS Secret Key                                                                                                       | `nil`                                                   |
-| `metrics.enabled`                          | Enable the export of Prometheus metrics                                                                              | `false`                                                 |
-| `metrics.image.registry`                   | Logstash Relay image registry                                                                                        | `docker.io`                                             |
-| `metrics.image.repository`                 | Logstash Relay image name                                                                                            | `bitnami/logstash-exporter`                             |
-| `metrics.image.tag`                        | Logstash Relay image tag                                                                                             | `{TAG_NAME}`                                            |
-| `metrics.image.pullPolicy`                 | Logstash Relay image pull policy                                                                                     | `IfNotPresent`                                          |
-| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                     | `[]` (does not add image pull secrets to deployed pods) |
-| `metrics.resources.limits`                 | The resources limits for the Logstash Prometheus Exporter container                                                  | `{}`                                                    |
-| `metrics.resources.requests`               | The requested resources for the Logstash Prometheus Exporter container                                               | `{}`                                                    |
-| `metrics.livenessProbe`                    | Liveness probe configuration for Logstash Prometheus Exporter                                                        | `Check values.yaml file`                                |
-| `metrics.readinessProbe`                   | Readiness probe configuration for Logstash Prometheus Exporter                                                       | `Check values.yaml file`                                |
-| `metrics.service.type`                     | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                                  | `ClusterIP`                                             |
-| `metrics.service.port`                     | Logstash Prometheus Exporter port                                                                                    | `9122`                                                  |
-| `metrics.service.nodePort`                 | Kubernetes HTTP node port                                                                                            | `""`                                                    |
-| `metrics.service.annotations`              | Annotations for Logstash Prometheus Exporter service                                                                 | `Check values.yaml file`                                |
-| `metrics.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`                                                                     | `nil`                                                   |
-| `metrics.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                                                                | `[]`                                                    |
-| `metrics.service.clusterIP`                | Static clusterIP or None for headless services                                                                       | `nil`                                                   |
-| `metrics.serviceMonitor.enabled`           | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)               | `false`                                                 |
-| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                                             | `nil`                                                   |
-| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                                         | `nil` (Prometheus Operator default value)               |
-| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                              | `nil` (Prometheus Operator default value)               |
-| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                                  | `nil`                                                   |
-| `podDisruptionBudget.create`               | If true, create a pod disruption budget for pods.                                                                    | `false`                                                 |
-| `podDisruptionBudget.minAvailable`         | Minimum number / percentage of pods that should remain scheduled                                                     | `1`                                                     |
-| `podDisruptionBudget.maxUnavailable`       | Maximum number / percentage of pods that may be made unavailable                                                     | `nil`                                                   |
-| `extraDeploy`                              | Array of extra objects to deploy with the release (evaluated as a template).                                         | `nil`                                                   |
+| Name                      | Description                                     | Value |
+| ------------------------- | ----------------------------------------------- | ----- |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
+
+
+### Common parameters
+
+| Name                     | Description                                                                              | Value           |
+| ------------------------ | ---------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                     | `""`            |
+| `nameOverride`           | String to partially override logstash.fullname template (will maintain the release name) | `""`            |
+| `fullnameOverride`       | String to fully override logstash.fullname template                                      | `""`            |
+| `clusterDomain`          | Default Kubernetes cluster domain                                                        | `cluster.local` |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                               | `{}`            |
+| `commonLabels`           | Labels to add to all deployed objects                                                    | `{}`            |
+| `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template).             | `[]`            |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)  | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                     | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                        | `["infinity"]`  |
+
+
+### Logstash parameters
+
+| Name                                          | Description                                                                                                                       | Value                    |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `image.registry`                              | Logstash image registry                                                                                                           | `docker.io`              |
+| `image.repository`                            | Logstash image repository                                                                                                         | `bitnami/logstash`       |
+| `image.tag`                                   | Logstash image tag (immutable tags are recommended)                                                                               | `8.5.2-debian-11-r0`     |
+| `image.digest`                                | Logstash image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                          | `""`                     |
+| `image.pullPolicy`                            | Logstash image pull policy                                                                                                        | `IfNotPresent`           |
+| `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                  | `[]`                     |
+| `image.debug`                                 | Specify if debug logs should be enabled                                                                                           | `false`                  |
+| `hostAliases`                                 | Add deployment host aliases                                                                                                       | `[]`                     |
+| `configFileName`                              | Logstash configuration file name. It must match the name of the configuration file mounted as a configmap.                        | `logstash.conf`          |
+| `enableMonitoringAPI`                         | Whether to enable the Logstash Monitoring API or not  Kubernetes cluster domain                                                   | `true`                   |
+| `monitoringAPIPort`                           | Logstash Monitoring API Port                                                                                                      | `9600`                   |
+| `extraEnvVars`                                | Array containing extra env vars to configure Logstash                                                                             | `[]`                     |
+| `extraEnvVarsSecret`                          | To add secrets to environment                                                                                                     | `""`                     |
+| `extraEnvVarsCM`                              | To add configmaps to environment                                                                                                  | `""`                     |
+| `input`                                       | Input Plugins configuration                                                                                                       | `""`                     |
+| `filter`                                      | Filter Plugins configuration                                                                                                      | `""`                     |
+| `output`                                      | Output Plugins configuration                                                                                                      | `""`                     |
+| `existingConfiguration`                       | Name of existing ConfigMap object with the Logstash configuration (`input`, `filter`, and `output` will be ignored).              | `""`                     |
+| `enableMultiplePipelines`                     | Allows user to use multiple pipelines                                                                                             | `false`                  |
+| `extraVolumes`                                | Array to add extra volumes (evaluated as a template)                                                                              | `[]`                     |
+| `extraVolumeMounts`                           | Array to add extra mounts (normally used with extraVolumes, evaluated as a template)                                              | `[]`                     |
+| `serviceAccount.create`                       | Enable creation of ServiceAccount for Logstash pods                                                                               | `true`                   |
+| `serviceAccount.name`                         | The name of the service account to use. If not set and `create` is `true`, a name is generated                                    | `""`                     |
+| `serviceAccount.automountServiceAccountToken` | Allows automount of ServiceAccountToken on the serviceAccount created                                                             | `true`                   |
+| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                              | `{}`                     |
+| `containerPorts`                              | Array containing the ports to open in the Logstash container (evaluated as a template)                                            | `[]`                     |
+| `initContainers`                              | Add additional init containers to the Logstash pod(s)                                                                             | `[]`                     |
+| `sidecars`                                    | Add additional sidecar containers to the Logstash pod(s)                                                                          | `[]`                     |
+| `replicaCount`                                | Number of Logstash replicas to deploy                                                                                             | `1`                      |
+| `updateStrategy.type`                         | Update strategy type (`RollingUpdate`, or `OnDelete`)                                                                             | `RollingUpdate`          |
+| `podManagementPolicy`                         | Pod management policy                                                                                                             | `OrderedReady`           |
+| `podAnnotations`                              | Pod annotations                                                                                                                   | `{}`                     |
+| `podLabels`                                   | Extra labels for Logstash pods                                                                                                    | `{}`                     |
+| `podAffinityPreset`                           | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                               | `""`                     |
+| `podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                          | `soft`                   |
+| `nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                         | `""`                     |
+| `nodeAffinityPreset.key`                      | Node label key to match. Ignored if `affinity` is set.                                                                            | `""`                     |
+| `nodeAffinityPreset.values`                   | Node label values to match. Ignored if `affinity` is set.                                                                         | `[]`                     |
+| `affinity`                                    | Affinity for pod assignment                                                                                                       | `{}`                     |
+| `nodeSelector`                                | Node labels for pod assignment                                                                                                    | `{}`                     |
+| `tolerations`                                 | Tolerations for pod assignment                                                                                                    | `[]`                     |
+| `priorityClassName`                           | Pod priority                                                                                                                      | `""`                     |
+| `schedulerName`                               | Name of the k8s scheduler (other than default)                                                                                    | `""`                     |
+| `terminationGracePeriodSeconds`               | In seconds, time the given to the Logstash pod needs to terminate gracefully                                                      | `""`                     |
+| `topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment                                                                                    | `[]`                     |
+| `podSecurityContext.enabled`                  | Enabled Logstash pods' Security Context                                                                                           | `true`                   |
+| `podSecurityContext.fsGroup`                  | Set Logstash pod's Security Context fsGroup                                                                                       | `1001`                   |
+| `containerSecurityContext.enabled`            | Enabled Logstash containers' Security Context                                                                                     | `true`                   |
+| `containerSecurityContext.runAsUser`          | Set Logstash containers' Security Context runAsUser                                                                               | `1001`                   |
+| `containerSecurityContext.runAsNonRoot`       | Set Logstash container's Security Context runAsNonRoot                                                                            | `true`                   |
+| `command`                                     | Override default container command (useful when using custom images)                                                              | `[]`                     |
+| `args`                                        | Override default container args (useful when using custom images)                                                                 | `[]`                     |
+| `lifecycleHooks`                              | for the Logstash container(s) to automate configuration before or after startup                                                   | `{}`                     |
+| `resources.limits`                            | The resources limits for the Logstash container                                                                                   | `{}`                     |
+| `resources.requests`                          | The requested resources for the Logstash container                                                                                | `{}`                     |
+| `startupProbe.enabled`                        | Enable startupProbe                                                                                                               | `false`                  |
+| `startupProbe.initialDelaySeconds`            | Initial delay seconds for startupProbe                                                                                            | `60`                     |
+| `startupProbe.periodSeconds`                  | Period seconds for startupProbe                                                                                                   | `10`                     |
+| `startupProbe.timeoutSeconds`                 | Timeout seconds for startupProbe                                                                                                  | `5`                      |
+| `startupProbe.failureThreshold`               | Failure threshold for startupProbe                                                                                                | `6`                      |
+| `startupProbe.successThreshold`               | Success threshold for startupProbe                                                                                                | `1`                      |
+| `livenessProbe.enabled`                       | Enable livenessProbe                                                                                                              | `true`                   |
+| `livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                                                           | `60`                     |
+| `livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                                                                  | `10`                     |
+| `livenessProbe.timeoutSeconds`                | Timeout seconds for livenessProbe                                                                                                 | `5`                      |
+| `livenessProbe.failureThreshold`              | Failure threshold for livenessProbe                                                                                               | `6`                      |
+| `livenessProbe.successThreshold`              | Success threshold for livenessProbe                                                                                               | `1`                      |
+| `readinessProbe.enabled`                      | Enable readinessProbe                                                                                                             | `true`                   |
+| `readinessProbe.initialDelaySeconds`          | Initial delay seconds for readinessProbe                                                                                          | `60`                     |
+| `readinessProbe.periodSeconds`                | Period seconds for readinessProbe                                                                                                 | `10`                     |
+| `readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                                                                | `5`                      |
+| `readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                                                              | `6`                      |
+| `readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                                                              | `1`                      |
+| `customStartupProbe`                          | Custom startup probe for the Web component                                                                                        | `{}`                     |
+| `customLivenessProbe`                         | Custom liveness probe for the Web component                                                                                       | `{}`                     |
+| `customReadinessProbe`                        | Custom readiness probe for the Web component                                                                                      | `{}`                     |
+| `service.type`                                | Kubernetes service type (`ClusterIP`, `NodePort`, or `LoadBalancer`)                                                              | `ClusterIP`              |
+| `service.ports`                               | Logstash service ports (evaluated as a template)                                                                                  | `[]`                     |
+| `service.loadBalancerIP`                      | loadBalancerIP if service type is `LoadBalancer`                                                                                  | `""`                     |
+| `service.loadBalancerSourceRanges`            | Addresses that are allowed when service is LoadBalancer                                                                           | `[]`                     |
+| `service.externalTrafficPolicy`               | External traffic policy, configure to Local to preserve client source IP when using an external loadBalancer                      | `""`                     |
+| `service.clusterIP`                           | Static clusterIP or None for headless services                                                                                    | `""`                     |
+| `service.annotations`                         | Annotations for Logstash service                                                                                                  | `{}`                     |
+| `service.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                              | `None`                   |
+| `service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                                                                       | `{}`                     |
+| `persistence.enabled`                         | Enable Logstash data persistence using PVC                                                                                        | `false`                  |
+| `persistence.existingClaim`                   | A manually managed Persistent Volume and Claim                                                                                    | `""`                     |
+| `persistence.storageClass`                    | PVC Storage Class for Logstash data volume                                                                                        | `""`                     |
+| `persistence.accessModes`                     | PVC Access Mode for Logstash data volume                                                                                          | `["ReadWriteOnce"]`      |
+| `persistence.size`                            | PVC Storage Request for Logstash data volume                                                                                      | `2Gi`                    |
+| `persistence.annotations`                     | Annotations for the PVC                                                                                                           | `{}`                     |
+| `persistence.mountPath`                       | Mount path of the Logstash data volume                                                                                            | `/bitnami/logstash/data` |
+| `persistence.selector`                        | Selector to match an existing Persistent Volume for WordPress data PVC                                                            | `{}`                     |
+| `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                  |
+| `volumePermissions.securityContext.runAsUser` | User ID for the volumePermissions init container                                                                                  | `0`                      |
+| `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                  | `docker.io`              |
+| `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell`  |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r54`       |
+| `volumePermissions.image.digest`              | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
+| `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`           |
+| `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                  | `[]`                     |
+| `volumePermissions.resources.limits`          | Init container volume-permissions resource limits                                                                                 | `{}`                     |
+| `volumePermissions.resources.requests`        | Init container volume-permissions resource requests                                                                               | `{}`                     |
+| `ingress.enabled`                             | Enable ingress controller resource                                                                                                | `false`                  |
+| `ingress.selfSigned`                          | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                      | `false`                  |
+| `ingress.pathType`                            | Ingress Path type                                                                                                                 | `ImplementationSpecific` |
+| `ingress.apiVersion`                          | Override API Version (automatically detected if not set)                                                                          | `""`                     |
+| `ingress.hostname`                            | Default host for the ingress resource                                                                                             | `logstash.local`         |
+| `ingress.path`                                | The Path to Logstash. You may need to set this to '/*' in order to use this with ALB ingress controllers.                         | `/`                      |
+| `ingress.annotations`                         | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.  | `{}`                     |
+| `ingress.tls`                                 | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                   | `false`                  |
+| `ingress.extraHosts`                          | The list of additional hostnames to be covered with this ingress record.                                                          | `[]`                     |
+| `ingress.extraPaths`                          | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                      | `[]`                     |
+| `ingress.extraRules`                          | The list of additional rules to be added to this ingress record. Evaluated as a template                                          | `[]`                     |
+| `ingress.extraTls`                            | The tls configuration for additional hostnames to be covered with this ingress record.                                            | `[]`                     |
+| `ingress.secrets`                             | If you're providing your own certificates, please use this to add the certificates as secrets                                     | `[]`                     |
+| `ingress.ingressClassName`                    | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                     | `""`                     |
+| `pdb.create`                                  | If true, create a pod disruption budget for pods.                                                                                 | `false`                  |
+| `pdb.minAvailable`                            | Minimum number / percentage of pods that should remain scheduled                                                                  | `1`                      |
+| `pdb.maxUnavailable`                          | Maximum number / percentage of pods that may be made unavailable                                                                  | `""`                     |
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
 $ helm install my-release \
-  --set enableMonitoringAPI=false bitnami/logstash
+  --set enableMonitoringAPI=false my-repo/logstash
 ```
 
 The above command disables the Logstash Monitoring API.
@@ -155,124 +214,49 @@ The above command disables the Logstash Monitoring API.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/logstash
+$ helm install my-release -f values.yaml my-repo/logstash
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Configure the way how to expose Logstash
+### Expose the Logstash service
 
-- **Ingress**: The ingress controller must be installed in the Kubernetes cluster. Set `ingress.enabled=true` to expose Logstash through Ingress.
-- **ClusterIP**: Exposes the service on a cluster-internal IP. Choosing this value makes the service only reachable from within the cluster. Set `service.type=ClusterIP` to choose this service type.
-- **NodePort**: Exposes the service on each Node's IP at a static port (the NodePort). You’ll be able to contact the NodePort service, from outside the cluster, by requesting `NodeIP:NodePort`. Set `service.type=NodePort` to choose this service type.
-- **LoadBalancer**: Exposes the service externally using a cloud provider's load balancer. Set `service.type=LoadBalancer` to choose this service type.
+The service(s) created by the deployment can be exposed within or outside the cluster using any of the following approaches:
 
-### Using custom configuration
+- **Ingress**: Set `ingress.enabled=true` to expose Logstash through Ingress.
+- **ClusterIP**: Set `service.type=ClusterIP` to choose this service type.
+- **NodePort**: Set `service.type=NodePort` to choose this service type.
+- **LoadBalancer**: Set `service.type=LoadBalancer` to choose this service type.
 
-By default, this Helm chart provides a very basic configuration for Logstash, which listen HTTP requests on port 8080 and writes them to stdout.
+For more information, refer to the [chart documentation on exposing the Logstash service](https://docs.bitnami.com/kubernetes/apps/logstash/get-started/expose-service/).
 
-You can achieve any Logstash configuration by providing your custom configuration files. To do so, this helm chart supports to customize every configuration file.
+### Use custom configuration
 
-You can specify the Logstash configuration using the `input`, `filter`, and `output` parameters. Each of them, allows you to specify the Input Plugins, Filter Plugins, and Output Plugins configuration, respectively.
+By default, this Helm chart provides a basic configuration for Logstash: listening to HTTP requests on port 8080 and writing them to the standard output.
 
-In addition to these options, you can also set an external ConfigMap with all the configuration files. This is done by setting the `existingConfiguration` parameter. Note that this will override the two previous options.
+This Logstash configuration can be adjusted using the *input*, *filter*, and *output* parameters, which allow specification of the input, filter and output plugins configuration respectively. In addition to these options, the chart also supports reading configuration from an external ConfigMap via the *existingConfiguration* parameter.
 
-### Using multiple pipelines
+Refer to the [chart documentation for more information on customizing the Logstash deployment](https://docs.bitnami.com/kubernetes/apps/logstash/configuration/customize-deployment/).
 
-You can use [multiple pipelines](https://www.elastic.co/guide/en/logstash/master/multiple-pipelines.html) by setting the `enableMultiplePipelines` parameter to `true`.
+### Create and use multiple pipelines
 
-In that case, you should place your `pipelines.yml` file in the "files/conf" directory (together with the rest of the desired configuration files). If the `enableMultiplePipelines` parameter is set to `true` but there is not any `pipelines.yml` file in the mounted volume, a dummy file is created using the default configuration file as a single pipeline.
+The chart supports the use of [multiple pipelines](https://www.elastic.co/guide/en/logstash/master/multiple-pipelines.html) by setting the *enableMultiplePipelines* parameter to *true*.
 
-You can also set an external ConfigMap with all the configuration files. This is done by setting the `existingConfiguration` parameter.
+The chart supports setting an external ConfigMap with all the configuration files via the *existingConfiguration* parameter.
 
-Find below a basic example placing the configuration files in the "files/conf" folder although the same approach can be followed by using a ConfigMap:
+For more information and an example, refer to the chart documentation on [using multiple pipelines](https://docs.bitnami.com/kubernetes/apps/logstash/configuration/use-multiple-pipelines/).
 
-- ConfigMap with the configuration files:
+### Add extra environment variables
 
-```console
-$ cat bye.conf
-input {
-  file {
-    path => "/tmp/bye"
-  }
-}
-output {
-  stdout { }
-}
-
-$ cat hello.conf
-input {
-  file {
-    path => "/tmp/hello"
-  }
-}
-output {
-  stdout { }
-}
-
-$ cat pipelines.yml
-- pipeline.id: hello
-  path.config: "/opt/bitnami/logstash/config/hello.conf"
-- pipeline.id: bye
-  path.config: "/opt/bitnami/logstash/config/bye.conf"
-
-$ kubectl create cm multipleconfig --from-file=pipelines.yml --from-file=hello.conf --from-file=bye.conf
-```
-
-- Deploy the Helm Chart with the `enableMultiplePipelines` parameter:
-
-```console
-$ helm install logstash . --set enableMultiplePipelines=true --set existingConfiguration=multipleconfig
-
-$ kubectl logs -f logstash-0
-logstash 12:57:43.51 INFO  ==> ** Starting Logstash setup **
-logstash 12:57:43.54 INFO  ==> Initializing Logstash server...
-logstash 12:57:43.56 INFO  ==> Mounted config directory detected
-logstash 12:57:43.62 INFO  ==> User's pipelines file detected.
-logstash 12:57:43.63 INFO  ==> ** Logstash setup finished! **
-logstash 12:57:43.64 INFO  ==> ** Starting Logstash **
-logstash 12:57:43.64 INFO  ==> Starting logstash using pipelines file (pipelines.yml)
-...
-[2020-11-25T12:58:23,802][INFO ][logstash.javapipeline    ][bye] Pipeline started {"pipeline.id"=>"bye"}
-[2020-11-25T12:58:23,810][INFO ][logstash.javapipeline    ][hello] Pipeline started {"pipeline.id"=>"hello"}
-[2020-11-25T12:58:23,931][INFO ][logstash.agent           ] Pipelines running {:count=>2, :running_pipelines=>[:bye, :hello], :non_running_pipelines=>[]}
-```
-
-- According to the previous logs, both pipelines are being taken into account. Let's create some events in the tracked files and see the result in the Logstash output:
-```console
-$ kubectl exec -ti logstash-0 -- bash -c 'echo hi >> /tmp/hello'
-$ kubectl exec -ti logstash-0 -- bash -c 'echo bye >> /tmp/bye'
-
-$ kubectl logs -f logstash-0
-...
-[2020-11-25T12:58:24,535][INFO ][logstash.agent           ] Successfully started Logstash API endpoint {:port=>9600}
-{
-      "@version" => "1",
-    "@timestamp" => 2020-11-25T12:59:39.624Z,
-          "path" => "/tmp/hello",
-          "host" => "logstash-0",
-       "message" => "hi"
-}
-{
-      "@version" => "1",
-    "@timestamp" => 2020-11-25T12:59:54.351Z,
-          "path" => "/tmp/bye",
-          "host" => "logstash-0",
-       "message" => "bye"
-}
-```
-
-### Adding extra environment variables
-
-In case you want to add extra environment variables, you can use the `extraEnvVars` property.
+To add extra environment variables, use the `extraEnvVars` property.
 
 ```yaml
 extraEnvVars:
@@ -280,17 +264,49 @@ extraEnvVars:
     value: "x.y.z"
 ```
 
-### Setting Pod's affinity
+To add extra environment variables from an external ConfigMap or secret, use the `extraEnvVarsCM` and `extraEnvVarsSecret` properties. Note that the secret and ConfigMap should be already available in the namespace.
 
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+```yaml
+extraEnvVarsSecret: logstash-secrets
+extraEnvVarsCM: logstash-configmap
+```
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+### Set Pod affinity
+
+This chart allows you to set custom Pod affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
+## Persistence
+
+The [Bitnami Logstash](https://github.com/bitnami/containers/tree/main/bitnami/logstash) image stores the Logstash data at the `/bitnami/logstash/data` path of the container.
+
+Persistent Volume Claims (PVCs) are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
+
+See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 5.0.0
+
+This major release is no longer contains the metrics section because the container `bitnami/logstash-exporter` has been deprecated due to the upstream project is not maintained.
+
+### To 4.0.0
+
+This major release updates the chart to use Logstash 8. In addition, this chart has been standardized adding missing values and renaming others, in order to get aligned with the rest of the assets in the Bitnami charts repository.
+
+The following values have been renamed:
+
+- `securityContext` has been splitted between `containerSecurityContext` and `podSecurityContext`.
+- Liveness and readiness probes httpGet field can not be modified. For customization, use customLivenessProbe and customReadinessProbe instead.
+- `lifecycle` renamed as `lifecycleHooks`.
+- `service.ports` is now evaluated as a template with array structure.
+- Enabling `ingress.tls` no longer auto generates certificates. Use `ingress.selfSigned` to enable the creation of autogenerated certificates.
+- `podDisruptionBudget.*` renamed as `pdb.*`.
 
 ### To 3.0.0
 
@@ -302,25 +318,26 @@ This version drops support of including files in the `files/` folder, as it was 
 
 ### To 1.2.0
 
-This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### To 1.0.0
 
-[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+[On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). Subsequently, a major version of the chart was released to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
+[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/apps/logstash/administration/upgrade-helm3/).
 
-- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+## License
 
-**Considerations when upgrading to this version**
+Copyright &copy; 2022 Bitnami
 
-- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
-- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
-- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-**Useful links**
+    http://www.apache.org/licenses/LICENSE-2.0
 
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

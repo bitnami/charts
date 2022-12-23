@@ -1,0 +1,28 @@
+annotations:
+  category: Infrastructure
+apiVersion: v2
+appVersion: 0.9.9
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 2.x.x
+description: Wavefront HPA Adapter for Kubernetes is a Kubernetes Horizontal Pod Autoscaler adapter. It allows to scale your Kubernetes workloads based on Wavefront metrics.
+engine: gotpl
+home: https://github.com/wavefrontHQ/wavefront-kubernetes-adapter
+icon: https://bitnami.com/assets/stacks/wavefront-hpa-adapter/img/wavefront-hpa-adapter-stack-220x234.png
+keywords:
+  - alerting
+  - adapter
+  - metrics
+  - monitoring
+  - observability
+  - wavefront
+maintainers:
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
+name: wavefront-hpa-adapter
+sources:
+  - https://github.com/bitnami/containers/tree/main/bitnami/wavefront-hpa-adapter
+version: 1.3.6

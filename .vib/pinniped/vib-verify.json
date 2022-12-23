@@ -1,0 +1,44 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/pinniped"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/pinniped"
+        },
+        "runtime_parameters": "Y29uY2llcmdlOgogIGNyZWRlbnRpYWxJc3N1ZXJDb25maWc6IHwKICAgIGltcGVyc29uYXRpb25Qcm94eToKICAgICAgbW9kZTogYXV0bwogICAgICBzZXJ2aWNlOgogICAgICAgIHR5cGU6IENsdXN0ZXJJUAogICAgICAgIGFubm90YXRpb25zOgogICAgICAgICAgc2VydmljZS5iZXRhLmt1YmVybmV0ZXMuaW8vYXdzLWxvYWQtYmFsYW5jZXItY29ubmVjdGlvbi1pZGxlLXRpbWVvdXQ6ICI0MDAwIgpzdXBlcnZpc29yOgogIHNlcnZpY2U6CiAgICBwb3J0czoKICAgICAgaHR0cHM6IDQ0MwogICAgdHlwZTogTG9hZEJhbGFuY2VyCg==",
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "health-check",
+          "params": {
+            "endpoint": "lb-pinniped-supervisor-https",
+            "app_protocol": "GENERIC"
+          }
+        }
+      ]
+    }
+  }
+}

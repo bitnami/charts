@@ -1,5 +1,29 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+    /opt/bitnami/scripts/mongodb/entrypoint.sh /opt/bitnami/scripts/mongodb/run.sh
+
+{{- else }}
+
 {{- $replicaCount := int .Values.replicaCount }}
-{{- $portNumber := int .Values.service.port }}
+{{- $portNumber := int .Values.service.ports.mongodb }}
 {{- $fullname := include "mongodb.fullname" . }}
 {{- $releaseNamespace := include "mongodb.namespace" . }}
 {{- $clusterDomain := .Values.clusterDomain }}
@@ -11,13 +35,13 @@
 
 {{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled) (not (eq $replicaCount $loadBalancerIPListLength )) (eq .Values.externalAccess.service.type "LoadBalancer") }}
 
-###############################################################################
-### ERROR: You enabled external access to MongoDB(R) nodes without specifying  ###
-###   the array of load balancer IPs for MongoDB(R) nodes.                     ###
-###############################################################################
+####################################################################################
+### ERROR: You enabled external access to MongoDB&reg; nodes without specifying  ###
+###   the array of load balancer IPs for MongoDB&reg; nodes.                     ###
+####################################################################################
 
 This deployment will be incomplete until you configure the array of load balancer
-IPs for MongoDB(R) nodes. To complete your deployment follow the steps below:
+IPs for MongoDB&reg; nodes. To complete your deployment follow the steps below:
 
 1. Wait for the load balancer IPs (it may take a few minutes for them to be available):
 
@@ -31,7 +55,7 @@ IPs for MongoDB(R) nodes. To complete your deployment follow the steps below:
 
 3. Upgrade you chart:
 
-    helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+    helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} my-repo/{{ .Chart.Name }} \
       --set mongodb.replicaCount={{ $replicaCount }} \
       --set mongodb.externalAccess.enabled=true \
       {{- range $i, $e := until $replicaCount }}
@@ -46,7 +70,7 @@ IPs for MongoDB(R) nodes. To complete your deployment follow the steps below:
  WARNING
 
     By not enabling "mongodb.auth.enabled" you have most likely exposed the
-    MongoDB(R) service externally without any authentication mechanism.
+    MongoDB&reg; service externally without any authentication mechanism.
 
     For security reasons, we strongly suggest that you enable authentiation
     setting the "mongodb.auth.enabled" parameter to "true".
@@ -56,7 +80,7 @@ IPs for MongoDB(R) nodes. To complete your deployment follow the steps below:
 
 ** Please be patient while the chart is being deployed **
 
-MongoDB(R) can be accessed on the following DNS name(s) and ports from within your cluster:
+MongoDB&reg; can be accessed on the following DNS name(s) and ports from within your cluster:
 
 {{- if eq .Values.architecture "replicaset" }}
 {{ join "\n" $mongoList | nindent 4 }}
@@ -70,27 +94,32 @@ MongoDB(R) can be accessed on the following DNS name(s) and ports from within yo
 
 To get the root password run:
 
-    export MONGODB_ROOT_PASSWORD=$(kubectl get secret --namespace {{ template "mongodb.namespace" . }} {{ template "mongodb.fullname" . }} -o jsonpath="{.data.mongodb-root-password}" | base64 --decode)
+    export MONGODB_ROOT_PASSWORD=$(kubectl get secret --namespace {{ template "mongodb.namespace" . }} {{ template "mongodb.secretName" . }} -o jsonpath="{.data.mongodb-root-password}" | base64 -d)
 
 {{- end }}
-{{- if and .Values.auth.username .Values.auth.database .Values.auth.password }}
+{{- $customUsers := include "mongodb.customUsers" . -}}
+{{- $customDatabases := include "mongodb.customDatabases" . -}}
+{{- if and (not (empty $customUsers)) (not (empty $customDatabases)) }}
+{{- $customUsersList := splitList "," $customUsers }}
+{{- range $index, $user := $customUsersList }}
 
-To get the password for "{{ .Values.auth.username }}" run:
+To get the password for "{{ $user }}" run:
 
-    export MONGODB_PASSWORD=$(kubectl get secret --namespace {{ template "mongodb.namespace" . }} {{ template "mongodb.fullname" . }} -o jsonpath="{.data.mongodb-password}" | base64 --decode)
+    export MONGODB_PASSWORD=$(kubectl get secret --namespace {{ include "mongodb.namespace" $ }} {{ include "mongodb.secretName" $ }} -o jsonpath="{.data.mongodb-passwords}" | base64 -d | awk -F',' '{print ${{ add 1 $index }}}')
 
 {{- end }}
+{{- end }}
 
-To connect to your database, create a MongoDB(R) client container:
+To connect to your database, create a MongoDB&reg; client container:
 
     kubectl run --namespace {{ template "mongodb.namespace" . }} {{ template "mongodb.fullname" . }}-client --rm --tty -i --restart='Never' --env="MONGODB_ROOT_PASSWORD=$MONGODB_ROOT_PASSWORD" --image {{ template "mongodb.image" . }} --command -- bash
 
 Then, run the following command:
 
     {{- if eq .Values.architecture "replicaset" }}
-    mongo admin --host "{{ join "," $mongoList }}" {{- if .Values.auth.enabled }} --authenticationDatabase admin -u root -p $MONGODB_ROOT_PASSWORD{{- end }}
+    mongosh admin --host "{{ join "," $mongoList }}" {{- if .Values.auth.enabled }} --authenticationDatabase admin -u root -p $MONGODB_ROOT_PASSWORD{{- end }}
     {{- else }}
-    mongo admin --host "{{ template "mongodb.fullname" . }}" {{- if .Values.auth.enabled }} --authenticationDatabase admin -u root -p $MONGODB_ROOT_PASSWORD{{- end }}
+    mongosh admin --host "{{ template "mongodb.fullname" . }}" {{- if .Values.auth.enabled }} --authenticationDatabase admin -u root -p $MONGODB_ROOT_PASSWORD{{- end }}
     {{- end }}
 
 {{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled }}
@@ -100,17 +129,17 @@ To connect to your database nodes from outside, you need to add both primary and
 {{- if eq "NodePort" .Values.externalAccess.service.type }}
 {{- if .Values.externalAccess.service.domain }}
 
-    MongoDB(R) nodes domain: Use your provided hostname to reach MongoDB(R) nodes, {{ .Values.externalAccess.service.domain }}
+    MongoDB&reg; nodes domain: Use your provided hostname to reach MongoDB&reg; nodes, {{ .Values.externalAccess.service.domain }}
 
 {{- else }}
 
-    MongoDB(R) nodes domain: you can reach MongoDB(R) nodes on any of the K8s nodes external IPs.
+    MongoDB&reg; nodes domain: you can reach MongoDB&reg; nodes on any of the K8s nodes external IPs.
 
         kubectl get nodes -o wide
 
 {{- end }}
 
-    MongoDB(R) nodes port: You will have a different node port for each MongoDB(R) node. You can get the list of configured node ports using the command below:
+    MongoDB&reg; nodes port: You will have a different node port for each MongoDB&reg; node. You can get the list of configured node ports using the command below:
 
         echo "$(kubectl get svc --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "mongodb.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=mongodb,pod" -o jsonpath='{.items[*].spec.ports[0].nodePort}' | tr ' ' '\n')"
 
@@ -119,11 +148,11 @@ To connect to your database nodes from outside, you need to add both primary and
   NOTE: It may take a few minutes for the LoadBalancer IPs to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "mongodb.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=mongodb,pod" -w'
 
-    MongoDB(R) nodes domain: You will have a different external IP for each MongoDB(R) node. You can get the list of external IPs using the command below:
+    MongoDB&reg; nodes domain: You will have a different external IP for each MongoDB&reg; node. You can get the list of external IPs using the command below:
 
         echo "$(kubectl get svc --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "mongodb.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=mongodb,pod" -o jsonpath='{.items[*].status.loadBalancer.ingress[0].ip}' | tr ' ' '\n')"
 
-    MongoDB(R) nodes port: {{ .Values.externalAccess.service.port }}
+    MongoDB&reg; nodes port: {{ .Values.externalAccess.service.ports.mongodb }}
 
 {{- end }}
 
@@ -142,13 +171,13 @@ To connect to your database from outside the cluster execute the following comma
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ template "mongodb.namespace" . }} -w {{ template "mongodb.fullname" . }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ template "mongodb.namespace" . }} {{ template "mongodb.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
-    mongo --host $SERVICE_IP --port {{ $portNumber }} {{- if .Values.auth.enabled }} --authenticationDatabase admin -p $MONGODB_ROOT_PASSWORD{{- end }}
+    export SERVICE_IP=$(kubectl get svc --namespace {{ template "mongodb.namespace" . }} {{ template "mongodb.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+    mongosh --host $SERVICE_IP --port {{ $portNumber }} {{- if .Values.auth.enabled }} --authenticationDatabase admin -p $MONGODB_ROOT_PASSWORD{{- end }}
 
 {{- else if contains "ClusterIP" .Values.service.type }}
 
     kubectl port-forward --namespace {{ template "mongodb.namespace" . }} svc/{{ template "mongodb.fullname" . }} {{ $portNumber }}:{{ $portNumber }} &
-    mongo --host 127.0.0.1 {{- if .Values.auth.enabled }} --authenticationDatabase admin -p $MONGODB_ROOT_PASSWORD{{- end }}
+    mongosh --host 127.0.0.1 {{- if .Values.auth.enabled }} --authenticationDatabase admin -p $MONGODB_ROOT_PASSWORD{{- end }}
 
 {{- end }}
 {{- end }}
@@ -156,19 +185,18 @@ To connect to your database from outside the cluster execute the following comma
 
 {{- if .Values.metrics.enabled }}
 
-To access the MongoDB(R) Prometheus metrics, get the MongoDB(R) Prometheus URL by running:
+To access the MongoDB&reg; Prometheus metrics, get the MongoDB&reg; Prometheus URL by running:
 
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "mongodb.fullname" . }}-metrics {{ .Values.metrics.service.port }}:{{ .Values.metrics.service.port }} &
-    echo "Prometheus Metrics URL: http://127.0.0.1:{{ .Values.metrics.service.port }}/metrics"
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "mongodb.fullname" . }}-metrics {{ .Values.metrics.service.ports.metrics }}:{{ .Values.metrics.service.ports.metrics }} &
+    echo "Prometheus Metrics URL: http://127.0.0.1:{{ .Values.metrics.service.ports.metrics }}/metrics"
 
 Then, open the obtained URL in a browser.
 
 {{- end }}
-
+{{- end }}
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
 {{- include "common.warnings.rollingTag" .Values.externalAccess.autoDiscovery.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
+{{- include "common.warnings.rollingTag" .Values.tls.image }}
 {{- include "mongodb.validateValues" . }}
-{{- $secretName := include "mongodb.fullname" . -}}
-{{- $passwordValidationErrors := include "common.validations.values.mongodb.passwords" (dict "secret" $secretName "context" $) -}}
-{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $passwordValidationErrors) "context" $) -}}

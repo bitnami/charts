@@ -1,0 +1,3 @@
+mariadb:
+  auth:
+    database: bitnami_joomla

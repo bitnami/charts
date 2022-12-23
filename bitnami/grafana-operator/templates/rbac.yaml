@@ -1,7 +1,77 @@
 {{- if and .Values.operator.rbac.create .Values.operator.enabled }}
----
+{{- if .Values.operator.leaderElect }}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
+metadata:
+  name: {{ printf "%s-leader-election" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+rules:
+- apiGroups:
+    - ""
+  resources:
+    - configmaps
+  verbs:
+    - get
+    - list
+    - watch
+    - create
+    - update
+    - patch
+    - delete
+- apiGroups:
+    - coordination.k8s.io
+  resources:
+    - leases
+  verbs:
+    - get
+    - list
+    - watch
+    - create
+    - update
+    - patch
+    - delete
+- apiGroups:
+    - ""
+  resources:
+    - events
+  verbs:
+    - create
+    - patch
+---
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: RoleBinding
+metadata:
+  name: {{ printf "%s-leader-election" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ printf "%s-leader-election" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "grafana-operator.serviceAccountName" . }}
+{{- end }}
+---
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+{{- if or .Values.operator.scanAllNamespaces .Values.operator.scanNamespaces }}
+kind: ClusterRole
+{{- else }}
+kind: Role
+{{- end }}
 metadata:
   name: {{ include "common.names.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
@@ -15,49 +85,163 @@ rules:
   - apiGroups:
       - ""
     resources:
-      - pods
-      - services
-      - endpoints
-      - persistentvolumeclaims
       - configmaps
+      - persistentvolumeclaims
       - secrets
       - serviceaccounts
-      - configmaps
+      - services
     verbs:
+      - create
+      - delete
       - get
       - list
-      - create
+      - patch
       - update
-      - delete
-      - deletecollection
       - watch
   - apiGroups:
       - ""
     resources:
       - events
     verbs:
+      - create
       - get
       - list
-      - watch
-      - create
-      - delete
-      - update
       - patch
+      - watch
   - apiGroups:
-      - apps
+      - ""
     resources:
-      - deployments
-      - deployments/finalizers
-      - daemonsets
-      - replicasets
-      - statefulsets
+      - pods
     verbs:
       - get
       - list
+      - watch
+  - apiGroups:
+      - apps
+      - extensions
+    resources:
+      - deployments
+      - deployments/finalizers
+    verbs:
       - create
-      - update
       - delete
-      - deletecollection
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - integreatly.org
+    resources:
+      - grafanadashboards
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - integreatly.org
+    resources:
+      - grafanadashboards/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - integreatly.org
+    resources:
+      - grafanadatasources
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - integreatly.org
+    resources:
+      - grafanadatasources/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - integreatly.org
+    resources:
+      - grafanafolders
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - integreatly.org
+    resources:
+      - grafanafolders/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - integreatly.org
+    resources:
+      - grafananotificationchannels
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - integreatly.org
+    resources:
+      - grafananotificationchannels/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - integreatly.org
+    resources:
+      - grafanas
+      - grafanas/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - integreatly.org
+    resources:
+      - grafanas/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - networking.k8s.io
+    resources:
+      - ingresses
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
       - watch
   - apiGroups:
       - route.openshift.io
@@ -65,90 +249,26 @@ rules:
       - routes
       - routes/custom-host
     verbs:
+      - create
+      - delete
       - get
       - list
-      - create
+      - patch
       - update
-      - delete
-      - deletecollection
       - watch
-      - create
-  - apiGroups:
-      - extensions
-    resources:
-      - ingresses
+  {{- if or .Values.operator.scanAllNamespaces  .Values.operator.scanNamespaces }}
+  - nonResourceURLs:
+      - /metrics
     verbs:
       - get
-      - list
-      - create
-      - update
-      - delete
-      - deletecollection
-      - watch
-  - apiGroups:
-      - integreatly.org
-    resources:
-      - grafanas
-      - grafanas/status
-      - grafanas/finalizers
-      - grafanadashboards
-      - grafanadatasources
-      - grafanadatasources/status
-    verbs:
-      - get
-      - list
-      - create
-      - update
-      - delete
-      - deletecollection
-      - watch
----
-apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
-kind: RoleBinding
-metadata:
-  name: {{ include "common.names.fullname" . }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
-roleRef:
-  name: {{ include "common.names.fullname" . }}
-  kind: Role
-  apiGroup: ""
-subjects:
-  - kind: ServiceAccount
-    name: {{ include "grafana-operator.serviceAccountName" . }}
-{{- if or .Values.operator.args.scanAllNamespaces  .Values.operator.args.scanNamespaces}}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
-kind: ClusterRole
-metadata:
-  name: {{ include "common.names.fullname" . }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-  {{- end }}
-rules:
-  - apiGroups:
-      - integreatly.org
-    resources:
-      - grafanadashboards
-      - grafanadashboards/status
-    verbs: ['get', 'list', 'update', 'watch']
-  - apiGroups:
-      - ""
-    resources:
-      - namespaces
-    verbs: ['get', 'list', 'watch']
----
-apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+{{- if or .Values.operator.scanAllNamespaces  .Values.operator.scanNamespaces }}
 kind: ClusterRoleBinding
+{{- else }}
+kind: RoleBinding
+{{- end }}
 metadata:
   name: {{ include "common.names.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
@@ -160,11 +280,16 @@ metadata:
   {{- end }}
 roleRef:
   name: {{ include "common.names.fullname" . }}
+  {{- if or .Values.operator.scanAllNamespaces  .Values.operator.scanNamespaces }}
   kind: ClusterRole
-  apiGroup: ""
+  {{- else }}
+  kind: Role
+  {{- end }}
+  apiGroup: rbac.authorization.k8s.io
 subjects:
   - kind: ServiceAccount
     name: {{ include "grafana-operator.serviceAccountName" . }}
-    namespace: {{ .Release.Namespace }}
-{{- end }}
+    {{- if or .Values.operator.scanAllNamespaces .Values.operator.scanNamespaces }}
+    namespace: {{ include "common.names.namespace" . }}
+    {{- end }}
 {{- end }}

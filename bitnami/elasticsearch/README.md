@@ -1,24 +1,30 @@
-# Elasticsearch
+<!--- app-name: Elasticsearch -->
 
-[Elasticsearch](https://www.elastic.co/products/elasticsearch) is a highly scalable open-source full-text search and analytics engine. It allows you to store, search, and analyze big volumes of data quickly and in near real time.
+# Bitnami Elasticsearch Stack
 
+Elasticsearch is a distributed search and analytics engine. It is used for web search, log monitoring, and real-time analytics. Ideal for Big Data applications.
+
+[Overview of Elasticsearch](https://www.elastic.co/products/elasticsearch)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/elasticsearch
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/elasticsearch
 ```
 
 ## Introduction
 
-This chart bootstraps a [Elasticsearch](https://github.com/bitnami/bitnami-docker-elasticsearch) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Elasticsearch](https://github.com/bitnami/containers/tree/main/bitnami/elasticsearch) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -26,8 +32,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/elasticsearch
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/elasticsearch
 ```
 
 These commands deploy Elasticsearch on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -50,287 +56,596 @@ $ helm delete --purge my-release
 
 ## Parameters
 
-The following table lists the configurable parameters of the Elasticsearch chart and their default values.
+### Global parameters
 
-| Parameter                                         | Description                                                                                                                                                       | Default                                                      |
-|---------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `global.imageRegistry`                            | Global Docker image registry                                                                                                                                      | `nil`                                                        |
-| `global.imagePullSecrets`                         | Global Docker registry secret names as an array                                                                                                                   | `[]` (does not add image pull secrets to deployed pods)      |
-| `global.storageClass`                             | Global storage class for dynamic provisioning                                                                                                                     | `nil`                                                        |
-| `global.coordinating.name`                        | Coordinating-only node pod name at global level to be used also in the Kibana subchart                                                                            | `coordinating-only`                                          |
-| `image.registry`                                  | Elasticsearch image registry                                                                                                                                      | `docker.io`                                                  |
-| `image.repository`                                | Elasticsearch image repository                                                                                                                                    | `bitnami/elasticsearch`                                      |
-| `image.tag`                                       | Elasticsearch image tag                                                                                                                                           | `{TAG_NAME}`                                                 |
-| `image.pullPolicy`                                | Image pull policy                                                                                                                                                 | `IfNotPresent`                                               |
-| `image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                                                                  | `[]` (does not add image pull secrets to deployed pods)      |
-| `nameOverride`                                    | String to partially override elasticsearch.fullname template with a string (will prepend the release name)                                                        | `nil`                                                        |
-| `fullnameOverride`                                | String to fully override elasticsearch.fullname template with a string                                                                                            | `nil`                                                        |
-| `name`                                            | Elasticsearch cluster name                                                                                                                                        | `elastic`                                                    |
-| `plugins`                                         | Comma, semi-colon or space separated list of plugins to install at initialization                                                                                 | `nil`                                                        |
-| `snapshotRepoPath`                                | File System snapshot repository path                                                                                                                              | `nil`                                                        |
-| `config`                                          | Elasticsearch node custom configuration                                                                                                                           | ``                                                           |
-| `extraVolumes`                                    | Extra volumes                                                                                                                                                     |                                                              |
-| `extraVolumeMounts`                               | Mount extra volume(s),                                                                                                                                            |                                                              |
-| `initScripts`                                     | Dictionary of init scripts. Evaluated as a template.                                                                                                              | `nil`                                                        |
-| `initScriptsCM`                                   | ConfigMap with the init scripts. Evaluated as a template.                                                                                                         | `nil`                                                        |
-| `initScriptsSecret`                               | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template.               | `nil`                                                        |
-| `extraEnvVars`                                    | Array containing extra env vars to be added to all pods (evaluated as a template)                                                                                 | `[]`                                                         |
-| `extraEnvVarsConfigMap`                           | ConfigMap containing extra env vars to be added to all pods (evaluated as a template)                                                                             | `nil`                                                        |
-| `extraEnvVarsSecret`                              | Secret containing extra env vars to be added to all pods (evaluated as a template)                                                                                | `nil`                                                        |
-| `master.name`                                     | Master-eligible node pod name                                                                                                                                     | `master`                                                     |
-| `master.replicas`                                 | Desired number of Elasticsearch master-eligible nodes                                                                                                             | `2`                                                          |
-| `master.updateStrategy.type`                      | Update strategy for Master statefulset                                                                                                                            | `RollingUpdate`                                              |
-| `master.heapSize`                                 | Master-eligible node heap size                                                                                                                                    | `128m`                                                       |
-| `master.service.type`                             | Kubernetes Service type (master-eligible nodes)                                                                                                                   | `ClusterIP`                                                  |
-| `master.service.port`                             | Kubernetes Service port for Elasticsearch transport port (master-eligible nodes)                                                                                  | `9300`                                                       |
-| `master.service.nodePort`                         | Kubernetes Service nodePort (master-eligible nodes)                                                                                                               | `nil`                                                        |
-| `master.service.annotations`                      | Annotations for master-eligible nodes service                                                                                                                     | `{}`                                                         |
-| `master.service.loadBalancerIP`                   | loadBalancerIP if master-eligible nodes service type is `LoadBalancer`                                                                                            | `nil`                                                        |
-| `master.resources`                                | CPU/Memory resource requests/limits for master-eligible nodes pods                                                                                                | `requests: { cpu: "25m", memory: "256Mi" }`                  |
-| `master.podAnnotations`                           | Annotations for master pods.                                                                                                                                      | `{}`                                                         |
-| `master.hostAliases`                              | Add deployment host aliases                                                                                                                                       | `[]`                                                         |
-| `master.podAffinityPreset`                        | Master-eligible Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                               | `""`                                                         |
-| `master.podAntiAffinityPreset`                    | Master-eligible Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                          | `soft`                                                       |
-| `master.nodeAffinityPreset.type`                  | Master-eligible Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                         | `""`                                                         |
-| `master.nodeAffinityPreset.key`                   | Master-eligible Node label key to match Ignored if `affinity` is set.                                                                                             | `""`                                                         |
-| `master.nodeAffinityPreset.values`                | Master-eligible Node label values to match. Ignored if `affinity` is set.                                                                                         | `[]`                                                         |
-| `master.affinity`                                 | Master-eligible Affinity for pod assignment                                                                                                                       | `{}` (evaluated as a template)                               |
-| `master.nodeSelector`                             | Master-eligible Node labels for pod assignment                                                                                                                    | `{}` (evaluated as a template)                               |
-| `master.tolerations`                              | Master-eligible Tolerations for pod assignment                                                                                                                    | `[]` (evaluated as a template)                               |
-| `master.persistence.enabled`                      | Enable persistence using a `PersistentVolumeClaim`                                                                                                                | `true`                                                       |
-| `master.persistence.annotations`                  | Persistent Volume Claim annotations                                                                                                                               | `{}`                                                         |
-| `master.persistence.storageClass`                 | Persistent Volume Storage Class                                                                                                                                   | ``                                                           |
-| `master.persistence.existingClaim`                | Existing Persistent Volume Claim                                                                                                                                  | `nil`                                                        |
-| `master.persistence.existingVolume`               | Existing Persistent Volume for use as volume match label selector to the `volumeClaimTemplate`. Ignored when `master.persistence.selector` ist set.               | `nil`                                                        |
-| `master.persistence.selector`                     | Configure custom selector for existing Persistent Volume. Overwrites `master.persistence.existingVolume`                                                          | `nil`                                                        |
-| `master.persistence.accessModes`                  | Persistent Volume Access Modes                                                                                                                                    | `[ReadWriteOnce]`                                            |
-| `master.persistence.size`                         | Persistent Volume Size                                                                                                                                            | `8Gi`                                                        |
-| `master.schedulerName`                            | Name of the k8s scheduler (other than default)                                                                                                                    | `nil`                                                        |
-| `master.securityContext.enabled`                  | Enable security context for master-eligible pods                                                                                                                  | `true`                                                       |
-| `master.securityContext.fsGroup`                  | Group ID for the container for master-eligible pods                                                                                                               | `1001`                                                       |
-| `master.securityContext.runAsUser`                | User ID for the container for master-eligible pods                                                                                                                | `1001`                                                       |
-| `master.livenessProbe.enabled`                    | Enable/disable the liveness probe (master-eligible nodes pod)                                                                                                     | `true`                                                       |
-| `master.livenessProbe.initialDelaySeconds`        | Delay before liveness probe is initiated (master-eligible nodes pod)                                                                                              | `90`                                                         |
-| `master.livenessProbe.periodSeconds`              | How often to perform the probe (master-eligible nodes pod)                                                                                                        | `10`                                                         |
-| `master.livenessProbe.timeoutSeconds`             | When the probe times out (master-eligible nodes pod)                                                                                                              | `5`                                                          |
-| `master.livenessProbe.successThreshold`           | Minimum consecutive successes for the probe to be considered successful after having failed (master-eligible nodes pod)                                           | `1`                                                          |
-| `master.livenessProbe.failureThreshold`           | Minimum consecutive failures for the probe to be considered failed after having succeeded                                                                         | `5`                                                          |
-| `master.readinessProbe.enabled`                   | Enable/disable the readiness probe (master-eligible nodes pod)                                                                                                    | `true`                                                       |
-| `master.readinessProbe.initialDelaySeconds`       | Delay before readiness probe is initiated (master-eligible nodes pod)                                                                                             | `90`                                                         |
-| `master.readinessProbe.periodSeconds`             | How often to perform the probe (master-eligible nodes pod)                                                                                                        | `10`                                                         |
-| `master.readinessProbe.timeoutSeconds`            | When the probe times out (master-eligible nodes pod)                                                                                                              | `5`                                                          |
-| `master.readinessProbe.successThreshold`          | Minimum consecutive successes for the probe to be considered successful after having failed (master-eligible nodes pod)                                           | `1`                                                          |
-| `master.readinessProbe.failureThreshold`          | Minimum consecutive failures for the probe to be considered failed after having succeeded                                                                         | `5`                                                          |
-| `master.serviceAccount.create`                    | Enable creation of ServiceAccount for the master node                                                                                                             | `false`                                                      |
-| `master.serviceAccount.name`                      | Name of the created serviceAccount                                                                                                                                | Generated using the `elasticsearch.master.fullname` template |
-| `clusterDomain`                                   | Kubernetes cluster domain                                                                                                                                         | `cluster.local`                                              |
-| `coordinating.replicas`                           | Desired number of Elasticsearch coordinating-only nodes                                                                                                           | `2`                                                          |
-| `coordinating.hostAliases`                        | Add deployment host aliases                                                                                                                                       | `[]`                                                         |
-| `coordinating.updateStrategy.type`                | Update strategy for Coordinating Deployment                                                                                                                       | `RollingUpdate`                                              |
-| `coordinating.heapSize`                           | Coordinating-only node heap size                                                                                                                                  | `128m`                                                       |
-| `coordinating.podAnnotations`                     | Annotations for coordniating pods.                                                                                                                                | `{}`                                                         |
-| `coordinating.podAffinityPreset`                  | Coordinating Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                  | `""`                                                         |
-| `coordinating.podAntiAffinityPreset`              | Coordinating Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                             | `soft`                                                       |
-| `coordinating.nodeAffinityPreset.type`            | Coordinating Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                            | `""`                                                         |
-| `coordinating.nodeAffinityPreset.key`             | Coordinating Node label key to match Ignored if `affinity` is set.                                                                                                | `""`                                                         |
-| `coordinating.nodeAffinityPreset.values`          | Coordinating Node label values to match. Ignored if `affinity` is set.                                                                                            | `[]`                                                         |
-| `coordinating.affinity`                           | Coordinating Affinity for pod assignment                                                                                                                          | `{}` (evaluated as a template)                               |
-| `coordinating.nodeSelector`                       | Coordinating Node labels for pod assignment                                                                                                                       | `{}` (evaluated as a template)                               |
-| `coordinating.tolerations`                        | Coordinating Tolerations for pod assignment                                                                                                                       | `[]` (evaluated as a template)                               |
-| `coordinating.schedulerName`                      | Name of the k8s scheduler (other than default)                                                                                                                    | `nil`                                                        |
-| `coordinating.service.type`                       | Kubernetes Service type (coordinating-only nodes)                                                                                                                 | `ClusterIP`                                                  |
-| `coordinating.service.port`                       | Kubernetes Service port for REST API (coordinating-only nodes)                                                                                                    | `9200`                                                       |
-| `coordinating.service.nodePort`                   | Kubernetes Service nodePort (coordinating-only nodes)                                                                                                             | `nil`                                                        |
-| `coordinating.service.annotations`                | Annotations for coordinating-only nodes service                                                                                                                   | `{}`                                                         |
-| `coordinating.service.loadBalancerIP`             | loadBalancerIP if coordinating-only nodes service type is `LoadBalancer`                                                                                          | `nil`                                                        |
-| `coordinating.resources`                          | CPU/Memory resource requests/limits for coordinating-only nodes pods                                                                                              | `requests: { cpu: "25m", memory: "256Mi" }`                  |
-| `coordinating.securityContext.enabled`            | Enable security context for coordinating-only pods                                                                                                                | `true`                                                       |
-| `coordinating.securityContext.fsGroup`            | Group ID for the container for coordinating-only pods                                                                                                             | `1001`                                                       |
-| `coordinating.securityContext.runAsUser`          | User ID for the container for coordinating-only pods                                                                                                              | `1001`                                                       |
-| `coordinating.livenessProbe.enabled`              | Enable/disable the liveness probe (coordinating-only nodes pod)                                                                                                   | `true`                                                       |
-| `coordinating.livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated (coordinating-only nodes pod)                                                                                            | `90`                                                         |
-| `coordinating.livenessProbe.periodSeconds`        | How often to perform the probe (coordinating-only nodes pod)                                                                                                      | `10`                                                         |
-| `coordinating.livenessProbe.timeoutSeconds`       | When the probe times out (coordinating-only nodes pod)                                                                                                            | `5`                                                          |
-| `coordinating.livenessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed (coordinating-only nodes pod)                                         | `1`                                                          |
-| `coordinating.livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded                                                                         | `5`                                                          |
-| `coordinating.readinessProbe.enabled`             | Enable/disable the readiness probe (coordinating-only nodes pod)                                                                                                  | `true`                                                       |
-| `coordinating.readinessProbe.initialDelaySeconds` | Delay before readiness probe is initiated (coordinating-only nodes pod)                                                                                           | `90`                                                         |
-| `coordinating.readinessProbe.periodSeconds`       | How often to perform the probe (coordinating-only nodes pod)                                                                                                      | `10`                                                         |
-| `coordinating.readinessProbe.timeoutSeconds`      | When the probe times out (coordinating-only nodes pod)                                                                                                            | `5`                                                          |
-| `coordinating.readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed (coordinating-only nodes pod)                                         | `1`                                                          |
-| `coordinating.readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded                                                                         | `5`                                                          |
-| `coordinating.serviceAccount.create`              | Enable creation of ServiceAccount for the coordinating-only node                                                                                                  | `false`                                                      |
-| `coordinating.serviceAccount.name`                | Name of the created serviceAccount                                                                                                                                | Generated using the `elasticsearch.coordinating.fullname`    |
-| `data.name`                                       | Data node pod name                                                                                                                                                | `data`                                                       |
-| `data.replicas`                                   | Desired number of Elasticsearch data nodes                                                                                                                        | `3`                                                          |
-| `data.hostAliases`                                | Add deployment host aliases                                                                                                                                       | `[]`                                                         |
-| `data.updateStrategy.type`                        | Update strategy for Data statefulset                                                                                                                              | `RollingUpdate`                                              |
-| `data.updateStrategy.rollingUpdatePartition`      | Partition update strategy for Data statefulset                                                                                                                    | `nil`                                                        |
-| `data.heapSize`                                   | Data node heap size                                                                                                                                               | `1024m`                                                      |
-| `data.resources`                                  | CPU/Memory resource requests/limits for data nodes                                                                                                                | `requests: { cpu: "25m", memory: "2048Mi" }`                 |
-| `data.persistence.enabled`                        | Enable persistence using a `PersistentVolumeClaim`                                                                                                                | `true`                                                       |
-| `data.persistence.annotations`                    | Persistent Volume Claim annotations                                                                                                                               | `{}`                                                         |
-| `data.persistence.existingClaim`                  | Existing Persistent Volume Claim                                                                                                                                  | `nil`                                                        |
-| `data.persistence.existingVolume`                 | Existing Persistent Volume for use as volume match label selector to the `volumeClaimTemplate`. Ignored when `data.persistence.selector` ist set.                 | `nil`                                                        |
-| `data.persistence.selector`                       | Configure custom selector for existing Persistent Volume. Overwrites `data.persistence.existingVolume`                                                            | `nil`                                                        |
-| `data.persistence.storageClass`                   | Persistent Volume Storage Class                                                                                                                                   | ``                                                           |
-| `data.persistence.accessModes`                    | Persistent Volume Access Modes                                                                                                                                    | `[ReadWriteOnce]`                                            |
-| `data.persistence.size`                           | Persistent Volume Size                                                                                                                                            | `8Gi`                                                        |
-| `data.schedulerName`                              | Name of the k8s scheduler (other than default)                                                                                                                    | `nil`                                                        |
-| `data.securityContext.enabled`                    | Enable security context for data pods                                                                                                                             | `true`                                                       |
-| `data.securityContext.fsGroup`                    | Group ID for the container for data pods                                                                                                                          | `1001`                                                       |
-| `data.securityContext.runAsUser`                  | User ID for the container for data pods                                                                                                                           | `1001`                                                       |
-| `data.livenessProbe.enabled`                      | Enable/disable the liveness probe (data nodes pod)                                                                                                                | `true`                                                       |
-| `data.livenessProbe.initialDelaySeconds`          | Delay before liveness probe is initiated (data nodes pod)                                                                                                         | `90`                                                         |
-| `data.livenessProbe.periodSeconds`                | How often to perform the probe (data nodes pod)                                                                                                                   | `10`                                                         |
-| `data.livenessProbe.timeoutSeconds`               | When the probe times out (data nodes pod)                                                                                                                         | `5`                                                          |
-| `data.livenessProbe.successThreshold`             | Minimum consecutive successes for the probe to be considered successful after having failed (data nodes pod)                                                      | `1`                                                          |
-| `data.livenessProbe.failureThreshold`             | Minimum consecutive failures for the probe to be considered failed after having succeeded                                                                         | `5`                                                          |
-| `data.podAnnotations`                             | Annotations for data pods.                                                                                                                                        | `{}`                                                         |
-| `data.podAffinityPreset`                          | Data Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                          | `""`                                                         |
-| `data.podAntiAffinityPreset`                      | Data Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                     | `soft`                                                       |
-| `data.nodeAffinityPreset.type`                    | Data Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                    | `""`                                                         |
-| `data.nodeAffinityPreset.key`                     | Data Node label key to match Ignored if `affinity` is set.                                                                                                        | `""`                                                         |
-| `data.nodeAffinityPreset.values`                  | Data Node label values to match. Ignored if `affinity` is set.                                                                                                    | `[]`                                                         |
-| `data.affinity`                                   | Data Affinity for pod assignment                                                                                                                                  | `{}` (evaluated as a template)                               |
-| `data.nodeSelector`                               | Data Node labels for pod assignment                                                                                                                               | `{}` (evaluated as a template)                               |
-| `data.tolerations`                                | Data Tolerations for pod assignment                                                                                                                               | `[]` (evaluated as a template)                               |
-| `data.readinessProbe.enabled`                     | Enable/disable the readiness probe (data nodes pod)                                                                                                               | `true`                                                       |
-| `data.readinessProbe.initialDelaySeconds`         | Delay before readiness probe is initiated (data nodes pod)                                                                                                        | `90`                                                         |
-| `data.readinessProbe.periodSeconds`               | How often to perform the probe (data nodes pod)                                                                                                                   | `10`                                                         |
-| `data.readinessProbe.timeoutSeconds`              | When the probe times out (data nodes pod)                                                                                                                         | `5`                                                          |
-| `data.readinessProbe.successThreshold`            | Minimum consecutive successes for the probe to be considered successful after having failed (data nodes pod)                                                      | `1`                                                          |
-| `data.readinessProbe.failureThreshold`            | Minimum consecutive failures for the probe to be considered failed after having succeeded                                                                         | `5`                                                          |
-| `data.serviceAccount.create`                      | Enable creation of ServiceAccount for the data node                                                                                                               | `false`                                                      |
-| `data.serviceAccount.name`                        | Name of the created serviceAccount                                                                                                                                | Generated using the `elasticsearch.data.fullname` template   |
-| `ingest.enabled`                                  | Enable ingest nodes                                                                                                                                               | `false`                                                      |
-| `ingest.name`                                     | Ingest node pod name                                                                                                                                              | `ingest`                                                     |
-| `ingest.replicas`                                 | Desired number of Elasticsearch ingest nodes                                                                                                                      | `2`                                                          |
-| `ingest.heapSize`                                 | Ingest node heap size                                                                                                                                             | `128m`                                                       |
-| `ingest.hostAliases`                              | Add deployment host aliases                                                                                                                                       | `[]`                                                         |
-| `ingest.schedulerName`                            | Name of the k8s scheduler (other than default)                                                                                                                    | `nil`                                                        |
-| `ingest.service.type`                             | Kubernetes Service type (ingest nodes)                                                                                                                            | `ClusterIP`                                                  |
-| `ingest.service.port`                             | Kubernetes Service port Elasticsearch transport port (ingest nodes)                                                                                               | `9300`                                                       |
-| `ingest.service.nodePort`                         | Kubernetes Service nodePort (ingest nodes)                                                                                                                        | `nil`                                                        |
-| `ingest.service.annotations`                      | Annotations for ingest nodes service                                                                                                                              | `{}`                                                         |
-| `ingest.service.loadBalancerIP`                   | loadBalancerIP if ingest nodes service type is `LoadBalancer`                                                                                                     | `nil`                                                        |
-| `ingest.resources`                                | CPU/Memory resource requests/limits for ingest nodes pods                                                                                                         | `requests: { cpu: "25m", memory: "256Mi" }`                  |
-| `ingest.securityContext.enabled`                  | Enable security context for ingest pods                                                                                                                           | `true`                                                       |
-| `ingest.securityContext.fsGroup`                  | Group ID for the container for ingest pods                                                                                                                        | `1001`                                                       |
-| `ingest.securityContext.runAsUser`                | User ID for the container for ingest pods                                                                                                                         | `1001`                                                       |
-| `ingest.livenessProbe.enabled`                    | Enable/disable the liveness probe (ingest nodes pod)                                                                                                              | `true`                                                       |
-| `ingest.livenessProbe.initialDelaySeconds`        | Delay before liveness probe is initiated (ingest nodes pod)                                                                                                       | `90`                                                         |
-| `ingest.livenessProbe.periodSeconds`              | How often to perform the probe (ingest nodes pod)                                                                                                                 | `10`                                                         |
-| `ingest.livenessProbe.timeoutSeconds`             | When the probe times out (ingest nodes pod)                                                                                                                       | `5`                                                          |
-| `ingest.livenessProbe.successThreshold`           | Minimum consecutive successes for the probe to be considered successful after having failed (ingest nodes pod)                                                    | `1`                                                          |
-| `ingest.livenessProbe.failureThreshold`           | Minimum consecutive failures for the probe to be considered failed after having succeeded                                                                         | `5`                                                          |
-| `ingest.podAnnotations`                           | Annotations for ingest pods.                                                                                                                                      | `{}`                                                         |
-| `ingest.podAffinityPreset`                        | Ingest Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                        | `""`                                                         |
-| `ingest.podAntiAffinityPreset`                    | Ingest Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                   | `soft`                                                       |
-| `ingest.nodeAffinityPreset.type`                  | Ingest Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                  | `""`                                                         |
-| `ingest.nodeAffinityPreset.key`                   | Ingest Node label key to match Ignored if `affinity` is set.                                                                                                      | `""`                                                         |
-| `ingest.nodeAffinityPreset.values`                | Ingest Node label values to match. Ignored if `affinity` is set.                                                                                                  | `[]`                                                         |
-| `ingest.affinity`                                 | Ingest Affinity for pod assignment                                                                                                                                | `{}` (evaluated as a template)                               |
-| `ingest.nodeSelector`                             | Ingest Node labels for pod assignment                                                                                                                             | `{}` (evaluated as a template)                               |
-| `ingest.tolerations`                              | Ingest Tolerations for pod assignment                                                                                                                             | `[]` (evaluated as a template)                               |
-| `ingest.readinessProbe.enabled`                   | Enable/disable the readiness probe (ingest nodes pod)                                                                                                             | `true`                                                       |
-| `ingest.readinessProbe.initialDelaySeconds`       | Delay before readiness probe is initiated (ingest nodes pod)                                                                                                      | `90`                                                         |
-| `ingest.readinessProbe.periodSeconds`             | How often to perform the probe (ingest nodes pod)                                                                                                                 | `10`                                                         |
-| `ingest.readinessProbe.timeoutSeconds`            | When the probe times out (ingest nodes pod)                                                                                                                       | `5`                                                          |
-| `ingest.readinessProbe.successThreshold`          | Minimum consecutive successes for the probe to be considered successful after having failed (ingest nodes pod)                                                    | `1`                                                          |
-| `ingest.readinessProbe.failureThreshold`          | Minimum consecutive failures for the probe to be considered failed after having succeeded                                                                         | `5`                                                          |
-| `curator.enabled`                                 | Enable Elasticsearch Curator cron job                                                                                                                             | `false`                                                      |
-| `curator.name`                                    | Elasticsearch Curator pod name                                                                                                                                    | `curator`                                                    |
-| `curator.image.registry`                          | Elasticsearch Curator image registry                                                                                                                              | `docker.io`                                                  |
-| `curator.image.repository`                        | Elasticsearch Curator image repository                                                                                                                            | `bitnami/elasticsearch-curator`                              |
-| `curator.image.tag`                               | Elasticsearch Curator image tag                                                                                                                                   | `{TAG_NAME}`                                                 |
-| `curator.image.pullPolicy`                        | Elasticsearch Curator image pull policy                                                                                                                           | `{TAG_NAME}`                                                 |
-| `curator.cronjob.schedule`                        | Schedule for the CronJob                                                                                                                                          | `0 1 * * *`                                                  |
-| `curator.cronjob.annotations`                     | Annotations to add to the cronjob                                                                                                                                 | `{}`                                                         |
-| `curator.cronjob.concurrencyPolicy`               | `Allow,Forbid,Replace` concurrent jobs                                                                                                                            | `nil`                                                        |
-| `curator.cronjob.failedJobsHistoryLimit`          | Specify the number of failed Jobs to keep                                                                                                                         | `nil`                                                        |
-| `curator.cronjob.successfulJobsHistoryLimit`      | Specify the number of completed Jobs to keep                                                                                                                      | `nil`                                                        |
-| `curator.cronjob.jobRestartPolicy`                | Control the Job restartPolicy                                                                                                                                     | `Never`                                                      |
-| `curator.podAnnotations`                          | Annotations to add to the pod                                                                                                                                     | `{}`                                                         |
-| `curator.podAffinityPreset`                       | Curator Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                       | `""`                                                         |
-| `curator.podAntiAffinityPreset`                   | Curator Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                  | `soft`                                                       |
-| `curator.nodeAffinityPreset.type`                 | Curator Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                 | `""`                                                         |
-| `curator.nodeAffinityPreset.key`                  | Curator Node label key to match Ignored if `affinity` is set.                                                                                                     | `""`                                                         |
-| `curator.nodeAffinityPreset.values`               | Curator Node label values to match. Ignored if `affinity` is set.                                                                                                 | `[]`                                                         |
-| `curator.affinity`                                | Curator Affinity for pod assignment                                                                                                                               | `{}` (evaluated as a template)                               |
-| `curator.nodeSelector`                            | Curator Node labels for pod assignment                                                                                                                            | `{}` (evaluated as a template)                               |
-| `curator.tolerations`                             | Curator Tolerations for pod assignment                                                                                                                            | `[]` (evaluated as a template)                               |
-| `curator.rbac.enabled`                            | Enable RBAC resources                                                                                                                                             | `false`                                                      |
-| `curator.schedulerName`                           | Name of the k8s scheduler (other than default)                                                                                                                    | `nil`                                                        |
-| `curator.serviceAccount.create`                   | Create a default serviceaccount for elasticsearch curator                                                                                                         | `true`                                                       |
-| `curator.serviceAccount.name`                     | Name for elasticsearch curator serviceaccount                                                                                                                     | `""`                                                         |
-| `curator.hooks`                                   | Whether to run job on selected hooks                                                                                                                              | `{ "install": false, "upgrade": false }`                     |
-| `curator.psp.create`                              | Create pod security policy resources                                                                                                                              | `false`                                                      |
-| `curator.dryrun`                                  | Run Curator in dry-run mode                                                                                                                                       | `false`                                                      |
-| `curator.command`                                 | Command to execute                                                                                                                                                | `["/curator/curator"]`                                       |
-| `curator.env`                                     | Environment variables to add to the cronjob container                                                                                                             | `{}`                                                         |
-| `curator.configMaps.action_file_yml`              | Contents of the Curator action_file.yml                                                                                                                           | See values.yaml                                              |
-| `curator.configMaps.config_yml`                   | Contents of the Curator config.yml (overrides config)                                                                                                             | See values.yaml                                              |
-| `curator.resources`                               | Resource requests and limits                                                                                                                                      | `{}`                                                         |
-| `curator.priorityClassName`                       | priorityClassName                                                                                                                                                 | `nil`                                                        |
-| `curator.extraVolumes`                            | Extra volumes                                                                                                                                                     |                                                              |
-| `curator.extraVolumeMounts`                       | Mount extra volume(s),                                                                                                                                            |                                                              |
-| `curator.extraInitContainers`                     | Init containers to add to the cronjob container                                                                                                                   | `{}`                                                         |
-| `curator.envFromSecrets`                          | Environment variables from secrets to the cronjob container                                                                                                       | `{}`                                                         |
-| `curator.envFromSecrets.*.from.secret`            | - `secretKeyRef.name` used for environment variable                                                                                                               |                                                              |
-| `curator.envFromSecrets.*.from.key`               | - `secretKeyRef.key` used for environment variable                                                                                                                |                                                              |
-| `metrics.enabled`                                 | Enable prometheus exporter                                                                                                                                        | `false`                                                      |
-| `metrics.name`                                    | Metrics pod name                                                                                                                                                  | `metrics`                                                    |
-| `metrics.hostAliases`                             | Add deployment host aliases                                                                                                                                       | `[]`                                                         |
-| `metrics.image.registry`                          | Metrics exporter image registry                                                                                                                                   | `docker.io`                                                  |
-| `metrics.image.repository`                        | Metrics exporter image repository                                                                                                                                 | `bitnami/elasticsearch-exporter`                             |
-| `metrics.image.tag`                               | Metrics exporter image tag                                                                                                                                        | `1.0.2`                                                      |
-| `metrics.image.pullPolicy`                        | Metrics exporter image pull policy                                                                                                                                | `IfNotPresent`                                               |
-| `metrics.service.type`                            | Metrics exporter endpoint service type                                                                                                                            | `ClusterIP`                                                  |
-| `metrics.service.annotations`                     | Annotations for metrics service.                                                                                                                                  | `{prometheus.io/scrape: "true", prometheus.io/port: "8080"}` |
-| `metrics.resources`                               | Metrics exporter resource requests/limit                                                                                                                          | `requests: { cpu: "25m" }`                                   |
-| `metrics.podAnnotations`                          | Annotations for metrics pods.                                                                                                                                     | `{prometheus.io/scrape: "true", prometheus.io/port: "8080"}` |
-| `metrics.podAffinityPreset`                       | Metrics Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                       | `""`                                                         |
-| `metrics.podAntiAffinityPreset`                   | Metrics Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                  | `soft`                                                       |
-| `metrics.nodeAffinityPreset.type`                 | Metrics Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                 | `""`                                                         |
-| `metrics.nodeAffinityPreset.key`                  | Metrics Node label key to match Ignored if `affinity` is set.                                                                                                     | `""`                                                         |
-| `metrics.nodeAffinityPreset.values`               | Metrics Node label values to match. Ignored if `affinity` is set.                                                                                                 | `[]`                                                         |
-| `metrics.affinity`                                | Metrics Affinity for pod assignment                                                                                                                               | `{}` (evaluated as a template)                               |
-| `metrics.nodeSelector`                            | Metrics Node labels for pod assignment                                                                                                                            | `{}` (evaluated as a template)                               |
-| `metrics.tolerations`                             | Metrics Tolerations for pod assignment                                                                                                                            | `[]` (evaluated as a template)                               |
-| `metrics.schedulerName`                           | Name of the k8s scheduler (other than default)                                                                                                                    | `nil`                                                        |
-| `metrics.serviceMonitor.enabled`                  | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                                            | `false`                                                      |
-| `metrics.serviceMonitor.namespace`                | Namespace in which Prometheus is running                                                                                                                          | `nil`                                                        |
-| `metrics.serviceMonitor.interval`                 | Interval at which metrics should be scraped.                                                                                                                      | `nil` (Prometheus Operator default value)                    |
-| `metrics.serviceMonitor.scrapeTimeout`            | Timeout after which the scrape is ended                                                                                                                           | `nil` (Prometheus Operator default value)                    |
-| `metrics.serviceMonitor.selector`                 | Prometheus instance selector labels                                                                                                                               | `nil`                                                        |
-| `sysctlImage.enabled`                             | Enable kernel settings modifier image                                                                                                                             | `true`                                                       |
-| `sysctlImage.registry`                            | Kernel settings modifier image registry                                                                                                                           | `docker.io`                                                  |
-| `sysctlImage.repository`                          | Kernel settings modifier image repository                                                                                                                         | `bitnami/bitnami-shell`                                      |
-| `sysctlImage.tag`                                 | Kernel settings modifier image tag                                                                                                                                | `"10"`                                                       |
-| `sysctlImage.pullPolicy`                          | Kernel settings modifier image pull policy                                                                                                                        | `Always`                                                     |
-| `sysctlImage.resources`                           | Init container resource requests/limit                                                                                                                            | `requests: {}, limits: {}`                                   |
-| `volumePermissions.enabled`                       | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work        ) | `false`                                                      |
-| `volumePermissions.image.registry`                | Init container volume-permissions image registry                                                                                                                  | `docker.io`                                                  |
-| `volumePermissions.image.repository`              | Init container volume-permissions image name                                                                                                                      | `bitnami/bitnami-shell`                                      |
-| `volumePermissions.image.tag`                     | Init container volume-permissions image tag                                                                                                                       | `"10"`                                                       |
-| `volumePermissions.image.pullPolicy`              | Init container volume-permissions image pull policy                                                                                                               | `Always`                                                     |
-| `volumePermissions.resources`                     | Init container resource requests/limit                                                                                                                            | `requests: {}, limits: {}`                                   |
+| Name                                         | Description                                                                                           | Value           |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------------- | --------------- |
+| `global.imageRegistry`                       | Global Docker image registry                                                                          | `""`            |
+| `global.imagePullSecrets`                    | Global Docker registry secret names as an array                                                       | `[]`            |
+| `global.storageClass`                        | Global StorageClass for Persistent Volume(s)                                                          | `""`            |
+| `global.elasticsearch.service.name`          | Elasticsearch service name to be used in the Kibana subchart (ignored if kibanaEnabled=false)         | `elasticsearch` |
+| `global.elasticsearch.service.ports.restAPI` | Elasticsearch service restAPI port to be used in the Kibana subchart (ignored if kibanaEnabled=false) | `9200`          |
+| `global.kibanaEnabled`                       | Whether or not to enable Kibana                                                                       | `false`         |
+
+
+### Common parameters
+
+| Name                     | Description                                                                             | Value           |
+| ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`            | Override Kubernetes version                                                             | `""`            |
+| `nameOverride`           | String to partially override common.names.fullname                                      | `""`            |
+| `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
+| `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`            |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`            |
+| `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
+| `namespaceOverride`      | String to fully override common.names.namespace                                         | `""`            |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
+
+
+### Elasticsearch cluster Parameters
+
+| Name                                       | Description                                                                                                                                         | Value                          |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| `clusterName`                              | Elasticsearch cluster name                                                                                                                          | `elastic`                      |
+| `containerPorts.restAPI`                   | Elasticsearch REST API port                                                                                                                         | `9200`                         |
+| `containerPorts.transport`                 | Elasticsearch Transport port                                                                                                                        | `9300`                         |
+| `plugins`                                  | Comma, semi-colon or space separated list of plugins to install at initialization                                                                   | `""`                           |
+| `snapshotRepoPath`                         | File System snapshot repository path                                                                                                                | `""`                           |
+| `config`                                   | Override elasticsearch configuration                                                                                                                | `{}`                           |
+| `extraConfig`                              | Append extra configuration to the elasticsearch node configuration                                                                                  | `{}`                           |
+| `extraHosts`                               | A list of external hosts which are part of this cluster                                                                                             | `[]`                           |
+| `extraVolumes`                             | A list of volumes to be added to the pod                                                                                                            | `[]`                           |
+| `extraVolumeMounts`                        | A list of volume mounts to be added to the pod                                                                                                      | `[]`                           |
+| `initScripts`                              | Dictionary of init scripts. Evaluated as a template.                                                                                                | `{}`                           |
+| `initScriptsCM`                            | ConfigMap with the init scripts. Evaluated as a template.                                                                                           | `""`                           |
+| `initScriptsSecret`                        | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template. | `""`                           |
+| `extraEnvVars`                             | Array containing extra env vars to be added to all pods (evaluated as a template)                                                                   | `[]`                           |
+| `extraEnvVarsCM`                           | ConfigMap containing extra env vars to be added to all pods (evaluated as a template)                                                               | `""`                           |
+| `extraEnvVarsSecret`                       | Secret containing extra env vars to be added to all pods (evaluated as a template)                                                                  | `""`                           |
+| `sidecars`                                 | Add additional sidecar containers to the all elasticsearch node pod(s)                                                                              | `[]`                           |
+| `initContainers`                           | Add additional init containers to the all elasticsearch node pod(s)                                                                                 | `[]`                           |
+| `useIstioLabels`                           | Use this variable to add Istio labels to all pods                                                                                                   | `true`                         |
+| `image.registry`                           | Elasticsearch image registry                                                                                                                        | `docker.io`                    |
+| `image.repository`                         | Elasticsearch image repository                                                                                                                      | `bitnami/elasticsearch`        |
+| `image.tag`                                | Elasticsearch image tag (immutable tags are recommended)                                                                                            | `8.5.2-debian-11-r0`           |
+| `image.digest`                             | Elasticsearch image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                       | `""`                           |
+| `image.pullPolicy`                         | Elasticsearch image pull policy                                                                                                                     | `IfNotPresent`                 |
+| `image.pullSecrets`                        | Elasticsearch image pull secrets                                                                                                                    | `[]`                           |
+| `image.debug`                              | Enable Elasticsearch image debug mode                                                                                                               | `false`                        |
+| `security.enabled`                         | Enable X-Pack Security settings                                                                                                                     | `false`                        |
+| `security.elasticPassword`                 | Password for 'elastic' user                                                                                                                         | `""`                           |
+| `security.existingSecret`                  | Name of the existing secret containing the Elasticsearch password and                                                                               | `""`                           |
+| `security.fipsMode`                        | Configure elasticsearch with FIPS 140 compliant mode                                                                                                | `false`                        |
+| `security.tls.restEncryption`              | Enable SSL/TLS encryption for Elasticsearch REST API.                                                                                               | `true`                         |
+| `security.tls.autoGenerated`               | Create self-signed TLS certificates.                                                                                                                | `false`                        |
+| `security.tls.verificationMode`            | Verification mode for SSL communications.                                                                                                           | `full`                         |
+| `security.tls.master.existingSecret`       | Existing secret containing the certificates for the master nodes                                                                                    | `""`                           |
+| `security.tls.data.existingSecret`         | Existing secret containing the certificates for the data nodes                                                                                      | `""`                           |
+| `security.tls.ingest.existingSecret`       | Existing secret containing the certificates for the ingest nodes                                                                                    | `""`                           |
+| `security.tls.coordinating.existingSecret` | Existing secret containing the certificates for the coordinating nodes                                                                              | `""`                           |
+| `security.tls.keystoreFilename`            | Name of the keystore file                                                                                                                           | `elasticsearch.keystore.jks`   |
+| `security.tls.truststoreFilename`          | Name of the truststore                                                                                                                              | `elasticsearch.truststore.jks` |
+| `security.tls.usePemCerts`                 | Use this variable if your secrets contain PEM certificates instead of JKS/PKCS12                                                                    | `false`                        |
+| `security.tls.passwordsSecret`             | Existing secret containing the Keystore and Truststore passwords, or key password if PEM certs are used                                             | `""`                           |
+| `security.tls.keystorePassword`            | Password to access the JKS/PKCS12 keystore or PEM key when they are password-protected.                                                             | `""`                           |
+| `security.tls.truststorePassword`          | Password to access the JKS/PKCS12 truststore when they are password-protected.                                                                      | `""`                           |
+| `security.tls.keyPassword`                 | Password to access the PEM key when they are password-protected.                                                                                    | `""`                           |
+| `security.tls.secretKeystoreKey`           | Name of the secret key containing the Keystore password                                                                                             | `""`                           |
+| `security.tls.secretTruststoreKey`         | Name of the secret key containing the Truststore password                                                                                           | `""`                           |
+| `security.tls.secretKey`                   | Name of the secret key containing the PEM key password                                                                                              | `""`                           |
+
+
+### Traffic Exposure Parameters
+
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | Elasticsearch service type                                                                                                       | `ClusterIP`              |
+| `service.ports.restAPI`            | Elasticsearch service REST API port                                                                                              | `9200`                   |
+| `service.ports.transport`          | Elasticsearch service transport port                                                                                             | `9300`                   |
+| `service.nodePorts.restAPI`        | Node port for REST API                                                                                                           | `""`                     |
+| `service.nodePorts.transport`      | Node port for REST API                                                                                                           | `""`                     |
+| `service.clusterIP`                | Elasticsearch service Cluster IP                                                                                                 | `""`                     |
+| `service.loadBalancerIP`           | Elasticsearch service Load Balancer IP                                                                                           | `""`                     |
+| `service.loadBalancerSourceRanges` | Elasticsearch service Load Balancer sources                                                                                      | `[]`                     |
+| `service.externalTrafficPolicy`    | Elasticsearch service external traffic policy                                                                                    | `Cluster`                |
+| `service.annotations`              | Additional custom annotations for Elasticsearch service                                                                          | `{}`                     |
+| `service.extraPorts`               | Extra ports to expose in Elasticsearch service (normally used with the `sidecars` value)                                         | `[]`                     |
+| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `ingress.enabled`                  | Enable ingress record generation for Elasticsearch                                                                               | `false`                  |
+| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.hostname`                 | Default host for the ingress record                                                                                              | `elasticsearch.local`    |
+| `ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
+| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
+| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+
+
+### Master-elegible nodes parameters
+
+| Name                                                 | Description                                                                                                                                        | Value               |
+| ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `master.masterOnly`                                  | Deploy the Elasticsearch master-elegible nodes as master-only nodes. Recommended for high-demand deployments.                                      | `true`              |
+| `master.replicaCount`                                | Number of master-elegible replicas to deploy                                                                                                       | `2`                 |
+| `master.nameOverride`                                | String to partially override elasticsearch.master.fullname                                                                                         | `""`                |
+| `master.fullnameOverride`                            | String to fully override elasticsearch.master.fullname                                                                                             | `""`                |
+| `master.servicenameOverride`                         | String to fully override elasticsearch.master.servicename                                                                                          | `""`                |
+| `master.annotations`                                 | Annotations for the master statefulset                                                                                                             | `{}`                |
+| `master.updateStrategy.type`                         | Master-elegible nodes statefulset stategy type                                                                                                     | `RollingUpdate`     |
+| `master.resources.limits`                            | The resources limits for the master-elegible containers                                                                                            | `{}`                |
+| `master.resources.requests`                          | The requested resources for the master-elegible containers                                                                                         | `{}`                |
+| `master.heapSize`                                    | Elasticsearch master-eligible node heap size.                                                                                                      | `128m`              |
+| `master.podSecurityContext.enabled`                  | Enabled master-elegible pods' Security Context                                                                                                     | `true`              |
+| `master.podSecurityContext.fsGroup`                  | Set master-elegible pod's Security Context fsGroup                                                                                                 | `1001`              |
+| `master.containerSecurityContext.enabled`            | Enabled master-elegible containers' Security Context                                                                                               | `true`              |
+| `master.containerSecurityContext.runAsUser`          | Set master-elegible containers' Security Context runAsUser                                                                                         | `1001`              |
+| `master.containerSecurityContext.runAsNonRoot`       | Set master-elegible containers' Security Context runAsNonRoot                                                                                      | `true`              |
+| `master.hostAliases`                                 | master-elegible pods host aliases                                                                                                                  | `[]`                |
+| `master.podLabels`                                   | Extra labels for master-elegible pods                                                                                                              | `{}`                |
+| `master.podAnnotations`                              | Annotations for master-elegible pods                                                                                                               | `{}`                |
+| `master.podAffinityPreset`                           | Pod affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`                                                         | `""`                |
+| `master.podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`                                                    | `""`                |
+| `master.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`                                                   | `""`                |
+| `master.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `master.affinity` is set                                                                                       | `""`                |
+| `master.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `master.affinity` is set                                                                                    | `[]`                |
+| `master.affinity`                                    | Affinity for master-elegible pods assignment                                                                                                       | `{}`                |
+| `master.nodeSelector`                                | Node labels for master-elegible pods assignment                                                                                                    | `{}`                |
+| `master.tolerations`                                 | Tolerations for master-elegible pods assignment                                                                                                    | `[]`                |
+| `master.priorityClassName`                           | master-elegible pods' priorityClassName                                                                                                            | `""`                |
+| `master.schedulerName`                               | Name of the k8s scheduler (other than default) for master-elegible pods                                                                            | `""`                |
+| `master.terminationGracePeriodSeconds`               | In seconds, time the given to the Elasticsearch Master pod needs to terminate gracefully                                                           | `""`                |
+| `master.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                           | `[]`                |
+| `master.podManagementPolicy`                         | podManagementPolicy to manage scaling operation of Elasticsearch master pods                                                                       | `Parallel`          |
+| `master.startupProbe.enabled`                        | Enable/disable the startup probe (master nodes pod)                                                                                                | `false`             |
+| `master.startupProbe.initialDelaySeconds`            | Delay before startup probe is initiated (master nodes pod)                                                                                         | `90`                |
+| `master.startupProbe.periodSeconds`                  | How often to perform the probe (master nodes pod)                                                                                                  | `10`                |
+| `master.startupProbe.timeoutSeconds`                 | When the probe times out (master nodes pod)                                                                                                        | `5`                 |
+| `master.startupProbe.successThreshold`               | Minimum consecutive successes for the probe to be considered successful after having failed (master nodes pod)                                     | `1`                 |
+| `master.startupProbe.failureThreshold`               | Minimum consecutive failures for the probe to be considered failed after having succeeded                                                          | `5`                 |
+| `master.livenessProbe.enabled`                       | Enable/disable the liveness probe (master-eligible nodes pod)                                                                                      | `true`              |
+| `master.livenessProbe.initialDelaySeconds`           | Delay before liveness probe is initiated (master-eligible nodes pod)                                                                               | `90`                |
+| `master.livenessProbe.periodSeconds`                 | How often to perform the probe (master-eligible nodes pod)                                                                                         | `10`                |
+| `master.livenessProbe.timeoutSeconds`                | When the probe times out (master-eligible nodes pod)                                                                                               | `5`                 |
+| `master.livenessProbe.successThreshold`              | Minimum consecutive successes for the probe to be considered successful after having failed (master-eligible nodes pod)                            | `1`                 |
+| `master.livenessProbe.failureThreshold`              | Minimum consecutive failures for the probe to be considered failed after having succeeded                                                          | `5`                 |
+| `master.readinessProbe.enabled`                      | Enable/disable the readiness probe (master-eligible nodes pod)                                                                                     | `true`              |
+| `master.readinessProbe.initialDelaySeconds`          | Delay before readiness probe is initiated (master-eligible nodes pod)                                                                              | `90`                |
+| `master.readinessProbe.periodSeconds`                | How often to perform the probe (master-eligible nodes pod)                                                                                         | `10`                |
+| `master.readinessProbe.timeoutSeconds`               | When the probe times out (master-eligible nodes pod)                                                                                               | `5`                 |
+| `master.readinessProbe.successThreshold`             | Minimum consecutive successes for the probe to be considered successful after having failed (master-eligible nodes pod)                            | `1`                 |
+| `master.readinessProbe.failureThreshold`             | Minimum consecutive failures for the probe to be considered failed after having succeeded                                                          | `5`                 |
+| `master.customStartupProbe`                          | Override default startup probe                                                                                                                     | `{}`                |
+| `master.customLivenessProbe`                         | Override default liveness probe                                                                                                                    | `{}`                |
+| `master.customReadinessProbe`                        | Override default readiness probe                                                                                                                   | `{}`                |
+| `master.command`                                     | Override default container command (useful when using custom images)                                                                               | `[]`                |
+| `master.args`                                        | Override default container args (useful when using custom images)                                                                                  | `[]`                |
+| `master.lifecycleHooks`                              | for the master-elegible container(s) to automate configuration before or after startup                                                             | `{}`                |
+| `master.extraEnvVars`                                | Array with extra environment variables to add to master-elegible nodes                                                                             | `[]`                |
+| `master.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars for master-elegible nodes                                                                     | `""`                |
+| `master.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars for master-elegible nodes                                                                        | `""`                |
+| `master.extraVolumes`                                | Optionally specify extra list of additional volumes for the master-elegible pod(s)                                                                 | `[]`                |
+| `master.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for the master-elegible container(s)                                                      | `[]`                |
+| `master.sidecars`                                    | Add additional sidecar containers to the master-elegible pod(s)                                                                                    | `[]`                |
+| `master.initContainers`                              | Add additional init containers to the master-elegible pod(s)                                                                                       | `[]`                |
+| `master.persistence.enabled`                         | Enable persistence using a `PersistentVolumeClaim`                                                                                                 | `true`              |
+| `master.persistence.storageClass`                    | Persistent Volume Storage Class                                                                                                                    | `""`                |
+| `master.persistence.existingClaim`                   | Existing Persistent Volume Claim                                                                                                                   | `""`                |
+| `master.persistence.existingVolume`                  | Existing Persistent Volume for use as volume match label selector to the `volumeClaimTemplate`. Ignored when `master.persistence.selector` is set. | `""`                |
+| `master.persistence.selector`                        | Configure custom selector for existing Persistent Volume. Overwrites `master.persistence.existingVolume`                                           | `{}`                |
+| `master.persistence.annotations`                     | Persistent Volume Claim annotations                                                                                                                | `{}`                |
+| `master.persistence.accessModes`                     | Persistent Volume Access Modes                                                                                                                     | `["ReadWriteOnce"]` |
+| `master.persistence.size`                            | Persistent Volume Size                                                                                                                             | `8Gi`               |
+| `master.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                                               | `false`             |
+| `master.serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.                                | `""`                |
+| `master.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                                     | `true`              |
+| `master.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                         | `{}`                |
+| `master.autoscaling.enabled`                         | Whether enable horizontal pod autoscale                                                                                                            | `false`             |
+| `master.autoscaling.minReplicas`                     | Configure a minimum amount of pods                                                                                                                 | `3`                 |
+| `master.autoscaling.maxReplicas`                     | Configure a maximum amount of pods                                                                                                                 | `11`                |
+| `master.autoscaling.targetCPU`                       | Define the CPU target to trigger the scaling actions (utilization percentage)                                                                      | `""`                |
+| `master.autoscaling.targetMemory`                    | Define the memory target to trigger the scaling actions (utilization percentage)                                                                   | `""`                |
+
+
+### Data-only nodes parameters
+
+| Name                                               | Description                                                                                                                                      | Value               |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------- |
+| `data.replicaCount`                                | Number of data-only replicas to deploy                                                                                                           | `2`                 |
+| `data.nameOverride`                                | String to partially override elasticsearch.data.fullname                                                                                         | `""`                |
+| `data.fullnameOverride`                            | String to fully override elasticsearch.data.fullname                                                                                             | `""`                |
+| `data.servicenameOverride`                         | String to fully override elasticsearch.data.servicename                                                                                          | `""`                |
+| `data.annotations`                                 | Annotations for the data statefulset                                                                                                             | `{}`                |
+| `data.updateStrategy.type`                         | Data-only nodes statefulset stategy type                                                                                                         | `RollingUpdate`     |
+| `data.resources.limits`                            | The resources limits for the data containers                                                                                                     | `{}`                |
+| `data.resources.requests`                          | The requested resources for the data containers                                                                                                  | `{}`                |
+| `data.heapSize`                                    | Elasticsearch data node heap size.                                                                                                               | `1024m`             |
+| `data.podSecurityContext.enabled`                  | Enabled data pods' Security Context                                                                                                              | `true`              |
+| `data.podSecurityContext.fsGroup`                  | Set data pod's Security Context fsGroup                                                                                                          | `1001`              |
+| `data.containerSecurityContext.enabled`            | Enabled data containers' Security Context                                                                                                        | `true`              |
+| `data.containerSecurityContext.runAsUser`          | Set data containers' Security Context runAsUser                                                                                                  | `1001`              |
+| `data.containerSecurityContext.runAsNonRoot`       | Set data containers' Security Context runAsNonRoot                                                                                               | `true`              |
+| `data.hostAliases`                                 | data pods host aliases                                                                                                                           | `[]`                |
+| `data.podLabels`                                   | Extra labels for data pods                                                                                                                       | `{}`                |
+| `data.podAnnotations`                              | Annotations for data pods                                                                                                                        | `{}`                |
+| `data.podAffinityPreset`                           | Pod affinity preset. Ignored if `data.affinity` is set. Allowed values: `soft` or `hard`                                                         | `""`                |
+| `data.podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `data.affinity` is set. Allowed values: `soft` or `hard`                                                    | `""`                |
+| `data.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `data.affinity` is set. Allowed values: `soft` or `hard`                                                   | `""`                |
+| `data.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `data.affinity` is set                                                                                       | `""`                |
+| `data.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `data.affinity` is set                                                                                    | `[]`                |
+| `data.affinity`                                    | Affinity for data pods assignment                                                                                                                | `{}`                |
+| `data.nodeSelector`                                | Node labels for data pods assignment                                                                                                             | `{}`                |
+| `data.tolerations`                                 | Tolerations for data pods assignment                                                                                                             | `[]`                |
+| `data.priorityClassName`                           | data pods' priorityClassName                                                                                                                     | `""`                |
+| `data.schedulerName`                               | Name of the k8s scheduler (other than default) for data pods                                                                                     | `""`                |
+| `data.terminationGracePeriodSeconds`               | In seconds, time the given to the Elasticsearch data pod needs to terminate gracefully                                                           | `""`                |
+| `data.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                         | `[]`                |
+| `data.podManagementPolicy`                         | podManagementPolicy to manage scaling operation of Elasticsearch data pods                                                                       | `Parallel`          |
+| `data.startupProbe.enabled`                        | Enable/disable the startup probe (data nodes pod)                                                                                                | `false`             |
+| `data.startupProbe.initialDelaySeconds`            | Delay before startup probe is initiated (data nodes pod)                                                                                         | `90`                |
+| `data.startupProbe.periodSeconds`                  | How often to perform the probe (data nodes pod)                                                                                                  | `10`                |
+| `data.startupProbe.timeoutSeconds`                 | When the probe times out (data nodes pod)                                                                                                        | `5`                 |
+| `data.startupProbe.successThreshold`               | Minimum consecutive successes for the probe to be considered successful after having failed (data nodes pod)                                     | `1`                 |
+| `data.startupProbe.failureThreshold`               | Minimum consecutive failures for the probe to be considered failed after having succeeded                                                        | `5`                 |
+| `data.livenessProbe.enabled`                       | Enable/disable the liveness probe (data nodes pod)                                                                                               | `true`              |
+| `data.livenessProbe.initialDelaySeconds`           | Delay before liveness probe is initiated (data nodes pod)                                                                                        | `90`                |
+| `data.livenessProbe.periodSeconds`                 | How often to perform the probe (data nodes pod)                                                                                                  | `10`                |
+| `data.livenessProbe.timeoutSeconds`                | When the probe times out (data nodes pod)                                                                                                        | `5`                 |
+| `data.livenessProbe.successThreshold`              | Minimum consecutive successes for the probe to be considered successful after having failed (data nodes pod)                                     | `1`                 |
+| `data.livenessProbe.failureThreshold`              | Minimum consecutive failures for the probe to be considered failed after having succeeded                                                        | `5`                 |
+| `data.readinessProbe.enabled`                      | Enable/disable the readiness probe (data nodes pod)                                                                                              | `true`              |
+| `data.readinessProbe.initialDelaySeconds`          | Delay before readiness probe is initiated (data nodes pod)                                                                                       | `90`                |
+| `data.readinessProbe.periodSeconds`                | How often to perform the probe (data nodes pod)                                                                                                  | `10`                |
+| `data.readinessProbe.timeoutSeconds`               | When the probe times out (data nodes pod)                                                                                                        | `5`                 |
+| `data.readinessProbe.successThreshold`             | Minimum consecutive successes for the probe to be considered successful after having failed (data nodes pod)                                     | `1`                 |
+| `data.readinessProbe.failureThreshold`             | Minimum consecutive failures for the probe to be considered failed after having succeeded                                                        | `5`                 |
+| `data.customStartupProbe`                          | Override default startup probe                                                                                                                   | `{}`                |
+| `data.customLivenessProbe`                         | Override default liveness probe                                                                                                                  | `{}`                |
+| `data.customReadinessProbe`                        | Override default readiness probe                                                                                                                 | `{}`                |
+| `data.command`                                     | Override default container command (useful when using custom images)                                                                             | `[]`                |
+| `data.args`                                        | Override default container args (useful when using custom images)                                                                                | `[]`                |
+| `data.lifecycleHooks`                              | for the data container(s) to automate configuration before or after startup                                                                      | `{}`                |
+| `data.extraEnvVars`                                | Array with extra environment variables to add to data nodes                                                                                      | `[]`                |
+| `data.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars for data nodes                                                                              | `""`                |
+| `data.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars for data nodes                                                                                 | `""`                |
+| `data.extraVolumes`                                | Optionally specify extra list of additional volumes for the data pod(s)                                                                          | `[]`                |
+| `data.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for the data container(s)                                                               | `[]`                |
+| `data.sidecars`                                    | Add additional sidecar containers to the data pod(s)                                                                                             | `[]`                |
+| `data.initContainers`                              | Add additional init containers to the data pod(s)                                                                                                | `[]`                |
+| `data.persistence.enabled`                         | Enable persistence using a `PersistentVolumeClaim`                                                                                               | `true`              |
+| `data.persistence.storageClass`                    | Persistent Volume Storage Class                                                                                                                  | `""`                |
+| `data.persistence.existingClaim`                   | Existing Persistent Volume Claim                                                                                                                 | `""`                |
+| `data.persistence.existingVolume`                  | Existing Persistent Volume for use as volume match label selector to the `volumeClaimTemplate`. Ignored when `data.persistence.selector` is set. | `""`                |
+| `data.persistence.selector`                        | Configure custom selector for existing Persistent Volume. Overwrites `data.persistence.existingVolume`                                           | `{}`                |
+| `data.persistence.annotations`                     | Persistent Volume Claim annotations                                                                                                              | `{}`                |
+| `data.persistence.accessModes`                     | Persistent Volume Access Modes                                                                                                                   | `["ReadWriteOnce"]` |
+| `data.persistence.size`                            | Persistent Volume Size                                                                                                                           | `8Gi`               |
+| `data.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                                             | `false`             |
+| `data.serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.                              | `""`                |
+| `data.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                                   | `true`              |
+| `data.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                       | `{}`                |
+| `data.autoscaling.enabled`                         | Whether enable horizontal pod autoscale                                                                                                          | `false`             |
+| `data.autoscaling.minReplicas`                     | Configure a minimum amount of pods                                                                                                               | `3`                 |
+| `data.autoscaling.maxReplicas`                     | Configure a maximum amount of pods                                                                                                               | `11`                |
+| `data.autoscaling.targetCPU`                       | Define the CPU target to trigger the scaling actions (utilization percentage)                                                                    | `""`                |
+| `data.autoscaling.targetMemory`                    | Define the memory target to trigger the scaling actions (utilization percentage)                                                                 | `""`                |
+
+
+### Coordinating-only nodes parameters
+
+| Name                                                       | Description                                                                                                               | Value           |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `coordinating.replicaCount`                                | Number of coordinating-only replicas to deploy                                                                            | `2`             |
+| `coordinating.nameOverride`                                | String to partially override elasticsearch.coordinating.fullname                                                          | `""`            |
+| `coordinating.fullnameOverride`                            | String to fully override elasticsearch.coordinating.fullname                                                              | `""`            |
+| `coordinating.servicenameOverride`                         | String to fully override elasticsearch.coordinating.servicename                                                           | `""`            |
+| `coordinating.annotations`                                 | Annotations for the coordinating-only statefulset                                                                         | `{}`            |
+| `coordinating.updateStrategy.type`                         | Coordinating-only nodes statefulset stategy type                                                                          | `RollingUpdate` |
+| `coordinating.resources.limits`                            | The resources limits for the coordinating-only containers                                                                 | `{}`            |
+| `coordinating.resources.requests`                          | The requested resources for the coordinating-only containers                                                              | `{}`            |
+| `coordinating.heapSize`                                    | Elasticsearch coordinating node heap size.                                                                                | `128m`          |
+| `coordinating.podSecurityContext.enabled`                  | Enabled coordinating-only pods' Security Context                                                                          | `true`          |
+| `coordinating.podSecurityContext.fsGroup`                  | Set coordinating-only pod's Security Context fsGroup                                                                      | `1001`          |
+| `coordinating.containerSecurityContext.enabled`            | Enabled coordinating-only containers' Security Context                                                                    | `true`          |
+| `coordinating.containerSecurityContext.runAsUser`          | Set coordinating-only containers' Security Context runAsUser                                                              | `1001`          |
+| `coordinating.containerSecurityContext.runAsNonRoot`       | Set coordinating-only containers' Security Context runAsNonRoot                                                           | `true`          |
+| `coordinating.hostAliases`                                 | coordinating-only pods host aliases                                                                                       | `[]`            |
+| `coordinating.podLabels`                                   | Extra labels for coordinating-only pods                                                                                   | `{}`            |
+| `coordinating.podAnnotations`                              | Annotations for coordinating-only pods                                                                                    | `{}`            |
+| `coordinating.podAffinityPreset`                           | Pod affinity preset. Ignored if `coordinating.affinity` is set. Allowed values: `soft` or `hard`                          | `""`            |
+| `coordinating.podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `coordinating.affinity` is set. Allowed values: `soft` or `hard`                     | `""`            |
+| `coordinating.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `coordinating.affinity` is set. Allowed values: `soft` or `hard`                    | `""`            |
+| `coordinating.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `coordinating.affinity` is set                                                        | `""`            |
+| `coordinating.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `coordinating.affinity` is set                                                     | `[]`            |
+| `coordinating.affinity`                                    | Affinity for coordinating-only pods assignment                                                                            | `{}`            |
+| `coordinating.nodeSelector`                                | Node labels for coordinating-only pods assignment                                                                         | `{}`            |
+| `coordinating.tolerations`                                 | Tolerations for coordinating-only pods assignment                                                                         | `[]`            |
+| `coordinating.priorityClassName`                           | coordinating-only pods' priorityClassName                                                                                 | `""`            |
+| `coordinating.schedulerName`                               | Name of the k8s scheduler (other than default) for coordinating-only pods                                                 | `""`            |
+| `coordinating.terminationGracePeriodSeconds`               | In seconds, time the given to the Elasticsearch coordinating pod needs to terminate gracefully                            | `""`            |
+| `coordinating.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template  | `[]`            |
+| `coordinating.podManagementPolicy`                         | podManagementPolicy to manage scaling operation of Elasticsearch coordinating pods                                        | `Parallel`      |
+| `coordinating.startupProbe.enabled`                        | Enable/disable the startup probe (coordinating-only nodes pod)                                                            | `false`         |
+| `coordinating.startupProbe.initialDelaySeconds`            | Delay before startup probe is initiated (coordinating-only nodes pod)                                                     | `90`            |
+| `coordinating.startupProbe.periodSeconds`                  | How often to perform the probe (coordinating-only nodes pod)                                                              | `10`            |
+| `coordinating.startupProbe.timeoutSeconds`                 | When the probe times out (coordinating-only nodes pod)                                                                    | `5`             |
+| `coordinating.startupProbe.successThreshold`               | Minimum consecutive successes for the probe to be considered successful after having failed (coordinating-only nodes pod) | `1`             |
+| `coordinating.startupProbe.failureThreshold`               | Minimum consecutive failures for the probe to be considered failed after having succeeded                                 | `5`             |
+| `coordinating.livenessProbe.enabled`                       | Enable/disable the liveness probe (coordinating-only nodes pod)                                                           | `true`          |
+| `coordinating.livenessProbe.initialDelaySeconds`           | Delay before liveness probe is initiated (coordinating-only nodes pod)                                                    | `90`            |
+| `coordinating.livenessProbe.periodSeconds`                 | How often to perform the probe (coordinating-only nodes pod)                                                              | `10`            |
+| `coordinating.livenessProbe.timeoutSeconds`                | When the probe times out (coordinating-only nodes pod)                                                                    | `5`             |
+| `coordinating.livenessProbe.successThreshold`              | Minimum consecutive successes for the probe to be considered successful after having failed (coordinating-only nodes pod) | `1`             |
+| `coordinating.livenessProbe.failureThreshold`              | Minimum consecutive failures for the probe to be considered failed after having succeeded                                 | `5`             |
+| `coordinating.readinessProbe.enabled`                      | Enable/disable the readiness probe (coordinating-only nodes pod)                                                          | `true`          |
+| `coordinating.readinessProbe.initialDelaySeconds`          | Delay before readiness probe is initiated (coordinating-only nodes pod)                                                   | `90`            |
+| `coordinating.readinessProbe.periodSeconds`                | How often to perform the probe (coordinating-only nodes pod)                                                              | `10`            |
+| `coordinating.readinessProbe.timeoutSeconds`               | When the probe times out (coordinating-only nodes pod)                                                                    | `5`             |
+| `coordinating.readinessProbe.successThreshold`             | Minimum consecutive successes for the probe to be considered successful after having failed (coordinating-only nodes pod) | `1`             |
+| `coordinating.readinessProbe.failureThreshold`             | Minimum consecutive failures for the probe to be considered failed after having succeeded                                 | `5`             |
+| `coordinating.customStartupProbe`                          | Override default startup probe                                                                                            | `{}`            |
+| `coordinating.customLivenessProbe`                         | Override default liveness probe                                                                                           | `{}`            |
+| `coordinating.customReadinessProbe`                        | Override default readiness probe                                                                                          | `{}`            |
+| `coordinating.command`                                     | Override default container command (useful when using custom images)                                                      | `[]`            |
+| `coordinating.args`                                        | Override default container args (useful when using custom images)                                                         | `[]`            |
+| `coordinating.lifecycleHooks`                              | for the coordinating-only container(s) to automate configuration before or after startup                                  | `{}`            |
+| `coordinating.extraEnvVars`                                | Array with extra environment variables to add to coordinating-only nodes                                                  | `[]`            |
+| `coordinating.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars for coordinating-only nodes                                          | `""`            |
+| `coordinating.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars for coordinating-only nodes                                             | `""`            |
+| `coordinating.extraVolumes`                                | Optionally specify extra list of additional volumes for the coordinating-only pod(s)                                      | `[]`            |
+| `coordinating.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for the coordinating-only container(s)                           | `[]`            |
+| `coordinating.sidecars`                                    | Add additional sidecar containers to the coordinating-only pod(s)                                                         | `[]`            |
+| `coordinating.initContainers`                              | Add additional init containers to the coordinating-only pod(s)                                                            | `[]`            |
+| `coordinating.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                      | `false`         |
+| `coordinating.serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.       | `""`            |
+| `coordinating.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                            | `true`          |
+| `coordinating.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                | `{}`            |
+| `coordinating.autoscaling.enabled`                         | Whether enable horizontal pod autoscale                                                                                   | `false`         |
+| `coordinating.autoscaling.minReplicas`                     | Configure a minimum amount of pods                                                                                        | `3`             |
+| `coordinating.autoscaling.maxReplicas`                     | Configure a maximum amount of pods                                                                                        | `11`            |
+| `coordinating.autoscaling.targetCPU`                       | Define the CPU target to trigger the scaling actions (utilization percentage)                                             | `""`            |
+| `coordinating.autoscaling.targetMemory`                    | Define the memory target to trigger the scaling actions (utilization percentage)                                          | `""`            |
+
+
+### Ingest-only nodes parameters
+
+| Name                                                 | Description                                                                                                                      | Value                        |
+| ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| `ingest.enabled`                                     | Enable ingest nodes                                                                                                              | `true`                       |
+| `ingest.replicaCount`                                | Number of ingest-only replicas to deploy                                                                                         | `2`                          |
+| `ingest.nameOverride`                                | String to partially override elasticsearch.ingest.fullname                                                                       | `""`                         |
+| `ingest.fullnameOverride`                            | String to fully override elasticsearch.ingest.fullname                                                                           | `""`                         |
+| `ingest.servicenameOverride`                         | String to fully override ingest.master.servicename                                                                               | `""`                         |
+| `ingest.annotations`                                 | Annotations for the ingest statefulset                                                                                           | `{}`                         |
+| `ingest.containerPorts.restAPI`                      | Elasticsearch REST API port                                                                                                      | `9200`                       |
+| `ingest.containerPorts.transport`                    | Elasticsearch Transport port                                                                                                     | `9300`                       |
+| `ingest.updateStrategy.type`                         | Ingest-only nodes statefulset stategy type                                                                                       | `RollingUpdate`              |
+| `ingest.resources.limits`                            | The resources limits for the ingest-only containers                                                                              | `{}`                         |
+| `ingest.resources.requests`                          | The requested resources for the ingest-only containers                                                                           | `{}`                         |
+| `ingest.heapSize`                                    | Elasticsearch ingest-only node heap size.                                                                                        | `128m`                       |
+| `ingest.podSecurityContext.enabled`                  | Enabled ingest-only pods' Security Context                                                                                       | `true`                       |
+| `ingest.podSecurityContext.fsGroup`                  | Set ingest-only pod's Security Context fsGroup                                                                                   | `1001`                       |
+| `ingest.containerSecurityContext.enabled`            | Enabled ingest-only containers' Security Context                                                                                 | `true`                       |
+| `ingest.containerSecurityContext.runAsUser`          | Set ingest-only containers' Security Context runAsUser                                                                           | `1001`                       |
+| `ingest.containerSecurityContext.runAsNonRoot`       | Set ingest-only containers' Security Context runAsNonRoot                                                                        | `true`                       |
+| `ingest.hostAliases`                                 | ingest-only pods host aliases                                                                                                    | `[]`                         |
+| `ingest.podLabels`                                   | Extra labels for ingest-only pods                                                                                                | `{}`                         |
+| `ingest.podAnnotations`                              | Annotations for ingest-only pods                                                                                                 | `{}`                         |
+| `ingest.podAffinityPreset`                           | Pod affinity preset. Ignored if `ingest.affinity` is set. Allowed values: `soft` or `hard`                                       | `""`                         |
+| `ingest.podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `ingest.affinity` is set. Allowed values: `soft` or `hard`                                  | `""`                         |
+| `ingest.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `ingest.affinity` is set. Allowed values: `soft` or `hard`                                 | `""`                         |
+| `ingest.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `ingest.affinity` is set                                                                     | `""`                         |
+| `ingest.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `ingest.affinity` is set                                                                  | `[]`                         |
+| `ingest.affinity`                                    | Affinity for ingest-only pods assignment                                                                                         | `{}`                         |
+| `ingest.nodeSelector`                                | Node labels for ingest-only pods assignment                                                                                      | `{}`                         |
+| `ingest.tolerations`                                 | Tolerations for ingest-only pods assignment                                                                                      | `[]`                         |
+| `ingest.priorityClassName`                           | ingest-only pods' priorityClassName                                                                                              | `""`                         |
+| `ingest.schedulerName`                               | Name of the k8s scheduler (other than default) for ingest-only pods                                                              | `""`                         |
+| `ingest.terminationGracePeriodSeconds`               | In seconds, time the given to the Elasticsearch ingest pod needs to terminate gracefully                                         | `""`                         |
+| `ingest.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template         | `[]`                         |
+| `ingest.podManagementPolicy`                         | podManagementPolicy to manage scaling operation of Elasticsearch ingest pods                                                     | `Parallel`                   |
+| `ingest.startupProbe.enabled`                        | Enable/disable the startup probe (ingest-only nodes pod)                                                                         | `false`                      |
+| `ingest.startupProbe.initialDelaySeconds`            | Delay before startup probe is initiated (ingest-only nodes pod)                                                                  | `90`                         |
+| `ingest.startupProbe.periodSeconds`                  | How often to perform the probe (ingest-only nodes pod)                                                                           | `10`                         |
+| `ingest.startupProbe.timeoutSeconds`                 | When the probe times out (ingest-only nodes pod)                                                                                 | `5`                          |
+| `ingest.startupProbe.successThreshold`               | Minimum consecutive successes for the probe to be considered successful after having failed (ingest-only nodes pod)              | `1`                          |
+| `ingest.startupProbe.failureThreshold`               | Minimum consecutive failures for the probe to be considered failed after having succeeded                                        | `5`                          |
+| `ingest.livenessProbe.enabled`                       | Enable/disable the liveness probe (ingest-only nodes pod)                                                                        | `true`                       |
+| `ingest.livenessProbe.initialDelaySeconds`           | Delay before liveness probe is initiated (ingest-only nodes pod)                                                                 | `90`                         |
+| `ingest.livenessProbe.periodSeconds`                 | How often to perform the probe (ingest-only nodes pod)                                                                           | `10`                         |
+| `ingest.livenessProbe.timeoutSeconds`                | When the probe times out (ingest-only nodes pod)                                                                                 | `5`                          |
+| `ingest.livenessProbe.successThreshold`              | Minimum consecutive successes for the probe to be considered successful after having failed (ingest-only nodes pod)              | `1`                          |
+| `ingest.livenessProbe.failureThreshold`              | Minimum consecutive failures for the probe to be considered failed after having succeeded                                        | `5`                          |
+| `ingest.readinessProbe.enabled`                      | Enable/disable the readiness probe (ingest-only nodes pod)                                                                       | `true`                       |
+| `ingest.readinessProbe.initialDelaySeconds`          | Delay before readiness probe is initiated (ingest-only nodes pod)                                                                | `90`                         |
+| `ingest.readinessProbe.periodSeconds`                | How often to perform the probe (ingest-only nodes pod)                                                                           | `10`                         |
+| `ingest.readinessProbe.timeoutSeconds`               | When the probe times out (ingest-only nodes pod)                                                                                 | `5`                          |
+| `ingest.readinessProbe.successThreshold`             | Minimum consecutive successes for the probe to be considered successful after having failed (ingest-only nodes pod)              | `1`                          |
+| `ingest.readinessProbe.failureThreshold`             | Minimum consecutive failures for the probe to be considered failed after having succeeded                                        | `5`                          |
+| `ingest.customStartupProbe`                          | Override default startup probe                                                                                                   | `{}`                         |
+| `ingest.customLivenessProbe`                         | Override default liveness probe                                                                                                  | `{}`                         |
+| `ingest.customReadinessProbe`                        | Override default readiness probe                                                                                                 | `{}`                         |
+| `ingest.command`                                     | Override default container command (useful when using custom images)                                                             | `[]`                         |
+| `ingest.args`                                        | Override default container args (useful when using custom images)                                                                | `[]`                         |
+| `ingest.lifecycleHooks`                              | for the ingest-only container(s) to automate configuration before or after startup                                               | `{}`                         |
+| `ingest.extraEnvVars`                                | Array with extra environment variables to add to ingest-only nodes                                                               | `[]`                         |
+| `ingest.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars for ingest-only nodes                                                       | `""`                         |
+| `ingest.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars for ingest-only nodes                                                          | `""`                         |
+| `ingest.extraVolumes`                                | Optionally specify extra list of additional volumes for the ingest-only pod(s)                                                   | `[]`                         |
+| `ingest.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for the ingest-only container(s)                                        | `[]`                         |
+| `ingest.sidecars`                                    | Add additional sidecar containers to the ingest-only pod(s)                                                                      | `[]`                         |
+| `ingest.initContainers`                              | Add additional init containers to the ingest-only pod(s)                                                                         | `[]`                         |
+| `ingest.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                             | `false`                      |
+| `ingest.serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.              | `""`                         |
+| `ingest.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                   | `true`                       |
+| `ingest.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                       | `{}`                         |
+| `ingest.autoscaling.enabled`                         | Whether enable horizontal pod autoscale                                                                                          | `false`                      |
+| `ingest.autoscaling.minReplicas`                     | Configure a minimum amount of pods                                                                                               | `3`                          |
+| `ingest.autoscaling.maxReplicas`                     | Configure a maximum amount of pods                                                                                               | `11`                         |
+| `ingest.autoscaling.targetCPU`                       | Define the CPU target to trigger the scaling actions (utilization percentage)                                                    | `""`                         |
+| `ingest.autoscaling.targetMemory`                    | Define the memory target to trigger the scaling actions (utilization percentage)                                                 | `""`                         |
+| `ingest.service.enabled`                             | Enable Ingest-only service                                                                                                       | `false`                      |
+| `ingest.service.type`                                | Elasticsearch ingest-only service type                                                                                           | `ClusterIP`                  |
+| `ingest.service.ports.restAPI`                       | Elasticsearch service REST API port                                                                                              | `9200`                       |
+| `ingest.service.ports.transport`                     | Elasticsearch service transport port                                                                                             | `9300`                       |
+| `ingest.service.nodePorts.restAPI`                   | Node port for REST API                                                                                                           | `""`                         |
+| `ingest.service.nodePorts.transport`                 | Node port for REST API                                                                                                           | `""`                         |
+| `ingest.service.clusterIP`                           | Elasticsearch ingest-only service Cluster IP                                                                                     | `""`                         |
+| `ingest.service.loadBalancerIP`                      | Elasticsearch ingest-only service Load Balancer IP                                                                               | `""`                         |
+| `ingest.service.loadBalancerSourceRanges`            | Elasticsearch ingest-only service Load Balancer sources                                                                          | `[]`                         |
+| `ingest.service.externalTrafficPolicy`               | Elasticsearch ingest-only service external traffic policy                                                                        | `Cluster`                    |
+| `ingest.service.extraPorts`                          | Extra ports to expose (normally used with the `sidecar` value)                                                                   | `[]`                         |
+| `ingest.service.annotations`                         | Additional custom annotations for Elasticsearch ingest-only service                                                              | `{}`                         |
+| `ingest.service.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                       |
+| `ingest.service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                                                                      | `{}`                         |
+| `ingest.ingress.enabled`                             | Enable ingress record generation for Elasticsearch                                                                               | `false`                      |
+| `ingest.ingress.pathType`                            | Ingress path type                                                                                                                | `ImplementationSpecific`     |
+| `ingest.ingress.apiVersion`                          | Force Ingress API version (automatically detected if not set)                                                                    | `""`                         |
+| `ingest.ingress.hostname`                            | Default host for the ingress record                                                                                              | `elasticsearch-ingest.local` |
+| `ingest.ingress.path`                                | Default path for the ingress record                                                                                              | `/`                          |
+| `ingest.ingress.annotations`                         | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                         |
+| `ingest.ingress.tls`                                 | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                      |
+| `ingest.ingress.selfSigned`                          | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                      |
+| `ingest.ingress.ingressClassName`                    | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                         |
+| `ingest.ingress.extraHosts`                          | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                         |
+| `ingest.ingress.extraPaths`                          | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                         |
+| `ingest.ingress.extraTls`                            | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                         |
+| `ingest.ingress.secrets`                             | Custom TLS certificates as secrets                                                                                               | `[]`                         |
+| `ingest.ingress.extraRules`                          | Additional rules to be covered with this ingress record                                                                          | `[]`                         |
+
+
+### Metrics parameters
+
+| Name                                            | Description                                                                                                                    | Value                            |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | -------------------------------- |
+| `metrics.enabled`                               | Enable prometheus exporter                                                                                                     | `false`                          |
+| `metrics.nameOverride`                          | Metrics pod name                                                                                                               | `""`                             |
+| `metrics.fullnameOverride`                      | String to fully override common.names.fullname                                                                                 | `""`                             |
+| `metrics.image.registry`                        | Metrics exporter image registry                                                                                                | `docker.io`                      |
+| `metrics.image.repository`                      | Metrics exporter image repository                                                                                              | `bitnami/elasticsearch-exporter` |
+| `metrics.image.tag`                             | Metrics exporter image tag                                                                                                     | `1.5.0-debian-11-r41`            |
+| `metrics.image.digest`                          | Metrics exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag               | `""`                             |
+| `metrics.image.pullPolicy`                      | Metrics exporter image pull policy                                                                                             | `IfNotPresent`                   |
+| `metrics.image.pullSecrets`                     | Metrics exporter image pull secrets                                                                                            | `[]`                             |
+| `metrics.annotations`                           | Annotations for metrics                                                                                                        | `{}`                             |
+| `metrics.extraArgs`                             | Extra arguments to add to the default exporter command                                                                         | `[]`                             |
+| `metrics.hostAliases`                           | Add deployment host aliases                                                                                                    | `[]`                             |
+| `metrics.schedulerName`                         | Name of the k8s scheduler (other than default)                                                                                 | `""`                             |
+| `metrics.priorityClassName`                     | Elasticsearch metrics exporter pods' priorityClassName                                                                         | `""`                             |
+| `metrics.service.type`                          | Metrics exporter endpoint service type                                                                                         | `ClusterIP`                      |
+| `metrics.service.port`                          | Metrics exporter endpoint service port                                                                                         | `9114`                           |
+| `metrics.service.annotations`                   | Provide any additional annotations which may be required.                                                                      | `{}`                             |
+| `metrics.podAffinityPreset`                     | Metrics Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                    | `""`                             |
+| `metrics.podAntiAffinityPreset`                 | Metrics Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                               | `""`                             |
+| `metrics.nodeAffinityPreset.type`               | Metrics Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `""`                             |
+| `metrics.nodeAffinityPreset.key`                | Metrics Node label key to match Ignored if `affinity` is set.                                                                  | `""`                             |
+| `metrics.nodeAffinityPreset.values`             | Metrics Node label values to match. Ignored if `affinity` is set.                                                              | `[]`                             |
+| `metrics.affinity`                              | Metrics Affinity for pod assignment                                                                                            | `{}`                             |
+| `metrics.nodeSelector`                          | Metrics Node labels for pod assignment                                                                                         | `{}`                             |
+| `metrics.tolerations`                           | Metrics Tolerations for pod assignment                                                                                         | `[]`                             |
+| `metrics.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template       | `[]`                             |
+| `metrics.resources.limits`                      | The resources limits for the container                                                                                         | `{}`                             |
+| `metrics.resources.requests`                    | The requested resources for the container                                                                                      | `{}`                             |
+| `metrics.livenessProbe.enabled`                 | Enable/disable the liveness probe (metrics pod)                                                                                | `true`                           |
+| `metrics.livenessProbe.initialDelaySeconds`     | Delay before liveness probe is initiated (metrics pod)                                                                         | `60`                             |
+| `metrics.livenessProbe.periodSeconds`           | How often to perform the probe (metrics pod)                                                                                   | `10`                             |
+| `metrics.livenessProbe.timeoutSeconds`          | When the probe times out (metrics pod)                                                                                         | `5`                              |
+| `metrics.livenessProbe.failureThreshold`        | Minimum consecutive failures for the probe to be considered failed after having succeeded                                      | `5`                              |
+| `metrics.livenessProbe.successThreshold`        | Minimum consecutive successes for the probe to be considered successful after having failed (metrics pod)                      | `1`                              |
+| `metrics.readinessProbe.enabled`                | Enable/disable the readiness probe (metrics pod)                                                                               | `true`                           |
+| `metrics.readinessProbe.initialDelaySeconds`    | Delay before readiness probe is initiated (metrics pod)                                                                        | `5`                              |
+| `metrics.readinessProbe.periodSeconds`          | How often to perform the probe (metrics pod)                                                                                   | `10`                             |
+| `metrics.readinessProbe.timeoutSeconds`         | When the probe times out (metrics pod)                                                                                         | `1`                              |
+| `metrics.readinessProbe.failureThreshold`       | Minimum consecutive failures for the probe to be considered failed after having succeeded                                      | `5`                              |
+| `metrics.readinessProbe.successThreshold`       | Minimum consecutive successes for the probe to be considered successful after having failed (metrics pod)                      | `1`                              |
+| `metrics.startupProbe.enabled`                  | Enable/disable the startup probe (metrics pod)                                                                                 | `false`                          |
+| `metrics.startupProbe.initialDelaySeconds`      | Delay before startup probe is initiated (metrics pod)                                                                          | `5`                              |
+| `metrics.startupProbe.periodSeconds`            | How often to perform the probe (metrics pod)                                                                                   | `10`                             |
+| `metrics.startupProbe.timeoutSeconds`           | When the probe times out (metrics pod)                                                                                         | `1`                              |
+| `metrics.startupProbe.failureThreshold`         | Minimum consecutive failures for the probe to be considered failed after having succeeded                                      | `5`                              |
+| `metrics.startupProbe.successThreshold`         | Minimum consecutive successes for the probe to be considered successful after having failed (metrics pod)                      | `1`                              |
+| `metrics.customStartupProbe`                    | Custom liveness probe for the Web component                                                                                    | `{}`                             |
+| `metrics.customLivenessProbe`                   | Custom liveness probe for the Web component                                                                                    | `{}`                             |
+| `metrics.customReadinessProbe`                  | Custom readiness probe for the Web component                                                                                   | `{}`                             |
+| `metrics.podAnnotations`                        | Metrics exporter pod Annotation and Labels                                                                                     | `{}`                             |
+| `metrics.podLabels`                             | Extra labels to add to Pod                                                                                                     | `{}`                             |
+| `metrics.podSecurityContext.enabled`            | Enabled Elasticsearch metrics exporter pods' Security Context                                                                  | `true`                           |
+| `metrics.podSecurityContext.fsGroup`            | Set Elasticsearch metrics exporter pod's Security Context fsGroup                                                              | `1001`                           |
+| `metrics.containerSecurityContext.enabled`      | Enabled Elasticsearch metrics exporter containers' Security Context                                                            | `true`                           |
+| `metrics.containerSecurityContext.runAsUser`    | Set Elasticsearch metrics exporter containers' Security Context runAsUser                                                      | `1001`                           |
+| `metrics.containerSecurityContext.runAsNonRoot` | Set Elasticsearch metrics exporter container's Security Context runAsNonRoot                                                   | `true`                           |
+| `metrics.command`                               | Override default container command (useful when using custom images)                                                           | `[]`                             |
+| `metrics.args`                                  | Override default container args (useful when using custom images)                                                              | `[]`                             |
+| `metrics.extraEnvVars`                          | Array with extra environment variables to add to Elasticsearch metrics exporter nodes                                          | `[]`                             |
+| `metrics.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for Elasticsearch metrics exporter nodes                                  | `""`                             |
+| `metrics.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for Elasticsearch metrics exporter nodes                                     | `""`                             |
+| `metrics.extraVolumes`                          | Optionally specify extra list of additional volumes for the Elasticsearch metrics exporter pod(s)                              | `[]`                             |
+| `metrics.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Elasticsearch metrics exporter container(s)                   | `[]`                             |
+| `metrics.sidecars`                              | Add additional sidecar containers to the Elasticsearch metrics exporter pod(s)                                                 | `[]`                             |
+| `metrics.initContainers`                        | Add additional init containers to the Elasticsearch metrics exporter pod(s)                                                    | `[]`                             |
+| `metrics.serviceMonitor.enabled`                | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                                   | `false`                          |
+| `metrics.serviceMonitor.namespace`              | Namespace which Prometheus is running in                                                                                       | `""`                             |
+| `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in prometheus.                                              | `""`                             |
+| `metrics.serviceMonitor.interval`               | Interval at which metrics should be scraped                                                                                    | `""`                             |
+| `metrics.serviceMonitor.scrapeTimeout`          | Timeout after which the scrape is ended                                                                                        | `""`                             |
+| `metrics.serviceMonitor.relabelings`            | RelabelConfigs to apply to samples before scraping                                                                             | `[]`                             |
+| `metrics.serviceMonitor.metricRelabelings`      | MetricRelabelConfigs to apply to samples before ingestion                                                                      | `[]`                             |
+| `metrics.serviceMonitor.selector`               | ServiceMonitor selector labels                                                                                                 | `{}`                             |
+| `metrics.serviceMonitor.labels`                 | Extra labels for the ServiceMonitor                                                                                            | `{}`                             |
+| `metrics.serviceMonitor.honorLabels`            | honorLabels chooses the metric's labels on collisions with target labels                                                       | `false`                          |
+| `metrics.prometheusRule.enabled`                | Creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`                          |
+| `metrics.prometheusRule.namespace`              | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                  | `""`                             |
+| `metrics.prometheusRule.additionalLabels`       | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                          | `{}`                             |
+| `metrics.prometheusRule.rules`                  | Prometheus Rule definitions                                                                                                    | `[]`                             |
+
+
+### Init Container Parameters
+
+| Name                                   | Description                                                                                                                                               | Value                   |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
+| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
+| `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r54`      |
+| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                    |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
+| `volumePermissions.image.pullSecrets`  | Init container volume-permissions image pull secrets                                                                                                      | `[]`                    |
+| `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
+| `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`                    |
+| `sysctlImage.enabled`                  | Enable kernel settings modifier image                                                                                                                     | `true`                  |
+| `sysctlImage.registry`                 | Kernel settings modifier image registry                                                                                                                   | `docker.io`             |
+| `sysctlImage.repository`               | Kernel settings modifier image repository                                                                                                                 | `bitnami/bitnami-shell` |
+| `sysctlImage.tag`                      | Kernel settings modifier image tag                                                                                                                        | `11-debian-11-r54`      |
+| `sysctlImage.digest`                   | Kernel settings modifier image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                  | `""`                    |
+| `sysctlImage.pullPolicy`               | Kernel settings modifier image pull policy                                                                                                                | `IfNotPresent`          |
+| `sysctlImage.pullSecrets`              | Kernel settings modifier image pull secrets                                                                                                               | `[]`                    |
+| `sysctlImage.resources.limits`         | The resources limits for the container                                                                                                                    | `{}`                    |
+| `sysctlImage.resources.requests`       | The requested resources for the container                                                                                                                 | `{}`                    |
+
 
 ### Kibana Parameters
 
-| Parameter                    | Description                                                               | Default                                                                                 |
-|------------------------------|---------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
-| `global.kibanaEnabled`       | Use bundled Kibana                                                        | `false`                                                                                 |
-| `kibana.elasticsearch.hosts` | Array containing hostnames for the ES instances. Used to generate the URL | `{{ include "elasticsearch.coordinating.fullname" . }}` Coordinating service (fullname) |
-| `kibana.elasticsearch.port`  | Port to connect Kibana and ES instance. Used to generate the URL          | `9200`                                                                                  |
+| Name                         | Description                                                               | Value                                                   |
+| ---------------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------- |
+| `kibana.elasticsearch.hosts` | Array containing hostnames for the ES instances. Used to generate the URL | `[]`                                                    |
+| `kibana.elasticsearch.port`  | Port to connect Kibana and ES instance. Used to generate the URL          | `{{ include "elasticsearch.service.ports.restAPI" . }}` |
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
 $ helm install my-release \
   --set name=my-elastic,client.service.port=8080 \
-  bitnami/elasticsearch
+  my-repo/elasticsearch
 ```
 
 The above command sets the Elasticsearch cluster name to `my-elastic` and REST port number to `8080`.
@@ -338,7 +653,7 @@ The above command sets the Elasticsearch cluster name to `my-elastic` and REST p
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/elasticsearch
+$ helm install my-release -f values.yaml my-repo/elasticsearch
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml).
@@ -370,6 +685,53 @@ You can disable the initContainer using the `sysctlImage.enabled=false` paramete
 This Elasticsearch chart contains Kibana as subchart, you can enable it just setting the `global.kibanaEnabled=true` parameter.
 To see the notes with some operational instructions from the Kibana chart, please use the `--render-subchart-notes` as part of your `helm install` command, in this way you can see the Kibana and ES notes in your terminal.
 
+When enabling the bundled kibana subchart, there are a few gotchas that you should be aware of listed below.
+
+#### Elasticsearch rest Encryption
+
+When enabling elasticsearch' rest endpoint encryption you will also need to set `kibana.elasticsearch.security.tls.enabled` to the SAME value along with some additional values shown below for an "out of the box experience":
+
+```yaml
+security:
+  enabled: true
+  # PASSWORD must be the same value passed to elasticsearch to get an "out of the box" experience
+  elasticPassword: "<PASSWORD>"
+  tls:
+    # AutoGenerate TLS certs for elastic
+    autoGenerated: true
+
+kibana:
+  elasticsearch:
+    security:
+      auth:
+        enabled: true
+        # default in the elasticsearch chart is elastic
+        kibanaUsername: "<USERNAME>"
+        kibanaPassword: "<PASSWORD>"
+      tls:
+        # Instruct kibana to connect to elastic over https
+        enabled: true
+        # Bit of a catch 22, as you will need to know the name upfront of your release
+        existingSecret: RELEASENAME-elasticsearch-coordinating-crt # or just 'elasticsearch-coordinating-crt' if the release name happens to be 'elasticsearch'
+        # As the certs are auto-generated, they are pemCerts so set to true
+        usePemCerts: true
+```
+
+At a bare-minimum, when working with kibana and elasticsearch together the following values MUST be the same, otherwise things will fail:
+
+```yaml
+security:
+  tls:
+    restEncryption: true
+
+# assumes global.kibanaEnabled=true
+kibana:
+  elasticsearch:
+    security:
+      tls:
+        enabled: true
+```
+
 ### Adding extra environment variables
 
 In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
@@ -380,7 +742,7 @@ extraEnvVars:
     value: 7.0
 ```
 
-Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsConfigMap` or the `extraEnvVarsSecret` values.
+Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
 
 ### Using custom init scripts
 
@@ -409,17 +771,43 @@ extraVolumeMounts:
 snapshotRepoPath: "/snapshots"
 ```
 
+### Sidecars and Init Containers
+
+If you have a need for additional containers to run within the same pod as Elasticsearch components (e.g. an additional metrics or logging exporter), you can do so via the `XXX.sidecars` parameter(s), where XXX is placeholder you need to replace with the actual component(s). Simply define your container according to the Kubernetes container spec.
+
+
+```yaml
+sidecars:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Similarly, you can add extra init containers using the `initContainers` parameter.
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+```
+
 ### Setting Pod's affinity
 
 This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Persistence
 
-The [Bitnami Elasticsearch](https://github.com/bitnami/bitnami-docker-elasticsearch) image stores the Elasticsearch data at the `/bitnami/elasticsearch/data` path of the container.
+The [Bitnami Elasticsearch](https://github.com/bitnami/containers/tree/main/bitnami/elasticsearch) image stores the Elasticsearch data at the `/bitnami/elasticsearch/data` path of the container.
 
-By default, the chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning. See the [Parameters](#parameters) section to configure the PVC.
+By default, the chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning. See the [Parameters](#parameters) section to configure the PVC.
 
 ### Adjust permissions of persistent volume mountpoint
 
@@ -432,9 +820,65 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 19.0.0
+
+The new version of this chart no longer supports elasticsearch-curator, this repository has been deprecated.
+
+### To 18.0.0
+
+This major release refactors the bitnami/elasticsearch chart, adding some organization and functional changes.
+
+- Each role has now the same structure: its Statefulset, a headless service (for FQDN, it gives each node an individual Advertised name, required for TLS verification), its own ServiceAccount (BWC), and HorizontalPodAutoscaling.
+- Previously, the chart would alternate between a Coordinating service and an All-nodes service for traffic exposure. This logic has been replaced with a single Traffic exposure service, that will have coordinating-only nodes as backend pods, or master pods if no coordinating nodes are enabled.
+- Master-eligible nodes can now be deployed as multi-role nodes using the setting masterOnly. This allows the creation of different topologies, smaller clusters with HA (3 multi-role master-eligible nodes), and single-node deployments.
+- Renamed several values to be in line with the rest of the catalog.
+
+This major release also upgrades Elasticsearch to its version 8.x.x and the updates Kibana subchart.
+- Upgrade to Elasticsearch 8
+- Upgrade Kibana subchart.
+
+
+In addition, several modifications have been performed adding missing features and renaming values, in order to get aligned with the rest of the assets in the Bitnami charts repository.
+
+The following values have been modified:
+
+- `coordinating.service.*` have been renamed as `service.*`. This service will be backed by coordinating nodes if enabled, or master nodes if not.
+- `master.service.*` has been removed.
+- `data.service.*` has been removed.
+- `master.ingress.*` has been renamed as `ingress.*`. This ingress will be backed by the coordinating/master service previously mentioned.
+- In addition, an Ingest-only service and ingress have been added, for use cases where separated ingrestion and search channels are needed.
+- `global.coordinating.name` have been renamed as `global.elasticsaerch.service.name`.
+- `name` has been renamed as `clusterName`.
+- `extraEnvVarsConfigMap` has been renamed as `extraEnvVarsCM`.
+- `{master/data/ingest/coordinating}.replicas` has been renamed as `{master/data/ingest/coordinating}.replicaCount`.
+- `{master/data/ingest/coordinating}.securityContext` has been separated in two different values: `podSecurityContext` and `containerSecurityContext`.
+- `{master/data/ingest/coordinating}.updateStrategy` is now interpreted as an object. `rollingUpdatePartition` has been removed and has to be configured inside the updateStrategy object when needed.
+- Default values for `kibana.elasticsearch.hosts` and `kibana.elasticsearch.port` have been modified to use the new helpers.
+- `{master/data/ingest/coordinating/curator/metrics}.name` has been renamed as `{master/data/ingest/coordinating/curator}.nameOverride`.
+
+### To 17.0.0
+
+This version bumps in a major the version of the Kibana Helm Chart bundled as dependecy, [here](https://github.com/bitnami/charts/tree/main/bitnami/kibana#to-900) you can see the changes implemented in this Kibana major version.
+
+### To 16.0.0
+
+This version replaces the Ingest and Coordinating Deployments with Statefulsets. This change is required so Coordinating and Ingest nodes have their services associated, required for TLS hostname verification.
+
+We haven't encountered any issues during our upgrade test, but we recommend creating volumes backups before upgrading this major version, especially for users with additional volumes and custom configurations.
+
+Additionally, this version adds support for X-Pack Security features such as TLS/SSL encryption and basic authentication.
+
+### To 15.0.0
+
+From this version onwards, Elasticsearch container components are now licensed under the [Elastic License](https://www.elastic.co/licensing/elastic-license) that is not currently accepted as an Open Source license by the Open Source Initiative (OSI).
+
+Also, from now on, the Helm Chart will include the X-Pack plugin installed by default.
+
+Regular upgrade is compatible from previous versions.
 
 ### To 14.0.0
 
@@ -479,7 +923,7 @@ The field `podManagementPolicy` can't be updated in a StatefulSet, so you need t
 
 ```console
 $ kubectl delete statefulset elasticsearch-master
-$ helm upgrade <DEPLOYMENT_NAME> bitnami/elasticsearch
+$ helm upgrade <DEPLOYMENT_NAME> my-repo/elasticsearch
 ```
 
 ### TO 10.0.0
@@ -500,7 +944,7 @@ In [4dfac075aacf74405e31ae5b27df4369e84eb0b0](https://github.com/bitnami/charts/
 
 ### To 7.4.0
 
-This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### To 7.0.0
 
@@ -519,3 +963,19 @@ $ kubectl patch deployment elasticsearch-master --type=json -p='[{"op": "remove"
 $ kubectl patch deployment elasticsearch-metrics --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
 $ kubectl delete statefulset elasticsearch-data --cascade=false
 ```
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

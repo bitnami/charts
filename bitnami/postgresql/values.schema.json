@@ -2,15 +2,68 @@
   "$schema": "http://json-schema.org/schema#",
   "type": "object",
   "properties": {
-    "postgresqlUsername": {
+    "architecture": {
       "type": "string",
-      "title": "Admin user",
-      "form": true
+      "title": "PostgreSQL architecture",
+      "form": true,
+      "description": "Allowed values: `standalone` or `replication`"
     },
-    "postgresqlPassword": {
-      "type": "string",
-      "title": "Password",
-      "form": true
+    "auth": {
+      "type": "object",
+      "title": "Authentication configuration",
+      "form": true,
+      "properties": {
+        "enablePostgresUser": {
+          "type": "boolean",
+          "title": "Enable \"postgres\" admin user",
+          "description": "Assign a password to the \"postgres\" admin user. Otherwise, remote access will be blocked for this user",
+          "form": true
+        },
+        "postgresPassword": {
+          "type": "string",
+          "title": "Password for the \"postgres\" admin user",
+          "description": "Defaults to a random 10-character alphanumeric string if not set",
+          "form": true
+        },
+        "database": {
+          "type": "string",
+          "title": "PostgreSQL custom database",
+          "description": "Name of the custom database to be created during the 1st initialization of PostgreSQL",
+          "form": true
+        },
+        "username": {
+          "type": "string",
+          "title": "PostgreSQL custom user",
+          "description": "Name of the custom user to be created during the 1st initialization of PostgreSQL. This user only has permissions on the PostgreSQL custom database",
+          "form": true
+        },
+        "password": {
+          "type": "string",
+          "title": "Password for the custom user to create",
+          "description": "Defaults to a random 10-character alphanumeric string if not set",
+          "form": true
+        },
+        "replicationUsername": {
+          "type": "string",
+          "title": "PostgreSQL replication user",
+          "description": "Name of user used to manage replication.",
+          "form": true,
+          "hidden": {
+            "value": "standalone",
+            "path": "architecture"
+          }
+        },
+        "replicationPassword": {
+          "type": "string",
+          "title": "Password for PostgreSQL replication user",
+          "description": "Defaults to a random 10-character alphanumeric string if not set",
+          "form": true,
+          "hidden": {
+            "value": "standalone",
+            "path": "architecture"
+          }
+        }
+      }
     },
     "persistence": {
       "type": "object",
@@ -72,8 +125,8 @@
           "title": "read Replicas",
           "form": true,
           "hidden": {
-            "value": false,
-            "path": "replication/enabled"
+            "value": "standalone",
+            "path": "architecture"
           }
         }
       }

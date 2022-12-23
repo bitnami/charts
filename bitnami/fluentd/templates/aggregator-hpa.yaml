@@ -1,20 +1,28 @@
 {{- if .Values.aggregator.autoscaling.enabled }}
-apiVersion: autoscaling/v2beta2
+apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "beta2" "true" "context" $ ) }}
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "fluentd.fullname" . }}-aggregator-hpa
-  labels: {{- include "fluentd.labels" . | nindent 4 }}
+  name: {{ printf "%s-aggregator-hpa" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: aggregator
-  {{- if .Values.aggregator.annotations }}
-  annotations: {{- include "fluentd.tplValue" (dict "value" .Values.aggregator.annotations "context" $) | nindent 4 }}
-  {{- end }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.aggregator.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
 spec:
   scaleTargetRef:
-    apiVersion: apps/v1
+    apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
     kind: StatefulSet
-    name: {{ include "fluentd.fullname" . }}
+    name: {{ include "common.names.fullname" . }}
   minReplicas: {{ .Values.aggregator.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.aggregator.autoscaling.maxReplicas }}
   metrics:
-    {{- include "fluentd.tplValue" (dict "value" .Values.aggregator.autoscaling.metrics "context" $) | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.autoscaling.metrics "context" $) | nindent 4 }}
 {{- end }}

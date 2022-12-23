@@ -1,0 +1,7 @@
+{
+  "newStream": {
+    "name": "test-stream",
+    "app1": "http",
+    "app2": "log"
+  }
+}

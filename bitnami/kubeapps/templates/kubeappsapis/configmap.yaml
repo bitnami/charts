@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-configmap" (include "kubeapps.kubeappsapis.fullname" .) }}
+  namespace: {{ .Release.Namespace | quote }}
+data:
+  plugins.conf: |-
+{{- if .Values.kubeappsapis.pluginConfig }}
+{{ .Values.kubeappsapis.pluginConfig | toPrettyJson | indent 4 }}
+{{- end }}

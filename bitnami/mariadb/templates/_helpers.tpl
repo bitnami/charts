@@ -2,14 +2,14 @@
 
 {{- define "mariadb.primary.fullname" -}}
 {{- if eq .Values.architecture "replication" }}
-{{- printf "%s-%s" (include "common.names.fullname" .) "primary" | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) .Values.primary.name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
 {{- include "common.names.fullname" . -}}
 {{- end -}}
 {{- end -}}
 
 {{- define "mariadb.secondary.fullname" -}}
-{{- printf "%s-%s" (include "common.names.fullname" .) "secondary" | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) .Values.secondary.name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -120,9 +120,8 @@ Return the secret with MariaDB credentials
 Return true if a secret object should be created for MariaDB
 */}}
 {{- define "mariadb.createSecret" -}}
-{{- if and (not .Values.auth.existingSecret) (not .Values.auth.customPasswordFiles) }}
+{{- if not (or .Values.auth.existingSecret .Values.auth.customPasswordFiles) }}
     {{- true -}}
-{{- else -}}
 {{- end -}}
 {{- end -}}
 

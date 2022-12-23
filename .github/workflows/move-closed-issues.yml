@@ -1,0 +1,19 @@
+name: '[Support] Move closed issues'
+on:
+  issues:
+    types:
+      - closed
+  pull_request_target:
+    types:
+      - closed
+jobs:
+  send_to_solved:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send to the Solved column
+        uses: peter-evans/create-or-update-project-card@v2
+        with:
+          project-name: Support
+          column-name: 'Solved'
+          token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
+          issue-number: ${{ github.event_name != 'issues' && github.event.number || github.event.issue.number }}

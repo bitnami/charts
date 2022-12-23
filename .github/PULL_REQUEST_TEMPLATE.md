@@ -10,32 +10,32 @@
  Also don't be worried if the request is closed or not integrated sometimes the priorities of Bitnami might not match the priorities of the pull request. Don't fret, the open source community thrives on forks and GitHub makes it easy to keep your changes in a forked repo.
  -->
 
-**Description of the change**
+### Description of the change
 
 <!-- Describe the scope of your change - i.e. what the change does. -->
 
-**Benefits**
+### Benefits
 
 <!-- What benefits will be realized by the code change? -->
 
-**Possible drawbacks**
+### Possible drawbacks
 
 <!-- Describe any known limitations with your change -->
 
-**Applicable issues**
+### Applicable issues
 
 <!-- Enter any applicable Issues here (You can reference an issue using #) -->
   - fixes #
 
-**Additional information**
+### Additional information
 
-<!-- If there's anything else that's important and relevant to your pull
-request, mention that information here.-->
+<!-- If there's anything else that's important and relevant to your pull request, mention that information here.-->
 
-**Checklist** 
+### Checklist
+
 <!-- [Place an '[X]' (no spaces) in all applicable fields. Please remove unrelated fields.] -->
-- [ ] Chart version bumped in `Chart.yaml` according to [semver](http://semver.org/).
-- [ ] Variables are documented in the README.md
-- [ ] Title of the PR starts with chart name (e.g. `[bitnami/chart]`)
 
-:warning: Keep in mind that if you want to make changes to the kubeapps chart, please implement them in the [kubeapps repository](https://github.com/kubeapps/kubeapps/tree/master/chart/kubeapps). This is only a synchronized mirror.
+- [ ] Chart version bumped in `Chart.yaml` according to [semver](http://semver.org/). This is *not necessary* when the changes only affect README.md files.
+- [ ] Variables are documented in the values.yaml and added to the `README.md` using [readme-generator-for-helm](https://github.com/bitnami-labs/readme-generator-for-helm)
+- [ ] Title of the pull request follows this pattern [bitnami/<name_of_the_chart>] Descriptive title
+- [ ] All commits signed off and in agreement of [Developer Certificate of Origin (DCO)](https://github.com/bitnami/charts/blob/main/CONTRIBUTING.md#sign-your-work)

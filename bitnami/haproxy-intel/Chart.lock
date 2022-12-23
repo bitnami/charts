@@ -1,0 +1,9 @@
+dependencies:
+- name: haproxy
+  repository: https://charts.bitnami.com/bitnami
+  version: 0.6.3
+- name: common
+  repository: https://charts.bitnami.com/bitnami
+  version: 2.2.1
+digest: sha256:91cfdddcee189bb6adeffa4fc089bad2932678d49f7c411c9b690da3bd645663
+generated: "2022-12-01T16:32:28.303006071Z"

@@ -1,24 +1,24 @@
 annotations:
   category: ProjectManagement
 apiVersion: v2
-appVersion: 4.1.1
+appVersion: 5.0.4
 dependencies:
+  - condition: postgresql.enabled
+    name: postgresql
+    repository: https://charts.bitnami.com/bitnami
+    version: 12.x.x
+  - condition: mariadb.enabled
+    name: mariadb
+    repository: https://charts.bitnami.com/bitnami
+    version: 11.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
-    version: 1.x.x
-  - condition: mariadb.enabled
-    name: mariadb
-    repository: https://charts.bitnami.com/bitnami
-    version: 9.x.x
-  - condition: postgresql.enabled
-    name: postgresql
-    repository: https://charts.bitnami.com/bitnami
-    version: 10.x.x
-description: A flexible project management web application.
+    version: 2.x.x
+description: Redmine is an open source management application. It includes a tracking issue system, Gantt charts for a visual view of projects and deadlines, and supports SCM integration for version control.
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/redmine
+home: https://github.com/bitnami/charts/tree/main/bitnami/redmine
 icon: https://bitnami.com/assets/stacks/redmine/img/redmine-stack-220x234.png
 keywords:
   - redmine
@@ -30,10 +30,10 @@ keywords:
   - ruby
   - rails
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: redmine
 sources:
-  - https://github.com/bitnami/bitnami-docker-redmine
-  - http://www.redmine.org/
-version: 15.2.5
+  - https://github.com/bitnami/containers/tree/main/bitnami/redmine
+  - https://www.redmine.org/
+version: 21.0.3

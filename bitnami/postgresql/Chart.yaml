@@ -1,14 +1,16 @@
 annotations:
   category: Database
 apiVersion: v2
-appVersion: 11.11.0
+appVersion: 15.1.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
-    version: 1.x.x
-description: Chart for PostgreSQL, an object-relational database management system (ORDBMS) with an emphasis on extensibility and on standards-compliance.
+    tags:
+      - bitnami-common
+    version: 2.x.x
+description: PostgreSQL (Postgres) is an open source object-relational database known for reliability and data integrity. ACID-compliant, it supports foreign keys, joins, views, triggers and stored procedures.
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/postgresql
+home: https://github.com/bitnami/charts/tree/main/bitnami/postgresql
 icon: https://bitnami.com/assets/stacks/postgresql/img/postgresql-stack-220x234.png
 keywords:
   - postgresql
@@ -18,12 +20,10 @@ keywords:
   - replication
   - cluster
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
-  - email: cedric@desaintmartin.fr
-    name: desaintmartin
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: postgresql
 sources:
-  - https://github.com/bitnami/bitnami-docker-postgresql
+  - https://github.com/bitnami/containers/tree/main/bitnami/postgresql
   - https://www.postgresql.org/
-version: 10.3.11
+version: 12.1.3

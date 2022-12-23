@@ -1,0 +1,41 @@
+file:
+  /bitnami/nats/conf/{{ .Vars.natsFilename }}.conf:
+    mode: "0644"
+    filetype: file
+    exists: true
+    owner: root
+command:
+  {{- $running_user := printf "%d" .Vars.containerSecurityContext.runAsUser }}
+  {{- $auth := printf "--user=%s --password=%s" .Vars.auth.user .Vars.auth.password }}
+  {{- $client_port := printf "%d" .Vars.service.ports.client }}
+  {{- $lb_endpoint := printf "-s nats://nats:%s" $client_port }}
+  key-management:
+    {{- $subject := printf "subj_%s" (randAlpha 5) }}
+    {{- $msg := printf "msg_%s" (randAlpha 5) }}
+    ## We need to have the subscriber process running at the same time the publishing is done
+    ## The sleep is needed to avoid a race condition where the publishing is done before the subscriber is ready
+    ## The subscriber process needs to be timed out so there is no dangling process making goss timeout
+    exec: ( USER={{ $running_user }} timeout 10 nats {{ $auth }} {{ $lb_endpoint }} sub {{ $subject }}; ) & sleep 3 && USER={{ $running_user }} nats {{ $auth }} {{ $lb_endpoint }} pub {{ $subject }} {{ $msg }}
+    exit-status: 0
+    stdout:
+    - /Received on.*{{ $subject }}/
+    - {{ $msg }}
+    timeout: 20000
+  {{- range $e, $i := until .Vars.replicaCount }}
+  cluster-key-management-{{ $i }}:
+    {{- $subject := printf "subj_%s" (randAlpha 5) }}
+    {{- $msg := printf "msg_%s" (randAlpha 5) }}
+    {{- $pod_endpoint := printf "-s nats://nats-%d.nats-headless:%s" $i $client_port }}
+    exec: ( USER={{ $running_user }} timeout 10 nats {{ $auth }} {{ $pod_endpoint }} sub {{ $subject }}; ) & sleep 3 && USER={{ $running_user }} nats {{ $auth }} {{ $lb_endpoint }} pub {{ $subject }} {{ $msg }}
+    exit-status: 0
+    stdout:
+    - /Received on.*{{ $subject }}/
+    - {{ $msg }}
+    timeout: 20000
+  {{ end }}
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+    - uid={{ $running_user }}
+    - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/

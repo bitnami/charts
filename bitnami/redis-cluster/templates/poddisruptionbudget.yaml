@@ -1,8 +1,9 @@
 {{- if .Values.podDisruptionBudget }}
-apiVersion: policy/v1beta1
+apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
   name: {{ template "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -14,6 +15,6 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
     matchExpressions:
-      - {key: job-name, operator: NotIn, values: [{{ template "common.names.fullname" . }}-cluster-create]}
+      - {key: job-name, operator: NotIn, values: [{{ template "common.names.fullname" . }}-cluster-update]}
   {{- toYaml .Values.podDisruptionBudget | nindent 2 }}
 {{- end }}

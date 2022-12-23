@@ -1,34 +1,12 @@
 {{/* vim: set filetype=mustache: */}}
-{{/*
-Expand the name of the chart.
-*/}}
-{{- define "solr.name" -}}
-{{- include "common.names.name" . -}}
-{{- end -}}
 
 {{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
 */}}
-{{- define "solr.fullname" -}}
-{{- include "common.names.fullname" . -}}
+{{- define "solr.zookeeper.fullname" -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "zookeeper" "chartValues" .Values.zookeeper "context" $) -}}
 {{- end -}}
-
-{{/*
-Define the name of the solr exporter
-*/}}
-{{- define "solr.exporter-name" -}}
-{{- printf "%s-%s" (include "solr.fullname" .) "exporter" | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Return the proper Docker Image Registry Secret Names
-*/}}
-{{- define "solr.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image ) "global" .Values.global) -}}
-{{- end -}}
-
 
 {{/*
 Return the proper Apache Solr image name
@@ -38,17 +16,25 @@ Return the proper Apache Solr image name
 {{- end -}}
 
 {{/*
-Return the proper Solr Exporter image name
+Return the proper image name (for the init container volume-permissions image)
 */}}
-{{- define "exporter.image" -}}
-{{- include "common.images.image" (dict "imageRoot" .Values.exporter.image "global" .Values.global) -}}
+{{- define "solr.volumePermissions.image" -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.volumePermissions.image "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
-Return the proper image name (for the init container volume-permissions image)
+Return the proper Docker Image Registry Secret Names
 */}}
-{{- define "volumePermissions.image" -}}
-{{- include "common.images.image" ( dict "imageRoot" .Values.volumePermissions.image "global" .Values.global ) -}}
+{{- define "solr.imagePullSecrets" -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.volumePermissions.image) "global" .Values.global) -}}
+{{- end -}}
+
+{{/*
+Check if there are rolling tags in the images
+*/}}
+{{- define "solr.checkRollingTags" -}}
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- end -}}
 
 {{/*
@@ -56,29 +42,138 @@ Return the proper image name (for the init container volume-permissions image)
  */}}
 {{- define "solr.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-    {{- default (include "solr.fullname" .) .Values.serviceAccount.name -}}
+    {{- default (include "common.names.fullname" .) .Values.serviceAccount.name -}}
 {{- else -}}
     {{- default "default" .Values.serviceAccount.name -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Return  the proper Storage Class
+Return the Solr authentication credentials secret
 */}}
-{{- define "solr.storageClass" -}}
-{{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) -}}
-{{- end -}}
-
-{{/* Solr credential secret name */}}
 {{- define "solr.secretName" -}}
-{{- coalesce .Values.existingSecret (include "common.names.fullname" .) -}}
+{{- coalesce (tpl .Values.auth.existingSecret $) (include "common.names.fullname" .) -}}
 {{- end -}}
 
-{{/* Return the proper Zookeeper host */}}
+{{/*
+Get the password key to be retrieved from the Solr auth secret.
+*/}}
+{{- define "solr.secretPasswordKey" -}}
+{{- if and .Values.auth.existingSecret .Values.auth.existingSecretPasswordKey -}}
+{{- printf "%s" .Values.auth.existingSecretPasswordKey -}}
+{{- else -}}
+{{- printf "solr-password" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a Solr authentication credentials secret object should be created
+*/}}
+{{- define "solr.createSecret" -}}
+{{- if and .Values.auth.enabled (empty .Values.auth.existingSecret) -}}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns the available value for certain key in an existing secret (if it exists),
+otherwise it generates a random value.
+*/}}
+{{- define "getValueFromSecret" }}
+    {{- $len := (default 16 .Length) | int -}}
+    {{- $obj := (lookup "v1" "Secret" .Namespace .Name).data -}}
+    {{- if $obj }}
+        {{- index $obj .Key | b64dec -}}
+    {{- else -}}
+        {{- randAlphaNum $len -}}
+    {{- end -}}
+{{- end }}
+
+{{/*
+Return Solr admin password
+*/}}
+{{- define "solr.password" -}}
+{{- if not (empty .Values.auth.adminPassword) -}}
+    {{- .Values.auth.adminPassword -}}
+{{- else -}}
+    {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "solr-password")  -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper Zookeeper host
+*/}}
 {{- define "solr.zookeeper.host" -}}
 {{- if .Values.externalZookeeper.servers -}}
-{{- include "common.tplvalues.render" (dict "value" (join "," .Values.externalZookeeper.servers) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (join "," .Values.externalZookeeper.servers) "context" $) -}}
 {{- else -}}
-{{- printf "%s-%s" .Release.Name "zookeeper" -}}:{{- .Values.zookeeper.port -}}
+    {{- printf "%s:%d" (include "solr.zookeeper.fullname" .) (int .Values.zookeeper.containerPorts.client) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a TLS secret object should be created
+*/}}
+{{- define "solr.createTlsSecret" -}}
+{{- if and .Values.tls.enabled .Values.tls.autoGenerated (not .Values.tls.certificatesSecretName) }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Solr TLS credentials secret
+*/}}
+{{- define "solr.tlsSecretName" -}}
+{{- $secretName := .Values.tls.certificatesSecretName -}}
+{{- if $secretName -}}
+    {{- printf "%s" (tpl $secretName $) -}}
+{{- else -}}
+    {{- printf "%s-crt" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a secret containing the Keystore and Truststore password should be created for Solr client
+*/}}
+{{- define "solr.createTlsPasswordsSecret" -}}
+{{- if and .Values.tls.enabled (not .Values.tls.passwordsSecretName) }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a TLS credentials secret object should be created
+*/}}
+{{- define "solr.tlsPasswordsSecret" -}}
+{{- $secretName := .Values.tls.passwordsSecretName -}}
+{{- if $secretName -}}
+    {{- printf "%s" (tpl $secretName $) -}}
+{{- else -}}
+    {{- printf "%s-tls-pass" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Compile all warnings into a single message.
+*/}}
+{{- define "solr.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "solr.validateValues.tls" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of Solr - TLS enabled
+*/}}
+{{- define "solr.validateValues.tls" -}}
+{{- if and .Values.tls.enabled (not .Values.tls.autoGenerated) (not .Values.tls.certificatesSecretName) }}
+solr: tls.enabled
+    In order to enable TLS, you also need to provide
+    an existing secret containing the Keystore and Truststore or
+    enable auto-generated certificates.
 {{- end -}}
 {{- end -}}

@@ -1,9 +1,16 @@
 apiVersion: {{ if .Values.mongos.useStatefulSet }}{{ include "common.capabilities.statefulset.apiVersion" . }}{{- else }}{{ include "common.capabilities.deployment.apiVersion" . }}{{- end }}
 kind: {{ if .Values.mongos.useStatefulSet }}StatefulSet{{- else }}Deployment{{- end }}
 metadata:
-  name: {{ include "common.names.fullname" . }}-mongos
+  name: {{ printf "%s-mongos" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: mongos
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   {{- if .Values.mongos.useStatefulSet }}
   serviceName: {{ include "mongodb-sharded.serviceName" . }}
@@ -13,7 +20,7 @@ spec:
   strategy:
   {{- end }}
     {{- toYaml .Values.mongos.updateStrategy | nindent 4 }}
-  replicas: {{ .Values.mongos.replicas }}
+  replicas: {{ .Values.mongos.replicaCount }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: mongos
@@ -21,6 +28,9 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: mongos
+        {{- if .Values.common.podLabels }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.common.podLabels "context" $ ) | nindent 8 }}
+        {{- end }}
         {{- if .Values.mongos.podLabels }}
           {{- include "common.tplvalues.render" ( dict "value" .Values.mongos.podLabels "context" $ ) | nindent 8 }}
         {{- end }}
@@ -37,10 +47,10 @@ spec:
         {{- end }}
       {{- end }}
     spec:
-      {{- if .Values.common.schedulerName }}
-      schedulerName: {{ .Values.common.schedulerName | quote }}
+      {{- if .Values.mongos.schedulerName }}
+      schedulerName: {{ .Values.mongos.schedulerName | quote }}
       {{- end }}
-      serviceAccountName: {{ include "mongodb-sharded.serviceAccountName" (dict "value" $.Values.mongos.serviceAccount "context" $) }}
+      serviceAccountName: {{ include "mongodb-sharded.serviceAccountName" (dict "component" "mongos" "value" $.Values.mongos.serviceAccount "context" $) }}
       {{- if .Values.mongos.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -58,39 +68,48 @@ spec:
       {{- if .Values.mongos.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.securityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.securityContext.fsGroup }}
+      {{- if .Values.mongos.priorityClassName }}
+      priorityClassName: {{ .Values.mongos.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.mongos.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.topologySpreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.mongos.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.mongos.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.mongos.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.mongos.terminationGracePeriodSeconds }}
       {{- end }}
       {{- include "mongodb-sharded.imagePullSecrets" . | nindent 6 }}
       {{- if or $.Values.mongos.initContainers $.Values.common.initContainers }}
       initContainers:
         {{- with $.Values.mongos.initContainers }}
-        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
         {{- end }}
         {{- with $.Values.common.initContainers }}
-        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
         {{- end }}
       {{- end }}
       containers:
         - name: mongos
           image: {{ include "mongodb-sharded.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.securityContext.enabled }}
-          securityContext:
-            runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
-            runAsUser: {{ .Values.securityContext.runAsUser }}
+          {{- if .Values.mongos.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.mongos.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           env:
-            {{- if .Values.image.debug }}
+            - name: MONGODB_ENABLE_NUMACTL
+              value: {{ ternary "yes" "no" $.Values.common.mongodbEnableNumactl | quote }}
             - name: BITNAMI_DEBUG
-              value: "true"
-            {{- end }}
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: MONGODB_SHARDING_MODE
               value: "mongos"
             - name: MONGODB_MAX_TIMEOUT
               value: {{ .Values.common.mongodbMaxWaitTimeout | quote }}
-            {{- if .Values.usePasswordFile }}
+            {{- if $.Values.auth.enabled }}
+            - name: MONGODB_ROOT_USER
+              value: {{ .Values.auth.rootUser | quote }}
+            {{- if .Values.auth.usePasswordFile }}
             - name: MONGODB_ROOT_PASSWORD_FILE
               value: "/bitnami/mongodb/secrets/mongodb-root-password"
             - name: MONGODB_REPLICA_SET_KEY_FILE
@@ -107,6 +126,7 @@ spec:
                   name: {{ include "mongodb-sharded.secret" . }}
                   key: mongodb-replica-set-key
             {{- end }}
+            {{- end }}
             - name: MONGODB_POD_NAME
               valueFrom:
                 fieldRef:
@@ -115,6 +135,8 @@ spec:
             - name: MONGODB_ADVERTISED_HOSTNAME
               value: "$(MONGODB_POD_NAME)"
             {{- end }}
+            - name: MONGODB_PORT_NUMBER
+              value: {{ $.Values.common.containerPorts.mongodb | quote }}
             - name: MONGODB_CFG_PRIMARY_HOST
               value: {{ include "mongodb-sharded.configServer.primaryHost" . }}
             - name: MONGODB_CFG_REPLICA_SET_NAME
@@ -122,7 +144,7 @@ spec:
             - name: MONGODB_SYSTEM_LOG_VERBOSITY
               value: {{ .Values.common.mongodbSystemLogVerbosity | quote }}
             - name: MONGODB_DISABLE_SYSTEM_LOG
-              {{- if .Values.mongodbDisableSystemLog }}
+              {{- if .Values.common.mongodbDisableSystemLog }}
               value: "yes"
               {{- else }}
               value: "no"
@@ -164,43 +186,56 @@ spec:
                 name: {{ include "common.tplvalues.render" ( dict "value" .Values.mongos.extraEnvVarsCM "context" $ ) }}
             {{- end }}
             {{- if .Values.mongos.extraEnvVarsSecret }}
-            - configMapRef:
+            - secretRef:
                 name: {{ include "common.tplvalues.render" ( dict "value" .Values.mongos.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
           {{- end }}
           ports:
             - name: mongodb
-              containerPort: 27017
-          {{- if .Values.livenessProbe.enabled }}
-          livenessProbe:
-            exec:
-              command:
-                - mongo
-                - --disableImplicitSessions
-                - --eval
-                - "db.adminCommand('ping')"
-            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+              containerPort: {{ $.Values.common.containerPorts.mongodb }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else }}
+          {{- if .Values.mongos.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.readinessProbe.enabled }}
-          readinessProbe:
+          {{- if .Values.mongos.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.args "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.mongos.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.mongos.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.mongos.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
-                - mongo
-                - --disableImplicitSessions
-                - --eval
-                - "db.adminCommand('ping')"
-            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+                - /bin/sh 
+                - -c 
+                - mongosh --port $MONGODB_PORT_NUMBER --eval "db.adminCommand('ping')"
+          {{- end }}
+          {{- if .Values.mongos.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.mongos.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.mongos.readinessProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+                - /bin/sh 
+                - -c 
+                - mongosh --port $MONGODB_PORT_NUMBER --eval "db.adminCommand('ping')"
+          {{- end }}
+          {{- if .Values.mongos.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.mongos.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.mongos.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: mongodb 
+          {{- end }}
+          {{- end }}
+          {{- if .Values.mongos.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            {{- if .Values.usePasswordFile }}
+            {{- if .Values.auth.usePasswordFile }}
             - name: secrets
               mountPath: /bitnami/mongodb/secrets/
             {{- end }}
@@ -219,13 +254,14 @@ spec:
         - name: metrics
           image: {{ include "mongodb-sharded.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
-          {{- if .Values.securityContext.enabled }}
-          securityContext:
-            runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
-            runAsUser: {{ .Values.securityContext.runAsUser }}
+          {{- if .Values.metrics.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           env:
-          {{- if .Values.usePasswordFile }}
+          {{- if $.Values.auth.enabled }}
+            - name: MONGODB_ROOT_USER
+              value: {{ .Values.auth.rootUser | quote }}
+          {{- if .Values.auth.usePasswordFile }}
             - name: MONGODB_ROOT_PASSWORD_FILE
               value: "/bitnami/mongodb/secrets/mongodb-root-password"
           {{- else }}
@@ -235,55 +271,64 @@ spec:
                   name: {{ include "mongodb-sharded.secret" . }}
                   key: mongodb-root-password
           {{- end }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else }}
           command:
             - sh
             - -ec
             - |-
               #!/bin/sh
-              {{- if .Values.usePasswordFile }}
+              {{- if .Values.auth.usePasswordFile }}
               export MONGODB_ROOT_PASSWORD="$(cat "${MONGODB_ROOT_PASSWORD_FILE}")"
               {{- end }}
-              /bin/mongodb_exporter --web.listen-address ":{{ .Values.metrics.containerPort }}" --mongodb.uri mongodb://root:`echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g"`@localhost:{{ .Values.service.port }}/admin {{ .Values.metrics.extraArgs }}
-          {{- if .Values.usePasswordFile }}
+              /bin/mongodb_exporter --collect-all --compatible-mode --web.listen-address ":{{ .Values.metrics.containerPorts.metrics }}" --mongodb.uri mongodb://$(echo $MONGODB_ROOT_USER):$(echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g")@localhost:{{ .Values.common.containerPorts.mongodb }}/admin{{ ternary "?ssl=true" "" $.Values.metrics.useTLS }} {{ .Values.metrics.extraArgs }}
+          {{- end }}
+          {{- if .Values.auth.usePasswordFile }}
           volumeMounts:
             - name: secrets
               mountPath: /bitnami/mongodb/secrets/
           {{- end }}
           ports:
             - name: metrics
-              containerPort: {{ .Values.metrics.containerPort }}
-          {{- if .Values.metrics.livenessProbe.enabled }}
-          livenessProbe:
+              containerPort: {{ .Values.metrics.containerPorts.metrics }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.metrics.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: metrics
-            initialDelaySeconds: {{ .Values.metrics.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.metrics.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.metrics.livenessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.metrics.livenessProbe.failureThreshold }}
-            successThreshold: {{ .Values.metrics.livenessProbe.successThreshold }}
           {{- end }}
-          {{- if .Values.metrics.readinessProbe.enabled }}
-          readinessProbe:
+          {{- if .Values.metrics.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: metrics
-            initialDelaySeconds: {{ .Values.metrics.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.metrics.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.metrics.readinessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.metrics.readinessProbe.failureThreshold }}
-            successThreshold: {{ .Values.metrics.readinessProbe.successThreshold }}
+          {{- end }}
+          {{- if .Values.metrics.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: metrics
+          {{- end }}
           {{- end }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
         {{- end }}
         {{- with $.Values.mongos.sidecars }}
-        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
         {{- end }}
         {{- with $.Values.common.sidecars }}
-        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
         {{- end }}
       volumes:
-        {{- if .Values.usePasswordFile }}
+        {{- if .Values.auth.usePasswordFile }}
         - name: secrets
           secret:
             secretName: {{ include "mongodb-sharded.secret" . }}

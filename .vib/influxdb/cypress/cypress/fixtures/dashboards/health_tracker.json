@@ -1,0 +1,63 @@
+[
+  {
+    "apiVersion": "influxdata.com/v2alpha1",
+    "kind": "Dashboard",
+    "metadata": {
+      "name": "health-tracker-template"
+    },
+    "spec": {
+      "charts": [
+        {
+          "axes": [
+            {
+              "base": "10",
+              "name": "x",
+              "scale": "linear"
+            },
+            {
+              "base": "10",
+              "name": "y",
+              "scale": "linear"
+            }
+          ],
+          "colorizeRows": true,
+          "colors": [
+            {
+              "id": "base",
+              "name": "laser",
+              "type": "text",
+              "hex": "#00C9FF"
+            }
+          ],
+          "decimalPlaces": 2,
+          "height": 4,
+          "hoverDimension": "auto",
+          "kind": "Single_Stat_Plus_Line",
+          "legendColorizeRows": true,
+          "legendOpacity": 1,
+          "legendOrientationThreshold": 100000000,
+          "name": "Glucose Levels",
+          "opacity": 1,
+          "orientationThreshold": 100000000,
+          "position": "overlaid",
+          "queries": [
+            {
+              "query": "from(bucket: \"primary\")\n  |> range(start: time(v: \"2022-08-16T22:00:00.000Z\"), stop: time(v: \"2022-08-17T21:00:00.929Z\"))\n  |> filter(fn: (r) => r[\"_measurement\"] == \"health\")\n  |> filter(fn: (r) => r[\"_field\"] == \"glucose\")\n  |> aggregateWindow(every: v.windowPeriod, fn: max, createEmpty: false)\n  |> yield(name: \"max\")"
+            }
+          ],
+          "staticLegend": {
+            "colorizeRows": true,
+            "opacity": 1,
+            "orientationThreshold": 100000000,
+            "widthRatio": 1
+          },
+          "width": 4,
+          "widthRatio": 1,
+          "xCol": "_time",
+          "yCol": "_value"
+        }
+      ],
+      "name": "Health Tracker"
+    }
+  }
+]

@@ -1,271 +1,224 @@
+## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry and imagePullSecrets
-##
-# global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
-#   storageClass: myStorageClass
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
 
-## Force target Kubernetes version (using Helm capabilites if not set)
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
-kubeVersion:
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass: ""
 
-## Number of Discourse & Sidekiq replicas
-## (Note that you will need ReadWriteMany PVCs for this to work properly)
+## @section Common parameters
+
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
-replicaCount: 1
+kubeVersion: ""
+## @param nameOverride String to partially override discourse.fullname template (will maintain the release name)
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override discourse.fullname template
+##
+fullnameOverride: ""
+## @param clusterDomain Kubernetes Cluster Domain
+##
+clusterDomain: cluster.local
+## @param commonLabels Labels to be added to all deployed resources
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to be added to all deployed resources
+##
+commonAnnotations: {}
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+## Enable diagnostic mode in the deployment(s)/statefulset(s)
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the the deployment(s)/statefulset(s)
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the the deployment(s)/statefulset(s)
+  ##
+  args:
+    - infinity
+
+## @section Discourse Common parameters
 
 ## Bitnami Discourse image version
 ## ref: https://hub.docker.com/r/bitnami/discourse/tags/
+## @param image.registry Discourse image registry
+## @param image.repository Discourse image repository
+## @param image.tag Discourse image tag
+## @param image.digest Discourse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param image.pullPolicy Discourse image pull policy
+## @param image.pullSecrets Discourse image pull secrets
+## @param image.debug Enable image debug mode
 ##
 image:
   registry: docker.io
   repository: bitnami/discourse
-  tag: 2.6.3-debian-10-r0
+  tag: 2.8.11-debian-11-r5
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
   ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
+  pullSecrets: []
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
-
-imagePullSecrets: []
-
-## String to partially override discourse.fullname template (will maintain the release name)
+## Authentication parameters
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/discourse#user-and-site-configuration
 ##
-# nameOverride:
-
-## String to fully override discourse.fullname template
+auth:
+  ## @param auth.email Discourse admin user email
+  ##
+  email: user@example.com
+  ## @param auth.username Discourse admin user
+  ##
+  username: user
+  ## @param auth.password Discourse admin password. WARNING: Minimum length of 10 characters
+  ## Defaults to a random 10-character alphanumeric string if not set
+  ##
+  password: ""
+  ## @param auth.existingSecret Name of an existing secret to use for Discourse credentials
+  ## `auth.password` will be ignored and picked up from this secret
+  ## The secret must contain the key `discourse-password`
+  ## The value is evaluated as a template
+  ##
+  existingSecret: ""
+## @param host Hostname to create application URLs (include the port if =/= 80)
 ##
-# fullnameOverride:
-
-## Deployment pod host aliases
+host: ""
+## @param siteName Discourse site name
+##
+siteName: 'My Site!'
+## Discourse SMTP settings
+## @param smtp.enabled Enable/disable SMTP
+## @param smtp.host SMTP host name
+## @param smtp.port SMTP port number
+## @param smtp.user SMTP account user name
+## @param smtp.password SMTP account password
+## @param smtp.protocol SMTP protocol (Allowed values: tls, ssl)
+## @param smtp.auth SMTP authentication method
+## @param smtp.existingSecret Name of an existing Kubernetes secret. The secret must have the following key configured: `smtp-password`
+##
+smtp:
+  enabled: false
+  host: ""
+  port: ""
+  user: ""
+  password: ""
+  protocol: ""
+  auth: ""
+  existingSecret: ""
+## @param replicaCount Number of Discourse & Sidekiq replicas
+## Note: ReadWriteMany PVCs are required to scale
+##
+replicaCount: 1
+## Configure Discourse pods Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param podSecurityContext.enabled Enabled Discourse pods' Security Context
+## @param podSecurityContext.fsGroup Set Discourse pod's Security Context fsGroup
+##
+podSecurityContext:
+  enabled: false
+  fsGroup: 0
+## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-
-discourse:
-  ## Discourse host to create application URLs. The port will be automatilly included.
-  ## ref: https://github.com/bitnami/bitnami-docker-discourse#configuration
-  ##
-  host: ''
-  ## Discourse site name
-  ## ref: https://github.com/bitnami/bitnami-docker-discourse#environment-variables
-  ##
-  siteName: 'My Site!'
-  ## User of the application
-  ## ref: https://github.com/bitnami/bitnami-docker-discourse#environment-variables
-  ##
-  username: user
-  ## Application password
-  ## WARNING: Minimum length of 10 characters
-  ## Defaults to a random 10-character alphanumeric string if not set
-  ## ref: https://github.com/bitnami/bitnami-docker-discourse#environment-variables
-  ##
-  # password:
-  ## Name of an existing secret containing the password (ignores previous password)
-  ##
-  # existingSecret: my-secret
-  ## Admin email
-  ## ref: https://github.com/bitnami/bitnami-docker-discourse#environment-variables
-  ##
-  email: user@example.com
-
-  ## Custom command to override image cmd
-  ##
-  # command: []
-
-  ## Custom args for the custom command:
-  # args: []
-
-  containerSecurityContext: {}
-  ## capabilities:
-  ##   drop:
-  ##   - ALL
-  ## readOnlyRootFilesystem: true
-  ## runAsNonRoot: true
-  ## runAsUser: 1000
-  ##
-
-  ## Discourse container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources: {}
-  ##  We usually recommend not to specify default resources and to leave this as a conscious
-  ##  choice for the user. This also increases chances charts run on environments with little
-  ##  resources, such as Minikube. If you do want to specify resources, uncomment the following
-  ##  lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  #   limits:
-  #     cpu: 100m
-  #     memory: 128Mi
-  #   requests:
-  #     cpu: 100m
-  #     memory: 128Mi
-
-  ## Discourse extra options for liveness and readiness probes
-  ## WARNING: Discourse installation process may take up some time and
-  ## setting inappropriate values here may lead to pods failure.
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-  ##
-  livenessProbe:
-    enabled: true
-    initialDelaySeconds: 500
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 6
-    successThreshold: 1
-
-  readinessProbe:
-    enabled: true
-    initialDelaySeconds: 30
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 6
-    successThreshold: 1
-
-  ## Custom liveness and readiness probes, it overrides the default one (evaluated as a template)
-  ##
-  customLivenessProbe: {}
-  customReadinessProbe: {}
-
-  ## An array to add extra env vars
-  ## For example:
-  ## extraEnvVars:
-  ##   discourse:
-  ##   - name: DISCOURSE_ELASTICSEARCH_URL
-  ##     value: test
-  ##
-  extraEnvVars: []
-
-  ## Array to add extra configmaps:
-  ##
-  extraEnvVarsCM: []
-
-  ## Array to add extra environment
-  ## variables from a secret:
-  ##
-  # extraEnvVarsSecret: ""
-
-  ## Additional volume mounts
-  ## Example: Mount CA file
-  ## extraVolumeMounts
-  ##   - name: ca-cert
-  ##     subPath: ca_cert
-  ##     mountPath: /path/to/ca_cert
-  ##
-  extraVolumeMounts: []
-
-  ## Do not run the Discourse installation wizard.
-  ## Use only in case you are importing an existing database.
-  ##
-  skipInstall: false
-
-sidekiq:
-  containerSecurityContext: {}
-  ## capabilities:
-  ##   drop:
-  ##   - ALL
-  ## readOnlyRootFilesystem: true
-  ## runAsNonRoot: true
-  ## runAsUser: 1000
-  ##
-
-  ## Custom command to override image cmd
-  ##
-  command: ['/app-entrypoint.sh']
-
-  ## Custom args for the custom command:
-  ##
-  args: ['nami', 'start', '--foreground', 'discourse-sidekiq']
-
-  ## Sidekiq resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources: {}
-  ##  We usually recommend not to specify default resources and to leave this as a conscious
-  ##  choice for the user. This also increases chances charts run on environments with little
-  ##  resources, such as Minikube. If you do want to specify resources, uncomment the following
-  ##  lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  #   limits:
-  #     cpu: 100m
-  #     memory: 128Mi
-  #   requests:
-  #     cpu: 100m
-  #     memory: 128Mi
-
-  ## Sidekiq extra options for liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-  ##
-  livenessProbe:
-    enabled: true
-    initialDelaySeconds: 500
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 6
-    successThreshold: 1
-
-  readinessProbe:
-    enabled: true
-    initialDelaySeconds: 30
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 6
-    successThreshold: 1
-
-  ## Custom liveness and readiness probes, it overrides the default one (evaluated as a template)
-  ##
-  customLivenessProbe: {}
-  customReadinessProbe: {}
-
-  ## An array to add extra env vars
-  ## For example:
-  ## extraEnvVars:
-  ##   - name: DISCOURSE_ELASTICSEARCH_URL
-  ##     value: test
-  ##
-  extraEnvVars: []
-
-  ## Array to add extra configmaps:
-  ##
-  extraEnvVarsCM: []
-
-  ## Name of the secret that holds extra
-  ## env vars:
-  ##
-  # extraEnvVarsSecret:
-
-  ## Additional volume mounts
-  ## Example: Mount CA file
-  ## extraVolumeMounts
-  ##   - name: ca-cert
-  ##     subPath: ca_cert
-  ##     mountPath: /path/to/ca_cert
-  ##
-  extraVolumeMounts: []
-
-## Additional volumes
-## Example: Add secret volume
-## extraVolumes:
-##  - name: ca-cert
-##    secret:
-##      secretName: ca-cert
-##      items:
-##        - key: ca-cert
-##          path: ca_cert
+## @param podAnnotations Additional pod annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
-extraVolumes: []
-
-## Add sidecars to the pod.
+podAnnotations: {}
+## @param podLabels Additional pod labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+## @param podAffinityPreset Pod affinity preset. Allowed values: soft, hard
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAffinityPreset: ""
+## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAntiAffinityPreset: soft
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## @param nodeAffinityPreset.key Node label key to match Ignored if `affinity` is set.
+## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.
+##
+nodeAffinityPreset:
+  type: ""
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+## @param affinity Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+##
+affinity: {}
+## @param nodeSelector Node labels for pod assignment.
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+## @param tolerations Tolerations for pod assignment.
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+##
+topologySpreadConstraints: []
+## @param priorityClassName Priority Class Name
+## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+##
+priorityClassName: ""
+## @param schedulerName Use an alternate scheduler, e.g. "stork".
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param terminationGracePeriodSeconds Seconds Discourse pod needs to terminate gracefully
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+##
+terminationGracePeriodSeconds: ""
+## @param updateStrategy.type Discourse deployment strategy type
+## @param updateStrategy.rollingUpdate Discourse deployment rolling update configuration parameters
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+##
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate: {}
+## @param sidecars Add additional sidecar containers to the Discourse pods
 ## Example:
 ## sidecars:
 ##   - name: your-image-name
@@ -276,363 +229,653 @@ extraVolumes: []
 ##         containerPort: 1234
 ##
 sidecars: []
-
-## Add init containers to the pod
-##
-## e.g.
+## @param initContainers Add additional init containers to the Discourse pods
+## Example:
 ## initContainers:
 ##   - name: your-image-name
 ##     image: your-image
 ##     imagePullPolicy: Always
 ##     ports:
 ##       - name: portname
-##       containerPort: 1234
+##         containerPort: 1234
 ##
 initContainers: []
-
-serviceAccount:
-  ## Specifies whether a service account should be created
-  ##
-  create: false
-  ## Annotations to add to the service account
-  ##
-  annotations: {}
-  ## The name of the service account to use.
-  ## If not set and create is true, a name is generated using the fullname template
-  ##
-  name:
-
-podSecurityContext: {}
-##  fsGroup: 2000
+## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Discourse pods
 ##
+extraVolumeMounts: []
+## @param extraVolumes Optionally specify extra list of additional volumes for the Discourse pods
+##
+extraVolumes: []
 
-## Enable persistence using Persistent Volume Claims
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+## @section Discourse container parameters
+
+discourse:
+  ## @param discourse.skipInstall Do not run the Discourse installation wizard
+  ## Use only in case you are importing an existing database.
+  ##
+  skipInstall: false
+  ## @param discourse.command Custom command to override image cmd
+  ##
+  command: []
+  ## @param discourse.args Custom args for the custom command
+  ##
+  args: []
+  ## @param discourse.extraEnvVars Array with extra environment variables to add Discourse pods
+  ##
+  extraEnvVars: []
+  ## @param discourse.extraEnvVarsCM ConfigMap containing extra environment variables for Discourse pods
+  ##
+  extraEnvVarsCM: ""
+  ## @param discourse.extraEnvVarsSecret Secret containing extra environment variables (in case of sensitive data) for Discourse pods
+  ##
+  extraEnvVarsSecret: ""
+  ## @param discourse.containerPorts.http Discourse HTTP container port
+  ##
+  containerPorts:
+    http: 8080
+  ## Configure extra options for Discourse containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param discourse.livenessProbe.enabled Enable livenessProbe on Discourse containers
+  ## @param discourse.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param discourse.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param discourse.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param discourse.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param discourse.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 500
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param discourse.readinessProbe.enabled Enable readinessProbe on Discourse containers
+  ## @param discourse.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param discourse.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param discourse.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param discourse.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param discourse.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param discourse.startupProbe.enabled Enable startupProbe on Discourse containers
+  ## @param discourse.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param discourse.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param discourse.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param discourse.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param discourse.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param discourse.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param discourse.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param discourse.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## Discourse resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param discourse.resources.limits The resources limits for the Discourse containers
+  ## @param discourse.resources.requests The requested resources for the Discourse containers
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Configure Discourse containers (only main one) Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param discourse.containerSecurityContext.enabled Enabled Discourse containers' Security Context
+  ## @param discourse.containerSecurityContext.runAsUser Set Discourse containers' Security Context runAsUser
+  ## @param discourse.containerSecurityContext.runAsNonRoot Set Discourse containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: false
+    runAsUser: 0
+    runAsNonRoot: false
+  ## @param discourse.lifecycleHooks for the Discourse container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param discourse.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Discourse pods
+  ##
+  extraVolumeMounts: []
+
+## Persistence Parameters
+## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
+  ## @param persistence.enabled Enable persistence using Persistent Volume Claims
+  ##
   enabled: true
-  ## discourse & sidekiq data Persistent Volume Storage Class
+  ## @param persistence.storageClass Persistent Volume storage class
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClassName spec is
-  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-  ##   GKE, AWS & OpenStack)
+  ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
   ##
-  # storageClass: "-"
+  storageClass: ""
+  ## @param persistence.accessModes [array] Persistent Volume access modes
   ##
-  ## If you want to reuse an existing claim, you can pass the name of the PVC using
-  ## the existingClaim variable
-  # existingClaim: your-claim
+  accessModes:
+    - ReadWriteOnce
+  ## @param persistence.accessMode Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)
+  ##
   accessMode: ReadWriteOnce
+  ## @param persistence.size Persistent Volume size
+  ##
   size: 10Gi
-  ## selector can be used to match an existing PersistentVolume
+  ## @param persistence.existingClaim The name of an existing PVC to use for persistence
+  ##
+  existingClaim: ""
+  ## @param persistence.selector Selector to match an existing Persistent Volume for Discourse data PVC
+  ## If set, the PVC can't have a PV dynamically provisioned for it
+  ## E.g.
   ## selector:
   ##   matchLabels:
   ##     app: my-app
+  ##
   selector: {}
+  ## @param persistence.annotations Persistent Volume Claim annotations
+  ##
+  annotations: {}
 
-## Kubernetes configuration
-## For minikube, set this to NodePort, elsewhere use LoadBalancer or ClusterIP
+## @section Sidekiq container parameters
+
+sidekiq:
+  ## @param sidekiq.command Custom command to override image cmd (evaluated as a template)
+  ##
+  command: ['/opt/bitnami/scripts/discourse/entrypoint.sh']
+  ## @param sidekiq.args Custom args for the custom command (evaluated as a template)
+  ##
+  args: ['/opt/bitnami/scripts/discourse-sidekiq/run.sh']
+  ## @param sidekiq.extraEnvVars Array with extra environment variables to add Sidekiq pods
+  ##
+  extraEnvVars: []
+  ## @param sidekiq.extraEnvVarsCM ConfigMap containing extra environment variables for Sidekiq pods
+  ##
+  extraEnvVarsCM: ""
+  ## @param sidekiq.extraEnvVarsSecret Secret containing extra environment variables (in case of sensitive data) for Sidekiq pods
+  ##
+  extraEnvVarsSecret: ""
+  ## Configure extra options for Sidekiq containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param sidekiq.livenessProbe.enabled Enable livenessProbe on Sidekiq containers
+  ## @param sidekiq.livenessProbe.initialDelaySeconds Delay before liveness probe is initiated
+  ## @param sidekiq.livenessProbe.periodSeconds How often to perform the probe
+  ## @param sidekiq.livenessProbe.timeoutSeconds When the probe times out
+  ## @param sidekiq.livenessProbe.failureThreshold Minimum consecutive failures for the probe
+  ## @param sidekiq.livenessProbe.successThreshold Minimum consecutive successes for the probe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 500
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## Sidekiq extra options for readiness probe
+  ## @param sidekiq.readinessProbe.enabled Enable readinessProbe on Sidekiq containers
+  ## @param sidekiq.readinessProbe.initialDelaySeconds Delay before readiness probe is initiated
+  ## @param sidekiq.readinessProbe.periodSeconds How often to perform the probe
+  ## @param sidekiq.readinessProbe.timeoutSeconds When the probe times out
+  ## @param sidekiq.readinessProbe.failureThreshold Minimum consecutive failures for the probe
+  ## @param sidekiq.readinessProbe.successThreshold Minimum consecutive successes for the probe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param sidekiq.startupProbe.enabled Enable startupProbe on Sidekiq containers
+  ## @param sidekiq.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param sidekiq.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param sidekiq.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param sidekiq.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param sidekiq.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param sidekiq.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param sidekiq.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param sidekiq.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## Sidekiq resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param sidekiq.resources.limits The resources limits for the Sidekiq containers
+  ## @param sidekiq.resources.requests The requested resources for the Sidekiq containers
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Configure Sidekiq containers (only main one) Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param sidekiq.containerSecurityContext.enabled Enabled Sidekiq containers' Security Context
+  ## @param sidekiq.containerSecurityContext.runAsUser Set Sidekiq containers' Security Context runAsUser
+  ## @param sidekiq.containerSecurityContext.runAsNonRoot Set Sidekiq containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: false
+    runAsUser: 0
+    runAsNonRoot: false
+  ## @param sidekiq.lifecycleHooks for the Sidekiq container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param sidekiq.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Sidekiq pods
+  ##
+  extraVolumeMounts: []
+
+## @section Traffic Exposure Parameters
+
+## Discourse service parameters
 ##
 service:
-  type: LoadBalancer
-  ## HTTP Port
+  ## @param service.type Discourse service type
   ##
-  port: 80
-  ## Node Ports to expose
-  # nodePort:
-  ## Use loadBalancerIP to request a specific static IP,
-  # loadBalancerIP:
-  ## Enable client source IP preservation
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  type: ClusterIP
+  ## @param service.ports.http Discourse service HTTP port
   ##
-  externalTrafficPolicy: Cluster
-  annotations: {}
-  ## Limits which cidr blocks can connect to service's load balancer
-  ## Only valid if service.type: LoadBalancer
-  ##
-  loadBalancerSourceRanges: []
-  ## Extra ports to expose (normally used with the `sidecar` value)
-  # extraPorts:
-
-  ## nodePorts:
-  ##   http: <to set explicitly, choose port between 30000-32767>
+  ports:
+    http: 80
+  ## Node ports to expose
+  ## @param service.nodePorts.http Node port for HTTP
+  ## NOTE: choose port between <30000-32767>
   ##
   nodePorts:
-    http: ''
-
-## Ingress parameters
-##
-ingress:
-  ## Set to true to enable ingress record generation
+    http: ""
+  ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
+  ## Values: ClientIP or None
+  ## ref: https://kubernetes.io/docs/user-guide/services/
   ##
-  enabled: false
-  ## Set this to true in order to add the corresponding annotations for cert-manager
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
   ##
-  certManager: false
-  ## When the ingress is enabled, a host pointing to this will be created
+  sessionAffinityConfig: {}
+  ## @param service.clusterIP Discourse service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
   ##
-  hostname: discourse.local
-  ## Override API Version (automatically detected if not set)
+  clusterIP: ""
+  ## @param service.loadBalancerIP Discourse service Load Balancer IP
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
-  apiVersion:
-
-  ## Ingress Path
+  loadBalancerIP: ""
+  ## @param service.loadBalancerSourceRanges Discourse service Load Balancer sources
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
   ##
-  path: /
-
-  ## Ingress Path type
+  loadBalancerSourceRanges: []
+  ## @param service.externalTrafficPolicy Discourse service external traffic policy
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
-  pathType: ImplementationSpecific
-
-  ## Ingress annotations done as key:value pairs
-  ## For a full list of possible ingress annotations, please see
-  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
-  ##
-  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  externalTrafficPolicy: Cluster
+  ## @param service.annotations Additional custom annotations for Discourse service
   ##
   annotations: {}
-  ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
-  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
-  ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
+  ## @param service.extraPorts Extra port to expose on Discourse service
+  ##
+  extraPorts: []
+
+## Discourse ingress parameters
+## ref: https://kubernetes.io/docs/user-guide/ingress/
+##
+ingress:
+  ## @param ingress.enabled Enable ingress record generation for Discourse
+  ##
+  enabled: false
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
+  ## @param ingress.pathType Ingress path type
+  ##
+  pathType: ImplementationSpecific
+  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
+  ##
+  apiVersion: ""
+  ## @param ingress.hostname Default host for the ingress record
+  ##
+  hostname: discourse.local
+  ## @param ingress.path Default path for the ingress record
+  ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+  ##
+  path: /
+  ## @param ingress.annotations [object] Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+  ##
+  annotations: {}
+  ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+  ## You can:
+  ##   - Use the `ingress.secrets` parameter to create this TLS secret
+  ##   - Rely on cert-manager to create it by setting the corresponding annotations
+  ##   - Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
   ##
   tls: false
-  ## The list of additional hostnames to be covered with this ingress record.
-  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
-  ## extraHosts:
-  ## - name: discourse.local
-  ##   path: /
+  ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
   ##
-  ## The tls configuration for additional hostnames to be covered with this ingress record.
-  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  selfSigned: false
+  ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+  ## e.g:
+  ## extraHosts:
+  ##   - name: discourse.local
+  ##     path: /
+  ##
+  extraHosts: []
+  ## @param ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+  ## e.g:
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
+  ## @param ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## e.g:
   ## extraTls:
   ## - hosts:
   ##     - discourse.local
   ##   secretName: discourse.local-tls
   ##
-  ## If you're providing your own certificates, please use this to add the certificates as secrets
-  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
-  ## -----BEGIN RSA PRIVATE KEY-----
-  ##
-  ## name should line up with a tlsSecret set further up
-  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
-  ##
+  extraTls: []
+  ## @param ingress.secrets Custom TLS certificates as secrets
+  ## NOTE: 'key' and 'certificate' are expected in PEM format
+  ## NOTE: 'name' should line up with a 'secretName' set further up
+  ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
+  ## e.g:
+  ## secrets:
+  ##   - name: discourse.local-tls
+  ##     key: |-
+  ##       -----BEGIN RSA PRIVATE KEY-----
+  ##       ...
+  ##       -----END RSA PRIVATE KEY-----
+  ##     certificate: |-
+  ##       -----BEGIN CERTIFICATE-----
+  ##       ...
+  ##       -----END CERTIFICATE-----
   ##
   secrets: []
-  ## - name: discourse.local-tls
-  ##   key:
-  ##   certificate:
+  ## @param ingress.extraRules Additional rules to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g:
+  ## extraRules:
+  ## - host: example.local
+  ##     http:
+  ##       path: /
+  ##       backend:
+  ##         service:
+  ##           name: example-svc
+  ##           port:
+  ##             name: http
   ##
+  extraRules: []
 
-## Only really applicable for deployments with RWO PVs attached
-## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
-## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
-## terminate the single previous pod, so that the new, incoming pod can attach to the PV
-## Example:
-# updateStrategy:
-#  type: RollingUpdate
-#  rollingUpdate:
-#    maxSurge: 25%
-#    maxUnavailable: 25%
-updateStrategy:
-  type: RollingUpdate
+## @section Volume Permissions parameters
 
-## Additional pod annotations
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+## Init containers parameters:
+## volumePermissions: Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each node
 ##
-podAnnotations: {}
-
-## Additional pod labels
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-##
-podLabels: {}
-
-## Add labels to all the deployed resources
-##
-commonLabels: {}
-
-## Add annotations to all the deployed resources
-##
-commonAnnotations: {}
-
-## Pod affinity preset
-## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
-##
-podAffinityPreset: ""
-
-## Pod anti-affinity preset
-## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
-##
-podAntiAffinityPreset: soft
-
-## Node affinity preset
-## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-## Allowed values: soft, hard
-##
-nodeAffinityPreset:
-  ## Node affinity type
-  ## Allowed values: soft, hard
+volumePermissions:
+  ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume
   ##
-  type: ""
-  ## Node label key to match
-  ## E.g.
-  ## key: "kubernetes.io/e2e-az-name"
+  enabled: false
+  ## @param volumePermissions.image.registry Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository Init container volume-permissions image repository
+  ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
+  ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
   ##
-  key: ""
-  ## Node label values to match
-  ## E.g.
-  ## values:
-  ##   - e2e-az1
-  ##   - e2e-az2
+  image:
+    registry: docker.io
+    repository: bitnami/bitnami-shell
+    tag: 10-debian-10-r312
+    digest: ""
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Init container resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param volumePermissions.resources.limits Init container volume-permissions resource limits
+  ## @param volumePermissions.resources.requests Init container volume-permissions resource requests
   ##
-  values: []
+  resources:
+    limits: {}
+    requests: {}
+  ## Init container' Security Context
+  ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
+  ## and not the below volumePermissions.containerSecurityContext.runAsUser
+  ## @param volumePermissions.containerSecurityContext.runAsUser User ID for the init container
+  ##
+  containerSecurityContext:
+    runAsUser: 0
 
-## Affinity for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
-##
-affinity: {}
+## @section Other Parameters
 
-## Node labels for pod assignment
-## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+## Service account for Discourse pods to use.
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
-nodeSelector: {}
+serviceAccount:
+  ## @param serviceAccount.create Enable creation of ServiceAccount for Discourse pods
+  ##
+  create: false
+  ## @param serviceAccount.name The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the common.names.fullname template
+  ##
+  name: ""
+  ## @param serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+  ## Can be set to false if pods using this serviceAccount do not need to use K8s API
+  ##
+  automountServiceAccountToken: true
+  ## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
+  ##
+  annotations: {}
 
-## Tolerations for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-##
-tolerations: []
+## @section NetworkPolicy parameters
 
-##
+networkPolicy:
+  ## @param networkPolicy.enabled Enable network policies
+  ## If ingress.enabled is true, configure networkPolicy.ingress selectors to allow communication
+  ##
+  enabled: false
+  ## @param networkPolicy.ingress.enabled Enable network policy for Ingress Proxies
+  ## @param networkPolicy.ingress.namespaceSelector Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.
+  ## @param networkPolicy.ingress.podSelector Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.
+  ##
+  ingress:
+    enabled: false
+    ## e.g:
+    ## podSelector:
+    ##   label: ingress
+    ##
+    podSelector: {}
+    ## e.g:
+    ## namespaceSelector:
+    ##   label: ingress
+    ##
+    namespaceSelector: {}
+  ## @param networkPolicy.ingressRules.backendOnlyAccessibleByFrontend Enable ingress rule that makes the backends (PostgreSQL and Redis) only accessible by Discourse's pods.
+  ## @param networkPolicy.ingressRules.customBackendSelector Backend selector labels. These labels will be used to identify the backend pods.
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.enabled Enable ingress rule that makes Discourse only accessible from a particular origin
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector Namespace selector label that is allowed to access Discourse. This label will be used to identified the allowed namespace(s).
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.podSelector Pods selector label that is allowed to access Discourse. This label will be used to identified the allowed pod(s).
+  ## @param networkPolicy.ingressRules.customRules Custom network policy ingress rule
+  ##
+  ingressRules:
+    ## PostgreSQL and Redis backends only can be accessed from Discourse
+    ##
+    backendOnlyAccessibleByFrontend: false
+    customBackendSelector: {}
+    ## Allow only from the indicated:
+    ##
+    accessOnlyFrom:
+      enabled: false
+      ## e.g:
+      ## namespaceSelector:
+      ##   label: ingress
+      ##
+      namespaceSelector: {}
+      ## e.g:
+      ## podSelector:
+      ##   label: access
+      ##
+      podSelector: {}
+    ## custom ingress rules
+    ## e.g:
+    ## customRules:
+    ##   - from:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    ##
+    customRules: {}
+  ## @param networkPolicy.egressRules.denyConnectionsToExternal Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).
+  ## @param networkPolicy.egressRules.customRules Custom network policy rule
+  ##
+  egressRules:
+    ## Deny connections to external. This is not compatible with an external database.
+    ##
+    denyConnectionsToExternal: false
+    ## Additional custom egress rules
+    ## e.g:
+    ## customRules:
+    ##   - to:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    ##
+    customRules: {}
+
+## @section Discourse database parameters
+
 ## PostgreSQL chart configuration
-##
-## https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
+## ref: https://github.com/bitnami/charts/blob/main/bitnami/postgresql/values.yaml
+## @param postgresql.enabled Switch to enable or disable the PostgreSQL helm chart
+## @param postgresql.auth.enablePostgresUser Assign a password to the "postgres" admin user. Otherwise, remote access will be blocked for this user
+## @param postgresql.auth.postgresPassword Password for the "postgres" admin user
+## @param postgresql.auth.username Name for a custom user to create
+## @param postgresql.auth.password Password for the custom user to create
+## @param postgresql.auth.database Name for a custom database to create
+## @param postgresql.auth.existingSecret Name of existing secret to use for PostgreSQL credentials
+## @param postgresql.architecture PostgreSQL architecture (`standalone` or `replication`)
 ##
 postgresql:
-  ## Whether to deploy a postgresql server to satisfy the applications database requirements. To use an external database set this to false and configure the externalDatabase parameters
-  ##
   enabled: true
-  ## PostgreSQL user (has superuser privileges if username is `postgres`)
-  ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
-  ##
-  postgresqlUsername: bn_discourse
-  ## PostgreSQL password
-  ## Defaults to a random 10-character alphanumeric string if not set
-  ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
-  ##
-  # postgresqlPassword:
-  ## PostgreSQL admin password (used when `postgresqlUsername` is not `postgres`)
-  ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-user-on-first-run (see note!)
-  ##
-  postgresqlPostgresPassword: 'bitnami'
-  ## Name of existing secret object
-  ## The secret should contain the following keys:
-  ## postgresql-postgres-password (for the unprivileged user)
-  ## postgresql-password (for root user)
-  ##
-  # existingSecret: my-secret
-  ## Create a database
-  ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-on-first-run
-  ##
-  postgresqlDatabase: bitnami_application
-  ## PostgreSQL data Persistent Volume Storage Class
-  ##
-  persistence:
-    enabled: true
-
-##
-## External database configuration
+  auth:
+    enablePostgresUser: true
+    postgresPassword: bitnami
+    username: bn_discourse
+    password: ""
+    database: bitnami_application
+    existingSecret: ""
+  architecture: standalone
+## External PostgreSQL configuration
+## All of these values are only used when postgresql.enabled is set to false
+## @param externalDatabase.host Database host
+## @param externalDatabase.port Database port number
+## @param externalDatabase.user Non-root username for Discourse
+## @param externalDatabase.password Password for the non-root username for Discourse
+## @param externalDatabase.database Discourse database name
+## @param externalDatabase.create Switch to enable user/database creation during the installation stage
+## @param externalDatabase.postgresUser PostgreSQL admin user, used during the installation stage
+## @param externalDatabase.postgresPassword PostgreSQL admin password, used during the installation stage
+## @param externalDatabase.existingSecret Name of an existing secret resource containing the database credentials
+## @param externalDatabase.existingSecretPasswordKey Name of an existing secret key containing the database credentials
+## @param externalDatabase.existingSecretPostgresPasswordKey Name of an existing secret key containing the database admin user credentials
 ##
 externalDatabase:
-  ## Database host
-  ##
-  host: ''
-  ## Database port
-  ##
+  host: localhost
   port: 5432
-  ## non-root Username for Discourse Database
-  ##
   user: bn_discourse
-  ## Database password
-  ##
-  password: ''
-  ## PostgreSQL admin user (used in the installation stage)
-  ##
-  postgresqlPostgresUser: ''
-  ## PostgreSQL admin password (used in the installation stage)
-  ##
-  postgresqlPostgresPassword: ''
-  ## Name of existing secret object
-  ## The secret should contain the following keys:
-  ## postgresql-postgres-password (for the unprivileged user)
-  ## postgresql-password (for root user)
-  ##
-  # existingSecret: my-secret
-  ## Database name
-  ##
   database: bitnami_application
+  password: ""
+  create: true
+  postgresUser: ""
+  postgresPassword: ""
+  existingSecret: ""
+  existingSecretPasswordKey: "password"
+  existingSecretPostgresPasswordKey: "postgres-password"
 
-## Redis(TM) chart configuration
-##
-## https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
+## @section Redis&reg; parameters
+
+## Redis&reg; chart configuration
+## ref: https://github.com/bitnami/charts/blob/main/bitnami/redis/values.yaml
+## @param redis.enabled Switch to enable or disable the Redis&reg; helm
+## @param redis.auth.enabled Enable password authentication
+## @param redis.auth.password Redis&reg; password
+## @param redis.auth.existingSecret The name of an existing secret with Redis&reg; credentials
+## @param redis.architecture Redis&reg; architecture. Allowed values: `standalone` or `replication`
 ##
 redis:
-  ## Whether to deploy a redis server to satisfy the applications requirements. To use an external redis instance set this to false and configure the externalRedis parameters
-  ##
   enabled: true
-  ## Use password authentication
-  ##
-  usePassword: false
-  ## Redis(TM) password (both master and slave)
-  ## Defaults to a random 10-character alphanumeric string if not set and usePassword is true.
-  ## It should always be set using the password value or in the existingSecret to avoid issues
-  ## with Discourse.
-  ## The password value is ignored if existingSecret is set
-  # password:
-  ##
-  ## Name of existing secret object containing the password
-  ##
-  existingSecret:
-  ##
-  ## Password key to be retrieved from Redis(TM) secret
-  ##
-  existingSecretPasswordKey: 'redis-password'
-  ##
-  ## Cluster settings
-  ##
-  cluster:
-    enabled: false
+  auth:
+    enabled: true
+    ## Redis&reg; password (both master and slave). Defaults to a random 10-character alphanumeric string if not set and auth.enabled is true.
+    ## It should always be set using the password value or in the existingSecret to avoid issues
+    ## with Discourse.
+    ## The password value is ignored if existingSecret is set
+    password: ""
+    existingSecret: ""
+  architecture: standalone
 
-  ##
-  ## Redis(TM) Master parameters
-  ##
-  master:
-    persistence:
-      enabled: true
-
-##
-## External Redis(TM)
+## External Redis&reg; configuration
+## All of these values are only used when redis.enabled is set to false
+## @param externalRedis.host Redis&reg; host
+## @param externalRedis.port Redis&reg; port number
+## @param externalRedis.username Redis&reg; username
+## @param externalRedis.password Redis&reg; password
+## @param externalRedis.existingSecret Name of an existing secret resource containing the Redis&trade credentials
+## @param externalRedis.existingSecretPasswordKey Name of an existing secret key containing the Redis&trade credentials
 ##
 externalRedis:
-  ## Redis(TM) host
-  ##
-  host: ''
-  ## Redis(TM) port
-  ##
+  host: localhost
   port: 6379
-  ## Redis(TM) password for authentication
-  ## Ignored if existingSecret is set
-  ##
-  password: ''
-  ##
-  ## Name of existing secret object containing the password
-  ##
-  existingSecret:
-  ##
-  ## Password key to be retrieved from Redis(TM) secret
-  ##
-  existingSecretPasswordKey: 'redis-password'
+  ## Most Redis&reg; implementations do not require a username
+  ## to authenticate and it should be enough with the password
+  username: ""
+  password: ""
+  existingSecret: ""
+  existingSecretPasswordKey: "redis-password"

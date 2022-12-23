@@ -1,12 +1,12 @@
 dependencies:
 - name: postgresql
   repository: https://charts.bitnami.com/bitnami
-  version: 10.3.7
-- name: cassandra
-  repository: https://charts.bitnami.com/bitnami
-  version: 7.3.3
+  version: 12.1.3
 - name: common
   repository: https://charts.bitnami.com/bitnami
-  version: 1.4.1
-digest: sha256:1ed6001dc2d40c3a2923aadec909c9031983c54f261f1af317c9f7c8e8f50172
-generated: "2021-02-26T15:38:26.779857743Z"
+  version: 2.2.1
+- name: cassandra
+  repository: https://charts.bitnami.com/bitnami
+  version: 9.7.6
+digest: sha256:04738930b47bf0672fb902f8b15e1884848df4508f9ffb644e2142c8bc4f9e7d
+generated: "2022-12-03T01:41:09.442473879Z"

@@ -1,0 +1,40 @@
+command:
+  ruby-version-test:
+    exec: ruby -v
+    exit-status: 0
+    stdout:
+      - ruby
+    stderr: [ ]
+    timeout: 20000  
+file:
+  /bitnami/redmine/config/configuration.yml:
+    mode: "0664"
+    filetype: file
+    exists: true
+    group: root
+    contains:
+      - "smtp_settings"
+      - "attachments_storage_path"
+  /bitnami/redmine/config/database.yml:
+    mode: "0664"
+    filetype: file
+    exists: true
+    group: root
+    contains:
+      - "postgresql"
+      - "redmine"
+  /bitnami/redmine/files:
+    mode: "0775"
+    filetype: directory
+    exists: true
+    group: root
+  /opt/bitnami/mysql:
+    mode: "0755"
+    filetype: directory
+    exists: true
+    group: root
+  /opt/bitnami/postgresql:
+    mode: "0755"
+    filetype: directory
+    exists: true
+    group: root

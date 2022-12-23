@@ -1,17 +1,25 @@
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
-Create the name of the controller service account to use
-*/}}
-{{- define "metallb.controllerServiceAccountName" -}}
-{{ include "common.secrets.name" (dict "existingSecret" .Values.controller.serviceAccount.name "defaultNameSuffix" "controller" "context" $) }}
+ Create the name of the controller service account to use
+ */}}
+{{- define "metallb.controller.serviceAccountName" -}}
+{{- if .Values.controller.serviceAccount.create -}}
+    {{ default (printf "%s-controller" (include "common.names.fullname" .)) .Values.controller.serviceAccount.name | trunc 63 | trimSuffix "-" }}
+{{- else -}}
+    {{ default "default" .Values.controller.serviceAccount.name }}
+{{- end -}}
 {{- end -}}
 
 {{/*
-Create the name of the speaker service account to use
-*/}}
-{{- define "metallb.speakerServiceAccountName" -}}
-{{ include "common.secrets.name" (dict "existingSecret" .Values.speaker.serviceAccount.name "defaultNameSuffix" "speaker" "context" $) }}
+ Create the name of the speaker service account to use
+ */}}
+{{- define "metallb.speaker.serviceAccountName" -}}
+{{- if .Values.speaker.serviceAccount.create -}}
+    {{ default (printf "%s-speaker" (include "common.names.fullname" .)) .Values.speaker.serviceAccount.name | trunc 63 | trimSuffix "-" }}
+{{- else -}}
+    {{ default "default" .Values.speaker.serviceAccount.name }}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -35,13 +43,3 @@ Create the key of the member Secret to use.
 {{ include "common.secrets.key" (dict "existingSecret" .Values.speaker.secretKey "key" "secretkey") }}
 {{- end -}}
 
-{{/*
-Return the appropriate apiVersion for networkpolicy.
-*/}}
-{{- define "networkPolicy.apiVersion" -}}
-{{- if semverCompare ">=1.4-0, <1.7-0" .Capabilities.KubeVersion.GitVersion -}}
-{{- print "extensions/v1beta1" -}}
-{{- else -}}
-{{- print "networking.k8s.io/v1" -}}
-{{- end -}}
-{{- end -}}

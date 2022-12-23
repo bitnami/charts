@@ -1,0 +1,4 @@
+addr:
+  tcp://wordpress-intel-mariadb:3306:
+    reachable: true
+    timeout: 2000

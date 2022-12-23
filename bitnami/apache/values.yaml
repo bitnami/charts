@@ -1,175 +1,281 @@
+## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry and imagepullSecrets
-##
-# global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
 
-## Force target Kubernetes version (using Helm capabilites if not set)
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
-kubeVersion:
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass: ""
 
-## Bitnami Apache image version
+## @section Common parameters
+
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
+## @param nameOverride String to partially override common.names.fullname
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+
+## @section Apache parameters
+
+## Bitnami Apache image
 ## ref: https://hub.docker.com/r/bitnami/apache/tags/
+## @param image.registry Apache image registry
+## @param image.repository Apache image repository
+## @param image.tag Apache image tag (immutable tags are recommended)
+## @param image.digest Apache image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param image.pullPolicy Apache image pull policy
+## @param image.pullSecrets Apache image pull secrets
+## @param image.debug Enable image debug mode
 ##
 image:
   registry: docker.io
   repository: bitnami/apache
-  tag: 2.4.46-debian-10-r182
+  tag: 2.4.54-debian-11-r62
+  digest: ""
   ## Specify a imagePullPolicy
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
   ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
-
-  ## Set to true if you would like to see extra information on logs
+  pullSecrets: []
+  ## Enable debug mode
   ##
   debug: false
-
-## Extra objects to deploy (value evaluated as a template)
-##
-extraDeploy: []
-
 ## Bitnami Git image version
 ## ref: https://hub.docker.com/r/bitnami/git/tags/
+## @param git.registry Git image registry
+## @param git.repository Git image name
+## @param git.tag Git image tag (immutable tags are recommended)
+## @param git.digest Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param git.pullPolicy Git image pull policy
+## @param git.pullSecrets Specify docker-registry secret names as an array
 ##
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.30.1-debian-10-r17
+  tag: 2.38.1-debian-11-r16
+  digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
   ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
-
-## String to partially override apache.fullname template (will maintain the release name)
-##
-# nameOverride:
-
-## String to fully override apache.fullname template
-##
-# fullnameOverride:
-
-## Number of Apache replicas to deploy
+  pullSecrets: []
+## @param replicaCount Number of replicas of the Apache deployment
 ##
 replicaCount: 1
-
-## Pod affinity preset
+## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
 ##
 podAffinityPreset: ""
-
-## Pod anti-affinity preset
+## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
 ##
 podAntiAffinityPreset: soft
-
 ## Node affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-## Allowed values: soft, hard
 ##
 nodeAffinityPreset:
-  ## Node affinity type
-  ## Allowed values: soft, hard
+  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ##
   type: ""
-  ## Node label key to match
-  ## E.g.
-  ## key: "kubernetes.io/e2e-az-name"
+  ## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
   ##
   key: ""
-  ## Node label values to match
+  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
   ## E.g.
   ## values:
   ##   - e2e-az1
   ##   - e2e-az2
   ##
   values: []
-
-## Affinity for pod assignment
+## @param affinity Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+## NOTE: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
-
-## Node labels for pod assignment
-## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+## @param nodeSelector Node labels for pod assignment
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-
-## Tolerations for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+## @param tolerations Tolerations for pod assignment
+## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+##
+topologySpreadConstraints: []
+## @param extraPodSpec Optionally specify extra PodSpec
+##
+extraPodSpec: {}
 ## Get the server static content from a git repository
+## @param cloneHtdocsFromGit.enabled Get the server static content from a git repository
+## @param cloneHtdocsFromGit.repository Repository to clone static content from
+## @param cloneHtdocsFromGit.branch Branch inside the git repository
+## @param cloneHtdocsFromGit.enableAutoRefresh Enables an automatic git pull with a sidecar container
+## @param cloneHtdocsFromGit.interval Interval for sidecar container pull from the repository
+## @param cloneHtdocsFromGit.resources Init container git resource requests
+## @param cloneHtdocsFromGit.extraVolumeMounts Add extra volume mounts for the GIT containers
 ##
 cloneHtdocsFromGit:
   enabled: false
-  # repository:
-  # branch:
+  repository: ""
+  branch: ""
+  enableAutoRefresh: true
   interval: 60
   resources: {}
-
-## Name of a config map with the server static content
+  ## Useful to mount keys to connect through ssh. (normally used with extraVolumes)
+  ## E.g:
+  ## extraVolumeMounts:
+  ##   - name: ssh-dir
+  ##     mountPath: /root/.ssh/
+  ##
+  extraVolumeMounts: []
+## @param htdocsConfigMap Name of a config map with the server static content
 ##
-# htdocsConfigMap:
-
-## Name of a PVC with the server static content
+htdocsConfigMap: ""
+## @param htdocsPVC Name of a PVC with the server static content
 ##
-# htdocsPVC:
-
-## Name of a config map with the virtual hosts content
+htdocsPVC: ""
+## @param vhostsConfigMap Name of a config map with the virtual hosts content
 ##
-# vhostsConfigMap:
-
-## Name of a config map with the httpd.conf file contents
+vhostsConfigMap: ""
+## @param httpdConfConfigMap Name of a config map with the httpd.conf file contents
 ##
-# httpdConfConfigMap:
-
-## Pod annotations
+httpdConfConfigMap: ""
+## @param podLabels Extra labels for Apache pods
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+## @param podAnnotations Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
-
-## Deployment pod host aliases
+## @param hostAliases [array] Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases:
-  # Necessary for apache-exporter to work
+  ## Necessary for apache-exporter to work
+  ##
   - ip: "127.0.0.1"
     hostnames:
       - "status.localhost"
-
+## @param priorityClassName Apache Server pods' priorityClassName
+##
+priorityClassName: ""
+## @param schedulerName Name of the k8s scheduler (other than default)
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## Configure Pods Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param podSecurityContext.enabled Enabled Apache Server pods' Security Context
+## @param podSecurityContext.fsGroup Set Apache Server pod's Security Context fsGroup
+##
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
+## Configure Container Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param containerSecurityContext.enabled Enabled Apache Server containers' Security Context
+## @param containerSecurityContext.runAsUser Set Apache Server containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set Controller container's Security Context runAsNonRoot
+##
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
+  runAsNonRoot: true
+## @param command Override default container command (useful when using custom images)
+##
+command: []
+## @param args Override default container args (useful when using custom images)
+##
+args: []
+## @param lifecycleHooks for the Apache server container(s) to automate configuration before or after startup
+##
+lifecycleHooks: {}
 ## Apache pods' resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## We usually recommend not to specify default resources and to leave this as a conscious
+## choice for the user. This also increases chances charts run on environments with little
+## resources, such as Minikube. If you do want to specify resources, uncomment the following
+## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+## @param resources.limits The resources limits for the container
+## @param resources.requests The requested resources for the container
 ##
 resources:
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## Example:
+  ## limits:
+  ##   cpu: 100m
+  ##   memory: 128Mi
   limits: {}
-  #   cpu: 100m
-  #   memory: 128Mi
+  ## Examples:
+  ## requests:
+  ##   cpu: 100m
+  ##   memory: 128Mi
   requests: {}
-  #   cpu: 100m
-  #   memory: 128Mi
-
-## Apache container's liveness and readiness probes
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+## Configure extra options for containers' liveness and readiness probes
+## Configure extra options for Apache server containers' liveness, readiness and startup probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.path Path to access on the HTTP server
+## @param startupProbe.port Port for startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  path: "/"
+  port: http
+  initialDelaySeconds: 180
+  periodSeconds: 20
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+## @param livenessProbe.enabled Enable liveness probe
+## @param livenessProbe.path Path to access on the HTTP server
+## @param livenessProbe.port Port for livenessProbe
+## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+## @param livenessProbe.periodSeconds Period seconds for livenessProbe
+## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
+## @param livenessProbe.successThreshold Success threshold for livenessProbe
 ##
 livenessProbe:
   enabled: true
@@ -180,6 +286,15 @@ livenessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
+## @param readinessProbe.enabled Enable readiness probe
+## @param readinessProbe.path Path to access on the HTTP server
+## @param readinessProbe.port Port for readinessProbe
+## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+## @param readinessProbe.periodSeconds Period seconds for readinessProbe
+## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
+## @param readinessProbe.successThreshold Success threshold for readinessProbe
+##
 readinessProbe:
   enabled: true
   path: "/"
@@ -189,125 +304,38 @@ readinessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
-
-## Ingress parameters
+## @param customStartupProbe Custom liveness probe for the Web component
 ##
-ingress:
-  ## Set to true to enable ingress record generation
-  ##
-  enabled: false
-
-  ## Override API Version (automatically detected if not set)
-  ##
-  apiVersion:
-
-  ## Ingress Path
-  ##
-  path: /
-
-  ## Ingress Path type
-  ##
-  pathType: ImplementationSpecific
-
-  ## Set this to true in order to add the corresponding annotations for cert-manager
-  ##
-  certManager: false
-
-  ## When the ingress is enabled, a host pointing to this will be created
-  ##
-  hostname: example.local
-
-  ## Ingress annotations done as key:value pairs
-  ## For a full list of possible ingress annotations, please see
-  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
-  ##
-  ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
-  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
-  ##
-  annotations: {}
-  #  kubernetes.io/ingress.class: nginx
-
-  ## The list of additional hostnames to be covered with this ingress record.
-  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
-  ## hosts:
-  ## - name: example.local
-  ##   path: /
-  ##
-
-  ## The tls configuration for the ingress
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-  ##
-  tls:
-    - hosts:
-        - example.local
-      secretName: example.local-tls
-
-  secrets:
-  ## If you're providing your own certificates, please use this to add the certificates as secrets
-  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
-  ## -----BEGIN RSA PRIVATE KEY-----
-  ##
-  ## name should line up with a tlsSecret set further up
-  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
-  ##
-  ## It is also possible to create and manage the certificates outside of this helm chart
-  ## Please see README.md for more information
-  # - name: apache.local-tls
-  #   key:
-  #   certificate:
-
-## Prometheus Exporter / Metrics
+customStartupProbe: {}
+## @param customLivenessProbe Custom liveness probe for the Web component
 ##
-metrics:
-  enabled: false
-  ## Bitnami Apache Prometheus Exporter image
-  ## ref: https://hub.docker.com/r/bitnami/apache-exporter/tags/
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r308
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-  ## Metrics exporter pod Annotation and Labels
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  podAnnotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "9117"
-  ## Apache Prometheus exporter resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-    requests: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-
-## Array to add extra volumes (evaluated as a template)
+customLivenessProbe: {}
+## @param customReadinessProbe Custom rediness probe for the Web component
+##
+customReadinessProbe: {}
+## @param extraVolumes Array to add extra volumes (evaluated as a template)
 ##
 extraVolumes: []
-
-## Array to add extra mounts (normally used with extraVolumes, evaluated as a template)
+## @param extraVolumeMounts Array to add extra mounts (normally used with extraVolumes, evaluated as a template)
 ##
 extraVolumeMounts: []
-
-## An array to add extra env vars
+## @param extraEnvVars Array to add extra environment variables
 ##
 extraEnvVars: []
-
-## Add init containers to the Apache pods.
+## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Apache server nodes
+##
+extraEnvVarsCM: ""
+## @param extraEnvVarsSecret Name of existing Secret containing extra env vars for Apache server nodes
+##
+extraEnvVarsSecret: ""
+## Apache server container port
+## @param containerPorts.http Apache server HTTP container port
+## @param containerPorts.https Apache server HTTPS container port
+##
+containerPorts:
+  http: 8080
+  https: 8443
+## @param initContainers Add additional init containers to the Apache pods
 ## Example:
 ## initContainers:
 ##   - name: your-image-name
@@ -317,9 +345,8 @@ extraEnvVars: []
 ##       - name: portname
 ##         containerPort: 1234
 ##
-initContainers: {}
-
-## Add sidecars to the Apache pods.
+initContainers: []
+## @param sidecars Add additional sidecar containers to the Apache pods
 ## Example:
 ## sidecars:
 ##   - name: your-image-name
@@ -329,37 +356,348 @@ initContainers: {}
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars: {}
+sidecars: []
 
-## Service parameters
+## @param updateStrategy.type Apache Server deployment strategy type.
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+## e.g:
+## updateStrategy:
+##  type: RollingUpdate
+##  rollingUpdate:
+##    maxSurge: 25%
+##    maxUnavailable: 25%
+##
+updateStrategy:
+  type: RollingUpdate
+
+## @section Other Parameters
+
+## Apache Pod Disruption Budget configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+## @param pdb.create Enable a Pod Disruption Budget creation
+## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+##
+pdb:
+  create: false
+  minAvailable: 1
+  maxUnavailable: ""
+
+## Apache Autoscaling parameters
+## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+## @param autoscaling.enabled Enable Horizontal POD autoscaling for Apache
+## @param autoscaling.minReplicas Minimum number of Apache replicas
+## @param autoscaling.maxReplicas Maximum number of Apache replicas
+## @param autoscaling.targetCPU Target CPU utilization percentage
+## @param autoscaling.targetMemory Target Memory utilization percentage
+##
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 11
+  targetCPU: 50
+  targetMemory: 50
+
+## @section Traffic Exposure Parameters
+
+## Apache service parameters
 ##
 service:
-  ## Service type
+  ## @param service.type Apache Service type
   ##
   type: LoadBalancer
-  ## HTTP Port
+  ## @param service.ports.http Apache service HTTP port
+  ## @param service.ports.https Apache service HTTPS port
   ##
-  port: 80
-  ## HTTPS Port
-  ##
-  httpsPort: 443
-  ## Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ports:
+    http: 80
+    https: 443
+  ## Node ports to expose
+  ## @param service.nodePorts.http Node port for HTTP
+  ## @param service.nodePorts.https Node port for HTTPS
   ##
   nodePorts:
     http: ""
     https: ""
-  ## Set the LoadBalancer service type to internal only.
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ## @param service.clusterIP Apache service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
   ##
-  # loadBalancerIP:
-  ## Provide any additional annotations which may be required. This can be used to
-  ## set the LoadBalancer service type to internal only.
+  clusterIP: ""
+  ## @param service.loadBalancerIP Apache service Load Balancer IP
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+  ##
+  loadBalancerIP: ""
+  ## @param service.loadBalancerSourceRanges Apache service Load Balancer sources
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
+  ## @param service.annotations Additional custom annotations for Apache service
+  ## This can be used to set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
   annotations: {}
-
-  ## Enable client source IP preservation
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ## @param service.externalTrafficPolicy Apache service external traffic policy
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
+  ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
+  ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  ## If "ClientIP", consecutive client requests will be directed to the same mongos Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
+## Configure the ingress resource that allows you to access the Apache installation
+## ref: https://kubernetes.io/docs/user-guide/ingress/
+##
+ingress:
+  ## @param ingress.enabled Enable ingress record generation for Apache
+  ##
+  enabled: false
+
+  ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+  ##
+  selfSigned: false
+
+  ## @param ingress.pathType Ingress path type
+  ##
+  pathType: ImplementationSpecific
+  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
+  ##
+  apiVersion: ""
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## IngressClassName is used to reference the IngressClass that should be used to implement this Ingress.
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
+  ## @param ingress.hostname Default host for the ingress record
+  ##
+  hostname: example.local
+  ## @param ingress.path Default path for the ingress record
+  ##
+  path: /
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+  ## For a full list of possible ingress annotations, please see
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+  ##
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+  ##
+  annotations: {}
+  ## @param ingress.tls [array] Enable TLS configuration for the hosts defined
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ##
+  tls:
+    - hosts:
+        - example.local
+      secretName: example.local-tls
+  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
+  ## certManager: false
+  ##
+
+  ## @param ingress.hosts An array with additional hostname(s) to be covered with the ingress record
+  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+  ## e.g:
+  ## hosts:
+  ##   - name: example.local
+  ##     path: /
+  ##
+  hosts: []
+  ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+  ## e.g:
+  ## extraHosts:
+  ##   - name: apache.local
+  ##     path: /
+  ##
+  extraHosts: []
+  ## @param ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+  ## e.g:
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
+  ## @param ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## e.g:
+  ## extraTls:
+  ## - hosts:
+  ##     - apache.local
+  ##   secretName: apache.local-tls
+  ##
+  extraTls: []
+  ## @param ingress.secrets Custom TLS certificates as secrets
+  ## NOTE: 'key' and 'certificate' are expected in PEM format
+  ## NOTE: 'name' should line up with a 'secretName' set further up
+  ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+  ## It is also possible to create and manage the certificates outside of this helm chart
+  ## Please see README.md for more information
+  ## e.g:
+  ## secrets:
+  ##   - name: example.local-tls
+  ##     key: |-
+  ##       -----BEGIN RSA PRIVATE KEY-----
+  ##       ...
+  ##       -----END RSA PRIVATE KEY-----
+  ##     certificate: |-
+  ##       -----BEGIN CERTIFICATE-----
+  ##       ...
+  ##       -----END CERTIFICATE-----
+  ##
+  secrets: []
+  ## @param ingress.extraRules Additional rules to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g:
+  ## extraRules:
+  ## - host: apache.local
+  ##     http:
+  ##       path: /
+  ##       backend:
+  ##         service:
+  ##           name: apache-svc
+  ##           port:
+  ##             name: http
+  ##
+  extraRules: []
+
+## @section Metrics Parameters
+
+metrics:
+  ## @param metrics.enabled Start a sidecar prometheus exporter to expose Apache metrics
+  ##
+  enabled: false
+  ## Bitnami Apache Prometheus Exporter image
+  ## ref: https://hub.docker.com/r/bitnami/apache-exporter/tags/
+  ## @param metrics.image.registry Apache Exporter image registry
+  ## @param metrics.image.repository Apache Exporter image repository
+  ## @param metrics.image.tag Apache Exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.digest Apache Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param metrics.image.pullPolicy Apache Exporter image pull policy
+  ## @param metrics.image.pullSecrets Apache Exporter image pull secrets
+  ## @param metrics.image.debug Apache Exporter image debug mode
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/apache-exporter
+    tag: 0.11.0-debian-11-r68
+    digest: ""
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+    ## Enable debug mode
+    ##
+    debug: false
+  ## @param metrics.podAnnotations [object] Additional custom annotations for Apache exporter service
+  ##
+  podAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9117"
+  ## Apache Prometheus exporter resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param metrics.resources.limits The resources limits for the container
+  ## @param metrics.resources.requests The requested resources for the container
+  ##
+  resources:
+    ## Example:
+    ## limits:
+    ##   cpu: 100m
+    ##   memory: 128Mi
+    limits: {}
+    ## Examples:
+    ## requests:
+    ##   cpu: 100m
+    ##   memory: 128Mi
+    requests: {}
+    ## Prometheus exporter service parameters
+  ##
+  service:
+    ## @param metrics.service.port Metrics service port
+    ##
+    port: 9117
+    ## @param metrics.service.annotations [object] Additional custom annotations for Metrics service
+    ##
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "{{ .Values.metrics.service.port }}"
+  ## Prometheus Operator PodMonitor configuration
+  ##
+  serviceMonitor:
+    ## @param metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator PodMonitor (also requires `metrics.enabled` to be `true`)
+    ##
+    enabled: false
+    ## @param metrics.serviceMonitor.namespace Namespace for the PodMonitor Resource (defaults to the Release Namespace)
+    ##
+    namespace: ""
+    ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## interval: 10s
+    ##
+    interval: ""
+    ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## scrapeTimeout: 10s
+    ##
+    scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.labels Labels that can be used so PodMonitor will be discovered by Prometheus
+    ##
+    labels: {}
+    ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+    ##
+    metricRelabelings: []
+  ## Prometheus Operator PrometheusRule configuration
+  ##
+  prometheusRule:
+    ## @param metrics.prometheusRule.enabled if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`)
+    ##
+    enabled: false
+    ## @param metrics.prometheusRule.namespace Namespace for the PrometheusRule Resource (defaults to the Release Namespace)
+    ##
+    namespace: ""
+    ## @param metrics.prometheusRule.labels Labels that can be used so PrometheusRule will be discovered by Prometheus
+    ##
+    labels: {}
+    ## @param metrics.prometheusRule.rules Prometheus Rule definitions
+    ##   - alert: LowInstance
+    ##     expr: up{service="{{ template "common.names.fullname" . }}"} < 1
+    ##     for: 1m
+    ##     labels:
+    ##       severity: critical
+    ##     annotations:
+    ##       description: Service {{ template "common.names.fullname" . }} Apache is down since 1m.
+    ##       summary: Apache instance is down.
+    ##
+    rules: []

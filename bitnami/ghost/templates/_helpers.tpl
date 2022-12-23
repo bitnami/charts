@@ -4,8 +4,8 @@
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
-{{- define "ghost.mariadb.fullname" -}}
-{{- printf "%s-%s" .Release.Name "mariadb" | trunc 63 | trimSuffix "-" -}}
+{{- define "ghost.mysql.fullname" -}}
+{{- printf "%s-%s" .Release.Name "mysql" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -30,10 +30,14 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
-Return  the proper Storage Class
+Create the name of the service account to use
 */}}
-{{- define "ghost.storageClass" -}}
-{{ include "common.storage.class" ( dict "persistence" .Values.persistence "global" .Values.global) }}
+{{- define "ghost.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -53,29 +57,24 @@ Gets the host to be used for this application.
 If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value will be empty.
 */}}
 {{- define "ghost.host" -}}
-{{- default (include "ghost.serviceIP" .) .Values.ghostHost -}}
+{{- if .Values.ingress.enabled }}
+    {{- printf "%s%s" .Values.ingress.hostname .Values.ingress.path | default "" -}}
+{{- else if .Values.ghostHost -}}
+    {{- printf "%s%s" .Values.ghostHost .Values.ghostPath | default "" -}}
+{{- else -}}
+    {{- include "ghost.serviceIP" . -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
-Gets the endpoint to be used for this application.
-If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value will be empty.
-*/}}
-{{- define "ghost.endpoint" -}}
-{{- $host := include "ghost.host" . -}}
-{{- $path := trimSuffix "/" (trimPrefix "/" .Values.ghostPath) -}}
-
-{{- printf "%s/%s" $host $path -}}
-{{- end -}}
-
-{{/*
-Return the MariaDB Hostname
+Return the MySQL Hostname
 */}}
 {{- define "ghost.databaseHost" -}}
-{{- if .Values.mariadb.enabled }}
-    {{- if eq .Values.mariadb.architecture "replication" }}
-        {{- printf "%s-%s" (include "ghost.mariadb.fullname" .) "primary" | trunc 63 | trimSuffix "-" -}}
+{{- if .Values.mysql.enabled }}
+    {{- if eq .Values.mysql.architecture "replication" }}
+        {{- printf "%s-%s" (include "ghost.mysql.fullname" .) "primary" | trunc 63 | trimSuffix "-" -}}
     {{- else -}}
-        {{- printf "%s" (include "ghost.mariadb.fullname" .) -}}
+        {{- printf "%s" (include "ghost.mysql.fullname" .) -}}
     {{- end -}}
 {{- else -}}
     {{- printf "%s" .Values.externalDatabase.host -}}
@@ -83,10 +82,10 @@ Return the MariaDB Hostname
 {{- end -}}
 
 {{/*
-Return the MariaDB Port
+Return the MySQL Port
 */}}
 {{- define "ghost.databasePort" -}}
-{{- if .Values.mariadb.enabled }}
+{{- if .Values.mysql.enabled }}
     {{- printf "3306" -}}
 {{- else -}}
     {{- printf "%d" (.Values.externalDatabase.port | int ) -}}
@@ -94,36 +93,67 @@ Return the MariaDB Port
 {{- end -}}
 
 {{/*
-Return the MariaDB Database Name
+Return the MySQL Database Name
 */}}
 {{- define "ghost.databaseName" -}}
-{{- if .Values.mariadb.enabled }}
-    {{- printf "%s" .Values.mariadb.auth.database -}}
+{{- if .Values.mysql.enabled }}
+    {{- printf "%s" .Values.mysql.auth.database -}}
 {{- else -}}
     {{- printf "%s" .Values.externalDatabase.database -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Return the MariaDB User
+Return the MySQL User
 */}}
 {{- define "ghost.databaseUser" -}}
-{{- if .Values.mariadb.enabled }}
-    {{- printf "%s" .Values.mariadb.auth.username -}}
+{{- if .Values.mysql.enabled }}
+    {{- printf "%s" .Values.mysql.auth.username -}}
 {{- else -}}
     {{- printf "%s" .Values.externalDatabase.user -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Return the MariaDB Secret Name
+Return the MySQL Secret Name
 */}}
 {{- define "ghost.databaseSecretName" -}}
-{{- if .Values.mariadb.enabled }}
-    {{- printf "%s" (include "ghost.mariadb.fullname" .) -}}
+{{- if .Values.mysql.enabled }}
+    {{- if .Values.mysql.auth.existingSecret -}}
+        {{- printf "%s" .Values.mysql.auth.existingSecret -}}
+    {{- else -}}
+        {{- printf "%s" (include "ghost.mysql.fullname" .) -}}
+    {{- end -}}
 {{- else if .Values.externalDatabase.existingSecret -}}
     {{- printf "%s" .Values.externalDatabase.existingSecret -}}
 {{- else -}}
-    {{- printf "%s-%s" (include "common.names.fullname" .) "external-db" -}}
+    {{- printf "%s-externaldb" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Compile all warnings into a single message.
+*/}}
+{{- define "ghost.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "ghost.validateValues.database" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Ghost - Database */}}
+{{- define "ghost.validateValues.database" -}}
+{{- if and (not .Values.mysql.enabled) (or (empty .Values.externalDatabase.host) (empty .Values.externalDatabase.port) (empty .Values.externalDatabase.database)) -}}
+ghost: database
+   You disable the MySQL installation but you did not provide the required parameters
+   to use an external database. To use an external database, please ensure you provide
+   (at least) the following values:
+
+       externalDatabase.host=DB_SERVER_HOST
+       externalDatabase.database=DB_NAME
+       externalDatabase.port=DB_SERVER_PORT
 {{- end -}}
 {{- end -}}

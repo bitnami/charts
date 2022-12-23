@@ -1,57 +1,58 @@
-{{/* vim: set filetype=mustache: */}}
+{{/*
+Create a default fully qualified app name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "osclass.mariadb.fullname" -}}
+{{- printf "%s-%s" .Release.Name "mariadb" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Return the proper certificate image name
+*/}}
+{{- define "certificates.image" -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.certificates.image "global" .Values.global ) -}}
+{{- end -}}
 
 {{/*
 Return the proper Osclass image name
 */}}
 {{- define "osclass.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
+{{- include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
 Return the proper image name (for the metrics image)
 */}}
 {{- define "osclass.metrics.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.metrics.image "global" .Values.global) }}
+{{- include "common.images.image" (dict "imageRoot" .Values.metrics.image "global" .Values.global) -}}
+{{- end -}}
+
+{{/*
+Return the proper image name (for the init container volume-permissions image)
+*/}}
+{{- define "osclass.volumePermissions.image" -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.volumePermissions.image "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "osclass.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image .Values.volumePermissions.image .Values.certificates.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
-Get the user defined LoadBalancerIP for this release.
-Note, returns 127.0.0.1 if using ClusterIP.
+Return  the proper Storage Class
 */}}
-{{- define "osclass.serviceIP" -}}
-{{- if eq .Values.service.type "ClusterIP" -}}
-127.0.0.1
-{{- else -}}
-{{- .Values.service.loadBalancerIP | default "" -}}
-{{- end -}}
+{{- define "osclass.storageClass" -}}
+{{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
-Gets the host to be used for this application.
-If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value will be empty.
+Osclass credential secret name
 */}}
-{{- define "osclass.host" -}}
-{{- $host := index .Values (printf "%sHost" .Chart.Name) | default "" -}}
-{{- default (include "osclass.serviceIP" .) $host -}}
-{{- end -}}
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-*/}}
-{{- define "osclass.mariadb.fullname" -}}
-{{- if .Values.fullnameOverride -}}
-{{- printf "%s-mariadb" .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-mariadb" .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
+{{- define "osclass.secretName" -}}
+{{- coalesce .Values.existingSecret (include "common.names.fullname" .) -}}
 {{- end -}}
 
 {{/*
@@ -111,14 +112,17 @@ Return the MariaDB Secret Name
 {{- else if .Values.externalDatabase.existingSecret -}}
     {{- printf "%s" .Values.externalDatabase.existingSecret -}}
 {{- else -}}
-    {{- printf "%s-%s" .Release.Name "externaldb" -}}
+    {{- printf "%s-%s" (include "common.names.fullname" .) "externaldb" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Check if there are rolling tags in the images
+Return the database password key
 */}}
-{{- define "osclass.checkRollingTags" -}}
-{{- include "common.warnings.rollingTag" .Values.image }}
-{{- include "common.warnings.rollingTag" .Values.metrics.image }}
+{{- define "osclass.databasePasswordKey" -}}
+{{- if .Values.mariadb.enabled -}}
+mariadb-password
+{{- else -}}
+db-password
+{{- end -}}
 {{- end -}}

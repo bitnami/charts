@@ -12,6 +12,7 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+  namespace: {{ .Release.Namespace }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -20,11 +21,9 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: server
-  strategy:
-    type: {{ .Values.server.strategyType }}
-    {{- if (eq "Recreate" .Values.server.strategyType) }}
-    rollingUpdate: null
-    {{- end }}
+  {{- if .Values.server.updateStrategy }}
+  strategy: {{- include "common.tplvalues.render" (dict "value" .Values.server.updateStrategy "context" $) | nindent 4 }}
+  {{- end }}
   template:
     metadata:
       {{- if or (include "scdf.server.createConfigmap" .) .Values.server.podAnnotations }}
@@ -38,6 +37,9 @@ spec:
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: server
+        {{- if .Values.server.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.server.podLabels "context" $) | nindent 8 }}
+        {{- end }}
     spec:
       {{- include "scdf.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ include "scdf.serviceAccountName" . }}
@@ -58,12 +60,17 @@ spec:
       {{- if .Values.server.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.server.tolerations "context" $) | nindent 8 }}
       {{- end }}
-
+      {{- if .Values.server.schedulerName }}
+      schedulerName: {{ .Values.server.schedulerName }}
+      {{- end }}
+      {{- if .Values.server.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.server.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
       {{- if .Values.server.priorityClassName }}
       priorityClassName: {{ .Values.server.priorityClassName | quote }}
       {{- end }}
-      {{- if .Values.server.podSecurityContext }}
-      securityContext: {{- toYaml .Values.server.podSecurityContext | nindent 8 }}
+      {{- if .Values.server.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.server.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if or .Values.server.initContainers .Values.waitForBackends.enabled }}
       initContainers:
@@ -74,7 +81,7 @@ spec:
           command:
             - /scripts/wait-for-backends.sh
           {{- if .Values.waitForBackends.resources }}
-          resources: {{- toYaml .Values.waitForBackends.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.waitForBackends.resources "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: scripts
@@ -89,14 +96,23 @@ spec:
         - name: server
           image: {{ include "scdf.server.image" . }}
           imagePullPolicy: {{ .Values.server.image.pullPolicy | quote }}
-          {{- if .Values.server.containerSecurityContext }}
-          securityContext: {{- toYaml .Values.server.containerSecurityContext | nindent 12 }}
+          {{- if .Values.server.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.server.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.server.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.server.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.server.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.server.args "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.server.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.server.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.server.image.debug | quote }}
             - name: SERVER_PORT
-              value: "8080"
+              value: "{{ .Values.server.containerPort }}"
             - name: SPRING_CLOUD_CONFIG_ENABLED
               value: "false"
             - name: SPRING_CLOUD_KUBERNETES_CONFIG_ENABLE_API
@@ -129,6 +145,7 @@ spec:
               value: {{ printf "$s:%d/api" .Values.externalSkipper.host (int .Values.externalSkipper.port) | quote }}
               {{- end }}
             {{- end }}
+            {{- if .Values.server.configuration.defaultSpringApplicationJSON }}
             - name: SPRING_APPLICATION_JSON
               {{- if .Values.server.proxy }}
               {{- if .Values.server.proxy.user }}
@@ -139,6 +156,7 @@ spec:
               {{- else }}
               value: "{ \"maven\": { \"local-repository\": null, \"remote-repositories\": { \"repo1\": { \"url\": \"https://repo.spring.io/libs-snapshot\"} } } }"
               {{- end }}
+            {{- end }}
             - name: KUBERNETES_NAMESPACE
               valueFrom:
                 fieldRef:
@@ -168,14 +186,29 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: {{ .Values.server.containerPort }}
               protocol: TCP
             {{- if .Values.server.jdwp.enabled }}
             - name: jdwp
               containerPort: {{ .Values.server.jdwp.port }}
               protocol: TCP
             {{- end }}
-          {{- if .Values.server.livenessProbe.enabled }}
+          {{- if .Values.server.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.server.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: /management/health
+              port: http
+            initialDelaySeconds: {{ .Values.server.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.server.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.server.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.server.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.server.startupProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.server.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.server.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /management/health
@@ -185,10 +218,10 @@ spec:
             timeoutSeconds: {{ .Values.server.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.server.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.server.livenessProbe.failureThreshold }}
-          {{- else if .Values.server.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.server.readinessProbe.enabled }}
+          {{- if .Values.server.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.server.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
               path: /management/health
@@ -198,11 +231,9 @@ spec:
             timeoutSeconds: {{ .Values.server.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.server.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.server.readinessProbe.failureThreshold }}
-          {{- else if .Values.server.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.server.resources }}
-          resources: {{- toYaml .Values.server.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.server.resources "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: database
@@ -212,7 +243,7 @@ spec:
               mountPath: /opt/bitnami/spring-cloud-dataflow/conf
               readOnly: true
             {{- if .Values.server.extraVolumeMounts }}
-            {{- toYaml .Values.server.extraVolumeMounts | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.server.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
         {{- if .Values.server.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.server.sidecars "context" $) | nindent 8 }}
@@ -234,5 +265,5 @@ spec:
             defaultMode: 0755
         {{- end }}
         {{- if .Values.server.extraVolumes }}
-          {{- toYaml .Values.server.extraVolumes | nindent 8 }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.server.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

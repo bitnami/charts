@@ -1,0 +1,76 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/zookeeper"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/zookeeper"
+        },
+        "runtime_parameters": "InNlcnZpY2UiOgogICJwb3J0cyI6CiAgICAiY2xpZW50IjogIjgwIgogICJ0eXBlIjogIkxvYWRCYWxhbmNlciIKInByZUFsbG9jU2l6ZSI6ICI2NTUzNiIKImNvbnRhaW5lclBvcnRzIjoKICAiY2xpZW50IjogIjIxODEi",
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "health-check",
+          "params": {
+            "endpoint": "lb-zookeeper-tcp-client"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/zookeeper/goss"
+            },
+            "remote": {
+              "workload": "sts-zookeeper"
+            },
+            "vars_file": "vars.yaml"
+          }
+        },
+        {
+          "action_id": "health-check",
+          "params": {
+            "endpoint": "lb-zookeeper-tcp-client"
+          }
+        }
+      ]
+    },
+    "publish": {
+      "actions": [
+        {
+          "action_id": "helm-publish",
+          "params": {
+            "repository": {
+              "kind": "S3",
+              "url": "{VIB_ENV_S3_URL}",
+              "username": "{VIB_ENV_S3_USERNAME}",
+              "password": "{VIB_ENV_S3_PASSWORD}"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

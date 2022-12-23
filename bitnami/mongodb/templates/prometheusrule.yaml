@@ -5,10 +5,14 @@ metadata:
   name: {{ include "mongodb.fullname" . }}
   namespace: {{ include "mongodb.prometheusRule.namespace" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
     {{- if .Values.metrics.prometheusRule.additionalLabels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 4 }}
     {{- end }}
 spec:
   groups:
-    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.rules "context" $) | nindent 2 }}
+    - name: {{ include "mongodb.fullname" . }}
+      rules: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.prometheusRule.rules "context" $ ) | nindent 8 }}
 {{- end }}

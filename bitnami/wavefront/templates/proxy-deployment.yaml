@@ -1,13 +1,14 @@
 {{- if .Values.proxy.enabled }}
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
+  name: {{ printf "%s-proxy" (include "common.names.fullname" .) }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: proxy
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  name: {{ template "common.names.fullname" . }}-proxy
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -15,7 +16,7 @@ spec:
   {{- if .Values.proxy.updateStrategy }}
   strategy: {{- toYaml .Values.proxy.updateStrategy | nindent 4 }}
   {{- end }}
-  replicas: {{ .Values.proxy.replicas }}
+  replicas: {{ coalesce .Values.proxy.replicaCount .Values.proxy.replicas }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: proxy
@@ -42,6 +43,12 @@ spec:
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.proxy.podAntiAffinityPreset "component" "proxy" "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.proxy.nodeAffinityPreset.type "key" .Values.proxy.nodeAffinityPreset.key "values" .Values.proxy.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
+      {{- if .Values.proxy.schedulerName }}
+      schedulerName: {{ .Values.proxy.schedulerName }}
+      {{- end }}
+      {{- if .Values.proxy.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
       {{- if .Values.proxy.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
@@ -51,9 +58,11 @@ spec:
       {{- if .Values.proxy.priorityClassName }}
       priorityClassName: {{ .Values.proxy.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.proxy.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.proxy.terminationGracePeriodSeconds }}
+      {{- end }}
       {{- if .Values.proxy.podSecurityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.proxy.podSecurityContext.fsGroup }}
+      securityContext: {{- omit .Values.proxy.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.proxy.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.initContainers "context" $) | nindent 8 }}
@@ -66,13 +75,19 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.proxy.containerSecurityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.proxy.containerSecurityContext.runAsUser }}
-            runAsNonRoot: {{ .Values.proxy.containerSecurityContext.runAsNonRoot }}
+          securityContext: {{- omit .Values.proxy.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.proxy.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: WAVEFRONT_URL
-              value: {{ .Values.wavefront.url }}/api
+              value: {{ printf "%s/api" .Values.wavefront.url }}
             - name: WAVEFRONT_TOKEN
               valueFrom:
                 secretKeyRef:
@@ -83,6 +98,7 @@ spec:
               {{- if .Values.proxy.tracePort }} --traceListenerPorts {{ .Values.proxy.tracePort }}{{- end -}}
               {{- if .Values.proxy.jaegerPort }} --traceJaegerListenerPorts {{ .Values.proxy.jaegerPort }}{{- end -}}
               {{- if .Values.proxy.traceJaegerHttpListenerPort }} --traceJaegerHttpListenerPorts {{ .Values.proxy.traceJaegerHttpListenerPort }}{{- end -}}
+              {{- if .Values.proxy.traceJaegerGrpcListenerPort }} --traceJaegerGrpcListenerPorts {{ .Values.proxy.traceJaegerGrpcListenerPort }}{{- end -}}
               {{- if .Values.proxy.zipkinPort }} --traceZipkinListenerPorts {{ .Values.proxy.zipkinPort }}{{- end -}}
               {{- if .Values.proxy.traceSamplingRate }} --traceSamplingRate {{ .Values.proxy.traceSamplingRate }}{{- end -}}
               {{- if .Values.proxy.traceSamplingDuration }} --traceSamplingDuration {{ .Values.proxy.traceSamplingDuration }}{{- end -}}
@@ -125,6 +141,10 @@ spec:
             - containerPort: {{ .Values.proxy.traceJaegerHttpListenerPort }}
               protocol: TCP
             {{- end }}
+            {{- if .Values.proxy.traceJaegerGrpcListenerPort }}
+            - containerPort: {{ .Values.proxy.traceJaegerGrpcListenerPort }}
+              protocol: TCP
+            {{- end }}
             {{- if .Values.proxy.zipkinPort }}
             - containerPort: {{ .Values.proxy.zipkinPort }}
               protocol: TCP
@@ -152,7 +172,9 @@ spec:
           {{- if .Values.proxy.resources }}
           resources: {{- toYaml .Values.proxy.resources | nindent 12 }}
           {{- end }}
-          {{- if .Values.proxy.livenessProbe.enabled }}
+          {{- if .Values.proxy.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.proxy.livenessProbe.enabled }}
           livenessProbe:
             tcpSocket:
               port: {{ .Values.proxy.port }}
@@ -161,10 +183,10 @@ spec:
             timeoutSeconds: {{ .Values.proxy.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.proxy.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.proxy.livenessProbe.failureThreshold }}
-          {{- else if .Values.proxy.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.proxy.readinessProbe.enabled }}
+          {{- if .Values.proxy.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.proxy.readinessProbe.enabled }}
           readinessProbe:
             tcpSocket:
               port: {{ .Values.proxy.port }}
@@ -173,8 +195,18 @@ spec:
             timeoutSeconds: {{ .Values.proxy.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.proxy.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.proxy.readinessProbe.failureThreshold }}
-          {{- else if .Values.proxy.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.proxy.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.proxy.startupProbe.enabled }}
+          startupProbe:
+            tcpSocket:
+              port: {{ .Values.proxy.port }}
+            initialDelaySeconds: {{ .Values.proxy.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.proxy.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.proxy.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.proxy.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.proxy.startupProbe.failureThreshold }}
           {{- end }}
           volumeMounts:
             {{- if .Values.proxy.preprocessor }}

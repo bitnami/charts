@@ -3,11 +3,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
   name: {{ include "common.names.fullname" . }}
-  {{- if .Values.metrics.prometheusRule.namespace }}
-  namespace: {{ .Values.metrics.prometheusRule.namespace | quote }}
-  {{- else }}
-  namespace: {{ .Release.Namespace | quote }}
-  {{- end }}
+  namespace: {{ default (include "common.names.namespace" .) .Values.metrics.prometheusRule.namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
     {{- if .Values.metrics.prometheusRule.additionalLabels }}
@@ -23,6 +19,6 @@ spec:
   {{- with .Values.metrics.prometheusRule.rules }}
   groups:
     - name: {{ include "common.names.name" $ }}
-      rules: {{- toYaml . | nindent 4 }}
+      rules: {{- toYaml . | nindent 6 }}
   {{- end }}
 {{- end }}

@@ -1,8 +1,0 @@
-database: postgresql
-
-postgresql:
-  enabled: false
-  external:
-    host: test-postgresql
-    user: test
-    password: test

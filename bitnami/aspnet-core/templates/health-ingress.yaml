@@ -1,8 +1,9 @@
 {{- if .Values.healthIngress.enabled -}}
-apiVersion: extensions/v1beta1
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
-  name: {{ include "aspnet-core.fullname" . }}-health
+  name: {{ printf "%s-health" (include "aspnet-core.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -18,31 +19,45 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
+  {{- if and .Values.healthIngress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
+  ingressClassName: {{ .Values.healthIngress.ingressClassName | quote }}
+  {{- end }}
   rules:
     {{- if .Values.healthIngress.hostname }}
     - host: {{ .Values.healthIngress.hostname }}
       http:
         paths:
-          - path: /
-            backend:
-              serviceName: {{ include "aspnet-core.fullname" . }}
-              servicePort: http
+          {{- if .Values.healthIngress.extraPaths }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.healthIngress.extraPaths  "context" $) | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.healthIngress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.healthIngress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "aspnet-core.fullname" .) "servicePort" "http" "context" $)  | nindent 14 }}
     {{- end }}
     {{- range .Values.healthIngress.extraHosts }}
     - host: {{ .name }}
       http:
         paths:
-          - path: {{ default "/" .path }}
-            backend:
-              serviceName: {{ include "aspnet-core.fullname" $ }}
-              servicePort: http
+          {{- if .Values.healthIngress.extraPaths }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.healthIngress.extraPaths  "context" $) | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.healthIngress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ .Values.healthIngress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "aspnet-core.fullname" $) "servicePort" "http" "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- if .Values.healthIngress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.healthIngress.extraRules "context" $) | nindent 4 }}
     {{- end }}
   {{- if or .Values.healthIngress.tls .Values.healthIngress.extraTls .Values.healthIngress.hosts }}
   tls:
     {{- if .Values.healthIngress.tls }}
     - hosts:
         - {{ .Values.healthIngress.hostname }}
-      secretName: {{ printf "%s-tls" .Values.healthIngress.hostname }}
+      secretName: {{ printf "%s-tls" .Values.healthIngress.hostname | trunc 63 | trimSuffix "-" }}
     {{- end }}
     {{- if .Values.healthIngress.extraTls }}
     {{- toYaml .Values.healthIngress.extraTls | nindent 4 }}

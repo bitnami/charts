@@ -8,6 +8,7 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+  namespace: {{ .Release.Namespace }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -15,7 +16,7 @@ data:
   application.yaml: |-
     {{- if .Values.metrics.enabled }}
     {{- $fullname := include "scdf.fullname" . }}
-    {{- $rsocketPort := int .Values.metrics.service.rsocketPort }}
+    {{- $rsocketPort := int (coalesce .Values.metrics.service.ports.rsocket .Values.metrics.service.rsocketPort) }}
     management:
       metrics:
          export:
@@ -29,20 +30,24 @@ data:
     spring:
       cloud:
         dataflow:
+          {{- if .Values.server.applicationProperties }}
+          applicationProperties: {{- include "common.tplvalues.render" (dict "value" .Values.server.applicationProperties "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.server.configuration.batchEnabled }}
           task:
             platform:
               kubernetes:
                 accounts:
                   {{ .Values.server.configuration.accountName }}:
-                    {{- if .Values.deployer.environmentVariables }}
-                    environmentVariables: '{{ .Values.deployer.environmentVariables | trim }}'
+                    {{- $environmentVariables := include "scdf.deployer.environmentVariables" . }}
+                    {{- if $environmentVariables }}
+                    environmentVariables: {{- $environmentVariables | trim | nindent 22 }}
                     {{- end }}
                     {{- if .Values.deployer.resources.limits }}
-                    limits: {{- toYaml .Values.deployer.resources.limits | trim | nindent 22 }}
+                    limits: {{- include "common.tplvalues.render" (dict "value" .Values.deployer.resources.limits "context" $) | trim | nindent 22 }}
                     {{- end }}
                     {{- if .Values.deployer.resources.requests }}
-                    requests: {{- toYaml .Values.deployer.resources.requests | trim | nindent 22 }}
+                    requests: {{- include "common.tplvalues.render" (dict "value" .Values.deployer.resources.requests "context" $) | trim | nindent 22 }}
                     {{- end }}
                     {{- if .Values.deployer.readinessProbe.initialDelaySeconds }}
                     readinessProbeDelay: {{ .Values.deployer.readinessProbe.initialDelaySeconds }}
@@ -54,16 +59,25 @@ data:
                     nodeSelector: {{ .Values.deployer.nodeSelector }}
                     {{- end }}
                     {{- if .Values.deployer.tolerations }}
-                    tolerations: {{- toYaml .Values.deployer.tolerations | nindent 22 }}
+                    tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.deployer.tolerations "context" $) | nindent 22 }}
                     {{- end }}
                     {{- if .Values.deployer.volumeMounts }}
-                    volumeMounts: {{- toYaml .Values.deployer.volumeMounts | nindent 22 }}
+                    volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.deployer.volumeMounts "context" $) | nindent 22 }}
                     {{- end }}
                     {{- if .Values.deployer.volumes }}
-                    volumes: {{- toYaml .Values.deployer.volumes | nindent 22 }}
+                    volumes: {{- include "common.tplvalues.render" (dict "value" .Values.deployer.volumes "context" $) | nindent 22 }}
                     {{- end }}
-                    {{- if .Values.deployer.podSecurityContext }}
-                    podSecurityContext: {{- toYaml .Values.deployer.podSecurityContext | nindent 22 }}
+                    {{- if .Values.deployer.podSecurityContext.enabled }}
+                    podSecurityContext: {{- omit .Values.deployer.podSecurityContext "enabled" | toYaml | nindent 22 }}
+                    {{- end }}
+                    {{- if .Values.deployer.imagePullSecrets }}
+                    imagePullSecrets: {{- include "common.tplvalues.render" (dict "value" .Values.deployer.imagePullSecrets "context" $) | nindent 22 }}
+                    {{- end }}
+                    {{- if .Values.deployer.secretRefs }}
+                    secretRefs: {{- include "common.tplvalues.render" (dict "value" .Values.deployer.secretRefs "context" $) | nindent 22 }}
+                    {{- end }}
+                    {{- if .Values.deployer.entryPointStyle }}
+                    entryPointStyle: {{ .Values.deployer.entryPointStyle }}
                     {{- end }}
           {{- end }}
           {{- if .Values.server.configuration.containerRegistries }}
@@ -77,6 +91,8 @@ data:
           metrics.dashboard:
             url: {{ .Values.server.configuration.grafanaInfo }}
           {{- end }}
+        task:
+          closecontextEnabled: true
       {{- $hibernateDialect := include "scdf.database.hibernate.dialect" .  }}
       {{- if $hibernateDialect }}
       jpa:
@@ -95,4 +111,6 @@ data:
         {{- end }}
         testOnBorrow: true
         validationQuery: "SELECT 1"
+      flyway:
+        enabled: {{ .Values.flyway.enabled }}
 {{ end }}

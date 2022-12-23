@@ -1,0 +1,24 @@
+auth:
+  password: ComplicatedPassword123!4
+master:
+  disableCommands:
+    - FLUSHDB
+    - FLUSHALL
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 1002
+  persistence:
+    path: /data
+  service:
+    ports:
+      redis: 80
+replica:
+  replicaCount: 3
+  containerPorts:
+    redis: 6380
+  service:
+    ports:
+      redis: 6378
+serviceAccount:
+  automountServiceAccountToken: true

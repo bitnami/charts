@@ -1,0 +1,20 @@
+secrets:
+  localUser: "bitnamiUser"
+  localPassword: "ComplicatedPassword123!4"
+worker:
+  replicaCount: 2
+  containerPorts:
+    garden: 7778
+    health: 8889
+    baggageclaim: 7789
+    pprof: 7788
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 0
+  serviceAccount:
+    automountServiceAccountToken: true
+service:
+  web:
+    ports:
+      http: 80

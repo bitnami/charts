@@ -1,0 +1,11 @@
+file:
+  /app:
+    exists: true
+    filetype: directory
+    mode: "0777"
+    owner: root
+    group: root
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    exists: {{ and .Vars.serviceAccount.create .Vars.serviceAccount.automountServiceAccountToken }}
+    filetype: directory
+    mode: "1777"

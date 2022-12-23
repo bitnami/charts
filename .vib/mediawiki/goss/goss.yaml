@@ -1,0 +1,36 @@
+file:
+  /bitnami/mediawiki:
+    exists: true
+    filetype: directory
+    mode: "2775"
+    owner: root
+  /etc/hosts:
+    exists: true
+    filetype: file
+    contains:
+    {{ range .Vars.hostAliases }}
+    {{ $ip := .ip }}
+    {{ range $host := .hostnames }}
+      - /{{ $ip }}.*{{ $host }}/
+    {{ end }}
+    {{ end }}
+http:
+  https://mediawiki:{{ .Vars.service.ports.https }}:
+    ## Only checking for status code 301 to avoid the automatic redirect to the domain.
+    status: 301
+    no-follow-redirects: true
+    allow-insecure: true
+command:
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+      - uid={{ .Vars.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
+  check-db-credentials:
+    exec: env
+    exit-status: 0
+    stdout:
+      - /MEDIAWIKI_DATABASE_NAME.*{{ .Vars.mariadb.auth.database }}/
+      - /MEDIAWIKI_DATABASE_USER.*{{ .Vars.mariadb.auth.username }}/
+      - /MEDIAWIKI_DATABASE_PASSWORD.*{{ .Vars.mariadb.auth.password }}/

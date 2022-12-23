@@ -1,0 +1,11 @@
+containerPorts:
+  server: 8500
+  restApi: 8501
+service:
+  ports:
+    server: 8501
+    restApi: 80
+containerSecurityContext:
+  runAsUser: 1002
+podSecurityContext:
+  fsGroup: 1002

@@ -27,12 +27,7 @@ Create a default fully qualified app name for RabbitMQ subchart
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "scdf.rabbitmq.fullname" -}}
-{{- if .Values.rabbitmq.fullnameOverride -}}
-{{- .Values.rabbitmq.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default "rabbitmq" .Values.rabbitmq.nameOverride -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "rabbitmq" "chartValues" .Values.rabbitmq "context" $) -}}
 {{- end -}}
 
 {{/*
@@ -40,12 +35,7 @@ Create a default fully qualified app name for Kafka subchart
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "scdf.kafka.fullname" -}}
-{{- if .Values.kafka.fullnameOverride -}}
-{{- .Values.kafka.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default "kafka" .Values.kafka.nameOverride -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "kafka" "chartValues" .Values.kafka "context" $) -}}
 {{- end -}}
 
 {{/*
@@ -286,7 +276,7 @@ Return the RabbitMQ Port
 */}}
 {{- define "scdf.rabbitmq.port" -}}
 {{- if .Values.rabbitmq.enabled }}
-    {{- printf "%d" (.Values.rabbitmq.service.port | int ) -}}
+    {{- printf "%d" (.Values.rabbitmq.service.ports.amqp | int ) -}}
 {{- else -}}
     {{- printf "%d" (.Values.externalRabbitmq.port | int ) -}}
 {{- end -}}
@@ -384,7 +374,11 @@ Return Deployer Environment Variables. Empty string or variables started with co
 */}}
 {{- define "scdf.deployer.environmentVariables" -}}
   {{- if .Values.deployer.environmentVariables -}}
-    {{- printf ",%s" .Values.deployer.environmentVariables | trim -}}
+    {{- if kindIs "string" .Values.deployer.environmentVariables -}}
+      {{- printf "- %s" .Values.deployer.environmentVariables | trim -}}
+    {{- else -}}
+      {{- toYaml .Values.deployer.environmentVariables -}}
+    {{- end -}}
   {{- else -}}
     {{- printf "" -}}
   {{- end -}}

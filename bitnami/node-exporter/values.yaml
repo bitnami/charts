@@ -1,279 +1,449 @@
+## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  # imageRegistry: myRegistryName
-  # imagePullSecrets:
-  #   - myRegistryKeySecretName
-  # storageClass: myStorageClass
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass: ""
 
-  labels: {}
-  #   foo: bar
+## @section Common parameters
 
-## String to partially override common.names.fullname template (will maintain the release name)
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
-# nameOverride:
-
-## String to fully override common.names.fullname template
+kubeVersion: ""
+## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
-# fullnameOverride:
+nameOverride: ""
+## @param fullnameOverride String to fully override `common.names.fullname` template with a string
+##
+fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
 
-## Deployment pod host aliases
+## Enable diagnostic mode in the deployment(s)/statefulset(s)
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the the deployment(s)/statefulset(s)
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the the deployment(s)/statefulset(s)
+  ##
+  args:
+    - infinity
+
+## @section Node Exporter parameters
+
+## @param hostAliases Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-
 ## Role Based Access
 ## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ##
 rbac:
-  create: true
-
-  ## RBAC API version
+  ## @param rbac.create Whether to create and use RBAC resources or not
   ##
-  apiVersion: v1beta1
-
-  ## Podsecuritypolicy
+  create: true
+  ## @param rbac.pspEnabled Whether to create a PodSecurityPolicy and bound it with RBAC. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
   ##
   pspEnabled: true
-
 ## Service account for Node Exporter to use.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+## @param serviceAccount.create Specifies whether a ServiceAccount should be created
+## @param serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+## @param serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
 ##
 serviceAccount:
-  ## Specifies whether a ServiceAccount should be created
-  ##
   create: true
-  ## The name of the ServiceAccount to use.
-  ## If not set and create is true, a name is generated using the common.names.fullname template
-  # name:
+  name: ""
+  automountServiceAccountToken: true
+  annotations: {}
 
 ## Bitnami Node Exporter image version
 ## ref: https://hub.docker.com/r/bitnami/node-exporter/tags/
+## @param image.registry Node Exporter image registry
+## @param image.repository Node Exporter image repository
+## @param image.tag Node Exporter image tag (immutable tags are recommended)
+## @param image.digest Node Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param image.pullPolicy Node Exporter image pull policy
+## @param image.pullSecrets Specify docker-registry secret names as an array
 ##
 image:
   registry: docker.io
   repository: bitnami/node-exporter
-  tag: 1.1.1-debian-10-r0
-
+  tag: 1.5.0-debian-11-r0
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## Example:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
   ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
+  pullSecrets: []
 
-## Additional command line arguments to pass to node-exporter
+## @param containerPorts.metrics Node Exporter container port
+##
+containerPorts:
+  metrics: 9100
+## @param sidecars Add additional sidecar containers to the Node exporter pod(s)
+## e.g:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: []
+## @param initContainers Add additional init containers to the Node exporter pod(s)
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+## e.g:
+## initContainers:
+##  - name: your-image-name
+##    image: your-image
+##    imagePullPolicy: Always
+##    command: ['sh', '-c', 'echo "hello world"']
+##
+initContainers: []
+
+## @param extraArgs Additional command line arguments to pass to node-exporter
+## e.g:
+##  collector.filesystem.ignored-mount-points: "^/(dev|proc|sys|var/lib/docker/.+)($|/)"
+##  collector.filesystem.ignored-fs-types: "^(autofs|binfmt_misc|cgroup|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$"
 ##
 extraArgs: {}
-#  collector.filesystem.ignored-mount-points: "^/(dev|proc|sys|var/lib/docker/.+)($|/)"
-#  collector.filesystem.ignored-fs-types: "^(autofs|binfmt_misc|cgroup|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$"
-
-## Additional volumes to the node-exporter pods
+## @param command Override default container command (useful when using custom images)
+##
+command: []
+## @param args Override default container args (useful when using custom images)
+##
+args: []
+## @param lifecycleHooks for the Node exporter container(s) to automate configuration before or after startup
+##
+lifecycleHooks: {}
+## @param extraEnvVars Array with extra environment variables to add to Node exporter container
+## e.g:
+## extraEnvVars:
+##   - name: FOO
+##     value: "bar"
+##
+extraEnvVars: []
+## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Node exporter container
+##
+extraEnvVarsCM: ""
+## @param extraEnvVarsSecret Name of existing Secret containing extra env vars for Node exporter container
+##
+extraEnvVarsSecret: ""
+## @param extraVolumes Additional volumes to the node-exporter pods
+## e.g:
+##  - name: copy-portal-skins
+##    emptyDir: {}
 ##
 extraVolumes: []
-#  - name: copy-portal-skins
-#    emptyDir: {}
-
-## Additional volumeMounts to the node-exporter container
+## @param extraVolumeMounts Additional volumeMounts to the node-exporter container
+## e.g:
+##  - name: copy-portal-skins
+##   mountPath: /var/lib/lemonldap-ng/portal/skins
 ##
 extraVolumeMounts: []
-#  - name: copy-portal-skins
-#   mountPath: /var/lib/lemonldap-ng/portal/skins
-
-## SecurityContext configuration
+## Configure Pods Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param podSecurityContext.enabled Enabled Node exporter pods' Security Context
+## @param podSecurityContext.fsGroup Set Node exporter pod's Security Context fsGroup
 ##
-securityContext:
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
+## Configure Container Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param containerSecurityContext.enabled Enabled Node exporter containers' Security Context
+## @param containerSecurityContext.runAsUser Set Node exporter containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set Node exporter container's Security Context runAsNonRoot
+##
+containerSecurityContext:
   enabled: true
   runAsUser: 1001
-  fsGroup: 1001
-
+  runAsNonRoot: true
 ## Node Exporter Service
 ##
 service:
-  ## Kubernetes service type and port number
+  ## @param service.type Kubernetes service type
   ##
   type: ClusterIP
-  targetPort: 9100
-  port: 9100
-  # clusterIP: None
-
-  ## Specify the nodePort value for the LoadBalancer and NodePort service types.
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ## @param service.ports.metrics Node Exporter metrics service port
   ##
-  # nodePort: 30080
-
-  ## Set the LoadBalancer service type to internal only.
+  ports:
+    metrics: 9100
+  ## @param service.nodePorts.metrics Specify the nodePort value for the LoadBalancer and NodePort service types
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ## e.g:
+  ## nodePort: 30080
+  ##
+  nodePorts:
+    metrics: ""
+  ## @param service.clusterIP Specific cluster IP when service type is cluster IP. Use `None` for headless service
+  ##
+  clusterIP: ""
+  ## @param service.loadBalancerIP `loadBalancerIP` if service type is `LoadBalancer`
+  ## Set the LoadBalancer service type to internal only
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
-  # loadBalancerIP:
-
-  ## Load Balancer sources
+  loadBalancerIP: ""
+  ## @param service.loadBalancerSourceRanges Address that are allowed when service is `LoadBalancer`
   ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ##
-  # loadBalancerSourceRanges:
-  # - 10.10.10.0/24
-
-  # Add the `prometheus.io/scrape: "true"` annotation to the service
+  ## loadBalancerSourceRanges:
+  ## - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
+  ## @param service.externalTrafficPolicy Node exporter service external traffic policy
+  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
+  ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
+  ## @param service.addPrometheusScrapeAnnotation Add the `prometheus.io/scrape: "true"` annotation to the service
+  ##
   addPrometheusScrapeAnnotation: true
-
-  ## Provide any additional service annotations
+  ## @param service.annotations Additional annotations for Node Exporter service
   ##
   annotations: {}
-
-  ## Provide any additional service labels
+  ## @param service.labels Additional labels for Node Exporter service
   ##
   labels: {}
-
-# The update strategy to apply to the DaemonSet
+  ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  ## If "ClientIP", consecutive client requests will be directed to the same Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
+## @param updateStrategy.type The update strategy type to apply to the DaemonSet
+## @param updateStrategy.rollingUpdate.maxUnavailable Maximum number of pods that may be made unavailable
 ##
 updateStrategy:
   type: RollingUpdate
   rollingUpdate:
     maxUnavailable: 1
-
-# Expose the service to the host network
+## @param hostNetwork Expose the service to the host network
 hostNetwork: true
-
-# minReadySeconds to avoid killing pods before we are ready
+## @param minReadySeconds `minReadySeconds` to avoid killing pods before we are ready
 ##
 minReadySeconds: 0
-
-## Priority class assigned to the Pods
+## @param priorityClassName Priority class assigned to the Pods
 ##
 priorityClassName: ""
-
+## @param terminationGracePeriodSeconds In seconds, time the given to the Node exporter pod needs to terminate gracefully
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+##
+terminationGracePeriodSeconds: ""
 ## Resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## We usually recommend not to specify default resources and to leave this as a conscious
+## choice for the user. This also increases chances charts run on environments with little
+## resources, such as Minikube. If you do want to specify resources, uncomment the following
+## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+## @param resources.limits The resources limits for the container
+## @param resources.requests The requested resources for the container
 ##
 resources:
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## Example:
+  ## limits:
+  ##    cpu: 100m
+  ##    memory: 128Mi
   limits: {}
-  #   cpu: 100m
-  #   memory: 128Mi
+  ## Examples:
+  ## requests:
+  ##    cpu: 100m
+  ##    memory: 128Mi
   requests: {}
-  #   cpu: 100m
-  #   memory: 128Mi
-
-## Pod labels
+## @param podLabels Pod labels
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
-
-## Pod annotations
+## @param podAnnotations Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
-
-## Pod affinity preset
+## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
 ##
 podAffinityPreset: ""
-
-## Pod anti-affinity preset
+## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
 ##
 podAntiAffinityPreset: soft
-
 ## Node affinity preset
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-## Allowed values: soft, hard
 ##
 nodeAffinityPreset:
-  ## Node affinity type
-  ## Allowed values: soft, hard
+  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ##
   type: ""
-  ## Node label key to match
+  ## @param nodeAffinityPreset.key Node label key to match Ignored if `affinity` is set.
   ## E.g.
   ## key: "kubernetes.io/e2e-az-name"
   ##
   key: ""
-  ## Node label values to match
+  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.
   ## E.g.
   ## values:
   ##   - e2e-az1
   ##   - e2e-az2
   ##
   values: []
-
-## Affinity for pod assignment. Evaluated as a template.
+## @param affinity Affinity for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
-
-## Node labels for pod assignment. Evaluated as a template.
+## @param nodeSelector Node labels for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-
-## Tolerations for pod assignment. Evaluated as a template.
+## @param tolerations Tolerations for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
-## Configure extra options for liveness and readiness probes
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+## Configure extra options for liveness probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param livenessProbe.enabled Enable livenessProbe
+## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+## @param livenessProbe.periodSeconds Period seconds for livenessProbe
+## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
+## @param livenessProbe.successThreshold Success threshold for livenessProbe
 ##
 livenessProbe:
+  enabled: true
   initialDelaySeconds: 120
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
-
+## Configure extra options for readiness probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param readinessProbe.enabled Enable readinessProbe
+## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+## @param readinessProbe.periodSeconds Period seconds for readinessProbe
+## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
+## @param readinessProbe.successThreshold Success threshold for readinessProbe
+##
 readinessProbe:
+  enabled: true
   initialDelaySeconds: 30
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
-
+## Configure extra options for startup probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+## @param customStartupProbe Custom liveness probe for the Node exporter container
+##
+customStartupProbe: {}
+## @param customLivenessProbe Custom liveness probe for the Node exporter container
+##
+customLivenessProbe: {}
+## @param customReadinessProbe Custom readiness probe for the Node exporter container
+##
+customReadinessProbe: {}
 ## ServiceMonitor configuration
 ##
 serviceMonitor:
+  ## @param serviceMonitor.enabled Creates a ServiceMonitor to monitor Node Exporter
+  ##
   enabled: false
-  ## Namespace in which Prometheus is running
+  ## @param serviceMonitor.namespace Namespace in which Prometheus is running
   ##
-  # namespace: monitoring
-
-  ## The name of the label on the target service to use as the job name in prometheus
-  # jobLabel:
-
-  ## Interval at which metrics should be scraped.
+  namespace: ""
+  ## @param serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+  ##
+  jobLabel: ""
+  ## @param serviceMonitor.interval Scrape interval (use by default, falling back to Prometheus' default)
   ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+  ## e.g:
+  ## interval: 10s
   ##
-  # interval: 10s
-
-  ## Timeout after which the scrape is ended
+  interval: ""
+  ## @param serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
   ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+  ## e.g:
+  ## scrapeTimeout: 10s
   ##
-  # scrapeTimeout: 10s
-
-  ## ServiceMonitor selector labels
-  ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+  scrapeTimeout: ""
+  ## @param serviceMonitor.selector ServiceMonitor selector labels
+  ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
   ##
-  # selector:
-  #   prometheus: my-prometheus
-
-  ## RelabelConfigs to apply to samples before scraping
+  ## selector:
+  ##   prometheus: my-prometheus
+  ##
+  selector: {}
+  ## @param serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
   ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
   ##
-  # relabelings: []
-
-  ## MetricRelabelConfigs to apply to samples before ingestion
+  relabelings: []
+  ## @param serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
   ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
   ##
-  # metricRelabelings: []
+  metricRelabelings: []
+  ## @param serviceMonitor.labels Extra labels for the ServiceMonitor
+  ##
+  labels: {}
+  ## @param serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+  ##
+  honorLabels: false

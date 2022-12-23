@@ -1,8 +1,30 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
 {{- $dbSecretName := include "parse.mongodb.fullname" . -}}
 
-******************************************************************
-*** PLEASE BE PATIENT: Parse may take a few minutes to install ***
-******************************************************************
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ template "common.names.namespace" . }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ template "common.names.namespace" . }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+    /opt/bitnami/scripts/parse/entrypoint.sh /opt/bitnami/scripts/parse/run.sh
+
+{{- else }}
 
 Parse Server
 ------------
@@ -16,20 +38,20 @@ Parse Server
 
   export SERVICE_HOST={{ .Values.ingress.server.hostname }}
 
-{{- else if contains "NodePort" .Values.service.type }}
+{{- else if contains "NodePort" .Values.server.service.type }}
 
   export NODE_PORT=$(kubectl get svc --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" {{ include "common.names.fullname" . }})
   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
   export SERVICE_HOST=$NODE_IP:$NODE_PORT
 
-{{- else if contains "LoadBalancer" .Values.service.type }}
+{{- else if contains "LoadBalancer" .Values.server.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "common.names.fullname" . }}'
 
-  export SERVICE_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}"):{{ .Values.server.port }}
+  export SERVICE_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}"):{{ .Values.server.service.ports.http }}
 
-{{- else if contains "ClusterIP"  .Values.service.type }}
+{{- else if contains "ClusterIP"  .Values.server.service.type }}
 
   export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/name={{ template "common.names.name" . }},app.kubernetes.io/component=server -o jsonpath="{.items[0].metadata.name}")
   kubectl port-forward --namespace {{ .Release.Namespace }} $POD_NAME 1337:1337 &
@@ -62,12 +84,12 @@ service:
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "common.names.fullname" . }}'
 
-  export APP_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  export APP_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
 
 2. Complete your Parse Dashboard deployment by running:
 
-  helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
-    --set server.host=$APP_HOST,server.port={{ .Values.server.port }},server.masterKey=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath="{.data.master-key}" | base64 --decode),dashboard.username={{ .Values.dashboard.username }},dashboard.password=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath="{.data.parse-dashboard-password}" | base64 --decode){{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
+  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} my-repo/{{ .Chart.Name }} \
+    --set server.host=$APP_HOST,server.containerPorts.http={{ .Values.server.containerPorts.http }},server.masterKey=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath="{.data.master-key}" | base64 -d),dashboard.username={{ .Values.dashboard.username }},dashboard.password=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath="{.data.parse-dashboard-password}" | base64 -d){{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
 
 {{- else }}
 
@@ -77,7 +99,7 @@ service:
 
   You should be able to access Parse Dashboard through: {{ if .Values.ingress.tls }}https{{ else }}http{{ end }}://{{ .Values.ingress.dashboard.hostname }}
 
-{{- else if eq .Values.service.type "ClusterIP" }}
+{{- else if eq .Values.dashboard.service.type "ClusterIP" }}
 
   export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/name={{ template "common.names.name" . }},app.kubernetes.io/component=dashboard -o jsonpath="{.items[0].metadata.name}")
   kubectl port-forward --namespace {{ .Release.Namespace }} $POD_NAME 4040:4040 &
@@ -92,16 +114,10 @@ service:
 2. Get your Parse Dashboard login credentials by running:
 
   echo Username: {{ .Values.dashboard.username }}
-  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath="{.data.parse-dashboard-password}" | base64 --decode)
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath="{.data.parse-dashboard-password}" | base64 -d)
+{{- end }}
 {{- end }}
 {{- end }}
 
 {{ include "parse.validateValues" . }}
 {{ include "parse.checkRollingTags" . }}
-
-{{- $passwordValidationErrors := list }}
-
-{{- $dbPasswordValidationErrors := include "common.validations.values.mongodb.passwords" (dict "secret" $dbSecretName "subchart" true "context" $) -}}
-{{- $passwordValidationErrors = append $passwordValidationErrors $dbPasswordValidationErrors -}}
-
-{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}

@@ -1,0 +1,17 @@
+containerPorts:
+  http: 9090
+  elastic: 9091
+podSecurityContext:
+  fsGroup: 1002
+containerSecurityContext:
+  runAsUser: 1002
+serviceAccount:
+  automountServiceAccountToken: true
+postgresql:
+  auth:
+    database: test_db_database
+    username: test_db_user
+    password: test_db_password
+  service:
+    ports:
+      postgresql: 5432

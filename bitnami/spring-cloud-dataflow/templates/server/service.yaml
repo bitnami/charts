@@ -7,6 +7,7 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+  namespace: {{ .Release.Namespace }}
   annotations:
   {{- if .Values.commonAnnotations }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -23,10 +24,16 @@ spec:
   loadBalancerIP: {{ .Values.server.service.loadBalancerIP }}
   {{- end }}
   {{- if and (eq .Values.server.service.type "LoadBalancer") .Values.server.service.loadBalancerSourceRanges }}
-  loadBalancerSourceRanges: {{- toYaml .Values.server.service.loadBalancerSourceRanges | nindent 4 }}
+  loadBalancerSourceRanges: {{- include "common.tplvalues.render" (dict "value" .Values.server.service.loadBalancerSourceRanges "context" $) | nindent 4 }}
   {{- end }}
   {{- if or (eq .Values.server.service.type "LoadBalancer") (eq .Values.server.service.type "NodePort") }}
   externalTrafficPolicy: {{ .Values.server.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if .Values.server.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.server.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.server.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.server.service.sessionAffinityConfig "context" $) | nindent 4 }}
   {{- end }}
   ports:
     - name: http
@@ -37,5 +44,8 @@ spec:
       {{- else if eq .Values.server.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- if .Values.server.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.server.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
   selector: {{ include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: server

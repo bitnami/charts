@@ -5,12 +5,12 @@
 
 {{- range $i, $e := until $nodesCount }}
 {{- $targetPod := printf "%s-%d" (printf "%s" $fullName) $i }}
-
----
+{{- $_ := set $ "targetPod" $targetPod }}
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "common.names.fullname" $ }}-{{ $i }}-svc
+  namespace: {{ $.Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" $ | nindent 4 }}
     pod: {{ $targetPod }}
     {{- if $root.Values.commonLabels }}
@@ -28,13 +28,16 @@ spec:
   {{- if $root.Values.cluster.externalAccess.service.loadBalancerIP }}
   loadBalancerIP: {{ index $root.Values.cluster.externalAccess.service.loadBalancerIP $i }}
   {{- end }}
+  {{- if and (eq $root.Values.cluster.externalAccess.service.type "LoadBalancer") $root.Values.cluster.externalAccess.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml $root.Values.cluster.externalAccess.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
   ports:
     - name: tcp-redis
       port: {{ $root.Values.cluster.externalAccess.service.port }}
       targetPort: tcp-redis
     - name: tcp-redis-bus
       targetPort: tcp-redis-bus
-      port: {{ $root.Values.redis.busPort }}
+      port: {{ $root.Values.redis.containerPorts.bus }}
   selector: {{- include "common.labels.matchLabels" $ | nindent 4 }}
     statefulset.kubernetes.io/pod-name: {{ $targetPod }}
 ---

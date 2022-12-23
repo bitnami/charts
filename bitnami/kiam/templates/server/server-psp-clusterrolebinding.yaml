@@ -1,5 +1,5 @@
-{{- if and .Values.server.enabled .Values.server.podSecurityPolicy.create }}
-{{- if .Values.rbac.create }}
+{{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
+{{- if and $pspAvailable .Values.server.enabled .Values.server.podSecurityPolicy.create .Values.rbac.create }}
 kind: ClusterRoleBinding
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
@@ -9,6 +9,7 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   name: {{ template "common.names.fullname" . }}-server-psp
+  namespace: {{ .Release.Namespace | quote }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -19,6 +20,5 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ template "kiam.server.serviceAccountName" . }}
-    namespace: {{ .Release.Namespace }}
-{{- end }}
+    namespace: {{ .Release.Namespace | quote }}
 {{- end }}

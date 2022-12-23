@@ -3,6 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "harbor.notary-server" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -11,12 +12,12 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-{{- if (eq .Values.ingress.controller "gce") }}
+  {{- if (eq .Values.ingress.notary.controller "gce") }}
   type: NodePort
-{{- end }}
+  {{- end }}
   ports:
     - name: notary-server
-      port: 4443
+      port: {{ .Values.notary.service.ports.server }}
       targetPort: notary-server
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: notary-server
@@ -35,7 +36,7 @@ metadata:
 spec:
   ports:
     - name: notary-signer
-      port: 7899
+      port: {{ .Values.notary.service.ports.signer }}
       targetPort: notary-signer
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: notary-signer

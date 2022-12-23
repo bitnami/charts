@@ -1,3 +1,6 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
 
 ** Please be patient while the chart is being deployed **
 
@@ -80,10 +83,12 @@ To access Spring Cloud Data Flow dashboard from outside the cluster execute the 
 {{- $passwordErrors = append $passwordErrors $passwordMysqlErrors -}}
 
 {{/* Rabbitmq required password */}}
+{{- if or (.Values.rabbitmq.enabled) (and (.Values.externalRabbitmq.enabled) (not .Values.externalRabbitmq.existingPasswordSecret)) -}}
 {{- $requiredRabbitmqPassword := dict "valueKey" "rabbitmq.auth.password" "secret" $secretNameRabbitmq "field" "rabbitmq-password" -}}
 {{- $requiredErlangPassword := dict "valueKey" "rabbitmq.auth.erlangCookie" "secret" $secretNameRabbitmq "field" "rabbitmq-erlang-cookie" -}}
 {{- $requiredRabbitmqPasswordErrors := include "common.validations.values.multiple.empty" (dict "required" (list $requiredRabbitmqPassword $requiredErlangPassword) "context" $) -}}
 {{- $passwordErrors =  append $passwordErrors $requiredRabbitmqPasswordErrors -}}
+{{- end }}
 
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordErrors "context" $) -}}
 

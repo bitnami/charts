@@ -1,0 +1,58 @@
+CHART NAME: {{ .Chart.Name  }}
+CHART VERSION: {{ .Chart.Version  }}
+APP VERSION: {{ .Chart.AppVersion  }}
+
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ include "common.names.namespace" . | quote }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ include "common.names.namespace" . | quote }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+    /opt/bitnami/scripts/clickhouse/entrypoint.sh /opt/bitnami/scripts/clickhouse/run.sh
+
+{{- else }}
+
+ClickHouse is available in the following address:
+
+{{- if .Values.externalAccess.enabled }}
+
+NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+
+    kubectl get svc --namespace {{ template "common.names.namespace" . }} -l "app.kubernetes.io/name={{ template "common.names.fullname" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=clickhouse" -w
+
+{{- else if (eq "LoadBalancer" .Values.service.type) }}
+
+    export SERVICE_IP=$(kubectl get svc --namespace {{ template "common.names.namespace" . }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+
+{{- else if (eq "NodePort" .Values.service.type)}}
+
+    export NODE_IP=$(kubectl get nodes --namespace {{ template "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    export NODE_PORT=$(kubectl get --namespace {{ template "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
+
+{{- else if (eq "ClusterIP" .Values.service.type)}}
+
+    kubectl port-forward --namespace {{ template "common.names.namespace" . }} svc/{{ template "common.names.fullname" . }} {{ .Values.service.ports.tcp }}:9000 &
+
+{{- end }}
+
+Credentials:
+
+    echo "Username      : {{ .Values.auth.username }}"
+    echo "Password      : $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "clickhouse.secretName" . }} -o jsonpath="{.data.{{ include "clickhouse.secretKey" .}}}" | base64 -d)"
+
+{{- end }}
+
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "clickhouse.validateValues" . }}

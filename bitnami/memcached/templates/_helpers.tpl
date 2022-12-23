@@ -14,11 +14,30 @@ Return the proper image name (for the metrics image)
 {{ include "common.images.image" (dict "imageRoot" .Values.metrics.image "global" .Values.global) }}
 {{- end -}}
 
+
+{{/*
+Return the proper image name (for the init container volume-permissions image)
+*/}}
+{{- define "memcached.volumePermissions.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.volumePermissions.image "global" .Values.global) }}
+{{- end -}}
+
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "memcached.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image .Values.volumePermissions.image) "global" .Values.global) -}}
+{{- end -}}
+
+{{/*
+ Create the name of the service account to use
+ */}}
+{{- define "memcached.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -27,6 +46,7 @@ Check if there are rolling tags in the images
 {{- define "memcached.checkRollingTags" -}}
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- end -}}
 
 {{/*
@@ -36,6 +56,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := list -}}
 {{- $messages := append $messages (include "memcached.validateValues.architecture" .) -}}
 {{- $messages := append $messages (include "memcached.validateValues.replicaCount" .) -}}
+{{- $messages := append $messages (include "memcached.validateValues.auth" .) -}}
 {{- $messages := append $messages (include "memcached.validateValues.readOnlyRootFilesystem" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
@@ -65,11 +86,31 @@ memcached: replicaCount
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of Memcached - securityContext.readOnlyRootFilesystem */}}
-{{- define "memcached.validateValues.readOnlyRootFilesystem" -}}
-{{- if and .Values.securityContext.enabled .Values.securityContext.readOnlyRootFilesystem (not (empty .Values.memcachedPassword)) -}}
-memcached: securityContext.readOnlyRootFilesystem
-    Enabling authentication is not compatible with using a read-only filesystem.
-    Please disable it (--set securityContext.readOnlyRootFilesystem=false)
+{{/* Validate values of Memcached - authentication */}}
+{{- define "memcached.validateValues.auth" -}}
+{{- if and .Values.auth.enabled (empty .Values.auth.username) -}}
+memcached: auth.username
+    Enabling authentication requires setting a valid admin username.
+    Please set a valid username (--set auth.username="xxxx")
 {{- end -}}
+{{- end -}}
+
+{{/* Validate values of Memcached - containerSecurityContext.readOnlyRootFilesystem */}}
+{{- define "memcached.validateValues.readOnlyRootFilesystem" -}}
+{{- if and .Values.containerSecurityContext.enabled .Values.containerSecurityContext.readOnlyRootFilesystem .Values.auth.enabled -}}
+memcached: containerSecurityContext.readOnlyRootFilesystem
+    Enabling authentication is not compatible with using a read-only filesystem.
+    Please disable it (--set containerSecurityContext.readOnlyRootFilesystem=false)
+{{- end -}}
+{{- end -}}
+
+{{/*
+Get the password secret.
+*/}}
+{{- define "memcached.secretPasswordName" -}}
+    {{- if .Values.auth.existingPasswordSecret -}}
+        {{- printf "%s" (tpl .Values.auth.existingPasswordSecret $) -}}
+    {{- else -}}
+        {{- printf "%s" (include "common.names.fullname" .) -}}
+    {{- end -}}
 {{- end -}}

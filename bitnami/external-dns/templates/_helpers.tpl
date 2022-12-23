@@ -114,17 +114,19 @@ imagePullSecrets:
 Return true if a secret object should be created
 */}}
 {{- define "external-dns.createSecret" -}}
-{{- if and (eq .Values.provider "alibabacloud") .Values.alibabacloud.accessKeyId .Values.alibabacloud.accessKeySecret (not .Values.alibabacloud.secretName) }}
+{{- if and (eq .Values.provider "akamai") .Values.akamai.clientSecret (not .Values.akamai.secretName) -}}
+    {{- true -}}
+{{- else if and (eq .Values.provider "alibabacloud") .Values.alibabacloud.accessKeyId .Values.alibabacloud.accessKeySecret (not .Values.alibabacloud.secretName) }}
     {{- true -}}
 {{- else if and (eq .Values.provider "aws") .Values.aws.credentials.secretKey .Values.aws.credentials.accessKey (not .Values.aws.credentials.secretName) }}
     {{- true -}}
-{{- else if and (eq .Values.provider "azure") (or (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId .Values.azure.aadClientId .Values.azure.aadClientSecret (not .Values.azure.useManagedIdentityExtension)) (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId .Values.azure.useManagedIdentityExtension)) (not .Values.azure.secretName) -}}
-    {{- true -}}
-{{- else if and (eq .Values.provider "azure-private-dns") (or (and .Values.azure.aadClientId .Values.azure.aadClientSecret) (not .Values.azure.secretName)) -}}
+{{- else if and (or (eq .Values.provider "azure") (eq .Values.provider "azure-private-dns")) (or (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId .Values.azure.aadClientId .Values.azure.aadClientSecret (not .Values.azure.useManagedIdentityExtension)) (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId .Values.azure.useManagedIdentityExtension)) (not .Values.azure.secretName) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "cloudflare") (or .Values.cloudflare.apiToken .Values.cloudflare.apiKey) (not .Values.cloudflare.secretName) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "designate") (or .Values.designate.username .Values.designate.password) -}}
+    {{- true -}}
+{{- else if and (eq .Values.provider "designate") (or .Values.designate.applicationCredentialId .Values.designate.applicationCredentialSecret) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "digitalocean") .Values.digitalocean.apiToken (not .Values.digitalocean.secretName) -}}
     {{- true -}}
@@ -136,17 +138,33 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "linode") .Values.linode.apiToken (not .Values.linode.secretName) -}}
     {{- true -}}
-{{- else if and (eq .Values.provider "rfc2136") .Values.rfc2136.tsigSecret -}}
+{{- else if and (eq .Values.provider "oci") .Values.oci.privateKeyFingerprint (not .Values.oci.secretName) -}}
+    {{- true -}}
+{{- else if and (eq .Values.provider "rfc2136") (or .Values.rfc2136.tsigSecret (and .Values.rfc2136.kerberosUsername .Values.rfc2136.kerberosPassword)) (not .Values.rfc2136.secretName) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "pdns") .Values.pdns.apiKey (not .Values.pdns.secretName) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "transip") .Values.transip.apiKey -}}
     {{- true -}}
-{{- else if and (eq .Values.provider "ovh") .Values.ovh.consumerKey -}}
+{{- else if and (eq .Values.provider "ovh") .Values.ovh.consumerKey (not .Values.ovh.secretName) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "scaleway") .Values.scaleway.scwAccessKey -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "vinyldns") (or .Values.vinyldns.secretKey .Values.vinyldns.accessKey) -}}
+    {{- true -}}
+{{- else if and (eq .Values.provider "ns1") .Values.ns1.apiKey (not .Values.ns1.secretName) -}}
+    {{- true -}}
+{{- else -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a configmap object should be created
+*/}}
+{{- define "external-dns.createConfigMap" -}}
+{{- if and (eq .Values.provider "designate") .Values.designate.customCA.enabled }}
+    {{- true -}}
+{{- else if and (eq .Values.provider "rfc2136") .Values.rfc2136.rfc3645Enabled }}
     {{- true -}}
 {{- else -}}
 {{- end -}}
@@ -156,7 +174,9 @@ Return true if a secret object should be created
 Return the name of the Secret used to store the passwords
 */}}
 {{- define "external-dns.secretName" -}}
-{{- if and (eq .Values.provider "alibabacloud") .Values.alibabacloud.secretName }}
+{{- if and (eq .Values.provider "akamai") .Values.akamai.secretName }}
+{{- .Values.akamai.secretName }}
+{{- else if and (eq .Values.provider "alibabacloud") .Values.alibabacloud.secretName }}
 {{- .Values.alibabacloud.secretName }}
 {{- else if and (eq .Values.provider "aws") .Values.aws.credentials.secretName }}
 {{- .Values.aws.credentials.secretName }}
@@ -168,14 +188,22 @@ Return the name of the Secret used to store the passwords
 {{- .Values.digitalocean.secretName }}
 {{- else if and (eq .Values.provider "google") .Values.google.serviceAccountSecret }}
 {{- .Values.google.serviceAccountSecret }}
-{{- else if and (eq .Values.provider "hetzner") .Values.hetzner.secretName -}}
-{{- .Values.hetzner.secretName -}}
+{{- else if and (eq .Values.provider "hetzner") .Values.hetzner.secretName }}
+{{- .Values.hetzner.secretName }}
 {{- else if and (eq .Values.provider "linode") .Values.linode.secretName }}
 {{- .Values.linode.secretName }}
+{{- else if and (eq .Values.provider "oci") .Values.oci.secretName }}
+{{- .Values.oci.secretName }}
+{{- else if and (eq .Values.provider "ovh") .Values.ovh.secretName }}
+{{- .Values.ovh.secretName }}
 {{- else if and (eq .Values.provider "pdns") .Values.pdns.secretName }}
 {{- .Values.pdns.secretName }}
 {{- else if and (eq .Values.provider "infoblox") .Values.infoblox.secretName }}
 {{- .Values.infoblox.secretName }}
+{{- else if and (eq .Values.provider "rfc2136") .Values.rfc2136.secretName }}
+{{- .Values.rfc2136.secretName }}
+{{- else if and (eq .Values.provider "ns1") .Values.ns1.secretName }}
+{{- .Values.ns1.secretName }}
 {{- else -}}
 {{- template "external-dns.fullname" . }}
 {{- end -}}
@@ -185,13 +213,16 @@ Return the name of the Secret used to store the passwords
 {
   {{- if .Values.alibabacloud.regionId }}
   "regionId": "{{ .Values.alibabacloud.regionId }}",
-  {{- end}}
+  {{- end }}
+  {{- if .Values.alibabacloud.vpcId }}
+  "vpcId": "{{ .Values.alibabacloud.vpcId }}",
+  {{- end }}
   {{- if .Values.alibabacloud.accessKeyId }}
   "accessKeyId": "{{ .Values.alibabacloud.accessKeyId }}",
-  {{- end}}
+  {{- end }}
   {{- if .Values.alibabacloud.accessKeySecret }}
   "accessKeySecret": "{{ .Values.alibabacloud.accessKeySecret }}"
-  {{- end}}
+  {{- end }}
 }
 {{ end }}
 
@@ -210,9 +241,13 @@ region = {{ .Values.aws.region }}
 {
   {{- if .Values.azure.cloud }}
   "cloud": "{{ .Values.azure.cloud }}",
-  {{- end}}
+  {{- end }}
+  {{- if .Values.azure.tenantId }}
   "tenantId": "{{ .Values.azure.tenantId }}",
+  {{- end }}
+  {{- if .Values.azure.subscriptionId }}
   "subscriptionId": "{{ .Values.azure.subscriptionId }}",
+  {{- end }}
   "resourceGroup": "{{ .Values.azure.resourceGroup }}",
   {{- if not .Values.azure.useManagedIdentityExtension }}
   "aadClientId": "{{ .Values.azure.aadClientId }}",
@@ -226,6 +261,19 @@ region = {{ .Values.aws.region }}
   {{- end }}
 }
 {{ end }}
+{{- define "external-dns.oci-credentials" -}}
+auth:
+  region: {{ .Values.oci.region }}
+  tenancy: {{ .Values.oci.tenancyOCID }}
+  user: {{ .Values.oci.userOCID }}
+  key: {{ toYaml .Values.oci.privateKey | indent 4 }}
+  fingerprint: {{ .Values.oci.privateKeyFingerprint }}
+  # Omit if there is not a password for the key
+  {{- if .Values.oci.privateKeyPassphrase }}
+  passphrase: {{ .Values.oci.privateKeyPassphrase }}
+  {{- end }}
+compartment: {{ .Values.oci.compartmentOCID }}
+{{ end }}
 
 {{/*
 Compile all warnings into a single message, and call fail.
@@ -234,6 +282,10 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := list -}}
 {{- $messages := append $messages (include "external-dns.validateValues.provider" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.sources" .) -}}
+{{- $messages := append $messages (include "external-dns.validateValues.akamai.host" .) -}}
+{{- $messages := append $messages (include "external-dns.validateValues.akamai.accessToken" .) -}}
+{{- $messages := append $messages (include "external-dns.validateValues.akamai.clientToken" .) -}}
+{{- $messages := append $messages (include "external-dns.validateValues.akamai.clientSecret" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.aws" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.infoblox.gridHost" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.infoblox.wapiPassword" .) -}}
@@ -241,9 +293,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "external-dns.validateValues.pdns.apiKey" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.azure.resourceGroupWithoutTenantId" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.azure.resourceGroupWithoutSubscriptionId" .) -}}
-{{- $messages := append $messages (include "external-dns.validateValues.azure.tenantIdWithoutResourceGroup" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.azure.tenantIdWithoutSubscriptionId" .) -}}
-{{- $messages := append $messages (include "external-dns.validateValues.azure.subscriptionIdWithoutResourceGroup" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.azure.subscriptionIdWithoutTenantId" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.azure.useManagedIdentityExtensionAadClientId" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.azure.useManagedIdentityExtensionAadClientSecret" .) -}}
@@ -260,10 +310,13 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "external-dns.validateValues.azurePrivateDns.userAssignedIdentityIDWithoutUseManagedIdentityExtension" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.transip.account" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.transip.apiKey" .) -}}
+{{- $messages := append $messages (include "external-dns.validateValues.ns1.apiKey" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.linode.apiToken" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.ovh.consumerKey" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.ovh.applicationKey" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.ovh.applicationSecret" .) -}}
+{{- $messages := append $messages (include "external-dns.validateValues.rfc2136.kerberosRealm" .) -}}
+{{- $messages := append $messages (include "external-dns.validateValues.rfc2136.kerberosConfig" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.scaleway.scwAccessKey" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.scaleway.scwSecretKey" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.scaleway.scwDefaultOrganizationId" .) -}}
@@ -296,6 +349,54 @@ Validate values of External DNS:
 external-dns: sources
     You must provide sources to be observed for new DNS entries by ExternalDNS
     Please set the sources parameter (--set sources="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of External DNS:
+- must provide the Akamai host when provider is "akamai"
+*/}}
+{{- define "external-dns.validateValues.akamai.host" -}}
+{{- if and (eq .Values.provider "akamai") (not .Values.akamai.host) -}}
+external-dns: akamai.host
+    You must provide the Akamai host when provider="akamai".
+    Please set the host parameter (--set akamai.host="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of External DNS:
+- must provide the Akamai access token when provider is "akamai"
+*/}}
+{{- define "external-dns.validateValues.akamai.accessToken" -}}
+{{- if and (eq .Values.provider "akamai") (not .Values.akamai.accessToken) -}}
+external-dns: akamai.accessToken
+    You must provide the Akamai access token when provider="akamai".
+    Please set the accessToken parameter (--set akamai.accessToken="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of External DNS:
+- must provide the Akamai client token when provider is "akamai"
+*/}}
+{{- define "external-dns.validateValues.akamai.clientToken" -}}
+{{- if and (eq .Values.provider "akamai") (not .Values.akamai.clientToken) -}}
+external-dns: akamai.clientToken
+    You must provide the Akamai client token when provider="akamai".
+    Please set the clientToken parameter (--set akamai.clientToken="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of External DNS:
+- must provide the Akamai client secret when provider is "akamai"
+*/}}
+{{- define "external-dns.validateValues.akamai.clientSecret" -}}
+{{- if and (eq .Values.provider "akamai") (not .Values.akamai.clientSecret) (not .Values.akamai.secretName) -}}
+external-dns: akamai.clientSecret
+    You must provide the Akamai client secret when provider="akamai".
+    Please set the clientSecret parameter (--set akamai.clientSecret="xxxx")
 {{- end -}}
 {{- end -}}
 
@@ -336,17 +437,6 @@ external-dns: infoblox.wapiPassword
     You must provide a WAPI password when provider="infoblox".
     Please set the wapiPassword parameter (--set infoblox.wapiPassword="xxxx")
     or you can provide an existing secret name via infoblox.secretName
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the appropriate apiVersion for PodSecurityPolicy.
-*/}}
-{{- define "podSecurityPolicy.apiVersion" -}}
-{{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-{{- print "policy/v1beta1" -}}
-{{- else -}}
-{{- print "extensions/v1beta1" -}}
 {{- end -}}
 {{- end -}}
 
@@ -408,18 +498,6 @@ external-dns: azure.resourceGroup
 
 {{/*
 Validate values of Azure DNS:
-- must provide the Azure Tenant ID when provider is "azure" and secretName is not set and resourceGroup is set
-*/}}
-{{- define "external-dns.validateValues.azure.tenantIdWithoutResourceGroup" -}}
-{{- if and (eq .Values.provider "azure") (not .Values.azure.tenantId) (not .Values.azure.secretName) .Values.azure.resourceGroup -}}
-external-dns: azure.tenantId
-    You must provide the Azure Tenant ID when provider="azure" and resourceGroup is set.
-    Please set the tenantId parameter (--set azure.tenantId="xxxx")
-{{- end -}}
-{{- end -}}
-
-{{/*
-Validate values of Azure DNS:
 - must provide the Azure Tenant ID when provider is "azure" and secretName is not set and subscriptionId is set
 */}}
 {{- define "external-dns.validateValues.azure.tenantIdWithoutSubscriptionId" -}}
@@ -427,18 +505,6 @@ Validate values of Azure DNS:
 external-dns: azure.tenantId
     You must provide the Azure Tenant ID when provider="azure" and subscriptionId is set.
     Please set the tenantId parameter (--set azure.tenantId="xxxx")
-{{- end -}}
-{{- end -}}
-
-{{/*
-Validate values of Azure DNS:
-- must provide the Azure Subscription ID when provider is "azure" and secretName is not set and resourceGroup is set
-*/}}
-{{- define "external-dns.validateValues.azure.subscriptionIdWithoutResourceGroup" -}}
-{{- if and (eq .Values.provider "azure") (not .Values.azure.subscriptionId) (not .Values.azure.secretName) .Values.azure.resourceGroup -}}
-external-dns: azure.subscriptionId
-    You must provide the Azure Subscription ID when provider="azure" and resourceGroup is set.
-    Please set the subscriptionId parameter (--set azure.subscriptionId="xxxx")
 {{- end -}}
 {{- end -}}
 
@@ -662,10 +728,23 @@ external-dns: linode.apiToken
 
 {{/*
 Validate values of External DNS:
+- must provide the NS1 API key when provider is "ns1"
+*/}}
+{{- define "external-dns.validateValues.ns1.apiKey" -}}
+{{- if and (eq .Values.provider "ns1") (not .Values.ns1.apiKey) (not .Values.ns1.secretName) -}}
+external-dns: ns1.apiKey
+    You must provide the NS1 API key when provider="ns1".
+    Please set the token parameter (--set ns1.apiKey="xxxx")
+    or specify a secret that contains an API key. (--set ns1.secretName="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of External DNS:
 - must provide the OVH consumer key when provider is "ovh"
 */}}
 {{- define "external-dns.validateValues.ovh.consumerKey" -}}
-{{- if and (eq .Values.provider "ovh") (not .Values.ovh.consumerKey) -}}
+{{- if and (eq .Values.provider "ovh") (not .Values.ovh.consumerKey) (not .Values.ovh.secretName) -}}
 external-dns: ovh.consumerKey
     You must provide the OVH consumer key when provider="ovh".
     Please set the consumerKey parameter (--set ovh.consumerKey="xxxx")
@@ -677,7 +756,7 @@ Validate values of External DNS:
 - must provide the OVH application key when provider is "ovh"
 */}}
 {{- define "external-dns.validateValues.ovh.applicationKey" -}}
-{{- if and (eq .Values.provider "ovh") (not .Values.ovh.applicationKey) -}}
+{{- if and (eq .Values.provider "ovh") (not .Values.ovh.applicationKey) (not .Values.ovh.secretName) -}}
 external-dns: ovh.applicationKey
     You must provide the OVH appliciation key when provider="ovh".
     Please set the applicationKey parameter (--set ovh.applicationKey="xxxx")
@@ -689,10 +768,34 @@ Validate values of External DNS:
 - must provide the OVH application secret when provider is "ovh"
 */}}
 {{- define "external-dns.validateValues.ovh.applicationSecret" -}}
-{{- if and (eq .Values.provider "ovh") (not .Values.ovh.applicationSecret) -}}
+{{- if and (eq .Values.provider "ovh") (not .Values.ovh.applicationSecret) (not .Values.ovh.secretName) -}}
 external-dns: ovh.applicationSecret
     You must provide the OVH appliciation secret key when provider="ovh".
     Please set the applicationSecret parameter (--set ovh.applicationSecret="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of RFC2136 DNS:
+- Must provide the kerberos realm when provider is rfc2136 and rfc3645Enabled is true
+*/}}
+{{- define "external-dns.validateValues.rfc2136.kerberosRealm" -}}
+{{- if and (eq .Values.provider "rfc2136") .Values.rfc2136.rfc3645Enabled (not .Values.rfc2136.kerberosRealm) -}}
+external-dns: rfc2136.kerberosRealm
+    You must provide the kerberos realm when provider is rfc2136 and rfc3645Enabled is true
+    Please set the kerberosRealm parameter (--set rfc2136.kerberosRealm="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of RFC2136 DNS:
+- Must provide the kerberos config when provider is rfc2136 and rfc3645Enabled is true
+*/}}
+{{- define "external-dns.validateValues.rfc2136.kerberosConfig" -}}
+{{- if and (eq .Values.provider "rfc2136") .Values.rfc2136.rfc3645Enabled (not .Values.rfc2136.kerberosConfig) -}}
+external-dns: rfc2136.kerberosConfig
+    You must provide the kerberos config when provider is rfc2136 and rfc3645Enabled is true
+    Please set the kerberosConfig parameter (--set-file rfc2136.kerberosConfig="path/to/krb5.conf")
 {{- end -}}
 {{- end -}}
 
@@ -732,7 +835,7 @@ external-dns: scaleway.scwDefaultOrganizationId
 {{- end -}}
 {{- end -}}
 
-{/*
+{{/*
 Return the ExternalDNS service account name
 */}}
 {{- define "external-dns.serviceAccountName" -}}
@@ -740,5 +843,72 @@ Return the ExternalDNS service account name
     {{ default (include "external-dns.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the ExternalDNS namespace to be used
+*/}}
+{{- define "external-dns.namespace" -}}
+{{- if and .Values.rbac.create (not .Values.rbac.clusterRole) -}}
+    {{ default .Release.Namespace .Values.namespace }}
+{{- else if .Values.watchReleaseNamespace -}}
+    {{ .Release.namespace }}
+{{- else -}}
+    {{ .Values.namespace }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the secret containing external-dns TLS certificates
+*/}}
+{{- define "external-dns.tlsSecretName" -}}
+{{- if .Values.coredns.etcdTLS.autoGenerated -}}
+    {{- printf "%s-crt" (include "external-dns.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- $secretName := .Values.coredns.etcdTLS.secretName -}}
+{{- printf "%s" (tpl $secretName $) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the path to the CA cert file.
+*/}}
+{{- define "external-dns.tlsCACert" -}}
+{{- if .Values.coredns.etcdTLS.autoGenerated }}
+    {{- printf "ca.crt" -}}
+{{- else -}}
+    {{- printf "%s" .Values.coredns.etcdTLS.caFilename -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the path to the cert file.
+*/}}
+{{- define "external-dns.tlsCert" -}}
+{{- if .Values.coredns.etcdTLS.autoGenerated }}
+    {{- printf "tls.crt" -}}
+{{- else -}}
+    {{- printf "%s" .Values.coredns.etcdTLS.certFilename -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the path to the cert key file.
+*/}}
+{{- define "external-dns.tlsCertKey" -}}
+{{- if .Values.coredns.etcdTLS.autoGenerated }}
+    {{- printf "tls.key" -}}
+{{- else -}}
+    {{- printf "%s" .Values.coredns.etcdTLS.keyFilename -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a TLS secret object should be created
+*/}}
+{{- define "external-dns.createTlsSecret" -}}
+{{- if and .Values.coredns.etcdTLS.enabled .Values.coredns.etcdTLS.autoGenerated }}
+    {{- true -}}
 {{- end -}}
 {{- end -}}

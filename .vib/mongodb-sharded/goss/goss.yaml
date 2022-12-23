@@ -1,0 +1,41 @@
+command:
+  {{- $mongos := .Vars.mongos.replicaCount }}
+  {{- $shards := .Vars.shards }}
+  {{- $shardNodes := .Vars.shardsvr.dataNode.replicaCount }}
+  {{- $collection := printf "test_%s" (randAlpha 5) }}
+  {{- $dbUser := .Vars.auth.rootUser }}
+  {{- $dbPassword := .Vars.auth.rootPassword }}
+  {{- $authOptions := printf "-u %s -p %s" $dbUser $dbPassword }}
+  {{- $svcPort := .Vars.mongos.servicePerReplica.port }}
+  {{- $localEndpoint := printf "%s:%d" "localhost" .Vars.common.containerPorts.mongodb }}
+  mongos-check:
+    exec: mongosh --quiet {{ $authOptions }} {{ $localEndpoint }} --eval "db.createCollection('{{ $collection }}')"{{ range $e, $i := until $mongos }} && mongosh --quiet {{ $authOptions }} mongodb-sharded-{{ $i }}:{{ $svcPort }} --eval "db.getCollectionNames()" | grep {{ $collection }}{{ end }}
+    exit-status: 0
+    timeout: 20000
+  sharding-status:
+    exec: if [ "$(mongosh --quiet {{ $authOptions }} {{ $localEndpoint }} --eval 'sh.status()' | grep 'state.*1' | wc -l)" -ne {{ $shards }} ]; then exit 1; fi
+    exit-status: 0
+    timeout: 20000
+  shard-data-nodes:
+    exec: mongosh --quiet {{ $authOptions }} {{ $localEndpoint }} --eval "sh.status()"
+    exit-status: 0
+    stdout:
+    {{ range $e, $shard := until $shards }}
+    {{ range $e, $shardNode := until $shardNodes }}
+      - /host.*mongodb-sharded-shard{{ $shard }}-data-{{ $shardNode }}/
+    {{ end }}
+    {{ end }}
+    timeout: 20000
+  check-user-info:
+    exec: id
+    exit-status: 0
+    stdout:
+    - uid={{ .Vars.mongos.containerSecurityContext.runAsUser }}
+    - /groups=.*{{ .Vars.mongos.podSecurityContext.fsGroup }}/
+file:
+  /opt/bitnami/mongodb/conf/keyfile:
+    mode: "0600"
+    filetype: file
+    contains:
+      - {{ .Vars.auth.replicaSetKey }}
+    exists: true

@@ -1,40 +1,46 @@
-# kube-state-metrics
+<!--- app-name: Kube State Metrics -->
 
-[kube-state-metrics](https://github.com/kubernetes/kube-state-metrics) is a simple service that listens to the Kubernetes API server and generates metrics about the state of the objects.
+# Kube State Metrics packaged by Bitnami
 
+kube-state-metrics is a simple service that listens to the Kubernetes API server and generates metrics about the state of the objects.
+
+[Overview of Kube State Metrics](https://github.com/kubernetes/kube-state-metrics)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/kube-state-metrics
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/kube-state-metrics
 ```
 
 ## Introduction
 
-This chart bootstraps [kube-state-metrics](https://github.com/bitnami/bitnami-docker-kube-state-metrics) on [Kubernetes](http://kubernetes.io) using the [Helm](https://helm.sh) package manager.
+This chart bootstraps [kube-state-metrics](https://github.com/bitnami/containers/tree/main/bitnami/kube-state-metrics) on [Kubernetes](https://kubernetes.io) using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 
 ## Installing the Chart
 
 Add the `bitnami` charts repo to Helm:
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 ```
 
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install my-release bitnami/kube-state-metrics
+$ helm install my-release my-repo/kube-state-metrics
 ```
 
-The command deploys kube-state-metrics on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+The command deploys kube-state-metrics on the Kubernetes cluster in the default configuration. The [configuration](#configuration-and-installation-details) section lists the parameters that can be configured during installation.
 
 ## Uninstalling the Chart
 
@@ -48,164 +54,243 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
-The following table lists the configurable parameters of the kube-state-metrics chart and their default values.
+### Global parameters
 
-| Parameter                                    | Description                                                                                                   | Default                                                    |
-|----------------------------------------------|---------------------------------------------------------------------------------------------------------------|------------------------------------------------------------|
-| `global.imageRegistry`                       | Global Docker image registry                                                                                  | `nil`                                                      |
-| `global.imagePullSecrets`                    | Global Docker registry secret names as an array                                                               | `[]` (does not add image pull secrets to deployed pods)    |
-| `global.storageClass`                        | Global storage class for dynamic provisioning                                                                 | `nil`                                                      |
-| `global.labels`                              | Additional labels to apply to all resources                                                                   | `{}`                                                       |
-| `nameOverride`                               | String to partially override `kube-state-metrics.name` template with a string (will prepend the release name) | `nil`                                                      |
-| `fullnameOverride`                           | String to fully override `kube-state-metrics.fullname` template with a string                                 | `nil`                                                      |
-| `rbac.create`                                | Whether to create & use RBAC resources or not                                                                 | `true`                                                     |
-| `rbac.apiVersion`                            | Version of the RBAC API                                                                                       | `v1beta1`                                                  |
-| `rbac.pspEnabled`                            | PodSecurityPolicy                                                                                             | `true`                                                     |
-| `serviceAccount.create`                      | Specify whether to create a ServiceAccount for kube-state-metrics                                             | `true`                                                     |
-| `serviceAccount.name`                        | The name of the ServiceAccount to create                                                                      | Generated using the `kube-state-metrics.fullname` template |
-| `image.registry`                             | kube-state-metrics image registry                                                                             | `docker.io`                                                |
-| `image.repository`                           | kube-state-metrics Image name                                                                                 | `bitnami/kube-state-metrics`                               |
-| `image.tag`                                  | kube-state-metrics Image tag                                                                                  | `{TAG_NAME}`                                               |
-| `image.pullPolicy`                           | kube-state-metrics image pull policy                                                                          | `IfNotPresent`                                             |
-| `image.pullSecrets`                          | Specify docker-registry secret names as an array                                                              | `[]` (does not add image pull secrets to deployed pods)    |
-| `extraArgs`                                  | Additional command line arguments to pass to kube-state-metrics                                               | `{}`                                                       |
-| `namespace`                                  | Comma-separated list of namespaces to be enabled. Defaults to all namespaces                                  | ``                                                         |
-| `hostAliases`                                | Add deployment host aliases                                                                                   | `[]`                                                       |
-| `collectors.certificatesigningrequests`      | Enable the `certificatesigningrequests` collector                                                             | `true`                                                     |
-| `collectors.configmaps`                      | Enable the `configmaps` collector                                                                             | `true`                                                     |
-| `collectors.cronjobs`                        | Enable the `cronjobs` collector                                                                               | `true`                                                     |
-| `collectors.daemonsets`                      | Enable the `daemonsets` collector                                                                             | `true`                                                     |
-| `collectors.deployments`                     | Enable the `deployments` collector                                                                            | `true`                                                     |
-| `collectors.endpoints`                       | Enable the `endpoints` collector                                                                              | `true`                                                     |
-| `collectors.horizontalpodautoscalers`        | Enable the `horizontalpodautoscalers` collector                                                               | `true`                                                     |
-| `collectors.ingresses`                       | Enable the `ingresses` collector                                                                              | `true`                                                     |
-| `collectors.jobs`                            | Enable the `jobs` collector                                                                                   | `true`                                                     |
-| `collectors.limitranges`                     | Enable the `limitranges` collector                                                                            | `true`                                                     |
-| `collectors.mutatingwebhookconfigurations`   | Enable the `mutatingwebhookconfigurations` collector                                                          | `true`                                                     |
-| `collectors.namespaces`                      | Enable the `namespaces` collector                                                                             | `true`                                                     |
-| `collectors.networkpolicies`                 | Enable the `networkpolicies` collector                                                                        | `true`                                                     |
-| `collectors.nodes`                           | Enable the `nodes` collector                                                                                  | `true`                                                     |
-| `collectors.persistentvolumeclaims`          | Enable the `persistentvolumeclaims` collector                                                                 | `true`                                                     |
-| `collectors.persistentvolumes`               | Enable the `persistentvolumes` collector                                                                      | `true`                                                     |
-| `collectors.poddisruptionbudgets`            | Enable the `poddisruptionbudgets` collector                                                                   | `true`                                                     |
-| `collectors.pods`                            | Enable the `pods` collector                                                                                   | `true`                                                     |
-| `collectors.replicasets`                     | Enable the `replicasets` collector                                                                            | `true`                                                     |
-| `collectors.replicationcontrollers`          | Enable the `replicationcontrollers` collector                                                                 | `true`                                                     |
-| `collectors.resourcequotas`                  | Enable the `resourcequotas` collector                                                                         | `true`                                                     |
-| `collectors.secrets`                         | Enable the `secrets` collector                                                                                | `true`                                                     |
-| `collectors.services`                        | Enable the `services` collector                                                                               | `true`                                                     |
-| `collectors.statefulsets`                    | Enable the `statefulsets` collector                                                                           | `true`                                                     |
-| `collectors.storageclasses`                  | Enable the `storageclasses` collector                                                                         | `true`                                                     |
-| `collectors.verticalpodautoscalers`          | Enable the `verticalpodautoscalers` collector                                                                 | `false`                                                    |
-| `collectors.validatingwebhookconfigurations` | Enable the `validatingwebhookconfigurations` collector                                                        | `false`                                                    |
-| `collectors.volumeattachments`               | Enable the `volumeattachments` collector                                                                      | `true`                                                     |
-| `securityContext.enabled`                    | Enable security context                                                                                       | `true`                                                     |
-| `securityContext.runAsUser`                  | User ID for the container                                                                                     | `1001`                                                     |
-| `securityContext.fsGroup`                    | Group ID for the container filesystem                                                                         | `1001`                                                     |
-| `service.type`                               | Kubernetes service type                                                                                       | `ClusterIP`                                                |
-| `service.port`                               | kube-state-metrics service port                                                                               | `8080`                                                     |
-| `service.clusterIP`                          | Specific cluster IP when service type is cluster IP. Use `None` for headless service                          | `nil`                                                      |
-| `service.nodePort`                           | Kubernetes Service nodePort                                                                                   | `nil`                                                      |
-| `service.loadBalancerIP`                     | `loadBalancerIP` if service type is `LoadBalancer`                                                            | `nil`                                                      |
-| `service.loadBalancerSourceRanges`           | Address that are allowed when svc is `LoadBalancer`                                                           | `[]`                                                       |
-| `service.annotations`                        | Additional annotations for kube-state-metrics service                                                         | `{}`                                                       |
-| `service.labels`                             | Additional labels for kube-state-metrics service                                                              | `{}`                                                       |
-| `hostNetwork`                                | Enable hostNetwork mode                                                                                       | `false`                                                    |
-| `priorityClassName`                          | Priority class assigned to the Pods                                                                           | `nil`                                                      |
-| `resources`                                  | Resource requests/limit                                                                                       | `{}`                                                       |
-| `replicaCount`                               | Desired number of controller pods                                                                             | `1`                                                        |
-| `podLabels`                                  | Pod labels                                                                                                    | `{}`                                                       |
-| `podAnnotations`                             | Pod annotations                                                                                               | `{}`                                                       |
-| `updateStrategy`                             | Allows setting of `RollingUpdate` strategy                                                                    | `{}`                                                       |
-| `minReadySeconds`                            | How many seconds a pod needs to be ready before killing the next, during update                               | `0`                                                        |
-| `podAffinityPreset`                          | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                           | `""`                                                       |
-| `podAntiAffinityPreset`                      | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                      | `soft`                                                     |
-| `nodeAffinityPreset.type`                    | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                     | `""`                                                       |
-| `nodeAffinityPreset.key`                     | Node label key to match. Ignored if `affinity` is set.                                                        | `""`                                                       |
-| `nodeAffinityPreset.values`                  | Node label values to match. Ignored if `affinity` is set.                                                     | `[]`                                                       |
-| `affinity`                                   | Affinity for pod assignment                                                                                   | `{}` (evaluated as a template)                             |
-| `nodeSelector`                               | Node labels for pod assignment                                                                                | `{}` (evaluated as a template)                             |
-| `tolerations`                                | Tolerations for pod assignment                                                                                | `[]` (evaluated as a template)                             |
-| `livenessProbe.enabled`                      | Turn on and off liveness probe                                                                                | `true`                                                     |
-| `livenessProbe.initialDelaySeconds`          | Delay before liveness probe is initiated                                                                      | `120`                                                      |
-| `livenessProbe.periodSeconds`                | How often to perform the probe                                                                                | `10`                                                       |
-| `livenessProbe.timeoutSeconds`               | When the probe times out                                                                                      | `5`                                                        |
-| `livenessProbe.failureThreshold`             | Minimum consecutive failures for the probe                                                                    | `6`                                                        |
-| `livenessProbe.successThreshold`             | Minimum consecutive successes for the probe                                                                   | `1`                                                        |
-| `readinessProbe.enabled`                     | Turn on and off readiness probe                                                                               | `true`                                                     |
-| `readinessProbe.initialDelaySeconds`         | Delay before readiness probe is initiated                                                                     | `30`                                                       |
-| `readinessProbe.periodSeconds`               | How often to perform the probe                                                                                | `10`                                                       |
-| `readinessProbe.timeoutSeconds`              | When the probe times out                                                                                      | `5`                                                        |
-| `readinessProbe.failureThreshold`            | Minimum consecutive failures for the probe                                                                    | `6`                                                        |
-| `readinessProbe.successThreshold`            | Minimum consecutive successes for the probe                                                                   | `1`                                                        |
-| `serviceMonitor.enabled`                     | Creates a ServiceMonitor to monitor kube-state-metrics                                                        | `false`                                                    |
-| `serviceMonitor.namespace`                   | Namespace in which Prometheus is running                                                                      | `nil`                                                      |
-| `serviceMonitor.interval`                    | Scrape interval (use by default, falling back to Prometheus' default)                                         | `nil`                                                      |
-| `serviceMonitor.jobLabel`                    | The name of the label on the target service to use as the job name in prometheus.                             | `nil`                                                      |
-| `serviceMonitor.selector`                    | ServiceMonitor selector labels                                                                                | `[]`                                                       |
-| `serviceMonitor.honorLabels`                 | Honor metrics labels                                                                                          | `false`                                                    |
-| `serviceMonitor.relabelings`                 | ServiceMonitor relabelings                                                                                    | `[]`                                                       |
-| `serviceMonitor.metricRelabelings`           | ServiceMonitor metricRelabelings                                                                              | `[]`                                                       |
+| Name                      | Description                                     | Value |
+| ------------------------- | ----------------------------------------------- | ----- |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
+
+
+### Common parameters
+
+| Name                     | Description                                                                                                   | Value          |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------- | -------------- |
+| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                                          | `""`           |
+| `nameOverride`           | String to partially override `kube-state-metrics.name` template with a string (will prepend the release name) | `""`           |
+| `fullnameOverride`       | String to fully override `kube-state-metrics.fullname` template with a string                                 | `""`           |
+| `namespaceOverride`      | String to fully override common.names.namespace                                                               | `""`           |
+| `commonLabels`           | Add labels to all the deployed resources                                                                      | `{}`           |
+| `commonAnnotations`      | Add annotations to all the deployed resources                                                                 | `{}`           |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                                             | `[]`           |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                       | `false`        |
+| `diagnosticMode.command` | Command to override all containers in the the deployment(s)/statefulset(s)                                    | `["sleep"]`    |
+| `diagnosticMode.args`    | Args to override all containers in the the deployment(s)/statefulset(s)                                       | `["infinity"]` |
+
+
+### kube-state-metrics parameters
+
+| Name                                            | Description                                                                                                                                                        | Value                        |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------- |
+| `hostAliases`                                   | Add deployment host aliases                                                                                                                                        | `[]`                         |
+| `rbac.create`                                   | Whether to create & use RBAC resources or not                                                                                                                      | `true`                       |
+| `rbac.pspEnabled`                               | Whether to create a PodSecurityPolicy and bound it with RBAC. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `true`                       |
+| `serviceAccount.create`                         | Specifies whether a ServiceAccount should be created                                                                                                               | `true`                       |
+| `serviceAccount.name`                           | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.                                                | `""`                         |
+| `serviceAccount.automountServiceAccountToken`   | Automount service account token for the server service account                                                                                                     | `true`                       |
+| `serviceAccount.annotations`                    | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                                         | `{}`                         |
+| `image.registry`                                | kube-state-metrics image registry                                                                                                                                  | `docker.io`                  |
+| `image.repository`                              | kube-state-metrics image repository                                                                                                                                | `bitnami/kube-state-metrics` |
+| `image.tag`                                     | kube-state-metrics image tag (immutable tags are recommended)                                                                                                      | `2.7.0-debian-11-r0`         |
+| `image.digest`                                  | kube-state-metrics image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                 | `""`                         |
+| `image.pullPolicy`                              | kube-state-metrics image pull policy                                                                                                                               | `IfNotPresent`               |
+| `image.pullSecrets`                             | Specify docker-registry secret names as an array                                                                                                                   | `[]`                         |
+| `extraArgs`                                     | Additional command line arguments to pass to kube-state-metrics                                                                                                    | `{}`                         |
+| `command`                                       | Override default container command (useful when using custom images)                                                                                               | `[]`                         |
+| `args`                                          | Override default container args (useful when using custom images)                                                                                                  | `[]`                         |
+| `lifecycleHooks`                                | for the kube-state-metrics container(s) to automate configuration before or after startup                                                                          | `{}`                         |
+| `extraEnvVars`                                  | Array with extra environment variables to add to kube-state-metrics nodes                                                                                          | `[]`                         |
+| `extraEnvVarsCM`                                | Name of existing ConfigMap containing extra env vars for kube-state-metrics pod(s)                                                                                 | `""`                         |
+| `extraEnvVarsSecret`                            | Name of existing Secret containing extra env vars for kube-state-metrics pod(s)                                                                                    | `""`                         |
+| `extraVolumes`                                  | Optionally specify extra list of additional volumes for the kube-state-metrics pod(s)                                                                              | `[]`                         |
+| `extraVolumeMounts`                             | Optionally specify extra list of additional volumeMounts for the kube-state-metrics container(s)                                                                   | `[]`                         |
+| `sidecars`                                      | Add additional sidecar containers to the kube-state-metrics pod(s)                                                                                                 | `[]`                         |
+| `initContainers`                                | Add additional init containers to the kube-state-metrics pod(s)                                                                                                    | `[]`                         |
+| `namespaces`                                    | Comma-separated list of namespaces to be enabled. Defaults to all namespaces. Evaluated as a template.                                                             | `""`                         |
+| `kubeResources.certificatesigningrequests`      | Enable the `certificatesigningrequests` resource                                                                                                                   | `true`                       |
+| `kubeResources.configmaps`                      | Enable the `configmaps` resource                                                                                                                                   | `true`                       |
+| `kubeResources.cronjobs`                        | Enable the `cronjobs` resource                                                                                                                                     | `true`                       |
+| `kubeResources.daemonsets`                      | Enable the `daemonsets` resource                                                                                                                                   | `true`                       |
+| `kubeResources.deployments`                     | Enable the `deployments` resource                                                                                                                                  | `true`                       |
+| `kubeResources.endpoints`                       | Enable the `endpoints` resource                                                                                                                                    | `true`                       |
+| `kubeResources.horizontalpodautoscalers`        | Enable the `horizontalpodautoscalers` resource                                                                                                                     | `true`                       |
+| `kubeResources.ingresses`                       | Enable the `ingresses` resource                                                                                                                                    | `true`                       |
+| `kubeResources.jobs`                            | Enable the `jobs` resource                                                                                                                                         | `true`                       |
+| `kubeResources.limitranges`                     | Enable the `limitranges` resource                                                                                                                                  | `true`                       |
+| `kubeResources.mutatingwebhookconfigurations`   | Enable the `mutatingwebhookconfigurations` resource                                                                                                                | `true`                       |
+| `kubeResources.namespaces`                      | Enable the `namespaces` resource                                                                                                                                   | `true`                       |
+| `kubeResources.networkpolicies`                 | Enable the `networkpolicies` resource                                                                                                                              | `true`                       |
+| `kubeResources.nodes`                           | Enable the `nodes` resource                                                                                                                                        | `true`                       |
+| `kubeResources.persistentvolumeclaims`          | Enable the `persistentvolumeclaims` resource                                                                                                                       | `true`                       |
+| `kubeResources.persistentvolumes`               | Enable the `persistentvolumes` resource                                                                                                                            | `true`                       |
+| `kubeResources.poddisruptionbudgets`            | Enable the `poddisruptionbudgets` resource                                                                                                                         | `true`                       |
+| `kubeResources.pods`                            | Enable the `pods` resource                                                                                                                                         | `true`                       |
+| `kubeResources.replicasets`                     | Enable the `replicasets` resource                                                                                                                                  | `true`                       |
+| `kubeResources.replicationcontrollers`          | Enable the `replicationcontrollers` resource                                                                                                                       | `true`                       |
+| `kubeResources.resourcequotas`                  | Enable the `resourcequotas` resource                                                                                                                               | `true`                       |
+| `kubeResources.secrets`                         | Enable the `secrets` resource                                                                                                                                      | `true`                       |
+| `kubeResources.services`                        | Enable the `services` resource                                                                                                                                     | `true`                       |
+| `kubeResources.statefulsets`                    | Enable the `statefulsets` resource                                                                                                                                 | `true`                       |
+| `kubeResources.storageclasses`                  | Enable the `storageclasses` resource                                                                                                                               | `true`                       |
+| `kubeResources.verticalpodautoscalers`          | Enable the `verticalpodautoscalers` resource                                                                                                                       | `false`                      |
+| `kubeResources.validatingwebhookconfigurations` | Enable the `validatingwebhookconfigurations` resource                                                                                                              | `false`                      |
+| `kubeResources.volumeattachments`               | Enable the `volumeattachments` resource                                                                                                                            | `true`                       |
+| `podSecurityContext.enabled`                    | Enabled kube-state-metrics pods' Security Context                                                                                                                  | `true`                       |
+| `podSecurityContext.fsGroup`                    | Set kube-state-metrics pod's Security Context fsGroup                                                                                                              | `1001`                       |
+| `containerSecurityContext.enabled`              | Enabled kube-state-metrics containers' Security Context                                                                                                            | `true`                       |
+| `containerSecurityContext.runAsUser`            | Set kube-state-metrics containers' Security Context runAsUser                                                                                                      | `1001`                       |
+| `containerSecurityContext.runAsNonRoot`         | Set kube-state-metrics container's Security Context runAsNonRoot                                                                                                   | `true`                       |
+| `service.type`                                  | Kubernetes service type                                                                                                                                            | `ClusterIP`                  |
+| `service.ports.http`                            | kube-state-metrics service port                                                                                                                                    | `8080`                       |
+| `service.nodePorts.http`                        | Specify the nodePort value for the LoadBalancer and NodePort service types.                                                                                        | `""`                         |
+| `service.clusterIP`                             | Specific cluster IP when service type is cluster IP. Use `None` for headless service                                                                               | `""`                         |
+| `service.loadBalancerIP`                        | `loadBalancerIP` if service type is `LoadBalancer`                                                                                                                 | `""`                         |
+| `service.loadBalancerSourceRanges`              | Address that are allowed when svc is `LoadBalancer`                                                                                                                | `[]`                         |
+| `service.externalTrafficPolicy`                 | kube-state-metrics service external traffic policy                                                                                                                 | `Cluster`                    |
+| `service.extraPorts`                            | Extra ports to expose (normally used with the `sidecar` value)                                                                                                     | `[]`                         |
+| `service.annotations`                           | Additional annotations for kube-state-metrics service                                                                                                              | `{}`                         |
+| `service.labels`                                | Additional labels for kube-state-metrics service                                                                                                                   | `{}`                         |
+| `service.sessionAffinity`                       | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                               | `None`                       |
+| `service.sessionAffinityConfig`                 | Additional settings for the sessionAffinity                                                                                                                        | `{}`                         |
+| `hostNetwork`                                   | Enable hostNetwork mode                                                                                                                                            | `false`                      |
+| `priorityClassName`                             | Priority class assigned to the Pods                                                                                                                                | `""`                         |
+| `schedulerName`                                 | Name of the k8s scheduler (other than default)                                                                                                                     | `""`                         |
+| `terminationGracePeriodSeconds`                 | In seconds, time the given to the kube-state-metrics pod needs to terminate gracefully                                                                             | `""`                         |
+| `topologySpreadConstraints`                     | Topology Spread Constraints for pod assignment                                                                                                                     | `[]`                         |
+| `resources.limits`                              | The resources limits for the container                                                                                                                             | `{}`                         |
+| `resources.requests`                            | The requested resources for the container                                                                                                                          | `{}`                         |
+| `replicaCount`                                  | Desired number of controller pods                                                                                                                                  | `1`                          |
+| `podLabels`                                     | Pod labels                                                                                                                                                         | `{}`                         |
+| `podAnnotations`                                | Pod annotations                                                                                                                                                    | `{}`                         |
+| `updateStrategy`                                | Allows setting of `RollingUpdate` strategy                                                                                                                         | `{}`                         |
+| `minReadySeconds`                               | How many seconds a pod needs to be ready before killing the next, during update                                                                                    | `0`                          |
+| `podAffinityPreset`                             | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                | `""`                         |
+| `podAntiAffinityPreset`                         | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                           | `soft`                       |
+| `nodeAffinityPreset.type`                       | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                          | `""`                         |
+| `nodeAffinityPreset.key`                        | Node label key to match. Ignored if `affinity` is set.                                                                                                             | `""`                         |
+| `nodeAffinityPreset.values`                     | Node label values to match. Ignored if `affinity` is set.                                                                                                          | `[]`                         |
+| `affinity`                                      | Affinity for pod assignment                                                                                                                                        | `{}`                         |
+| `nodeSelector`                                  | Node labels for pod assignment                                                                                                                                     | `{}`                         |
+| `tolerations`                                   | Tolerations for pod assignment                                                                                                                                     | `[]`                         |
+| `livenessProbe.enabled`                         | Turn on and off liveness probe                                                                                                                                     | `true`                       |
+| `livenessProbe.initialDelaySeconds`             | Delay before liveness probe is initiated                                                                                                                           | `120`                        |
+| `livenessProbe.periodSeconds`                   | How often to perform the probe                                                                                                                                     | `10`                         |
+| `livenessProbe.timeoutSeconds`                  | When the probe times out                                                                                                                                           | `5`                          |
+| `livenessProbe.failureThreshold`                | Minimum consecutive failures for the probe                                                                                                                         | `6`                          |
+| `livenessProbe.successThreshold`                | Minimum consecutive successes for the probe                                                                                                                        | `1`                          |
+| `readinessProbe.enabled`                        | Turn on and off readiness probe                                                                                                                                    | `true`                       |
+| `readinessProbe.initialDelaySeconds`            | Delay before readiness probe is initiated                                                                                                                          | `30`                         |
+| `readinessProbe.periodSeconds`                  | How often to perform the probe                                                                                                                                     | `10`                         |
+| `readinessProbe.timeoutSeconds`                 | When the probe times out                                                                                                                                           | `5`                          |
+| `readinessProbe.failureThreshold`               | Minimum consecutive failures for the probe                                                                                                                         | `6`                          |
+| `readinessProbe.successThreshold`               | Minimum consecutive successes for the probe                                                                                                                        | `1`                          |
+| `startupProbe.enabled`                          | Turn on and off startup probe                                                                                                                                      | `false`                      |
+| `startupProbe.initialDelaySeconds`              | Delay before startup probe is initiated                                                                                                                            | `30`                         |
+| `startupProbe.periodSeconds`                    | How often to perform the probe                                                                                                                                     | `10`                         |
+| `startupProbe.timeoutSeconds`                   | When the probe times out                                                                                                                                           | `5`                          |
+| `startupProbe.failureThreshold`                 | Minimum consecutive failures for the probe                                                                                                                         | `6`                          |
+| `startupProbe.successThreshold`                 | Minimum consecutive successes for the probe                                                                                                                        | `1`                          |
+| `customStartupProbe`                            | Custom liveness probe for the Web component                                                                                                                        | `{}`                         |
+| `customLivenessProbe`                           | Custom liveness probe for the Web component                                                                                                                        | `{}`                         |
+| `customReadinessProbe`                          | Custom readiness probe for the Web component                                                                                                                       | `{}`                         |
+| `serviceMonitor.enabled`                        | Creates a ServiceMonitor to monitor kube-state-metrics                                                                                                             | `false`                      |
+| `serviceMonitor.namespace`                      | Namespace in which Prometheus is running                                                                                                                           | `""`                         |
+| `serviceMonitor.jobLabel`                       | The name of the label on the target service to use as the job name in prometheus.                                                                                  | `""`                         |
+| `serviceMonitor.interval`                       | Scrape interval (use by default, falling back to Prometheus' default)                                                                                              | `""`                         |
+| `serviceMonitor.scrapeTimeout`                  | Timeout after which the scrape is ended                                                                                                                            | `""`                         |
+| `serviceMonitor.selector`                       | ServiceMonitor selector labels                                                                                                                                     | `{}`                         |
+| `serviceMonitor.honorLabels`                    | Honor metrics labels                                                                                                                                               | `false`                      |
+| `serviceMonitor.relabelings`                    | ServiceMonitor relabelings                                                                                                                                         | `[]`                         |
+| `serviceMonitor.metricRelabelings`              | ServiceMonitor metricRelabelings                                                                                                                                   | `[]`                         |
+| `serviceMonitor.labels`                         | Extra labels for the ServiceMonitor                                                                                                                                | `{}`                         |
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example the following command sets the `replicas` of the kube-state-metrics Pods to `2`.
 
 ```bash
-$ helm install my-release --set replicas=2 bitnami/kube-state-metrics
+$ helm install my-release --set replicas=2 my-repo/kube-state-metrics
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/kube-state-metrics
+$ helm install my-release -f values.yaml my-repo/kube-state-metrics
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Setting Pod's affinity
+### Use Sidecars and Init Containers
 
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` config parameter. Similarly, extra init containers can be added using the `initContainers` parameter.
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+Refer to the chart documentation for more information on, and examples of, configuring and using [sidecars and init containers](https://docs.bitnami.com/kubernetes/apps/kube-state-metrics/configuration/configure-sidecar-init-containers/).
+
+### Set Pod affinity
+
+This chart allows you to set custom Pod affinity using the `affinity` parameter. Find more information about Pod's affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 
 ```bash
-$ helm upgrade my-release bitnami/kube-state-metrics
+$ helm upgrade my-release my-repo/kube-state-metrics
 ```
+
+### To 3.0.0
+
+This major release renames several values in this chart and adds missing features, in order to be aligned with the rest of the assets in the Bitnami charts repository.
+
+Affected values:
+- `service.port` was renamed as `service.ports.metrics`.
+- `service.nodePort` was renamed as `service.nodePorts.metrics`.
+- `securityContext` was split in `podSecurityContext` and `containerSecurityContext`.
+- Removed unused value `rbac.apiVersion`.
+
+### To 2.0.0
+
+This version updates kube-state-metrics to its new major, 2.0.0. There have been some value's name changes to acommodate to the naming used in 2.0.0:
+
+  - `.Values.namespace` -> `.Values.namespaces`
+  - `.Values.collectors` -> `.Values.kubeResources`
+
+For more information, please refer to [kube-state-metrics 2 release notes](https://kubernetes.io/blog/2021/04/13/kube-state-metrics-v-2-0/).
 
 ### To 1.1.0
 
-This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### To 1.0.0
 
-[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+[On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). This major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
+[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/apps/kube-state-metrics/administration/upgrade-helm3/).
 
-- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+## License
 
-**Considerations when upgrading to this version**
+Copyright &copy; 2022 Bitnami
 
-- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
-- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
-- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-**Useful links**
+    http://www.apache.org/licenses/LICENSE-2.0
 
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

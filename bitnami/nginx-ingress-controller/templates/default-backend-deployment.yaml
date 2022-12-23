@@ -3,7 +3,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "nginx-ingress-controller.defaultBackend.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: default-backend
     {{- if .Values.commonLabels }}
@@ -20,7 +20,7 @@ spec:
   template:
     metadata:
       {{- if .Values.defaultBackend.podAnnotations }}
-      annotations: {{- include "nginx-ingress-controller.annotations" (dict "annotations" .Values.defaultBackend.podAnnotations "context" $) | trim | nindent 8 }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: default-backend
@@ -49,11 +49,22 @@ spec:
       {{- if .Values.defaultBackend.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.tolerations "context" .) | nindent 8 }}
       {{- end }}
-      {{- if .Values.defaultBackend.podSecurityContext }}
+      {{- if .Values.defaultBackend.schedulerName }}
+      schedulerName: {{ .Values.defaultBackend.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.defaultBackend.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.defaultBackend.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.defaultBackend.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ template "nginx-ingress-controller.serviceAccountName" . }}
-      terminationGracePeriodSeconds: 60
+      {{- if .Values.defaultBackend.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.defaultBackend.terminationGracePeriodSeconds }}
+      {{- end }}
+      {{- if .Values.defaultBackend.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.initContainers "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: default-backend
           image: {{ template "nginx-ingress-controller.defaultBackend.image" . }}
@@ -61,23 +72,61 @@ spec:
           {{- if .Values.defaultBackend.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.defaultBackend.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
+          {{- if .Values.defaultBackend.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.defaultBackend.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.args "context" $) | nindent 12 }}
+          {{- else }}
           args:
-          {{- range $key, $value := .Values.defaultBackend.extraArgs }}
+            {{- range $key, $value := .Values.defaultBackend.extraArgs }}
             {{- if $value }}
             - --{{ $key }}={{ $value }}
             {{- else }}
             - --{{ $key }}
             {{- end }}
+            {{- end }}
           {{- end }}
-          {{- if .Values.defaultBackend.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.defaultBackend.livenessProbe "enabled") "context" $) | nindent 12 }}
-          {{- else if .Values.defaultBackend.customLivenessProbe }}
+          env:
+            {{- if .Values.defaultBackend.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.defaultBackend.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.defaultBackend.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.defaultBackend.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.defaultBackend.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.defaultBackend.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.defaultBackend.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.defaultBackend.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.defaultBackend.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /healthz
+              port: http
+              scheme: HTTP
           {{- end }}
-          {{- if .Values.defaultBackend.readinessProbe.enabled }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.defaultBackend.readinessProbe "enabled") "context" $) | nindent 12 }}
-          {{- else if .Values.defaultBackend.customReadinessProbe }}
+          {{- if .Values.defaultBackend.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.defaultBackend.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.defaultBackend.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /healthz
+              port: http
+              scheme: HTTP
+          {{- end }}
+          {{- if .Values.defaultBackend.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.defaultBackend.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.defaultBackend.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
           {{- end }}
           ports:
             - name: http
@@ -86,4 +135,28 @@ spec:
           {{- if .Values.defaultBackend.resources }}
           resources: {{- toYaml .Values.defaultBackend.resources | nindent 12 }}
           {{- end }}
+          volumeMounts:
+            {{- if .Values.defaultBackend.serverBlockConfig }}
+            - name: nginx-config-volume
+              mountPath: /opt/bitnami/nginx/conf/bitnami/
+              readOnly: true
+            {{- end }}
+            {{- if .Values.defaultBackend.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.defaultBackend.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        {{- if .Values.defaultBackend.serverBlockConfig }}
+        - name: nginx-config-volume
+          configMap:
+            name: {{ template "nginx-ingress-controller.defaultBackend.fullname" . }}
+            items:
+              - key: defaultBackend.conf
+                path: defaultBackend.conf
+        {{- end }}
+        {{- if .Values.defaultBackend.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
 {{- end }}

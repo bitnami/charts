@@ -1,167 +1,227 @@
+## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
 ##
-# global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
-#   storageClass: myStorageClass
 
-## String to partially override common.names.fullname template (will maintain the release name)
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
-# nameOverride:
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass: ""
 
-## String to fully override common.names.fullname template
+## @section Common Parameters
 ##
-# fullnameOverride:
 
-## Force target Kubernetes version (using Helm capabilites if not set)
+## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
-kubeVersion:
-
-## Add labels to all the deployed resources
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname template
+##
+fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
+## @param kubeVersion Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion: ""
+## @param commonLabels Add labels to all the deployed resources
 ##
 commonLabels: {}
-
-## Add annotations to all the deployed resources
+## @param commonAnnotations Add annotations to all the deployed resources
 ##
 commonAnnotations: {}
-
-## Init containers parameters:
-## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
+## @param extraDeploy Array of extra objects to deploy with the release
 ##
-volumePermissions:
+extraDeploy: []
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
   enabled: false
-  image:
-    registry: docker.io
-    repository: bitnami/bitnami-shell
-    tag: "10"
-    pullPolicy: Always
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-  resources: {}
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
 
-## Kubernetes serviceType for Parse Deployment
-## ref: http://kubernetes.io/docs/user-guide/services/#publishing-services---service-types
+## @section Parse server parameters
 ##
-service:
-  type: LoadBalancer
-  # Parse dashboard HTTP Port
-  port: 80
-  ## loadBalancerIP:
-  ##
-  ## nodePorts:
-  ##   http: <to set explicitly, choose port between 30000-32767>
-  ##
-  nodePorts:
-    http: ""
-  ## Enable client source IP preservation
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
-  ##
-  externalTrafficPolicy: Cluster
 
 ## loadBalancerIP for the Parse Service (optional, cloud specific)
-## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
 ##
-#
 server:
   ## Bitnami Parse image version
   ## ref: https://hub.docker.com/r/bitnami/parse/tags/
+  ## @param server.image.registry Parse image registry
+  ## @param server.image.repository Parse image repository
+  ## @param server.image.tag Parse image tag (immutable tags are recommended)
+  ## @param server.image.digest Parse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param server.image.pullPolicy Image pull policy
+  ## @param server.image.pullSecrets Specify docker-registry secret names as an array
+  ## @param server.image.debug Enable image debug mode
   ##
   image:
     registry: docker.io
     repository: bitnami/parse
-    tag: 4.9.3-debian-10-r65
+    tag: 5.4.0-debian-11-r0
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
     ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-
-  ## Deployment pod host aliases
+    pullSecrets: []
+    ## Enable debug mode
+    ##
+    debug: false
+  ## @param server.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-
-  ## Parse Server Pod Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param server.podLabels Extra labels for Parse pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
-  securityContext:
+  podLabels: {}
+  ## @param server.podAnnotations Annotations for Parse pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param server.podSecurityContext.enabled Enabled Parse Dashboard pods' Security Context
+  ## @param server.podSecurityContext.fsGroup Set Parse Dashboard pod's Security Context fsGroup
+  ##
+  podSecurityContext:
     enabled: true
     fsGroup: 1001
-    runAsUser: 1001
-
-  ## Parse Server Port
-  ## ref: https://github.com/bitnami/bitnami-docker-parse#configuration
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param server.containerSecurityContext.enabled Enabled Parse Dashboard containers' Security Context
+  ## @param server.containerSecurityContext.runAsUser Set Parse Dashboard containers' Security Context runAsUser
+  ## @param server.containerSecurityContext.runAsNonRoot Set Parse Dashboard containers' Security Context runAsNonRoot
+  ## @param server.containerSecurityContext.readOnlyRootFilesystem Set Parse Dashboard containers' Security Context runAsNonRoot
   ##
-  port: 1337
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
 
-  ## Parse API mount path
-  ## ref: https://github.com/bitnami/bitnami-docker-parse#configuration
+  ## @param server.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param server.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param server.containerPorts.http Parse server port
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/parse#configuration
+  ##
+  containerPorts:
+    http: 1337
+  ## @param server.mountPath Parse server API mount path
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/parse#configuration
   ##
   mountPath: /parse
-
-  ## Parse Server App ID
-  ## ref: https://github.com/bitnami/bitnami-docker-parse#configuration
+  ## @param server.appId Parse server App ID
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/parse#configuration
   ##
   appId: myappID
-
-  ## Parse Server Master Key
-  ## ref: https://github.com/bitnami/bitnami-docker-parse#configuration
+  ## @param server.masterKey Parse server Master Key
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/parse#configuration
   ##
-  # masterKey:
-
-  ## An array to add extra env vars
+  masterKey: ""
+  ## @param server.extraEnvVars An array to add extra env vars
   ## For example:
   ## extraEnvVars:
   ##  - name: PARSE_SERVER_ALLOW_CLIENT_CLASS_CREATION
   ##    value: "true"
   ##
   extraEnvVars: []
-  ## Name of a ConfigMap containing extra env vars
+  ## @param server.extraEnvVarsCM Name of a ConfigMap containing extra environment variables
   ##
-  extraEnvVarsCM:
-  ## Name of a Secret containing extra env vars
+  extraEnvVarsCM: ""
+  ## @param server.extraEnvVarsSecret Name of a Secret containing extra environment variables
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
+  ## @param server.extraVolumes Optionally specify extra list of additional volumes for the Parse pod(s)
+  ##
+  extraVolumes: []
+  ## @param server.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Parse container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param server.sidecars Add additional sidecar containers to the Parse pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param server.initContainers Add additional init containers to the Parse pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
 
-  ## Enable Cloud Clode
-  ## ref: https://github.com/bitnami/bitnami-docker-parse#how-to-deploy-your-cloud-functions-with-parse-cloud-code
+  ## @param server.enableCloudCode Enable Parse Cloud Code
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/parse#how-to-deploy-your-cloud-functions-with-parse-cloud-code
   ##
   enableCloudCode: false
-
-  ## Cloud Code scripts
+  ## @param server.cloudCodeScripts Cloud Code scripts
   ## Specify dictionary of Cloud Code scripts and content
   ## Alternatively, you can put your scripts under the files/cloud directory
   ##
-  # cloudCodeScripts:
-  #   main.js: |
-  #      Parse.Cloud.define("sayHelloWorld", function(request, response) {
-  #        return "Hello world!";
-  #      });
-
-  ## ConfigMap with Cloud Code scripts
+  ## cloudCodeScripts:
+  ##   main.js: |
+  ##      Parse.Cloud.define("sayHelloWorld", function(request, response) {
+  ##        return "Hello world!";
+  ##      });
+  ##
+  cloudCodeScripts: {}
+  ## @param server.existingCloudCodeScriptsCM ConfigMap with Cloud Code scripts (Note: Overrides `cloudCodeScripts`).
   ## NOTE: This will override cloudCodeScripts
   ##
-  # existingCloudCodeScriptsCM
-
-  ## Parse Server pods' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  existingCloudCodeScriptsCM: ""
+  ## @param server.resources Parse Server pods' resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
-  ## Parse Server pods' liveness and readiness probes
+  ## Parse Server pods' liveness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+  ## @param server.livenessProbe.enabled Enable livenessProbe
+  ## @param server.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param server.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param server.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param server.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param server.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
     enabled: true
@@ -170,6 +230,15 @@ server:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 5
+  ## Parse Server pods' readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+  ## @param server.readinessProbe.enabled Enable readinessProbe
+  ## @param server.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param server.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param server.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param server.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param server.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
   readinessProbe:
     enabled: true
     initialDelaySeconds: 30
@@ -177,116 +246,252 @@ server:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 5
+  ## @param server.startupProbe.enabled Enable startupProbe on Parse containers
+  ## @param server.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param server.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param server.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param server.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param server.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 0
+    periodSeconds: 3
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 15
+  ## @param server.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param server.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param server.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
 
-  ## Pod affinity preset
+  ## @param server.podAffinityPreset Parse server pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAffinityPreset: ""
-
-  ## Pod anti-affinity preset
+  ## @param server.podAntiAffinityPreset Parse server pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAntiAffinityPreset: soft
-
   ## Node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
   ##
   nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
+    ## @param server.nodeAffinityPreset.type Parse server node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## Node label key to match
+    ## @param server.nodeAffinityPreset.key Parse server node label key to match Ignored if `affinity` is set.
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
     key: ""
-    ## Node label values to match
+    ## @param server.nodeAffinityPreset.values Parse server node label values to match. Ignored if `affinity` is set.
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-
-  ## Affinity for pod assignment
+  ## @param server.affinity Parse server affinity for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: server.podAffinityPreset, server.podAntiAffinityPreset, and server.nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-
-  ## Node labels for pod assignment
+  ## @param server.nodeSelector Parse server node labels for pod assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
-  ## Tolerations for pod assignment
+  ## @param server.tolerations Parse server tolerations for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
+  ## @param server.updateStrategy.type Parse statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+  ## @param server.priorityClassName Parse pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param server.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param server.schedulerName Name of the k8s scheduler (other than default) for Parse pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param server.terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param server.lifecycleHooks for the Parse container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## Kubernetes service for Parse Server Deployment
+  ## ref: https://kubernetes.io/docs/user-guide/services/#publishing-services---service-types
+  ##
+  service:
+    ## @param server.service.type Kubernetes Service type
+    ##
+    type: LoadBalancer
+    ## @param server.service.ports.http Service HTTP port (Dashboard)
+    ##
+    ports:
+      http: 1337
+    ## @param server.service.nodePorts.http Kubernetes HTTP node port
+    ## nodePorts:
+    ##   http: <to set explicitly, choose port between 30000-32767>
+    ##
+    nodePorts:
+      http: ""
+    ## @param server.service.clusterIP Service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param server.service.loadBalancerIP Service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param server.service.loadBalancerSourceRanges Service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param server.service.externalTrafficPolicy Service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param server.service.annotations Additional custom annotations for Service
+    ##
+    annotations: {}
+    ## @param server.service.extraPorts Extra ports to expose in Service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param server.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ##
+    sessionAffinity: None
+    ## @param server.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+
+## @section Dashboard Parameters
+##
 
 dashboard:
-  ## Enable deployment of Parse Dashboard
+  ## @param dashboard.enabled Enable parse dashboard
   ##
   enabled: true
-
   ## Bitnami Parse Dashboard image version
   ## ref: https://hub.docker.com/r/bitnami/parse-dashboard/tags/
+  ## @param dashboard.image.registry Dashboard image registry
+  ## @param dashboard.image.repository Dashboard image repository
+  ## @param dashboard.image.tag Dashboard image tag (immutable tags are recommended)
+  ## @param dashboard.image.digest Dashboard image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param dashboard.image.pullPolicy image pull policy
+  ## @param dashboard.image.pullSecrets Specify docker-registry secret names as an array
+  ## @param dashboard.image.debug Enable Parse Dashboard image debug mode
   ##
   image:
     registry: docker.io
     repository: bitnami/parse-dashboard
-    tag: 2.1.0-debian-10-r288
+    tag: 5.0.0-debian-11-r4
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
     ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-
-  ## Deployment pod host aliases
+    pullSecrets: []
+    ## Enable debug mode
+    ##
+    debug: false
+  ## @param dashboard.replicaCount Number of Parse Dashboard replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param dashboard.containerPorts.http Parse Dashboard HTTP container port
+  ##
+  containerPorts:
+    http: 4040
+  ## @param dashboard.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-
-  ## Parse Dashboard Pod Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param dashboard.podSecurityContext.enabled Enabled Parse Dashboard pods' Security Context
+  ## @param dashboard.podSecurityContext.fsGroup Set Parse Dashboard pod's Security Context fsGroup
   ##
-  securityContext:
+  podSecurityContext:
     enabled: true
     fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param dashboard.containerSecurityContext.enabled Enabled Parse Dashboard containers' Security Context
+  ## @param dashboard.containerSecurityContext.runAsUser Set Parse Dashboard containers' Security Context runAsUser
+  ## @param dashboard.containerSecurityContext.runAsNonRoot Set Parse Dashboard containers' Security Context runAsNonRoot
+  ## @param dashboard.containerSecurityContext.readOnlyRootFilesystem Set Parse Dashboard containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
     runAsUser: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
 
-  ## Parse Dashboard application username
-  ## ref: https://github.com/bitnami/bitnami-docker-parse-dashboard#configuration
+  ## @param dashboard.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param dashboard.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param dashboard.username Parse Dashboard application username
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/parse-dashboard#configuration
   ##
   username: user
-
-  ## Parse Dashboard application password
+  ## @param dashboard.password Parse Dashboard application password
   ## Defaults to a random 10-character alphanumeric string if not set
-  ## ref: https://github.com/bitnami/bitnami-docker-parse-dashboard#configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/parse-dashboard#configuration
   ##
-  # password:
-
-  ## Parse Dashboard application name
-  ## ref: https://github.com/bitnami/bitnami-docker-parse-dashboard#configuration
+  password: ""
+  ## @param dashboard.appName Parse Dashboard application name
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/parse-dashboard#configuration
   ##
   appName: MyDashboard
-
-  ## Parse Dashboard pods' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param dashboard.resources Parse Dashboard pods' resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
-  ## Parse Dashboard pods' liveness and readiness probes
+  ## Parse Dashboard pods' liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+  ## @param dashboard.livenessProbe.enabled Enable livenessProbe
+  ## @param dashboard.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param dashboard.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param dashboard.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param dashboard.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param dashboard.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
     enabled: true
@@ -295,6 +500,15 @@ dashboard:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 5
+  ## Parse Dashboard pods' liveness probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+  ## @param dashboard.readinessProbe.enabled Enable readinessProbe
+  ## @param dashboard.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param dashboard.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param dashboard.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param dashboard.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param dashboard.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
   readinessProbe:
     enabled: true
     initialDelaySeconds: 30
@@ -302,123 +516,256 @@ dashboard:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 5
-
-  ## Pod affinity preset
+  ## @param dashboard.startupProbe.enabled Enable startupProbe on Parse Dashboard containers
+  ## @param dashboard.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param dashboard.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param dashboard.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param dashboard.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param dashboard.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 0
+    periodSeconds: 3
+    timeoutSeconds: 2
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param dashboard.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param dashboard.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param dashboard.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param dashboard.podLabels Extra labels for Parse Dashboard pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param dashboard.podAnnotations Annotations for Parse Dashboard pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param dashboard.podAffinityPreset Parse dashboard pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAffinityPreset: ""
-
-  ## Pod anti-affinity preset
+  ## @param dashboard.podAntiAffinityPreset Parse dashboard pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAntiAffinityPreset: soft
-
   ## Node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ## Allowed values: soft, hard
   ##
   nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
+    ## @param dashboard.nodeAffinityPreset.type Parse dashboard node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## Node label key to match
+    ## @param dashboard.nodeAffinityPreset.key Parse dashboard node label key to match Ignored if `affinity` is set.
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
     key: ""
-    ## Node label values to match
+    ## @param dashboard.nodeAffinityPreset.values Parse dashboard node label values to match. Ignored if `affinity` is set.
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-
-  ## Affinity for pod assignment
+  ## @param dashboard.affinity Parse dashboard affinity for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: dashboard.podAffinityPreset, dashboard.podAntiAffinityPreset, and dashboard.nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-
-  ## Node labels for pod assignment
+  ## @param dashboard.nodeSelector Parse dashboard node labels for pod assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
-  ## Tolerations for pod assignment
+  ## @param dashboard.tolerations Parse dashboard tolerations for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
+  ## @param dashboard.updateStrategy.type Parse statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+  ## @param dashboard.priorityClassName Parse pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param dashboard.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param dashboard.schedulerName Name of the k8s scheduler (other than default) for Parse pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param dashboard.terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param dashboard.lifecycleHooks for the Parse container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
 
-  ## Protocol to form URLs to Parse
+  ## @param dashboard.parseServerUrlProtocol Protocol used by Parse Dashboard to form the URLs to Parse server
   ##
   parseServerUrlProtocol: "http"
-
-  ## An array to add extra env vars
+  ## @param dashboard.extraEnvVars An array to add extra env vars
   ## For example:
   ## extraEnvVars:
   ##  - name: KIBANA_ELASTICSEARCH_URL
   ##    value: test
   ##
   extraEnvVars: []
-  ## Name of a ConfigMap containing extra env vars
+  ## @param dashboard.extraEnvVarsCM Name of a ConfigMap containing extra environment variables
   ##
-  extraEnvVarsCM:
-  ## Name of a Secret containing extra env vars
+  extraEnvVarsCM: ""
+  ## @param dashboard.extraEnvVarsSecret Name of a Secret containing extra environment variables
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
+  ## @param dashboard.extraVolumes Optionally specify extra list of additional volumes for the Parse pod(s)
+  ##
+  extraVolumes: []
+  ## @param dashboard.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Parse container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param dashboard.sidecars Add additional sidecar containers to the Parse pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param dashboard.initContainers Add additional init containers to the Parse pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+    ## Kubernetes service for Parse Server Deployment
+  ## ref: https://kubernetes.io/docs/user-guide/services/#publishing-services---service-types
+  ##
+  service:
+    ## @param dashboard.service.type Kubernetes Service type
+    ##
+    type: LoadBalancer
+    ## @param dashboard.service.ports.http Service HTTP port (Dashboard)
+    ##
+    ports:
+      http: 80
+    ## @param dashboard.service.nodePorts.http Kubernetes HTTP node port
+    ## nodePorts:
+    ##   http: <to set explicitly, choose port between 30000-32767>
+    ##
+    nodePorts:
+      http: ""
+    ## @param dashboard.service.clusterIP Service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param dashboard.service.loadBalancerIP Service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param dashboard.service.loadBalancerSourceRanges Service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param dashboard.service.externalTrafficPolicy Service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param dashboard.service.annotations Additional custom annotations for Service
+    ##
+    annotations: {}
+    ## @param dashboard.service.extraPorts Extra ports to expose in Service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param dashboard.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ##
+    sessionAffinity: None
+    ## @param dashboard.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
 
-## Configure the ingress resource that allows you to access the
-## Parse installation.
-## ref: http://kubernetes.io/docs/user-guide/ingress/
+## @section Traffic Exposure Parameters
+##
+
+## Configure the ingress resource that allows you to access the Parse installation.
+## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
-  ## Set to true to enable ingress record generation
+  ## @param ingress.enabled Set to true to enable ingress record generation
   ##
   enabled: false
-
-  ## Set this to true in order to add the corresponding annotations for cert-manager
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
   ##
-  certManager: false
-
-  ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
+  ingressClassName: ""
+  ## @param ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter
   ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
   ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
   ##
   tls: false
-
-  ## Ingress annotations done as key:value pairs. If certManager is set to true,
-  ## the annotation 'kubernetes.io/tls-acme: "true"' will automatically be set
-  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
   ##
-  annotations:
-  #  kubernetes.io/ingress.class: nginx
-
+  selfSigned: false
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+  ## For a full list of possible ingress annotations, please see
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+  ##
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+  ##
+  annotations: {}
   dashboard:
-    ## When the ingress is enabled, a host pointing to this will be created
+    ## @param ingress.dashboard.hostname Default host for the ingress resource
     ##
     hostname: parse-dashboard.local
-
-    ## The Path to WordPress. You may need to set this to '/*' in order to use this
-    ## with ALB ingress controllers.
+    ## @param ingress.dashboard.path The Path to WordPress. You may need to set this to '/*' in order to use this with ALB ingress controllers.
     ##
     path: /
-
-    ## Ingress Path type
+    ## @param ingress.dashboard.pathType Ingress path type
     ##
     pathType: ImplementationSpecific
-
-    ## The list of additional hostnames to be covered with this ingress record.
+    ## @param ingress.dashboard.extraHosts The list of additional hostnames to be covered with this ingress record.
     ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
     ## extraHosts:
     ## - name: wordpress.local
     ##   path: /
     ##
-
-    ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
+    extraHosts: []
+    ## @param ingress.dashboard.extraPaths Any additional arbitrary paths that may need to be added to the ingress under the main host.
     ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
     ## extraPaths:
     ## - path: /*
@@ -426,29 +773,25 @@ ingress:
     ##     serviceName: ssl-redirect
     ##     servicePort: use-annotation
     ##
-
+    extraPaths: []
   server:
-    ## When the ingress is enabled, a host pointing to this will be created
+    ## @param ingress.server.hostname Default host for the ingress resource
     ##
     hostname: parse-server.local
-
-    ## The Path to WordPress. You may need to set this to '/*' in order to use this
-    ## with ALB ingress controllers.
+    ## @param ingress.server.path Default path for the ingress resource*' in order to use this with ALB ingress controllers.
     ##
     path: /
-
-    ## Ingress Path type
+    ## @param ingress.server.pathType Ingress path type
     ##
     pathType: ImplementationSpecific
-
-    ## The list of additional hostnames to be covered with this ingress record.
+    ## @param ingress.server.extraHosts The list of additional hostnames to be covered with this ingress record.
     ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
     ## extraHosts:
     ## - name: wordpress.local
     ##   path: /
     ##
-
-    ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
+    extraHosts: []
+    ## @param ingress.server.extraPaths Any additional arbitrary paths that may need to be added to the ingress under the main host.
     ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
     ## extraPaths:
     ## - path: /*
@@ -456,17 +799,16 @@ ingress:
     ##     serviceName: ssl-redirect
     ##     servicePort: use-annotation
     ##
-
-  ## The tls configuration for additional hostnames to be covered with this ingress record.
+    extraPaths: []
+  ## @param ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## extraTls:
   ## - hosts:
   ##     - wordpress.local
   ##   secretName: wordpress.local-tls
   ##
-
-  secrets:
-  ## If you're providing your own certificates, please use this to add the certificates as secrets
+  extraTls: []
+  ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or
   ## -----BEGIN RSA PRIVATE KEY-----
   ##
@@ -475,63 +817,173 @@ ingress:
   ##
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
-  # - name: parse.local-tls
-  #   key:
-  #   certificate:
+  ## e.g:
+  ## - name: parse.local-tls
+  ##   key:
+  ##   certificate:
+  ##
+  secrets: []
+  ## @param ingress.extraRules Additional rules to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g:
+  ## extraRules:
+  ## - host: parse.local
+  ##     http:
+  ##       path: /
+  ##       backend:
+  ##         service:
+  ##           name: parse-svc
+  ##           port:
+  ##             name: http
+  ##
+  extraRules: []
+
+## @section Persistence Parameters
+##
 
 ## Enable persistence using Persistent Volume Claims
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
+  ## @param persistence.enabled Enable Parse persistence using PVC
+  ##
   enabled: true
-  ## parse data Persistent Volume Storage Class
+  ## @param persistence.storageClass PVC Storage Class for Parse volume
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
   ## If undefined (the default) or set to null, no storageClassName spec is
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  # storageClass: "-"
-  accessMode: ReadWriteOnce
+  storageClass: ""
+  ## @param persistence.accessModes PVC Access Mode for Parse volume
+  ##
+  accessModes:
+    - ReadWriteOnce
+  ## @param persistence.size PVC Storage Request for Parse volume
+  ##
   size: 8Gi
+  ## @param persistence.existingClaim The name of an existing PVC to use for persistence
+  ##
+  existingClaim: ""
+  ## @param persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
+  ## If set, the PVC can't have a PV dynamically provisioned for it
+  ## E.g.
+  ## selector:
+  ##   matchLabels:
+  ##     app: my-app
+  ##
+  selector: {}
+  ## @param persistence.dataSource Custom PVC data source
+  ##
+  dataSource: {}
+  ## @param persistence.annotations Persistent Volume Claim annotations
+  ##
+  annotations: {}
 
+## @section Volume Permissions parameters
 ##
-## MongoDB(R) chart configuration
+
+## Init containers parameters:
+## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
 ##
-## https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml
+volumePermissions:
+  ## @param volumePermissions.enabled Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work)
+  ##
+  enabled: false
+  ## @param volumePermissions.image.registry Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository Init container volume-permissions image name
+  ## @param volumePermissions.image.tag Init container volume-permissions image tag
+  ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
+  ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/bitnami-shell
+    tag: 11-debian-11-r53
+    digest: ""
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## @param volumePermissions.resources The resources for the container
+  ##
+  resources: {}
+
+## ServiceAccount configuration
+##
+serviceAccount:
+  ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
+  ##
+  create: true
+  ## @param serviceAccount.name The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the common.names.fullname template
+  ##
+  name: ""
+  ## @param serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+  ##
+  annotations: {}
+  ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ##
+  automountServiceAccountToken: true
+
+## @section MongoDB&reg; Parameters
+##
+
+## MongoDB&reg; chart configuration
+## https://github.com/bitnami/charts/blob/main/bitnami/mongodb/values.yaml
 ##
 mongodb:
-  # This is necessary for bitnami/common validation purposes. Setting enabled=false will
-  # make no difference in deploying the subchart. Change this when further standardizations
-  # are added (externalDB)
+  ## @param mongodb.enabled Enable MongoDB&reg; chart
+  ## This is necessary for bitnami/common validation purposes. Setting enabled=false will
+  ## make no difference in deploying the subchart. Change this when further standardizations
+  ## are added (externalDB)
+  ##
   enabled: true
-  ## MongoDB(R) Authentication parameters
+  ## MongoDB&reg; Authentication parameters
   ##
   auth:
-    ## Enable authentication
+    ## @param mongodb.auth.enabled Enable MongoDB&reg; password authentication
     ## ref: https://docs.mongodb.com/manual/tutorial/enable-authentication/
     ##
     enabled: true
-    ## MongoDB(R) root password
-    ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
+    ## @param mongodb.auth.rootPassword MongoDB&reg; admin password
+    ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#setting-the-root-password-on-first-run
     ##
     rootPassword: ""
+    ## @param mongodb.auth.username MongoDB&reg; user
+    ##
+    username: bn_parse
+    ## @param mongodb.auth.password MongoDB&reg; user password
+    ##
+    password: ""
+    ## @param mongodb.auth.database MongoDB&reg; database
+    ##
+    database: bitnami_parse
   ## Enable persistence using Persistent Volume Claims
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
+    ## @param mongodb.persistence.enabled Enable MongoDB&reg; persistence using PVC
+    ##
     enabled: true
-    ## mongodb data Persistent Volume Storage Class
+    ## @param mongodb.persistence.storageClass PVC Storage Class for MongoDB&reg; volume
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
     ## If undefined (the default) or set to null, no storageClassName spec is
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
     ##
-    # storageClass: "-"
+    storageClass: ""
+    ## @param mongodb.persistence.accessMode PVC Access Mode for MongoDB&reg; volume
+    ##
     accessMode: ReadWriteOnce
+    ## @param mongodb.persistence.size PVC Storage Request for MongoDB&reg; volume
+    ##
     size: 8Gi
-
-## Array with extra yaml to deploy with the chart. Evaluated as a template
-##
-extraDeploy: []

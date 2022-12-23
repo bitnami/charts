@@ -81,16 +81,6 @@
                 "value": "server/ingress/enabled"
               }
             },
-            "certManager": {
-              "type": "boolean",
-              "form": true,
-              "title": "Enable CertManager",
-              "description": "This will add the required annotation for CertManager to add certificates.",
-              "hidden": {
-                "condition": false,
-                "value": "server/ingress/enabled"
-              }
-            },
             "tls": {
               "type": "boolean",
               "form": true,
@@ -248,6 +238,19 @@
           "title": "Use a new MariaDB database hosted in the cluster",
           "form": true,
           "description": "Whether to deploy a MariaDB server to satisfy the Spring Cloud database requirements. To use an external database switch this off and configure the external database details"
+        }
+      }
+    },
+    "flyway": {
+      "type": "object",
+      "title": "Flyway Details",
+      "form": true,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Run or skip Database creation scripts on startup",
+          "form": true,
+          "description": "Whether to run or skip running Database creation scripts on startup. This feature can be used in scenario of Database schema and tables already present, when using Mariadb or external database"
         }
       }
     },

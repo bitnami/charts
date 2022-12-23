@@ -1,18 +1,20 @@
 annotations:
   category: CMS
 apiVersion: v2
-appVersion: 3.9.25
+appVersion: 4.2.5
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
     repository: https://charts.bitnami.com/bitnami
-    version: 9.x.x
+    version: 11.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
-    version: 1.x.x
-description: PHP content management system (CMS) for publishing web content
+    tags:
+      - bitnami-common
+    version: 2.x.x
+description: Joomla! is an award winning open source CMS platform for building websites and applications. It includes page caching, page compression and Let's Encrypt auto-configuration support.
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/joomla
+home: https://github.com/bitnami/charts/tree/main/bitnami/joomla
 icon: https://bitnami.com/assets/stacks/joomla/img/joomla-stack-220x234.png
 keywords:
   - joomla
@@ -21,10 +23,10 @@ keywords:
   - http
   - php
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: joomla
 sources:
-  - https://github.com/bitnami/bitnami-docker-joomla
-  - http://www.joomla.org/
-version: 10.1.3
+  - https://github.com/bitnami/containers/tree/main/bitnami/joomla
+  - https://www.joomla.org/
+version: 13.3.10

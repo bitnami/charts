@@ -2,6 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "harbor.registry" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -33,7 +34,9 @@ data:
       {{- else if eq .Values.persistence.imageChartStorage.type "gcs" }}
       gcs:
         bucket: {{ .Values.persistence.imageChartStorage.gcs.bucket }}
+        {{- if .Values.persistence.imageChartStorage.gcs.encodedkey }}
         keyfile: /etc/registry/gcs-key.json
+        {{- end }}
         {{- if .Values.persistence.imageChartStorage.gcs.rootdirectory }}
         rootdirectory: {{ .Values.persistence.imageChartStorage.gcs.rootdirectory }}
         {{- end }}
@@ -60,6 +63,9 @@ data:
         {{- if .Values.persistence.imageChartStorage.s3.secure }}
         secure: {{ .Values.persistence.imageChartStorage.s3.secure }}
         {{- end }}
+        {{- if .Values.persistence.imageChartStorage.s3.skipverify }}
+        skipverify: {{ .Values.persistence.imageChartStorage.s3.skipverify }}
+        {{- end }}
         {{- if .Values.persistence.imageChartStorage.s3.v4auth }}
         v4auth: {{ .Values.persistence.imageChartStorage.s3.v4auth }}
         {{- end }}
@@ -69,8 +75,8 @@ data:
         {{- if .Values.persistence.imageChartStorage.s3.rootdirectory }}
         rootdirectory: {{ .Values.persistence.imageChartStorage.s3.rootdirectory }}
         {{- end }}
-        {{- if .Values.persistence.imageChartStorage.s3.storageclass }}
-        storageclass: {{ .Values.persistence.imageChartStorage.s3.storageclass }}
+        {{- if .Values.persistence.imageChartStorage.s3.storageClass }}
+        storageclass: {{ .Values.persistence.imageChartStorage.s3.storageClass }}
         {{- end }}
       {{- else if eq .Values.persistence.imageChartStorage.type "swift" }}
       swift:
@@ -122,7 +128,7 @@ data:
         region: {{ .Values.persistence.imageChartStorage.oss.region }}
         bucket: {{ .Values.persistence.imageChartStorage.oss.bucket }}
         {{- if .Values.persistence.imageChartStorage.oss.endpoint }}
-        endpoint: {{ .Values.persistence.imageChartStorage.oss.endpoint }}
+        endpoint: {{ .Values.persistence.imageChartStorage.oss.bucket }}.{{ .Values.persistence.imageChartStorage.oss.endpoint }}
         {{- end }}
         {{- if .Values.persistence.imageChartStorage.oss.internal }}
         internal: {{ .Values.persistence.imageChartStorage.oss.internal }}
@@ -154,7 +160,7 @@ data:
       db: {{ template "harbor.redis.registryDatabaseIndex" . }}
     http:
       relativeurls: {{ .Values.registry.relativeurls }}
-      addr: :{{ include "harbor.registry.containerPort" . }}
+      addr: :{{ ternary .Values.registry.server.containerPorts.https .Values.registry.server.containerPorts.http .Values.internalTLS.enabled }}
       {{- if .Values.internalTLS.enabled }}
       tls:
         certificate: /etc/harbor/ssl/registry/tls.crt
@@ -164,7 +170,14 @@ data:
       # set via environment variable
       # secret: placeholder
       debug:
-        addr: localhost:5001
+        {{- if .Values.metrics.enabled}}
+        addr: :{{ .Values.registry.server.containerPorts.metrics }}
+        prometheus:
+          enabled: true
+          path: {{ .Values.metrics.path }}
+      {{- else }}
+        addr: localhost:{{ .Values.registry.server.containerPorts.debug }}
+      {{- end }}
     auth:
       htpasswd:
         realm: harbor-registry-basic-realm
@@ -185,25 +198,17 @@ data:
             ipfilteredby: {{ .Values.registry.middleware.cloudFront.ipfilteredby }}
     {{- end }}
     {{- end }}
-    notifications:
-      endpoints:
-        - name: harbor
-          disabled: false
-          url: http://{{ template "harbor.core" . }}/service/notifications
-          timeout: 3000ms
-          threshold: 5
-          backoff: 1s
   ctl-config.yml: |+
     ---
     {{- if .Values.internalTLS.enabled }}
     protocol: "https"
-    port: 8443
+    port: {{ .Values.registry.controller.containerPorts.https }}
     https_config:
       cert: "/etc/harbor/ssl/registry/tls.crt"
       key: "/etc/harbor/ssl/registry/tls.key"
     {{- else }}
     protocol: "http"
-    port: 8080
+    port: {{ .Values.registry.controller.containerPorts.http }}
     {{- end }}
     log_level: {{ .Values.logLevel }}
     registry_config: "/etc/registry/config.yml"

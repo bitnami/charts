@@ -1,19 +1,26 @@
-{{- if .Values.storegateway.enabled }}
+{{- if and .Values.storegateway.enabled (not .Values.storegateway.sharded.enabled) }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ include "common.names.fullname" . }}-storegateway
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: storegateway
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
+  {{- if not .Values.storegateway.autoscaling.enabled }}
   replicas: {{ .Values.storegateway.replicaCount }}
+  {{- end }}
   podManagementPolicy: {{ .Values.storegateway.podManagementPolicy }}
   serviceName: {{ include "common.names.fullname" . }}-storegateway-headless
-  updateStrategy:
-    type: {{ .Values.storegateway.updateStrategyType }}
-    {{- if (eq "OnDelete" .Values.storegateway.updateStrategyType) }}
-    rollingUpdate: null
-    {{- end }}
+  {{- if .Values.storegateway.updateStrategy }}
+  updateStrategy: {{- toYaml .Values.storegateway.updateStrategy | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: storegateway
@@ -21,8 +28,14 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: storegateway
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.storegateway.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       annotations:
-        checksum/ojbstore-configuration: {{ include (print $.Template.BasePath "/objstore-secret.yaml") . | sha256sum }}
+        checksum/objstore-configuration: {{ include (print $.Template.BasePath "/objstore-secret.yaml") . | sha256sum }}
         {{- if (include "thanos.storegateway.createConfigmap" .) }}
         checksum/storegateway-configuration: {{ include (print $.Template.BasePath "/storegateway/configmap.yaml") . | sha256sum }}
         {{- end }}
@@ -31,7 +44,8 @@ spec:
         {{- end }}
     spec:
       {{- include "thanos.imagePullSecrets" . | nindent 6 }}
-      serviceAccount: {{ include "thanos.serviceaccount.name" (dict "component" "storegateway" "context" $) }}
+      serviceAccount: {{ include "thanos.serviceAccountName" (dict "component" "storegateway" "context" $) }}
+      automountServiceAccountToken: {{ .Values.storegateway.automountServiceAccountToken }}
       {{- if .Values.storegateway.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -52,12 +66,18 @@ spec:
       {{- if .Values.storegateway.priorityClassName }}
       priorityClassName: {{ .Values.storegateway.priorityClassName | quote }}
       {{- end }}
-      {{- if .Values.storegateway.securityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.storegateway.securityContext.fsGroup }}
+      {{- if .Values.storegateway.schedulerName }}
+      schedulerName: {{ .Values.storegateway.schedulerName }}
       {{- end }}
-      {{- if and .Values.volumePermissions.enabled .Values.storegateway.persistence.enabled }}
+      {{- if .Values.storegateway.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.storegateway.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.storegateway.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.topologySpreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if or .Values.storegateway.initContainers (and .Values.volumePermissions.enabled .Values.storegateway.persistence.enabled) }}
       initContainers:
+        {{- if and .Values.volumePermissions.enabled .Values.storegateway.persistence.enabled }}
         - name: init-chmod-data
           image: {{ include "thanos.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
@@ -66,28 +86,44 @@ spec:
             - -c
             - |
               mkdir -p /data
-              chown -R "{{ .Values.storegateway.securityContext.runAsUser }}:{{ .Values.storegateway.securityContext.fsGroup }}" /data
+              chown -R "{{ .Values.storegateway.containerSecurityContext.runAsUser }}:{{ .Values.storegateway.podSecurityContext.fsGroup }}" /data
           securityContext:
             runAsUser: 0
           volumeMounts:
             - name: data
               mountPath: /data
+        {{- end }}
+        {{- if .Values.storegateway.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.initContainers "context" $) | nindent 8 }}
+        {{- end }}
       {{- end }}
       containers:
+        {{- if .Values.storegateway.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.sidecars "context" $) | nindent 8 }}
+        {{- end }}
         - name: storegateway
           image: {{ include "thanos.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.storegateway.securityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.storegateway.securityContext.runAsUser }}
+          {{- if .Values.storegateway.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.storegateway.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.storegateway.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.command "context" $) | nindent 12 }}
           {{- end }}
           args:
+            {{- if .Values.storegateway.args }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.args "context" $) | nindent 12 }}
+            {{- else }}
             - store
             - --log.level={{ .Values.storegateway.logLevel }}
+            - --log.format={{ .Values.storegateway.logFormat }}
             - --grpc-address=0.0.0.0:10901
             - --http-address=0.0.0.0:10902
             - --data-dir=/data
             - --objstore.config-file=/conf/objstore.yml
+            {{- if (include "thanos.httpConfigEnabled" .) }}
+            - --http.config=/conf/http/http-config.yml
+            {{- end }}
             {{- if .Values.indexCacheConfig }}
             - --index-cache.config-file=/conf/index-cache.yml
             {{- end }}
@@ -97,14 +133,29 @@ spec:
             {{- if or .Values.storegateway.config .Values.storegateway.existingConfigmap }}
             - --index-cache.config-file=/conf/cache/config.yml
             {{- end }}
-            {{- if or .Values.storegateway.grpc.tls.enabled }}
-            - --grpc-server-tls-cert=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.storegateway.grpc.tls.existingSecret "key" "tls-cert") }}
-            - --grpc-server-tls-key=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.storegateway.grpc.tls.existingSecret "key" "tls-key") }}
-            - --grpc-server-tls-client-ca=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.storegateway.grpc.tls.existingSecret "key" "ca-cert") }}
+            {{- if .Values.storegateway.grpc.server.tls.enabled }}
+            - --grpc-server-tls-cert=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.storegateway.grpc.server.tls.existingSecret "key" "tls-cert") }}
+            - --grpc-server-tls-key=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.storegateway.grpc.server.tls.existingSecret "key" "tls-key") }}
+            - --grpc-server-tls-client-ca=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.storegateway.grpc.server.tls.existingSecret "key" "ca-cert") }}
             {{- end }}
             {{- if .Values.storegateway.extraFlags }}
             {{- .Values.storegateway.extraFlags | toYaml | nindent 12 }}
             {{- end }}
+            {{- end }}
+          {{- if .Values.storegateway.extraEnvVars }}
+          env: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.extraEnvVars "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if or .Values.storegateway.extraEnvVarsCM .Values.storegateway.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.storegateway.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.storegateway.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.storegateway.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.storegateway.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 10902
@@ -112,16 +163,63 @@ spec:
             - name: grpc
               containerPort: 10901
               protocol: TCP
-          {{- if .Values.storegateway.livenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.livenessProbe "context" $) | nindent 12 }}
+          {{- if .Values.storegateway.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.storegateway.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.storegateway.livenessProbe "enabled") "context" $) | nindent 12 }}
+            {{- if not .Values.auth.basicAuthUsers }}
+            httpGet:
+              path: /-/healthy
+              port: http
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.https.enabled }}
+            {{- else }}
+            tcpSocket:
+              port: http
+            {{- end }}
           {{- end }}
-          {{- if .Values.storegateway.readinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.readinessProbe "context" $) | nindent 12 }}
+          {{- if .Values.storegateway.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.storegateway.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.storegateway.readinessProbe "enabled") "context" $) | nindent 12 }}
+            {{- if not .Values.auth.basicAuthUsers }}
+            httpGet:
+              path: /-/ready
+              port: http
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.https.enabled }}
+            {{- else }}
+            tcpSocket:
+              port: http
+            {{- end }}
+          {{- end }}
+          {{- if .Values.storegateway.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.storegateway.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.storegateway.startupProbe "enabled") "context" $) | nindent 12 }}
+            {{- if not .Values.auth.basicAuthUsers }}
+            httpGet:
+              path: /-/ready
+              port: http
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.https.enabled }}
+            {{- else }}
+            tcpSocket:
+              port: http
+            {{- end }}
+          {{- end }}
+          {{- if .Values.storegateway.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.storegateway.resources }}
           resources: {{- toYaml .Values.storegateway.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
+            {{- if (include "thanos.httpConfigEnabled" .) }}
+            - name: http-config
+              mountPath: /conf/http
+            {{- if .Values.https.enabled }}
+            - name: http-certs
+              mountPath: /certs
+            {{- end }}
+            {{- end }}
             - name: objstore-config
               mountPath: /conf
             - name: data
@@ -130,9 +228,12 @@ spec:
             - name: cache-config
               mountPath: /conf/cache
             {{- end }}
-            {{- if .Values.storegateway.grpc.tls.enabled }}
-            - name: tls-server
+            {{- if .Values.storegateway.grpc.server.tls.enabled }}
+            - name: grpc-server-tls
               mountPath: /certs
+            {{- end }}
+            {{- if .Values.storegateway.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
       volumes:
         - name: objstore-config
@@ -141,15 +242,28 @@ spec:
             {{- if .Values.existingObjstoreSecretItems }}
             items: {{- toYaml .Values.existingObjstoreSecretItems | nindent 14 }}
             {{- end }}
+        {{- if .Values.storegateway.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
         {{- if or .Values.storegateway.config .Values.storegateway.existingConfigmap }}
         - name: cache-config
           configMap:
             name: {{ include "thanos.storegateway.configmapName" . }}
         {{- end }}
-        {{- if .Values.storegateway.grpc.tls.enabled }}
-        - name: tls-server
+        {{- if (include "thanos.httpConfigEnabled" .) }}
+        - name: http-config
           secret:
-            secretName: {{ include "common.secrets.name" (dict "existingSecret" .Values.storegateway.grpc.tls.existingSecret "defaultNameSuffix" "store-tls-server" "context" $) }}
+            secretName: {{ include "thanos.httpConfigSecretName" . }}
+        {{- if .Values.https.enabled }}
+        - name: http-certs
+          secret:
+            secretName: {{ include "thanos.httpCertsSecretName" . }}
+        {{- end }}
+        {{- end }}
+        {{- if .Values.storegateway.grpc.server.tls.enabled }}
+        - name: grpc-server-tls
+          secret:
+            secretName: {{ include "common.secrets.name" (dict "existingSecret" .Values.storegateway.grpc.server.tls.existingSecret "defaultNameSuffix" "store-grpc-server" "context" $) }}
         {{- end }}
   {{- if and .Values.storegateway.persistence.enabled .Values.storegateway.persistence.existingClaim }}
         - name: data
@@ -162,6 +276,12 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: data
+        {{- if .Values.storegateway.persistence.labels }}
+        labels: {{- include "common.tplvalues.render" ( dict "value" .Values.storegateway.persistence.labels "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.storegateway.persistence.annotations }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.storegateway.persistence.annotations "context" $) | nindent 10 }}
+        {{- end }}
       spec:
         accessModes:
         {{- range .Values.storegateway.persistence.accessModes }}

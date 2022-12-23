@@ -3,10 +3,17 @@ apiVersion: monitoring.coreos.com/v1
 kind: Prometheus
 metadata:
   name: {{ template "kube-prometheus.prometheus.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "kube-prometheus.prometheus.labels" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   replicas: {{ .Values.prometheus.replicaCount }}
+  shards: {{ .Values.prometheus.shards }}
   serviceAccountName: {{ template "kube-prometheus.prometheus.serviceAccountName" . }}
   {{- if .Values.prometheus.serviceMonitorSelector }}
   serviceMonitorSelector: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.serviceMonitorSelector "context" $) | nindent 4 }}
@@ -28,7 +35,7 @@ spec:
     {{- if .Values.prometheus.alertingEndpoints }}
     {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.alertingEndpoints "context" $) | nindent 6 }}
     {{- else if .Values.alertmanager.enabled }}
-      - namespace: {{ .Release.Namespace }}
+      - namespace: {{ include "common.names.namespace" . | quote }}
         name: {{ template "kube-prometheus.alertmanager.fullname" . }}
         port: http
         pathPrefix: "{{ .Values.alertmanager.routePrefix }}"
@@ -53,16 +60,22 @@ spec:
   {{- end }}
   {{- if index .Values.prometheus "externalUrl" }}
   externalUrl: "{{ .Values.prometheus.externalUrl }}"
-  {{- else if and .Values.prometheus.ingress.enabled .Values.prometheus.ingress.hosts }}
-  externalUrl: {{ if .Values.prometheus.ingress.tls }}https{{else}}http{{ end }}://{{ (index .Values.prometheus.ingress.hosts 0).name }}{{ .Values.prometheus.routePrefix }}
+  {{- else if and .Values.prometheus.ingress.enabled }}
+  externalUrl: {{ printf "%s://%s%s" (ternary "https" "http" .Values.prometheus.ingress.tls) .Values.prometheus.ingress.hostname .Values.prometheus.routePrefix }}
   {{- else }}
-  externalUrl: http://{{ template "kube-prometheus.prometheus.fullname" . }}.{{ .Release.Namespace }}:9090{{ .Values.prometheus.routePrefix }}
+  externalUrl: http://{{ template "kube-prometheus.prometheus.fullname" . }}.{{ include "common.names.namespace" . }}:9090{{ .Values.prometheus.routePrefix }}
   {{- end }}
   paused: {{ .Values.prometheus.paused }}
   logLevel: {{ .Values.prometheus.logLevel }}
   logFormat: {{ .Values.prometheus.logFormat }}
   listenLocal: {{ .Values.prometheus.listenLocal }}
   enableAdminAPI: {{ .Values.prometheus.enableAdminAPI }}
+  {{- if .Values.prometheus.enableFeatures }}
+  enableFeatures:
+    {{- range .Values.prometheus.enableFeatures }}
+    - {{ . | quote }}
+    {{- end }}
+  {{- end }}
   {{- if .Values.prometheus.scrapeInterval }}
   scrapeInterval: {{ .Values.prometheus.scrapeInterval }}
   {{- end }}
@@ -111,10 +124,8 @@ spec:
   {{- if .Values.prometheus.remoteWrite }}
   remoteWrite: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.remoteWrite "context" $) | nindent 4 }}
   {{- end }}
-  {{- if .Values.prometheus.securityContext.enabled }}
-  securityContext:
-    runAsUser: {{ .Values.prometheus.securityContext.runAsUser }}
-    fsGroup: {{ .Values.prometheus.securityContext.fsGroup }}
+  {{- if .Values.prometheus.podSecurityContext.enabled }}
+  securityContext: {{- omit .Values.prometheus.podSecurityContext "enabled" | toYaml | nindent 4 }}
   {{- end }}
   {{- if .Values.prometheus.ruleNamespaceSelector }}
   ruleNamespaceSelector: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.ruleNamespaceSelector "context" $) | nindent 4 }}
@@ -131,6 +142,19 @@ spec:
   {{- else if .Values.prometheus.persistence.enabled }}
   storage:
     volumeClaimTemplate:
+      metadata:
+        {{- if or .Values.prometheus.persistence.annotations .Values.commonAnnotations }}
+        annotations:
+          {{- if .Values.prometheus.persistence.annotations }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.persistence.annotations "context" $) | nindent 10 }}
+          {{- end }}
+          {{- if .Values.commonAnnotations }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 10 }}
+          {{- end }}
+        {{- end }}
+        {{- if .Values.commonLabels }}
+        labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
+        {{- end }}
       spec:
         accessModes:
           {{- range .Values.prometheus.persistence.accessModes }}
@@ -203,7 +227,11 @@ spec:
     key: {{ .Values.prometheus.additionalAlertRelabelConfigsExternal.key }}
   {{- end }}
 {{- include "kube-prometheus.imagePullSecrets" . | indent 2 }}
-  {{- if or .Values.prometheus.containers .Values.prometheus.thanos.create }}
+  {{- if or .Values.prometheus.containers .Values.prometheus.thanos.create .Values.prometheus.containerSecurityContext.enabled .Values.prometheus.containerSecurityContext.enabled .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled }}
+  {{- if .Values.prometheus.initContainers }}
+  initContainers:
+    {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.initContainers "context" $) | nindent 4 }}
+  {{- end }}
   containers:
     {{- if .Values.prometheus.thanos.create }}
     - name: thanos-sidecar
@@ -211,7 +239,7 @@ spec:
       imagePullPolicy: {{ .Values.prometheus.thanos.image.pullPolicy }}
       args:
         - sidecar
-        - --prometheus.url=http://localhost:9090
+        - --prometheus.url={{ default "http://localhost:9090" .Values.prometheus.thanos.prometheusUrl }}
         - --grpc-address=0.0.0.0:10901
         - --http-address=0.0.0.0:10902
         - --tsdb.path=/prometheus/
@@ -245,6 +273,116 @@ spec:
           {{- if not (.Values.prometheus.storageSpec.disableMountSubPath | default (not .Values.prometheus.persistence.enabled)) }}
           subPath: prometheus-db
           {{- end }}
+        {{- if .Values.prometheus.thanos.extraVolumeMounts }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.thanos.extraVolumeMounts "context" $) | nindent 8 }}
+        {{- end }}
+      {{- if .Values.prometheus.thanos.containerSecurityContext.enabled }}
+      # yamllint disable rule:indentation
+      securityContext: {{- omit .Values.prometheus.thanos.containerSecurityContext "enabled" | toYaml | nindent 8 }}
+      # yamllint enable rule:indentation
+      {{- end }}
+      {{- if .Values.prometheus.thanos.livenessProbe.enabled }}
+      livenessProbe:
+        httpGet:
+          path: {{ .Values.prometheus.thanos.livenessProbe.path }}
+          port: http
+          scheme: HTTP
+        initialDelaySeconds: {{ .Values.prometheus.thanos.livenessProbe.initialDelaySeconds }}
+        periodSeconds: {{ .Values.prometheus.thanos.livenessProbe.periodSeconds }}
+        timeoutSeconds: {{ .Values.prometheus.thanos.livenessProbe.timeoutSeconds }}
+        failureThreshold: {{ .Values.prometheus.thanos.livenessProbe.failureThreshold }}
+        successThreshold: {{ .Values.prometheus.thanos.livenessProbe.successThreshold }}
+      {{- end }}
+      {{- if .Values.prometheus.thanos.readinessProbe.enabled }}
+      readinessProbe:
+        httpGet:
+          path: {{ .Values.prometheus.thanos.readinessProbe.path }}
+          port: http
+          scheme: HTTP
+        initialDelaySeconds: {{ .Values.prometheus.thanos.readinessProbe.initialDelaySeconds }}
+        periodSeconds: {{ .Values.prometheus.thanos.readinessProbe.periodSeconds }}
+        timeoutSeconds: {{ .Values.prometheus.thanos.readinessProbe.timeoutSeconds }}
+        failureThreshold: {{ .Values.prometheus.thanos.readinessProbe.failureThreshold }}
+        successThreshold: {{ .Values.prometheus.thanos.readinessProbe.successThreshold }}
+      {{- end }}
+    {{- end }}
+    {{- if or .Values.prometheus.containerSecurityContext.enabled .Values.prometheus.livenessProbe.enabled .Values.prometheus.readinessProbe.enabled }}
+    ## This monkey patching is needed until the securityContexts are
+    ## directly patchable via the CRD.
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/issues/3947
+    ## currently implemented with strategic merge
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/strategic-merge-patch.md
+    - name: prometheus
+      {{- if .Values.prometheus.containerSecurityContext.enabled }}
+      securityContext: {{- omit .Values.prometheus.containerSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.prometheus.livenessProbe.enabled }}
+      livenessProbe:
+        httpGet:
+          path: {{ .Values.prometheus.livenessProbe.path }}
+          port: web
+          scheme: HTTP
+        initialDelaySeconds: {{ .Values.prometheus.livenessProbe.initialDelaySeconds }}
+        periodSeconds: {{ .Values.prometheus.livenessProbe.periodSeconds }}
+        timeoutSeconds: {{ .Values.prometheus.livenessProbe.timeoutSeconds }}
+        failureThreshold: {{ .Values.prometheus.livenessProbe.failureThreshold }}
+        successThreshold: {{ .Values.prometheus.livenessProbe.successThreshold }}
+      {{- end }}
+      {{- if .Values.prometheus.readinessProbe.enabled }}
+      readinessProbe:
+        httpGet:
+          path: {{ .Values.prometheus.readinessProbe.path }}
+          port: web
+          scheme: HTTP
+        initialDelaySeconds: {{ .Values.prometheus.readinessProbe.initialDelaySeconds }}
+        periodSeconds: {{ .Values.prometheus.readinessProbe.periodSeconds }}
+        timeoutSeconds: {{ .Values.prometheus.readinessProbe.timeoutSeconds }}
+        failureThreshold: {{ .Values.prometheus.readinessProbe.failureThreshold }}
+        successThreshold: {{ .Values.prometheus.readinessProbe.successThreshold }}
+      {{- end }}
+      {{- if .Values.prometheus.startupProbe.enabled }}
+      startupProbe:
+        httpGet:
+          path: {{ .Values.prometheus.startupProbe.path }}
+          port: web
+          scheme: HTTP
+        initialDelaySeconds: {{ .Values.prometheus.startupProbe.initialDelaySeconds }}
+        periodSeconds: {{ .Values.prometheus.startupProbe.periodSeconds }}
+        timeoutSeconds: {{ .Values.prometheus.startupProbe.timeoutSeconds }}
+        failureThreshold: {{ .Values.prometheus.startupProbe.failureThreshold }}
+        successThreshold: {{ .Values.prometheus.startupProbe.successThreshold }}
+      {{- end }}
+    {{- end }}
+    {{- if or .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled .Values.operator.prometheusConfigReloader.livenessProbe.enabled .Values.operator.prometheusConfigReloader.readinessProbe.enabled }}
+    ## This monkey patching is needed until the securityContexts are
+    ## directly patchable via the CRD.
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/issues/3947
+    ## currently implemented with strategic merge
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/strategic-merge-patch.md
+    - name: config-reloader
+      {{- if .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled }}
+      securityContext: {{- omit .Values.operator.prometheusConfigReloader.containerSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.operator.prometheusConfigReloader.livenessProbe.enabled }}
+      livenessProbe:
+        tcpSocket:
+          port: reloader-web
+        initialDelaySeconds: {{ .Values.operator.prometheusConfigReloader.livenessProbe.initialDelaySeconds }}
+        periodSeconds: {{ .Values.operator.prometheusConfigReloader.livenessProbe.periodSeconds }}
+        timeoutSeconds: {{ .Values.operator.prometheusConfigReloader.livenessProbe.timeoutSeconds }}
+        failureThreshold: {{ .Values.operator.prometheusConfigReloader.livenessProbe.failureThreshold }}
+        successThreshold: {{ .Values.operator.prometheusConfigReloader.livenessProbe.successThreshold }}
+      {{- end }}
+      {{- if .Values.operator.prometheusConfigReloader.readinessProbe.enabled }}
+      readinessProbe:
+        tcpSocket:
+          port: reloader-web
+        initialDelaySeconds: {{ .Values.operator.prometheusConfigReloader.readinessProbe.initialDelaySeconds }}
+        periodSeconds: {{ .Values.operator.prometheusConfigReloader.readinessProbe.periodSeconds }}
+        timeoutSeconds: {{ .Values.operator.prometheusConfigReloader.readinessProbe.timeoutSeconds }}
+        failureThreshold: {{ .Values.operator.prometheusConfigReloader.readinessProbe.failureThreshold }}
+        successThreshold: {{ .Values.operator.prometheusConfigReloader.readinessProbe.successThreshold }}
+      {{- end }}
     {{- end }}
     {{- if .Values.prometheus.containers }}
     {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.containers "context" $) | nindent 4 }}

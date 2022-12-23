@@ -30,22 +30,23 @@ We prepend a random letter to the string to avoid password validation errors
 {{- end -}}
 
 {{/*
-Return the appropriate apiVersion for networkpolicy.
+Return true if a NATS configuration secret object should be created
 */}}
-{{- define "networkPolicy.apiVersion" -}}
-{{- if semverCompare ">=1.4-0, <1.7-0" .Capabilities.KubeVersion.GitVersion -}}
-{{- print "extensions/v1beta1" -}}
-{{- else -}}
-{{- print "networking.k8s.io/v1" -}}
+{{- define "nats.createSecret" -}}
+{{- if and .Values.configuration (not .Values.existingSecret) }}
+    {{- true -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Check if there are rolling tags in the images
+Return the NATS configuration secret name
 */}}
-{{- define "nats.checkRollingTags" -}}
-{{- include "common.warnings.rollingTag" .Values.image }}
-{{- include "common.warnings.rollingTag" .Values.metrics.image }}
+{{- define "nats.secretName" -}}
+{{- if .Values.existingSecret }}
+    {{- printf "%s" (tpl .Values.existingSecret .) -}}
+{{- else -}}
+    {{- printf "%s" (include "common.names.fullname" .) -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -54,6 +55,7 @@ Compile all warnings into a single message, and call fail.
 {{- define "nats.validateValues" -}}
 {{- $messages := list -}}
 {{- $messages := append $messages (include "nats.validateValues.resourceType" .) -}}
+{{- $messages := append $messages (include "nats.validateValues.jetstream" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -68,5 +70,14 @@ Compile all warnings into a single message, and call fail.
 nats: resourceType
     Invalid resourceType selected. Valid values are "deployment" and
     "statefulset". Please set a valid mode (--set resourceType="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of NATS - enabling JetStream requires persistence & statefulsets */}}
+{{- define "nats.validateValues.jetstream" -}}
+{{- if and .Values.jetstream.enabled (or (ne .Values.resourceType "statefulset") (not .Values.persistence.enabled)) -}}
+nats: jetstream
+    Invalid configuration selected. Enabling jetstream requires enabling persistence
+    and using a "statefulset" (--set persistence.enabled=true,resourceType="statefulset")
 {{- end -}}
 {{- end -}}

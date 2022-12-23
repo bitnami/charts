@@ -1,14 +1,16 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
 {{- if or .Values.mariadb.enabled .Values.externalDatabase.host -}}
 
-*******************************************************************
-*** PLEASE BE PATIENT: Moodle(TM) may take a few minutes to install ***
-*******************************************************************
+** Please be patient while the chart is being deployed **
 
-1. Get the Moodle(TM) URL:
+1. Get the Moodle&trade; URL:
 
 {{- if .Values.ingress.enabled }}
 
-  You should be able to access your new Moodle(TM) installation through
+  You should be able to access your new Moodle&trade; installation through
 
   http://{{- .Values.ingress.hostname }}/
 
@@ -17,15 +19,15 @@
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "common.names.fullname" . }}'
 
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
 
-{{- $port:=.Values.service.port | toString }}
-  echo "Moodle(TM) URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/"
+{{- $port:=(coalesce .Values.service.ports.http .Values.service.port) | toString }}
+  echo "Moodle&trade; URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ coalesce .Values.service.ports.http .Values.service.port }}{{ end }}/"
 
 {{- else if eq .Values.service.type "ClusterIP" }}
 
-  echo "Moodle(TM) URL: http://127.0.0.1:8080/"
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} 8080:{{ .Values.service.port }}
+  echo "Moodle&trade; URL: http://127.0.0.1:8080/"
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} 8080:{{ coalesce .Values.service.ports.http .Values.service.port }}
 
 {{- end }}
 
@@ -35,14 +37,14 @@
 
   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-  echo "Moodle(TM) URL: http://$NODE_IP:$NODE_PORT/"
+  echo "Moodle&trade; URL: http://$NODE_IP:$NODE_PORT/"
 
 {{- end }}
 
-2. Get your Moodle(TM) login credentials by running:
+2. Get your Moodle&trade; login credentials by running:
 
   echo Username: {{ .Values.moodleUsername }}
-  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "moodle.secretName" . }} -o jsonpath="{.data.moodle-password}" | base64 --decode)
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "moodle.secretName" . }} -o jsonpath="{.data.moodle-password}" | base64 -d)
 
 {{- else -}}
 
@@ -50,16 +52,16 @@
 ### ERROR: You did not provide an external database host in your 'helm install' call ###
 ########################################################################################
 
-This deployment will be incomplete until you configure Moodle(TM) with a resolvable database
-host. To configure Moodle(TM) to use and external database host:
+This deployment will be incomplete until you configure Moodle&trade; with a resolvable database
+host. To configure Moodle&trade; to use and external database host:
 
-1. Complete your Moodle(TM) deployment by running:
+1. Complete your Moodle&trade; deployment by running:
 
-  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "moodle.secretName" . }} -o jsonpath="{.data.moodle-password}" | base64 --decode)
+  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "moodle.secretName" . }} -o jsonpath="{.data.moodle-password}" | base64 -d)
 
   ## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
 
-  helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} my-repo/{{ .Chart.Name }} \
     --set moodlePassword=$APP_PASSWORD,service.type={{ .Values.service.type }},mariadb.enabled=false{{- if not (empty .Values.externalDatabase.user) }},externalDatabase.user={{ .Values.externalDatabase.user }}{{- end }}{{- if not (empty .Values.externalDatabase.password) }},externalDatabase.password={{ .Values.externalDatabase.password }}{{- end }}{{- if not (empty .Values.externalDatabase.database) }},externalDatabase.database={{ .Values.externalDatabase.database }}{{- end }},externalDatabase.host=YOUR_EXTERNAL_DATABASE_HOST{{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
 
 {{- end }}
@@ -79,6 +81,8 @@ You can access Apache Prometheus metrics following the steps below:
 
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
+{{- include "common.warnings.rollingTag" .Values.certificates.image }}
 
 {{- $passwordValidationErrors := list -}}
 {{- if not .Values.existingSecret -}}

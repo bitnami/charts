@@ -1,9 +1,10 @@
-{{- if and (not .Values.ingress.enabled) .Values.service.tls.enabled }}
-{{- $scheme := (include "harbor.component.scheme" .) -}}
+{{- if and (eq .Values.exposureType "proxy") .Values.nginx.tls.enabled }}
+{{- $scheme := ternary "https" "http" .Values.internalTLS.enabled -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "harbor.nginx" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -18,7 +19,7 @@ data:
     pid /opt/bitnami/nginx/tmp/nginx.pid;
 
     events {
-      worker_connections 1024;
+      worker_connections 3096;
       use epoll;
       multi_accept on;
     }
@@ -36,16 +37,16 @@ data:
       proxy_http_version 1.1;
 
       upstream core {
-        server "{{ template "harbor.core" . }}:{{ template "harbor.core.servicePort" . }}";
+        server {{ printf "%s:%d" (include "harbor.core" .) (ternary .Values.core.service.ports.https .Values.core.service.ports.http .Values.internalTLS.enabled | int) }};
       }
 
       upstream portal {
-        server "{{ template "harbor.portal" . }}:{{ template "harbor.portal.servicePort" . }}";
+        server {{ printf "%s:%d" (include "harbor.portal" .) (ternary .Values.portal.service.ports.https .Values.portal.service.ports.http .Values.internalTLS.enabled | int) }};
       }
 
       {{- if .Values.notary.enabled }}
       upstream notary-server {
-        server {{ template "harbor.notary-server" . }}:4443;
+        server {{ printf "%s:%d" (include "harbor.notary-server" .) (.Values.notary.service.ports.server | int) }};
       }
       {{- end }}
 
@@ -58,7 +59,12 @@ data:
 
       {{- if .Values.notary.enabled }}
       server {
-        listen 4443 ssl;
+        {{- if .Values.ipFamily.ipv4.enabled }}
+        listen {{ .Values.nginx.containerPorts.notary }} ssl;
+        {{- end }}
+        {{- if .Values.ipFamily.ipv6.enabled }}
+        listen [::]:{{ .Values.nginx.containerPorts.notary }} ssl;
+        {{- end }}
         server_tokens off;
         # ssl
         ssl_certificate /etc/nginx/cert/tls.crt;
@@ -93,7 +99,12 @@ data:
       {{- end }}
 
       server {
-        listen 8443 ssl;
+        {{- if .Values.ipFamily.ipv4.enabled }}
+        listen {{ .Values.nginx.containerPorts.https }} ssl;
+        {{- end }}
+        {{- if .Values.ipFamily.ipv6.enabled }}
+        listen [::]:{{ .Values.nginx.containerPorts.https }} ssl;
+        {{- end }}
         server_tokens off;
         # SSL
         ssl_certificate /etc/nginx/cert/tls.crt;
@@ -224,7 +235,12 @@ data:
         }
       }
       server {
+          {{- if .Values.ipFamily.ipv4.enabled }}
           listen 8080;
+          {{- end }}
+          {{- if .Values.ipFamily.ipv6.enabled }}
+          listen [::]:8080;
+          {{- end }}
           return 301 https://$host$request_uri;
       }
     }
