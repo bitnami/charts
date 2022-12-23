@@ -1,0 +1,11 @@
+{{- if .Values.core.serviceAccount.create }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ template "harbor.core.serviceAccountName" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- if .Values.core.serviceAccount.annotations }}
+  annotations: {{ toYaml .Values.core.serviceAccount.annotations | nindent 4 }}
+  {{- end }}
+{{- end }}

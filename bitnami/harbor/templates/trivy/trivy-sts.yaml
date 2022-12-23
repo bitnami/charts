@@ -57,7 +57,7 @@ spec:
       {{- if .Values.podSecurityContext }}
       securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
-      automountServiceAccountToken: {{ .Values.trivy.automountServiceAccountToken }}
+      serviceAccountName: {{ template "harbor.trivy.serviceAccountName" . }}
       initContainers:
       {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions

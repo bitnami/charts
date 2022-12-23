@@ -36,7 +36,7 @@ spec:
         {{- end }}
     spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
-      automountServiceAccountToken: false
+      serviceAccountName: {{ template "harbor.notary-signer.serviceAccountName" . }}
       {{- if .Values.notary.signer.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.notary.signer.affinity "context" $) | nindent 8 }}
       {{- else }}

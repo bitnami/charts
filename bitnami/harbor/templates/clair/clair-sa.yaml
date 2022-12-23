@@ -1,0 +1,11 @@
+{{- if .Values.clair.serviceAccount.create }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ template "harbor.clair.serviceAccountName" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- if .Values.clair.serviceAccount.annotations }}
+  annotations: {{ toYaml .Values.clair.serviceAccount.annotations | nindent 4 }}
+  {{- end }}
+{{- end }}

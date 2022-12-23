@@ -981,6 +981,20 @@ portal:
     failureThreshold: 6
     successThreshold: 1
 
+  ## Service Account
+  ##
+  serviceAccount:
+    ## Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the fullname template
+    ##
+    # name: ""
+    ## Annotations to add to the service account (evaluated as a template)
+    ##
+    annotations: { }
+
 ## Harbor Core parameters
 ##
 core:
@@ -1190,6 +1204,20 @@ core:
     failureThreshold: 30
     successThreshold: 1
 
+  ## Service Account
+  ##
+  serviceAccount:
+    ## Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the fullname template
+    ##
+    # name: ""
+    ## Annotations to add to the service account (evaluated as a template)
+    ##
+    annotations: {}
+
 ## Harbor Jobservice parameters
 ##
 jobservice:
@@ -1369,6 +1397,20 @@ jobservice:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
+
+  ## Service Account
+  ##
+  serviceAccount:
+    ## Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the fullname template
+    ##
+    # name: ""
+    ## Annotations to add to the service account (evaluated as a template)
+    ##
+    annotations: { }
 
 registry:
   replicas: 1
@@ -1637,6 +1679,20 @@ registry:
       ##
       privateKeySecret: 'my-secret'
 
+  ## Service Account
+  ##
+  serviceAccount:
+    ## Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the fullname template
+    ##
+    # name: ""
+    ## Annotations to add to the service account (evaluated as a template)
+    ##
+    annotations: { }
+
 ## Chartmuseum parameters
 ##
 chartmuseum:
@@ -1834,6 +1890,20 @@ chartmuseum:
     failureThreshold: 10
     successThreshold: 1
 
+  ## Service Account
+  ##
+  serviceAccount:
+    ## Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the fullname template
+    ##
+    # name: ""
+    ## Annotations to add to the service account (evaluated as a template)
+    ##
+    annotations: { }
+
 ## Clair parameters
 ##
 clair:
@@ -1937,6 +2007,20 @@ clair:
       requests: {}
       #   cpu: 250m
       #   memory: 256Mi
+
+  ## Service Account
+  ##
+  serviceAccount:
+    ## Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the fullname template
+    ##
+    # name: ""
+    ## Annotations to add to the service account (evaluated as a template)
+    ##
+    annotations: { }
 
   ## Clair main container properties
   ##
@@ -2292,6 +2376,20 @@ trivy:
   ##
   podAnnotations: {}
 
+  ## Service Account
+  ##
+  serviceAccount:
+    ## Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the fullname template
+    ##
+    # name: ""
+    ## Annotations to add to the service account (evaluated as a template)
+    ##
+    annotations: { }
+
 ## Notary parameters
 ##
 notary:
@@ -2452,6 +2550,20 @@ notary:
     ##
     podAnnotations: {}
 
+    ## Service Account
+    ##
+    serviceAccount:
+      ## Specifies whether a ServiceAccount should be created
+      ##
+      create: true
+      ## The name of the ServiceAccount to use.
+      ## If not set and create is true, a name is generated using the fullname template
+      ##
+      # name: ""
+      ## Annotations to add to the service account (evaluated as a template)
+      ##
+      annotations: { }
+
   signer:
     ## Notary signer container command (using container default if not set)
     ##
@@ -2607,6 +2719,20 @@ notary:
     ## Custom Rediness probe
     ##
     customReadinessProbe: {}
+
+    ## Service Account
+    ##
+    serviceAccount:
+      ## Specifies whether a ServiceAccount should be created
+      ##
+      create: true
+      ## The name of the ServiceAccount to use.
+      ## If not set and create is true, a name is generated using the fullname template
+      ##
+      # name: ""
+      ## Annotations to add to the service account (evaluated as a template)
+      ##
+      annotations: { }
 
   ## Fill the name of a kubernetes secret if you want to use your own
   ## TLS certificate authority, certificate and private key for notary

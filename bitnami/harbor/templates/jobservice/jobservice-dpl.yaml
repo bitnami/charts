@@ -42,7 +42,7 @@ spec:
         {{- end }}
     spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
-      automountServiceAccountToken: false
+      serviceAccountName: {{ template "harbor.jobservice.serviceAccountName" . }}
       {{- if .Values.jobservice.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.affinity "context" $) | nindent 8 }}
       {{- else }}
