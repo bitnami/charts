@@ -364,10 +364,10 @@ spec:
             sources:
               - secret:
                   name: {{ printf "%s-config" (include "common.names.fullname" .) }}
-            {{- if and .Values.advancedConfigurationExistingSecret (not .Values.advancedConfiguration) }}
-            - secret:
-                name: {{ tpl .Values.advancedConfigurationExistingSecret . | quote }}
-            {{- end }}
+              {{- if and .Values.advancedConfigurationExistingSecret (not .Values.advancedConfiguration) }}
+              - secret:
+                  name: {{ tpl .Values.advancedConfigurationExistingSecret . | quote }}
+              {{- end }}
         {{- if .Values.loadDefinition.enabled }}
         - name: load-definition-volume
           secret:
