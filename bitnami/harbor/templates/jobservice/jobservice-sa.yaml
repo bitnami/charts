@@ -1,0 +1,12 @@
+{{- if .Values.jobservice.serviceAccount.create }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ template "harbor.jobservice.serviceAccountName" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- if .Values.jobservice.serviceAccount.annotations }}
+  annotations: {{ toYaml .Values.jobservice.serviceAccount.annotations | nindent 4 }}
+  {{- end }}
+automountServiceAccountToken: {{ .Values.jobservice.serviceAccount.automountServiceAccountToken }}
+{{- end }}
