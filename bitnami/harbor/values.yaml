@@ -1263,9 +1263,23 @@ portal:
   ## @param portal.extraVolumes Optionally specify extra list of additional volumes for the Harbor Portal pods
   ##
   extraVolumes: []
-  ## @param portal.automountServiceAccountToken Automount service account token
+  ## ServiceAccount parameters
   ##
-  automountServiceAccountToken: false
+  serviceAccount:
+    ## @param portal.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param portal.serviceAccount.name Override Hub service account name
+    ## If not set and create is true, a name is generated using the fullname template
+    ##
+    name: ""
+    ## @param portal.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+    ## Can be set to false if pods using this serviceAccount do not need to use K8s API
+    ##
+    automountServiceAccountToken: false
+    ## @param portal.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ##
+    annotations: {}
   ## Harbor Portal service configuration
   ##
   service:
@@ -1554,9 +1568,23 @@ core:
   ## @param core.extraVolumes Optionally specify extra list of additional volumes for the Harbor Core pods
   ##
   extraVolumes: []
-  ## @param core.automountServiceAccountToken Automount service account token
+  ## ServiceAccount parameters
   ##
-  automountServiceAccountToken: false
+  serviceAccount:
+    ## @param core.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param core.serviceAccount.name Override Hub service account name
+    ## If not set and create is true, a name is generated using the fullname template
+    ##
+    name: ""
+    ## @param core.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+    ## Can be set to false if pods using this serviceAccount do not need to use K8s API
+    ##
+    automountServiceAccountToken: false
+    ## @param core.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ##
+    annotations: {}
   ## Harbor Core service configuration
   ##
   service:
@@ -1832,9 +1860,23 @@ jobservice:
   ## @param jobservice.extraVolumes Optionally specify extra list of additional volumes for the Harbor Jobservice pods
   ##
   extraVolumes: []
-  ## @param jobservice.automountServiceAccountToken Automount service account token
+  ## ServiceAccount parameters
   ##
-  automountServiceAccountToken: false
+  serviceAccount:
+    ## @param jobservice.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param jobservice.serviceAccount.name Override Hub service account name
+    ## If not set and create is true, a name is generated using the fullname template
+    ##
+    name: ""
+    ## @param jobservice.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+    ## Can be set to false if pods using this serviceAccount do not need to use K8s API
+    ##
+    automountServiceAccountToken: false
+    ## @param jobservice.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ##
+    annotations: {}
   ## Harbor Jobservice service configuration
   ##
   service:
@@ -2010,9 +2052,23 @@ registry:
   ## @param registry.extraVolumes Optionally specify extra list of additional volumes for the Harbor Registry pods
   ##
   extraVolumes: []
-  ## @param registry.automountServiceAccountToken Automount service account token
+  ## ServiceAccount parameters
   ##
-  automountServiceAccountToken: false
+  serviceAccount:
+    ## @param registry.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param registry.serviceAccount.name Override Hub service account name
+    ## If not set and create is true, a name is generated using the fullname template
+    ##
+    name: ""
+    ## @param registry.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+    ## Can be set to false if pods using this serviceAccount do not need to use K8s API
+    ##
+    automountServiceAccountToken: false
+    ## @param registry.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ##
+    annotations: {}
   ## Harbor Registry main container parameters
   ##
   server:
@@ -2599,9 +2655,23 @@ chartmuseum:
   ## @param chartmuseum.extraVolumes Optionally specify extra list of additional volumes for the Chartmuseum pods
   ##
   extraVolumes: []
-  ## @param chartmuseum.automountServiceAccountToken Automount service account token
+  ## ServiceAccount parameters
   ##
-  automountServiceAccountToken: false
+  serviceAccount:
+    ## @param chartmuseum.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param chartmuseum.serviceAccount.name Override Hub service account name
+    ## If not set and create is true, a name is generated using the fullname template
+    ##
+    name: ""
+    ## @param chartmuseum.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+    ## Can be set to false if pods using this serviceAccount do not need to use K8s API
+    ##
+    automountServiceAccountToken: false
+    ## @param chartmuseum.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ##
+    annotations: {}
   ## Chartmuseum service configuration
   ##
   service:
@@ -2863,9 +2933,23 @@ notary:
     ## @param notary.server.extraVolumes Optionally specify extra list of additional volumes for the Harbor Notary Server pods
     ##
     extraVolumes: []
-    ## @param notary.server.automountServiceAccountToken Automount service account token
+    ## ServiceAccount parameters
     ##
-    automountServiceAccountToken: false
+    serviceAccount:
+      ## @param notary.server.serviceAccount.create Specifies whether a ServiceAccount should be created
+      ##
+      create: true
+      ## @param notary.server.serviceAccount.name Override Hub service account name
+      ## If not set and create is true, a name is generated using the fullname template
+      ##
+      name: ""
+      ## @param notary.server.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+      ## Can be set to false if pods using this serviceAccount do not need to use K8s API
+      ##
+      automountServiceAccountToken: false
+      ## @param notary.server.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+      ##
+      annotations: {}
   signer:
     ## Bitnami Harbor Notary Signer image
     ## ref: https://hub.docker.com/r/bitnami/harbor-notary-signer/tags/
@@ -3100,9 +3184,23 @@ notary:
     ## @param notary.signer.extraVolumes Optionally specify extra list of additional volumes for the Harbor Notary Signer pods
     ##
     extraVolumes: []
-    ## @param notary.signer.automountServiceAccountToken Automount service account token
+    ## ServiceAccount parameters
     ##
-    automountServiceAccountToken: false
+    serviceAccount:
+      ## @param notary.signer.serviceAccount.create Specifies whether a ServiceAccount should be created
+      ##
+      create: true
+      ## @param notary.signer.serviceAccount.name Override Hub service account name
+      ## If not set and create is true, a name is generated using the fullname template
+      ##
+      name: ""
+      ## @param notary.signer.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+      ## Can be set to false if pods using this serviceAccount do not need to use K8s API
+      ##
+      automountServiceAccountToken: false
+      ## @param notary.signer.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+      ##
+      annotations: {}
   ## Harbor Notary service configuration
   ##
   service:
@@ -3408,9 +3506,23 @@ trivy:
   ## @param trivy.extraVolumes Optionally specify extra list of additional volumes for the Trivy pods
   ##
   extraVolumes: []
-  ## @param trivy.automountServiceAccountToken Automount service account token
+  ## ServiceAccount parameters
   ##
-  automountServiceAccountToken: false
+  serviceAccount:
+    ## @param trivy.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param trivy.serviceAccount.name Override Hub service account name
+    ## If not set and create is true, a name is generated using the fullname template
+    ##
+    name: ""
+    ## @param trivy.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+    ## Can be set to false if pods using this serviceAccount do not need to use K8s API
+    ##
+    automountServiceAccountToken: false
+    ## @param trivy.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ##
+    annotations: {}
   ## Trivy service configuration
   ##
   service:

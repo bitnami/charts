@@ -1,0 +1,12 @@
+{{- if .Values.notary.signer.serviceAccount.create }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ template "harbor.notary-signer.serviceAccountName" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- if .Values.notary.signer.serviceAccount.annotations }}
+  annotations: {{ toYaml .Values.notary.signer.serviceAccount.annotations | nindent 4 }}
+  {{- end }}
+automountServiceAccountToken: {{ .Values.notary.signer.serviceAccount.automountServiceAccountToken }}
+{{- end }}

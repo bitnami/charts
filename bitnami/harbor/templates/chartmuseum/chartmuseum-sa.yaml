@@ -1,0 +1,12 @@
+{{- if .Values.chartmuseum.serviceAccount.create }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ template "harbor.chartmuseum.serviceAccountName" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- if .Values.chartmuseum.serviceAccount.annotations }}
+  annotations: {{ toYaml .Values.chartmuseum.serviceAccount.annotations | nindent 4 }}
+  {{- end }}
+automountServiceAccountToken: {{ .Values.chartmuseum.serviceAccount.automountServiceAccountToken }}
+{{- end }}
