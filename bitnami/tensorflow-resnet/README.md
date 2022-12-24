@@ -4,7 +4,7 @@
 
 TensorFlow ResNet is a client utility for use with TensorFlow Serving and ResNet models.
 
-[Overview of TensorFlow ResNet](https://github.com/tensorflow/models/tree/master/official/resnet)
+[Overview of TensorFlow ResNet](https://github.com/tensorflow/models)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
                            
