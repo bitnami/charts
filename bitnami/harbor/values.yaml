@@ -1266,18 +1266,18 @@ portal:
   ## ServiceAccount parameters
   ##
   serviceAccount:
-    ## @param core.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ## @param portal.serviceAccount.create Specifies whether a ServiceAccount should be created
     ##
     create: true
-    ## @param core.serviceAccount.name Override Hub service account name
+    ## @param portal.serviceAccount.name Override Hub service account name
     ## If not set and create is true, a name is generated using the fullname template
     ##
     name: ""
-    ## @param core.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+    ## @param portal.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
     ## Can be set to false if pods using this serviceAccount do not need to use K8s API
     ##
     automountServiceAccountToken: false
-    ## @param core.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ## @param portal.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
   ## Harbor Portal service configuration
@@ -1864,7 +1864,7 @@ jobservice:
     ## @param jobservice.serviceAccount.create Specifies whether a ServiceAccount should be created
     ##
     create: true
-    ## @param core.serviceAccount.name Override Hub service account name
+    ## @param jobservice.serviceAccount.name Override Hub service account name
     ## If not set and create is true, a name is generated using the fullname template
     ##
     name: ""
