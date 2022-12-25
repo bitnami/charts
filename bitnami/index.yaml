@@ -49320,6 +49320,40 @@ entries:
       category: Database
     apiVersion: v2
     appVersion: 10.6.11
+    created: "2022-12-25T17:34:07.736695062Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: MariaDB Galera is a multi-primary database cluster solution for synchronous
+      replication and high availability.
+    digest: 96ac8d82f8c3136d6c8de4b64929630e5ad119ebf3e92f6249d261c0cc167eb5
+    home: https://github.com/bitnami/charts/tree/main/bitnami/mariadb-galera
+    icon: https://bitnami.com/assets/stacks/mariadb-galera/img/mariadb-galera-stack-220x234.png
+    keywords:
+    - mariadb
+    - mysql
+    - database
+    - sql
+    - prometheus
+    - galera
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: mariadb-galera
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/mariadb-galera
+    - https://github.com/prometheus/mysqld_exporter
+    - https://mariadb.org
+    urls:
+    - https://charts.bitnami.com/bitnami/mariadb-galera-7.4.10.tgz
+    version: 7.4.10
+  - annotations:
+      category: Database
+    apiVersion: v2
+    appVersion: 10.6.11
     created: "2022-11-25T17:32:40.395103203Z"
     dependencies:
     - name: common
@@ -99737,4 +99771,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2022-12-24T21:42:00.226218666Z"
+generated: "2022-12-25T17:34:07.733010565Z"
