@@ -234,6 +234,11 @@ logLevel: information
 keeper:
   enabled: false
 
+## @param interClusterSecret [string] Nodes that share the same non-empty secret trust each other
+##  
+##
+interClusterSecret: same-user
+
 ## @param defaultConfigurationOverrides [string] Default configuration overrides (evaluated as a template)
 ##
 defaultConfigurationOverrides: |
@@ -252,6 +257,8 @@ defaultConfigurationOverrides: |
     <!-- Cluster configuration - Any update of the shards and replicas requires helm upgrade -->
     <remote_servers>
       <default>
+        <!-- nodes with same non-empty secret string trust each other -->
+        <secret>{{ $.Values.interClusterSecret }}</secret>
         {{- $shards := $.Values.shards | int }}
         {{- range $shard, $e := until $shards }}
         <shard>
