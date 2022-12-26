@@ -84,64 +84,63 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### ClickHouse Parameters
 
-| Name                                                | Description                                                                                                                   | Value                  |
-| --------------------------------------------------- |-------------------------------------------------------------------------------------------------------------------------------|------------------------|
-| `image.registry`                                    | ClickHouse image registry                                                                                                     | `docker.io`            |
-| `image.repository`                                  | ClickHouse image repository                                                                                                   | `bitnami/clickhouse`   |
-| `image.tag`                                         | ClickHouse image tag (immutable tags are recommended)                                                                         | `22.11.2-debian-11-r0` |
-| `image.digest`                                      | ClickHouse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                    | `""`                   |
-| `image.pullPolicy`                                  | ClickHouse image pull policy                                                                                                  | `IfNotPresent`         |
-| `image.pullSecrets`                                 | ClickHouse image pull secrets                                                                                                 | `[]`                   |
-| `image.debug`                                       | Enable ClickHouse image debug mode                                                                                            | `false`                |
-| `shards`                                            | Number of ClickHouse shards to deploy                                                                                         | `2`                    |
-| `replicaCount`                                      | Number of ClickHouse replicas per shard to deploy                                                                             | `3`                    |
-| `containerPorts.http`                               | ClickHouse HTTP container port                                                                                                | `8123`                 |
-| `containerPorts.tcp`                                | ClickHouse TCP container port                                                                                                 | `9000`                 |
-| `containerPorts.tcpSecure`                          | ClickHouse TCP (secure) container port                                                                                        | `9440`                 |
-| `containerPorts.keeper`                             | ClickHouse keeper TCP container port                                                                                          | `2181`                 |
-| `containerPorts.keeperSecure`                       | ClickHouse keeper TCP (secure) container port                                                                                 | `3181`                 |
-| `containerPorts.keeperInter`                        | ClickHouse keeper interserver TCP container port                                                                              | `9444`                 |
-| `containerPorts.mysql`                              | ClickHouse MySQL container port                                                                                               | `9004`                 |
-| `containerPorts.postgresql`                         | ClickHouse PostgreSQL container port                                                                                          | `9005`                 |
-| `containerPorts.interserver`                        | ClickHouse Interserver container port                                                                                         | `9009`                 |
-| `containerPorts.metrics`                            | ClickHouse metrics container port                                                                                             | `8001`                 |
-| `livenessProbe.enabled`                             | Enable livenessProbe on ClickHouse containers                                                                                 | `true`                 |
-| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                       | `10`                   |
-| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                              | `10`                   |
-| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                             | `1`                    |
-| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                           | `3`                    |
-| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                           | `1`                    |
-| `readinessProbe.enabled`                            | Enable readinessProbe on ClickHouse containers                                                                                | `true`                 |
-| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                      | `10`                   |
-| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                             | `10`                   |
-| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                            | `1`                    |
-| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                          | `3`                    |
-| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                          | `1`                    |
-| `startupProbe.enabled`                              | Enable startupProbe on ClickHouse containers                                                                                  | `false`                |
-| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                        | `10`                   |
-| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                               | `10`                   |
-| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                              | `1`                    |
-| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                            | `3`                    |
-| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                            | `1`                    |
-| `customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                           | `{}`                   |
-| `customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                          | `{}`                   |
-| `customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                            | `{}`                   |
-| `resources.limits`                                  | The resources limits for the ClickHouse containers                                                                            | `{}`                   |
-| `resources.requests`                                | The requested resources for the ClickHouse containers                                                                         | `{}`                   |
-| `podSecurityContext.enabled`                        | Enabled ClickHouse pods' Security Context                                                                                     | `true`                 |
-| `podSecurityContext.fsGroup`                        | Set ClickHouse pod's Security Context fsGroup                                                                                 | `1001`                 |
-| `podSecurityContext.seccompProfile.type`            | Set ClickHouse container's Security Context seccomp profile                                                                   | `RuntimeDefault`       |
-| `containerSecurityContext.enabled`                  | Enabled ClickHouse containers' Security Context                                                                               | `true`                 |
-| `containerSecurityContext.runAsUser`                | Set ClickHouse containers' Security Context runAsUser                                                                         | `1001`                 |
-| `containerSecurityContext.runAsNonRoot`             | Set ClickHouse containers' Security Context runAsNonRoot                                                                      | `true`                 |
-| `containerSecurityContext.allowPrivilegeEscalation` | Set ClickHouse container's privilege escalation                                                                               | `false`                |
-| `containerSecurityContext.capabilities.drop`        | Set ClickHouse container's Security Context runAsNonRoot                                                                      | `["ALL"]`              |
-| `auth.username`                                     | ClickHouse Admin username                                                                                                     | `default`              |
-| `auth.password`                                     | ClickHouse Admin password                                                                                                     | `""`                   |
-| `auth.existingSecret`                               | Name of a secret containing the Admin password                                                                                | `""`                   |
-| `auth.existingSecretKey`                            | Name of the key inside the existing secret                                                                                    | `""`                   |
-| `logLevel`                                          | Logging level                                                                                                                 | `information`          |
-| `interClusterSecret`                                | Nodes that share the same non-empty secret trust each other. The initial user is used as the current user for cluster queries | `same-user`            |
+| Name                                                | Description                                                                                                | Value                  |
+| --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `image.registry`                                    | ClickHouse image registry                                                                                  | `docker.io`            |
+| `image.repository`                                  | ClickHouse image repository                                                                                | `bitnami/clickhouse`   |
+| `image.tag`                                         | ClickHouse image tag (immutable tags are recommended)                                                      | `22.11.2-debian-11-r0` |
+| `image.digest`                                      | ClickHouse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `image.pullPolicy`                                  | ClickHouse image pull policy                                                                               | `IfNotPresent`         |
+| `image.pullSecrets`                                 | ClickHouse image pull secrets                                                                              | `[]`                   |
+| `image.debug`                                       | Enable ClickHouse image debug mode                                                                         | `false`                |
+| `shards`                                            | Number of ClickHouse shards to deploy                                                                      | `2`                    |
+| `replicaCount`                                      | Number of ClickHouse replicas per shard to deploy                                                          | `3`                    |
+| `containerPorts.http`                               | ClickHouse HTTP container port                                                                             | `8123`                 |
+| `containerPorts.tcp`                                | ClickHouse TCP container port                                                                              | `9000`                 |
+| `containerPorts.tcpSecure`                          | ClickHouse TCP (secure) container port                                                                     | `9440`                 |
+| `containerPorts.keeper`                             | ClickHouse keeper TCP container port                                                                       | `2181`                 |
+| `containerPorts.keeperSecure`                       | ClickHouse keeper TCP (secure) container port                                                              | `3181`                 |
+| `containerPorts.keeperInter`                        | ClickHouse keeper interserver TCP container port                                                           | `9444`                 |
+| `containerPorts.mysql`                              | ClickHouse MySQL container port                                                                            | `9004`                 |
+| `containerPorts.postgresql`                         | ClickHouse PostgreSQL container port                                                                       | `9005`                 |
+| `containerPorts.interserver`                        | ClickHouse Interserver container port                                                                      | `9009`                 |
+| `containerPorts.metrics`                            | ClickHouse metrics container port                                                                          | `8001`                 |
+| `livenessProbe.enabled`                             | Enable livenessProbe on ClickHouse containers                                                              | `true`                 |
+| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                    | `10`                   |
+| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                           | `10`                   |
+| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                          | `1`                    |
+| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                        | `3`                    |
+| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                        | `1`                    |
+| `readinessProbe.enabled`                            | Enable readinessProbe on ClickHouse containers                                                             | `true`                 |
+| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                   | `10`                   |
+| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                          | `10`                   |
+| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                         | `1`                    |
+| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                       | `3`                    |
+| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                       | `1`                    |
+| `startupProbe.enabled`                              | Enable startupProbe on ClickHouse containers                                                               | `false`                |
+| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                     | `10`                   |
+| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                            | `10`                   |
+| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                           | `1`                    |
+| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                         | `3`                    |
+| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                         | `1`                    |
+| `customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                        | `{}`                   |
+| `customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                       | `{}`                   |
+| `customStartupProbe`                                | Custom startupProbe that overrides the default one                                                         | `{}`                   |
+| `resources.limits`                                  | The resources limits for the ClickHouse containers                                                         | `{}`                   |
+| `resources.requests`                                | The requested resources for the ClickHouse containers                                                      | `{}`                   |
+| `podSecurityContext.enabled`                        | Enabled ClickHouse pods' Security Context                                                                  | `true`                 |
+| `podSecurityContext.fsGroup`                        | Set ClickHouse pod's Security Context fsGroup                                                              | `1001`                 |
+| `podSecurityContext.seccompProfile.type`            | Set ClickHouse container's Security Context seccomp profile                                                | `RuntimeDefault`       |
+| `containerSecurityContext.enabled`                  | Enabled ClickHouse containers' Security Context                                                            | `true`                 |
+| `containerSecurityContext.runAsUser`                | Set ClickHouse containers' Security Context runAsUser                                                      | `1001`                 |
+| `containerSecurityContext.runAsNonRoot`             | Set ClickHouse containers' Security Context runAsNonRoot                                                   | `true`                 |
+| `containerSecurityContext.allowPrivilegeEscalation` | Set ClickHouse container's privilege escalation                                                            | `false`                |
+| `containerSecurityContext.capabilities.drop`        | Set ClickHouse container's Security Context runAsNonRoot                                                   | `["ALL"]`              |
+| `auth.username`                                     | ClickHouse Admin username                                                                                  | `default`              |
+| `auth.password`                                     | ClickHouse Admin password                                                                                  | `""`                   |
+| `auth.existingSecret`                               | Name of a secret containing the Admin password                                                             | `""`                   |
+| `auth.existingSecretKey`                            | Name of the key inside the existing secret                                                                 | `""`                   |
+| `logLevel`                                          | Logging level                                                                                              | `information`          |
 
 
 ### ClickHouse keeper configuration parameters
@@ -149,6 +148,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                            | Description                                                                                                              | Value                   |
 | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
 | `keeper.enabled`                | Deploy ClickHouse keeper. Support is experimental.                                                                       | `false`                 |
+| `interClusterSecret`            | Nodes that share the same non-empty secret trust each other                                                              | `""`                    |
 | `defaultConfigurationOverrides` | Default configuration overrides (evaluated as a template)                                                                | `""`                    |
 | `existingOverridesConfigmap`    | The name of an existing ConfigMap with your custom configuration for ClickHouse                                          | `""`                    |
 | `extraOverrides`                | Extra configuration overrides (evaluated as a template) apart from the default                                           | `""`                    |
