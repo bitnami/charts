@@ -270,6 +270,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.updateStrategy`                                    | Set up update strategy for Grafana installation.                                                           | `{}`                     |
 | `grafana.extraVolumes`                                      | Optionally specify extra list of additional volumes for the grafana pod(s)                                 | `[]`                     |
 | `grafana.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the grafana container(s)                      | `[]`                     |
+| `grafana.initContainers`                                    | Add additional initContainers to the grafana pod(s)                                                        | `[]`                     |
 | `grafana.sidecars`                                          | Add additional sidecar containers to the grafana pod(s)                                                    | `[]`                     |
 
 

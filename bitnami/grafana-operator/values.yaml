@@ -79,13 +79,13 @@ operator:
   ## @param operator.customStartupProbe [object] Override default startup probe
   ##
   customStartupProbe: {}
-  ## @param operator.extraVolumes [array] Optionally specify extra list of additional volumes for etcd pods
+  ## @param operator.extraVolumes [array] Optionally specify extra list of additional volumes for Grafana Operator pods
   ##
   extraVolumes: []
-  ## @param operator.extraVolumeMounts [array] Optionally specify extra list of additional volumeMounts for etcd container(s)
+  ## @param operator.extraVolumeMounts [array] Optionally specify extra list of additional volumeMounts for Grafana Operator container(s)
   ##
   extraVolumeMounts: []
-  ## @param operator.initContainers [array] Add additional init containers to the etcd pods
+  ## @param operator.initContainers [array] Add additional init containers to the Grafana Operator pods
   ## e.g:
   ## initContainers:
   ##   - name: your-image-name
@@ -96,7 +96,7 @@ operator:
   ##         containerPort: 1234
   ##
   initContainers: []
-  ## @param operator.sidecars [array] Add additional sidecar containers to the etcd pods
+  ## @param operator.sidecars [array] Add additional sidecar containers to the Grafana Operator pods
   ## e.g:
   ## sidecars:
   ##   - name: your-image-name
@@ -804,6 +804,17 @@ grafana:
   ## @param grafana.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the grafana container(s)
   ##
   extraVolumeMounts: []
+  ## @param grafana.initContainers [array] Add additional init containers to the grafana pods
+  ## e.g:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  initContainers: []
   ## @param grafana.sidecars Add additional sidecar containers to the grafana pod(s)
   ## e.g:
   ## sidecars:
