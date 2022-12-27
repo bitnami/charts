@@ -1014,6 +1014,8 @@ sentinel:
   ## NOTE: This feature requires a "downAfterMilliseconds" value less or equal to 2000.
   ##
   automateClusterRecovery: false
+  ## @param sentinel.redisShutdownWaitFailover Whether the Redis&reg; master container waits for the failover at shutdown (in addition to the Redis&reg; Sentinel container).
+  redisShutdownWaitFailover: true
   ## Sentinel timing restrictions
   ## @param sentinel.downAfterMilliseconds Timeout for detecting a Redis&reg; node is down
   ## @param sentinel.failoverTimeout Timeout for performing a election failover
