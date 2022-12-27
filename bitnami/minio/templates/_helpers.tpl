@@ -314,3 +314,14 @@ Return true if a TLS secret object should be created
     {{- true -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Provisioning job labels (exclude matchLabels from standard labels)
+*/}}
+{{- define "minio.labels.provisioning" -}}
+{{- $provisioningLabels := (include "common.labels.standard" . | fromYaml ) -}}
+{{- range (include "common.labels.matchLabels" . | fromYaml | keys ) -}}
+{{- $_ := unset $provisioningLabels . -}}
+{{- end -}}
+{{- print ($provisioningLabels | toYaml) -}}
+{{- end -}}

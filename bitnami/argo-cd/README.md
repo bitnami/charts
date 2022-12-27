@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`    | Argo CD image registry                                                                                  | `docker.io`          |
 | `image.repository`  | Argo CD image repository                                                                                | `bitnami/argo-cd`    |
-| `image.tag`         | Argo CD image tag (immutable tags are recommended)                                                      | `2.5.4-debian-11-r0` |
+| `image.tag`         | Argo CD image tag (immutable tags are recommended)                                                      | `2.5.5-debian-11-r0` |
 | `image.digest`      | Argo CD image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
 | `image.pullPolicy`  | Argo CD image pull policy                                                                               | `IfNotPresent`       |
 | `image.pullSecrets` | Argo CD image pull secrets                                                                              | `[]`                 |
@@ -201,6 +201,112 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Argo CD container(s)                | `[]`            |
 | `controller.sidecars`                                          | Add additional sidecar containers to the Argo CD pod(s)                                              | `[]`            |
 | `controller.initContainers`                                    | Add additional init containers to the Argo CD pod(s)                                                 | `[]`            |
+
+
+### Argo CD ApplicationSet controller parameters
+
+| Name                                                               | Description                                                                                                     | Value           |
+| ------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------- | --------------- |
+| `applicationSet.enabled`                                           | Enable ApplicationSet controller                                                                                | `false`         |
+| `applicationSet.replicaCount`                                      | The number of ApplicationSet controller pods to run                                                             | `1`             |
+| `applicationSet.command`                                           | Override default container command (useful when using custom images)                                            | `[]`            |
+| `applicationSet.defaultArgs.enableLeaderElection`                  | Enable leader election                                                                                          | `false`         |
+| `applicationSet.defaultArgs.policy`                                | Default policy                                                                                                  | `sync`          |
+| `applicationSet.defaultArgs.debug`                                 | Enable debug mode                                                                                               | `false`         |
+| `applicationSet.defaultArgs.dryRun`                                | Enable dry-run mode                                                                                             | `false`         |
+| `applicationSet.args`                                              | Override default container args (useful when using custom images). Overrides the defaultArgs.                   | `[]`            |
+| `applicationSet.extraArgs`                                         | Add extra arguments to the default arguments for the Argo CD applicationSet controller                          | `[]`            |
+| `applicationSet.logFormat`                                         | Format for the Argo CD applicationSet controller logs. Options: [text, json]                                    | `text`          |
+| `applicationSet.logLevel`                                          | Log level for the Argo CD applicationSet controller                                                             | `info`          |
+| `applicationSet.containerPorts.metrics`                            | Argo CD applicationSet controller metrics port number                                                           | `8085`          |
+| `applicationSet.containerPorts.probe`                              | Argo CD applicationSet controller probe port number                                                             | `8081`          |
+| `applicationSet.metrics.enabled`                                   | Enable Argo CD applicationSet controller metrics                                                                | `false`         |
+| `applicationSet.metrics.service.type`                              | Argo CD applicationSet controller service type                                                                  | `ClusterIP`     |
+| `applicationSet.metrics.service.port`                              | Argo CD applicationSet controller metrics service port                                                          | `8085`          |
+| `applicationSet.metrics.service.nodePort`                          | Node port for the applicationSet controller service                                                             | `""`            |
+| `applicationSet.metrics.service.clusterIP`                         | Argo CD applicationSet controller metrics service Cluster IP                                                    | `""`            |
+| `applicationSet.metrics.service.loadBalancerIP`                    | Argo CD applicationSet controller service Load Balancer IP                                                      | `""`            |
+| `applicationSet.metrics.service.loadBalancerSourceRanges`          | Argo CD applicationSet controller service Load Balancer sources                                                 | `[]`            |
+| `applicationSet.metrics.service.externalTrafficPolicy`             | Argo CD applicationSet controller service external traffic policy                                               | `Cluster`       |
+| `applicationSet.metrics.service.annotations`                       | Additional custom annotations for Argo CD applicationSet controller service                                     | `{}`            |
+| `applicationSet.metrics.service.sessionAffinity`                   | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                            | `None`          |
+| `applicationSet.metrics.service.sessionAffinityConfig`             | Additional settings for the sessionAffinity                                                                     | `{}`            |
+| `applicationSet.metrics.serviceMonitor.enabled`                    | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                    | `false`         |
+| `applicationSet.metrics.serviceMonitor.namespace`                  | Namespace which Prometheus is running in                                                                        | `""`            |
+| `applicationSet.metrics.serviceMonitor.jobLabel`                   | The name of the label on the target service to use as the job name in prometheus.                               | `""`            |
+| `applicationSet.metrics.serviceMonitor.interval`                   | Interval at which metrics should be scraped                                                                     | `30s`           |
+| `applicationSet.metrics.serviceMonitor.scrapeTimeout`              | Timeout after which the scrape is ended                                                                         | `10s`           |
+| `applicationSet.metrics.serviceMonitor.relabelings`                | RelabelConfigs to apply to samples before scraping                                                              | `[]`            |
+| `applicationSet.metrics.serviceMonitor.metricRelabelings`          | MetricRelabelConfigs to apply to samples before ingestion                                                       | `[]`            |
+| `applicationSet.metrics.serviceMonitor.selector`                   | ServiceMonitor selector labels                                                                                  | `{}`            |
+| `applicationSet.metrics.serviceMonitor.honorLabels`                | honorLabels chooses the metric's labels on collisions with target labels                                        | `false`         |
+| `applicationSet.service.type`                                      | Argo CD applicationSet controller service type                                                                  | `ClusterIP`     |
+| `applicationSet.service.port`                                      | Argo CD applicationSet controller service port                                                                  | `7000`          |
+| `applicationSet.service.nodePort`                                  | Node port for Argo CD applicationSet controller service                                                         | `""`            |
+| `applicationSet.service.clusterIP`                                 | Argo CD applicationSet controller service Cluster IP                                                            | `""`            |
+| `applicationSet.service.loadBalancerIP`                            | Argo CD applicationSet controller service Load Balancer IP                                                      | `""`            |
+| `applicationSet.service.loadBalancerSourceRanges`                  | Argo CD applicationSet controller service Load Balancer sources                                                 | `[]`            |
+| `applicationSet.service.externalTrafficPolicy`                     | Argo CD applicationSet controller service external traffic policy                                               | `Cluster`       |
+| `applicationSet.service.annotations`                               | Additional custom annotations for Argo CD applicationSet controller service                                     | `{}`            |
+| `applicationSet.service.extraPorts`                                | Extra ports to expose (normally used with the `sidecar` value)                                                  | `[]`            |
+| `applicationSet.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                            | `None`          |
+| `applicationSet.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                                     | `{}`            |
+| `applicationSet.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                            | `true`          |
+| `applicationSet.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                          | `""`            |
+| `applicationSet.serviceAccount.automountServiceAccountToken`       | Automount service account token for the applicationSet controller service account                               | `true`          |
+| `applicationSet.serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                      | `{}`            |
+| `applicationSet.podAffinityPreset`                                 | Pod affinity preset. Ignored if `applicationSet.affinity` is set. Allowed values: `soft` or `hard`              | `""`            |
+| `applicationSet.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `applicationSet.affinity` is set. Allowed values: `soft` or `hard`         | `soft`          |
+| `applicationSet.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `applicationSet.affinity` is set. Allowed values: `soft` or `hard`        | `""`            |
+| `applicationSet.nodeAffinityPreset.key`                            | Node label key to match. Ignored if `applicationSet.affinity` is set                                            | `""`            |
+| `applicationSet.nodeAffinityPreset.values`                         | Node label values to match. Ignored if `applicationSet.affinity` is set                                         | `[]`            |
+| `applicationSet.affinity`                                          | Affinity for Argo CD applicationSet controller pods assignment                                                  | `{}`            |
+| `applicationSet.podAnnotations`                                    | Annotations for Argo CD applicationSet controller pods                                                          | `{}`            |
+| `applicationSet.podLabels`                                         | Extra labels for Argo CD applicationSet controller pods                                                         | `{}`            |
+| `applicationSet.containerSecurityContext.enabled`                  | Enabled Argo CD applicationSet controller containers' Security Context                                          | `true`          |
+| `applicationSet.containerSecurityContext.runAsUser`                | Set Argo CD applicationSet controller containers' Security Context runAsUser                                    | `1001`          |
+| `applicationSet.containerSecurityContext.allowPrivilegeEscalation` | Set Argo CD applicationSet controller containers' Security Context allowPrivilegeEscalation                     | `false`         |
+| `applicationSet.containerSecurityContext.capabilities.drop`        | Set Argo CD applicationSet controller containers' Security Context capabilities to be dropped                   | `["all"]`       |
+| `applicationSet.containerSecurityContext.readOnlyRootFilesystem`   | Set Argo CD applicationSet controller containers' Security Context readOnlyRootFilesystem                       | `false`         |
+| `applicationSet.containerSecurityContext.runAsNonRoot`             | Set Argo CD applicationSet controller container's Security Context runAsNonRoot                                 | `true`          |
+| `applicationSet.livenessProbe.enabled`                             | Enable livenessProbe on Argo CD applicationSet controller nodes                                                 | `true`          |
+| `applicationSet.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                         | `10`            |
+| `applicationSet.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                | `10`            |
+| `applicationSet.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                               | `1`             |
+| `applicationSet.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                             | `3`             |
+| `applicationSet.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                             | `1`             |
+| `applicationSet.readinessProbe.enabled`                            | Enable readinessProbe on Argo CD applicationSet controller nodes                                                | `true`          |
+| `applicationSet.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                        | `10`            |
+| `applicationSet.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                               | `10`            |
+| `applicationSet.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                              | `1`             |
+| `applicationSet.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                            | `3`             |
+| `applicationSet.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                            | `1`             |
+| `applicationSet.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                             | `{}`            |
+| `applicationSet.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                            | `{}`            |
+| `applicationSet.resources.limits`                                  | The resources limits for the Argo CD applicationSet controller containers                                       | `{}`            |
+| `applicationSet.resources.requests`                                | The requested resources for the Argo CD applicationSet controller containers                                    | `{}`            |
+| `applicationSet.podSecurityContext.enabled`                        | Enabled Argo CD applicationSet controller pods' Security Context                                                | `true`          |
+| `applicationSet.podSecurityContext.fsGroup`                        | Set Argo CD applicationSet controller pod's Security Context fsGroup                                            | `1001`          |
+| `applicationSet.nodeSelector`                                      | Node labels for Argo CD applicationSet controller pods assignment                                               | `{}`            |
+| `applicationSet.tolerations`                                       | Tolerations for Argo CD applicationSet controller pods assignment                                               | `[]`            |
+| `applicationSet.updateStrategy.type`                               | Argo CD applicationSet controller statefulset strategy type                                                     | `RollingUpdate` |
+| `applicationSet.priorityClassName`                                 | Argo CD applicationSet controller pods' priorityClassName                                                       | `""`            |
+| `applicationSet.extraVolumes`                                      | Optionally specify extra list of additional volumes for the Argo CD applicationSet controller pod(s)            | `[]`            |
+| `applicationSet.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Argo CD applicationSet controller container(s) | `[]`            |
+| `applicationSet.extraEnvVars`                                      | Array with extra environment variables to add to Argo CD applicationSet controller nodes                        | `[]`            |
+| `applicationSet.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Argo CD applicationSet controller nodes                | `""`            |
+| `applicationSet.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for Argo CD applicationSet controller nodes                   | `""`            |
+| `applicationSet.webhook.ingress.enabled`                           | Enable an ingress resource for Webhooks                                                                         | `false`         |
+| `applicationSet.webhook.ingress.annotations`                       | Additional ingress annotations                                                                                  | `{}`            |
+| `applicationSet.webhook.ingress.labels`                            | Additional ingress labels                                                                                       | `{}`            |
+| `applicationSet.webhook.ingress.ingressClassName`                  | Defines which ingress controller will implement the resource                                                    | `""`            |
+| `applicationSet.webhook.ingress.hostname`                          | Ingress hostname for the Argo CD applicationSet ingress                                                         | `""`            |
+| `applicationSet.webhook.ingress.path`                              | Argo CD applicationSet ingress path                                                                             | `/api/webhook`  |
+| `applicationSet.webhook.ingress.pathType`                          | Ingress path type. One of `Exact`, `Prefix` or `ImplementationSpecific`                                         | `Prefix`        |
+| `applicationSet.webhook.ingress.extraHosts`                        | Extra hosts array for the Argo CD applicationSet ingress                                                        | `[]`            |
+| `applicationSet.webhook.ingress.extraPaths`                        | Extra paths for the Argo CD applicationSet ingress                                                              | `[]`            |
+| `applicationSet.webhook.ingress.extraTls`                          | Extra TLS configuration for the Argo CD applicationSet ingress                                                  | `[]`            |
+| `applicationSet.webhook.ingress.tls`                               | Ingress TLS configuration                                                                                       | `[]`            |
 
 
 ### Argo CD server Parameters
@@ -464,7 +570,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | ---------------------- |
 | `dex.image.registry`                                    | Dex image registry                                                                                  | `docker.io`            |
 | `dex.image.repository`                                  | Dex image repository                                                                                | `bitnami/dex`          |
-| `dex.image.tag`                                         | Dex image tag (immutable tags are recommended)                                                      | `2.35.3-debian-11-r18` |
+| `dex.image.tag`                                         | Dex image tag (immutable tags are recommended)                                                      | `2.35.3-debian-11-r20` |
 | `dex.image.digest`                                      | Dex image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `dex.image.pullPolicy`                                  | Dex image pull policy                                                                               | `IfNotPresent`         |
 | `dex.image.pullSecrets`                                 | Dex image pull secrets                                                                              | `[]`                   |
@@ -581,6 +687,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `config.styles`                                | Custom CSS styles                                                                                     | `""`   |
 | `config.existingStylesConfigmap`               | Use an existing styles configmap                                                                      | `""`   |
 | `config.tlsCerts`                              | TLS certificates used to verify the authenticity of the repository servers                            | `{}`   |
+| `config.gpgKeys`                               | GnuPG public keys to add to the keyring                                                               | `{}`   |
 | `config.secret.create`                         | Whether to create or not the secret                                                                   | `true` |
 | `config.secret.annotations`                    | General secret extra annotations                                                                      | `{}`   |
 | `config.secret.githubSecret`                   | GitHub secret to configure webhooks                                                                   | `""`   |
@@ -604,7 +711,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r59`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r62`      |
 | `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -615,30 +722,30 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Other Parameters
 
-| Name                                      | Description                                                                                           | Value                 |
-| ----------------------------------------- | ----------------------------------------------------------------------------------------------------- | --------------------- |
-| `rbac.create`                             | Specifies whether RBAC resources should be created                                                    | `true`                |
-| `redis.image.registry`                    | Redis image registry                                                                                  | `docker.io`           |
-| `redis.image.repository`                  | Redis image repository                                                                                | `bitnami/redis`       |
-| `redis.image.tag`                         | Redis image tag (immutable tags are recommended)                                                      | `7.0.5-debian-11-r26` |
-| `redis.image.digest`                      | Redis image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `redis.image.pullPolicy`                  | Redis image pull policy                                                                               | `IfNotPresent`        |
-| `redis.image.pullSecrets`                 | Redis image pull secrets                                                                              | `[]`                  |
-| `redis.enabled`                           | Enable Redis dependency                                                                               | `true`                |
-| `redis.nameOverride`                      | Name override for the Redis dependency                                                                | `""`                  |
-| `redis.service.port`                      | Service port for Redis dependency                                                                     | `6379`                |
-| `redis.auth.enabled`                      | Enable Redis dependency authentication                                                                | `true`                |
-| `redis.auth.existingSecret`               | Existing secret to load redis dependency password                                                     | `""`                  |
-| `redis.auth.existingSecretPasswordKey`    | Pasword key name inside the existing secret                                                           | `redis-password`      |
-| `redis.architecture`                      | Redis&reg; architecture. Allowed values: `standalone` or `replication`                                | `standalone`          |
-| `externalRedis.host`                      | External Redis host                                                                                   | `""`                  |
-| `externalRedis.port`                      | External Redis port                                                                                   | `6379`                |
-| `externalRedis.password`                  | External Redis password                                                                               | `""`                  |
-| `externalRedis.existingSecret`            | Existing secret for the external redis                                                                | `""`                  |
-| `externalRedis.existingSecretPasswordKey` | Password key for the existing secret containing the external redis password                           | `redis-password`      |
-| `redisWait.enabled`                       | Enables waiting for redis                                                                             | `true`                |
-| `redisWait.extraArgs`                     | Additional arguments for the redis-cli call, such as TLS                                              | `""`                  |
-| `redisWait.securityContext`               | Security context for init container                                                                   | `{}`                  |
+| Name                                      | Description                                                                                           | Value                |
+| ----------------------------------------- | ----------------------------------------------------------------------------------------------------- | -------------------- |
+| `rbac.create`                             | Specifies whether RBAC resources should be created                                                    | `true`               |
+| `redis.image.registry`                    | Redis image registry                                                                                  | `docker.io`          |
+| `redis.image.repository`                  | Redis image repository                                                                                | `bitnami/redis`      |
+| `redis.image.tag`                         | Redis image tag (immutable tags are recommended)                                                      | `7.0.7-debian-11-r0` |
+| `redis.image.digest`                      | Redis image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
+| `redis.image.pullPolicy`                  | Redis image pull policy                                                                               | `IfNotPresent`       |
+| `redis.image.pullSecrets`                 | Redis image pull secrets                                                                              | `[]`                 |
+| `redis.enabled`                           | Enable Redis dependency                                                                               | `true`               |
+| `redis.nameOverride`                      | Name override for the Redis dependency                                                                | `""`                 |
+| `redis.service.port`                      | Service port for Redis dependency                                                                     | `6379`               |
+| `redis.auth.enabled`                      | Enable Redis dependency authentication                                                                | `true`               |
+| `redis.auth.existingSecret`               | Existing secret to load redis dependency password                                                     | `""`                 |
+| `redis.auth.existingSecretPasswordKey`    | Pasword key name inside the existing secret                                                           | `redis-password`     |
+| `redis.architecture`                      | Redis&reg; architecture. Allowed values: `standalone` or `replication`                                | `standalone`         |
+| `externalRedis.host`                      | External Redis host                                                                                   | `""`                 |
+| `externalRedis.port`                      | External Redis port                                                                                   | `6379`               |
+| `externalRedis.password`                  | External Redis password                                                                               | `""`                 |
+| `externalRedis.existingSecret`            | Existing secret for the external redis                                                                | `""`                 |
+| `externalRedis.existingSecretPasswordKey` | Password key for the existing secret containing the external redis password                           | `redis-password`     |
+| `redisWait.enabled`                       | Enables waiting for redis                                                                             | `true`               |
+| `redisWait.extraArgs`                     | Additional arguments for the redis-cli call, such as TLS                                              | `""`                 |
+| `redisWait.securityContext`               | Security context for init container                                                                   | `{}`                 |
 
 
 The above parameters map to the env variables defined in [bitnami/argo-cd](https://github.com/bitnami/containers/tree/main/bitnami/argo-cd). For more information please refer to the [bitnami/argo-cd](https://github.com/bitnami/containers/tree/main/bitnami/argo-cd) image documentation.

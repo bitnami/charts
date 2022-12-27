@@ -64,7 +64,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.61.1-debian-11-r0
+    tag: 0.61.1-debian-11-r9
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -504,7 +504,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.40.3-debian-11-r0
+    tag: 2.41.0-debian-11-r0
     digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1422,7 +1422,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.24.0-debian-11-r61
+    tag: 0.24.0-debian-11-r70
     digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1942,6 +1942,20 @@ kubelet:
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     interval: ""
+    ## @param kubelet.serviceMonitor.resource Enable scraping /metrics/resource from kubelet's service
+    ##
+    resource: false
+    ## @param kubelet.serviceMonitor.resourcePath From kubernetes 1.18, /metrics/resource/v1alpha1 was renamed to /metrics/resource
+    ##
+    resourcePath: "/metrics/resource/v1alpha1"
+    ## @param kubelet.serviceMonitor.resourceRelabelings Metric relabeling
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#relabelconfig
+    ##
+    resourceRelabelings: []
+    ## @param kubelet.serviceMonitor.resourceMetricRelabelings Metric relabeling
+    ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
+    ##
+    resourceMetricRelabelings: []
     ## @param kubelet.serviceMonitor.metricRelabelings Metric relabeling
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
     ##
@@ -1950,6 +1964,10 @@ kubelet:
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
     ##
     relabelings: []
+    ## @param kubelet.serviceMonitor.cAdvisor Enable scraping /metrics/cadvisor from kubelet's service
+    ## ref: https://prometheus.io/docs/guides/cadvisor/#exploring-metrics-in-the-expression-browser
+    ##
+    cAdvisor: true
     ## @param kubelet.serviceMonitor.cAdvisorMetricRelabelings Metric relabeling for scraping cAdvisor
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
     ##
@@ -1983,7 +2001,7 @@ blackboxExporter:
   image:
     registry: docker.io
     repository: bitnami/blackbox-exporter
-    tag: 0.22.0-debian-11-r38
+    tag: 0.23.0-debian-11-r6
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

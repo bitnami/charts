@@ -937,7 +937,7 @@ apprepository:
     httpProxy: ""
     httpsProxy: ""
     noProxy: ""
-  ## @param apprepository.crontab Schedule for syncing App repositories (default to 10 minutes)
+  ## @param apprepository.crontab Default schedule for syncing App repositories (defaults to every 10 minutes)
   ## e.g:
   ## crontab: "*/10 * * * *"
   ##
@@ -1513,8 +1513,6 @@ kubeappsapis:
         v1alpha1:
           ## @param kubeappsapis.pluginConfig.helm.packages.v1alpha1.globalPackagingNamespace Custom global packaging namespace. Using this value will override the current "kubeapps release namespace + suffix" pattern and will create a new namespace if not exists.
           globalPackagingNamespace: ""
-          ## @param kubeappsapis.pluginConfig.helm.packages.v1alpha1.userManagedSecrets Default policy for handling repository secrets, either managed by the user or by kubeapps-apis
-          userManagedSecrets: false
     kappController:
       packages:
         v1alpha1:
@@ -1539,8 +1537,8 @@ kubeappsapis:
           ## @param kubeappsapis.pluginConfig.flux.packages.v1alpha1.defaultUpgradePolicy Default upgrade policy generating version constraints
           ## enum: [ "major", "minor", "patch", "none" ]
           defaultUpgradePolicy: none
-            ## @param kubeappsapis.pluginConfig.flux.packages.v1alpha1.userManagedSecrets Default policy for handling repository secrets, either managed by the user or by kubeapps-apis
-          userManagedSecrets: false
+          ## @param kubeappsapis.pluginConfig.flux.packages.v1alpha1.noCrossNamespaceRefs Enable this flag to disallow cross-namespace references, useful when running Flux on multi-tenant clusters
+          noCrossNamespaceRefs: false
     resources:
       packages:
         v1alpha1:
