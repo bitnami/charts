@@ -70613,6 +70613,42 @@ entries:
       category: Forum
     apiVersion: v2
     appVersion: 3.3.9
+    created: "2022-12-29T00:02:15.68610832Z"
+    dependencies:
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: phpBB is a popular bulletin board that features robust messaging
+      capabilities such as flat message structure, subforums, topic split/merge/lock,
+      user groups, full-text search, and attachments.
+    digest: 42f6c3026233b40ac6509ea3d43915c87d848aacd22552c95fe0b2cd08efd6f2
+    home: https://github.com/bitnami/charts/tree/main/bitnami/phpbb
+    icon: https://bitnami.com/assets/stacks/phpbb/img/phpbb-stack-220x234.png
+    keywords:
+    - phpbb
+    - forum
+    - http
+    - php
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: phpbb
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/phpbb
+    - https://www.phpbb.com/
+    urls:
+    - https://charts.bitnami.com/bitnami/phpbb-12.3.9.tgz
+    version: 12.3.9
+  - annotations:
+      category: Forum
+    apiVersion: v2
+    appVersion: 3.3.9
     created: "2022-11-28T23:52:58.655561683Z"
     dependencies:
     - condition: mariadb.enabled
@@ -99875,4 +99911,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2022-12-28T19:41:39.77921739Z"
+generated: "2022-12-29T00:02:15.676457827Z"
