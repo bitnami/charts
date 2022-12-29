@@ -81,6 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `fullnameOverride`       | String to fully override common.names.fullname template with a string                                     | `""`            |
 | `namespaceOverride`      | String to fully override common.names.namespace                                                           | `""`            |
 | `commonAnnotations`      | Annotations to add to all deployed objects                                                                | `{}`            |
+| `checksumAnnotations`    | Add checksum Annotations for configmaps and secrets to statefulset                                        | `false`            |
 | `commonLabels`           | Labels to add to all deployed objects                                                                     | `{}`            |
 | `schedulerName`          | Name of the Kubernetes scheduler (other than default)                                                     | `""`            |
 | `clusterDomain`          | Kubernetes DNS Domain name to use                                                                         | `cluster.local` |
