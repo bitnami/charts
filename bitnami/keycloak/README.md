@@ -387,6 +387,12 @@ Refer to the [chart documentation on using an external database](https://docs.bi
 It is not supported but possible to run Keycloak with an external MSSQL database with the following settings:
 
 ```yaml
+externalDatabase:
+  host: "mssql.example.com"
+  port: 1433
+  user: keycloak
+  database: keycloak
+  existingSecret: passwords
 extraEnvVars:
   - name: KC_DB # override values from the conf file
     value: 'mssql'
