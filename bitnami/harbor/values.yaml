@@ -462,6 +462,24 @@ persistence:
       size: 1Gi
       annotations: {}
       selector: {}
+    ## @param persistence.persistentVolumeClaim.jobservice.scanData.existingClaim Name of an existing PVC to use
+    ## @param persistence.persistentVolumeClaim.jobservice.scanData.storageClass PVC Storage Class for Harbor Jobservice data volume
+    ## Note: The default StorageClass will be used if not defined. Set it to `-` to disable dynamic provisioning
+    ## @param persistence.persistentVolumeClaim.jobservice.scanData.subPath The sub path used in the volume
+    ## @param persistence.persistentVolumeClaim.jobservice.scanData.accessModes The access mode of the volume
+    ## @param persistence.persistentVolumeClaim.jobservice.scanData.size The size of the volume
+    ## @param persistence.persistentVolumeClaim.jobservice.scanData.annotations Annotations for the PVC
+    ## @param persistence.persistentVolumeClaim.jobservice.scanData.selector Selector to match an existing Persistent Volume
+    ##
+      scanData:
+        existingClaim: ""
+        storageClass: ""
+        subPath: ""
+        accessModes:
+          - ReadWriteOnce
+        size: 1Gi
+        annotations: {}
+        selector: {}
     ## @param persistence.persistentVolumeClaim.chartmuseum.existingClaim Name of an existing PVC to use
     ## @param persistence.persistentVolumeClaim.chartmuseum.storageClass PVC Storage Class for Chartmuseum data volume
     ## Note: The default StorageClass will be used if not defined. Set it to `-` to disable dynamic provisioning
