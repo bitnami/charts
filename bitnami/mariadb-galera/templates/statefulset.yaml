@@ -7,8 +7,20 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
     {{- end }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  {{- if or .Values.commonAnnotations .Values.checksumAnnotations }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if and (or (.Files.Glob "files/my.cnf") .Values.mariadbConfiguration) (not .Values.configurationConfigMap) }}
+    checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+    {{- end }}
+    {{- if and (or (.Files.Glob "files/docker-entrypoint-initdb.d/*.{sh,sql,sql.gz}") .Values.initdbScripts) (not .Values.initdbScriptsConfigMap) }}
+    checksum/config-init: {{ include (print $.Template.BasePath "/initialization-configmap.yaml") . | sha256sum }}
+    {{- end }}
+    {{- if (include "mariadb-galera.createSecret" .) }}
+    checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
+    {{- end }}
   {{- end }}
 spec:
   podManagementPolicy: {{ .Values.podManagementPolicy }}

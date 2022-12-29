@@ -33,6 +33,9 @@ namespaceOverride: ""
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
+## @param checksumAnnotations true/false (default false) Add configmap and secret checksums to Statefulset
+##
+checksumAnnotations: false
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
