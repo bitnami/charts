@@ -446,6 +446,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | Name                                     | Description                                                                  | Value        |
 | ---------------------------------------- | ---------------------------------------------------------------------------- | ------------ |
 | `postgresql.enabled`                     | Deploy a PostgreSQL server to satisfy the applications database requirements | `true`       |
+| `postgresql.auth.username`               | Username for PostgreSQL server                                               | `"postgres"` |
 | `postgresql.auth.postgresPassword`       | Password for 'postgres' user                                                 | `""`         |
 | `postgresql.auth.database`               | Name for a custom database to create                                         | `assets`     |
 | `postgresql.auth.existingSecret`         | Name of existing secret to use for PostgreSQL credentials                    | `""`         |

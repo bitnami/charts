@@ -1449,6 +1449,7 @@ featureFlags:
 ## PostgreSQL chart configuration
 ## ref: https://github.com/bitnami/charts/blob/main/bitnami/postgresql/values.yaml
 ## @param postgresql.enabled Deploy a PostgreSQL server to satisfy the applications database requirements
+## @param postgresql.auth.username Username for PostgreSQL server
 ## @param postgresql.auth.postgresPassword Password for 'postgres' user
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql#setting-the-root-password-on-first-run
 ## @param postgresql.auth.database Name for a custom database to create
@@ -1457,6 +1458,7 @@ featureFlags:
 postgresql:
   enabled: true
   auth:
+    username: "postgres"
     postgresPassword: ""
     database: assets
     existingSecret: ""
