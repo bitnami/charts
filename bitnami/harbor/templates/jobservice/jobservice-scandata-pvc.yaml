@@ -32,4 +32,3 @@ spec:
   {{- end }}
   {{- include "common.storage.class" ( dict "persistence" .Values.persistence.persistentVolumeClaim.jobservice.scanData "global" .Values.global ) | nindent 2 }}
 {{- end }}
-{{- end }}
