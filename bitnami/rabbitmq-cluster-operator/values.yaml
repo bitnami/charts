@@ -519,6 +519,12 @@ msgTopologyOperator:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
   terminationGracePeriodSeconds: ""
+  ## @param msgTopologyOperator.hostNetwork Boolean
+  ##
+  hostNetwork: "false"
+  ## @param msgTopologyOperator.dnsPolicy Alternative DNS policy
+  ##
+  dnsPolicy: "ClusterFirst"
   ## Configure extra options for RabbitMQ Messaging Topology Operator containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param msgTopologyOperator.livenessProbe.enabled Enable livenessProbe on RabbitMQ Messaging Topology Operator nodes
