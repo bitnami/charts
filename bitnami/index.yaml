@@ -79952,6 +79952,36 @@ entries:
       category: Database
     apiVersion: v2
     appVersion: 7.0.7
+    created: "2023-01-03T21:37:57.237750605Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Redis(R) is an open source, advanced key-value store. It is often
+      referred to as a data structure server since keys can contain strings, hashes,
+      lists, sets and sorted sets.
+    digest: b5f666d1006938614d5d95b242565f3a4832c79ea2d3793260de436f35942305
+    home: https://github.com/bitnami/charts/tree/main/bitnami/redis
+    icon: https://bitnami.com/assets/stacks/redis/img/redis-stack-220x234.png
+    keywords:
+    - redis
+    - keyvalue
+    - database
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: redis
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/redis
+    urls:
+    - https://charts.bitnami.com/bitnami/redis-17.4.1.tgz
+    version: 17.4.1
+  - annotations:
+      category: Database
+    apiVersion: v2
+    appVersion: 7.0.7
     created: "2022-12-23T14:15:20.61653212Z"
     dependencies:
     - name: common
@@ -100523,4 +100553,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-01-03T21:29:49.767793159Z"
+generated: "2023-01-03T21:37:57.230660929Z"
