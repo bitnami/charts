@@ -463,6 +463,9 @@ spec:
         name: redis-data
         labels: {{- include "common.labels.matchLabels" . | nindent 10 }}
           app.kubernetes.io/component: replica
+          {{- if .Values.commonLabels }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 10 }}
+          {{- end }}
         {{- if .Values.replica.persistence.annotations }}
         annotations: {{- toYaml .Values.replica.persistence.annotations | nindent 10 }}
         {{- end }}
