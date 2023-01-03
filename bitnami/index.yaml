@@ -61611,6 +61611,39 @@ entries:
       category: Infrastructure
     apiVersion: v2
     appVersion: 1.23.3
+    created: "2023-01-03T21:29:49.772447754Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: NGINX Open Source is a web server that can be also used as a reverse
+      proxy, load balancer, and HTTP cache. Recommended for high-demanding sites due
+      to its ability to provide faster content.
+    digest: f5bb94c95939220537c42a92a6fe13256d11795071e90f4ffe16186bb12302f1
+    home: https://github.com/bitnami/charts/tree/main/bitnami/nginx
+    icon: https://bitnami.com/assets/stacks/nginx/img/nginx-stack-220x234.png
+    keywords:
+    - nginx
+    - http
+    - web
+    - www
+    - reverse proxy
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: nginx
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/nginx
+    - https://www.nginx.org
+    urls:
+    - https://charts.bitnami.com/bitnami/nginx-13.2.21.tgz
+    version: 13.2.21
+  - annotations:
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 1.23.3
     created: "2022-12-21T21:25:24.350783562Z"
     dependencies:
     - name: common
@@ -100490,4 +100523,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-01-03T12:17:09.029201082Z"
+generated: "2023-01-03T21:29:49.767793159Z"
