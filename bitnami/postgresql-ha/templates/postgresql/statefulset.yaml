@@ -147,6 +147,7 @@ spec:
               exec:
                 command:
                   - /pre-stop.sh
+                  - {{ .Values.postgresql.preStopDelayAfterPgStopSeconds | quote }}
           {{- end }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}

@@ -580,6 +580,15 @@ postgresql:
     ## @param postgresql.tls.certKeyFilename Certificate key filename
     ##
     certKeyFilename: ""
+  ## @param postgresql.preStopDelayAfterPgStopSeconds Minimal number of seconds preStop hook waits after postgres instance is stopped
+  ## It is used to delay postgres pod termination. It gives pgpool time to detect that node goes down. Down up cycle in
+  ## pgpool makes sure postgres node is registered correctly in pgpool (mainly primary flag).
+  ## Note: it could be replaced with .spec.minReadySeconds for Kubernetes v1.25 or later once
+  ##       https://github.com/kubernetes/kubernetes/issues/112066 is fixed.
+  ## Note: must be set to lower value than terminationGracePeriodSeconds (defaults to 30) so that preStop hook finishes
+  ## before grace period expires
+  ##
+  preStopDelayAfterPgStopSeconds: 25
 
 witness:
   ## ref: https://hub.docker.com/r/bitnami/postgresql/tags/
