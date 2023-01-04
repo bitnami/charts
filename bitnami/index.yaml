@@ -11418,6 +11418,38 @@ entries:
       category: Infrastructure
     apiVersion: v2
     appVersion: 1.23.0
+    created: "2023-01-04T10:13:47.0161656Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: The Contour Operator extends the Kubernetes API to create, configure
+      and manage instances of Contour on behalf of users.
+    digest: 980bdaaa5ca086b4e3a20a182c8ef6e629853517cb7e13ead58ba5d974eda3f2
+    home: https://github.com/projectcontour/contour-operator
+    icon: https://bitnami.com/assets/stacks/contour-operator/img/contour-operator-stack-220x234.png
+    keywords:
+    - contour
+    - operator
+    - ingress
+    - envoy
+    kubeVersion: '>= 1.21.0-0'
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: contour-operator
+    sources:
+    - https://github.com/projectcontour/contour-operator
+    - https://github.com/bitnami/containers/tree/main/bitnami/contour-operator
+    urls:
+    - https://charts.bitnami.com/bitnami/contour-operator-3.0.2.tgz
+    version: 3.0.2
+  - annotations:
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 1.23.0
     created: "2022-12-05T08:21:00.658330171Z"
     dependencies:
     - name: common
@@ -100583,4 +100615,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-01-04T08:17:19.648204076Z"
+generated: "2023-01-04T10:13:47.009919847Z"
