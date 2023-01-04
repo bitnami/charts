@@ -100,7 +100,7 @@ spec:
             - --database-secret-name={{ include "kubeapps.postgresql.secretName" . }}
             - --database-secret-key=postgres-password
             - --database-url={{ printf "%s:%d" (include "kubeapps.postgresql.host" .) (int (include "kubeapps.postgresql.port" .)) }}
-            - --database-user=postgres
+            - --database-user={{ .Values.postgresql.auth.username }}
             - --database-name={{ .Values.postgresql.auth.database }}
             {{- if .Values.apprepository.crontab }}
             - --crontab={{ .Values.apprepository.crontab }}
