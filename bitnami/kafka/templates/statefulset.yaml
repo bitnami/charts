@@ -472,7 +472,7 @@ spec:
           command:
             - java
           args:
-            - -XX:MaxRAMPercentage=100
+            - -XX:MaxRAMPercentage=100.0
             - -XshowSettings:vm
             - -jar
             - jmx_prometheus_httpserver.jar
