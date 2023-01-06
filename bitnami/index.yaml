@@ -7565,6 +7565,40 @@ entries:
   - annotations:
       category: Database
     apiVersion: v2
+    appVersion: 22.12.2
+    created: "2023-01-06T19:54:35.735635049Z"
+    dependencies:
+    - condition: zookeeper.enabled
+      name: zookeeper
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: ClickHouse is an open-source column-oriented OLAP database management
+      system. Use it to boost your database performance while providing linear scalability
+      and hardware efficiency.
+    digest: b14bde45462a87c8369d697b12a1db54b82ea250b29c87c0a321c571fb0b3479
+    home: https://clickhouse.com/
+    icon: https://bitnami.com/assets/stacks/clickhouse/img/clickhouse-stack-220x234.png
+    keywords:
+    - database
+    - sharding
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: clickhouse
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/clickhouse
+    - https://github.com/ClickHouse/ClickHouse
+    urls:
+    - https://charts.bitnami.com/bitnami/clickhouse-2.2.2.tgz
+    version: 2.2.2
+  - annotations:
+      category: Database
+    apiVersion: v2
     appVersion: 22.12.1
     created: "2022-12-23T10:08:30.97358148Z"
     dependencies:
@@ -101228,4 +101262,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-01-06T19:47:18.215186248Z"
+generated: "2023-01-06T19:54:35.724095058Z"
