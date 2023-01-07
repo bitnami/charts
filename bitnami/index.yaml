@@ -77230,6 +77230,43 @@ entries:
   - annotations:
       category: E-Commerce
     apiVersion: v2
+    appVersion: 8.0.1
+    created: "2023-01-07T17:40:02.760181884Z"
+    dependencies:
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: PrestaShop is a powerful open source eCommerce platform used by over
+      250,000 online storefronts worldwide. It is easily customizable, responsive,
+      and includes powerful tools to drive online sales.
+    digest: 259955ffb309f3d02b4e6e2b66d762f34995ca3681391807f35427ae71df7621
+    home: https://github.com/bitnami/charts/tree/main/bitnami/prestashop
+    icon: https://bitnami.com/assets/stacks/prestashop/img/prestashop-stack-220x234.png
+    keywords:
+    - prestashop
+    - e-commerce
+    - http
+    - web
+    - php
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: prestashop
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/prestashop
+    - https://prestashop.com/
+    urls:
+    - https://charts.bitnami.com/bitnami/prestashop-16.0.2.tgz
+    version: 16.0.2
+  - annotations:
+      category: E-Commerce
+    apiVersion: v2
     appVersion: 8.0.0
     created: "2022-12-12T10:47:49.002573094Z"
     dependencies:
@@ -101303,4 +101340,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-01-06T20:51:10.84792925Z"
+generated: "2023-01-07T17:40:02.752962093Z"
