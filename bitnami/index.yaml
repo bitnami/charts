@@ -32409,6 +32409,44 @@ entries:
       category: Infrastructure
     apiVersion: v2
     appVersion: 8.1.0
+    created: "2023-01-07T17:43:47.08542282Z"
+    dependencies:
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: JasperReports Server is a stand-alone and embeddable reporting server.
+      It is a central information hub, with reporting and analytics that can be embedded
+      into web and mobile applications.
+    digest: 5cf026d71bf6becbc071a74ea2b5bd8c0939f64749bc25b71d22cfd17094cbf1
+    home: https://github.com/bitnami/charts/tree/main/bitnami/jasperreports
+    icon: https://bitnami.com/assets/stacks/jasperserver/img/jasperserver-stack-220x234.png
+    keywords:
+    - business intelligence
+    - java
+    - jasper
+    - reporting
+    - analytic
+    - visualization
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: jasperreports
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/jasperreports
+    - http://community.jaspersoft.com/project/jasperreports-server
+    urls:
+    - https://charts.bitnami.com/bitnami/jasperreports-14.3.7.tgz
+    version: 14.3.7
+  - annotations:
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 8.1.0
     created: "2022-12-07T09:19:00.841905662Z"
     dependencies:
     - condition: mariadb.enabled
@@ -101373,4 +101411,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-01-07T17:40:15.21509332Z"
+generated: "2023-01-07T17:43:47.077391879Z"
