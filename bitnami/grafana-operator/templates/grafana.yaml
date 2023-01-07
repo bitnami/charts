@@ -69,6 +69,9 @@ spec:
   {{- end }}
   {{- $imagePullSecrets | nindent 4 }}
   {{- end }}
+  {{- if .Values.grafana.initContainers }}
+  initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.initContainers "context" $) | nindent 4 }}
+  {{- end }}
   {{- if .Values.grafana.sidecars }}
   containers:
     {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.sidecars "context" $) | nindent 4 }}

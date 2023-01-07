@@ -151,7 +151,7 @@ spec:
             - name: ASSET_SYNCER_DB_NAME
               value: {{ .Values.postgresql.auth.database | quote }}
             - name: ASSET_SYNCER_DB_USERNAME
-              value: postgres
+              value: {{ .Values.postgresql.auth.username | quote }}
             - name: ASSET_SYNCER_DB_USERPASSWORD
               valueFrom:
                 secretKeyRef:

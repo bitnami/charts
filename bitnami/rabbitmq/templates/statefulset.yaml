@@ -360,14 +360,13 @@ spec:
             secretName: {{ .Values.ldap.tls.certificatesSecret }}
         {{- end }}
         - name: configuration
-          secret:
-            secretName: {{ printf "%s-config" (include "common.names.fullname" .) }}
-            items:
-              - key: rabbitmq.conf
-                path: rabbitmq.conf
-              {{- if .Values.advancedConfiguration }}
-              - key: advanced.config
-                path: advanced.config
+          projected:
+            sources:
+              - secret:
+                  name: {{ printf "%s-config" (include "common.names.fullname" .) }}
+              {{- if and .Values.advancedConfigurationExistingSecret (not .Values.advancedConfiguration) }}
+              - secret:
+                  name: {{ tpl .Values.advancedConfigurationExistingSecret . | quote }}
               {{- end }}
         {{- if .Values.loadDefinition.enabled }}
         - name: load-definition-volume

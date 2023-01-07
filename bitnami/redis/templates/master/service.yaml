@@ -41,6 +41,9 @@ spec:
   {{- if .Values.master.service.sessionAffinityConfig }}
   sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.master.service.sessionAffinityConfig "context" $) | nindent 4 }}
   {{- end }}
+  {{- if .Values.master.service.externalIPs }}
+  externalIPs: {{- include "common.tplvalues.render" (dict "value" .Values.master.service.externalIPs "context" $) | nindent 4 }}
+  {{- end }}
   ports:
     - name: tcp-redis
       port: {{ .Values.master.service.ports.redis }}
