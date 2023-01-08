@@ -13,6 +13,7 @@ rules:
       - argoproj.io
     resources:
       - applications
+      - applicationset
     verbs:
       - get
       - list

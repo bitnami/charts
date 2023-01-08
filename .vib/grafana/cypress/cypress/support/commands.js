@@ -23,3 +23,13 @@ Cypress.Commands.add(
     cy.contains('Home');
   }
 );
+
+Cypress.on('uncaught:exception', (err, runnable) => {
+  // we expect a 3rd party library error with message 'Cannot read properties of undefined'
+  // and don't want to fail the test so we return false
+  if (err.message.includes('Cannot read properties of undefined')) {
+    return false;
+  }
+  // we still want to ensure there are no other unexpected
+  // errors, so we let them fail the test
+});

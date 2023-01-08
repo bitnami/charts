@@ -419,10 +419,10 @@ Validate values of MongoDB&reg; exporter URI string - auth.enabled and/or tls.en
     {{- $uriTlsArgs := ternary "tls=true&tlsCertificateKeyFile=/certs/mongodb.pem&tlsCAFile=/certs/mongodb-ca-cert" "" .Values.tls.enabled -}}
     {{- if .Values.metrics.username }}
         {{- $uriAuth := ternary "$(echo $MONGODB_METRICS_USERNAME | sed -r \"s/@/%40/g;s/:/%3A/g\"):$(echo $MONGODB_METRICS_PASSWORD | sed -r \"s/@/%40/g;s/:/%3A/g\")@" "" .Values.auth.enabled -}}
-        {{- printf "mongodb://%slocalhost:27017/admin?%s" $uriAuth $uriTlsArgs -}}
+        {{- printf "mongodb://%slocalhost:%d/admin?%s" $uriAuth (int .Values.containerPorts.mongodb) $uriTlsArgs -}}
     {{- else -}}
         {{- $uriAuth := ternary "$MONGODB_ROOT_USER:$(echo $MONGODB_ROOT_PASSWORD | sed -r \"s/@/%40/g;s/:/%3A/g\")@" "" .Values.auth.enabled -}}
-        {{- printf "mongodb://%slocalhost:27017/admin?%s" $uriAuth $uriTlsArgs -}}
+        {{- printf "mongodb://%slocalhost:%d/admin?%s" $uriAuth (int .Values.containerPorts.mongodb) $uriTlsArgs -}}
     {{- end -}}
 {{- end -}}
 

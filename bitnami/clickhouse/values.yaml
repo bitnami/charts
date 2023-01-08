@@ -76,7 +76,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/clickhouse
-  tag: 22.12.1-debian-11-r0
+  tag: 22.12.2-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -190,6 +190,7 @@ resources:
 ## @param podSecurityContext.enabled Enabled ClickHouse pods' Security Context
 ## @param podSecurityContext.fsGroup Set ClickHouse pod's Security Context fsGroup
 ## @param podSecurityContext.seccompProfile.type Set ClickHouse container's Security Context seccomp profile
+## If you are using Kubernetes 1.18, the following code needs to be commented out.
 ##
 podSecurityContext:
   enabled: true
@@ -921,7 +922,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r61
+    tag: 11-debian-11-r69
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1043,7 +1044,7 @@ externalZookeeper:
 ##
 zookeeper:
   enabled: true
-  replicaCount: 2
+  replicaCount: 3
   service:
     ports:
       client: 2181

@@ -1,7 +1,7 @@
 annotations:
   category: Analytics
 apiVersion: v2
-appVersion: 1.17.3
+appVersion: 1.18.0
 dependencies:
   - condition: postgresql.enabled
     name: postgresql
@@ -30,4 +30,4 @@ name: gitea
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/gitea
   - https://gitea.io/
-version: 0.1.1
+version: 0.1.3
