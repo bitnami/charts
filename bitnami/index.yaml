@@ -67621,6 +67621,44 @@ entries:
       category: Infrastructure
     apiVersion: v2
     appVersion: 7.4.0
+    created: "2023-01-09T12:46:43.441389915Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 17.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: A reverse proxy and static file server that provides authentication
+      using Providers (Google, GitHub, and others) to validate accounts by email,
+      domain or group.
+    digest: a39f80076e7964881f112157224d3d1d37c0edfc3506f5b38efac2bb7af5db0b
+    home: https://github.com/bitnami/charts/tree/main/bitnami/oauth2-proxy
+    icon: https://bitnami.com/assets/stacks/oauth2-proxy/img/oauth2-proxy-stack-220x234.png
+    keywords:
+    - kubernetes
+    - oauth
+    - oauth2
+    - authentication
+    - google
+    - github
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: oauth2-proxy
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/oauth2-proxy
+    - https://github.com/oauth2-proxy/oauth2-proxy
+    urls:
+    - https://charts.bitnami.com/bitnami/oauth2-proxy-3.4.3.tgz
+    version: 3.4.3
+  - annotations:
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 7.4.0
     created: "2022-12-30T11:07:17.264859404Z"
     dependencies:
     - condition: redis.enabled
@@ -101899,4 +101937,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-01-09T11:58:57.8575327Z"
+generated: "2023-01-09T12:46:43.42938771Z"
