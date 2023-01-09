@@ -92457,6 +92457,40 @@ entries:
       category: ApplicationServer
     apiVersion: v2
     appVersion: 10.1.4
+    created: "2023-01-09T05:26:28.733405181Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Apache Tomcat is an open-source web server designed to host and run
+      Java-based web applications. It is a lightweight server with a good performance
+      for applications running in production environments.
+    digest: ac6bd04f252d5359169217248ccdc9b4605f446faaae8dfab479c3a648c77aa4
+    home: https://github.com/bitnami/charts/tree/main/bitnami/tomcat
+    icon: https://bitnami.com/assets/stacks/tomcat/img/tomcat-stack-220x234.png
+    keywords:
+    - tomcat
+    - java
+    - http
+    - web
+    - application server
+    - jsp
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: tomcat
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/tomcat
+    - http://tomcat.apache.org
+    urls:
+    - https://charts.bitnami.com/bitnami/tomcat-10.5.7.tgz
+    version: 10.5.7
+  - annotations:
+      category: ApplicationServer
+    apiVersion: v2
+    appVersion: 10.1.4
     created: "2022-12-10T05:16:51.982908401Z"
     dependencies:
     - name: common
@@ -101661,4 +101695,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-01-09T04:22:28.439466902Z"
+generated: "2023-01-09T05:26:28.729738476Z"
