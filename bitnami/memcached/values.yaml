@@ -112,7 +112,7 @@ auth:
 command: []
 ## @param args Override default container args (useful when using custom images)
 ## e.g:
-## arguments:
+## args:
 ##   - /run.sh
 ##   - -m <maxMemoryLimit>
 ##   - -I <maxItemSize>
