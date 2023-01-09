@@ -177,6 +177,27 @@ spec:
             - name: REDIS_PORT
               value: {{ .Values.replica.containerPorts.redis | quote }}
             {{- end }}
+            - name: REDIS_SENTINEL_TLS_ENABLED
+              value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
+            {{- if .Values.tls.enabled }}
+            - name: REDIS_SENTINEL_TLS_PORT_NUMBER
+              value: {{ .Values.sentinel.containerPorts.sentinel | quote }}
+            - name:  REDIS_SENTINEL_TLS_AUTH_CLIENTS
+              value: {{ ternary "yes" "no" .Values.tls.authClients | quote }}
+            - name:  REDIS_SENTINEL_TLS_CERT_FILE
+              value: {{ template "redis.tlsCert" . }}
+            - name:  REDIS_SENTINEL_TLS_KEY_FILE
+              value: {{ template "redis.tlsCertKey" . }}
+            - name:  REDIS_SENTINEL_TLS_CA_FILE
+              value: {{ template "redis.tlsCACert" . }}
+            {{- if .Values.tls.dhParamsFilename }}
+            - name:  REDIS_SENTINEL_TLS_DH_PARAMS_FILE
+              value: {{ template "redis.tlsDHParams" . }}
+            {{- end }}
+            {{- else }}
+            - name: REDIS_SENTINEL_PORT
+              value: {{ .Values.sentinel.containerPorts.sentinel | quote }}
+            {{- end }}
             - name: REDIS_DATA_DIR
               value: {{ .Values.replica.persistence.path }}
             {{- if .Values.replica.externalMaster.enabled }}
