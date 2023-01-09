@@ -65146,6 +65146,39 @@ entries:
       category: Infrastructure
     apiVersion: v2
     appVersion: 0.4.9
+    created: "2023-01-09T01:15:06.627792018Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: NGINX Open Source for Intel is a lightweight server, combined with
+      cryptography acceleration for 3rd gen Xeon Scalable Processors (Ice Lake) to
+      get a breakthrough performance improvement.
+    digest: d88a980276af8accd2b7828c7dd08741761dec0b7a297cecd229b29fc38fe124
+    home: https://github.com/bitnami/charts/tree/main/bitnami/nginx-intel
+    icon: https://bitnami.com/assets/stacks/nginx/img/nginx-stack-220x234.png
+    keywords:
+    - nginx
+    - http
+    - web
+    - www
+    - reverse proxy
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: nginx-intel
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/nginx-intel
+    - https://github.com/intel/asynch_mode_nginx
+    urls:
+    - https://charts.bitnami.com/bitnami/nginx-intel-2.1.14.tgz
+    version: 2.1.14
+  - annotations:
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 0.4.9
     created: "2022-12-12T10:32:06.083110236Z"
     dependencies:
     - name: common
@@ -101509,4 +101542,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-01-09T00:47:51.019625133Z"
+generated: "2023-01-09T01:15:06.624184072Z"
