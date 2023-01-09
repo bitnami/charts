@@ -80642,6 +80642,39 @@ entries:
       category: Infrastructure
     apiVersion: v2
     appVersion: 2.1.0
+    created: "2023-01-09T18:56:51.106571617Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: The RabbitMQ Cluster Kubernetes Operator automates provisioning,
+      management, and operations of RabbitMQ clusters running on Kubernetes.
+    digest: 77039a9df8199b3440039bb69854720e0525a0873349b538a1f21cc215547637
+    home: https://github.com/rabbitmq/cluster-operator
+    icon: https://bitnami.com/assets/stacks/rabbitmq-cluster-operator/img/rabbitmq-cluster-operator-stack-220x234.png
+    keywords:
+    - rabbitmq
+    - operator
+    - infrastructure
+    - message queue
+    - AMQP
+    kubeVersion: '>= 1.19.0-0'
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: rabbitmq-cluster-operator
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq-cluster-operator
+    - https://github.com/rabbitmq/cluster-operator
+    urls:
+    - https://charts.bitnami.com/bitnami/rabbitmq-cluster-operator-3.2.0.tgz
+    version: 3.2.0
+  - annotations:
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 2.1.0
     created: "2023-01-07T17:40:15.221489644Z"
     dependencies:
     - name: common
@@ -102102,4 +102135,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-01-09T16:53:38.352428586Z"
+generated: "2023-01-09T18:56:51.100542554Z"
