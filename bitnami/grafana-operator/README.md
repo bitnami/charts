@@ -100,10 +100,10 @@ For more information, refer to the [documentation on the differences between the
 | `operator.customLivenessProbe`                               | Override default liveness probe                                                                                                           | `{}`                       |
 | `operator.customReadinessProbe`                              | Override default readiness probe                                                                                                          | `{}`                       |
 | `operator.customStartupProbe`                                | Override default startup probe                                                                                                            | `{}`                       |
-| `operator.extraVolumes`                                      | Optionally specify extra list of additional volumes for etcd pods                                                                         | `[]`                       |
-| `operator.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for etcd container(s)                                                            | `[]`                       |
-| `operator.initContainers`                                    | Add additional init containers to the etcd pods                                                                                           | `[]`                       |
-| `operator.sidecars`                                          | Add additional sidecar containers to the etcd pods                                                                                        | `[]`                       |
+| `operator.extraVolumes`                                      | Optionally specify extra list of additional volumes for Grafana Operator pods                                                             | `[]`                       |
+| `operator.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Grafana Operator container(s)                                                | `[]`                       |
+| `operator.initContainers`                                    | Add additional init containers to the Grafana Operator pods                                                                               | `[]`                       |
+| `operator.sidecars`                                          | Add additional sidecar containers to the Grafana Operator pods                                                                            | `[]`                       |
 | `operator.watchNamespace`                                    | Override the namespace to watch                                                                                                           | `""`                       |
 | `operator.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                                                            | `[]`                       |
 | `operator.priorityClassName`                                 | %%MAIN_CONTAINER_NAME%% pods' priorityClassName                                                                                           | `""`                       |
@@ -270,6 +270,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.updateStrategy`                                    | Set up update strategy for Grafana installation.                                                           | `{}`                     |
 | `grafana.extraVolumes`                                      | Optionally specify extra list of additional volumes for the grafana pod(s)                                 | `[]`                     |
 | `grafana.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the grafana container(s)                      | `[]`                     |
+| `grafana.initContainers`                                    | Add additional init containers to the grafana pods                                                         | `[]`                     |
 | `grafana.sidecars`                                          | Add additional sidecar containers to the grafana pod(s)                                                    | `[]`                     |
 
 

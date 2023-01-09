@@ -319,7 +319,6 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "external-dns.validateValues.rfc2136.kerberosConfig" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.scaleway.scwAccessKey" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.scaleway.scwSecretKey" .) -}}
-{{- $messages := append $messages (include "external-dns.validateValues.scaleway.scwDefaultOrganizationId" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -820,18 +819,6 @@ Validate values of External DNS:
 external-dns: scaleway.scwSecretKey
     You must provide the scaleway secret key when provider="scaleway".
     Please set the scwSecretKey parameter (--set scaleway.scwSecretKey="xxxx")
-{{- end -}}
-{{- end -}}
-
-{{/*
-Validate values of External DNS:
-- must provide the scaleway organization id when provider is "scaleway"
-*/}}
-{{- define "external-dns.validateValues.scaleway.scwDefaultOrganizationId" -}}
-{{- if and (eq .Values.provider "scaleway") (not .Values.scaleway.scwDefaultOrganizationId) -}}
-external-dns: scaleway.scwDefaultOrganizationId
-    You must provide the scaleway organization id key when provider="scaleway".
-    Please set the scwDefaultOrganizationId parameter (--set scaleway.scwDefaultOrganizationId="xxxx")
 {{- end -}}
 {{- end -}}
 
