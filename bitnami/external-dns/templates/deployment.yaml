@@ -499,13 +499,6 @@ spec:
                   name: {{ template "external-dns.secretName" . }}
                   key: scw_secret_key
             {{- end }}
-            {{- if .Values.scaleway.scwDefaultOrganizationId }}
-            - name: SCW_DEFAULT_ORGANIZATION_ID
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "external-dns.secretName" . }}
-                  key: scw_default_organization_id
-            {{- end }}
             {{- end }}
             {{- if eq .Values.provider "infoblox" }}
             # Infloblox environment variables
