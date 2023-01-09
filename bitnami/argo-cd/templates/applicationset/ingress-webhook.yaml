@@ -1,0 +1,64 @@
+{{- if and .Values.applicationSet.enabled .Values.applicationSet.webhook.ingress.enabled -}}
+apiVersion: {{ include "common.capabilities.webhook.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ include "argocd.applicationSet" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: applicationSet
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.applicationSet.webhook.ingress.labels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.applicationSet.webhook.ingress.labels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.applicationSet.webhook.ingress.annotations .Values.commonAnnotations .Values.applicationSet.webhook.ingress.certManager }}
+  annotations:
+    {{- if .Values.applicationSet.webhook.ingress.certManager }}
+    kubernetes.io/tls-acme: "true"
+    {{- end }}
+    {{- if .Values.applicationSet.webhook.ingress.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.applicationSet.webhook.ingress.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  {{- if and .Values.applicationSet.webhook.ingress.ingressClassName (eq "true" (include "common.webhook.ingress.supportsIngressClassname" .)) }}
+  ingressClassName: {{ .Values.applicationSet.webhook.ingress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    {{- if .Values.applicationSet.webhook.ingress.hostname }}
+    - host: {{ .Values.applicationSet.webhook.ingress.hostname }}
+      http:
+        paths:
+          {{- if .Values.applicationSet.webhook.ingress.extraPaths }}
+          {{- toYaml .Values.applicationSet.webhook.ingress.extraPaths | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.applicationSet.webhook.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.applicationSet.webhook.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "argocd.server" .) "servicePort" (ternary "https" "http" .Values.applicationSet.webhook.ingress.tls) "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- range .Values.applicationSet.webhook.ingress.extraHosts }}
+    - host: {{ .name | quote }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "argocd.server" $) "servicePort" (ternary "https" "http" $.Values.applicationSet.webhook.ingress.tls) "context" $) | nindent 14 }}
+    {{- end }}
+  tls:
+    {{- if .Values.applicationSet.webhook.ingress.tls }}
+    - hosts:
+        - {{ .Values.applicationSet.webhook.ingress.hostname }}
+      secretName: {{ printf "%s-tls" .Values.applicationSet.webhook.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.applicationSet.webhook.ingress.extraTls }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.applicationSet.webhook.ingress.extraTls "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end -}}
