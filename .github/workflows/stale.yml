@@ -4,9 +4,7 @@
 name: '[Support] Close stale issues and PRs'
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 1 * * *'
-# Remove all permissions by default
+
 permissions: {}
 # This job won't trigger any additional event. All actions are performed with GITHUB_TOKEN
 jobs:
