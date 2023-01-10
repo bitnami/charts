@@ -2,7 +2,7 @@ file:
   /bitnami/sonarqube:
     exists: true
     filetype: directory
-    mode: "2775"
+    mode: "2777"
     owner: root
   /opt/bitnami/sonarqube/conf/sonar.properties:
     exists: true
