@@ -92,7 +92,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                                    | ClickHouse image registry                                                                                  | `docker.io`            |
 | `image.repository`                                  | ClickHouse image repository                                                                                | `bitnami/clickhouse`   |
-| `image.tag`                                         | ClickHouse image tag (immutable tags are recommended)                                                      | `22.12.2-debian-11-r1` |
+| `image.tag`                                         | ClickHouse image tag (immutable tags are recommended)                                                      | `22.12.3-debian-11-r0` |
 | `image.digest`                                      | ClickHouse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `image.pullPolicy`                                  | ClickHouse image pull policy                                                                               | `IfNotPresent`         |
 | `image.pullSecrets`                                 | ClickHouse image pull secrets                                                                              | `[]`                   |
