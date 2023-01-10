@@ -280,7 +280,7 @@ Returns the secret name for the Kafka Provisioning client
 {{- end -}}
 
 {{/*
-Create the name of the service account to use for the Kafka Provisioning client 
+Create the name of the service account to use for the Kafka Provisioning client
 */}}
 {{- define "kafka.provisioning.serviceAccountName" -}}
 {{- if .Values.provisioning.serviceAccount.create -}}
@@ -372,6 +372,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := list -}}
 {{- $messages := append $messages (include "kafka.validateValues.authProtocols" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.nodePortListLength" .) -}}
+{{- $messages := append $messages (include "kafka.validateValues.externalIPListLength" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.domainSpecified" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.externalAccessServiceType" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.externalAccessAutoDiscoveryRBAC" .) -}}
@@ -402,11 +403,27 @@ kafka: auth.clientProtocol auth.externalClientProtocol auth.interBrokerProtocol
 
 {{/* Validate values of Kafka - number of replicas must be the same as NodePort list */}}
 {{- define "kafka.validateValues.nodePortListLength" -}}
-{{- $replicaCount := int .Values.replicaCount }}
-{{- $nodePortListLength := len .Values.externalAccess.service.nodePorts }}
-{{- if and .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled) (not (eq $replicaCount $nodePortListLength )) (eq .Values.externalAccess.service.type "NodePort") -}}
+{{- $replicaCount := int .Values.replicaCount -}}
+{{- $nodePortListLength := len .Values.externalAccess.service.nodePorts -}}
+{{- $nodePortLe := empty .Values.externalAccess.service.nodePorts -}}
+{{- $nodePortLr := eq $nodePortListLength $replicaCount -}}
+{{- $externalIPLe := empty .Values.externalAccess.service.externalIPs -}}
+{{- if and .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled) (eq .Values.externalAccess.service.type "NodePort") (or (and (not $nodePortLe) (not $nodePortLr)) (and $nodePortLe $externalIPLe)) -}}
 kafka: .Values.externalAccess.service.nodePorts
-    Number of replicas and nodePort array length must be the same. Currently: replicaCount = {{ $replicaCount }} and nodePorts = {{ $nodePortListLength }}
+    Number of replicas and nodePort array length must be the same. Currently: replicaCount = {{ $replicaCount }} and length nodePorts = {{ $nodePortListLength }} - {{ $externalIPLe }}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Kafka - number of replicas must be the same as externalIPs list */}}
+{{- define "kafka.validateValues.externalIPListLength" -}}
+{{- $replicaCount := int .Values.replicaCount -}}
+{{- $externalIPListLength := len .Values.externalAccess.service.externalIPs -}}
+{{- $externalIPLe := empty .Values.externalAccess.service.externalIPs -}}
+{{- $externalIPLr := eq $externalIPListLength $replicaCount -}}
+{{- $nodePortLe := empty .Values.externalAccess.service.nodePorts -}}
+{{- if and .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled) (eq .Values.externalAccess.service.type "NodePort") (or (and (not $externalIPLe) (not $externalIPLr)) (and $externalIPLe $nodePortLe)) -}}
+kafka: .Values.externalAccess.service.externalIPs
+    Number of replicas and externalIPs array length must be the same. Currently: replicaCount = {{ $replicaCount }} and length externalIPs = {{ $externalIPListLength }}
 {{- end -}}
 {{- end -}}
 

@@ -46,7 +46,7 @@ spec:
   ports:
     - name: tcp-kafka
       port: {{ $root.Values.externalAccess.service.ports.external }}
-      {{- if not (empty $root.Values.externalAccess.service.nodePorts) }}
+      {{- if le (add $i 1) (len $root.Values.externalAccess.service.nodePorts) }}
       nodePort: {{ index $root.Values.externalAccess.service.nodePorts $i }}
       {{- else }}
       nodePort: null
@@ -55,6 +55,10 @@ spec:
     {{- if $root.Values.externalAccess.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" $root.Values.externalAccess.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
+  {{- if and (eq $root.Values.externalAccess.service.type "NodePort") (le (add $i 1) (len $root.Values.externalAccess.service.externalIPs)) }}
+  externalIPs:
+    - {{- index $root.Values.externalAccess.service.externalIPs $i | quote }}
+  {{- end }}
   selector: {{- include "common.labels.matchLabels" $ | nindent 4 }}
     app.kubernetes.io/component: kafka
     statefulset.kubernetes.io/pod-name: {{ $targetPod }}
