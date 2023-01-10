@@ -20,6 +20,13 @@ Return the proper sysctl image name
 {{- end -}}
 
 {{/*
+Return the proper install_plugins initContainer image name
+*/}}
+{{- define "sonarqube.plugins.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.plugins.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
 Return the proper sysctl image name
 */}}
 {{- define "sonarqube.metrics.jmx.image" -}}
@@ -208,5 +215,5 @@ Create the name of the deployment's install_plugins initContainer
 Create the name of the install_plugins configMap
 */}}
 {{- define "sonarqube.installPlugins.configMap" -}}
-    {{ printf "%s-install-plugins-configMap" (include "common.names.fullname" .) }}
+    {{ printf "%s-install-plugins-configmap" (include "common.names.fullname" .) }}
 {{- end -}}

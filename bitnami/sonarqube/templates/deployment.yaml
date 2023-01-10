@@ -3,12 +3,11 @@ kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-
 spec:
   {{- if .Values.plugins.install }}
   initContainers:
     - name: {{ include "sonarqube.installPlugins.initContainer" . }}
-      image: {{ .Values.plugins.image }}
+      image: {{ include "sonarqube.plugins.image" . }}
       imagePullPolicy: {{ .Values.plugins.image.pullPolicy  }}
       command: [ "sh",
                  "-e",
