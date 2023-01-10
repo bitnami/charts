@@ -11,6 +11,32 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- if .Values.plugins.install }}
+  initContainers:
+    - name: {{ template "common.names.fullname" . }}-install-plugins-initContainer #TODO: Create helper
+      image: {{ .Values.plugins.image }}
+      imagePullPolicy: {{ .Values.plugins.image.pullPolicy  }}
+      command: [ "sh",
+                 "-e",
+                 "/tmp/scripts/install_plugins.sh" ]
+      {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
+      securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+      {{- end }}
+      {{- if .Values.volumePermissions.resources }}
+      resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+      {{- end }}
+      volumeMounts:
+        - name: install-plugins
+          mountPath: /tmp/scripts/
+        - name: data
+          mountPath: /bitnami/sonarqube
+  {{- end }}
+
+
+
+
+
+
   replicas: {{ .Values.replicaCount }}
   {{- if .Values.updateStrategy }}
   strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
@@ -366,6 +392,14 @@ spec:
         - name: jmx-config
           configMap:
             name: {{ printf "%s-jmx-conf" (include "common.names.fullname" .) }}
+        {{- end }}
+        {{- if .Values.plugins.install }}
+        - name: install-plugins
+          configMap:
+            name: {{ template "common.names.fullname" . }}-install-plugins-configMap #TODO: Create helper
+            items:
+              - key: install_plugins.sh
+                path: install_plugins.sh
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
