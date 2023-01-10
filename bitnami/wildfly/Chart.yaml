@@ -26,4 +26,4 @@ name: wildfly
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/wildfly
   - http://wildfly.org
-version: 14.0.2
+version: 14.1.0
