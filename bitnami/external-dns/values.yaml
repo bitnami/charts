@@ -537,9 +537,6 @@ scaleway:
   ## @param scaleway.scwSecretKey When using the Scaleway provider, specify an existing secret key. (required when provider=scaleway)
   ##
   scwSecretKey: ""
-  ## @param scaleway.scwDefaultOrganizationId When using the Scaleway provider, specify the existing organization id. (required when provider=scaleway)
-  ##
-  scwDefaultOrganizationId: ""
 ## RFC 2136 configuration to be set via arguments/env. variables
 ##
 rfc2136:

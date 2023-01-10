@@ -14,6 +14,7 @@ dependencies:
     tags:
       - bitnami-common
     version: 2.x.x
+deprecated: true
 description: ownCloud is an open source content collaboration platform used to store and share files from any device. It grants data privacy, synchronization between devices, and file access control.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/main/bitnami/owncloud
@@ -24,11 +25,9 @@ keywords:
   - http
   - web
   - php
-maintainers:
-  - name: Bitnami
-    url: https://github.com/bitnami/charts
+maintainers: []
 name: owncloud
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/owncloud
   - https://owncloud.org/
-version: 12.2.8
+version: 12.2.10
