@@ -2525,6 +2525,42 @@ entries:
   - annotations:
       category: Infrastructure
     apiVersion: v2
+    appVersion: 2.5.6
+    created: "2023-01-10T23:46:50.481209376Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 17.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Argo CD is a continuous delivery tool for Kubernetes based on GitOps.
+    digest: 82f0148d0b669a40a934857c289478866582e687d051555b97ad91d81f8caa8b
+    home: https://argoproj.github.io/argo-cd/
+    icon: https://bitnami.com/assets/stacks/argo-cd/img/argo-cd-stack-220x234.png
+    keywords:
+    - Continuous delivery
+    - Continuous deployment
+    - Devops
+    - Kubernetes
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: argo-cd
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/argo-cd
+    - https://github.com/argoproj/argo-cd/
+    - https://github.com/bitnami/containers/tree/main/bitnami/dex
+    - https://github.com/dexidp/dex
+    urls:
+    - https://charts.bitnami.com/bitnami/argo-cd-4.4.1.tgz
+    version: 4.4.1
+  - annotations:
+      category: Infrastructure
+    apiVersion: v2
     appVersion: 2.5.5
     created: "2022-12-21T16:40:54.476847017Z"
     dependencies:
@@ -102629,4 +102665,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-01-10T21:27:50.657135501Z"
+generated: "2023-01-10T23:46:50.457876227Z"
