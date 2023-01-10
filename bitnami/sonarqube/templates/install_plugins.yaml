@@ -1,7 +1,7 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: ConfigMap
 metadata:
-  name: {{ template "common.names.fullname" . }}-install-plugins-configMap #TODO: Create helper
+  name: {{ include "sonarqube.installPlugins.configMap" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}

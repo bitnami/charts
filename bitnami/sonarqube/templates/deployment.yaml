@@ -3,17 +3,11 @@ kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-  {{- end }}
+
 spec:
   {{- if .Values.plugins.install }}
   initContainers:
-    - name: {{ template "common.names.fullname" . }}-install-plugins-initContainer #TODO: Create helper
+    - name: {{ include "sonarqube.installPlugins.initContainer" . }}
       image: {{ .Values.plugins.image }}
       imagePullPolicy: {{ .Values.plugins.image.pullPolicy  }}
       command: [ "sh",
@@ -390,7 +384,7 @@ spec:
         {{- if .Values.plugins.install }}
         - name: install-plugins
           configMap:
-            name: {{ template "common.names.fullname" . }}-install-plugins-configMap #TODO: Create helper
+            name: {{ include "sonarqube.installPlugins.configMap" . }}
             items:
               - key: install_plugins.sh
                 path: install_plugins.sh

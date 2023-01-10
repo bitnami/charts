@@ -196,3 +196,17 @@ sonarqube: database
        externalDatabase.database=DB_NAME
 {{- end -}}
 {{- end -}}
+
+{{/*
+Create the name of the deployment's install_plugins initContainer
+*/}}
+{{- define "sonarqube.installPlugins.initContainer" -}}
+    {{ printf "%s-install-plugins-initContainer" (include "common.names.fullname" .) }}
+{{- end -}}
+
+{{/*
+Create the name of the install_plugins configMap
+*/}}
+{{- define "sonarqube.installPlugins.configMap" -}}
+    {{ printf "%s-install-plugins-configMap" (include "common.names.fullname" .) }}
+{{- end -}}
