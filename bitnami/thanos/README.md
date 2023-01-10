@@ -1340,6 +1340,10 @@ objstoreConfig: |-
         rules:
           - alert: "PrometheusDown"
             expr: absent(up{prometheus="monitoring/kube-prometheus"})
+ metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true 
  minio:
   auth:
     rootPassword: minio123
