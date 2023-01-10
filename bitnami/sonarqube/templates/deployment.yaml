@@ -31,12 +31,6 @@ spec:
         - name: data
           mountPath: /bitnami/sonarqube
   {{- end }}
-
-
-
-
-
-
   replicas: {{ .Values.replicaCount }}
   {{- if .Values.updateStrategy }}
   strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
