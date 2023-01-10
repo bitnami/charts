@@ -43,7 +43,7 @@ spec:
     - name: mysql
       port: {{ .Values.service.ports.mysql }}
       targetPort: mysql
-      {{- $appProtocolAvailable := (semverCompare ">1.20-0" (include "common.capabilities.kubeVersion" .)) }}
+      {{- $appProtocolAvailable := (semverCompare ">=1.20-0" (include "common.capabilities.kubeVersion" .)) }}
       {{- if $appProtocolAvailable }}
       appProtocol: mysql
       {{- end }}

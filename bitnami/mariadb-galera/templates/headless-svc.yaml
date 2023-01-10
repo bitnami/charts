@@ -20,7 +20,7 @@ spec:
   type: ClusterIP
   clusterIP: None
   ports:
-    {{- $appProtocolAvailable := (semverCompare ">1.20-0" (include "common.capabilities.kubeVersion" .)) }}
+    {{- $appProtocolAvailable := (semverCompare ">=1.20-0" (include "common.capabilities.kubeVersion" .)) }}
     - name: galera
       port: 4567
       targetPort: galera
