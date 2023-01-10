@@ -53134,6 +53134,36 @@ entries:
       category: Infrastructure
     apiVersion: v2
     appVersion: 1.6.17
+    created: "2023-01-10T16:37:45.356055902Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Memcached is an high-performance, distributed memory object caching
+      system, generic in nature, but intended for use in speeding up dynamic web applications
+      by alleviating database load.
+    digest: 4f64113a213bc6749c7a268b8cd35a616b87ff658b6f32198824e5eca529ba7b
+    home: https://github.com/bitnami/charts/tree/main/bitnami/memcached
+    icon: https://bitnami.com/assets/stacks/memcached/img/memcached-stack-220x234.png
+    keywords:
+    - memcached
+    - cache
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: memcached
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/memcached
+    - http://memcached.org/
+    urls:
+    - https://charts.bitnami.com/bitnami/memcached-6.3.4.tgz
+    version: 6.3.4
+  - annotations:
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 1.6.17
     created: "2023-01-04T11:51:53.478765128Z"
     dependencies:
     - name: common
@@ -102314,4 +102344,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-01-10T15:19:00.511843199Z"
+generated: "2023-01-10T16:37:45.353039898Z"
