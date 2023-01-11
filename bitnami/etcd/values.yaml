@@ -117,6 +117,9 @@ auth:
   ## ref: https://etcd.io/docs/latest/learning/design-auth-v3/#two-types-of-tokens-simple-and-jwt
   ##
   token:
+    ## @param auth.token.enabled enables token authentication
+    ##
+    enabled: true
     ## @param auth.token.type Authentication token type. Allowed values: 'simple' or 'jwt'
     ## ref: https://etcd.io/docs/latest/op-guide/configuration/#--auth-token
     ##
