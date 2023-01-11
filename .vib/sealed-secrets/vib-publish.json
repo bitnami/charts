@@ -34,7 +34,7 @@
         {
           "action_id": "health-check",
           "params": {
-            "endpoint": "lb-sealed-secrets-80",
+            "endpoint": "lb-sealed-secrets-http",
             "app_protocol": "HTTP"
           }
         },
@@ -44,7 +44,7 @@
             "resources": {
               "path": "/.vib/sealed-secrets/cypress"
             },
-            "endpoint": "lb-sealed-secrets-80",
+            "endpoint": "lb-sealed-secrets-http",
             "app_protocol": "HTTP"
           }
         },

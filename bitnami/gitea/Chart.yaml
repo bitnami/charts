@@ -30,4 +30,4 @@ name: gitea
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/gitea
   - https://gitea.io/
-version: 0.1.3
+version: 0.1.5
