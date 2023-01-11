@@ -1,5 +1,7 @@
 annotations:
   category: ApplicationServer
+  licenses: |
+    - Apache-2.0
 apiVersion: v2
 appVersion: 27.0.1
 dependencies:
@@ -9,7 +11,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Wildfly is a lightweight, open source application server, formerly known as JBoss, that implements the latest enterprise Java standards.
-engine: gotpl
 home: https://github.com/bitnami/charts/tree/main/bitnami/wildfly
 icon: https://bitnami.com/assets/stacks/wildfly/img/wildfly-stack-220x234.png
 keywords:

@@ -1,5 +1,7 @@
 annotations:
   category: E-Commerce
+  licenses: |
+    - Apache-2.0
 apiVersion: v2
 appVersion: 8.0.1
 dependencies:
@@ -13,7 +15,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: PrestaShop is a powerful open source eCommerce platform used by over 250,000 online storefronts worldwide. It is easily customizable, responsive, and includes powerful tools to drive online sales.
-engine: gotpl
 home: https://github.com/bitnami/charts/tree/main/bitnami/prestashop
 icon: https://bitnami.com/assets/stacks/prestashop/img/prestashop-stack-220x234.png
 keywords:

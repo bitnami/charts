@@ -1,5 +1,7 @@
 annotations:
   category: Infrastructure
+  licenses: |
+    - Apache-2.0
 apiVersion: v2
 appVersion: 1.23.2
 dependencies:
@@ -9,7 +11,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Contour is an open source Kubernetes ingress controller that works by deploying the Envoy proxy as a reverse proxy and load balancer.
-engine: gotpl
 home: https://github.com/bitnami/charts/tree/main/bitnami/contour
 icon: https://bitnami.com/assets/stacks/contour/img/contour-stack-220x234.png
 keywords:
