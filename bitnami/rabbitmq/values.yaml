@@ -409,7 +409,7 @@ configuration: |-
   {{- if .Values.metrics.enabled }}
   ## Prometheus metrics
   ##
-  prometheus.tcp.port = 9419
+  prometheus.tcp.port = {{ .Values.containerPorts.metrics }}
   {{- end }}
   {{- if .Values.memoryHighWatermark.enabled }}
   ## Memory Threshold
