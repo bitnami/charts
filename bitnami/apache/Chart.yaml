@@ -1,5 +1,7 @@
 annotations:
   category: Infrastructure
+  licenses: |
+    - Apache-2.0
 apiVersion: v2
 appVersion: 2.4.54
 dependencies:
@@ -9,7 +11,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Apache HTTP Server is an open-source HTTP server. The goal of this project is to provide a secure, efficient and extensible server that provides HTTP services in sync with the current HTTP standards.
-engine: gotpl
 home: https://github.com/bitnami/charts/tree/main/bitnami/apache
 icon: https://bitnami.com/assets/stacks/apache/img/apache-stack-220x234.png
 keywords:
