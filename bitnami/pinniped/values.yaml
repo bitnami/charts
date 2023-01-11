@@ -88,7 +88,7 @@ concierge:
   ##
   containerPorts:
     api: 10250
-    proxy: 8443
+    proxy: 8444
 
   ## @param concierge.configurationPorts.aggregatedAPIServerPort Concierge API configuration port
   ## @param concierge.configurationPorts.impersonationProxyServerPort Concierge Proxy configuration port
