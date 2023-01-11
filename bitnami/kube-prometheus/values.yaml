@@ -1910,6 +1910,9 @@ exporters:
 ## @param node-exporter [object] Node Exporter deployment configuration
 ##
 node-exporter:
+  ## @param node-exporter.namespaceOverride String to fully override common.names.namespace
+  ##
+  namespaceOverride: ""
   service:
     labels:
       jobLabel: node-exporter
@@ -1922,6 +1925,9 @@ node-exporter:
 ## @param kube-state-metrics [object] Kube State Metrics deployment configuration
 ##
 kube-state-metrics:
+  ## @param kube-state-metrics.namespaceOverride String to fully override common.names.namespace
+  ##
+  namespaceOverride: ""
   serviceMonitor:
     enabled: true
     honorLabels: true
