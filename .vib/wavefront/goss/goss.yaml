@@ -1,11 +1,6 @@
 http:
   http://wavefront-proxy:{{ .Vars.proxy.port }}:
     status: 202
-file:
-  /var/run/secrets/kubernetes.io/serviceaccount:
-    exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
-    filetype: directory
-    mode: "3777"
 command:
   {{- $uid := .Vars.proxy.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.proxy.podSecurityContext.fsGroup }}
