@@ -482,7 +482,7 @@ supervisor:
     names:
       defaultTLSCertificateSecret: {{ printf "%s-%s" (include "pinniped.supervisor.fullname" .) "default-tls-certificate" | trunc 63 | trimSuffix "-" }}
       apiService: {{ template "pinniped.supervisor.api.fullname" . }}
-    labels: {"app":"pinniped-concierge", "app.kubernetes.io/part-of":"pinniped", "app.kubernetes.io/component": "supervisor", "app.kubernetes.io/instance": "{{ .Release.Name }}"}
+    labels: {"app.kubernetes.io/part-of":"pinniped", "app.kubernetes.io/component": "supervisor", "app.kubernetes.io/instance": "{{ .Release.Name }}"}
     insecureAcceptExternalUnencryptedHttpRequests: false
 
   ## Configure extra options for Supervisor containers' liveness and readiness probes
