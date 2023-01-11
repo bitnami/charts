@@ -1,5 +1,7 @@
 annotations:
   category: CMS
+  licenses: |
+    - Apache-2.0
 apiVersion: v2
 appVersion: 9.4.9
 dependencies:
@@ -13,7 +15,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Drupal is one of the most versatile open source content management systems in the world. It is pre-configured with the Ctools and Views modules, Drush and Let's Encrypt auto-configuration support.
-engine: gotpl
 home: https://github.com/bitnami/charts/tree/main/bitnami/drupal
 icon: https://bitnami.com/assets/stacks/drupal/img/drupal-stack-220x234.png
 keywords:
