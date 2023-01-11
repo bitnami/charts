@@ -344,6 +344,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.quorum`                             | Sentinel Quorum                                                                                                                             | `2`                      |
 | `sentinel.getMasterTimeout`                   | Amount of time to allow before get_sentinel_master_info() times out.                                                                        | `220`                    |
 | `sentinel.automateClusterRecovery`            | Automate cluster recovery in cases where the last replica is not considered a good replica and Sentinel won't automatically failover to it. | `false`                  |
+| `sentinel.redisShutdownWaitFailover`          | Whether the Redis&reg; master container waits for the failover at shutdown (in addition to the Redis&reg; Sentinel container).              | `true`                   |
 | `sentinel.downAfterMilliseconds`              | Timeout for detecting a Redis&reg; node is down                                                                                             | `60000`                  |
 | `sentinel.failoverTimeout`                    | Timeout for performing a election failover                                                                                                  | `180000`                 |
 | `sentinel.parallelSyncs`                      | Number of replicas that can be reconfigured in parallel to use the new master after a failover                                              | `1`                      |
@@ -620,7 +621,11 @@ When installing the chart with `architecture=standalone`, it will deploy a stand
 
 #### Master-Replicas with Sentinel
 
-When installing the chart with `architecture=replication` and `sentinel.enabled=true`, it will deploy a Redis&reg; master StatefulSet (only one master allowed) and a Redis&reg; replicas StatefulSet. In this case, the pods will contain an extra container with Redis&reg; Sentinel. This container will form a cluster of Redis&reg; Sentinel nodes, which will promote a new master in case the actual one fails. In addition to this, only one service is exposed:
+When installing the chart with `architecture=replication` and `sentinel.enabled=true`, it will deploy a Redis&reg; master StatefulSet (only one master allowed) and a Redis&reg; replicas StatefulSet. In this case, the pods will contain an extra container with Redis&reg; Sentinel. This container will form a cluster of Redis&reg; Sentinel nodes, which will promote a new master in case the actual one fails.
+
+On graceful termination of the Redis&reg; master pod, a failover of the master is initiated to promote a new master. The Redis&reg; Sentinel container in this pod will wait for the failover to occur before terminating. If `sentinel.redisShutdownWaitFailover=true` is set (the default), the Redis&reg; container will wait for the failover as well before terminating. This increases availability for reads during failover, but may cause stale reads until all clients have switched to the new master.
+
+In addition to this, only one service is exposed:
 
 - Redis&reg; service: Exposes port 6379 for Redis&reg; read-only operations and port 26379 for accessing Redis&reg; Sentinel.
 
