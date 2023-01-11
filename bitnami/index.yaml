@@ -3751,6 +3751,48 @@ entries:
       category: Infrastructure
     apiVersion: v2
     appVersion: 3.4.4
+    created: "2023-01-11T07:45:52.507122949Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.x.x
+    - condition: mysql.enabled
+      name: mysql
+      repository: https://charts.bitnami.com/bitnami
+      version: 9.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Argo Workflows is meant to orchestrate Kubernetes jobs in parallel.
+      It uses DAG and step-based workflows
+    digest: 162ad650446ebfabd9764fa1cce14fd533e4295c0bdb381cc662dbaf007a65e3
+    home: https://argoproj.github.io/workflows/
+    icon: https://bitnami.com/assets/stacks/argo-workflows/img/argo-workflows-stack-220x234.png
+    keywords:
+    - Devops
+    - Kubernetes
+    - Jobs
+    - Continuous delivery
+    - Continous deployment
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: argo-workflows
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/argo-workflow-cli
+    - https://github.com/bitnami/containers/tree/main/bitnami/argo-workflow-controller
+    - https://github.com/bitnami/containers/tree/main/bitnami/argo-workflow-exec
+    - https://argoproj.github.io/workflows/
+    urls:
+    - https://charts.bitnami.com/bitnami/argo-workflows-5.1.2.tgz
+    version: 5.1.2
+  - annotations:
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 3.4.4
     created: "2022-12-30T10:28:23.157337782Z"
     dependencies:
     - condition: postgresql.enabled
@@ -102698,4 +102740,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-01-11T01:57:58.5576489Z"
+generated: "2023-01-11T07:45:52.49275516Z"
