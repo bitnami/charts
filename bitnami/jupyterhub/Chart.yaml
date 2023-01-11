@@ -1,5 +1,7 @@
 annotations:
   category: MachineLearning
+  licenses: |
+    - Apache-2.0
 apiVersion: v2
 appVersion: 3.0.0
 dependencies:
@@ -13,7 +15,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: JupyterHub brings the power of notebooks to groups of users. It gives users access to computational environments and resources without burdening the users with installation and maintenance tasks.
-engine: gotpl
 home: https://jupyter.org/hub
 icon: https://bitnami.com/assets/stacks/jupyterhub/img/jupyterhub-stack-220x234.png
 keywords:
