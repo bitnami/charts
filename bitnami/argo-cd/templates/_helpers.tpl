@@ -129,6 +129,28 @@ Create the name of the service account to use for the Argo CD applicationSet con
 {{- end -}}
 
 {{/*
+Create the name of the service account to use for the Argo CD notifications controller
+*/}}
+{{- define "argocd.notifications.serviceAccountName" -}}
+{{- if .Values.notifications.serviceAccount.create -}}
+    {{ default (printf "%s-notifications" (include "common.names.fullname" .)) .Values.notifications.serviceAccount.name | trunc 63 | trimSuffix "-" }}
+{{- else -}}
+    {{ default "default" .Values.notifications.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use for the Argo CD Slack bot
+*/}}
+{{- define "argocd.notifications.bots.slack.serviceAccountName" -}}
+{{- if .Values.notifications.bots.slack.serviceAccount.create -}}
+    {{ default (printf "%s-notifications-slack-bot" (include "common.names.fullname" .)) .Values.notifications.bots.slack.serviceAccount.name | trunc 63 | trimSuffix "-" }}
+{{- else -}}
+    {{ default "default" .Values.notifications.bots.slack.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create the name of the service account to use for the Argo CD repo server
 */}}
 {{- define "argocd.repo-server.serviceAccountName" -}}

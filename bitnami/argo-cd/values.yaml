@@ -962,6 +962,573 @@ applicationSet:
       ##
       tls: []
 
+## @section Argo CD notifications controller parameters
+
+## notifications controller
+##
+notifications:
+  ## @param notifications.enabled Enable notifications controller
+  ##
+  enabled: false
+  ## @param notifications.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## Arguments that will be used by default for the application controller
+  ## @param notifications.defaultArgs.enableLeaderElection Enable leader election
+  ## @param notifications.defaultArgs.policy Default policy
+  ## @param notifications.defaultArgs.debug Enable debug mode
+  ## @param notifications.defaultArgs.dryRun Enable dry-run mode 
+  ##
+  defaultArgs:
+    enableLeaderElection: false
+    policy: "sync"
+    debug: "false"
+    dryRun: "false"
+  ## @param notifications.args Override default container args (useful when using custom images). Overrides the defaultArgs.
+  ##
+  args: []
+  ## @param notifications.extraArgs Add extra arguments to the default arguments for the Argo CD notifications controller
+  ##
+  extraArgs: []
+  ## Argo CD notifications controller log format: text|json
+  ## @param notifications.logFormat Format for the Argo CD notifications controller logs. Options: [text, json]
+  ##
+  logFormat: text
+  ## Argo CD notifications controller log level
+  ## @param notifications.logLevel Log level for the Argo CD notifications controller
+  ##
+  logLevel: info
+  ## Argo CD notifications controller ports
+  ## @param notifications.containerPorts.metrics Argo CD notifications controller metrics port number
+  ##
+  containerPorts:
+    metrics: 8085
+  ## Metrics configuration for Argo CD notifications controller
+  ##
+  metrics:
+    ## @param notifications.metrics.enabled Enable Argo CD notifications controller metrics
+    ##
+    enabled: false
+    service:
+      ## @param notifications.metrics.service.type Argo CD notifications controller service type
+      ##
+      type: ClusterIP
+      ## @param notifications.metrics.service.port Argo CD notifications controller metrics service port
+      ##
+      port: 8085
+      ## Node ports to expose
+      ## @param notifications.metrics.service.nodePort Node port for the notifications controller service
+      ## NOTE: choose port between <30000-32767>
+      ##
+      nodePort: ""
+      ## @param notifications.metrics.service.clusterIP Argo CD notifications controller metrics service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP: ""
+      ## @param notifications.metrics.service.loadBalancerIP Argo CD notifications controller service Load Balancer IP
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+      ##
+      loadBalancerIP: ""
+      ## @param notifications.metrics.service.loadBalancerSourceRanges Argo CD notifications controller service Load Balancer sources
+      ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+      ## e.g:
+      ## loadBalancerSourceRanges:
+      ##   - 10.10.10.0/24
+      ##
+      loadBalancerSourceRanges: []
+      ## @param notifications.metrics.service.externalTrafficPolicy Argo CD notifications controller service external traffic policy
+      ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ##
+      externalTrafficPolicy: Cluster
+      ## @param notifications.metrics.service.annotations Additional custom annotations for Argo CD notifications controller service
+      ##
+      annotations: {}
+      ## @param notifications.metrics.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+      ## If "ClientIP", consecutive client requests will be directed to the same Pod
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+      ##
+      sessionAffinity: None
+      ## @param notifications.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+      ## sessionAffinityConfig:
+      ##   clientIP:
+      ##     timeoutSeconds: 300
+      ##
+      sessionAffinityConfig: {}
+    ## Argo CD notifications controller metrics service monitor configuration
+    ##
+    serviceMonitor:
+      ## @param notifications.metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator
+      ##
+      enabled: false
+      ## @param notifications.metrics.serviceMonitor.namespace Namespace which Prometheus is running in
+      ## e.g:
+      ## namespace: monitoring
+      ##
+      namespace: ""
+      ## @param notifications.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+      ##
+      jobLabel: ""
+      ## @param notifications.metrics.serviceMonitor.interval Interval at which metrics should be scraped
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ##
+      interval: 30s
+      ## @param notifications.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ##
+      scrapeTimeout: 10s
+      ## @param notifications.metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+      ##
+      relabelings: []
+      ## @param notifications.metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+      ##
+      metricRelabelings: []
+      ## @param notifications.metrics.serviceMonitor.selector ServiceMonitor selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      ##
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+      ## @param notifications.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+  ## Argo CD notifications controller service parameters
+  ##
+  service:
+    ## @param notifications.service.type Argo CD notifications controller service type
+    ##
+    type: ClusterIP
+    ## @param notifications.service.port Argo CD notifications controller service port
+    ##
+    port: 7000
+
+    ## Node ports to expose
+    ## @param notifications.service.nodePort Node port for Argo CD notifications controller service
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePort: ""
+    ## @param notifications.service.clusterIP Argo CD notifications controller service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param notifications.service.loadBalancerIP Argo CD notifications controller service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param notifications.service.loadBalancerSourceRanges Argo CD notifications controller service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param notifications.service.externalTrafficPolicy Argo CD notifications controller service external traffic policy
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param notifications.service.annotations Additional custom annotations for Argo CD notifications controller service
+    ##
+    annotations: {}
+    ## @param notifications.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
+    ## @param notifications.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param notifications.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+  ## ServiceAccount configuration for the Argo CD notifications controller
+  ##
+  serviceAccount:
+    ## @param notifications.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param notifications.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param notifications.serviceAccount.automountServiceAccountToken Automount service account token for the notifications controller service account
+    ##
+    automountServiceAccountToken: true
+    ## @param notifications.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+    ##
+    annotations: {}
+  ## @param notifications.podAffinityPreset Pod affinity preset. Ignored if `notifications.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param notifications.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `notifications.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node notifications.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param notifications.nodeAffinityPreset.type Node affinity preset type. Ignored if `notifications.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param notifications.nodeAffinityPreset.key Node label key to match. Ignored if `notifications.affinity` is set
+    ##
+    key: ""
+    ## @param notifications.nodeAffinityPreset.values Node label values to match. Ignored if `notifications.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param notifications.affinity Affinity for Argo CD notifications controller pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `notifications.podAffinityPreset`, `notifications.podAntiAffinityPreset`, and `notifications.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param notifications.podAnnotations Annotations for Argo CD notifications controller pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param notifications.podLabels Extra labels for Argo CD notifications controller pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param notifications.containerSecurityContext.enabled Enabled Argo CD notifications controller containers' Security Context
+  ## @param notifications.containerSecurityContext.runAsUser Set Argo CD notifications controller containers' Security Context runAsUser
+  ## @param notifications.containerSecurityContext.allowPrivilegeEscalation Set Argo CD notifications controller containers' Security Context allowPrivilegeEscalation
+  ## @param notifications.containerSecurityContext.capabilities.drop Set Argo CD notifications controller containers' Security Context capabilities to be dropped
+  ## @param notifications.containerSecurityContext.readOnlyRootFilesystem Set Argo CD notifications controller containers' Security Context readOnlyRootFilesystem
+  ## @param notifications.containerSecurityContext.runAsNonRoot Set Argo CD notifications controller container's Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - all
+    readOnlyRootFilesystem: false
+    runAsNonRoot: true
+  ## Argo CD notifications controller resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param notifications.resources.limits The resources limits for the Argo CD notifications controller containers
+  ## @param notifications.resources.requests The requested resources for the Argo CD notifications controller containers
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param notifications.podSecurityContext.enabled Enabled Argo CD notifications controller pods' Security Context
+  ## @param notifications.podSecurityContext.fsGroup Set Argo CD notifications controller pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## @param notifications.nodeSelector Node labels for Argo CD notifications controller pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param notifications.tolerations Tolerations for Argo CD notifications controller pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param notifications.priorityClassName Argo CD notifications controller pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param notifications.extraVolumes Optionally specify extra list of additional volumes for the Argo CD notifications controller pod(s)
+  ##
+  extraVolumes: []
+  ## @param notifications.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Argo CD notifications controller container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param notifications.extraEnvVars Array with extra environment variables to add to Argo CD notifications controller nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param notifications.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Argo CD notifications controller nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param notifications.extraEnvVarsSecret Name of existing Secret containing extra env vars for Argo CD notifications controller nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## Webhook for the Git Generator
+  ## Ref: https://argocd-notifications.readthedocs.io/en/master/Generators-Git/#webhook-configuration)
+  ##
+  webhook:
+    ingress:
+      ## @param notifications.webhook.ingress.enabled Enable an ingress resource for Webhooks
+      ##
+      enabled: false
+      ## DEPRECATED: Use server.ingress.annotations instead of server.ingress.certManager
+      ## certManager: false
+      ##
+      ## @param notifications.webhook.ingress.annotations Additional ingress annotations
+      ##
+      annotations: {}
+      ## @param notifications.webhook.ingress.labels Additional ingress labels
+      ##
+      labels: {}
+      ## @param notifications.webhook.ingress.ingressClassName Defines which ingress controller will implement the resource
+      ##
+      ingressClassName: ""
+      ## @param notifications.webhook.ingress.hostname Ingress hostname for the Argo CD notifications ingress
+      ## Hostname must be provided if Ingress is enabled.
+      ##
+      hostname: ""
+      ## @param notifications.webhook.ingress.path Argo CD notifications ingress path
+      ##
+      path: /api/webhook
+      ## @param notifications.webhook.ingress.pathType Ingress path type. One of `Exact`, `Prefix` or `ImplementationSpecific`
+      ##
+      pathType: Prefix
+      ## @param notifications.webhook.ingress.extraHosts Extra hosts array for the Argo CD notifications ingress
+      ## The list of additional hostnames to be covered with this ingress record.
+      ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+      ##
+      extraHosts: []
+      ## @param notifications.webhook.ingress.extraPaths Extra paths for the Argo CD notifications ingress
+      ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
+      ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
+      ##
+      extraPaths: []
+      ## - path: /*
+      ##   backend:
+      ##     serviceName: ssl-redirect
+      ##     servicePort: use-annotation
+      ##
+      ## @param notifications.webhook.ingress.extraTls Extra TLS configuration for the Argo CD notifications ingress
+      ## The tls configuration for additional hostnames to be covered with this ingress record.
+      ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+      ##
+      extraTls: []
+      ## - hosts:
+      ##     - argocd.server.local
+      ##   secretName: argocd.server.local-tls
+      ##
+      ## @param notifications.webhook.ingress.tls Ingress TLS configuration
+      ##
+      tls: []
+
+  ## The optional bot component simplifies managing subscriptions
+  ## For more information: https://argocd-notifications.readthedocs.io/en/stable/bots/overview/
+  bots:
+    slack:
+      ## @param notifications.bots.slack.enabled Enable notifications controller
+      ##
+      enabled: false
+
+      ## @param notifications.bots.slack.command Override default container command (useful when using custom images)
+      ##
+      command: []
+
+      ## @param notifications.bots.slack.args Override default container args (useful when using custom images). Overrides the defaultArgs.
+      ##
+      args: []
+
+      ## @param notifications.bots.slack.extraArgs Add extra arguments to the default arguments for the Argo CD Slack bot
+      ##
+      extraArgs: []
+
+      ## Argo CD Slack bot service parameters
+      ##
+      service:
+        ## @param notifications.bots.slack.service.type Argo CD Slack bot service type
+        ##
+        type: LoadBalancer
+        ## @param notifications.bots.slack.service.port Argo CD Slack bot service port
+        ##
+        port: 80
+    
+        ## Node ports to expose
+        ## @param notifications.bots.slack.service.nodePort Node port for Argo CD Slack bot service
+        ## NOTE: choose port between <30000-32767>
+        ##
+        nodePort: ""
+        ## @param notifications.bots.slack.service.clusterIP Argo CD Slack bot service Cluster IP
+        ## e.g.:
+        ## clusterIP: None
+        ##
+        clusterIP: ""
+        ## @param notifications.bots.slack.service.loadBalancerIP Argo CD Slack bot service Load Balancer IP
+        ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+        ##
+        loadBalancerIP: ""
+        ## @param notifications.bots.slack.service.loadBalancerSourceRanges Argo CD Slack bot service Load Balancer sources
+        ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+        ## e.g:
+        ## loadBalancerSourceRanges:
+        ##   - 10.10.10.0/24
+        ##
+        loadBalancerSourceRanges: []
+        ## @param notifications.bots.slack.service.externalTrafficPolicy Argo CD Slack bot service external traffic policy
+        ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+        ##
+        externalTrafficPolicy: Cluster
+        ## @param notifications.bots.slack.service.annotations Additional custom annotations for Argo CD Slack bot service
+        ##
+        annotations: {}
+        ## @param notifications.bots.slack.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+        ##
+        extraPorts: []
+        ## @param notifications.bots.slack.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+        ## If "ClientIP", consecutive client requests will be directed to the same Pod
+        ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+        ##
+        sessionAffinity: None
+        ## @param notifications.bots.slack.service.sessionAffinityConfig Additional settings for the sessionAffinity
+        ## sessionAffinityConfig:
+        ##   clientIP:
+        ##     timeoutSeconds: 300
+        ##
+        sessionAffinityConfig: {}
+
+      ## ServiceAccount configuration for the Argo CD Slack bot
+      ##
+      serviceAccount:
+        ## @param notifications.bots.slack.serviceAccount.create Specifies whether a ServiceAccount should be created
+        ##
+        create: true
+        ## @param notifications.bots.slack.serviceAccount.name The name of the ServiceAccount to use.
+        ## If not set and create is true, a name is generated using the common.names.fullname template
+        ##
+        name: ""
+        ## @param notifications.bots.slack.serviceAccount.automountServiceAccountToken Automount service account token for the notifications controller service account
+        ##
+        automountServiceAccountToken: true
+        ## @param notifications.bots.slack.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+        ##
+        annotations: {}
+
+      # -- Slack bot container-level security Context
+      # @default -- See [values.yaml]
+      containerSecurityContext:
+        runAsNonRoot: true
+        readOnlyRootFilesystem: true
+        allowPrivilegeEscalation: false
+        seccompProfile:
+          type: RuntimeDefault
+        capabilities:
+          drop:
+          - ALL
+
+      ## @param notifications.bots.slack.podAffinityPreset Pod affinity preset. Ignored if `notifications.bots.slack.affinity` is set. Allowed values: `soft` or `hard`
+      ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+      ##
+      podAffinityPreset: ""
+      ## @param notifications.bots.slack.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `notifications.bots.slack.affinity` is set. Allowed values: `soft` or `hard`
+      ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+      ##
+      podAntiAffinityPreset: soft
+      ## Node notifications.bots.slack.affinity preset
+      ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+      ##
+      nodeAffinityPreset:
+        ## @param notifications.bots.slack.nodeAffinityPreset.type Node affinity preset type. Ignored if `notifications.bots.slack.affinity` is set. Allowed values: `soft` or `hard`
+        ##
+        type: ""
+        ## @param notifications.bots.slack.nodeAffinityPreset.key Node label key to match. Ignored if `notifications.bots.slack.affinity` is set
+        ##
+        key: ""
+        ## @param notifications.bots.slack.nodeAffinityPreset.values Node label values to match. Ignored if `notifications.bots.slack.affinity` is set
+        ## E.g.
+        ## values:
+        ##   - e2e-az1
+        ##   - e2e-az2
+        ##
+        values: []
+      ## @param notifications.bots.slack.affinity Affinity for Argo CD Slack bot pods assignment
+      ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+      ## NOTE: `notifications.bots.slack.podAffinityPreset`, `notifications.bots.slack.podAntiAffinityPreset`, and `notifications.bots.slack.nodeAffinityPreset` will be ignored when it's set
+      ##
+      affinity: {}
+      ## @param notifications.bots.slack.podAnnotations Annotations for Argo CD Slack bot pods
+      ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+      ##
+      podAnnotations: {}
+      ## @param notifications.bots.slack.podLabels Extra labels for Argo CD Slack bot pods
+      ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+      ##
+      podLabels: {}
+      ## Configure Container Security Context
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+      ## @param notifications.bots.slack.containerSecurityContext.enabled Enabled Argo CD Slack bot containers' Security Context
+      ## @param notifications.bots.slack.containerSecurityContext.runAsUser Set Argo CD Slack bot containers' Security Context runAsUser
+      ## @param notifications.bots.slack.containerSecurityContext.allowPrivilegeEscalation Set Argo CD Slack bot containers' Security Context allowPrivilegeEscalation
+      ## @param notifications.bots.slack.containerSecurityContext.capabilities.drop Set Argo CD Slack bot containers' Security Context capabilities to be dropped
+      ## @param notifications.bots.slack.containerSecurityContext.readOnlyRootFilesystem Set Argo CD Slack bot containers' Security Context readOnlyRootFilesystem
+      ## @param notifications.bots.slack.containerSecurityContext.runAsNonRoot Set Argo CD Slack bot container's Security Context runAsNonRoot
+      ##
+      containerSecurityContext:
+        enabled: true
+        runAsUser: 1001
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - all
+        readOnlyRootFilesystem: false
+        runAsNonRoot: true
+      ## Argo CD Slack bot resource requests and limits
+      ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+      ## @param notifications.bots.slack.resources.limits The resources limits for the Argo CD Slack bot containers
+      ## @param notifications.bots.slack.resources.requests The requested resources for the Argo CD Slack bot containers
+      ##
+      resources:
+        limits: {}
+        requests: {}
+      ## Configure Pods Security Context
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+      ## @param notifications.bots.slack.podSecurityContext.enabled Enabled Argo CD Slack bot pods' Security Context
+      ## @param notifications.bots.slack.podSecurityContext.fsGroup Set Argo CD Slack bot pod's Security Context fsGroup
+      ##
+      podSecurityContext:
+        enabled: true
+        fsGroup: 1001
+      ## @param notifications.bots.slack.nodeSelector Node labels for Argo CD Slack bot pods assignment
+      ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+      ##
+      nodeSelector: {}
+      ## @param notifications.bots.slack.tolerations Tolerations for Argo CD Slack bot pods assignment
+      ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+      ##
+      tolerations: []
+      ## @param notifications.bots.slack.priorityClassName Argo CD Slack bot pods' priorityClassName
+      ##
+      priorityClassName: ""
+      ## @param notifications.bots.slack.extraVolumes Optionally specify extra list of additional volumes for the Argo CD Slack bot pod(s)
+      ##
+      extraVolumes: []
+      ## @param notifications.bots.slack.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Argo CD Slack bot container(s)
+      ##
+      extraVolumeMounts: []
+      ## @param notifications.bots.slack.extraEnvVars Array with extra environment variables to add to Argo CD Slack bot nodes
+      ## e.g:
+      ## extraEnvVars:
+      ##   - name: FOO
+      ##     value: "bar"
+      ##
+      extraEnvVars: []
+      ## @param notifications.bots.slack.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Argo CD Slack bot nodes
+      ##
+      extraEnvVarsCM: ""
+      ## @param notifications.bots.slack.extraEnvVarsSecret Name of existing Secret containing extra env vars for Argo CD Slack bot nodes
+      ##
+      extraEnvVarsSecret: ""
+
+
 ## @section Argo CD server Parameters
 
 ## Argo CD server configuration
