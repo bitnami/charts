@@ -528,6 +528,10 @@ $ helm upgrade my-release my-repo/kong \
 
 > Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_ with the values obtained from instructions in the installation notes.
 
+### To 9.0.0
+
+This major updates the Cassandra subchart to its newest major, 10.0.0.
+
 ### To 8.0.0
 
 This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1200) you can find more information about the changes introduced in that version.
