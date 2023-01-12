@@ -344,15 +344,26 @@ spec:
       volumes:
         {{- if .Values.auth.tls.enabled }}
         - name: certs
-          secret:
-            secretName: {{ template "rabbitmq.tlsSecretName" . }}
-            items:
-              - key: {{ ternary "tls.crt" "ca.crt" .Values.auth.tls.existingSecretFullChain }}
-                path: ca_certificate.pem
-              - key: tls.crt
-                path: server_certificate.pem
-              - key: tls.key
-                path: server_key.pem
+          projected:
+            sources:
+              - secret:
+                  name: {{ template "rabbitmq.tlsSecretName" . }}
+                  items:
+                    {{- if not .Values.auth.tls.overrideCaCertificate }}                  
+                    - key: {{ ternary "tls.crt" "ca.crt" .Values.auth.tls.existingSecretFullChain }}
+                      path: ca_certificate.pem
+                    {{- end }}                      
+                    - key: tls.crt
+                      path: server_certificate.pem
+                    - key: tls.key
+                      path: server_key.pem
+              {{- if .Values.auth.tls.overrideCaCertificate }}
+              - secret:
+                  name: {{ .Values.auth.tls.overrideCaCertificate }}
+                  items:
+                    - key: ca.crt
+                      path: ca_certificate.pem
+              {{- end }}
         {{- end }}
         {{- if and .Values.ldap.tls.enabled .Values.ldap.tls.certificatesSecret }}
         - name: ldap-certs
