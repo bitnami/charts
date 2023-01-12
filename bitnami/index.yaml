@@ -34995,6 +34995,45 @@ entries:
   joomla:
   - annotations:
       category: CMS
+      licenses: |
+        - Apache-2.0
+    apiVersion: v2
+    appVersion: 4.2.6
+    created: "2023-01-12T17:44:22.925879595Z"
+    dependencies:
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Joomla! is an award winning open source CMS platform for building
+      websites and applications. It includes page caching, page compression and Let's
+      Encrypt auto-configuration support.
+    digest: 953a10b6ded24cccee06223d905dd6b8d98ace58cbedc193ee34222da527c8e3
+    home: https://github.com/bitnami/charts/tree/main/bitnami/joomla
+    icon: https://bitnami.com/assets/stacks/joomla/img/joomla-stack-220x234.png
+    keywords:
+    - joomla
+    - cms
+    - blog
+    - http
+    - php
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: joomla
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/joomla
+    - https://www.joomla.org/
+    urls:
+    - https://charts.bitnami.com/bitnami/joomla-13.3.13.tgz
+    version: 13.3.13
+  - annotations:
+      category: CMS
     apiVersion: v2
     appVersion: 4.2.6
     created: "2022-12-13T17:33:18.919343948Z"
@@ -103833,4 +103872,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-01-12T15:27:21.342824836Z"
+generated: "2023-01-12T17:44:22.918137487Z"
