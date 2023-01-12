@@ -30,4 +30,4 @@ name: joomla
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/joomla
   - https://www.joomla.org/
-version: 13.3.12
+version: 13.3.13
