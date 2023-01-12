@@ -454,7 +454,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 1.0.0
 
-This major updates the Cassandra subchart to its newest major, 10.0.0.
+This major updates the Cassandra subchart to its newest major, 10.0.0. [Here](https://github.com/bitnami/charts/pull/14076) you can find more information about the changes introduced in that version.
 
 ## License
 
