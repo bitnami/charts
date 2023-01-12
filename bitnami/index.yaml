@@ -80471,6 +80471,39 @@ entries:
   rabbitmq:
   - annotations:
       category: Infrastructure
+      licenses: |
+        - Apache-2.0
+    apiVersion: v2
+    appVersion: 3.11.6
+    created: "2023-01-12T13:00:34.66009128Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: RabbitMQ is an open source general-purpose message broker that is
+      designed for consistent, highly-available messaging scenarios (both synchronous
+      and asynchronous).
+    digest: 829787957a882ee5e036ea5fd4854c60ec748fbea037a56c22e6b766ba80cd76
+    home: https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq
+    icon: https://bitnami.com/assets/stacks/rabbitmq/img/rabbitmq-stack-220x234.png
+    keywords:
+    - rabbitmq
+    - message queue
+    - AMQP
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: rabbitmq
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq
+    - https://www.rabbitmq.com
+    urls:
+    - https://charts.bitnami.com/bitnami/rabbitmq-11.4.0.tgz
+    version: 11.4.0
+  - annotations:
+      category: Infrastructure
     apiVersion: v2
     appVersion: 3.11.6
     created: "2023-01-11T13:55:29.520965209Z"
@@ -103733,4 +103766,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-01-12T12:42:44.558898681Z"
+generated: "2023-01-12T13:00:34.654704578Z"
