@@ -1,0 +1,36 @@
+annotations:
+  category: Infrastructure
+  licenses: |
+    - Apache-2.0
+apiVersion: v2
+appVersion: 2.5.0
+dependencies:
+  - condition: minio.enabled
+    name: minio
+    repository: https://charts.bitnami.com/bitnami
+    version: 11.x.x
+  - condition: memcached.enabled
+    name: memcached
+    repository: https://charts.bitnami.com/bitnami
+    version: 6.x.x
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 2.x.x
+description: Grafana Mimir is an open source, horizontally scalable, highly available, multi-tenant, long-term storage for Prometheus.
+home: https://grafana.com/oss/mimir/
+icon: https://bitnami.com/assets/stacks/grafana-mimir/img/grafana-mimir-stack-220x234.png
+keywords:
+  - grafana
+  - tracing
+  - metrics
+  - infrastructure
+maintainers:
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
+name: grafana-mimir
+sources:
+  - https://github.com/bitnami/containers/tree/main/bitnami/grafana-mimir
+  - https://github.com/grafana/mimir
+version: 0.1.0

@@ -1,0 +1,67 @@
+{{- if .Values.store-gateway.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "grafana-mimir.store-gateway.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/part-of: grafana-mimir
+    app.kubernetes.io/component: store-gateway
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.store-gateway.service.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.store-gateway.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.store-gateway.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  type: {{ .Values.store-gateway.service.type }}
+  {{- if and .Values.store-gateway.service.clusterIP (eq .Values.store-gateway.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.store-gateway.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.store-gateway.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.store-gateway.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.store-gateway.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.store-gateway.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.store-gateway.service.type "LoadBalancer") (eq .Values.store-gateway.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.store-gateway.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.store-gateway.service.type "LoadBalancer") (not (empty .Values.store-gateway.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.store-gateway.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.store-gateway.service.type "LoadBalancer") (not (empty .Values.store-gateway.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.store-gateway.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http-metrics
+      port: {{ .Values.store-gateway.service.ports.http-metrics }}
+      targetPort: http-metrics
+      protocol: TCP
+      {{- if and (or (eq .Values.store-gateway.service.type "NodePort") (eq .Values.store-gateway.service.type "LoadBalancer")) (not (empty .Values.store-gateway.service.nodePorts.http-metrics)) }}
+      nodePort: {{ .Values.store-gateway.service.nodePorts.http-metrics }}
+      {{- else if eq .Values.store-gateway.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: grpc
+      port: {{ .Values.store-gateway.service.ports.grpc }}
+      targetPort: grpc
+      protocol: TCP
+      {{- if and (or (eq .Values.store-gateway.service.type "NodePort") (eq .Values.store-gateway.service.type "LoadBalancer")) (not (empty .Values.store-gateway.service.nodePorts.grpc)) }}
+      nodePort: {{ .Values.store-gateway.service.nodePorts.grpc }}
+      {{- else if eq .Values.store-gateway.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.store-gateway.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.store-gateway.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/part-of: grafana-mimir
+    app.kubernetes.io/component: store-gateway
+{{- end }}

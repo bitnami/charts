@@ -1,0 +1,51 @@
+{{- if .Values.query-frontend.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name:  {{ template "grafana-mimir.query-frontend.fullname" . }}-headless
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/part-of: grafana-mimir
+    app.kubernetes.io/component: query-frontend
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.query-frontend.service.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.query-frontend.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.query-frontend.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  publishNotReadyAddresses: true
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - name: http-metrics
+      port: {{ .Values.query-frontend.service.ports.http-metrics }}
+      targetPort: http-metrics
+      protocol: TCP
+      {{- if and (or (eq .Values.query-frontend.service.type "NodePort") (eq .Values.query-frontend.service.type "LoadBalancer")) (not (empty .Values.query-frontend.service.nodePorts.http-metrics)) }}
+      nodePort: {{ .Values.query-frontend.service.nodePorts.http-metrics }}
+      {{- else if eq .Values.query-frontend.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: grpc
+      port: {{ .Values.query-frontend.service.ports.grpc }}
+      targetPort: grpc
+      protocol: TCP
+      {{- if and (or (eq .Values.query-frontend.service.type "NodePort") (eq .Values.query-frontend.service.type "LoadBalancer")) (not (empty .Values.query-frontend.service.nodePorts.grpc)) }}
+      nodePort: {{ .Values.query-frontend.service.nodePorts.grpc }}
+      {{- else if eq .Values.query-frontend.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.query-frontend.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.query-frontend.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/part-of: grafana-mimir
+    app.kubernetes.io/component: query-frontend
+{{- end }}

@@ -1,0 +1,2842 @@
+## @section Global parameters
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
+##
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass: ""
+
+## @section Common parameters
+##
+
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
+## @param nameOverride String to partially override common.names.name
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+
+## @section Common Grafana Mimir Parameters
+##
+
+mimir:
+  ## Bitnami Grafana Mimir image
+  ## ref: https://hub.docker.com/r/bitnami/grafana-mimir/tags/
+  ## @param mimir.image.registry Grafana Mimir image registry
+  ## @param mimir.image.repository Grafana Mimir image repository
+  ## @param mimir.image.tag Grafana Mimir image tag (immutable tags are recommended)
+  ## @param mimir.image.digest Grafana Mimir image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
+  ## @param mimir.image.pullPolicy Grafana Mimir image pull policy
+  ## @param mimir.image.pullSecrets Grafana Mimir image pull secrets
+  ## @param mimir.image.debug Enable Grafana Mimir image debug mode
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/grafana-mimir
+    tag: 2.5.0-debian-11-r6
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+    ## Enable debug mode
+    ##
+    debug: false
+  ## @param mimir.dataDir path to the Mimir data directory
+  ##
+  dataDir: "/bitnami/grafana-mimir"
+  ## @param mimir.configuration [string] Mimir components configuration
+  ##
+  configuration: |
+    usage_stats:
+      installation_mode: helm
+    activity_tracker:
+      filepath: /active-query-tracker/activity.log
+    {{- if .Values.enterprise.enabled }}
+    auth:
+      type: enterprise
+    cluster_name: "{{ .Release.Name }}"
+    instrumentation:
+      enabled: true
+      distributor_client:
+        address: dns:///{{ template "grafana-mimir.fullname" . }}-distributor-headless.{{ .Release.Namespace }}.svc.{{ .Values.global.clusterDomain }}:{{ include "grafana-mimir.serverGrpcListenPort" . }}
+    license:
+      path: "/license/license.jwt"
+    admin_api:
+      leader_election:
+        enabled: true
+        ring:
+          kvstore:
+            store: "memberlist"
+    admin_client:
+      storage:
+        type: s3
+        s3:
+          access_key_id: {{ include "grafana-mimir.s3.accessKeyID" }}
+          bucket_name: {{ include "grafana-mimir.s3.adminClientBucket }}
+          endpoint: {{ include "grafana-mimir.s3.host" }}:{{ include "include.s3.port" }}
+          region: {{ include "grafana-mimir.s3.region" }}
+          insecure: {{ ternary true false (eq "http" (lower (include "grafana-mimir.s3.protocol"))) }}
+          secret_access_key: {{ include "grafana-mimir.s3.secretAccessKey" }}
+    gateway:
+      proxy:
+        admin_api:
+          url: http://{{ template "grafana-mimir.fullname" . }}-admin-api.{{ .Release.Namespace }}.svc:{{ include "grafana-mimir.serverHttpListenPort" . }}
+        alertmanager:
+          url: http://{{ template "grafana-mimir.fullname" . }}-alertmanager-headless.{{ .Release.Namespace }}.svc:{{ include "grafana-mimir.serverHttpListenPort" . }}
+        ingester:
+          url: http://{{ template "grafana-mimir.fullname" . }}-ingester.{{ .Release.Namespace }}.svc:{{ include "grafana-mimir.serverHttpListenPort" . }}
+        default:
+          url: http://{{ template "grafana-mimir.fullname" . }}-admin-api.{{ .Release.Namespace }}.svc:{{ include "grafana-mimir.serverHttpListenPort" . }}
+        distributor:
+          url: dns:///{{ template "grafana-mimir.fullname" . }}-distributor-headless.{{ .Release.Namespace }}.svc.{{ .Values.global.clusterDomain }}:{{ include "grafana-mimir.serverGrpcListenPort" . }}
+        ingester:
+          url: http://{{ template "grafana-mimir.fullname" . }}-ingester-headless.{{ .Release.Namespace }}.svc:{{ include "grafana-mimir.serverHttpListenPort" . }}
+        query_frontend:
+          url: http://{{ template "grafana-mimir.fullname" . }}-query-frontend.{{ .Release.Namespace }}.svc:{{ include "grafana-mimir.serverHttpListenPort" . }}
+        ruler:
+          url: http://{{ template "grafana-mimir.fullname" . }}-ruler.{{ .Release.Namespace }}.svc:{{ include "grafana-mimir.serverHttpListenPort" . }}
+        store_gateway:
+          url: http://{{ template "grafana-mimir.fullname" . }}-store-gateway-headless.{{ .Release.Namespace }}.svc:{{ include "grafana-mimir.serverHttpListenPort" . }}
+        {{- if .Values.graphite.enabled }}
+        graphite_write_proxy:
+          url: http://{{ template "grafana-mimir.fullname" . }}-graphite-write-proxy.{{ .Release.Namespace }}.svc:{{ include "grafana-mimir.serverHttpListenPort" . }}
+        graphite_querier:
+          url: http://{{ template "grafana-mimir.fullname" . }}-graphite-querier.{{ .Release.Namespace }}.svc:{{ include "grafana-mimir.serverHttpListenPort" . }}
+        {{- end}}
+    {{- if .Values.graphite.enabled }}
+    graphite:
+      enabled: true
+      write_proxy:
+        distributor_client:
+          address: dns:///{{ template "grafana-mimir.fullname" . }}-query-frontend.{{ .Release.Namespace }}.svc:{{ include "grafana-mimir.serverGrpcListenPort" .  }}
+      querier:
+        remote_read:
+          query_address: http://{{ template "grafana-mimir.fullname" . }}-query-frontend.{{ .Release.Namespace }}.svc:{{ include "grafana-mimir.serverHttpListenPort" .  }}/prometheus
+        graphite_fallback: http://{{ template "grafana-mimir.fullname" . }}-graphite-web.{{ .Release.Namespace}}.svc:{{ include "grafana-mimir.serverHttpListenPort" .  }}
+        schemas:
+          default_storage_schemas_file: /etc/graphite-proxy/storage-schemas.conf
+          default_storage_aggregations_file: /etc/graphite-proxy/storage-aggregations.conf
+        aggregation_cache:
+          memcached:
+            addresses: dnssrvnoa+{{ template "grafana-mimir.fullname" . }}-gr-aggr-cache.{{ .Release.Namespace}}.svc:11211
+            timeout: 1s
+        metric_name_cache:
+          memcached:
+            addresses: dnssrvnoa+{{ template "grafana-mimir.fullname" . }}-gr-metricname-cache.{{ .Release.Namespace}}.svc:11211
+            timeout: 1s
+    {{- end}}
+    {{- end }}
+    alertmanager:
+      data_dir: {{ .Values.mimir.dataDir }}
+      enable_api: true
+      external_url: /alertmanager
+      {{- if .Values.alertmanager.zoneAwareReplication.enabled }}
+      sharding_ring:
+        zone_awareness_enabled: true
+      {{- end }}
+      {{- if .Values.alertmanager.fallbackConfig }}
+      fallback_config_file: /configs/alertmanager_fallback_config.yaml
+      {{- end }}
+    {{- if .Values.minio.enabled }}
+    alertmanager_storage:
+      backend: s3
+      s3:
+        access_key_id: {{ include "grafana-mimir.s3.accessKeyID" }}
+        bucket_name: {{ include "grafana-mimir.s3.rulerBucket }}
+        endpoint: {{ include "grafana-mimir.s3.host" }}:{{ include "include.s3.port" }}
+        region: {{ include "grafana-mimir.s3.region" }}
+        insecure: {{ ternary true false (eq "http" (lower (include "grafana-mimir.s3.protocol"))) }}
+        secret_access_key: {{ include "grafana-mimir.s3.secretAccessKey" }}
+    {{- end }}
+    # This configures how the store-gateway synchronizes blocks stored in the bucket. It uses Minio by default for getting started (configured via flags) but this should be changed for production deployments.
+    blocks_storage:
+      backend: s3
+      bucket_store:
+        max_chunk_pool_bytes: 12884901888 # 12GiB
+        {{- if index .Values "chunks-cache" "enabled" }}
+        chunks_cache:
+          backend: memcached
+          memcached:
+            addresses: {{ include "grafana-mimir.chunksCacheAddress" . }}
+            max_item_size: {{ mul (index .Values "chunks-cache").maxItemMemory 1024 1024 }}
+            timeout: 450ms
+        {{- end }}
+        {{- if index .Values "index-cache" "enabled" }}
+        index_cache:
+          backend: memcached
+          memcached:
+            addresses: {{ include "grafana-mimir.indexCacheAddress" . }}
+            max_item_size: {{ mul (index .Values "index-cache").maxItemMemory 1024 1024 }}
+        {{- end }}
+        {{- if index .Values "metadata-cache" "enabled" }}
+        metadata_cache:
+          backend: memcached
+          memcached:
+            addresses: {{ include "grafana-mimir.metadataCacheAddress" . }}
+            max_item_size: {{ mul (index .Values "metadata-cache").maxItemMemory 1024 1024 }}
+        {{- end }}
+        sync_dir: {{ .Values.mimir.dataDir }}/tsdb-sync
+      {{- if .Values.minio.enabled }}
+      s3:
+        access_key_id: {{ include "grafana-mimir.s3.accessKeyID" }}
+        bucket_name: {{ include "grafana-mimir.s3.TSDBBucket }}
+        endpoint: {{ include "grafana-mimir.s3.host" }}:{{ include "include.s3.port" }}
+        region: {{ include "grafana-mimir.s3.region" }}
+        insecure: {{ ternary true false (eq "http" (lower (include "grafana-mimir.s3.protocol"))) }}
+        secret_access_key: {{ include "grafana-mimir.s3.secretAccessKey" }}
+      {{- end }}
+      tsdb:
+        dir: {{ .Values.mimir.dataDir }}/tsdb
+    ingester:
+      compaction_interval: 30m
+      deletion_delay: 2h
+      max_closing_blocks_concurrency: 2
+      max_opening_blocks_concurrency: 4
+      symbols_flushers_concurrency: 4
+      data_dir: "{{ .Values.mimir.dataDir }}"
+      sharding_ring:
+        wait_stability_min_duration: 1m
+    frontend:
+      parallelize_shardable_queries: true
+      {{- if index .Values "results-cache" "enabled" }}
+      results_cache:
+        backend: memcached
+        memcached:
+          timeout: 500ms
+          addresses: {{ include "grafana-mimir.resultsCacheAddress" . }}
+          max_item_size: {{ mul (index .Values "results-cache").maxItemMemory 1024 1024 }}
+      cache_results: true
+      {{- end }}
+      {{- if .Values.query_scheduler.enabled }}
+      scheduler_address: {{ template "grafana-mimir.fullname" . }}-query-scheduler-headless.{{ .Release.Namespace }}.svc:{{ include "grafana-mimir.serverGrpcListenPort" . }}
+      {{- end }}
+    frontend_worker:
+      grpc_client_config:
+        max_send_msg_size: 419430400 # 400MiB
+      {{- if .Values.query_scheduler.enabled }}
+      scheduler_address: {{ template "grafana-mimir.fullname" . }}-query-scheduler-headless.{{ .Release.Namespace }}.svc:{{ include "grafana-mimir.serverGrpcListenPort" . }}
+      {{- else }}
+      frontend_address: {{ template "grafana-mimir.fullname" . }}-query-frontend-headless.{{ .Release.Namespace }}.svc:{{ include "grafana-mimir.serverGrpcListenPort" . }}
+      {{- end }}
+    ingester:
+      ring:
+        final_sleep: 0s
+        num_tokens: 512
+        tokens_file_path: {{ .Values.mimir.dataDir }}/tokens
+        unregister_on_shutdown: false
+        {{- if .Values.ingester.zoneAwareReplication.enabled }}
+        zone_awareness_enabled: true
+        {{- end }}
+    ingester_client:
+      grpc_client_config:
+        max_recv_msg_size: 104857600
+        max_send_msg_size: 104857600
+    limits:
+      # Limit queries to 500 days. You can override this on a per-tenant basis.
+      max_total_query_length: 12000h
+      # Adjust max query parallelism to 16x sharding, without sharding we can run 15d queries fully in parallel.
+      # With sharding we can further shard each day another 16 times. 15 days * 16 shards = 240 subqueries.
+      max_query_parallelism: 240
+      # Avoid caching results newer than 10m because some samples can be delayed
+      # This presents caching incomplete results
+      max_cache_freshness: 10m
+    memberlist:
+      abort_if_cluster_join_fails: false
+      compression_enabled: false
+      join_members:
+      - dns+{{ include "grafana-mimir.fullname" . }}-gossip-ring.{{ .Release.Namespace }}.svc.{{ .Values.global.clusterDomain }}:{{ include "grafana-mimir.memberlistBindPort" . }}
+    querier:
+      # With query sharding we run more but smaller queries. We must strike a balance
+      # which allows us to process more sharded queries in parallel when requested, but not overload
+      # queriers during non-sharded queries.
+      max_concurrent: 16
+    query_scheduler:
+      # Increase from default of 100 to account for queries created by query sharding
+      max_outstanding_requests_per_tenant: 800
+    ruler:
+      alertmanager_url: dnssrvnoa+http://_http-metrics._tcp.{{ template "grafana-mimir.fullname" . }}-alertmanager-headless.{{ .Release.Namespace }}.svc.{{ .Values.global.clusterDomain }}/alertmanager
+      enable_api: true
+      rule_path: {{ .Values.mimir.dataDir }}
+    {{- if .Values.minio.enabled }}
+    ruler_storage:
+      backend: s3
+      s3:
+        access_key_id: {{ include "grafana-mimir.s3.accessKeyID" }}
+        bucket_name: {{ include "grafana-mimir.s3.rulerBucket }}
+        endpoint: {{ include "grafana-mimir.s3.host" }}:{{ include "include.s3.port" }}
+        region: {{ include "grafana-mimir.s3.region" }}
+        insecure: {{ ternary true false (eq "http" (lower (include "grafana-mimir.s3.protocol"))) }}
+        secret_access_key: {{ include "grafana-mimir.s3.secretAccessKey" }}
+    {{- end }}
+    runtime_config:
+      file: /var/{{ include "grafana-mimir.name" . }}/runtime.yaml
+    server:
+      grpc_server_max_concurrent_streams: 1000
+      grpc_server_max_connection_age: 2m
+      grpc_server_max_connection_age_grace: 5m
+      grpc_server_max_connection_idle: 1m
+    store_gateway:
+      sharding_ring:
+        wait_stability_min_duration: 1m
+        {{- if .Values.store_gateway.zoneAwareReplication.enabled }}
+        kvstore:
+          prefix: multi-zone/
+        {{- end }}
+        tokens_file_path: {{ .Values.mimir.dataDir }}/tokens
+        {{- if .Values.store_gateway.zoneAwareReplication.enabled }}
+        zone_awareness_enabled: true
+        {{- end }}
+
+  ## @param mimir.overrideConfiguration [object] Loki components configuration override. Values defined here takes precedence over mimir.configuration
+  ## e.g:
+  ## overrideConfiguration:
+  ##   auth_enabled: true
+  ##
+  overrideConfiguration: {}
+  ## @param mimir.existingConfigmap Name of a ConfigMap with the Loki configuration
+  ##
+  existingConfigmap: ""
+
+  ## @param mimir.containerPorts.http-metrics Grafana Mimir HTTP metrics container port
+  ## @param mimir.containerPorts.grpc Grafana Mimir GRPC container port
+  ## @param mimir.containerPorts.memberlist Grafana Mimir memberlist container port
+  ##
+  containerPorts:
+    http-metrics: 8080
+    grpc: 9095
+    memberlist: 7946
+
+## @section Compactor Deployment Parameters
+##
+compactor:
+  ## @param compactor.extraEnvVars Array with extra environment variables to add to compactor nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param compactor.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for compactor nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param compactor.extraEnvVarsSecret Name of existing Secret containing extra env vars for compactor nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param compactor.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param compactor.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param compactor.extraArgs Add additional argsto the default container args (useful to override configuration)
+  ## e.g:
+  ## extraArgs:
+  ##   - "-log.level=debug"
+  extraArgs: []
+  ## @param compactor.replicaCount Number of Compactor replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param compactor.podManagementPolicy Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: OrderedReady
+  ## Configure extra options for Compactor containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param compactor.livenessProbe.enabled Enable livenessProbe on Compactor nodes
+  ## @param compactor.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param compactor.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param compactor.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param compactor.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param compactor.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param compactor.readinessProbe.enabled Enable readinessProbe on Compactor nodes
+  ## @param compactor.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param compactor.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param compactor.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param compactor.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param compactor.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param compactor.startupProbe.enabled Enable startupProbe on Compactor containers
+  ## @param compactor.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param compactor.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param compactor.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param compactor.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param compactor.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param compactor.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param compactor.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param compactor.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## compactor resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param compactor.resources.limits The resources limits for the compactor containers
+  ## @param compactor.resources.requests The requested resources for the compactor containers
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param compactor.podSecurityContext.enabled Enabled Compactor pods' Security Context
+  ## @param compactor.podSecurityContext.fsGroup Set Compactor pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param compactor.containerSecurityContext.enabled Enabled Compactor containers' Security Context
+  ## @param compactor.containerSecurityContext.runAsUser Set Compactor containers' Security Context runAsUser
+  ## @param compactor.containerSecurityContext.runAsNonRoot Set Compactor containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  ## @param compactor.lifecycleHooks for the compactor container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param compactor.hostAliases compactor pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param compactor.podLabels Extra labels for compactor pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param compactor.podAnnotations Annotations for compactor pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param compactor.podAffinityPreset Pod affinity preset. Ignored if `compactor.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param compactor.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `compactor.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node compactor.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param compactor.nodeAffinityPreset.type Node affinity preset type. Ignored if `compactor.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param compactor.nodeAffinityPreset.key Node label key to match. Ignored if `compactor.affinity` is set
+    ##
+    key: ""
+    ## @param compactor.nodeAffinityPreset.values Node label values to match. Ignored if `compactor.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param compactor.affinity Affinity for Compactor pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `compactor.podAffinityPreset`, `compactor.podAntiAffinityPreset`, and `compactor.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param compactor.nodeSelector Node labels for Compactor pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param compactor.tolerations Tolerations for Compactor pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param compactor.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param compactor.priorityClassName Compactor pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param compactor.schedulerName Kubernetes pod scheduler registry
+  ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param compactor.terminationGracePeriodSeconds Seconds pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param compactor.updateStrategy.type Compactor statefulset strategy type
+  ## @param compactor.updateStrategy.rollingUpdate Compactor statefulset rolling update configuration parameters
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate: {}
+  ## @param compactor.extraVolumes Optionally specify extra list of additional volumes for the Compactor pod(s)
+  ##
+  extraVolumes: []
+  ## @param compactor.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Compactor container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param compactor.sidecars Add additional sidecar containers to the Compactor pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param compactor.initContainers Add additional init containers to the Compactor pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    ## @param compactor.persistence.enabled Enable persistence in Compactor instances
+    ##
+    enabled: true
+    ## @param compactor.persistence.existingClaim Name of an existing PVC to use
+    ##
+    existingClaim: ""
+    ## @param compactor.persistence.storageClass PVC Storage Class for Memcached data volume
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param compactor.persistence.accessModes PVC Access modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param compactor.persistence.size PVC Storage Request for Memcached data volume
+    ##
+    size: 8Gi
+    ## @param compactor.persistence.annotations Additional PVC annotations
+    ##
+    annotations: {}
+    ## @param compactor.persistence.selector Selector to match an existing Persistent Volume for Compactor's data PVC
+    ## If set, the PVC can't have a PV dynamically provisioned for it
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param compactor.persistence.dataSource PVC data source
+    ##
+    dataSource: {}
+
+  ## @section Compactor Traffic Exposure Parameters
+  ##
+
+  ## compactor service parameters
+  ##
+  service:
+    ## @param compactor.service.type Compactor service type
+    ##
+    type: ClusterIP
+    ## @param compactor.service.ports.http-metrics Compactor HTTP service port
+    ## @param compactor.service.ports.grpc Compactor GRPC service port
+    ##
+    ports:
+      http-metrics: 8080
+      grpc: 9095
+
+    ## Node ports to expose
+    ## NOTE: choose port between <30000-32767>
+    ## @param compactor.service.nodePorts.http-metrics Node port for HTTP
+    ## @param compactor.service.nodePorts.grpc Node port for GRPC
+    ##
+    nodePorts:
+      http-metrics: ""
+      grpc: 9095
+    ## @param compactor.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+    ## @param compactor.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ##
+    sessionAffinity: None
+    ## @param compactor.service.clusterIP Compactor service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param compactor.service.loadBalancerIP Compactor service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param compactor.service.loadBalancerSourceRanges Compactor service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param compactor.service.externalTrafficPolicy Compactor service external traffic policy
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param compactor.service.annotations Additional custom annotations for Compactor service
+    ##
+    annotations: {}
+    ## @param compactor.service.extraPorts Extra ports to expose in the Compactor service
+    ##
+    extraPorts: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param compactor.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param compactor.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param compactor.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+
+## @section Distributor Deployment Parameters
+##
+distributor:
+  ## @param distributor.extraEnvVars Array with extra environment variables to add to distributor nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param distributor.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for distributor nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param distributor.extraEnvVarsSecret Name of existing Secret containing extra env vars for distributor nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param distributor.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param distributor.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param distributor.extraArgs Add additional argsto the default container args (useful to override configuration)
+  ## e.g:
+  ## extraArgs:
+  ##   - "-log.level=debug"
+  extraArgs: []
+  ## @param distributor.replicaCount Number of Compactor replicas to deploy
+  ##
+  replicaCount: 1
+  ## Configure extra options for Compactor containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param distributor.livenessProbe.enabled Enable livenessProbe on Compactor nodes
+  ## @param distributor.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param distributor.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param distributor.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param distributor.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param distributor.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param distributor.readinessProbe.enabled Enable readinessProbe on Compactor nodes
+  ## @param distributor.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param distributor.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param distributor.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param distributor.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param distributor.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param distributor.startupProbe.enabled Enable startupProbe on Compactor containers
+  ## @param distributor.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param distributor.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param distributor.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param distributor.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param distributor.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param distributor.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param distributor.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param distributor.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## Distributor resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param distributor.resources.limits The resources limits for the distributor containers
+  ## @param distributor.resources.requests The requested resources for the distributor containers
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param distributor.podSecurityContext.enabled Enabled Compactor pods' Security Context
+  ## @param distributor.podSecurityContext.fsGroup Set Compactor pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param distributor.containerSecurityContext.enabled Enabled Compactor containers' Security Context
+  ## @param distributor.containerSecurityContext.runAsUser Set Compactor containers' Security Context runAsUser
+  ## @param distributor.containerSecurityContext.runAsNonRoot Set Compactor containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  ## @param distributor.lifecycleHooks for the distributor container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param distributor.hostAliases distributor pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param distributor.podLabels Extra labels for distributor pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param distributor.podAnnotations Annotations for distributor pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param distributor.podAffinityPreset Pod affinity preset. Ignored if `distributor.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param distributor.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `distributor.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node distributor.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param distributor.nodeAffinityPreset.type Node affinity preset type. Ignored if `distributor.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param distributor.nodeAffinityPreset.key Node label key to match. Ignored if `distributor.affinity` is set
+    ##
+    key: ""
+    ## @param distributor.nodeAffinityPreset.values Node label values to match. Ignored if `distributor.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param distributor.affinity Affinity for Compactor pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `distributor.podAffinityPreset`, `distributor.podAntiAffinityPreset`, and `distributor.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param distributor.nodeSelector Node labels for Compactor pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param distributor.tolerations Tolerations for Compactor pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param distributor.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param distributor.priorityClassName Compactor pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param distributor.schedulerName Kubernetes pod scheduler registry
+  ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param distributor.terminationGracePeriodSeconds Seconds pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param distributor.updateStrategy.type Compactor statefulset strategy type
+  ## @param distributor.updateStrategy.rollingUpdate Compactor statefulset rolling update configuration parameters
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate: {}
+  ## @param distributor.extraVolumes Optionally specify extra list of additional volumes for the Compactor pod(s)
+  ##
+  extraVolumes: []
+  ## @param distributor.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Compactor container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param distributor.sidecars Add additional sidecar containers to the Compactor pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param distributor.initContainers Add additional init containers to the Compactor pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+
+  ## @section Compactor Traffic Exposure Parameters
+  ##
+
+  ## distributor service parameters
+  ##
+  service:
+    ## @param distributor.service.type Compactor service type
+    ##
+    type: ClusterIP
+    ## @param distributor.service.ports.http-metrics Compactor HTTP service port
+    ## @param distributor.service.ports.grpc Compactor GRPC service port
+    ##
+    ports:
+      http-metrics: 8080
+      grpc: 9095
+
+    ## Node ports to expose
+    ## NOTE: choose port between <30000-32767>
+    ## @param distributor.service.nodePorts.http-metrics Node port for HTTP
+    ## @param distributor.service.nodePorts.grpc Node port for GRPC
+    ##
+    nodePorts:
+      http-metrics: ""
+      grpc: 9095
+    ## @param distributor.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+    ## @param distributor.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ##
+    sessionAffinity: None
+    ## @param distributor.service.clusterIP Compactor service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param distributor.service.loadBalancerIP Compactor service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param distributor.service.loadBalancerSourceRanges Compactor service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param distributor.service.externalTrafficPolicy Compactor service external traffic policy
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param distributor.service.annotations Additional custom annotations for Compactor service
+    ##
+    annotations: {}
+    ## @param distributor.service.extraPorts Extra ports to expose in the Compactor service
+    ##
+    extraPorts: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param distributor.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param distributor.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param distributor.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+
+## @section Gateway Deployment Parameters
+##
+gateway:
+  ## @param gateway.enabled Enable Gateway deployment
+  ##
+  enabled: true
+
+  ## Bitnami Nginx image
+  ## ref: https://hub.docker.com/r/bitnami/grafana-nginx/tags/
+  ## @param gateway.image.registry Nginx image registry
+  ## @param gateway.image.repository Nginx image repository
+  ## @param gateway.image.tag Nginx image tag (immutable tags are recommended)
+  ## @param gateway.image.digest Nginx image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param gateway.image.pullPolicy Nginx image pull policy
+  ## @param gateway.image.pullSecrets Nginx image pull secrets
+  ## @param gateway.image.debug Enable debugging in the initialization process
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/nginx
+    tag: 1.23.3-debian-11-r8
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+    debug: false
+
+  ## @param gateway.extraEnvVars Array with extra environment variables to add to gateway nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param gateway.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for gateway nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param gateway.extraEnvVarsSecret Name of existing Secret containing extra env vars for gateway nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param gateway.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param gateway.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param gateway.verboseLogging Show the gateway access_log
+  ##
+  verboseLogging: false
+  ## @param gateway.replicaCount Number of Gateway replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param gateway.auth.enabled Enable basic auth
+  ## @param gateway.auth.username Basic auth username
+  ## @param gateway.auth.password Basic auth password
+  ## @param gateway.auth.existingSecret Name of a secret containing the Basic auth password
+  ##
+  auth:
+    enabled: false
+    username: "user"
+    password: ""
+    existingSecret: ""
+  ## Configure extra options for Gateway containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param gateway.livenessProbe.enabled Enable livenessProbe on Gateway nodes
+  ## @param gateway.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param gateway.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param gateway.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param gateway.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param gateway.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param gateway.readinessProbe.enabled Enable readinessProbe on Gateway nodes
+  ## @param gateway.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param gateway.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param gateway.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param gateway.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param gateway.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param gateway.startupProbe.enabled Enable startupProbe on Gateway containers
+  ## @param gateway.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param gateway.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param gateway.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param gateway.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param gateway.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param gateway.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param gateway.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param gateway.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param gateway.containerPorts.http Gateway HTTP port
+  ##
+  containerPorts:
+    http: 8080
+  ## gateway resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param gateway.resources.limits The resources limits for the gateway containers
+  ## @param gateway.resources.requests The requested resources for the gateway containers
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param gateway.podSecurityContext.enabled Enabled Gateway pods' Security Context
+  ## @param gateway.podSecurityContext.fsGroup Set Gateway pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param gateway.containerSecurityContext.enabled Enabled Gateway containers' Security Context
+  ## @param gateway.containerSecurityContext.runAsUser Set Gateway containers' Security Context runAsUser
+  ## @param gateway.containerSecurityContext.runAsNonRoot Set Gateway containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  ## @param gateway.lifecycleHooks for the gateway container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param gateway.hostAliases gateway pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param gateway.podLabels Extra labels for gateway pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param gateway.podAnnotations Annotations for gateway pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param gateway.podAffinityPreset Pod affinity preset. Ignored if `gateway.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param gateway.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `gateway.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node gateway.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param gateway.nodeAffinityPreset.type Node affinity preset type. Ignored if `gateway.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param gateway.nodeAffinityPreset.key Node label key to match. Ignored if `gateway.affinity` is set
+    ##
+    key: ""
+    ## @param gateway.nodeAffinityPreset.values Node label values to match. Ignored if `gateway.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param gateway.affinity Affinity for Gateway pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `gateway.podAffinityPreset`, `gateway.podAntiAffinityPreset`, and `gateway.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param gateway.nodeSelector Node labels for Gateway pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param gateway.tolerations Tolerations for Gateway pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param gateway.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param gateway.priorityClassName Gateway pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param gateway.schedulerName Kubernetes pod scheduler registry
+  ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param gateway.updateStrategy.type Gateway statefulset strategy type
+  ## @param gateway.updateStrategy.rollingUpdate Gateway statefulset rolling update configuration parameters
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate: {}
+  ## @param gateway.extraVolumes Optionally specify extra list of additional volumes for the Gateway pod(s)
+  ##
+  extraVolumes: []
+  ## @param gateway.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Gateway container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param gateway.sidecars Add additional sidecar containers to the Gateway pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param gateway.initContainers Add additional init containers to the Gateway pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+
+  ## @section Gateway Traffic Exposure Parameters
+  ##
+
+  ## gateway service parameters
+  ##
+  service:
+    ## @param gateway.service.type Gateway service type
+    ##
+    type: ClusterIP
+    ## @param gateway.service.ports.http Gateway HTTP service port
+    ##
+    ports:
+      http: 80
+    ## Node ports to expose
+    ## NOTE: choose port between <30000-32767>
+    ## @param gateway.service.nodePorts.http Node port for HTTP
+    ##
+    nodePorts:
+      http: ""
+    ## @param gateway.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+    ## @param gateway.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ##
+    sessionAffinity: None
+    ## @param gateway.service.clusterIP Gateway service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param gateway.service.loadBalancerIP Gateway service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param gateway.service.loadBalancerSourceRanges Gateway service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param gateway.service.externalTrafficPolicy Gateway service external traffic policy
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param gateway.service.annotations Additional custom annotations for Gateway service
+    ##
+    annotations: {}
+    ## @param gateway.service.extraPorts Extra ports to expose in the Gateway service
+    ##
+    extraPorts: []
+
+  ## Configure the ingress resource that allows you to access the Loki Gateway installation
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
+  ##
+  ingress:
+    ## @param gateway.ingress.enabled Enable ingress record generation for Loki Gateway
+    ##
+    enabled: false
+    ## @param gateway.ingress.pathType Ingress path type
+    ##
+    pathType: ImplementationSpecific
+    ## @param gateway.ingress.apiVersion Force Ingress API version (automatically detected if not set)
+    ##
+    apiVersion: ""
+    ## @param gateway.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
+    ## @param gateway.ingress.hostname Default host for the ingress record
+    ##
+    hostname: grafana-mimir.local
+    ## @param gateway.ingress.path Default path for the ingress record
+    ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+    ##
+    path: /
+    ## @param gateway.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+    ## For a full list of possible ingress annotations, please see
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+    ##
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+    ##
+    annotations: {}
+    ## @param gateway.ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+    ## You can:
+    ##   - Use the `ingress.secrets` parameter to create this TLS secret
+    ##   - Rely on cert-manager to create it by setting the corresponding annotations
+    ##   - Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
+    ##
+    tls: false
+    ## @param gateway.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
+    ## @param gateway.ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+    ## e.g:
+    ## extraHosts:
+    ##   - name: Loki Gateway.local
+    ##     path: /
+    ##
+    extraHosts: []
+    ## @param gateway.ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+    ## e.g:
+    ## extraPaths:
+    ## - path: /*
+    ##   backend:
+    ##     serviceName: ssl-redirect
+    ##     servicePort: use-annotation
+    ##
+    extraPaths: []
+    ## @param gateway.ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+    ## e.g:
+    ## extraTls:
+    ## - hosts:
+    ##     - Loki Gateway.local
+    ##   secretName: Loki Gateway.local-tls
+    ##
+    extraTls: []
+    ## @param gateway.ingress.secrets Custom TLS certificates as secrets
+    ## NOTE: 'key' and 'certificate' are expected in PEM format
+    ## NOTE: 'name' should line up with a 'secretName' set further up
+    ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+    ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+    ## It is also possible to create and manage the certificates outside of this helm chart
+    ## Please see README.md for more information
+    ## e.g:
+    ## secrets:
+    ##   - name: Loki Gateway.local-tls
+    ##     key: |-
+    ##       -----BEGIN RSA PRIVATE KEY-----
+    ##       ...
+    ##       -----END RSA PRIVATE KEY-----
+    ##     certificate: |-
+    ##       -----BEGIN CERTIFICATE-----
+    ##       ...
+    ##       -----END CERTIFICATE-----
+    ##
+    secrets: []
+
+## @section Ingester Deployment Parameters
+##
+ingester:
+  ## @param ingester.extraEnvVars Array with extra environment variables to add to ingester nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param ingester.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for ingester nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param ingester.extraEnvVarsSecret Name of existing Secret containing extra env vars for ingester nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param ingester.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param ingester.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param ingester.extraArgs Add additional argsto the default container args (useful to override configuration)
+  ## e.g:
+  ## extraArgs:
+  ##   - "-log.level=debug"
+  extraArgs: []
+  ## @param ingester.replicaCount Number of Compactor replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param ingester.podManagementPolicy Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: OrderedReady
+  ## Configure extra options for Compactor containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param ingester.livenessProbe.enabled Enable livenessProbe on Compactor nodes
+  ## @param ingester.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param ingester.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param ingester.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param ingester.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param ingester.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param ingester.readinessProbe.enabled Enable readinessProbe on Compactor nodes
+  ## @param ingester.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param ingester.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param ingester.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param ingester.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param ingester.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param ingester.startupProbe.enabled Enable startupProbe on Compactor containers
+  ## @param ingester.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param ingester.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param ingester.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param ingester.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param ingester.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param ingester.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param ingester.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param ingester.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## ingester resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param ingester.resources.limits The resources limits for the ingester containers
+  ## @param ingester.resources.requests The requested resources for the ingester containers
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param ingester.podSecurityContext.enabled Enabled Compactor pods' Security Context
+  ## @param ingester.podSecurityContext.fsGroup Set Compactor pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param ingester.containerSecurityContext.enabled Enabled Compactor containers' Security Context
+  ## @param ingester.containerSecurityContext.runAsUser Set Compactor containers' Security Context runAsUser
+  ## @param ingester.containerSecurityContext.runAsNonRoot Set Compactor containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  ## @param ingester.lifecycleHooks for the ingester container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param ingester.hostAliases ingester pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param ingester.podLabels Extra labels for ingester pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param ingester.podAnnotations Annotations for ingester pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param ingester.podAffinityPreset Pod affinity preset. Ignored if `ingester.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param ingester.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `ingester.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node ingester.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param ingester.nodeAffinityPreset.type Node affinity preset type. Ignored if `ingester.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param ingester.nodeAffinityPreset.key Node label key to match. Ignored if `ingester.affinity` is set
+    ##
+    key: ""
+    ## @param ingester.nodeAffinityPreset.values Node label values to match. Ignored if `ingester.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param ingester.affinity Affinity for Compactor pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `ingester.podAffinityPreset`, `ingester.podAntiAffinityPreset`, and `ingester.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param ingester.nodeSelector Node labels for Compactor pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param ingester.tolerations Tolerations for Compactor pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param ingester.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param ingester.priorityClassName Compactor pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param ingester.schedulerName Kubernetes pod scheduler registry
+  ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param ingester.terminationGracePeriodSeconds Seconds pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param ingester.updateStrategy.type Compactor statefulset strategy type
+  ## @param ingester.updateStrategy.rollingUpdate Compactor statefulset rolling update configuration parameters
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate: {}
+  ## @param ingester.extraVolumes Optionally specify extra list of additional volumes for the Compactor pod(s)
+  ##
+  extraVolumes: []
+  ## @param ingester.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Compactor container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param ingester.sidecars Add additional sidecar containers to the Compactor pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param ingester.initContainers Add additional init containers to the Compactor pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    ## @param ingester.persistence.enabled Enable persistence in Compactor instances
+    ##
+    enabled: true
+    ## @param ingester.persistence.existingClaim Name of an existing PVC to use
+    ##
+    existingClaim: ""
+    ## @param ingester.persistence.storageClass PVC Storage Class for Memcached data volume
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param ingester.persistence.accessModes PVC Access modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param ingester.persistence.size PVC Storage Request for Memcached data volume
+    ##
+    size: 8Gi
+    ## @param ingester.persistence.annotations Additional PVC annotations
+    ##
+    annotations: {}
+    ## @param ingester.persistence.selector Selector to match an existing Persistent Volume for Compactor's data PVC
+    ## If set, the PVC can't have a PV dynamically provisioned for it
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param ingester.persistence.dataSource PVC data source
+    ##
+    dataSource: {}
+
+  ## @section Compactor Traffic Exposure Parameters
+  ##
+
+  ## ingester service parameters
+  ##
+  service:
+    ## @param ingester.service.type Compactor service type
+    ##
+    type: ClusterIP
+    ## @param ingester.service.ports.http-metrics Compactor HTTP service port
+    ## @param ingester.service.ports.grpc Compactor GRPC service port
+    ##
+    ports:
+      http-metrics: 8080
+      grpc: 9095
+
+    ## Node ports to expose
+    ## NOTE: choose port between <30000-32767>
+    ## @param ingester.service.nodePorts.http-metrics Node port for HTTP
+    ## @param ingester.service.nodePorts.grpc Node port for GRPC
+    ##
+    nodePorts:
+      http-metrics: ""
+      grpc: 9095
+    ## @param ingester.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+    ## @param ingester.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ##
+    sessionAffinity: None
+    ## @param ingester.service.clusterIP Compactor service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param ingester.service.loadBalancerIP Compactor service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param ingester.service.loadBalancerSourceRanges Compactor service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param ingester.service.externalTrafficPolicy Compactor service external traffic policy
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param ingester.service.annotations Additional custom annotations for Compactor service
+    ##
+    annotations: {}
+    ## @param ingester.service.extraPorts Extra ports to expose in the Compactor service
+    ##
+    extraPorts: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param ingester.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param ingester.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param ingester.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+
+## @section Querier Deployment Parameters
+##
+querier:
+  ## @param querier.extraEnvVars Array with extra environment variables to add to querier nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param querier.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for querier nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param querier.extraEnvVarsSecret Name of existing Secret containing extra env vars for querier nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param querier.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param querier.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param querier.extraArgs Add additional argsto the default container args (useful to override configuration)
+  ## e.g:
+  ## extraArgs:
+  ##   - "-log.level=debug"
+  extraArgs: []
+  ## @param querier.replicaCount Number of Compactor replicas to deploy
+  ##
+  replicaCount: 1
+  ## Configure extra options for Compactor containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param querier.livenessProbe.enabled Enable livenessProbe on Compactor nodes
+  ## @param querier.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param querier.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param querier.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param querier.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param querier.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param querier.readinessProbe.enabled Enable readinessProbe on Compactor nodes
+  ## @param querier.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param querier.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param querier.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param querier.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param querier.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param querier.startupProbe.enabled Enable startupProbe on Compactor containers
+  ## @param querier.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param querier.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param querier.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param querier.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param querier.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param querier.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param querier.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param querier.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## querier resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param querier.resources.limits The resources limits for the querier containers
+  ## @param querier.resources.requests The requested resources for the querier containers
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param querier.podSecurityContext.enabled Enabled Compactor pods' Security Context
+  ## @param querier.podSecurityContext.fsGroup Set Compactor pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param querier.containerSecurityContext.enabled Enabled Compactor containers' Security Context
+  ## @param querier.containerSecurityContext.runAsUser Set Compactor containers' Security Context runAsUser
+  ## @param querier.containerSecurityContext.runAsNonRoot Set Compactor containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  ## @param querier.lifecycleHooks for the ingester container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param querier.hostAliases ingester pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param querier.podLabels Extra labels for ingester pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param querier.podAnnotations Annotations for ingester pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param querier.podAffinityPreset Pod affinity preset. Ignored if `querier.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param querier.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `querier.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node querier.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param querier.nodeAffinityPreset.type Node affinity preset type. Ignored if `querier.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param querier.nodeAffinityPreset.key Node label key to match. Ignored if `querier.affinity` is set
+    ##
+    key: ""
+    ## @param querier.nodeAffinityPreset.values Node label values to match. Ignored if `querier.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param querier.affinity Affinity for Compactor pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `querier.podAffinityPreset`, `querier.podAntiAffinityPreset`, and `querier.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param querier.nodeSelector Node labels for Compactor pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param querier.tolerations Tolerations for Compactor pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param querier.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param querier.priorityClassName Compactor pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param querier.schedulerName Kubernetes pod scheduler registry
+  ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param querier.terminationGracePeriodSeconds Seconds pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param querier.updateStrategy.type Compactor statefulset strategy type
+  ## @param querier.updateStrategy.rollingUpdate Compactor statefulset rolling update configuration parameters
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate: {}
+  ## @param querier.extraVolumes Optionally specify extra list of additional volumes for the Compactor pod(s)
+  ##
+  extraVolumes: []
+  ## @param querier.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Compactor container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param querier.sidecars Add additional sidecar containers to the Compactor pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param querier.initContainers Add additional init containers to the Compactor pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+
+  ## @section Compactor Traffic Exposure Parameters
+  ##
+
+  ## ingester service parameters
+  ##
+  service:
+    ## @param querier.service.type Compactor service type
+    ##
+    type: ClusterIP
+    ## @param querier.service.ports.http-metrics Compactor HTTP service port
+    ## @param querier.service.ports.grpc Compactor GRPC service port
+    ##
+    ports:
+      http-metrics: 8080
+      grpc: 9095
+
+    ## Node ports to expose
+    ## NOTE: choose port between <30000-32767>
+    ## @param querier.service.nodePorts.http-metrics Node port for HTTP
+    ## @param querier.service.nodePorts.grpc Node port for GRPC
+    ##
+    nodePorts:
+      http-metrics: ""
+      grpc: 9095
+    ## @param querier.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+    ## @param querier.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ##
+    sessionAffinity: None
+    ## @param querier.service.clusterIP Compactor service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param querier.service.loadBalancerIP Compactor service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param querier.service.loadBalancerSourceRanges Compactor service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param querier.service.externalTrafficPolicy Compactor service external traffic policy
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param querier.service.annotations Additional custom annotations for Compactor service
+    ##
+    annotations: {}
+    ## @param querier.service.extraPorts Extra ports to expose in the Compactor service
+    ##
+    extraPorts: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param querier.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param querier.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param querier.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+
+## @section Query Frontend Deployment Parameters
+##
+query-frontend:
+  ## @param query-frontend.enabled Enable Distributor deployment
+  ##
+  enabled: true
+  ## @param query-frontend.extraEnvVars Array with extra environment variables to add to ingester nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param query-frontend.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for ingester nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param query-frontend.extraEnvVarsSecret Name of existing Secret containing extra env vars for ingester nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param query-frontend.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param query-frontend.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param query-frontend.extraArgs Add additional argsto the default container args (useful to override configuration)
+  ## e.g:
+  ## extraArgs:
+  ##   - "-log.level=debug"
+  extraArgs: []
+  ## @param query-frontend.replicaCount Number of Compactor replicas to deploy
+  ##
+  replicaCount: 1
+  ## Configure extra options for Compactor containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param query-frontend.livenessProbe.enabled Enable livenessProbe on Compactor nodes
+  ## @param query-frontend.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param query-frontend.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param query-frontend.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param query-frontend.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param query-frontend.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param query-frontend.readinessProbe.enabled Enable readinessProbe on Compactor nodes
+  ## @param query-frontend.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param query-frontend.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param query-frontend.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param query-frontend.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param query-frontend.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param query-frontend.startupProbe.enabled Enable startupProbe on Compactor containers
+  ## @param query-frontend.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param query-frontend.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param query-frontend.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param query-frontend.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param query-frontend.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param query-frontend.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param query-frontend.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param query-frontend.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## ingester resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param query-frontend.resources.limits The resources limits for the ingester containers
+  ## @param query-frontend.resources.requests The requested resources for the ingester containers
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param query-frontend.podSecurityContext.enabled Enabled Compactor pods' Security Context
+  ## @param query-frontend.podSecurityContext.fsGroup Set Compactor pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param query-frontend.containerSecurityContext.enabled Enabled Compactor containers' Security Context
+  ## @param query-frontend.containerSecurityContext.runAsUser Set Compactor containers' Security Context runAsUser
+  ## @param query-frontend.containerSecurityContext.runAsNonRoot Set Compactor containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  ## @param query-frontend.lifecycleHooks for the ingester container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param query-frontend.hostAliases ingester pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param query-frontend.podLabels Extra labels for ingester pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param query-frontend.podAnnotations Annotations for ingester pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param query-frontend.podAffinityPreset Pod affinity preset. Ignored if `query-frontend.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param query-frontend.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `query-frontend.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node query-frontendaffinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param query-frontend.nodeAffinityPreset.type Node affinity preset type. Ignored if `query-frontend.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param query-frontend.nodeAffinityPreset.key Node label key to match. Ignored if `query-frontend.affinity` is set
+    ##
+    key: ""
+    ## @param query-frontend.nodeAffinityPreset.values Node label values to match. Ignored if `query-frontend.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param query-frontend.affinity Affinity for Compactor pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `query-frontend.podAffinityPreset`, `query-frontend.podAntiAffinityPreset`, and `query-frontend.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param query-frontend.nodeSelector Node labels for Compactor pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param query-frontend.tolerations Tolerations for Compactor pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param query-frontend.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param query-frontend.priorityClassName Compactor pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param query-frontend.schedulerName Kubernetes pod scheduler registry
+  ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param query-frontend.terminationGracePeriodSeconds Seconds pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param query-frontend.updateStrategy.type Compactor statefulset strategy type
+  ## @param query-frontend.updateStrategy.rollingUpdate Compactor statefulset rolling update configuration parameters
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate: {}
+  ## @param query-frontend.extraVolumes Optionally specify extra list of additional volumes for the Compactor pod(s)
+  ##
+  extraVolumes: []
+  ## @param query-frontend.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Compactor container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param query-frontend.sidecars Add additional sidecar containers to the Compactor pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param query-frontend.initContainers Add additional init containers to the Compactor pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+
+  ## @section Compactor Traffic Exposure Parameters
+  ##
+
+  ## ingester service parameters
+  ##
+  service:
+    ## @param query-frontend.service.type Compactor service type
+    ##
+    type: ClusterIP
+    ## @param query-frontend.service.ports.http-metrics Compactor HTTP service port
+    ## @param query-frontend.service.ports.grpc Compactor GRPC service port
+    ##
+    ports:
+      http-metrics: 8080
+      grpc: 9095
+
+    ## Node ports to expose
+    ## NOTE: choose port between <30000-32767>
+    ## @param query-frontend.service.nodePorts.http-metrics Node port for HTTP
+    ## @param query-frontend.service.nodePorts.grpc Node port for GRPC
+    ##
+    nodePorts:
+      http-metrics: ""
+      grpc: 9095
+    ## @param query-frontend.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+    ## @param query-frontend.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ##
+    sessionAffinity: None
+    ## @param query-frontend.service.clusterIP Compactor service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param query-frontend.service.loadBalancerIP Compactor service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param query-frontend.service.loadBalancerSourceRanges Compactor service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param query-frontend.service.externalTrafficPolicy Compactor service external traffic policy
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param query-frontend.service.annotations Additional custom annotations for Compactor service
+    ##
+    annotations: {}
+    ## @param query-frontend.service.extraPorts Extra ports to expose in the Compactor service
+    ##
+    extraPorts: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param query-frontend.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param query-frontend.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param query-frontend.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+
+## @section Store Gateway Deployment Parameters
+##
+store-gateway:
+  ## @param store-gateway.enabled Enable Store Gateway deployment
+  ##
+  enabled: true
+  ## @param store-gateway.extraEnvVars Array with extra environment variables to add to ingester nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param store-gateway.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for ingester nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param store-gateway.extraEnvVarsSecret Name of existing Secret containing extra env vars for ingester nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param store-gateway.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param store-gateway.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param store-gateway.extraArgs Add additional argsto the default container args (useful to override configuration)
+  ## e.g:
+  ## extraArgs:
+  ##   - "-log.level=debug"
+  extraArgs: []
+  ## @param store-gateway.replicaCount Number of Compactor replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param store-gateway.podManagementPolicy Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: OrderedReady
+  ## Configure extra options for Compactor containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param store-gateway.livenessProbe.enabled Enable livenessProbe on Compactor nodes
+  ## @param store-gateway.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param store-gateway.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param store-gateway.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param store-gateway.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param store-gateway.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param store-gateway.readinessProbe.enabled Enable readinessProbe on Compactor nodes
+  ## @param store-gateway.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param store-gateway.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param store-gateway.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param store-gateway.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param store-gateway.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param store-gateway.startupProbe.enabled Enable startupProbe on Compactor containers
+  ## @param store-gateway.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param store-gateway.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param store-gateway.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param store-gateway.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param store-gateway.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param store-gateway.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param store-gateway.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param store-gateway.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## ingester resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param store-gateway.resources.limits The resources limits for the ingester containers
+  ## @param store-gateway.resources.requests The requested resources for the ingester containers
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param store-gateway.podSecurityContext.enabled Enabled Compactor pods' Security Context
+  ## @param store-gateway.podSecurityContext.fsGroup Set Compactor pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param store-gateway.containerSecurityContext.enabled Enabled Compactor containers' Security Context
+  ## @param store-gateway.containerSecurityContext.runAsUser Set Compactor containers' Security Context runAsUser
+  ## @param store-gateway.containerSecurityContext.runAsNonRoot Set Compactor containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  ## @param store-gateway.lifecycleHooks for the ingester container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param store-gateway.hostAliases ingester pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param store-gateway.podLabels Extra labels for ingester pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param store-gateway.podAnnotations Annotations for ingester pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param store-gateway.podAffinityPreset Pod affinity preset. Ignored if `store-gateway.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param store-gateway.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `store-gateway.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node store-gateway.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param store-gateway.nodeAffinityPreset.type Node affinity preset type. Ignored if `store-gateway.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param store-gateway.nodeAffinityPreset.key Node label key to match. Ignored if `store-gateway.affinity` is set
+    ##
+    key: ""
+    ## @param store-gateway.nodeAffinityPreset.values Node label values to match. Ignored if `store-gateway.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param store-gateway.affinity Affinity for Compactor pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `store-gateway.podAffinityPreset`, `store-gateway.podAntiAffinityPreset`, and `store-gateway.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param store-gateway.nodeSelector Node labels for Compactor pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param store-gateway.tolerations Tolerations for Compactor pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param store-gateway.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param store-gateway.priorityClassName Compactor pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param store-gateway.schedulerName Kubernetes pod scheduler registry
+  ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param store-gateway.terminationGracePeriodSeconds Seconds pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param store-gateway.updateStrategy.type Compactor statefulset strategy type
+  ## @param store-gateway.updateStrategy.rollingUpdate Compactor statefulset rolling update configuration parameters
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate: {}
+  ## @param store-gateway.extraVolumes Optionally specify extra list of additional volumes for the Compactor pod(s)
+  ##
+  extraVolumes: []
+  ## @param store-gateway.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Compactor container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param store-gateway.sidecars Add additional sidecar containers to the Compactor pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param store-gateway.initContainers Add additional init containers to the Compactor pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    ## @param store-gateway.persistence.enabled Enable persistence in Compactor instances
+    ##
+    enabled: true
+    ## @param store-gateway.persistence.existingClaim Name of an existing PVC to use
+    ##
+    existingClaim: ""
+    ## @param store-gateway.persistence.storageClass PVC Storage Class for Memcached data volume
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param store-gateway.persistence.accessModes PVC Access modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param store-gateway.persistence.size PVC Storage Request for Memcached data volume
+    ##
+    size: 8Gi
+    ## @param store-gateway.persistence.annotations Additional PVC annotations
+    ##
+    annotations: {}
+    ## @param store-gateway.persistence.selector Selector to match an existing Persistent Volume for Compactor's data PVC
+    ## If set, the PVC can't have a PV dynamically provisioned for it
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param store-gateway.persistence.dataSource PVC data source
+    ##
+    dataSource: {}
+
+  ## @section Compactor Traffic Exposure Parameters
+  ##
+
+  ## ingester service parameters
+  ##
+  service:
+    ## @param store-gateway.service.type Compactor service type
+    ##
+    type: ClusterIP
+    ## @param store-gateway.service.ports.http-metrics Compactor HTTP service port
+    ## @param store-gateway.service.ports.grpc Compactor GRPC service port
+    ##
+    ports:
+      http-metrics: 8080
+      grpc: 9095
+
+    ## Node ports to expose
+    ## NOTE: choose port between <30000-32767>
+    ## @param store-gateway.service.nodePorts.http-metrics Node port for HTTP
+    ## @param store-gateway.service.nodePorts.grpc Node port for GRPC
+    ##
+    nodePorts:
+      http-metrics: ""
+      grpc: 9095
+    ## @param store-gateway.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+    ## @param store-gateway.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ##
+    sessionAffinity: None
+    ## @param store-gateway.service.clusterIP Compactor service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param store-gateway.service.loadBalancerIP Compactor service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param store-gateway.service.loadBalancerSourceRanges Compactor service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param store-gateway.service.externalTrafficPolicy Compactor service external traffic policy
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param store-gateway.service.annotations Additional custom annotations for Compactor service
+    ##
+    annotations: {}
+    ## @param store-gateway.service.extraPorts Extra ports to expose in the Compactor service
+    ##
+    extraPorts: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param store-gateway.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param store-gateway.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param store-gateway.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+
+## @section Persistence Parameters
+##
+
+## Enable persistence using Persistent Volume Claims
+## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+persistence:
+  ## @param persistence.enabled Enable persistence using Persistent Volume Claims
+  ##
+  enabled: true
+  ## @param persistence.mountPath Path to mount the volume at.
+  ##
+  mountPath: /bitnami/mimir/data
+  ## @param persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
+  ##
+  subPath: ""
+  ## @param persistence.storageClass Storage class of backing PVC
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  storageClass: ""
+  ## @param persistence.annotations Persistent Volume Claim annotations
+  ##
+  annotations: {}
+  ## @param persistence.accessModes Persistent Volume Access Modes
+  ##
+  accessModes:
+    - ReadWriteOnce
+  ## @param persistence.size Size of data volume
+  ##
+  size: 8Gi
+  ## @param persistence.existingClaim The name of an existing PVC to use for persistence
+  ##
+  existingClaim: ""
+  ## @param persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
+  ## If set, the PVC can't have a PV dynamically provisioned for it
+  ## E.g.
+  ## selector:
+  ##   matchLabels:
+  ##     app: my-app
+  ##
+  selector: {}
+  ## @param persistence.dataSource Custom PVC data source
+  ##
+  dataSource: {}
+## @section Init Container Parameters
+##
+
+## 'volumePermissions' init container parameters
+## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
+##   based on the *podSecurityContext/*containerSecurityContext parameters
+##
+volumePermissions:
+  ## @param volumePermissions.enabled Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`
+  ##
+  enabled: false
+  ## Bitnami Shell image
+  ## ref: https://hub.docker.com/r/bitnami/bitnami-shell/tags/
+  ## @param volumePermissions.image.registry Bitnami Shell image registry
+  ## @param volumePermissions.image.repository Bitnami Shell image repository
+  ## @param volumePermissions.image.tag Bitnami Shell image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.pullPolicy Bitnami Shell image pull policy
+  ## @param volumePermissions.image.pullSecrets Bitnami Shell image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/bitnami-shell
+    tag: 11-debian-11-r%%IMAGE_REVISION%%
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Init container's resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param volumePermissions.resources.limits The resources limits for the init container
+  ## @param volumePermissions.resources.requests The requested resources for the init container
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Init container Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
+  ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
+  ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
+  ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
+  ##
+  containerSecurityContext:
+    runAsUser: 0
+
+## @section Other Parameters
+##
+
+## RBAC configuration
+##
+rbac:
+  ## @param rbac.create Specifies whether RBAC resources should be created
+  ##
+  create: false
+  ## @param rbac.rules Custom RBAC rules to set
+  ## e.g:
+  ## rules:
+  ##   - apiGroups:
+  ##       - ""
+  ##     resources:
+  ##       - pods
+  ##     verbs:
+  ##       - get
+  ##       - list
+  ##
+  rules: []
+
+## ServiceAccount configuration
+##
+serviceAccount:
+  ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
+  ##
+  create: true
+  ## @param serviceAccount.name The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the common.names.fullname template
+  ##
+  name: ""
+  ## @param serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+  ##
+  annotations: {}
+  ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ##
+  automountServiceAccountToken: true
+
+## Prometheus metrics
+##
+metrics:
+  ## @param metrics.enabled Enable the export of Prometheus metrics
+  ##
+  enabled: false
+  ## Prometheus Operator ServiceMonitor configuration
+  ##
+  serviceMonitor:
+    ## @param metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+    ##
+    enabled: false
+    ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+    ##
+    namespace: ""
+    ## @param metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
+    ##
+    annotations: {}
+    ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
+    ##
+    jobLabel: ""
+    ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+    ##
+    honorLabels: false
+    ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## interval: 10s
+    ##
+    interval: ""
+    ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## scrapeTimeout: 10s
+    ##
+    scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+    ##
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.relabelings Specify general relabeling
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+    ## selector:
+    ##   prometheus: my-prometheus
+    ##
+    selector: {}
+## @section MinIO&reg; chart parameters
+## @extra minio For full list of MinIO&reg; values configurations please refere [here](https://github.com/bitnami/charts/tree/main/bitnami/minio)
+##
+minio:
+  ## @param minio.enabled Enable/disable MinIO&reg; chart installation
+  ## to be used as an objstore for Mastodon
+  ##
+  enabled: true
+  ## MinIO&reg; authentication parameters
+  ##
+  auth:
+    ## @param minio.auth.rootUser MinIO&reg; root username
+    ##
+    rootUser: admin
+    ## @param minio.auth.rootPassword Password for MinIO&reg; root user
+    ##
+    rootPassword: ""
+    ## @param minio.auth.existingSecret Name of an existing secret containing the MinIO&reg; credentials
+    ##
+    existingSecret: ""
+  ## @param minio.defaultBuckets Comma, semi-colon or space separated list of MinIO&reg; buckets to create
+  ##
+  defaultBuckets: "s3storage"
+
+  ## @param minio.provisioning.enabled Enable/disable MinIO&reg; provisioning job
+  ## @param minio.provisioning.extraCommands Extra commands to run on MinIO&reg; provisioning job
+  ##
+  provisioning:
+    enabled: true
+    # We need to allow downloads in order for the UI to work
+    extraCommands: ["mc anonymous set download provisioning/s3storage"]
+
+  ## @param minio.tls.enabled Enable/disable MinIO&reg; TLS support
+  ##
+  tls:
+    enabled: false
+  ## @param minio.service.type MinIO&reg; service type
+  ## @param minio.service.loadBalancerIP MinIO&reg; service LoadBalancer IP
+  ## @param minio.service.ports.api MinIO&reg; service port
+  ##
+  service:
+    type: ClusterIP
+    loadBalancerIP: ""
+    ports:
+      api: 80
