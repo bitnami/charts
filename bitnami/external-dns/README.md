@@ -7,7 +7,7 @@ ExternalDNS is a Kubernetes addon that configures public DNS servers with inform
 [Overview of ExternalDNS](https://github.com/kubernetes-incubator/external-dns)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -70,6 +70,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraDeploy`           | Array of extra objects to deploy with the release (evaluated as a template).                 | `[]`            |
 | `kubeVersion`           | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
 | `watchReleaseNamespace` | Watch only namepsace used for the release                                                    | `false`         |
+| `useDaemonset`          | Use ExternalDNS in Daemonset mode                                                            | `false`         |
 
 
 ### external-dns parameters
@@ -78,7 +79,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                              | ExternalDNS image registry                                                                                                                                                   | `docker.io`               |
 | `image.repository`                            | ExternalDNS image repository                                                                                                                                                 | `bitnami/external-dns`    |
-| `image.tag`                                   | ExternalDNS Image tag (immutable tags are recommended)                                                                                                                       | `0.13.1-debian-11-r9`     |
+| `image.tag`                                   | ExternalDNS Image tag (immutable tags are recommended)                                                                                                                       | `0.13.1-debian-11-r19`    |
 | `image.digest`                                | ExternalDNS image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                  | `""`                      |
 | `image.pullPolicy`                            | ExternalDNS image pull policy                                                                                                                                                | `IfNotPresent`            |
 | `image.pullSecrets`                           | ExternalDNS image pull secrets                                                                                                                                               | `[]`                      |
@@ -201,7 +202,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ovh.secretName`                              | When using the OVH provider, it's the name of the secret containing `ovh_consumer_key`, `ovh_application_key` and `ovh_application_secret`. Disables usage of other `ovh`.   | `""`                      |
 | `scaleway.scwAccessKey`                       | When using the Scaleway provider, specify an existing access key. (required when provider=scaleway)                                                                          | `""`                      |
 | `scaleway.scwSecretKey`                       | When using the Scaleway provider, specify an existing secret key. (required when provider=scaleway)                                                                          | `""`                      |
-| `scaleway.scwDefaultOrganizationId`           | When using the Scaleway provider, specify the existing organization id. (required when provider=scaleway)                                                                    | `""`                      |
 | `rfc2136.host`                                | When using the rfc2136 provider, specify the RFC2136 host (required when provider=rfc2136)                                                                                   | `""`                      |
 | `rfc2136.port`                                | When using the rfc2136 provider, specify the RFC2136 port (optional)                                                                                                         | `53`                      |
 | `rfc2136.zone`                                | When using the rfc2136 provider, specify the zone (required when provider=rfc2136)                                                                                           | `""`                      |

@@ -59,7 +59,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/gitea
-  tag: 1.17.3-debian-11-r3
+  tag: 1.18.0-debian-11-r5
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -635,7 +635,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r56
+    tag: 11-debian-11-r70
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

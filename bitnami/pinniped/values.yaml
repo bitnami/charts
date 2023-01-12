@@ -57,7 +57,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/pinniped
-  tag: 0.20.0-scratch-r7
+  tag: 0.21.0-scratch-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -717,64 +717,120 @@ supervisor:
   ## Supervisor proxy service parameters
   ##
   service:
-    ## @param supervisor.service.type Supervisor service type
-    ##
-    type: LoadBalancer
-    ## @param supervisor.service.ports.https Supervisor service HTTPS port
-    ##
-    ports:
-      https: 443
-      ## pinniped-supervisor aggregated api server currently listens on port 10250
-      ## https://github.com/vmware-tanzu/pinniped/blob/4951cbe5d4c6bb1b1bb04b2981c10b1ae7504c01/internal/config/supervisor/config.go
-      ## @param supervisor.service.ports.aggregatedAPIServer Supervisor aggregated API server port
+    api:
+      ## @param supervisor.service.api.type Supervisor API service type
       ##
-      aggregatedAPIServer: 10250
-    ## Node ports to expose
-    ## @param supervisor.service.nodePorts.https Node port for HTTPS
-    ## NOTE: choose port between <30000-32767>
-    ##
-    nodePorts:
-      https: ""
-    ## @param supervisor.service.clusterIP Supervisor service Cluster IP
-    ## e.g.:
-    ## clusterIP: None
-    ##
-    clusterIP: ""
-    ## @param supervisor.service.labels Add labels to the service
-    ##
-    labels: {}
-    ## @param supervisor.service.loadBalancerIP Supervisor service Load Balancer IP
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
-    ##
-    loadBalancerIP: ""
-    ## @param supervisor.service.loadBalancerSourceRanges Supervisor service Load Balancer sources
-    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-    ## e.g:
-    ## loadBalancerSourceRanges:
-    ##   - 10.10.10.0/24
-    ##
-    loadBalancerSourceRanges: []
-    ## @param supervisor.service.externalTrafficPolicy Supervisor service external traffic policy
-    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
-    ##
-    externalTrafficPolicy: Cluster
-    ## @param supervisor.service.annotations Additional custom annotations for Supervisor service
-    ##
-    annotations: {}
-    ## @param supervisor.service.extraPorts Extra ports to expose in Supervisor service (normally used with the `sidecars` value)
-    ##
-    extraPorts: []
-    ## @param supervisor.service.sessionAffinity Control where client requests go, to the same pod or round-robin
-    ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
-    ##
-    sessionAffinity: None
-    ## @param supervisor.service.sessionAffinityConfig Additional settings for the sessionAffinity
-    ## sessionAffinityConfig:
-    ##   clientIP:
-    ##     timeoutSeconds: 300
-    ##
-    sessionAffinityConfig: {}
+      type: ClusterIP
+      ## @param supervisor.service.api.ports.https Supervisor API service HTTPS port
+      ##
+      ports:
+        https: 443
+        ## pinniped-supervisor aggregated api server currently listens on port 10250
+        ## https://github.com/vmware-tanzu/pinniped/blob/4951cbe5d4c6bb1b1bb04b2981c10b1ae7504c01/internal/config/supervisor/config.go
+        ## @param supervisor.service.api.ports.aggregatedAPIServer Supervisor aggregated API server port
+        ##
+        aggregatedAPIServer: 10250
+      ## Node ports to expose
+      ## @param supervisor.service.api.nodePorts.https Node port for HTTPS
+      ## NOTE: choose port between <30000-32767>
+      ##
+      nodePorts:
+        https: ""
+      ## @param supervisor.service.api.clusterIP Supervisor service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP: ""
+      ## @param supervisor.service.api.labels Add labels to the service
+      ##
+      labels: {}
+      ## @param supervisor.service.api.loadBalancerIP Supervisor service Load Balancer IP
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+      ##
+      loadBalancerIP: ""
+      ## @param supervisor.service.api.loadBalancerSourceRanges Supervisor service Load Balancer sources
+      ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+      ## e.g:
+      ## loadBalancerSourceRanges:
+      ##   - 10.10.10.0/24
+      ##
+      loadBalancerSourceRanges: []
+      ## @param supervisor.service.api.externalTrafficPolicy Supervisor service external traffic policy
+      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ##
+      externalTrafficPolicy: Cluster
+      ## @param supervisor.service.api.annotations Additional custom annotations for Supervisor service
+      ##
+      annotations: {}
+      ## @param supervisor.service.api.extraPorts Extra ports to expose in Supervisor service (normally used with the `sidecars` value)
+      ##
+      extraPorts: []
+      ## @param supervisor.service.api.sessionAffinity Control where client requests go, to the same pod or round-robin
+      ## Values: ClientIP or None
+      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ##
+      sessionAffinity: None
+      ## @param supervisor.service.api.sessionAffinityConfig Additional settings for the sessionAffinity
+      ## sessionAffinityConfig:
+      ##   clientIP:
+      ##     timeoutSeconds: 300
+      ##
+      sessionAffinityConfig: {}
+
+    public:
+      ## @param supervisor.service.public.type Supervisor user-facing service type
+      ##
+      type: LoadBalancer
+      ## @param supervisor.service.public.ports.https Supervisor user-facing service HTTPS port
+      ##
+      ports:
+        https: 443
+      ## Node ports to expose
+      ## @param supervisor.service.public.nodePorts.https Node port for HTTPS
+      ## NOTE: choose port between <30000-32767>
+      ##
+      nodePorts:
+        https: ""
+      ## @param supervisor.service.public.clusterIP Supervisor service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP: ""
+      ## @param supervisor.service.public.labels Add labels to the service
+      ##
+      labels: {}
+      ## @param supervisor.service.public.loadBalancerIP Supervisor service Load Balancer IP
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+      ##
+      loadBalancerIP: ""
+      ## @param supervisor.service.public.loadBalancerSourceRanges Supervisor service Load Balancer sources
+      ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+      ## e.g:
+      ## loadBalancerSourceRanges:
+      ##   - 10.10.10.0/24
+      ##
+      loadBalancerSourceRanges: []
+      ## @param supervisor.service.public.externalTrafficPolicy Supervisor service external traffic policy
+      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ##
+      externalTrafficPolicy: Cluster
+      ## @param supervisor.service.public.annotations Additional custom annotations for Supervisor service
+      ##
+      annotations: {}
+      ## @param supervisor.service.public.extraPorts Extra ports to expose in Supervisor service (normally used with the `sidecars` value)
+      ##
+      extraPorts: []
+      ## @param supervisor.service.public.sessionAffinity Control where client requests go, to the same pod or round-robin
+      ## Values: ClientIP or None
+      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ##
+      sessionAffinity: None
+      ## @param supervisor.service.public.sessionAffinityConfig Additional settings for the sessionAffinity
+      ## sessionAffinityConfig:
+      ##   clientIP:
+      ##     timeoutSeconds: 300
+      ##
+      sessionAffinityConfig: {}
 
   ## Configure the ingress resource that allows you to access the Pinniped Supervisor installation
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/

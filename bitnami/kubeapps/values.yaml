@@ -205,7 +205,7 @@ frontend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.23.2-debian-11-r9
+    tag: 1.23.3-debian-11-r7
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -524,7 +524,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 2.6.1-debian-11-r4
+    tag: 2.6.2-debian-11-r9
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -831,7 +831,7 @@ apprepository:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 2.6.1-scratch-r0
+    tag: 2.6.2-scratch-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -858,7 +858,7 @@ apprepository:
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-asset-syncer
-    tag: 2.6.1-scratch-r0
+    tag: 2.6.2-scratch-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -937,7 +937,7 @@ apprepository:
     httpProxy: ""
     httpsProxy: ""
     noProxy: ""
-  ## @param apprepository.crontab Schedule for syncing App repositories (default to 10 minutes)
+  ## @param apprepository.crontab Default schedule for syncing App repositories (defaults to every 10 minutes)
   ## e.g:
   ## crontab: "*/10 * * * *"
   ##
@@ -1142,7 +1142,7 @@ authProxy:
   image:
     registry: docker.io
     repository: bitnami/oauth2-proxy
-    tag: 7.4.0-debian-11-r6
+    tag: 7.4.0-debian-11-r22
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1276,7 +1276,7 @@ pinnipedProxy:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-pinniped-proxy
-    tag: 2.6.1-debian-11-r3
+    tag: 2.6.2-debian-11-r9
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1449,6 +1449,7 @@ featureFlags:
 ## PostgreSQL chart configuration
 ## ref: https://github.com/bitnami/charts/blob/main/bitnami/postgresql/values.yaml
 ## @param postgresql.enabled Deploy a PostgreSQL server to satisfy the applications database requirements
+## @param postgresql.auth.username Username for PostgreSQL server
 ## @param postgresql.auth.postgresPassword Password for 'postgres' user
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql#setting-the-root-password-on-first-run
 ## @param postgresql.auth.database Name for a custom database to create
@@ -1457,6 +1458,7 @@ featureFlags:
 postgresql:
   enabled: true
   auth:
+    username: "postgres"
     postgresPassword: ""
     database: assets
     existingSecret: ""
@@ -1513,8 +1515,6 @@ kubeappsapis:
         v1alpha1:
           ## @param kubeappsapis.pluginConfig.helm.packages.v1alpha1.globalPackagingNamespace Custom global packaging namespace. Using this value will override the current "kubeapps release namespace + suffix" pattern and will create a new namespace if not exists.
           globalPackagingNamespace: ""
-          ## @param kubeappsapis.pluginConfig.helm.packages.v1alpha1.userManagedSecrets Default policy for handling repository secrets, either managed by the user or by kubeapps-apis
-          userManagedSecrets: false
     kappController:
       packages:
         v1alpha1:
@@ -1539,8 +1539,8 @@ kubeappsapis:
           ## @param kubeappsapis.pluginConfig.flux.packages.v1alpha1.defaultUpgradePolicy Default upgrade policy generating version constraints
           ## enum: [ "major", "minor", "patch", "none" ]
           defaultUpgradePolicy: none
-            ## @param kubeappsapis.pluginConfig.flux.packages.v1alpha1.userManagedSecrets Default policy for handling repository secrets, either managed by the user or by kubeapps-apis
-          userManagedSecrets: false
+          ## @param kubeappsapis.pluginConfig.flux.packages.v1alpha1.noCrossNamespaceRefs Enable this flag to disallow cross-namespace references, useful when running Flux on multi-tenant clusters
+          noCrossNamespaceRefs: false
     resources:
       packages:
         v1alpha1:
@@ -1569,7 +1569,7 @@ kubeappsapis:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apis
-    tag: 2.6.1-debian-11-r3
+    tag: 2.6.2-debian-11-r9
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

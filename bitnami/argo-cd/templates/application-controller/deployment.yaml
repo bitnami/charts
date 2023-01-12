@@ -144,9 +144,9 @@ spec:
             - --repo-server
             - {{ include "argocd.repo-server" . }}:{{ .Values.repoServer.service.port }}
             - --logformat
-            - {{ .Values.controller.logFormat }}
+            - {{ .Values.controller.logFormat | quote }}
             - --loglevel
-            - {{ .Values.controller.logLevel }}
+            - {{ .Values.controller.logLevel | quote }}
             # TODO(miguelaeh): Test the chart using redis sentinel enabled: https://github.com/argoproj/argo-cd/blob/2a410187565e15633b6f2a8c8d8da22cf02b257d/util/cache/cache.go#L40
             - --redis
             - {{ include "argocd.redisHost" . }}:{{ include "argocd.redisPort" . }}

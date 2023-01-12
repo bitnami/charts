@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
 | `image.registry`                 | Keycloak image registry                                                                                                      | `docker.io`                   |
 | `image.repository`               | Keycloak image repository                                                                                                    | `bitnami/keycloak`            |
-| `image.tag`                      | Keycloak image tag (immutable tags are recommended)                                                                          | `19.0.3-debian-11-r15`        |
+| `image.tag`                      | Keycloak image tag (immutable tags are recommended)                                                                          | `20.0.2-debian-11-r2`         |
 | `image.digest`                   | Keycloak image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                     | `""`                          |
 | `image.pullPolicy`               | Keycloak image pull policy                                                                                                   | `IfNotPresent`                |
 | `image.pullSecrets`              | Specify docker-registry secret names as an array                                                                             | `[]`                          |
@@ -281,7 +281,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `keycloakConfigCli.enabled`                               | Whether to enable keycloak-config-cli job                                                                                     | `false`                       |
 | `keycloakConfigCli.image.registry`                        | keycloak-config-cli container image registry                                                                                  | `docker.io`                   |
 | `keycloakConfigCli.image.repository`                      | keycloak-config-cli container image repository                                                                                | `bitnami/keycloak-config-cli` |
-| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                                                       | `5.5.0-debian-11-r4`          |
+| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                                                       | `5.5.0-debian-11-r12`         |
 | `keycloakConfigCli.image.digest`                          | keycloak-config-cli container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                          |
 | `keycloakConfigCli.image.pullPolicy`                      | keycloak-config-cli container image pull policy                                                                               | `IfNotPresent`                |
 | `keycloakConfigCli.image.pullSecrets`                     | keycloak-config-cli container image pull secrets                                                                              | `[]`                          |
@@ -313,21 +313,22 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Database parameters
 
-| Name                                         | Description                                                             | Value              |
-| -------------------------------------------- | ----------------------------------------------------------------------- | ------------------ |
-| `postgresql.enabled`                         | Switch to enable or disable the PostgreSQL helm chart                   | `true`             |
-| `postgresql.auth.username`                   | Name for a custom user to create                                        | `bn_keycloak`      |
-| `postgresql.auth.password`                   | Password for the custom user to create                                  | `""`               |
-| `postgresql.auth.database`                   | Name for a custom database to create                                    | `bitnami_keycloak` |
-| `postgresql.auth.existingSecret`             | Name of existing secret to use for PostgreSQL credentials               | `""`               |
-| `postgresql.architecture`                    | PostgreSQL architecture (`standalone` or `replication`)                 | `standalone`       |
-| `externalDatabase.host`                      | Database host                                                           | `""`               |
-| `externalDatabase.port`                      | Database port number                                                    | `5432`             |
-| `externalDatabase.user`                      | Non-root username for Keycloak                                          | `bn_keycloak`      |
-| `externalDatabase.password`                  | Password for the non-root username for Keycloak                         | `""`               |
-| `externalDatabase.database`                  | Keycloak database name                                                  | `bitnami_keycloak` |
-| `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials | `""`               |
-| `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials      | `""`               |
+| Name                                         | Description                                                                                                       | Value              |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `postgresql.enabled`                         | Switch to enable or disable the PostgreSQL helm chart                                                             | `true`             |
+| `postgresql.auth.postgresPassword`           | Password for the "postgres" admin user. Ignored if `auth.existingSecret` with key `postgres-password` is provided | `""`               |
+| `postgresql.auth.username`                   | Name for a custom user to create                                                                                  | `bn_keycloak`      |
+| `postgresql.auth.password`                   | Password for the custom user to create                                                                            | `""`               |
+| `postgresql.auth.database`                   | Name for a custom database to create                                                                              | `bitnami_keycloak` |
+| `postgresql.auth.existingSecret`             | Name of existing secret to use for PostgreSQL credentials                                                         | `""`               |
+| `postgresql.architecture`                    | PostgreSQL architecture (`standalone` or `replication`)                                                           | `standalone`       |
+| `externalDatabase.host`                      | Database host                                                                                                     | `""`               |
+| `externalDatabase.port`                      | Database port number                                                                                              | `5432`             |
+| `externalDatabase.user`                      | Non-root username for Keycloak                                                                                    | `bn_keycloak`      |
+| `externalDatabase.password`                  | Password for the non-root username for Keycloak                                                                   | `""`               |
+| `externalDatabase.database`                  | Keycloak database name                                                                                            | `bitnami_keycloak` |
+| `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials                                           | `""`               |
+| `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials                                                | `""`               |
 
 
 ### Keycloak Cache parameters
@@ -341,9 +342,10 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Keycloak Logging parameters
 
-| Name             | Description                                                     | Value     |
-| ---------------- | --------------------------------------------------------------- | --------- |
-| `logging.output` | Alternates between the default log output format or json format | `default` |
+| Name             | Description                                                                    | Value     |
+| ---------------- | ------------------------------------------------------------------------------ | --------- |
+| `logging.output` | Alternates between the default log output format or json format                | `default` |
+| `logging.level`  | Allowed values as documented: FATAL, ERROR, WARN, INFO, DEBUG, TRACE, ALL, OFF | `INFO`    |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,

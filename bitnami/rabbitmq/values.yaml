@@ -31,7 +31,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.11.4-debian-11-r0
+  tag: 3.11.6-debian-11-r0
   digest: ""
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
@@ -75,6 +75,9 @@ extraDeploy: []
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
+## @param servicenameOverride String to partially override headless service name
+##
+servicenameOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
@@ -406,7 +409,7 @@ configuration: |-
   {{- if .Values.metrics.enabled }}
   ## Prometheus metrics
   ##
-  prometheus.tcp.port = 9419
+  prometheus.tcp.port = {{ .Values.containerPorts.metrics }}
   {{- end }}
   {{- if .Values.memoryHighWatermark.enabled }}
   ## Memory Threshold
@@ -432,7 +435,16 @@ extraConfiguration: |-
 ##                               {management,    {constant, true}}]}
 ##   ]}].
 ##
+## If both, advancedConfiguration and advancedConfigurationExistingSecret are set, then advancedConfiguration
+## will be used instead of the secret.
+#
 advancedConfiguration: |-
+
+## @param advancedConfigurationExistingSecret Existing secret with the advanced configuration file (must contain a key `advanced.config`).
+## Use this as additional configuration in classic config format (Erlang term configuration format) as in advancedConfiguration
+## Do not use in combination with advancedConfiguration, will be ignored
+##
+advancedConfigurationExistingSecret: ""
 
 ## LDAP configuration
 ##
@@ -1268,7 +1280,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r56
+    tag: 11-debian-11-r69
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

@@ -9,11 +9,5 @@
       "state": "California",
       "zipcode": "94304"
     }
-  },
-  "newCustomer": {
-    "firstName": "Maurice",
-    "lastName": "Canard",
-    "email": "lecanard@example.com",
-    "password": "Sup3rComplicated!"
   }
 }

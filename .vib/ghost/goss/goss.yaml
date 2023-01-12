@@ -1,20 +1,27 @@
+http:
+  http://localhost:{{ .Vars.containerPorts.http }}:
+    status: 200
 command:
-  which-ghost:
-    exec: which ghost
+{{- $checkCmd := "ghost config get %s -d /opt/bitnami/ghost | grep -q %d" }}
+{{- $dbCheck := printf $checkCmd "database.connection.database" .Vars.mysql.auth.database }}
+{{- $userCheck := printf $checkCmd "database.connection.user" .Vars.mysql.auth.username }}
+{{- $passCheck := printf $checkCmd "database.connection.password" .Vars.mysql.auth.password }}
+  check-db-config:
+    exec: ($dbCheck) && ($userCheck) && ($passCheck)
+    exit-status: 0
+  check-user-info:
+    exec: id
     exit-status: 0
     stdout:
-      - "/opt/bitnami/ghost/bin/ghost"
-    stderr: [ ]
-    timeout: 40000
+      - uid={{ .Vars.containerSecurityContext.runAsUser }}
+      - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
 file:
-  /opt/bitnami/ghost/content:
-    filetype: symlink
-    linked-to: /bitnami/ghost/content
+  /bitnami/ghost:
     exists: true
-  /bitnami/ghost/config.production.json:
-    mode: "0644"
-    filetype: file
-    exists: true
-user:
-  ghost:
-    exists: true
+    filetype: directory
+    mode: '2775'
+    owner: root
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
+    filetype: directory
+    mode: "3777"

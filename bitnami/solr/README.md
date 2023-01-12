@@ -84,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------- | ---------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`                 | Solr image registry                                                                                  | `docker.io`             |
 | `image.repository`               | Solr image repository                                                                                | `bitnami/solr`          |
-| `image.tag`                      | Solr image tag (immutable tags are recommended)                                                      | `9.1.0-debian-11-r0`    |
+| `image.tag`                      | Solr image tag (immutable tags are recommended)                                                      | `9.1.0-debian-11-r15`   |
 | `image.digest`                   | Solr image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `image.pullPolicy`               | image pull policy                                                                                    | `IfNotPresent`          |
 | `image.pullSecrets`              | Specify docker-registry secret names as an array                                                     | `[]`                    |
@@ -213,6 +213,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.size`          | Size of data volume                                                    | `8Gi`               |
 | `persistence.annotations`   | Persistence annotations for Solr                                       | `{}`                |
 | `persistence.mountPath`     | Persistence mount path for Solr                                        | `/bitnami/solr`     |
+| `persistence.subPath`       | Path within the volume from which the container's                      | `""`                |
+| `persistence.subPathExpr`   | Expanded path within the volume from which                             | `""`                |
 | `persistence.selector`      | Selector to match an existing Persistent Volume for WordPress data PVC | `{}`                |
 
 
@@ -223,7 +225,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r54`      |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r69`      |
 | `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`                    |
@@ -431,6 +433,10 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 7.0.0
+
+This major updates the Zookeeper subchart to it newest major, 11.0.0. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper#to-1100).
 
 ### To 6.0.0
 

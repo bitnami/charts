@@ -1,12 +1,14 @@
 annotations:
   category: Database
+  licenses: |
+    - Apache-2.0
 apiVersion: v2
-appVersion: 22.11.1
+appVersion: 22.12.3
 dependencies:
   - condition: zookeeper.enabled
     name: zookeeper
     repository: https://charts.bitnami.com/bitnami
-    version: 10.x.x
+    version: 11.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -25,4 +27,4 @@ name: clickhouse
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/clickhouse
   - https://github.com/ClickHouse/ClickHouse
-version: 1.0.5
+version: 2.2.4

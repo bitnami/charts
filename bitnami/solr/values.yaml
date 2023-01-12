@@ -72,7 +72,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/solr
-  tag: 9.1.0-debian-11-r0
+  tag: 9.1.0-debian-11-r15
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -552,6 +552,17 @@ persistence:
   ## @param persistence.mountPath Persistence mount path for Solr
   ##
   mountPath: /bitnami/solr
+  ## @param persistence.subPath Path within the volume from which the container's
+  ## volume should be mounted. Defaults to "" (volume's root).
+  ##
+  subPath: ""
+  ## @param persistence.subPathExpr Expanded path within the volume from which
+  ## the container's volume should be mounted. Behaves similarly to SubPath but
+  ## environment variable references $(VAR_NAME) are expanded using the
+  ## container's environment. Defaults to "" (volume's root).
+  ## SubPathExpr and SubPath are mutually exclusive.
+  ##
+  subPathExpr: ""
   ## @param persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
   ## If set, the PVC can't have a PV dynamically provisioned for it
   ## E.g.
@@ -580,7 +591,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r54
+    tag: 11-debian-11-r69
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

@@ -2,6 +2,10 @@ CHART NAME: {{ .Chart.Name }}
 CHART VERSION: {{ .Chart.Version }}
 APP VERSION: {{ .Chart.AppVersion }}
 
+This Helm chart is deprecated
+
+The upstream project has been discontinued and no new features will be added.
+
 ** Please be patient while the chart is being deployed **
 
 {{- if or .Values.mariadb.enabled .Values.externalDatabase.host -}}

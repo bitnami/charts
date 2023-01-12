@@ -84,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`              | ZooKeeper image registry                                                                                                   | `docker.io`             |
 | `image.repository`            | ZooKeeper image repository                                                                                                 | `bitnami/zookeeper`     |
-| `image.tag`                   | ZooKeeper image tag (immutable tags are recommended)                                                                       | `3.8.0-debian-11-r56`   |
+| `image.tag`                   | ZooKeeper image tag (immutable tags are recommended)                                                                       | `3.8.0-debian-11-r74`   |
 | `image.digest`                | ZooKeeper image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                  | `""`                    |
 | `image.pullPolicy`            | ZooKeeper image pull policy                                                                                                | `IfNotPresent`          |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                                                                           | `[]`                    |
@@ -240,6 +240,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.accessModes`              | PVC Access modes                                                               | `["ReadWriteOnce"]` |
 | `persistence.size`                     | PVC Storage Request for ZooKeeper data volume                                  | `8Gi`               |
 | `persistence.annotations`              | Annotations for the PVC                                                        | `{}`                |
+| `persistence.labels`                   | Labels for the PVC                                                             | `{}`                |
 | `persistence.selector`                 | Selector to match an existing Persistent Volume for ZooKeeper's data PVC       | `{}`                |
 | `persistence.dataLogDir.size`          | PVC Storage Request for ZooKeeper's dedicated data log directory               | `8Gi`               |
 | `persistence.dataLogDir.existingClaim` | Provide an existing `PersistentVolumeClaim` for ZooKeeper's data log directory | `""`                |
@@ -253,7 +254,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r51`      |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r69`      |
 | `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`                    |
@@ -430,10 +431,14 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 11.0.0
+
+This major version removes `commonAnnotations` and `commonLabels` from `volumeClaimTemplates`. Now annotations and labels can be set in volume claims using `persistence.annotations` and `persistence.labels` values. If the previous deployment has already set `commonAnnotations` and/or `commonLabels` values, to ensure a clean upgrade from previous version without loosing data, please set `persistence.annotations` and/or `persistence.labels` values with the same content as the common values.
+
 ### To 10.0.0
 
 This new version of the chart adds support for server-server authentication.
-The chart previously supported client-server authentication, to avioud confusion, the previous parameters have been renamed from `auth.*` to `auth.client.*`.
+The chart previously supported client-server authentication, to avoid confusion, the previous parameters have been renamed from `auth.*` to `auth.client.*`.
 
 ### To 9.0.0
 

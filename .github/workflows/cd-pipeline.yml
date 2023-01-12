@@ -25,7 +25,6 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/etcd/**'
       - 'bitnami/external-dns/**'
       - 'bitnami/fluentd/**'
-      - 'bitnami/geode/**'
       - 'bitnami/ghost/**'
       - 'bitnami/gitea/**'
       - 'bitnami/grafana-loki/**'
@@ -36,6 +35,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/haproxy-intel/**'
       - 'bitnami/harbor/**'
       - 'bitnami/influxdb/**'
+      - 'bitnami/jaeger/**'
       - 'bitnami/jasperreports/**'
       - 'bitnami/jenkins/**'
       - 'bitnami/joomla/**'
@@ -51,6 +51,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/kubernetes-event-exporter/**'
       - 'bitnami/logstash/**'
       - 'bitnami/magento/**'
+      - 'bitnami/mastodon/**'
       - 'bitnami/mariadb-galera/**'
       - 'bitnami/mariadb/**'
       - 'bitnami/matomo/**'
@@ -220,10 +221,10 @@ jobs:
       - id: update-index
         name: Fetch chart and update index
         run: |
-          # Extract chart release metadata from the publish result file
-          vib_publish_result_file=$(find ~/artifacts -name "result.json" -print -quit)
-          chart_name=$(jq -re '.actions|map(select(.action_id == "helm-publish"))[0] | .application.name' $vib_publish_result_file)
-          chart_version=$(jq -re '.actions|map(select(.action_id == "helm-publish"))[0] | .application.version' $vib_publish_result_file)
+          # Extract chart release metadata from the publish report file
+          vib_publish_report_file=$(find ~/artifacts -name "report.json" -print -quit)
+          chart_name=$(jq -re '.actions|map(select(.action_id == "helm-publish"))[0] | .application.name' $vib_publish_report_file)
+          chart_version=$(jq -re '.actions|map(select(.action_id == "helm-publish"))[0] | .application.version' $vib_publish_report_file)
           # Download published asset
           mkdir download
           aws s3 cp s3://${{ secrets.AWS_S3_BUCKET }}/bitnami/${chart_name}-${chart_version}.tgz download/

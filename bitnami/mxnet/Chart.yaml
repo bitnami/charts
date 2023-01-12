@@ -1,5 +1,7 @@
 annotations:
   category: MachineLearning
+  licenses: |
+    - Apache-2.0
 apiVersion: v2
 appVersion: 1.9.1
 dependencies:
@@ -9,7 +11,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Apache MXNet (Incubating) is a flexible and efficient library for deep learning designed to work as a neural network. Bitnami image ships OpenBLAS as math library.
-engine: gotpl
 home: https://github.com/bitnami/charts/tree/main/bitnami/mxnet
 icon: https://bitnami.com/assets/stacks/mxnet/img/mxnet-stack-220x234.png
 keywords:
@@ -24,4 +25,4 @@ name: mxnet
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/mxnet
   - https://mxnet.apache.org/
-version: 3.1.7
+version: 3.1.8

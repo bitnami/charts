@@ -1,5 +1,7 @@
 annotations:
   category: Database
+  licenses: |
+    - Apache-2.0
 apiVersion: v2
 appVersion: 6.0.3
 dependencies:
@@ -9,7 +11,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: MongoDB(R) is an open source NoSQL database that uses JSON for data storage. MongoDB(TM) Sharded improves scalability and reliability for large datasets by distributing data across multiple machines.
-engine: gotpl
 home: https://github.com/bitnami/charts/tree/main/bitnami/mongodb-sharded
 icon: https://bitnami.com/assets/stacks/mongodb/img/mongodb-stack-220x234.png
 keywords:
@@ -26,4 +27,4 @@ name: mongodb-sharded
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/mongodb-sharded
   - https://mongodb.org
-version: 6.2.0
+version: 6.2.1

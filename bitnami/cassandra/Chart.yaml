@@ -1,7 +1,9 @@
 annotations:
   category: Database
+  licenses: |
+    - Apache-2.0
 apiVersion: v2
-appVersion: 4.0.7
+appVersion: 4.1.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -9,7 +11,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Apache Cassandra is an open source distributed database management system designed to handle large amounts of data across many servers, providing high availability with no single point of failure.
-engine: gotpl
 home: https://github.com/bitnami/charts/tree/main/bitnami/cassandra
 icon: https://bitnami.com/assets/stacks/cassandra/img/cassandra-stack-220x234.png
 keywords:
@@ -23,4 +24,4 @@ name: cassandra
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/cassandra
   - http://cassandra.apache.org
-version: 9.7.5
+version: 10.0.0

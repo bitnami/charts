@@ -65,7 +65,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-cli
-    tag: 3.4.4-scratch-r0
+    tag: 3.4.4-scratch-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -474,7 +474,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-controller
-    tag: 3.4.3-scratch-r1
+    tag: 3.4.4-scratch-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -600,6 +600,12 @@ controller:
   ##
   extraArgs: ""
 
+  ##
+  ## @param controller.persistence.archive.enabled Save completed workflows to an SQL database.
+  persistence:
+    archive:  
+      enabled: false
+
   ## Controller configmap configuration content. Requires controller.existingConfigmap to be empty.
   ## @param controller.config [object] Controller configmap configuration content
   ##
@@ -646,10 +652,10 @@ controller:
         maxIdleConns: 100
         maxOpenConns: 0
       nodeStatusOffLoad: false
-      archive: false
-      {{- if or .Values.postgresql.enabled (eq .Values.externalDatabase.type "postgresql") }}
+      archive: {{ include "common.tplvalues.render" (dict "value" .Values.controller.persistence.archive.enabled "context" $) }}
+      {{- if or .Values.postgresql.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.type "postgresql")) }}
       postgresql:
-      {{- else if or .Values.mysql.enabled (eq .Values.externalDatabase.type "mysql") }}
+      {{- else if or .Values.mysql.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.type "mysql")) }}
       mysql:
       {{- end }}
         host: {{ include "argo-workflows.controller.database.host" . }}
@@ -947,7 +953,7 @@ executor:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-exec
-    tag: 3.4.4-debian-11-r0
+    tag: 3.4.4-debian-11-r9
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1180,7 +1186,7 @@ mysql:
 ##
 externalDatabase:
   enabled: false
-  ## Either "postgres" or  "mysql"
+  ## Either "postgresql" or  "mysql"
   ##
   type: ""
   host: localhost

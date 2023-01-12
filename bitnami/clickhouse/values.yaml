@@ -76,7 +76,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/clickhouse
-  tag: 22.11.1-debian-11-r0
+  tag: 22.12.3-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -99,11 +99,15 @@ image:
 shards: 2
 
 ## @param replicaCount Number of ClickHouse replicas per shard to deploy
+## if keeper enable, same as keeper count, keeper cluster by shards.
 ##
-replicaCount: 2
+replicaCount: 3
 ## @param containerPorts.http ClickHouse HTTP container port
 ## @param containerPorts.tcp ClickHouse TCP container port
-## @param containerPorts.tcpSecure ClickHouse TCP container port
+## @param containerPorts.tcpSecure ClickHouse TCP (secure) container port
+## @param containerPorts.keeper ClickHouse keeper TCP container port
+## @param containerPorts.keeperSecure ClickHouse keeper TCP (secure) container port
+## @param containerPorts.keeperInter ClickHouse keeper interserver TCP container port
 ## @param containerPorts.mysql ClickHouse MySQL container port
 ## @param containerPorts.postgresql ClickHouse PostgreSQL container port
 ## @param containerPorts.interserver ClickHouse Interserver container port
@@ -113,6 +117,9 @@ containerPorts:
   http: 8123
   tcp: 9000
   tcpSecure: 9440
+  keeper: 2181
+  keeperSecure: 3181
+  keeperInter: 9444
   mysql: 9004
   postgresql: 9005
   interserver: 9009
@@ -183,6 +190,7 @@ resources:
 ## @param podSecurityContext.enabled Enabled ClickHouse pods' Security Context
 ## @param podSecurityContext.fsGroup Set ClickHouse pod's Security Context fsGroup
 ## @param podSecurityContext.seccompProfile.type Set ClickHouse container's Security Context seccomp profile
+## If you are using Kubernetes 1.18, the following code needs to be commented out.
 ##
 podSecurityContext:
   enabled: true
@@ -221,6 +229,12 @@ auth:
 ##
 logLevel: information
 
+## @section ClickHouse keeper configuration parameters
+## @param keeper.enabled Deploy ClickHouse keeper. Support is experimental.
+##
+keeper:
+  enabled: false
+
 ## @param defaultConfigurationOverrides [string] Default configuration overrides (evaluated as a template)
 ##
 defaultConfigurationOverrides: |
@@ -254,15 +268,53 @@ defaultConfigurationOverrides: |
       </default>
     </remote_servers>
     {{- end }}
-    {{- if or .Values.zookeeper.enabled .Values.externalZookeeper.servers }}
+    {{- if .Values.keeper.enabled }}
+    <!-- keeper configuration -->
+    <keeper_server>
+      {{/*ClickHouse keeper configuration using the helm chart */}}
+      <tcp_port>{{ $.Values.containerPorts.keeper }}</tcp_port>
+      {{- if .Values.tls.enabled }}
+      <tcp_port_secure>{{ $.Values.containerPorts.keeperSecure }}</tcp_port_secure>
+      {{- end }}
+      <server_id from_env="KEEPER_SERVER_ID"></server_id>
+      <log_storage_path>/bitnami/clickhouse/keeper/coordination/log</log_storage_path>
+      <snapshot_storage_path>/bitnami/clickhouse/keeper/coordination/snapshots</snapshot_storage_path>
+
+      <coordination_settings>
+          <operation_timeout_ms>10000</operation_timeout_ms>
+          <session_timeout_ms>30000</session_timeout_ms>
+          <raft_logs_level>trace</raft_logs_level>
+      </coordination_settings>
+
+      <raft_configuration>
+      {{- $nodes := .Values.replicaCount | int }}
+      {{- range $node, $e := until $nodes }}
+      <server>
+        <id>{{ $node | int }}</id>
+        <hostname from_env="{{ printf "KEEPER_NODE_%d" $node }}"></hostname>
+        <port>{{ $.Values.service.ports.keeperInter }}</port>
+      </server>
+      {{- end }}
+      </raft_configuration>
+    </keeper_server>
+    {{- end }}
+    {{- if or .Values.keeper.enabled .Values.zookeeper.enabled .Values.externalZookeeper.servers }}
     <!-- Zookeeper configuration -->
     <zookeeper>
-      {{- if .Values.zookeeper.enabled }}
+      {{- if or .Values.keeper.enabled }}
+      {{- $nodes := .Values.replicaCount | int }}
+      {{- range $node, $e := until $nodes }}
+      <node>
+        <host from_env="{{ printf "KEEPER_NODE_%d" $node }}"></host>
+        <port>{{ $.Values.service.ports.keeper }}</port>
+      </node>
+      {{- end }}
+      {{- else if .Values.zookeeper.enabled }}
       {{/* Zookeeper configuration using the helm chart */}}
       {{- $nodes := .Values.zookeeper.replicaCount | int }}
       {{- range $node, $e := until $nodes }}
       <node>
-        <host>{{ printf "%s-%d.%s.%s.svc.%s" (include "clickhouse.zookeeper.fullname" $ ) $node (include "clickhouse.zookeeper.headlessServiceName" $) (include "common.names.namespace" $) $.Values.clusterDomain }}</host>
+        <host from_env="{{ printf "KEEPER_NODE_%d" $node }}"></host>
         <port>{{ $.Values.zookeeper.service.ports.client }}</port>
       </node>
       {{- end }}
@@ -365,7 +417,8 @@ startdbScriptsSecret: ""
 
 ## @param command Override default container command (useful when using custom images)
 ##
-command: []
+command:
+    - /scripts/setup.sh
 ## @param args Override default container args (useful when using custom images)
 ##
 args: []
@@ -528,6 +581,9 @@ service:
   ## @param service.ports.http ClickHouse service HTTP port
   ## @param service.ports.tcp ClickHouse service TCP port
   ## @param service.ports.tcpSecure ClickHouse service TCP (secure) port
+  ## @param service.ports.keeper ClickHouse keeper TCP container port
+  ## @param service.ports.keeperSecure ClickHouse keeper TCP (secure) container port
+  ## @param service.ports.keeperInter ClickHouse keeper interserver TCP container port
   ## @param service.ports.mysql ClickHouse service MySQL port
   ## @param service.ports.postgresql ClickHouse service PostgreSQL port
   ## @param service.ports.interserver ClickHouse service Interserver port
@@ -537,6 +593,9 @@ service:
     http: 8123
     tcp: 9000
     tcpSecure: 9440
+    keeper: 2181
+    keeperSecure: 3181
+    keeperInter: 9444
     mysql: 9004
     postgresql: 9005
     interserver: 9009
@@ -545,6 +604,9 @@ service:
   ## @param service.nodePorts.http Node port for HTTP
   ## @param service.nodePorts.tcp Node port for TCP
   ## @param service.nodePorts.tcpSecure Node port for TCP (with TLS)
+  ## @param service.nodePorts.keeper ClickHouse keeper TCP container port
+  ## @param service.nodePorts.keeperSecure ClickHouse keeper TCP (secure) container port
+  ## @param service.nodePorts.keeperInter ClickHouse keeper interserver TCP container port
   ## @param service.nodePorts.mysql Node port for MySQL
   ## @param service.nodePorts.postgresql Node port for PostgreSQL
   ## @param service.nodePorts.interserver Node port for Interserver
@@ -555,6 +617,9 @@ service:
     http: ""
     tcp: ""
     tcpSecure: ""
+    keeper: ""
+    keeperSecure: ""
+    keeperInter: ""
     mysql: ""
     postgresql: ""
     interserver: ""
@@ -613,6 +678,9 @@ externalAccess:
     ## @param externalAccess.service.ports.http ClickHouse service HTTP port
     ## @param externalAccess.service.ports.tcp ClickHouse service TCP port
     ## @param externalAccess.service.ports.tcpSecure ClickHouse service TCP (secure) port
+    ## @param externalAccess.service.ports.keeper ClickHouse keeper TCP container port
+    ## @param externalAccess.service.ports.keeperSecure ClickHouse keeper TCP (secure) container port
+    ## @param externalAccess.service.ports.keeperInter ClickHouse keeper interserver TCP container port
     ## @param externalAccess.service.ports.mysql ClickHouse service MySQL port
     ## @param externalAccess.service.ports.postgresql ClickHouse service PostgreSQL port
     ## @param externalAccess.service.ports.interserver ClickHouse service Interserver port
@@ -622,6 +690,9 @@ externalAccess:
       http: 80
       tcp: 9000
       tcpSecure: 9440
+      keeper: 2181
+      keeperSecure: 3181
+      keeperInter: 9444
       mysql: 9004
       postgresql: 9005
       interserver: 9009
@@ -650,6 +721,9 @@ externalAccess:
     ## @param externalAccess.service.nodePorts.http Node port for HTTP
     ## @param externalAccess.service.nodePorts.tcp Node port for TCP
     ## @param externalAccess.service.nodePorts.tcpSecure Node port for TCP (with TLS)
+    ## @param externalAccess.service.nodePorts.keeper ClickHouse keeper TCP container port
+    ## @param externalAccess.service.nodePorts.keeperSecure ClickHouse keeper TCP container port (with TLS)
+    ## @param externalAccess.service.nodePorts.keeperInter ClickHouse keeper interserver TCP container port
     ## @param externalAccess.service.nodePorts.mysql Node port for MySQL
     ## @param externalAccess.service.nodePorts.postgresql Node port for PostgreSQL
     ## @param externalAccess.service.nodePorts.interserver Node port for Interserver
@@ -665,6 +739,9 @@ externalAccess:
       http: []
       tcp: []
       tcpSecure: []
+      keeper: []
+      keeperSecure: []
+      keeperInter: []
       mysql: []
       postgresql: []
       interserver: []
@@ -845,7 +922,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r56
+    tag: 11-debian-11-r70
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -967,7 +1044,7 @@ externalZookeeper:
 ##
 zookeeper:
   enabled: true
-  replicaCount: 2
+  replicaCount: 3
   service:
     ports:
       client: 2181

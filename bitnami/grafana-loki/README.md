@@ -2,7 +2,7 @@
 
 # Grafana Loki packaged by Bitnami
 
-Grafana Loki is a horizontally scalable, highly available, and multi-tenant log aggregation system. It provides real-time long tailing and full persistence to object storage. 
+Grafana Loki is a horizontally scalable, highly available, and multi-tenant log aggregation system. It provides real-time long tailing and full persistence to object storage.
 
 [Overview of Grafana Loki](https://grafana.com/oss/loki/)
 
@@ -86,7 +86,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ----------------------- |
 | `loki.image.registry`                 | Grafana Loki image registry                                                                                  | `docker.io`             |
 | `loki.image.repository`               | Grafana Loki image repository                                                                                | `bitnami/grafana-loki`  |
-| `loki.image.tag`                      | Grafana Loki image tag (immutable tags are recommended)                                                      | `2.7.0-debian-11-r0`    |
+| `loki.image.tag`                      | Grafana Loki image tag (immutable tags are recommended)                                                      | `2.7.1-debian-11-r9`    |
 | `loki.image.digest`                   | Grafana Loki image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `loki.image.pullPolicy`               | Grafana Loki image pull policy                                                                               | `IfNotPresent`          |
 | `loki.image.pullSecrets`              | Grafana Loki image pull secrets                                                                              | `[]`                    |
@@ -195,7 +195,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.enabled`                               | Enable Gateway deployment                                                                             | `true`                |
 | `gateway.image.registry`                        | Nginx image registry                                                                                  | `docker.io`           |
 | `gateway.image.repository`                      | Nginx image repository                                                                                | `bitnami/nginx`       |
-| `gateway.image.tag`                             | Nginx image tag (immutable tags are recommended)                                                      | `1.23.2-debian-11-r7` |
+| `gateway.image.tag`                             | Nginx image tag (immutable tags are recommended)                                                      | `1.23.3-debian-11-r8` |
 | `gateway.image.digest`                          | Nginx image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `gateway.image.pullPolicy`                      | Nginx image pull policy                                                                               | `IfNotPresent`        |
 | `gateway.image.pullSecrets`                     | Nginx image pull secrets                                                                              | `[]`                  |
@@ -987,7 +987,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `promtail.enabled`                               | Deploy promtail                                                                                                  | `true`               |
 | `promtail.image.registry`                        | Grafana Promtail image registry                                                                                  | `docker.io`          |
 | `promtail.image.repository`                      | Grafana Promtail image repository                                                                                | `bitnami/promtail`   |
-| `promtail.image.tag`                             | Grafana Promtail image tag (immutable tags are recommended)                                                      | `2.7.0-debian-11-r0` |
+| `promtail.image.tag`                             | Grafana Promtail image tag (immutable tags are recommended)                                                      | `2.7.1-debian-11-r8` |
 | `promtail.image.digest`                          | Grafana Promtail image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
 | `promtail.image.pullPolicy`                      | Grafana Promtail image pull policy                                                                               | `IfNotPresent`       |
 | `promtail.image.pullSecrets`                     | Grafana Promtail image pull secrets                                                                              | `[]`                 |
@@ -1080,7 +1080,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r50`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r69`      |
 | `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -1131,7 +1131,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedchunks.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                 |
 | `memcachedchunks.image.registry`          | Memcached image registry                                                                                  | `docker.io`            |
 | `memcachedchunks.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`    |
-| `memcachedchunks.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.17-debian-11-r25` |
+| `memcachedchunks.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.17-debian-11-r44` |
 | `memcachedchunks.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `memcachedchunks.nameOverride`            | override the subchart name                                                                                | `""`                   |
 | `memcachedchunks.architecture`            | Memcached architecture                                                                                    | `high-availability`    |
@@ -1153,7 +1153,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedfrontend.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                 |
 | `memcachedfrontend.image.registry`          | Memcached image registry                                                                                  | `docker.io`            |
 | `memcachedfrontend.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`    |
-| `memcachedfrontend.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.17-debian-11-r25` |
+| `memcachedfrontend.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.17-debian-11-r44` |
 | `memcachedfrontend.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `memcachedfrontend.architecture`            | Memcached architecture                                                                                    | `high-availability`    |
 | `memcachedfrontend.nameOverride`            | override the subchart name                                                                                | `""`                   |
@@ -1175,7 +1175,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedindexqueries.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                 |
 | `memcachedindexqueries.image.registry`          | Memcached image registry                                                                                  | `docker.io`            |
 | `memcachedindexqueries.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`    |
-| `memcachedindexqueries.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.17-debian-11-r25` |
+| `memcachedindexqueries.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.17-debian-11-r44` |
 | `memcachedindexqueries.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `memcachedindexqueries.architecture`            | Memcached architecture                                                                                    | `high-availability`    |
 | `memcachedindexqueries.nameOverride`            | override the subchart name                                                                                | `""`                   |
@@ -1197,7 +1197,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedindexwrites.enabled`                 | Deploy memcached sub-chart                                                                                | `false`                |
 | `memcachedindexwrites.image.registry`          | Memcached image registry                                                                                  | `docker.io`            |
 | `memcachedindexwrites.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`    |
-| `memcachedindexwrites.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.17-debian-11-r25` |
+| `memcachedindexwrites.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.17-debian-11-r44` |
 | `memcachedindexwrites.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `memcachedindexwrites.architecture`            | Memcached architecture                                                                                    | `high-availability`    |
 | `memcachedindexwrites.nameOverride`            | override the subchart name                                                                                | `""`                   |

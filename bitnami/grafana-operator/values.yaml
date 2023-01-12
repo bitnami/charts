@@ -79,13 +79,13 @@ operator:
   ## @param operator.customStartupProbe [object] Override default startup probe
   ##
   customStartupProbe: {}
-  ## @param operator.extraVolumes [array] Optionally specify extra list of additional volumes for etcd pods
+  ## @param operator.extraVolumes [array] Optionally specify extra list of additional volumes for Grafana Operator pods
   ##
   extraVolumes: []
-  ## @param operator.extraVolumeMounts [array] Optionally specify extra list of additional volumeMounts for etcd container(s)
+  ## @param operator.extraVolumeMounts [array] Optionally specify extra list of additional volumeMounts for Grafana Operator container(s)
   ##
   extraVolumeMounts: []
-  ## @param operator.initContainers [array] Add additional init containers to the etcd pods
+  ## @param operator.initContainers [array] Add additional init containers to the Grafana Operator pods
   ## e.g:
   ## initContainers:
   ##   - name: your-image-name
@@ -96,7 +96,7 @@ operator:
   ##         containerPort: 1234
   ##
   initContainers: []
-  ## @param operator.sidecars [array] Add additional sidecar containers to the etcd pods
+  ## @param operator.sidecars [array] Add additional sidecar containers to the Grafana Operator pods
   ## e.g:
   ## sidecars:
   ##   - name: your-image-name
@@ -144,7 +144,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/grafana-operator
-    tag: 4.7.1-debian-11-r9
+    tag: 4.8.0-debian-11-r9
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -425,7 +425,7 @@ grafana:
   image:
     registry: docker.io
     repository: bitnami/grafana
-    tag: 9.2.4-debian-11-r2
+    tag: 9.3.2-debian-11-r4
     digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -804,6 +804,17 @@ grafana:
   ## @param grafana.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the grafana container(s)
   ##
   extraVolumeMounts: []
+  ## @param grafana.initContainers [array] Add additional init containers to the grafana pods
+  ## e.g:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  initContainers: []
   ## @param grafana.sidecars Add additional sidecar containers to the grafana pod(s)
   ## e.g:
   ## sidecars:
