@@ -3261,13 +3261,6 @@ spec:
                       required:
                         - enabled
                       type: object
-                    initContainers:
-                      items:
-                        description: A single application container that you want to run within a pod.
-                        required:
-                          - name
-                        type: object
-                      type: array
                     labels:
                       additionalProperties:
                         type: string
