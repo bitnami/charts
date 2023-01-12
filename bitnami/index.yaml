@@ -30298,6 +30298,41 @@ entries:
   haproxy-intel:
   - annotations:
       category: Infrastructure
+      licenses: |
+        - Apache-2.0
+    apiVersion: v2
+    appVersion: 2.7.1
+    created: "2023-01-12T12:34:55.505652886Z"
+    dependencies:
+    - name: haproxy
+      repository: https://charts.bitnami.com/bitnami
+      version: 0.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    deprecated: true
+    description: DEPRECATED HAProxy for Intel is a high-performance, open-source load
+      balancer and reverse proxy for TCP and HTTP applications. This image is optimized
+      with Intel(R) QuickAssist Technology OpenSSL* Engine (QAT_Engine).
+    digest: 5842ffd85478b0c22d9b6943d36f856e7942d305b8b1c7d19dccfebdb2b58b99
+    home: https://www.haproxy.org/
+    icon: https://bitnami.com/assets/stacks/haproxy/img/haproxy-stack-220x234.png
+    keywords:
+    - haproxy
+    - proxy
+    - infrastructure
+    - intel
+    name: haproxy-intel
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/haproxy-intel
+    - https://github.com/haproxytech/haproxy
+    urls:
+    - https://charts.bitnami.com/bitnami/haproxy-intel-0.2.11.tgz
+    version: 0.2.11
+  - annotations:
+      category: Infrastructure
     apiVersion: v2
     appVersion: 2.7.1
     created: "2022-12-19T19:28:48.247474681Z"
@@ -103622,4 +103657,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-01-12T12:14:18.366242751Z"
+generated: "2023-01-12T12:34:55.501945077Z"
