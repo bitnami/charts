@@ -30,4 +30,4 @@ name: kafka
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/kafka
   - https://kafka.apache.org/
-version: 20.0.2
+version: 20.0.3
