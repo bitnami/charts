@@ -1413,18 +1413,6 @@ notifications:
         ##
         annotations: {}
 
-      # -- Slack bot container-level security Context
-      # @default -- See [values.yaml]
-      containerSecurityContext:
-        runAsNonRoot: true
-        readOnlyRootFilesystem: true
-        allowPrivilegeEscalation: false
-        seccompProfile:
-          type: RuntimeDefault
-        capabilities:
-          drop:
-          - ALL
-
       ## @param notifications.bots.slack.podAffinityPreset Pod affinity preset. Ignored if `notifications.bots.slack.affinity` is set. Allowed values: `soft` or `hard`
       ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
       ##
