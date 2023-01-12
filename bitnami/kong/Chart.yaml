@@ -37,4 +37,4 @@ name: kong
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/kong
   - https://konghq.com/
-version: 8.0.28
+version: 9.0.0
