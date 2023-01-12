@@ -4,26 +4,6 @@ metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
 spec:
-  {{- if .Values.plugins.install }}
-  initContainers:
-    - name: {{ include "sonarqube.installPlugins.initContainer" . }}
-      image: {{ include "sonarqube.plugins.image" . }}
-      imagePullPolicy: {{ .Values.plugins.image.pullPolicy  }}
-      command: [ "sh",
-                 "-e",
-                 "/tmp/scripts/install_plugins.sh" ]
-      {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
-      securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "enabled" | toYaml | nindent 12 }}
-      {{- end }}
-      {{- if .Values.volumePermissions.resources }}
-      resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
-      {{- end }}
-      volumeMounts:
-        - name: install-plugins
-          mountPath: /tmp/scripts/
-        - name: data
-          mountPath: /bitnami/sonarqube
-  {{- end }}
   replicas: {{ .Values.replicaCount }}
   {{- if .Values.updateStrategy }}
   strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
@@ -77,6 +57,19 @@ spec:
       {{- end }}
       {{- if or .Values.initContainers .Values.sysctl.enabled (and .Values.volumePermissions.enabled .Values.persistence.enabled) }}
       initContainers:
+        {{- if .Values.plugins.install }}
+        - name: {{ include "sonarqube.installPlugins.initContainer" . }}
+          image: {{ include "sonarqube.plugins.image" . }}
+          imagePullPolicy: {{ .Values.plugins.image.pullPolicy  }}
+          command: [ "sh",
+                     "-e",
+                     "/tmp/scripts/install_plugins.sh" ]
+          volumeMounts:
+            - name: install-plugins
+              mountPath: /tmp/scripts/
+            - name: data
+              mountPath: /bitnami/sonarqube
+        {{- end }}
         {{- if .Values.sysctl.enabled }}
         ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
         - name: sysctl

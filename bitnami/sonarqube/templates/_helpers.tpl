@@ -208,7 +208,7 @@ sonarqube: database
 Create the name of the deployment's install_plugins initContainer
 */}}
 {{- define "sonarqube.installPlugins.initContainer" -}}
-    {{ printf "%s-install-plugins-initContainer" (include "common.names.fullname" .) }}
+    {{ printf "%s-install-plugins-initcontainer" (include "common.names.fullname" .) }}
 {{- end -}}
 
 {{/*
