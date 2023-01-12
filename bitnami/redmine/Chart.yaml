@@ -1,5 +1,7 @@
 annotations:
   category: ProjectManagement
+  licenses: |
+    - Apache-2.0
 apiVersion: v2
 appVersion: 5.0.4
 dependencies:
@@ -17,7 +19,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Redmine is an open source management application. It includes a tracking issue system, Gantt charts for a visual view of projects and deadlines, and supports SCM integration for version control.
-engine: gotpl
 home: https://github.com/bitnami/charts/tree/main/bitnami/redmine
 icon: https://bitnami.com/assets/stacks/redmine/img/redmine-stack-220x234.png
 keywords:
@@ -36,4 +37,4 @@ name: redmine
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/redmine
   - https://www.redmine.org/
-version: 21.0.3
+version: 21.0.4
