@@ -175,7 +175,7 @@ spec:
             - name: chartmuseum-data
               mountPath: /bitnami/data
               subPath: {{ .Values.persistence.persistentVolumeClaim.chartmuseum.subPath }}
-            {{- if and .Values.persistence.enabled (eq .Values.persistence.imageChartStorage.type "gcs") }}
+            {{- if and (and .Values.persistence.enabled (eq .Values.persistence.imageChartStorage.type "gcs")) .Values.persistence.imageChartStorage.gcs.encodedkey }}
             - name: gcs-key
               mountPath: /etc/chartmuseum/gcs-key.json
               subPath: gcs-key.json
@@ -206,7 +206,7 @@ spec:
         {{- else }}
           emptyDir: {}
         {{- end }}
-        {{- if and .Values.persistence.enabled (eq .Values.persistence.imageChartStorage.type "gcs") }}
+        {{- if and (and .Values.persistence.enabled (eq .Values.persistence.imageChartStorage.type "gcs")) .Values.persistence.imageChartStorage.gcs.encodedkey }}
         - name: gcs-key
           secret:
             secretName: {{ include "harbor.chartmuseum" . }}-secret
