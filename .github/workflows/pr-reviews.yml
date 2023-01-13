@@ -7,7 +7,6 @@ on:
   pull_request_review:
     types:
       - submitted
-      - dismissed
 permissions:
   repository-projects: write
 jobs:
