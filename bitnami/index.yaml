@@ -96794,6 +96794,41 @@ entries:
   wavefront-hpa-adapter:
   - annotations:
       category: Infrastructure
+      licenses: |
+        - Apache-2.0
+    apiVersion: v2
+    appVersion: 0.9.9
+    created: "2023-01-13T16:31:24.197992821Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Wavefront HPA Adapter for Kubernetes is a Kubernetes Horizontal Pod
+      Autoscaler adapter. It allows to scale your Kubernetes workloads based on Wavefront
+      metrics.
+    digest: 06bcc9b623f58b8e92206bba3cb50d0b0009a7db7cd75ab0c479ab776a3059f2
+    home: https://github.com/wavefrontHQ/wavefront-kubernetes-adapter
+    icon: https://bitnami.com/assets/stacks/wavefront-hpa-adapter/img/wavefront-hpa-adapter-stack-220x234.png
+    keywords:
+    - alerting
+    - adapter
+    - metrics
+    - monitoring
+    - observability
+    - wavefront
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: wavefront-hpa-adapter
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/wavefront-hpa-adapter
+    urls:
+    - https://charts.bitnami.com/bitnami/wavefront-hpa-adapter-1.3.8.tgz
+    version: 1.3.8
+  - annotations:
+      category: Infrastructure
     apiVersion: v2
     appVersion: 0.9.9
     created: "2022-12-14T16:14:03.074112186Z"
@@ -104448,4 +104483,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-01-13T15:58:36.089947755Z"
+generated: "2023-01-13T16:31:24.193160443Z"
