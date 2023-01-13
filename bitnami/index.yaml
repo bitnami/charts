@@ -18276,6 +18276,41 @@ entries:
   etcd:
   - annotations:
       category: Database
+      licenses: |
+        - Apache-2.0
+    apiVersion: v2
+    appVersion: 3.5.6
+    created: "2023-01-13T17:17:35.891750225Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: etcd is a distributed key-value store designed to securely store
+      data across a cluster. etcd is widely used in production on account of its reliability,
+      fault-tolerance and ease of use.
+    digest: cb9f06ea185b373573c5259f16e074551602a3f6401485b3746bc1138aa82c5b
+    home: https://github.com/bitnami/charts/tree/main/bitnami/etcd
+    icon: https://bitnami.com/assets/stacks/etcd/img/etcd-stack-220x234.png
+    keywords:
+    - etcd
+    - cluster
+    - database
+    - cache
+    - key-value
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: etcd
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/etcd
+    - https://coreos.com/etcd/
+    urls:
+    - https://charts.bitnami.com/bitnami/etcd-8.7.0.tgz
+    version: 8.7.0
+  - annotations:
+      category: Database
     apiVersion: v2
     appVersion: 3.5.6
     created: "2023-01-09T07:36:31.885231882Z"
@@ -104483,4 +104518,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-01-13T16:31:24.193160443Z"
+generated: "2023-01-13T17:17:35.885235997Z"
