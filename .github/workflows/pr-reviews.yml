@@ -4,14 +4,13 @@ on:
     types:
       - review_requested
       - synchronize
-  pull_request_review:
-    types:
-      - submitted
+  # For some reason events triggered by pull_request_review
+  # are failing due to a lack of permissions
+  # pull_request_review:
+  #   types:
+  #     - submitted
 permissions:
   repository-projects: write
-  # These permissions are required by the action
-  issues: write
-  pull-requests: write
 jobs:
   comments_handler:
     runs-on: ubuntu-latest
