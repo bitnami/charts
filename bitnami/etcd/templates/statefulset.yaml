@@ -162,12 +162,14 @@ spec:
                   name: {{ include "etcd.secretName" . }}
                   key: {{ include "etcd.secretPasswordKey" . }}
             {{- end }}
+            {{- if .Values.auth.token.enabled }}
             - name: ETCD_AUTH_TOKEN
               {{- if eq .Values.auth.token.type "jwt" }}
               value: {{ printf "jwt,priv-key=/opt/bitnami/etcd/certs/token/%s,sign-method=%s,ttl=%s" .Values.auth.token.privateKey.filename .Values.auth.token.signMethod .Values.auth.token.ttl | quote }}
               {{- else if eq .Values.auth.token.type "simple" }}
               value: "simple"
               {{- end }}
+            {{- end }}
             - name: ETCD_ADVERTISE_CLIENT_URLS
               value: "{{ $etcdClientProtocol }}://$(MY_POD_NAME).{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}:{{ .Values.containerPorts.client }},{{ $etcdClientProtocol }}://{{ $etcdFullname }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}:{{ coalesce .Values.service.ports.client .Values.service.port }}"
             - name: ETCD_LISTEN_CLIENT_URLS

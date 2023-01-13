@@ -110,7 +110,7 @@ Get the secret password key to be retrieved from etcd secret.
 Return true if a secret object should be created for the etcd token private key
 */}}
 {{- define "etcd.token.createSecret" -}}
-{{- if and (eq .Values.auth.token.type "jwt") (empty .Values.auth.token.privateKey.existingSecret) }}
+{{- if and (eq .Values.auth.token.enabled true) (eq .Values.auth.token.type "jwt") (empty .Values.auth.token.privateKey.existingSecret) }}
     {{- true -}}
 {{- end -}}
 {{- end -}}
