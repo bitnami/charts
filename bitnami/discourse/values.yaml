@@ -865,7 +865,6 @@ redis:
 ## All of these values are only used when redis.enabled is set to false
 ## @param externalRedis.host Redis&reg; host
 ## @param externalRedis.port Redis&reg; port number
-## @param externalRedis.username Redis&reg; username
 ## @param externalRedis.password Redis&reg; password
 ## @param externalRedis.existingSecret Name of an existing secret resource containing the Redis&trade credentials
 ## @param externalRedis.existingSecretPasswordKey Name of an existing secret key containing the Redis&trade credentials
@@ -873,9 +872,6 @@ redis:
 externalRedis:
   host: localhost
   port: 6379
-  ## Most Redis&reg; implementations do not require a username
-  ## to authenticate and it should be enough with the password
-  username: ""
   password: ""
   existingSecret: ""
   existingSecretPasswordKey: "redis-password"

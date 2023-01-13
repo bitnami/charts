@@ -1,5 +1,7 @@
 annotations:
   category: Infrastructure
+  licenses: |
+    - Apache-2.0
 apiVersion: v2
 appVersion: 0.4.9
 dependencies:
@@ -8,7 +10,9 @@ dependencies:
     tags:
       - bitnami-common
     version: 2.x.x
-description: NGINX Open Source for Intel is a lightweight server, combined with cryptography acceleration for 3rd gen Xeon Scalable Processors (Ice Lake) to get a breakthrough performance improvement.
+# The NGINX Open Source for Intel chart is deprecated and no longer maintained.
+deprecated: true
+description: DEPRECATED NGINX Open Source for Intel is a lightweight server, combined with cryptography acceleration for 3rd gen Xeon Scalable Processors (Ice Lake) to get a breakthrough performance improvement.
 home: https://github.com/bitnami/charts/tree/main/bitnami/nginx-intel
 icon: https://bitnami.com/assets/stacks/nginx/img/nginx-stack-220x234.png
 keywords:
@@ -17,11 +21,9 @@ keywords:
   - web
   - www
   - reverse proxy
-maintainers:
-  - name: Bitnami
-    url: https://github.com/bitnami/charts
+maintainers: []
 name: nginx-intel
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/nginx-intel
   - https://github.com/intel/asynch_mode_nginx
-version: 2.1.13
+version: 2.1.15

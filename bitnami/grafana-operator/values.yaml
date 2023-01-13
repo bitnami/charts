@@ -804,17 +804,6 @@ grafana:
   ## @param grafana.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the grafana container(s)
   ##
   extraVolumeMounts: []
-  ## @param grafana.initContainers [array] Add additional init containers to the grafana pods
-  ## e.g:
-  ## initContainers:
-  ##   - name: your-image-name
-  ##     image: your-image
-  ##     imagePullPolicy: Always
-  ##     ports:
-  ##       - name: portname
-  ##         containerPort: 1234
-  ##
-  initContainers: []
   ## @param grafana.sidecars Add additional sidecar containers to the grafana pod(s)
   ## e.g:
   ## sidecars:
