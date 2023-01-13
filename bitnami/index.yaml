@@ -33234,6 +33234,42 @@ entries:
   jaeger:
   - annotations:
       category: Infrastructure
+      licenses: |
+        - Apache-2.0
+    apiVersion: v2
+    appVersion: 1.41.0
+    created: "2023-01-13T07:54:53.358506575Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    - condition: cassandra.enabled
+      name: cassandra
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.x.x
+    description: Jaeger is a distributed tracing system. It is used for monitoring
+      and troubleshooting microservices-based distributed systems.
+    digest: d70ad64fdb2e246b3341fab628cb678a1d456d3fc92a080f0d0b5660107f5620
+    home: https://github.com/bitnami/charts/tree/main/bitnami/jaeger
+    icon: https://bitnami.com/assets/stacks/jaeger/img/jaeger-stack-220x234.png
+    keywords:
+    - jaeger
+    - tracing
+    - monitoring
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: jaeger
+    sources:
+    - https://github.com/jaegertracing/jaeger
+    - https://www.jaegertracing.io/
+    urls:
+    - https://charts.bitnami.com/bitnami/jaeger-1.0.0.tgz
+    version: 1.0.0
+  - annotations:
+      category: Infrastructure
     apiVersion: v2
     appVersion: 1.41.0
     created: "2023-01-04T12:00:43.227113583Z"
@@ -104075,4 +104111,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-01-13T07:29:38.538369766Z"
+generated: "2023-01-13T07:54:53.350251904Z"
