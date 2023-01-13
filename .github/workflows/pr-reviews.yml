@@ -9,6 +9,9 @@ on:
       - submitted
 permissions:
   repository-projects: write
+  # These permissions are required by the action
+  issues: write
+  pull-requests: write
 jobs:
   comments_handler:
     runs-on: ubuntu-latest
