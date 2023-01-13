@@ -156,6 +156,7 @@ auth:
   ## @param auth.tls.serverKey Server private key content
   ## @param auth.tls.existingSecret Existing secret with certificate content to RabbitMQ credentials
   ## @param auth.tls.existingSecretFullChain Whether or not the existing secret contains the full chain in the certificate (`tls.crt`). Will be used in place of `ca.cert` if `true`.
+  ## @param auth.tls.overrideCaCertificate Existing secret with certificate content be mounted instead of the `ca.crt` coming from caCertificate or existingSecret/existingSecretFullChain.
   ##
   tls:
     enabled: false
@@ -167,6 +168,7 @@ auth:
     serverKey: |-
     existingSecret: ""
     existingSecretFullChain: false
+    overrideCaCertificate: ""
 
 ## @param logs Path of the RabbitMQ server's Erlang log file. Value for the `RABBITMQ_LOGS` environment variable
 ## ref: https://www.rabbitmq.com/logging.html#log-file-location
@@ -409,7 +411,7 @@ configuration: |-
   {{- if .Values.metrics.enabled }}
   ## Prometheus metrics
   ##
-  prometheus.tcp.port = 9419
+  prometheus.tcp.port = {{ .Values.containerPorts.metrics }}
   {{- end }}
   {{- if .Values.memoryHighWatermark.enabled }}
   ## Memory Threshold

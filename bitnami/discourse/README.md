@@ -329,7 +329,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `redis.architecture`                      | Redis&reg; architecture. Allowed values: `standalone` or `replication`     | `standalone`     |
 | `externalRedis.host`                      | Redis&reg; host                                                            | `localhost`      |
 | `externalRedis.port`                      | Redis&reg; port number                                                     | `6379`           |
-| `externalRedis.username`                  | Redis&reg; username                                                        | `""`             |
 | `externalRedis.password`                  | Redis&reg; password                                                        | `""`             |
 | `externalRedis.existingSecret`            | Name of an existing secret resource containing the Redis&trade credentials | `""`             |
 | `externalRedis.existingSecretPasswordKey` | Name of an existing secret key containing the Redis&trade credentials      | `redis-password` |
