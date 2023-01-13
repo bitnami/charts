@@ -24,4 +24,4 @@ name: consul
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/consul
   - https://www.consul.io/
-version: 10.9.8
+version: 10.9.9
