@@ -541,7 +541,7 @@ persistence:
       bucket: bucketname
       ## The base64 encoded json file which contains the gcs key (file's content)
       ##
-      encodedkey: base64-encoded-json-key-file
+      encodedkey: ""
       rootdirectory: ""
       chunksize: ""
     ## Images/charts storage parameters when type is "s3"
