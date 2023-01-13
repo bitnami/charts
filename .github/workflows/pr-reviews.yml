@@ -27,9 +27,11 @@ jobs:
         with:
           project-name: Support
           column-name: Pending
+          issue-number: ${{ github.event.pull_request.number }}
       - name: Move into In Progress
         uses: peter-evans/create-or-update-project-card@v2
         if: ${{ github.event.action != 'submitted' }}
         with:
           project-name: Support
           column-name: In progress
+          issue-number: ${{ github.event.pull_request.number }}
