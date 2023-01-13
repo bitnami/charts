@@ -1,5 +1,5 @@
 {
-  "baseUrl": "http://34.73.55.146/",
+  "baseUrl": "http://localhost/",
   "defaultCommandTimeout": 60000,
   "env": {
     "storePort": "10903",
