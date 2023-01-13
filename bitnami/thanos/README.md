@@ -1316,7 +1316,7 @@ objstoreConfig: |-
   type: s3
   config:
     bucket: thanos
-    endpoint: {{ include "thanos.minio.fullname" . }}.monitoring.svc.cluster.local:9000
+    endpoint: {{ include "thanos.minio.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:9000
     access_key: minio
     secret_key: minio123
     insecure: true
@@ -1347,7 +1347,7 @@ metrics:
 minio:
   enabled: true
   auth:
-    rootUser: "admin"
+    rootUser: "minio"
     rootPassword: "minio123"
   defaultBuckets: "thanos"
 ```

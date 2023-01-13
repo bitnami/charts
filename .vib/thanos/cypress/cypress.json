@@ -1,0 +1,8 @@
+{
+  "baseUrl": "http://34.73.55.146/",
+  "defaultCommandTimeout": 60000,
+  "env": {
+    "storePort": "10903",
+    "receivePort": "10904"
+  }
+}
