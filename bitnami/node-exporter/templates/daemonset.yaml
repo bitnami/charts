@@ -149,7 +149,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       hostNetwork: {{ .Values.hostNetwork }}
-      hostPID: true
+      hostPID: {{ .Values.hostPID }}
       volumes:
         - name: proc
           hostPath:
