@@ -9950,6 +9950,38 @@ entries:
   consul:
   - annotations:
       category: DeveloperTools
+      licenses: |
+        - Apache-2.0
+    apiVersion: v2
+    appVersion: 1.14.3
+    created: "2023-01-13T23:15:33.545291846Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: HashiCorp Consul is a tool for discovering and configuring services
+      in your infrastructure.
+    digest: 3cd6a8919bcd85a2563189f0bfb7acab9f4f356b900b286a2e67509d29e45341
+    home: https://github.com/bitnami/charts/tree/main/bitnami/consul
+    icon: https://bitnami.com/assets/stacks/consul/img/consul-stack-220x234.png
+    keywords:
+    - discovering
+    - configuring
+    - services
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: consul
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/consul
+    - https://www.consul.io/
+    urls:
+    - https://charts.bitnami.com/bitnami/consul-10.9.9.tgz
+    version: 10.9.9
+  - annotations:
+      category: DeveloperTools
     apiVersion: v2
     appVersion: 1.14.3
     created: "2022-12-22T11:08:29.029790532Z"
@@ -104606,4 +104638,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-01-13T20:35:12.328970113Z"
+generated: "2023-01-13T23:15:33.541198583Z"
