@@ -72145,6 +72145,45 @@ entries:
   owncloud:
   - annotations:
       category: Infrastructure
+      licenses: |
+        - Apache-2.0
+    apiVersion: v2
+    appVersion: 10.11.0
+    created: "2023-01-13T12:22:39.796927194Z"
+    dependencies:
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - owncloud-database
+      version: 11.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    deprecated: true
+    description: DEPRECATED ownCloud is an open source content collaboration platform
+      used to store and share files from any device. It grants data privacy, synchronization
+      between devices, and file access control.
+    digest: 15bbadef289d8bb3868c7de38cee005496e614195ac71f79d771e8e36e7246e5
+    home: https://github.com/bitnami/charts/tree/main/bitnami/owncloud
+    icon: https://bitnami.com/assets/stacks/owncloud/img/owncloud-stack-220x234.png
+    keywords:
+    - owncloud
+    - storage
+    - http
+    - web
+    - php
+    name: owncloud
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/owncloud
+    - https://owncloud.org/
+    urls:
+    - https://charts.bitnami.com/bitnami/owncloud-12.2.11.tgz
+    version: 12.2.11
+  - annotations:
+      category: Infrastructure
     apiVersion: v2
     appVersion: 10.11.0
     created: "2022-12-23T16:45:27.141158273Z"
@@ -104196,4 +104235,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-01-13T08:56:51.408089932Z"
+generated: "2023-01-13T12:22:39.7884953Z"
