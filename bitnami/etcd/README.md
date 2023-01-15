@@ -93,6 +93,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.rbac.rootPassword`               | Root user password. The root user is always `root`                                                          | `""`                  |
 | `auth.rbac.existingSecret`             | Name of the existing secret containing credentials for the root user                                        | `""`                  |
 | `auth.rbac.existingSecretPasswordKey`  | Name of key containing password to be retrieved from the existing secret                                    | `""`                  |
+| `auth.token.enabled`                   | Enables token authentication                                                                                | `true`                |
 | `auth.token.type`                      | Authentication token type. Allowed values: 'simple' or 'jwt'                                                | `jwt`                 |
 | `auth.token.privateKey.filename`       | Name of the file containing the private key for signing the JWT token                                       | `jwt-token.pem`       |
 | `auth.token.privateKey.existingSecret` | Name of the existing secret containing the private key for signing the JWT token                            | `""`                  |
@@ -185,6 +186,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `schedulerName`                                     | Name of the k8s scheduler (other than default)                                            | `""`            |
 | `priorityClassName`                                 | Name of the priority class to be used by etcd pods                                        | `""`            |
 | `runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                            | `""`            |
+| `shareProcessNamespace`                             | Enable shared process namespace in a pod.                                                 | `false`         |
 | `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                            | `[]`            |
 | `persistentVolumeClaimRetentionPolicy.enabled`      | Controls if and how PVCs are deleted during the lifecycle of a StatefulSet                | `false`         |
 | `persistentVolumeClaimRetentionPolicy.whenScaled`   | Volume retention behavior when the replica count of the StatefulSet is reduced            | `Retain`        |

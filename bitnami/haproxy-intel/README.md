@@ -7,7 +7,11 @@ HAProxy is a high-performance, open-source load balancer and reverse proxy for T
 [Overview of HAProxy for Intel](https://www.haproxy.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
+## This Helm chart is deprecated
+
+The project has been discontinued and no new features will be added.
+
 ## TL;DR
 
 ```console

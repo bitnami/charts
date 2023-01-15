@@ -1,5 +1,7 @@
 annotations:
   category: Infrastructure
+  licenses: |
+    - Apache-2.0
 apiVersion: v2
 appVersion: 2.7.0
 dependencies:
@@ -17,7 +19,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Harbor is an open source trusted cloud-native registry to store, sign, and scan content. It adds functionalities like security, identity, and management to the open source Docker distribution.
-engine: gotpl
 home: https://github.com/bitnami/charts/tree/main/bitnami/harbor
 icon: https://bitnami.com/assets/stacks/harbor-core/img/harbor-core-stack-220x234.png
 keywords:

@@ -440,7 +440,7 @@ data:
             redis-cli -h "$REDIS_SERVICE" -p "$SENTINEL_SERVICE_PORT" sentinel "$@"
         fi
     }
-    failover_finished() {
+    sentinel_failover_finished() {
       REDIS_SENTINEL_INFO=($(run_sentinel_command get-master-addr-by-name "{{ .Values.sentinel.masterSet }}"))
       REDIS_MASTER_HOST="${REDIS_SENTINEL_INFO[0]}"
       [[ "$REDIS_MASTER_HOST" != "$(get_full_hostname $HOSTNAME)" ]]
@@ -454,11 +454,9 @@ data:
     [[ -f "$REDIS_PASSWORD_FILE" ]] && export REDISCLI_AUTH="$(< "${REDIS_PASSWORD_FILE}")"
     {{- end }}
 
-    if ! failover_finished; then
+    if ! sentinel_failover_finished; then
         echo "I am the master pod and you are stopping me. Starting sentinel failover"
-        # if I am the master, issue a command to failover once and then wait for the failover to finish
-        run_sentinel_command failover "{{ .Values.sentinel.masterSet }}"
-        if retry_while "failover_finished" "{{ sub .Values.sentinel.terminationGracePeriodSeconds 10 }}" 1; then
+        if retry_while "sentinel_failover_finished" "{{ sub .Values.sentinel.terminationGracePeriodSeconds 10 }}" 1; then
             echo "Master has been successfuly failed over to a different pod."
             exit 0
         else
@@ -481,29 +479,59 @@ data:
             redis-cli -h 127.0.0.1 -p "$REDIS_PORT" "$@"
         fi
     }
-    failover_finished() {
+    is_master() {
         REDIS_ROLE=$(run_redis_command role | head -1)
-        [[ "$REDIS_ROLE" != "master" ]]
+        [[ "$REDIS_ROLE" == "master" ]]
     }
+
+    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+    SENTINEL_SERVICE_ENV_NAME={{ printf "%s%s"  (upper (include "common.names.fullname" .)| replace "-" "_") "_SERVICE_PORT_TCP_SENTINEL" }}
+    SENTINEL_SERVICE_PORT=${!SENTINEL_SERVICE_ENV_NAME}
+
+    get_full_hostname() {
+        hostname="$1"
+
+        {{- if .Values.useExternalDNS.enabled }}
+        echo "${hostname}.{{- include "redis.externalDNS.suffix" . }}"
+        {{- else if eq .Values.sentinel.service.type "NodePort" }}
+        echo "${hostname}.{{- .Release.Namespace }}"
+        {{- else }}
+        echo "${hostname}.${HEADLESS_SERVICE}"
+        {{- end }}
+    }
+    run_sentinel_command() {
+        if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
+            {{ .Values.auth.sentinel | ternary "" "env -u REDISCLI_AUTH " -}} redis-cli -h "$REDIS_SERVICE" -p "$SENTINEL_SERVICE_PORT" --tls --cert "$REDIS_SENTINEL_TLS_CERT_FILE" --key "$REDIS_SENTINEL_TLS_KEY_FILE" --cacert "$REDIS_SENTINEL_TLS_CA_FILE" sentinel "$@"
+        else
+            {{ .Values.auth.sentinel | ternary "" "env -u REDISCLI_AUTH " -}} redis-cli -h "$REDIS_SERVICE" -p "$SENTINEL_SERVICE_PORT" sentinel "$@"
+        fi
+    }
+    sentinel_failover_finished() {
+        REDIS_SENTINEL_INFO=($(run_sentinel_command get-master-addr-by-name "{{ .Values.sentinel.masterSet }}"))
+        REDIS_MASTER_HOST="${REDIS_SENTINEL_INFO[0]}"
+        [[ "$REDIS_MASTER_HOST" != "$(get_full_hostname $HOSTNAME)" ]]
+    }
+
+    REDIS_SERVICE="{{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
 
     # redis-cli automatically consumes credentials from the REDISCLI_AUTH variable
     [[ -n "$REDIS_PASSWORD" ]] && export REDISCLI_AUTH="$REDIS_PASSWORD"
     [[ -f "$REDIS_PASSWORD_FILE" ]] && export REDISCLI_AUTH="$(< "${REDIS_PASSWORD_FILE}")"
 
-    if ! failover_finished; then
-        echo "I am the master pod and you are stopping me."
-        # Running failover command
-        echo "Running the FAILOVER command"
-        run_redis_command FAILOVER TIMEOUT "{{ mul (sub .Values.sentinel.terminationGracePeriodSeconds 10) 1000 }}"
-        # Waiting for the failover to finish
-        echo "Waiting for the failover to finish up to {{ sub .Values.sentinel.terminationGracePeriodSeconds 10 }}s"
-        if retry_while "failover_finished" "{{ sub .Values.sentinel.terminationGracePeriodSeconds 10 }}" 1
-            echo "Master has been successfuly failed over to a different pod."
-            exit 0
-        else
-            echo "Master failover failed"
-            exit 1
-        fi
+
+    if is_master && ! sentinel_failover_finished; then
+        echo "I am the master pod and you are stopping me. Pausing client connections."
+        # Pausing client write connections to avoid data loss
+        run_redis_command CLIENT PAUSE "{{ mul (add 2 (sub .Values.sentinel.terminationGracePeriodSeconds 10)) 1000 }}" WRITE
+
+        echo "Issuing failover"
+        # if I am the master, issue a command to failover once
+        run_sentinel_command failover "{{ .Values.sentinel.masterSet }}"
+
+        {{- if .Values.sentinel.redisShutdownWaitFailover }}
+        echo "Waiting for sentinel to complete failover for up to {{ sub .Values.sentinel.terminationGracePeriodSeconds 10 }}s"
+        retry_while "sentinel_failover_finished" "{{ sub .Values.sentinel.terminationGracePeriodSeconds 10 }}" 1
+        {{- end }}
     else
         exit 0
     fi
