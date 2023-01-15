@@ -1,12 +1,14 @@
 name: '[Support] Review based card movements'
 on:
-  pull_request:
+  pull_request_target:
     types:
       - review_requested
       - synchronize
-  pull_request_review:
-    types:
-      - submitted
+  # For some reason events triggered by pull_request_review
+  # are failing due to a lack of permissions
+  # pull_request_review:
+  #   types:
+  #     - submitted
 permissions:
   repository-projects: write
 jobs:
@@ -27,9 +29,11 @@ jobs:
         with:
           project-name: Support
           column-name: Pending
+          issue-number: ${{ github.event.pull_request.number }}
       - name: Move into In Progress
         uses: peter-evans/create-or-update-project-card@v2
         if: ${{ github.event.action != 'submitted' }}
         with:
           project-name: Support
           column-name: In progress
+          issue-number: ${{ github.event.pull_request.number }}
