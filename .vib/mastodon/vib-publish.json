@@ -59,7 +59,7 @@
             "endpoint": "lb-mastodon-apache-http",
             "app_protocol": "HTTP",
             "env": {
-              "user": "vib-user@example.com",
+              "user": "vib-user@gmail.com",
               "password": "bitnami!1234"
             }
           }
