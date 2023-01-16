@@ -237,10 +237,6 @@ spec:
             - name: POSTGRESQL_MAX_CONNECTIONS
               value: {{ .Values.witness.maxConnections | quote }}
             {{- end }}
-            {{- if .Values.witness.usePgRewind }}
-            - name: REPMGR_USE_PGREWIND
-              value: {{ .Values.witness.usePgRewind | quote }}
-            {{- end }}
             {{- if .Values.witness.postgresConnectionLimit }}
             - name: POSTGRESQL_POSTGRES_CONNECTION_LIMIT
               value: {{ .Values.witness.postgresConnectionLimit | quote }}
@@ -332,11 +328,11 @@ spec:
                   name: {{ include "postgresql-ha.postgresqlSecretName" . }}
                   key: repmgr-password
             {{- end }}
-            {{- if .Values.witness.repmgrUsePassfile }}
+            {{- if .Values.postgresql.repmgrUsePassfile }}
             - name: REPMGR_USE_PASSFILE
-              value: {{ ternary "true" "false" .Values.witness.repmgrUsePassfile | quote }}
+              value: {{ ternary "true" "false" .Values.postgresql.repmgrUsePassfile | quote }}
             - name: REPMGR_PASSFILE_PATH
-              value: {{ default "/opt/bitnami/repmgr/conf/.pgpass" .Values.witness.repmgrPassfilePath }}
+              value: {{ default "/opt/bitnami/repmgr/conf/.pgpass" .Values.postgresql.repmgrPassfilePath }}
             {{- end }}
             {{- if (include "postgresql-ha.repmgrDatabase" .) }}
             - name: REPMGR_DATABASE
@@ -355,10 +351,6 @@ spec:
             {{- if .Values.witness.repmgrChildNodesDisconnectTimeout }}
             - name: REPMGR_CHILD_NODES_DISCONNECT_TIMEOUT
               value: {{ .Values.witness.repmgrChildNodesDisconnectTimeout | quote }}
-            {{- end }}
-            {{- if .Values.witness.syncReplication }}
-            - name: POSTGRESQL_NUM_SYNCHRONOUS_REPLICAS
-              value: {{ sub (int .Values.witness.replicaCount) 1 | quote }}
             {{- end }}
             {{- if .Values.witness.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.witness.extraEnvVars "context" $) | nindent 12 }}
@@ -514,7 +506,7 @@ spec:
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-            {{- if .Values.witness.usePasswordFile }}
+            {{- if .Values.postgresql.usePasswordFile }}
             - name: password
               mountPath: /opt/bitnami/postgresql/secrets/
             {{- end }}
