@@ -1,7 +1,6 @@
 annotations:
   category: E-Commerce
-  licenses: |
-    - Apache-2.0
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: 2.4.5-p1
 dependencies:

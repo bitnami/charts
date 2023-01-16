@@ -1,7 +1,6 @@
 annotations:
   category: Database
-  licenses: |
-    - Apache-2.0
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: 2.6.1
 dependencies:

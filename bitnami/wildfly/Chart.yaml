@@ -1,7 +1,6 @@
 annotations:
   category: ApplicationServer
-  licenses: |
-    - Apache-2.0
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: 27.0.1
 dependencies:
@@ -27,4 +26,4 @@ name: wildfly
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/wildfly
   - http://wildfly.org
-version: 14.0.2
+version: 14.0.3
