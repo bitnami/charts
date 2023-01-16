@@ -1,7 +1,6 @@
 annotations:
   category: CRM
-  licenses: |
-    - Apache-2.0
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: 16.0.20221115
 dependencies:
