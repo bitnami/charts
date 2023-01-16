@@ -1,7 +1,6 @@
 annotations:
   category: Analytics
-  licenses: |
-    - Apache-2.0
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: 9.3.2
 dependencies:
