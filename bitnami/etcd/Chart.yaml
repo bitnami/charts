@@ -1,5 +1,7 @@
 annotations:
   category: Database
+  licenses: |
+    - Apache-2.0
 apiVersion: v2
 appVersion: 3.5.6
 dependencies:
@@ -24,4 +26,4 @@ name: etcd
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/etcd
   - https://coreos.com/etcd/
-version: 8.6.0
+version: 8.7.0

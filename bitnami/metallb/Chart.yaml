@@ -1,5 +1,7 @@
 annotations:
   category: Infrastructure
+  licenses: |
+    - Apache-2.0
 apiVersion: v2
 appVersion: 0.13.7
 dependencies:
@@ -9,7 +11,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: MetalLB is a load-balancer implementation for bare metal Kubernetes clusters, using standard routing protocols.
-engine: gotpl
 home: https://github.com/bitnami/charts/tree/main/bitnami/metallb
 icon: https://bitnami.com/assets/stacks/metallb-speaker/img/metallb-speaker-stack-220x234.png
 keywords:
@@ -29,4 +30,4 @@ sources:
   - https://github.com/metallb/metallb
   - https://github.com/bitnami/containers/tree/main/bitnami/metallb
   - https://metallb.universe.tf
-version: 4.1.13
+version: 4.1.14

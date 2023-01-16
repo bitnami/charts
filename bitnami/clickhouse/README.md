@@ -92,7 +92,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                                    | ClickHouse image registry                                                                                  | `docker.io`            |
 | `image.repository`                                  | ClickHouse image repository                                                                                | `bitnami/clickhouse`   |
-| `image.tag`                                         | ClickHouse image tag (immutable tags are recommended)                                                      | `22.12.2-debian-11-r0` |
+| `image.tag`                                         | ClickHouse image tag (immutable tags are recommended)                                                      | `22.12.3-debian-11-r0` |
 | `image.digest`                                      | ClickHouse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `image.pullPolicy`                                  | ClickHouse image pull policy                                                                               | `IfNotPresent`         |
 | `image.pullSecrets`                                 | ClickHouse image pull secrets                                                                              | `[]`                   |
@@ -100,6 +100,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `shards`                                            | Number of ClickHouse shards to deploy                                                                      | `2`                    |
 | `replicaCount`                                      | Number of ClickHouse replicas per shard to deploy                                                          | `3`                    |
 | `containerPorts.http`                               | ClickHouse HTTP container port                                                                             | `8123`                 |
+| `containerPorts.https`                              | ClickHouse HTTPS container port                                                                            | `8443`                 |
 | `containerPorts.tcp`                                | ClickHouse TCP container port                                                                              | `9000`                 |
 | `containerPorts.tcpSecure`                          | ClickHouse TCP (secure) container port                                                                     | `9440`                 |
 | `containerPorts.keeper`                             | ClickHouse keeper TCP container port                                                                       | `2181`                 |
@@ -202,6 +203,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                                    | ClickHouse service type                                                                                                          | `ClusterIP`              |
 | `service.ports.http`                              | ClickHouse service HTTP port                                                                                                     | `8123`                   |
+| `service.ports.https`                             | ClickHouse service HTTPS port                                                                                                    | `443`                    |
 | `service.ports.tcp`                               | ClickHouse service TCP port                                                                                                      | `9000`                   |
 | `service.ports.tcpSecure`                         | ClickHouse service TCP (secure) port                                                                                             | `9440`                   |
 | `service.ports.keeper`                            | ClickHouse keeper TCP container port                                                                                             | `2181`                   |
@@ -212,6 +214,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.ports.interserver`                       | ClickHouse service Interserver port                                                                                              | `9009`                   |
 | `service.ports.metrics`                           | ClickHouse service metrics port                                                                                                  | `8001`                   |
 | `service.nodePorts.http`                          | Node port for HTTP                                                                                                               | `""`                     |
+| `service.nodePorts.https`                         | Node port for HTTPS                                                                                                              | `""`                     |
 | `service.nodePorts.tcp`                           | Node port for TCP                                                                                                                | `""`                     |
 | `service.nodePorts.tcpSecure`                     | Node port for TCP (with TLS)                                                                                                     | `""`                     |
 | `service.nodePorts.keeper`                        | ClickHouse keeper TCP container port                                                                                             | `""`                     |
@@ -232,6 +235,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalAccess.enabled`                          | Enable Kubernetes external cluster access to ClickHouse                                                                          | `false`                  |
 | `externalAccess.service.type`                     | Kubernetes Service type for external access. It can be NodePort, LoadBalancer or ClusterIP                                       | `LoadBalancer`           |
 | `externalAccess.service.ports.http`               | ClickHouse service HTTP port                                                                                                     | `80`                     |
+| `externalAccess.service.ports.https`              | ClickHouse service HTTPS port                                                                                                    | `443`                    |
 | `externalAccess.service.ports.tcp`                | ClickHouse service TCP port                                                                                                      | `9000`                   |
 | `externalAccess.service.ports.tcpSecure`          | ClickHouse service TCP (secure) port                                                                                             | `9440`                   |
 | `externalAccess.service.ports.keeper`             | ClickHouse keeper TCP container port                                                                                             | `2181`                   |
@@ -245,6 +249,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalAccess.service.loadBalancerAnnotations`  | Array of load balancer annotations for each ClickHouse . Length must be the same as replicaCount                                 | `[]`                     |
 | `externalAccess.service.loadBalancerSourceRanges` | Address(es) that are allowed when service is LoadBalancer                                                                        | `[]`                     |
 | `externalAccess.service.nodePorts.http`           | Node port for HTTP                                                                                                               | `[]`                     |
+| `externalAccess.service.nodePorts.https`          | Node port for HTTPS                                                                                                              | `[]`                     |
 | `externalAccess.service.nodePorts.tcp`            | Node port for TCP                                                                                                                | `[]`                     |
 | `externalAccess.service.nodePorts.tcpSecure`      | Node port for TCP (with TLS)                                                                                                     | `[]`                     |
 | `externalAccess.service.nodePorts.keeper`         | ClickHouse keeper TCP container port                                                                                             | `[]`                     |
@@ -293,7 +298,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r69`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r70`      |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |

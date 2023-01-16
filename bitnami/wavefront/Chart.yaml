@@ -1,5 +1,7 @@
 annotations:
   category: Analytics
+  licenses: |
+    - Apache-2.0
 apiVersion: v2
 appVersion: 1.13.0
 dependencies:
@@ -13,7 +15,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Wavefront is a high-performance streaming analytics platform for monitoring and optimizing your environment and applications.
-engine: gotpl
 home: https://www.wavefront.com
 icon: https://bitnami.com/assets/stacks/wavefront/img/wavefront-stack-220x234.png
 keywords:
@@ -30,4 +31,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/wavefront-proxy
   - https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes
   - https://github.com/wavefrontHQ/wavefront-proxy
-version: 4.2.8
+version: 4.2.9
