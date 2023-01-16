@@ -1,5 +1,6 @@
 annotations:
   category: Infrastructure
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: 3.1.1
 dependencies:
@@ -15,9 +16,8 @@ dependencies:
   - condition: cassandra.enabled
     name: cassandra
     repository: https://charts.bitnami.com/bitnami
-    version: 9.x.x
+    version: 10.x.x
 description: Kong is an open source Microservice API gateway and platform designed for managing microservices requests of high-availability, fault-tolerance, and distributed systems.
-engine: gotpl
 home: https://github.com/bitnami/charts/tree/main/bitnami/kong
 icon: https://bitnami.com/assets/stacks/kong/img/kong-stack-220x234.png
 keywords:
@@ -36,4 +36,4 @@ name: kong
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/kong
   - https://konghq.com/
-version: 8.0.28
+version: 9.0.1

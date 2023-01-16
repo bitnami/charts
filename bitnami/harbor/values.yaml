@@ -462,6 +462,24 @@ persistence:
       size: 1Gi
       annotations: {}
       selector: {}
+      ## @param persistence.persistentVolumeClaim.jobservice.scanData.existingClaim Name of an existing PVC to use
+      ## @param persistence.persistentVolumeClaim.jobservice.scanData.storageClass PVC Storage Class for Harbor Jobservice scan data volume
+      ## Note: The default StorageClass will be used if not defined. Set it to `-` to disable dynamic provisioning
+      ## @param persistence.persistentVolumeClaim.jobservice.scanData.subPath The sub path used in the volume
+      ## @param persistence.persistentVolumeClaim.jobservice.scanData.accessModes The access mode of the volume
+      ## @param persistence.persistentVolumeClaim.jobservice.scanData.size The size of the volume
+      ## @param persistence.persistentVolumeClaim.jobservice.scanData.annotations Annotations for the PVC
+      ## @param persistence.persistentVolumeClaim.jobservice.scanData.selector Selector to match an existing Persistent Volume
+      ##
+      scanData:
+        existingClaim: ""
+        storageClass: ""
+        subPath: ""
+        accessModes:
+          - ReadWriteOnce
+        size: 1Gi
+        annotations: {}
+        selector: {}
     ## @param persistence.persistentVolumeClaim.chartmuseum.existingClaim Name of an existing PVC to use
     ## @param persistence.persistentVolumeClaim.chartmuseum.storageClass PVC Storage Class for Chartmuseum data volume
     ## Note: The default StorageClass will be used if not defined. Set it to `-` to disable dynamic provisioning
@@ -541,7 +559,7 @@ persistence:
       bucket: bucketname
       ## The base64 encoded json file which contains the gcs key (file's content)
       ##
-      encodedkey: base64-encoded-json-key-file
+      encodedkey: ""
       rootdirectory: ""
       chunksize: ""
     ## Images/charts storage parameters when type is "s3"
@@ -722,7 +740,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r63
+    tag: 11-debian-11-r71
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -768,7 +786,7 @@ nginx:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.23.3-debian-11-r1
+    tag: 1.23.3-debian-11-r11
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1033,7 +1051,7 @@ portal:
   image:
     registry: docker.io
     repository: bitnami/harbor-portal
-    tag: 2.7.0-debian-11-r0
+    tag: 2.7.0-debian-11-r9
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1293,7 +1311,7 @@ core:
   image:
     registry: docker.io
     repository: bitnami/harbor-core
-    tag: 2.7.0-debian-11-r0
+    tag: 2.7.0-debian-11-r8
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1586,7 +1604,7 @@ jobservice:
   image:
     registry: docker.io
     repository: bitnami/harbor-jobservice
-    tag: 2.7.0-debian-11-r0
+    tag: 2.7.0-debian-11-r8
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2029,7 +2047,7 @@ registry:
     image:
       registry: docker.io
       repository: bitnami/harbor-registry
-      tag: 2.7.0-debian-11-r0
+      tag: 2.7.0-debian-11-r8
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2176,7 +2194,7 @@ registry:
     image:
       registry: docker.io
       repository: bitnami/harbor-registryctl
-      tag: 2.7.0-debian-11-r0
+      tag: 2.7.0-debian-11-r8
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2319,7 +2337,7 @@ chartmuseum:
   image:
     registry: docker.io
     repository: bitnami/chartmuseum
-    tag: 0.15.0-debian-11-r51
+    tag: 0.15.0-debian-11-r59
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2643,7 +2661,7 @@ notary:
     image:
       registry: docker.io
       repository: bitnami/harbor-notary-server
-      tag: 2.7.0-debian-11-r0
+      tag: 2.7.0-debian-11-r8
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2880,7 +2898,7 @@ notary:
     image:
       registry: docker.io
       repository: bitnami/harbor-notary-signer
-      tag: 2.7.0-debian-11-r0
+      tag: 2.7.0-debian-11-r8
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -3130,7 +3148,7 @@ trivy:
   image:
     registry: docker.io
     repository: bitnami/harbor-adapter-trivy
-    tag: 2.6.2-debian-11-r7
+    tag: 2.7.0-debian-11-r7
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -3438,7 +3456,7 @@ exporter:
   image:
     registry: docker.io
     repository: bitnami/harbor-exporter
-    tag: 2.7.0-debian-11-r0
+    tag: 2.7.0-debian-11-r8
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -3687,7 +3705,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 13.9.0-debian-11-r13
+    tag: 13.9.0-debian-11-r21
     digest: ""
   auth:
     enablePostgresUser: true

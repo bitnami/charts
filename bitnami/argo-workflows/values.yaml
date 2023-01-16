@@ -653,9 +653,9 @@ controller:
         maxOpenConns: 0
       nodeStatusOffLoad: false
       archive: {{ include "common.tplvalues.render" (dict "value" .Values.controller.persistence.archive.enabled "context" $) }}
-      {{- if or .Values.postgresql.enabled (eq .Values.externalDatabase.type "postgresql") }}
+      {{- if or .Values.postgresql.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.type "postgresql")) }}
       postgresql:
-      {{- else if or .Values.mysql.enabled (eq .Values.externalDatabase.type "mysql") }}
+      {{- else if or .Values.mysql.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.type "mysql")) }}
       mysql:
       {{- end }}
         host: {{ include "argo-workflows.controller.database.host" . }}
@@ -1186,7 +1186,7 @@ mysql:
 ##
 externalDatabase:
   enabled: false
-  ## Either "postgres" or  "mysql"
+  ## Either "postgresql" or  "mysql"
   ##
   type: ""
   host: localhost

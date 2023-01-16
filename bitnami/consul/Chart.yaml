@@ -1,5 +1,6 @@
 annotations:
   category: DeveloperTools
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: 1.14.3
 dependencies:
@@ -9,7 +10,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: HashiCorp Consul is a tool for discovering and configuring services in your infrastructure.
-engine: gotpl
 home: https://github.com/bitnami/charts/tree/main/bitnami/consul
 icon: https://bitnami.com/assets/stacks/consul/img/consul-stack-220x234.png
 keywords:
@@ -23,4 +23,4 @@ name: consul
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/consul
   - https://www.consul.io/
-version: 10.9.8
+version: 10.9.9

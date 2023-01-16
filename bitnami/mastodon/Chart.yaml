@@ -1,5 +1,6 @@
 annotations:
   category: CMS
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: 4.0.2
 dependencies:
@@ -29,7 +30,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Mastodon is self-hosted social network server based on ActivityPub. Written in Ruby, features real-time updates, multimedia attachments and no vendor lock-in.
-engine: gotpl
 home: https://joinmastodon.org/
 icon: https://bitnami.com/assets/stacks/mastodon/img/mastodon-stack-220x234.png
 keywords:

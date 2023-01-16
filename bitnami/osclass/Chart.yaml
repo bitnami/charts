@@ -1,5 +1,6 @@
 annotations:
   category: CMS
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: 8.0.2
 dependencies:
@@ -15,7 +16,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Osclass allows you to easily create a classifieds site without any technical knowledge. It provides support for presenting general ads or specialized ads, is customizable, extensible and multilingual.
-engine: gotpl
 home: https://github.com/bitnami/charts/tree/main/bitnami/osclass
 icon: https://bitnami.com/assets/stacks/osclass/img/osclass-stack-220x234.png
 keywords:
@@ -31,4 +31,4 @@ name: osclass
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/osclass
   - https://osclass.org/
-version: 14.2.8
+version: 14.2.9

@@ -1,5 +1,6 @@
 annotations:
   category: Database
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: 15.1.0
 dependencies:
@@ -9,7 +10,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: This PostgreSQL cluster solution includes the PostgreSQL replication manager, an open-source tool for managing replication and failover on PostgreSQL clusters.
-engine: gotpl
 home: https://github.com/bitnami/charts/tree/main/bitnami/postgresql-ha
 icon: https://bitnami.com/assets/stacks/postgresql/img/postgresql-stack-220x234.png
 keywords:
