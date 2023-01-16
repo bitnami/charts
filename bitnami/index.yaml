@@ -85265,6 +85265,38 @@ entries:
   redis-cluster:
   - annotations:
       category: Database
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 7.0.8
+    created: "2023-01-16T20:21:42.356747057Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Redis(R) is an open source, scalable, distributed in-memory cache
+      for applications. It can be used to store and serve data in the form of strings,
+      hashes, lists, sets and sorted sets.
+    digest: b3f30ce07bf085b3f7459ac0d87d3e29c8f6fbc2e9101bfab3c45bc47c1a2017
+    home: https://github.com/bitnami/charts/tree/main/bitnami/redis-cluster
+    icon: https://bitnami.com/assets/stacks/redis/img/redis-stack-220x234.png
+    keywords:
+    - redis
+    - keyvalue
+    - database
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: redis-cluster
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/redis
+    - http://redis.io/
+    urls:
+    - https://charts.bitnami.com/bitnami/redis-cluster-8.3.4.tgz
+    version: 8.3.4
+  - annotations:
+      category: Database
     apiVersion: v2
     appVersion: 7.0.7
     created: "2022-12-20T14:22:28.566500213Z"
@@ -105215,4 +105247,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-01-16T18:12:40.20862866Z"
+generated: "2023-01-16T20:21:42.350734588Z"
