@@ -39,7 +39,8 @@
             },
             "remote": {
               "workload": "deploy-external-dns"
-            }
+            },
+            "vars_file": "vars.yaml"
           }
         },
         {
