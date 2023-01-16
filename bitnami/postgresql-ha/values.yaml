@@ -579,6 +579,16 @@ postgresql:
     certKeyFilename: ""
 
 witness:
+  ## ref: https://hub.docker.com/r/bitnami/postgresql/tags/
+  ## @param witness.create Create PostgreSQL witness nodes
+  ## @param witness.image.registry PostgreSQL with Repmgr image registry
+  ## @param witness.image.repository PostgreSQL with Repmgr image repository
+  ## @param witness.image.tag PostgreSQL with Repmgr image tag
+  ## @param witness.image.digest PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param witness.image.pullPolicy PostgreSQL with Repmgr image pull policy
+  ## @param witness.image.pullSecrets Specify docker-registry secret names as an array
+  ## @param witness.image.debug Specify if debug logs should be enabled
+  ##
   create: false
   image:
     registry: docker.io
@@ -841,45 +851,14 @@ witness:
     create: false
     minAvailable: 1
     maxUnavailable: ""
-  ## PostgreSQL configuration parameters
-  ## @param witness.username PostgreSQL username
-  ## @param witness.password PostgreSQL password
-  ## @param witness.database PostgreSQL database
-  ##
-  username: postgres
-  password: ""
-  database: ""
-  ## @param witness.existingSecret PostgreSQL password using existing secret
-  ##
-  existingSecret: ""
-  ## @param witness.postgresPassword PostgreSQL password for the `postgres` user when `username` is not `postgres`
-  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql#creating-a-database-user-on-first-run (see note!)
-  ##
-  postgresPassword: ""
-  ## @param witness.usePasswordFile Set to `true` to mount PostgreSQL secret as a file instead of passing environment variable
-  ##
-  usePasswordFile: ""
-  ## @param witness.repmgrUsePassfile Set to `true` to configure repmgrl to use `passfile` instead of `password` vars*:*:*:username:password" and use it to configure Repmgr instead of using password (Requires Postgresql 10+, otherwise ignored)
-  ## ref: https://repmgr.org/docs/current/configuration-password-management.html
-  ##      https://www.witness.org/docs/current/libpq-pgpass.html
-  ##
-  repmgrUsePassfile: ""
-  ## @param witness.repmgrPassfilePath Custom path where `passfile` will be stored
-  ##
-  repmgrPassfilePath: ""
+
   ## @param witness.upgradeRepmgrExtension Upgrade repmgr extension in the database
   ##
   upgradeRepmgrExtension: false
   ## @param witness.pgHbaTrustAll Configures PostgreSQL HBA to trust every user
   ##
   pgHbaTrustAll: false
-  ## @param witness.syncReplication Make the replication synchronous. This will wait until the data is synchronized in all the replicas before other query can be run. This ensures the data availability at the expenses of speed.
-  ##
-  syncReplication: false
   ## Repmgr configuration parameters
-  ## @param witness.repmgrUsername PostgreSQL Repmgr username
-  ## @param witness.repmgrPassword PostgreSQL Repmgr password
-  ## @param witness.repmgrDatabase PostgreSQL Repmgr database
   ## @param witness.repmgrLogLevel Repmgr log level (DEBUG, INFO, NOTICE, WARNING, ERROR, ALERT, CRIT or EMERG)
   ## @param witness.repmgrConnectTimeout Repmgr backend connection timeout (in seconds)
   ## @param witness.repmgrReconnectAttempts Repmgr backend reconnection attempts
@@ -889,9 +868,6 @@ witness:
   ## @param witness.repmgrChildNodesConnectedMinCount Repmgr minimum number of connected child nodes before being considered as failed primary for fencing
   ## @param witness.repmgrChildNodesDisconnectTimeout Repmgr time before node will be fenced when insufficient child nodes are detected (in seconds)
   ##
-  repmgrUsername: repmgr
-  repmgrPassword: ""
-  repmgrDatabase: repmgr
   repmgrLogLevel: NOTICE
   repmgrConnectTimeout: 5
   repmgrReconnectAttempts: 2
@@ -900,10 +876,7 @@ witness:
   repmgrChildNodesCheckInterval: 5
   repmgrChildNodesConnectedMinCount: 1
   repmgrChildNodesDisconnectTimeout: 30
-  ## EXPERMENTAL: Use pg_rewind for standby failover
-  ## @param witness.usePgRewind Use pg_rewind for standby failover (experimental)
-  ##
-  usePgRewind: false
+
   ## Audit settings
   ## https://github.com/bitnami/containers/tree/main/bitnami/postgresql#auditing
   ##
