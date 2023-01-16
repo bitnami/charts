@@ -98,8 +98,8 @@ concierge:
   ## If changed, other YAML references to the default ports may also need to be updated
   ##
   configurationPorts:
-    aggregatedAPIServerPort: ""
-    impersonationProxyServerPort: ""
+    aggregatedAPIServerPort: 10250
+    impersonationProxyServerPort: 8444
 
   ## @param concierge.hostNetwork Concierge API and Proxy container hostNetwork
   ##
