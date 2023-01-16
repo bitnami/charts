@@ -15,7 +15,7 @@ file:
   /var/lib/docker/containers:
     exists: true
     filetype: directory
-    mode: "0701"
+    mode: "0710"
     owner: root
     group: root
 command:
