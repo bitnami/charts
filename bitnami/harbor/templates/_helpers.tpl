@@ -341,6 +341,10 @@ Return whether Redis&reg; uses password authentication or not
   {{- printf "%s-jobservice" (include "common.names.fullname" .) -}}
 {{- end -}}
 
+{{- define "harbor.jobserviceScanData" -}}
+  {{- printf "%s-jobservice-scandata" (include "common.names.fullname" .) -}}
+{{- end -}}
+
 {{- define "harbor.registry" -}}
   {{- printf "%s-registry" (include "common.names.fullname" .) -}}
 {{- end -}}
