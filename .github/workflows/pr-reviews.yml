@@ -4,11 +4,6 @@ on:
     types:
       - review_requested
       - synchronize
-  # For some reason events triggered by pull_request_review
-  # are failing due to a lack of permissions
-  # pull_request_review:
-  #   types:
-  #     - submitted
 permissions:
   repository-projects: write
 jobs:
@@ -22,17 +17,8 @@ jobs:
       github.actor != 'bitnami-bot' && github.event.pull_request.user.login != 'bitnami-bot' &&
       (!contains(github.event.pull_request.labels.*.name, 'bitnami'))
     steps:
-      - name: Move into Pending
-        uses: peter-evans/create-or-update-project-card@v2
-        # Pull request review submitted
-        if: ${{ github.event.action == 'submitted' }}
-        with:
-          project-name: Support
-          column-name: Pending
-          issue-number: ${{ github.event.pull_request.number }}
       - name: Move into In Progress
         uses: peter-evans/create-or-update-project-card@v2
-        if: ${{ github.event.action != 'submitted' }}
         with:
           project-name: Support
           column-name: In progress
