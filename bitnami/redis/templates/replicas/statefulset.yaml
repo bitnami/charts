@@ -423,9 +423,11 @@ spec:
             path: /sys
         {{- end }}
         - name: redis-tmp-conf
-          {{- if .Values.replica.persistence.medium }}
+          {{- if or .Values.replica.persistence.medium .Values.replica.persistence.sizeLimit }}
           emptyDir:
+            {{- if .Values.replica.persistence.medium }}
             medium: {{ .Values.replica.persistence.medium | quote }}
+            {{- end }}
             {{- if .Values.replica.persistence.sizeLimit }}
             sizeLimit: {{ .Values.replica.persistence.sizeLimit | quote }}
             {{- end }}
@@ -446,10 +448,14 @@ spec:
         {{- end }}
   {{- if not .Values.replica.persistence.enabled }}
         - name: redis-data
-          {{- if .Values.replica.persistence.medium }}
-          emptyDir: {
+          {{- if or .Values.replica.persistence.medium .Values.replica.persistence.sizeLimit }}
+          emptyDir:
+            {{- if .Values.replica.persistence.medium }}
             medium: {{ .Values.replica.persistence.medium | quote }}
-          }
+            {{- end }}
+            {{- if .Values.replica.persistence.sizeLimit }}
+            sizeLimit: {{ .Values.replica.persistence.sizeLimit | quote }}
+            {{- end }}
           {{- else }}
           emptyDir: {}
           {{- end }}
