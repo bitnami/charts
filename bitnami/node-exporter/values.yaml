@@ -267,6 +267,8 @@ updateStrategy:
     maxUnavailable: 1
 ## @param hostNetwork Expose the service to the host network
 hostNetwork: true
+## @param hostPID Allows visibility of processes on the host, potentially leaking information such as environment variables and configuration
+hostPID: true
 ## @param minReadySeconds `minReadySeconds` to avoid killing pods before we are ready
 ##
 minReadySeconds: 0
