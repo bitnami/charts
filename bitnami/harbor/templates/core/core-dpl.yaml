@@ -98,14 +98,26 @@ spec:
               value: {{ ternary "true" "false" .Values.core.image.debug | quote }}
             - name: CORE_SECRET
               valueFrom:
+                {{- if .Values.core.existingSecret }}
+                secretKeyRef:
+                  name: {{ .Values.core.existingSecret }}
+                  key: secret
+                {{- else }}
                 secretKeyRef:
                   name: {{ include "harbor.core" . }}
                   key: secret
+                {{- end }}
             - name: JOBSERVICE_SECRET
               valueFrom:
+                {{- if .Values.jobservice.existingSecret }}
+                secretKeyRef:
+                  name: {{ .Values.jobservice.existingSecret }}
+                  key: secret
+                {{- else }}
                 secretKeyRef:
                   name: {{ include "harbor.jobservice" . }}
                   key: secret
+                {{- end }}
             {{- if or .Values.core.configOverwriteJson .Values.core.configOverwriteJsonSecret }}
             - name: CONFIG_OVERWRITE_JSON
               valueFrom:
@@ -130,7 +142,11 @@ spec:
             - configMapRef:
                 name: {{ printf "%s-envvars" (include "harbor.core" .) }}
             - secretRef:
+                {{- if .Values.core.existingEnvVarsSecret }}
+                name: {{ .Values.core.existingEnvVarsSecret }}
+                {{- else }}
                 name: {{ printf "%s-envvars" (include "harbor.core" .) }}
+                {{- end }}
             {{- if .Values.core.extraEnvVarsCM }}
             - configMapRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.core.extraEnvVarsCM "context" $) }}
@@ -224,10 +240,17 @@ spec:
                 path: app.conf
         - name: secret-key
           secret:
+            {{- if .Values.core.existingSecret }}
+            secretName: {{ .Values.core.existingSecret }}
+            items:
+              - key: secretKey
+                path: key
+            {{- else }}
             secretName: {{ include "harbor.core" . }}
             items:
               - key: secretKey
                 path: key
+            {{- end }}
         {{- if .Values.internalTLS.caBundleSecret }}
         {{- include "harbor.caBundleVolume" . | nindent 8 }}
         {{- end }}
