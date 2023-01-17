@@ -137,6 +137,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.requests`                    | The requested resources for the WildFly container                                         | `{}`            |
 | `containerPorts.http`                   | WildFly HTTP container port                                                               | `8080`          |
 | `containerPorts.mgmt`                   | WildFly HTTPS container port                                                              | `9990`          |
+| `extraContainerPorts`                   | Array with extra container ports to add to the WildFly container                          | `[]`            |
 | `podSecurityContext.enabled`            | Enabled WildFly pods' Security Context                                                    | `true`          |
 | `podSecurityContext.fsGroup`            | Set WildFly pod's Security Context fsGroup                                                | `1001`          |
 | `containerSecurityContext.enabled`      | Enabled WildFly containers' Security Context                                              | `true`          |
