@@ -27,7 +27,7 @@ spec:
     - 'hostPath'
   hostNetwork: true
   hostIPC: false
-  hostPID: true
+  hostPID: {{ .Values.hostPID }}
   hostPorts:
     - min: 0
       max: 65535
