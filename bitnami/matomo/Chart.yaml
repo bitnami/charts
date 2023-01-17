@@ -2,7 +2,7 @@ annotations:
   category: Analytics
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 4.13.0
+appVersion: 4.13.1
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
@@ -30,4 +30,4 @@ name: matomo
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/matomo
   - https://www.matomo.org/
-version: 0.2.16
+version: 0.2.17
