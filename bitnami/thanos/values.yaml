@@ -408,7 +408,7 @@ query:
       ## @param query.grpc.server.tls.cert TLS Certificate for GRPC server - ignored if existingSecret is provided
       ## @param query.grpc.server.tls.key TLS Key for GRPC server - ignored if existingSecret is provided
       ## @param query.grpc.server.tls.ca TLS CA to verify clients against - ignored if existingSecret is provided
-      ## @param query.grpc.server.tls.existingSecret Existing secret containing your own TLS certificates
+      ## @param query.grpc.server.tls.existingSecret Existing secret containing your own TLS certificates. In the case that they are not named ca-cert, tls-cert and tls-key you will need to use the keyMapping accordingly.
       ## e.g:
       ## existingSecret:
       ##   name: foo
@@ -436,7 +436,7 @@ query:
       ## @param query.grpc.client.tls.cert TLS Certificate for GRPC server - ignored if existingSecret is provided
       ## @param query.grpc.client.tls.key TLS Key for GRPC server - ignored if existingSecret is provided
       ## @param query.grpc.client.tls.ca TLS CA to verify clients against - ignored if existingSecret is provided
-      ## @param query.grpc.client.tls.existingSecret Existing secret containing your own TLS certificates
+      ## @param query.grpc.client.tls.existingSecret Existing secret containing your own TLS certificates. In the case that they are not named ca-cert, tls-cert and tls-key you will need to use the keyMapping accordingly.
       ## e.g:
       ## existingSecret:
       ##   name: foo
