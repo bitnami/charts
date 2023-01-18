@@ -1186,6 +1186,12 @@ authProxy:
   ## @param authProxy.cookieRefresh Duration after which to refresh the cookie
   ##
   cookieRefresh: 2m
+  ## @param authProxy.existingOauth2Secret.enabled Specifies whether Kubeapps should use existing secret to get clientID, clientSecret and cookieSecret parameters
+  ## @param authProxy.existingOauth2Secret.name Secret name where Oauth2 credentials are present
+  ##
+  existingOauth2Secret:
+    enabled: false
+    name: ""
   ## @param authProxy.scope OAuth scope specification
   ##
   scope: "openid email groups"

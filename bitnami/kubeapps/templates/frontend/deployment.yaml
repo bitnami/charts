@@ -185,6 +185,7 @@ spec:
             {{- end }}
           {{- end }}
           env:
+            {{- if not .Values.authProxy.existingOauth2Secret.enabled }}
             - name: OAUTH2_PROXY_CLIENT_ID
               valueFrom:
                 secretKeyRef:
@@ -200,6 +201,7 @@ spec:
                 secretKeyRef:
                   name: {{ template "kubeapps.oauth2_proxy-secret.name" . }}
                   key: cookieSecret
+            {{- end }}
             {{- if .Values.authProxy.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.authProxy.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -211,6 +213,10 @@ spec:
             {{- if .Values.authProxy.extraEnvVarsSecret }}
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.authProxy.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+            {{- if .Values.authProxy.existingOauth2Secret.enabled }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.authProxy.existingOauth2Secret.name "context" $) }}
             {{- end }}
           ports:
             - name: proxy
