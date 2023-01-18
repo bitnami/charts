@@ -1412,6 +1412,15 @@ metrics:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## @param metrics.livenessProbe define livenessProbe for metrics container
+  ##
+  livenessProbe: {}
+  ## @param metrics.readinessProbe define readinessProbe for metrics container
+  ##
+  readinessProbe: {}
+  ## @param metrics.startupProbe define startupProbe for metrics container
+  ##
+  startupProbe: {}
   ## @param metrics.command Override default metrics container init command (useful when using custom images)
   ##
   command: []
