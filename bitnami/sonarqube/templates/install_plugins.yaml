@@ -14,10 +14,10 @@ metadata:
 data:
   install_plugins.sh: |-
     {{- if .Values.plugins.install }}
-    mkdir -p /bitnami/sonarqube/extensions/plugins
-    mkdir -p /bitnami/sonarqube/data
-    [ -e /bitnami/sonarqube/extensions/plugins/* ] && rm /bitnami/sonarqube/extensions/plugins/*
-    cd /bitnami/sonarqube/extensions/plugins
+    mkdir /bitnami/sonarqube-extensions/plugins
+    mkdir  /bitnami/sonarqube-extensions/data
+    [ -e /bitnami/sonarqube-extensions/plugins/* ] && rm /bitnami/sonarqube/extensions/plugins/*
+    cd /bitnami/sonarqube-extensions/plugins
       {{- range $index, $val := .Values.plugins.install }}
     curl {{ if $.Values.plugins.noCheckCertificate }}--insecure{{ end }} {{ if $.Values.plugins.netrcCreds }}--netrc-file /root/.netrc{{ end }} -fsSLO {{ $val | quote }}
       {{- end }}
