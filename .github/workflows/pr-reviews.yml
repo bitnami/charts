@@ -9,7 +9,7 @@ permissions:
 concurrency:
   group: card-movement-${{ github.event.number }}
 jobs:
-  comments_handler:
+  handler:
     runs-on: ubuntu-latest
     # This job will ignore:
     # * Events triggered by bitnami-bot (README commits for example).
