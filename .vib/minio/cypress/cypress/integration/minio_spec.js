@@ -8,8 +8,7 @@ it('allows creating a bucket, uploading and retrieving a file', () => {
     bucketName=`${buckets.newBucket.name}.${random}`;
     cy.get('#bucket-name').type(`${bucketName}`);
     cy.contains('button', 'Create Bucket').click();
-    cy.get('a[href="/browser"]').click();
-    cy.get(`span[id="browse-${bucketName}"]`).click();
+    cy.visit(`/browser/${bucketName}`);
   });
 
   const fileToUpload = 'example.json';
