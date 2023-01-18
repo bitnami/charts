@@ -1532,7 +1532,7 @@ kubeappsapis:
           ## e.g:
           # defaultPrereleasesVersionSelection:
           # - rc
-          defaultPrereleasesVersionSelection: null
+          defaultPrereleasesVersionSelection: []
           ## @param kubeappsapis.pluginConfig.kappController.packages.v1alpha1.defaultAllowDowngrades Default policy for allowing applications to be downgraded to previous versions
           ## ref: https://carvel.dev/kapp-controller/docs/latest/package-consumer-concepts/#downgrading
           defaultAllowDowngrades: false
