@@ -225,3 +225,28 @@ Get the initialization scripts volume name.
 {{- define "rabbitmq.initScripts" -}}
 {{- printf "%s-init-scripts" (include "common.names.fullname" .) -}}
 {{- end -}}
+
+{{/*
+Returns the available value for certain key in an existing secret (if it exists),
+otherwise it generates a random value.
+*/}}
+{{- define "getValueFromSecret" }}
+    {{- $len := (default 16 .Length) | int -}}
+    {{- $obj := (lookup "v1" "Secret" .Namespace .Name).data -}}
+    {{- if $obj }}
+        {{- index $obj .Key | b64dec -}}
+    {{- else -}}
+        {{- randAlphaNum $len -}}
+    {{- end -}}
+{{- end }}
+
+{{/*
+Get the TLS.sslOptions.Password secret.
+*/}}
+{{- define "rabbitmq.tlsSslOptionsPassword" -}}
+{{- if not (empty .Values.auth.tls.sslOptionsPassword.password) -}}
+    {{- .Values.auth.tls.sslOptionsPassword.password -}}
+{{- else -}}
+    {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" .Values.auth.tls.sslOptionsPassword.existingSecret "Length" 10 "Key" .Values.auth.tls.sslOptionsPassword.key)  -}}
+{{- end -}}
+{{- end -}}
