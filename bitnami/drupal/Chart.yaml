@@ -2,7 +2,7 @@ annotations:
   category: CMS
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 9.4.9
+appVersion: 10.0.1
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
@@ -31,4 +31,4 @@ name: drupal
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/drupal
   - https://www.drupal.org/
-version: 12.5.13
+version: 12.5.14
