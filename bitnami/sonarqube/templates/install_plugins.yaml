@@ -15,6 +15,7 @@ data:
   install_plugins.sh: |-
     {{- if .Values.plugins.install }}
     mkdir -p /bitnami/sonarqube/extensions/plugins
+    mkdir -p /bitnami/sonarqube/data
     [ -e /bitnami/sonarqube/extensions/plugins/* ] && rm /bitnami/sonarqube/extensions/plugins/*
     cd /bitnami/sonarqube/extensions/plugins
       {{- range $index, $val := .Values.plugins.install }}

@@ -322,8 +322,6 @@ spec:
           volumeMounts:
             - mountPath: /bitnami/sonarqube
               name: data
-            - mountPath: /opt/bitnami/sonarqube/data
-              name: int-data
           {{- if .Values.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -370,8 +368,6 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
-        - name: int-data
-          emptyDir: {}
         {{- if .Values.metrics.jmx.enabled }}
         - name: jmx-config
           configMap:
