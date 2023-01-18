@@ -81,7 +81,7 @@ spec:
       hostNetwork: {{ .Values.witness.hostNetwork }}
       hostIPC: {{ .Values.witness.hostIPC }}
       initContainers:
-      {{- if .Values.witness.tls.enabled }}
+      {{- if .Values.postgresql.tls.enabled }}
         - name: init-chmod-tls
           image: {{ template "postgresql-ha.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
@@ -266,10 +266,10 @@ spec:
               value: {{ .Values.witness.pghbaRemoveFilters | quote }}
             {{- end }}
             - name: POSTGRESQL_ENABLE_TLS
-              value: {{ ternary "yes" "no" .Values.witness.tls.enabled | quote }}
-            {{- if .Values.witness.tls.enabled }}
+              value: {{ ternary "yes" "no" .Values.postgresql.tls.enabled | quote }}
+            {{- if .Values.postgresql.tls.enabled }}
             - name: POSTGRESQL_TLS_PREFER_SERVER_CIPHERS
-              value: {{ ternary "yes" "no" .Values.witness.tls.preferServerCiphers | quote }}
+              value: {{ ternary "yes" "no" .Values.postgresql.tls.preferServerCiphers | quote }}
             - name: POSTGRESQL_TLS_CERT_FILE
               value: {{ template "postgresql-ha.postgresql.tlsCert" . }}
             - name: POSTGRESQL_TLS_KEY_FILE
@@ -424,7 +424,7 @@ spec:
             - name: password
               mountPath: /opt/bitnami/postgresql/secrets/
             {{- end }}
-            {{- if .Values.witness.tls.enabled }}
+            {{- if .Values.postgresql.tls.enabled }}
             - name: postgresql-certificates
               mountPath: /opt/bitnami/postgresql/certs
             {{- end }}
@@ -565,10 +565,10 @@ spec:
           configMap:
             name: {{ template "postgresql-ha.postgresqlInitdbScriptsCM" . }}
         {{- end }}
-        {{- if .Values.witness.tls.enabled }}
+        {{- if .Values.postgresql.tls.enabled }}
         - name: raw-certificates
           secret:
-            secretName: {{ required "A secret containing TLS certificates is required when TLS is enabled" .Values.witness.tls.certificatesSecret }}
+            secretName: {{ required "A secret containing TLS certificates is required when TLS is enabled" .Values.postgresql.tls.certificatesSecret }}
         - name: postgresql-certificates
           emptyDir: {}
         {{- end }}
