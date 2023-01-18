@@ -20,7 +20,7 @@ jobs:
           path: .github/workflows/
       - uses: actions/github-script@v6
         script: |
-          const {data: cards} = github.rest.projects.listCards({
+          const cards = await github.rest.projects.listCards({
             column_id: ${{ env.SOLVED_COLUMN_ID }},
             archived_state: all,
             per_page: 100
