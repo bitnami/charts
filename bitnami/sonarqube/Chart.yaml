@@ -29,4 +29,4 @@ name: sonarqube
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/sonarqube
   - https://github.com/SonarSource/sonarqube
-version: 2.0.6
+version: 2.0.7
