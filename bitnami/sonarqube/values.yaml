@@ -578,20 +578,22 @@ ingress:
   ##
   extraRules: []
 
-# Init container for installing a list of plugins.
-# For example:
-# plugins:
-#  install:
-#    - "https://github.com/AmadeusITGroup/sonar-stash/releases/download/1.3.0/sonar-stash-plugin-1.3.0.jar"
-#    - "https://github.com/SonarSource/sonar-ldap/releases/download/2.2-RC3/sonar-ldap-plugin-2.2.0.601.jar"
-#
+## SonarQube&trade; plugin provisioning parameters
+##
 plugins:
+  ## @param plugins.install List of plugin URLS to download and install
+  ## For example:
+  ## plugins:
+  ##  install:
+  ##    - "https://github.com/AmadeusITGroup/sonar-stash/releases/download/1.3.0/sonar-stash-plugin-1.3.0.jar"
+  ##    - "https://github.com/SonarSource/sonar-ldap/releases/download/2.2-RC3/sonar-ldap-plugin-2.2.0.601.jar"
+  ##
   install: []
-  # .netrc secret file with a key "netrc" to use basic auth while downloading plugins
+  ## @param plugins.netrcCreds .netrc secret file with a key "netrc" to use basic auth while downloading plugins
   netrcCreds: ""
-
-  extensionsDir: "/bitnami/sonarqube-extensions/"
-  # Set to true to not validate the server's certificate to download plugin
+  ## @param plugins.extensionsDir Extensions base directory where to preload and provisioning plugins folder (extensionsDir/plugins)
+  extensionsDir: "/bitnami/sonarqube-extensions"
+  ## @param plugins.noCheckCertificate Set to true to not validate the server's certificate to download plugin
   noCheckCertificate: true
   ## Bitnami Shell image
   ## ref: https://hub.docker.com/r/bitnami/bitnami-shell/tags/

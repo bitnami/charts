@@ -68,7 +68,7 @@ spec:
             - name: install-plugins
               mountPath: /tmp/scripts/
             - name: provisioned-extensions
-              mountPath: /bitnami/sonarqube-extensions
+              mountPath: {{ .Values.plugins.extensionsDir }}
         {{- end }}
         {{- if .Values.sysctl.enabled }}
         ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
@@ -323,7 +323,7 @@ spec:
             - mountPath: /bitnami/sonarqube
               name: data
             - name: provisioned-extensions
-              mountPath: /bitnami/sonarqube-extensions
+              mountPath: {{ .Values.plugins.extensionsDir }}
           {{- if .Values.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
