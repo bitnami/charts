@@ -6,6 +6,8 @@ on:
       - synchronize
 permissions:
   repository-projects: write
+concurrency:
+  group: card-movement-${{ github.event.number }}
 jobs:
   comments_handler:
     runs-on: ubuntu-latest
@@ -15,11 +17,11 @@ jobs:
     # * PRs with 'bitnami' label.
     if: |
       github.actor != 'bitnami-bot' && github.event.pull_request.user.login != 'bitnami-bot' &&
-      (!contains(github.event.pull_request.labels.*.name, 'bitnami'))
+      (!contains(github.event.pull_request.labels.*.name, 'bitnami')) && (!contains(github.event.pull_request.labels.*.name, 'triage'))
     steps:
       - name: Move into In Progress
         uses: peter-evans/create-or-update-project-card@v2
         with:
           project-name: Support
           column-name: In progress
-          issue-number: ${{ github.event.pull_request.number }}
+          issue-number: ${{ github.event.number }}
