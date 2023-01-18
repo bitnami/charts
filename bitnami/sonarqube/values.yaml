@@ -907,21 +907,21 @@ primary:
   ## PostgreSQL service
   ##
   service:
-    ## @param postgresql.service.ports.postgresql PostgreSQL service port
-    ##
+  ## @param postgresql.primary.service.ports.postgresql PostgreSQL service port
+  ##
     ports:
       postgresql: 5432
   ## Enable persistence using Persistent Volume Claims
   ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
-    ## @param postgresql.persistence.enabled Use PVCs when deploying the PostgreSQL chart
+    ## @param postgresql.primary.persistence.enabled Use PVCs when deploying the PostgreSQL chart
     ##
     enabled: true
-    ## @param postgresql.persistence.existingClaim Use an existing PVC when deploying the PostgreSQL chart
+    ## @param postgresql.primary.persistence.existingClaim Use an existing PVC when deploying the PostgreSQL chart
     ##
     existingClaim: ""
-    ## @param postgresql.persistence.storageClass storageClass of the created PVCs
+    ## @param postgresql.primary.persistence.storageClass storageClass of the created PVCs
     ## postgresql data Persistent Volume Storage Class
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -930,10 +930,10 @@ primary:
     ##   GKE, AWS & OpenStack)
     ##
     storageClass: ""
-    ## @param postgresql.persistence.accessMode Access mode of the created PVCs
+    ## @param postgresql.primary.persistence.accessMode Access mode of the created PVCs
     ##
     accessMode: ReadWriteOnce
-    ## @param postgresql.persistence.size Size of the created PVCs
+    ## @param postgresql.primary.persistence.size Size of the created PVCs
     ##
     size: 8Gi
 
