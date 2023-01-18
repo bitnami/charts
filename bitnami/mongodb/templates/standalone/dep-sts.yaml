@@ -24,7 +24,7 @@ metadata:
 spec:
   replicas: 1
   {{- if .Values.useStatefulSet }}
-  serviceName: {{ include "mongodb.fullname" . }}
+  serviceName: {{ include "mongodb.service.nameOverride" . }}
   {{- end }}
   {{- if .Values.updateStrategy}}
   {{- if .Values.useStatefulSet }}

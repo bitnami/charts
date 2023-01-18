@@ -119,7 +119,7 @@ Then, run the following command:
     {{- if eq .Values.architecture "replicaset" }}
     mongosh admin --host "{{ join "," $mongoList }}" {{- if .Values.auth.enabled }} --authenticationDatabase admin -u root -p $MONGODB_ROOT_PASSWORD{{- end }}
     {{- else }}
-    mongosh admin --host "{{ template "mongodb.fullname" . }}" {{- if .Values.auth.enabled }} --authenticationDatabase admin -u root -p $MONGODB_ROOT_PASSWORD{{- end }}
+    mongosh admin --host "{{ template "mongodb.service.nameOverride" . }}" {{- if .Values.auth.enabled }} --authenticationDatabase admin -u root -p $MONGODB_ROOT_PASSWORD{{- end }}
     {{- end }}
 
 {{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled }}
@@ -163,20 +163,20 @@ To connect to your database from outside the cluster execute the following comma
 {{- if contains "NodePort" .Values.service.type }}
 
     export NODE_IP=$(kubectl get nodes --namespace {{ template "mongodb.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
-    export NODE_PORT=$(kubectl get --namespace {{ template "mongodb.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "mongodb.fullname" . }})
+    export NODE_PORT=$(kubectl get --namespace {{ template "mongodb.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "mongodb.service.nameOverride" . }})
     mongo --host $NODE_IP --port $NODE_PORT {{- if .Values.auth.enabled }} --authenticationDatabase admin -p $MONGODB_ROOT_PASSWORD{{- end }}
 
 {{- else if contains "LoadBalancer" .Values.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ template "mongodb.namespace" . }} -w {{ template "mongodb.fullname" . }}'
+        Watch the status with: 'kubectl get svc --namespace {{ template "mongodb.namespace" . }} -w {{ template "mongodb.service.nameOverride" . }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ template "mongodb.namespace" . }} {{ template "mongodb.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+    export SERVICE_IP=$(kubectl get svc --namespace {{ template "mongodb.namespace" . }} {{ template "mongodb.service.nameOverride" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
     mongosh --host $SERVICE_IP --port {{ $portNumber }} {{- if .Values.auth.enabled }} --authenticationDatabase admin -p $MONGODB_ROOT_PASSWORD{{- end }}
 
 {{- else if contains "ClusterIP" .Values.service.type }}
 
-    kubectl port-forward --namespace {{ template "mongodb.namespace" . }} svc/{{ template "mongodb.fullname" . }} {{ $portNumber }}:{{ $portNumber }} &
+    kubectl port-forward --namespace {{ template "mongodb.namespace" . }} svc/{{ template "mongodb.service.nameOverride" . }} {{ $portNumber }}:{{ $portNumber }} &
     mongosh --host 127.0.0.1 {{- if .Values.auth.enabled }} --authenticationDatabase admin -p $MONGODB_ROOT_PASSWORD{{- end }}
 
 {{- end }}
@@ -187,7 +187,7 @@ To connect to your database from outside the cluster execute the following comma
 
 To access the MongoDB&reg; Prometheus metrics, get the MongoDB&reg; Prometheus URL by running:
 
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "mongodb.fullname" . }}-metrics {{ .Values.metrics.service.ports.metrics }}:{{ .Values.metrics.service.ports.metrics }} &
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "mongodb.service.nameOverride" . }}-metrics {{ .Values.metrics.service.ports.metrics }}:{{ .Values.metrics.service.ports.metrics }} &
     echo "Prometheus Metrics URL: http://127.0.0.1:{{ .Values.metrics.service.ports.metrics }}/metrics"
 
 Then, open the obtained URL in a browser.
