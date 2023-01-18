@@ -454,9 +454,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.image.digest`                       | Redis&reg; Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
 | `metrics.image.pullPolicy`                   | Redis&reg; Exporter image pull policy                                                                               | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                  | Redis&reg; Exporter image pull secrets                                                                              | `[]`                     |
-| `metrics.startupProbe`                       | define startupProbe for metrics container                                                                           | `{}`                     |
 | `metrics.livenessProbe`                      | define livenessProbe for metrics container                                                                          | `{}`                     |
 | `metrics.readinessProbe`                     | define readinessProbe for metrics container                                                                         | `{}`                     |
+| `metrics.startupProbe`                       | define startupProbe for metrics container                                                                           | `{}`                     |
 | `metrics.command`                            | Override default metrics container init command (useful when using custom images)                                   | `[]`                     |
 | `metrics.redisTargetHost`                    | A way to specify an alternative Redis&reg; hostname                                                                 | `localhost`              |
 | `metrics.extraArgs`                          | Extra arguments for Redis&reg; exporter, for example:                                                               | `{}`                     |
