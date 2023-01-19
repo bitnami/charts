@@ -56957,6 +56957,38 @@ entries:
   metrics-server:
   - annotations:
       category: Analytics
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 0.6.2
+    created: "2023-01-19T17:41:42.341607086Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Metrics Server aggregates resource usage data, such as container
+      CPU and memory usage, in a Kubernetes cluster and makes it available via the
+      Metrics API.
+    digest: 83624e70f2fb91adbec8c5e1c1f043865fa3e8d36bc4bc3598b925e268ff4023
+    home: https://github.com/bitnami/charts/tree/main/bitnami/metrics-server
+    icon: https://bitnami.com/assets/stacks/metrics-server/img/metrics-server-stack-220x234.png
+    keywords:
+    - metrics-server
+    - cluster
+    - metrics
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: metrics-server
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/metrics-server
+    - https://github.com/kubernetes-incubator/metrics-server
+    urls:
+    - https://charts.bitnami.com/bitnami/metrics-server-6.2.7.tgz
+    version: 6.2.7
+  - annotations:
+      category: Analytics
     apiVersion: v2
     appVersion: 0.6.2
     created: "2023-01-01T20:05:36.581574811Z"
@@ -106531,4 +106563,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-01-19T15:15:51.888058624Z"
+generated: "2023-01-19T17:41:42.338590685Z"
