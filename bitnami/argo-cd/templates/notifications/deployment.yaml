@@ -68,8 +68,8 @@ spec:
             - {{ .Values.notifications.logFormat | quote }}
             - --loglevel
             - {{ .Values.notifications.logLevel | quote }}
-            - --metrics-addr
-            - ":{{ .Values.notifications.containerPorts.metrics }}"
+            - --metrics-port
+            - {{ .Values.notifications.containerPorts.metrics | quote }}
             - --argocd-repo-server
             - {{ include "argocd.repo-server" . }}:{{ .Values.repoServer.service.port }}
           {{- if .Values.notifications.extraArgs }}

@@ -48,6 +48,13 @@ Return the proper service name for Argo CD applicationSet controller
 {{- end -}}
 
 {{/*
+Return the proper service name for Argo CD notifications controller
+*/}}
+{{- define "argocd.notifications" -}}
+  {{- printf "%s-notifications" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+{{- end -}}
+
+{{/*
 Return the proper service name for Argo CD server
 */}}
 {{- define "argocd.server" -}}
