@@ -311,11 +311,6 @@ spec:
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customStartupProbe "context" $) | nindent 12 }}
           {{- else if .Values.metrics.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.startupProbe "enabled") "context" $) | nindent 12 }}
-            initialDelaySeconds: {{ .Values.metrics.startupProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.metrics.startupProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.metrics.startupProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.metrics.startupProbe.successThreshold }}
-            failureThreshold: {{ .Values.metrics.startupProbe.failureThreshold }}
             tcpSocket:
               port: metrics
           {{- end }}
