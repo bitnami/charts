@@ -21,7 +21,7 @@ jobs:
       - uses: actions/github-script@v6
         with:
           script: |
-            const cards = await github.rest.projects.listCards({
+            const {data: cards} = await github.rest.projects.listCards({
               column_id: ${{ env.SOLVED_COLUMN_ID }},
               archived_state: 'all',
               per_page: 100
