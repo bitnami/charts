@@ -973,18 +973,7 @@ notifications:
   ## @param notifications.command Override default container command (useful when using custom images)
   ##
   command: []
-  ## Arguments that will be used by default for the application controller
-  ## @param notifications.defaultArgs.enableLeaderElection Enable leader election
-  ## @param notifications.defaultArgs.policy Default policy
-  ## @param notifications.defaultArgs.debug Enable debug mode
-  ## @param notifications.defaultArgs.dryRun Enable dry-run mode 
-  ##
-  defaultArgs:
-    enableLeaderElection: false
-    policy: "sync"
-    debug: "false"
-    dryRun: "false"
-  ## @param notifications.args Override default container args (useful when using custom images). Overrides the defaultArgs.
+  ## @param notifications.args Override default container args (useful when using custom images).
   ##
   args: []
   ## @param notifications.extraArgs Add extra arguments to the default arguments for the Argo CD notifications controller
@@ -1335,7 +1324,7 @@ notifications:
       ##
       command: []
 
-      ## @param notifications.bots.slack.args Override default container args (useful when using custom images). Overrides the defaultArgs.
+      ## @param notifications.bots.slack.args Override default container args (useful when using custom images). 
       ##
       args: []
 
