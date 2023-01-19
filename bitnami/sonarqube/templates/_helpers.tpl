@@ -229,8 +229,12 @@ Create the name of the install_plugins configMap
 Set sonarqube.jvmOpts
 */}}
 {{- define "sonarqube.jvmOpts" -}}
-    {{- if .Values.caCerts.enabled -}}
+    {{- if and .Values.caCerts.enabled .Values.metrics.jmx.enabled -}}
+        {{ printf "-Djavax.net.ssl.trustStore=/bitnami/sonarqube/certs/cacerts -Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=10443 -Dcom.sun.management.jmxremote.rmi.port=10444 %s" .Values.jvmCeOpts | trim | quote }}
+    {{- else if .Values.caCerts.enabled -}}
         {{ printf "-Djavax.net.ssl.trustStore=/bitnami/sonarqube/certs/cacerts %s" .Values.jvmCeOpts | trim | quote }}
+    {{- else if .Values.metrics.jmx.enabled -}}
+        {{ printf "-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=10443 -Dcom.sun.management.jmxremote.rmi.port=10444 %s" .Values.jvmCeOpts | trim | quote }}
     {{- else -}}
         {{ printf "" }}
     {{- end -}}

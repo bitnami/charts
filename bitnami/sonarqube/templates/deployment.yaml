@@ -188,10 +188,6 @@ spec:
             - name: SONAR_SECURITY_REALM
               value: {{ .Values.sonarSecurityRealm | quote }}
             {{- end }}
-            - name: SONAR_WEB_JAVAOPTS
-              value: {{ template "sonarqube.jvmOpts" . }}
-            - name: SONAR_CE_JAVAOPTS
-              value: {{ template "sonarqube.jvmCEOpts" . }}
             {{- if .Values.sonarAuthenticatorDowncase }}
             - name: SONAR_AUTHENTICATOR_DOWNCASE
               value: {{ .Values.sonarAuthenticatorDowncase | quote }}
@@ -302,16 +298,10 @@ spec:
             - name: SONARQUBE_EXTRA_PROPERTIES
               value: {{ join "," .Values.extraProperties | quote }}
             {{- end }}
-
-
-
-
-            {{- if .Values.metrics.jmx.enabled }}
             - name: SONARQUBE_WEB_JAVA_ADD_OPTS
-              value: "-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=10443 -Dcom.sun.management.jmxremote.rmi.port=10444"
-            {{- end }}
-
-
+              value: {{ template "sonarqube.jvmOpts" . }}
+            - name: SONAR_CE_JAVAADDITIONALOPTS
+              value: {{ template "sonarqube.jvmCEOpts" . }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
