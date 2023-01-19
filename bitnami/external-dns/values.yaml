@@ -879,24 +879,30 @@ rbac:
   ## @param rbac.pspEnabled Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
   ##
   pspEnabled: false
-## @param containerSecurityContext Security context for the container
-## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-## Example:
-## securityContext:
-##   allowPrivilegeEscalation: false
-##   readOnlyRootFilesystem: true
-##   capabilities:
-##     drop: ["ALL"]
-##
-containerSecurityContext: {}
+## @param containerSecurityContext.enabled Enable container security context
+## @param containerSecurityContext.allowPrivilegeEscalation Enable privilege escalation or the container
+## @param containerSecurityContext.capabilities.drop Linux capabilities to drop
+## @param containerSecurityContext.readOnlyRootFilesystem Make containers rootfs ready-only
+## @param containerSecurityContext.runAsNonRoot Container must be required to run as non-root
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  enabled: true
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
 ## @param podSecurityContext.enabled Enable pod security context
-## @param podSecurityContext.fsGroup Group ID for the container
-## @param podSecurityContext.runAsUser User ID for the container
+## @param podSecurityContext.fsGroup Group ID for the pod
+## @param podSecurityContext.runAsUser User ID for the pod
+## @param podSecurityContext.seccompProfile.type Seccomp profile to use
 ##
 podSecurityContext:
   enabled: true
   fsGroup: 1001
   runAsUser: 1001
+  seccompProfile:
+    type: RuntimeDefault
 ## Container resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
