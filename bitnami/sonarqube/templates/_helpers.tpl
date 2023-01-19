@@ -212,8 +212,39 @@ Create the name of the deployment's install_plugins initContainer
 {{- end -}}
 
 {{/*
+Create the name of the deployment's caCerts initContainer
+*/}}
+{{- define "sonarqube.caCerts.initContainer" -}}
+    {{ printf "%s-ca-certs-initcontainer" (include "common.names.fullname" .) }}
+{{- end -}}
+
+{{/*
 Create the name of the install_plugins configMap
 */}}
 {{- define "sonarqube.installPlugins.configMap" -}}
     {{ printf "%s-install-plugins-configmap" (include "common.names.fullname" .) }}
 {{- end -}}
+
+{{/*
+Set sonarqube.jvmOpts
+*/}}
+{{- define "sonarqube.jvmOpts" -}}
+    {{- if .Values.caCerts.enabled -}}
+        {{ printf "-Djavax.net.ssl.trustStore=/bitnami/sonarqube/certs/cacerts %s" .Values.jvmCeOpts | trim | quote }}
+    {{- else -}}
+        {{ printf "" }}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Set sonarqube.jvmCEOpts
+*/}}
+{{- define "sonarqube.jvmCEOpts" -}}
+    {{- if .Values.caCerts.enabled -}}
+        {{ printf "-Djavax.net.ssl.trustStore=/bitnami/sonarqube/certs/cacerts %s".Values.jvmCeOpts | trim | quote }}
+    {{- else -}}
+        {{ printf "" }}
+    {{- end -}}
+{{- end -}}
+
+
