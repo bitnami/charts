@@ -1129,7 +1129,7 @@ apprepository:
 authProxy:
   ## @param authProxy.enabled Specifies whether Kubeapps should configure OAuth login/logout
   ##
-  enabled: false
+  enabled: true
   ## Bitnami OAuth2 Proxy image
   ## ref: https://hub.docker.com/r/bitnami/oauth2-proxy/tags/
   ## @param authProxy.image.registry OAuth2 Proxy image registry
@@ -1173,16 +1173,20 @@ authProxy:
   ## @param authProxy.clientSecret OAuth Client secret
   ## NOTE: Mandatory parameters for the internal auth-proxy
   ##
-  provider: ""
-  clientID: ""
-  clientSecret: ""
+  provider: "test"
+  clientID: "test"
+  clientSecret: "test"
   ## @param authProxy.cookieSecret Secret used by oauth2-proxy to encrypt any credentials
   ## NOTE: It must be a particular number of bytes. It's recommended using the following
   ## script to generate a cookieSecret:
   ##   python -c 'import os,base64; print base64.urlsafe_b64encode(os.urandom(16))'
   ## ref: https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/overview#generating-a-cookie-secret
   ##
-  cookieSecret: ""
+  cookieSecret: "test"
+  ## @param authProxy.existingOauth2Secret Name of an existing secret to use for Kubeapps credentials
+  ## `authProxy.provider`, `authProxy.clientID`, `authProxy.clientSecret` will be ignored
+  ##
+  existingOauth2Secret: ""
   ## @param authProxy.cookieRefresh Duration after which to refresh the cookie
   ##
   cookieRefresh: 2m
