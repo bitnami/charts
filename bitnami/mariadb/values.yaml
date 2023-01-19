@@ -313,12 +313,16 @@ primary:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param primary.containerSecurityContext.enabled MariaDB primary container securityContext
   ## @param primary.containerSecurityContext.runAsUser User ID for the MariaDB primary container
-  ## @param primary.containerSecurityContext.runAsNonRoot Set Controller container's Security Context runAsNonRoot
+  ## @param primary.containerSecurityContext.runAsNonRoot Set primary container's Security Context runAsNonRoot
+  ## @param primary.containerSecurityContext.privileged Set primary container's Security Context privileged
+  ## @param primary.containerSecurityContext.allowPrivilegeEscalation Set primary container's Security Context allowPrivilegeEscalation
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
   ## MariaDB primary container's resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -702,12 +706,16 @@ secondary:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param secondary.containerSecurityContext.enabled MariaDB secondary container securityContext
   ## @param secondary.containerSecurityContext.runAsUser User ID for the MariaDB secondary container
-  ## @param secondary.containerSecurityContext.runAsNonRoot Set Controller container's Security Context runAsNonRoot
+  ## @param secondary.containerSecurityContext.runAsNonRoot Set secondary container's Security Context runAsNonRoot
+  ## @param secondary.containerSecurityContext.privileged Set secondary container's Security Context privileged
+  ## @param secondary.containerSecurityContext.allowPrivilegeEscalation Set secondary container's Security Context allowPrivilegeEscalation
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
   ## MariaDB secondary container's resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -1081,6 +1089,8 @@ metrics:
   ## MariaDB metrics container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param metrics.containerSecurityContext.enabled Enable security context for MariaDB metrics container
+  ## @param metrics.containerSecurityContext.privileged Set metrics container's Security Context privileged
+  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set metrics container's Security Context allowPrivilegeEscalation
   ## Example:
   ##   containerSecurityContext:
   ##     enabled: true
@@ -1089,7 +1099,9 @@ metrics:
   ##     readOnlyRootFilesystem: true
   ##
   containerSecurityContext:
-    enabled: false
+    enabled: true
+    privileged: false
+    allowPrivilegeEscalation: false
   ## Mysqld Prometheus exporter resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
