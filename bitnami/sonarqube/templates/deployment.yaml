@@ -74,7 +74,7 @@ spec:
           resources: {{- toYaml .Values.plugins.resources | nindent 12 }}
             securityContext: {{- .Values.plugins.containerSecurityContext | toYaml | nindent 12 }}
         {{- end }}
-        {{- if .Values.caCerts }}
+        {{- if .Values.caCerts.enabled }}
         - name: {{ include "sonarqube.caCerts.initContainer" . }}
           image: {{ include "sonarqube.caCerts.image" . }}
           imagePullPolicy: {{ .Values.caCerts.image.pullPolicy  }}
@@ -388,7 +388,7 @@ spec:
         - name: provisioned-extensions
           emptyDir: {}
         {{- end }}
-        {{- if .Values.caCerts }}
+        {{- if .Values.caCerts.enabled }}
         - name: ca-certs
           secret:
             secretName: {{ .Values.caCerts.secret }}
