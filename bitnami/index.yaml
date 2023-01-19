@@ -99883,6 +99883,40 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 27.0.1
+    created: "2023-01-19T23:59:25.476003239Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Wildfly is a lightweight, open source application server, formerly
+      known as JBoss, that implements the latest enterprise Java standards.
+    digest: a739338cfa7188857dc985a6da1b897582241ed033429efd45d0071c01ae04f4
+    home: https://github.com/bitnami/charts/tree/main/bitnami/wildfly
+    icon: https://bitnami.com/assets/stacks/wildfly/img/wildfly-stack-220x234.png
+    keywords:
+    - wildfly
+    - java
+    - http
+    - web
+    - application server
+    - jsp
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: wildfly
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/wildfly
+    - http://wildfly.org
+    urls:
+    - https://charts.bitnami.com/bitnami/wildfly-14.1.1.tgz
+    version: 14.1.1
+  - annotations:
+      category: ApplicationServer
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 27.0.1
     created: "2023-01-17T08:51:18.311210482Z"
     dependencies:
     - name: common
@@ -106601,4 +106635,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-01-19T18:00:38.920059462Z"
+generated: "2023-01-19T23:59:25.471609684Z"
