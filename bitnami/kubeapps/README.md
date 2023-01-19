@@ -349,43 +349,43 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 
 ### Auth Proxy parameters
 
-| Name                                              | Description                                                                                                  | Value                  |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ---------------------- |
-| `authProxy.enabled`                               | Specifies whether Kubeapps should configure OAuth login/logout                                               | `false`                |
-| `authProxy.image.registry`                        | OAuth2 Proxy image registry                                                                                  | `docker.io`            |
-| `authProxy.image.repository`                      | OAuth2 Proxy image repository                                                                                | `bitnami/oauth2-proxy` |
-| `authProxy.image.tag`                             | OAuth2 Proxy image tag (immutable tags are recommended)                                                      | `7.4.0-debian-11-r22`  |
-| `authProxy.image.digest`                          | OAuth2 Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
-| `authProxy.image.pullPolicy`                      | OAuth2 Proxy image pull policy                                                                               | `IfNotPresent`         |
-| `authProxy.image.pullSecrets`                     | OAuth2 Proxy image pull secrets                                                                              | `[]`                   |
-| `authProxy.external`                              | Use an external Auth Proxy instead of deploying its own one                                                  | `false`                |
-| `authProxy.oauthLoginURI`                         | OAuth Login URI to which the Kubeapps frontend redirects for authn                                           | `/oauth2/start`        |
-| `authProxy.oauthLogoutURI`                        | OAuth Logout URI to which the Kubeapps frontend redirects for authn                                          | `/oauth2/sign_out`     |
-| `authProxy.skipKubeappsLoginPage`                 | Skip the Kubeapps login page when using OIDC and directly redirect to the IdP                                | `false`                |
-| `authProxy.provider`                              | OAuth provider                                                                                               | `""`                   |
-| `authProxy.clientID`                              | OAuth Client ID                                                                                              | `""`                   |
-| `authProxy.clientSecret`                          | OAuth Client secret                                                                                          | `""`                   |
-| `authProxy.cookieSecret`                          | Secret used by oauth2-proxy to encrypt any credentials                                                       | `""`                   |
-| `authProxy.existingOauth2Secret`                  | Name of an existing secret to use for Kubeapps credentials                                                   | `""`                   |
-| `authProxy.cookieRefresh`                         | Duration after which to refresh the cookie                                                                   | `2m`                   |
-| `authProxy.scope`                                 | OAuth scope specification                                                                                    | `openid email groups`  |
-| `authProxy.emailDomain`                           | Allowed email domains                                                                                        | `*`                    |
-| `authProxy.extraFlags`                            | Additional command line flags for oauth2-proxy                                                               | `[]`                   |
-| `authProxy.lifecycleHooks`                        | for the Auth Proxy container(s) to automate configuration before or after startup                            | `{}`                   |
-| `authProxy.command`                               | Override default container command (useful when using custom images)                                         | `[]`                   |
-| `authProxy.args`                                  | Override default container args (useful when using custom images)                                            | `[]`                   |
-| `authProxy.extraEnvVars`                          | Array with extra environment variables to add to the Auth Proxy container                                    | `[]`                   |
-| `authProxy.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for Auth Proxy containers(s)                            | `""`                   |
-| `authProxy.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for Auth Proxy containers(s)                               | `""`                   |
-| `authProxy.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Auth Proxy container(s)                     | `[]`                   |
-| `authProxy.containerPorts.proxy`                  | Auth Proxy HTTP container port                                                                               | `3000`                 |
-| `authProxy.containerSecurityContext.enabled`      | Enabled Auth Proxy containers' Security Context                                                              | `true`                 |
-| `authProxy.containerSecurityContext.runAsUser`    | Set Auth Proxy container's Security Context runAsUser                                                        | `1001`                 |
-| `authProxy.containerSecurityContext.runAsNonRoot` | Set Auth Proxy container's Security Context runAsNonRoot                                                     | `true`                 |
-| `authProxy.resources.limits.cpu`                  | The CPU limits for the OAuth2 Proxy container                                                                | `250m`                 |
-| `authProxy.resources.limits.memory`               | The memory limits for the OAuth2 Proxy container                                                             | `128Mi`                |
-| `authProxy.resources.requests.cpu`                | The requested CPU for the OAuth2 Proxy container                                                             | `25m`                  |
-| `authProxy.resources.requests.memory`             | The requested memory for the OAuth2 Proxy container                                                          | `32Mi`                 |
+| Name                                              | Description                                                                                                                         | Value                  |
+| ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `authProxy.enabled`                               | Specifies whether Kubeapps should configure OAuth login/logout                                                                      | `false`                |
+| `authProxy.image.registry`                        | OAuth2 Proxy image registry                                                                                                         | `docker.io`            |
+| `authProxy.image.repository`                      | OAuth2 Proxy image repository                                                                                                       | `bitnami/oauth2-proxy` |
+| `authProxy.image.tag`                             | OAuth2 Proxy image tag (immutable tags are recommended)                                                                             | `7.4.0-debian-11-r22`  |
+| `authProxy.image.digest`                          | OAuth2 Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                        | `""`                   |
+| `authProxy.image.pullPolicy`                      | OAuth2 Proxy image pull policy                                                                                                      | `IfNotPresent`         |
+| `authProxy.image.pullSecrets`                     | OAuth2 Proxy image pull secrets                                                                                                     | `[]`                   |
+| `authProxy.external`                              | Use an external Auth Proxy instead of deploying its own one                                                                         | `false`                |
+| `authProxy.oauthLoginURI`                         | OAuth Login URI to which the Kubeapps frontend redirects for authn                                                                  | `/oauth2/start`        |
+| `authProxy.oauthLogoutURI`                        | OAuth Logout URI to which the Kubeapps frontend redirects for authn                                                                 | `/oauth2/sign_out`     |
+| `authProxy.skipKubeappsLoginPage`                 | Skip the Kubeapps login page when using OIDC and directly redirect to the IdP                                                       | `false`                |
+| `authProxy.provider`                              | OAuth provider                                                                                                                      | `""`                   |
+| `authProxy.clientID`                              | OAuth Client ID                                                                                                                     | `""`                   |
+| `authProxy.clientSecret`                          | OAuth Client secret                                                                                                                 | `""`                   |
+| `authProxy.cookieSecret`                          | Secret used by oauth2-proxy to encrypt any credentials                                                                              | `""`                   |
+| `authProxy.existingOauth2Secret`                  | Name of an existing secret containing the OAuth client secrets, it should contain the keys clientID, clientSecret, and cookieSecret | `""`                   |
+| `authProxy.cookieRefresh`                         | Duration after which to refresh the cookie                                                                                          | `2m`                   |
+| `authProxy.scope`                                 | OAuth scope specification                                                                                                           | `openid email groups`  |
+| `authProxy.emailDomain`                           | Allowed email domains                                                                                                               | `*`                    |
+| `authProxy.extraFlags`                            | Additional command line flags for oauth2-proxy                                                                                      | `[]`                   |
+| `authProxy.lifecycleHooks`                        | for the Auth Proxy container(s) to automate configuration before or after startup                                                   | `{}`                   |
+| `authProxy.command`                               | Override default container command (useful when using custom images)                                                                | `[]`                   |
+| `authProxy.args`                                  | Override default container args (useful when using custom images)                                                                   | `[]`                   |
+| `authProxy.extraEnvVars`                          | Array with extra environment variables to add to the Auth Proxy container                                                           | `[]`                   |
+| `authProxy.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for Auth Proxy containers(s)                                                   | `""`                   |
+| `authProxy.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for Auth Proxy containers(s)                                                      | `""`                   |
+| `authProxy.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Auth Proxy container(s)                                            | `[]`                   |
+| `authProxy.containerPorts.proxy`                  | Auth Proxy HTTP container port                                                                                                      | `3000`                 |
+| `authProxy.containerSecurityContext.enabled`      | Enabled Auth Proxy containers' Security Context                                                                                     | `true`                 |
+| `authProxy.containerSecurityContext.runAsUser`    | Set Auth Proxy container's Security Context runAsUser                                                                               | `1001`                 |
+| `authProxy.containerSecurityContext.runAsNonRoot` | Set Auth Proxy container's Security Context runAsNonRoot                                                                            | `true`                 |
+| `authProxy.resources.limits.cpu`                  | The CPU limits for the OAuth2 Proxy container                                                                                       | `250m`                 |
+| `authProxy.resources.limits.memory`               | The memory limits for the OAuth2 Proxy container                                                                                    | `128Mi`                |
+| `authProxy.resources.requests.cpu`                | The requested CPU for the OAuth2 Proxy container                                                                                    | `25m`                  |
+| `authProxy.resources.requests.memory`             | The requested memory for the OAuth2 Proxy container                                                                                 | `32Mi`                 |
 
 
 ### Pinniped Proxy parameters
