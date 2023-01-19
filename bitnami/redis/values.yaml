@@ -1412,11 +1412,7 @@ metrics:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param metrics.livenessProbe define livenessProbe for metrics container
-  ##
-  ## @param metrics.livenessProbe define livenessProbe for metrics container
-  ##
-  ## Configure extra options for Redis&reg; containers' liveness and readiness probes
+  ## Configure extra options for Redis&reg; containers' liveness, readiness & startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param metrics.startupProbe.enabled Enable startupProbe on Redis&reg; replicas nodes
   ## @param metrics.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
