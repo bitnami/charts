@@ -6,14 +6,29 @@ on:
   pull_request_target:
     types:
       - closed
+permissions:
+  repository-projects: write
+# Avoid concurrency over the same issue
+concurrency:
+  group: card-movement-${{ github.event_name != 'issues' && github.event.number || github.event.issue.number }}
 jobs:
   send_to_solved:
     runs-on: ubuntu-latest
     steps:
       - name: Send to the Solved column
+        id: send-solved
         uses: peter-evans/create-or-update-project-card@v2
         with:
           project-name: Support
           column-name: 'Solved'
           token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
           issue-number: ${{ github.event_name != 'issues' && github.event.number || github.event.issue.number }}
+      - name: Remove cards from automated PRs
+        if: |
+          (github.event.issue != null && github.event.issue.user.login == 'bitnami-bot') ||
+          (github.event.issue == null && github.event.pull_request.user.login == 'bitnami-bot')
+        uses: actions/github-script@v6
+        script: |
+          github.rest.projects.deleteCard({
+            card_id: ${{ steps.send-solved.outputs.card-id }}
+          });
