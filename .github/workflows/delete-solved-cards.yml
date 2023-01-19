@@ -1,4 +1,4 @@
-name: '[Support] Archive Solved cards'
+name: '[Support] Delete Solved cards'
 on:
   workflow_dispatch:
   schedule:
@@ -7,7 +7,7 @@ on:
 permissions:
   repository-projects: write
 jobs:
-  archive:
+  delete-cards:
     runs-on: ubuntu-latest
     steps:
       - name: Repo checkout
@@ -31,7 +31,7 @@ jobs:
           cards.forEach(card => {
             const lastUpdate = new Date(card.updated_at);
             if (card.archived || lastUpdate < comparedDate ) {
-              github.rest.projects.removeCard({
+              github.rest.projects.deleteCard({
                 card_id: card.id
               });
             }
