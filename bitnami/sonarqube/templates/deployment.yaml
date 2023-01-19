@@ -71,35 +71,27 @@ spec:
             - name: provisioned-extensions
               mountPath: {{ .Values.plugins.extensionsDir }}
             {{- end }}
-          {{- if .Values.plugins.resources }}
           resources:
             {{ toYaml .Values.plugins.resources | indent 12 }}
-          {{- end }}
-          {{- if .Values.plugins.containerSecurityContext }}
           securityContext:
             {{ toYaml .Values.plugins.containerSecurityContext | indent 12 }}
-          {{- end }}
         {{- end }}
         {{- if .Values.caCerts }}
-                - name: {{ include "sonarqube.caCerts.initContainer" . }}
-                  image: {{ include "sonarqube.plugins.image" . }}
-                  imagePullPolicy: {{ .Values.plugins.image.pullPolicy  }}
-                  command: [ "sh" ]
-                  args: [ "-c", "cp -f \"${JAVA_HOME}/lib/security/cacerts\" /tmp/certs/cacerts; if [ \"$(ls /tmp/secrets/ca-certs)\" ]; then for f in /tmp/secrets/ca-certs/*; do keytool -importcert -file \"${f}\" -alias \"$(basename \"${f}\")\" -keystore /tmp/certs/cacerts -storepass changeit -trustcacerts -noprompt; done; fi;" ]
-                  {{- if .Values.caCerts.resources }}
-                  resources:
-                    {{ toYaml .Values.caCerts.resources | indent 12 }}
-                  {{- end }}
-                  {{- if .Values.caCerts.containerSecurityContext }}
-                  securityContext:
-                    {{ toYaml .Values.caCerts.containerSecurityContext | indent 12 }}
-                  {{- end }}
-                  volumeMounts:
-                    - mountPath: /tmp/certs
-                      name: data
-                      subPath: certs
-                    - mountPath: /tmp/secrets/ca-certs
-                      name: ca-certs
+        - name: {{ include "sonarqube.caCerts.initContainer" . }}
+          image: {{ include "sonarqube.caCerts.image" . }}
+          imagePullPolicy: {{ .Values.caCerts.image.pullPolicy  }}
+          command: [ "sh" ]
+          args: [ "-c", "cp -f \"${JAVA_HOME}/lib/security/cacerts\" /tmp/certs/cacerts; if [ \"$(ls /tmp/secrets/ca-certs)\" ]; then for f in /tmp/secrets/ca-certs/*; do keytool -importcert -file \"${f}\" -alias \"$(basename \"${f}\")\" -keystore /tmp/certs/cacerts -storepass changeit -trustcacerts -noprompt; done; fi;" ]
+          volumeMounts:
+            - mountPath: /tmp/certs
+              name: data
+              subPath: certs
+            - mountPath: /tmp/secrets/ca-certs
+              name: ca-certs
+          resources:
+            {{ toYaml .Values.caCerts.resources | indent 10 }}
+          securityContext:
+            {{ toYaml .Values.caCerts.containerSecurityContext | indent 10 }}
         {{- end }}
         {{- if .Values.sysctl.enabled }}
         ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)

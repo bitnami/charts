@@ -27,6 +27,13 @@ Return the proper install_plugins initContainer image name
 {{- end -}}
 
 {{/*
+Return the proper caCerts initContainer image name
+*/}}
+{{- define "sonarqube.caCerts.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.caCerts.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
 Return the proper sysctl image name
 */}}
 {{- define "sonarqube.metrics.jmx.image" -}}
@@ -245,7 +252,7 @@ Set sonarqube.jvmCEOpts
 */}}
 {{- define "sonarqube.jvmCEOpts" -}}
     {{- if .Values.caCerts.enabled -}}
-        {{ printf "-Djavax.net.ssl.trustStore=/bitnami/sonarqube/certs/cacerts %s".Values.jvmCeOpts | trim | quote }}
+        {{ printf "-Djavax.net.ssl.trustStore=/bitnami/sonarqube/certs/cacerts %s" .Values.jvmCeOpts | trim | quote }}
     {{- else -}}
         {{ printf "" }}
     {{- end -}}
