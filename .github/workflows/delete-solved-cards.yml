@@ -23,7 +23,7 @@ jobs:
           script: |
             const cards = await github.rest.projects.listCards({
               column_id: ${{ env.SOLVED_COLUMN_ID }},
-              archived_state: all,
+              archived_state: 'all',
               per_page: 100
             });
             // Remove cards without updates in last week.
