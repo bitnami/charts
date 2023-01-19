@@ -1183,8 +1183,8 @@ authProxy:
   ## ref: https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/overview#generating-a-cookie-secret
   ##
   cookieSecret: ""
-  ## @param authProxy.existingOauth2Secret Name of an existing secret to use for Kubeapps credentials
-  ## `authProxy.provider`, `authProxy.clientID`, `authProxy.clientSecret` will be ignored
+  ## @param authProxy.existingOauth2Secret Name of an existing secret containing the OAuth client secrets, it should contain the keys clientID, clientSecret, and cookieSecret
+  ##  If set, the values `authProxy.provider`, `authProxy.clientID`, `authProxy.clientSecret` will be ignored
   ##
   existingOauth2Secret: ""
   ## @param authProxy.cookieRefresh Duration after which to refresh the cookie
