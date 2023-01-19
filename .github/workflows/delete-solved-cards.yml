@@ -19,20 +19,21 @@ jobs:
         with:
           path: .github/workflows/
       - uses: actions/github-script@v6
-        script: |
-          const cards = await github.rest.projects.listCards({
-            column_id: ${{ env.SOLVED_COLUMN_ID }},
-            archived_state: all,
-            per_page: 100
-          });
-          // Remove cards without updates in last week.
-          const comparedDate = new Date();
-          comparedDate.setDate(comparedDate.getDate() - 7);
-          cards.forEach(card => {
-            const lastUpdate = new Date(card.updated_at);
-            if (card.archived || lastUpdate < comparedDate ) {
-              github.rest.projects.deleteCard({
-                card_id: card.id
-              });
-            }
-          });
+        with:
+          script: |
+            const cards = await github.rest.projects.listCards({
+              column_id: ${{ env.SOLVED_COLUMN_ID }},
+              archived_state: all,
+              per_page: 100
+            });
+            // Remove cards without updates in last week.
+            const comparedDate = new Date();
+            comparedDate.setDate(comparedDate.getDate() - 7);
+            cards.forEach(card => {
+              const lastUpdate = new Date(card.updated_at);
+              if (card.archived || lastUpdate < comparedDate ) {
+                github.rest.projects.deleteCard({
+                  card_id: card.id
+                });
+              }
+            });
