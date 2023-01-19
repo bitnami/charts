@@ -655,7 +655,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### 1.0.0
 
-This major release bumps the MinIO version to 2023. No major issues are expected during the upgrade.
+This major updates the MinIO&reg; subchart to its newest major, 12.0.0. This subchart's major doesn't include any changes affecting its use as a subchart for Mastodon, so no major issues are expected during the upgrade.
 
 ## License
 
