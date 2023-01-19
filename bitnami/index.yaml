@@ -53569,6 +53569,57 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 4.0.2
+    created: "2023-01-19T11:46:29.352861657Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 17.x.x
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.x.x
+    - condition: elasticsearch.enabled
+      name: elasticsearch
+      repository: https://charts.bitnami.com/bitnami
+      version: 19.x.x
+    - condition: minio.enabled
+      name: minio
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.x.x
+    - condition: apache.enabled
+      name: apache
+      repository: https://charts.bitnami.com/bitnami
+      version: 9.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Mastodon is self-hosted social network server based on ActivityPub.
+      Written in Ruby, features real-time updates, multimedia attachments and no vendor
+      lock-in.
+    digest: c6788dcdef5d51c9de5079ede32e4823119a800280c65e8feecab175038e8f00
+    home: https://joinmastodon.org/
+    icon: https://bitnami.com/assets/stacks/mastodon/img/mastodon-stack-220x234.png
+    keywords:
+    - development
+    - dashboards
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: mastodon
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/mastodon
+    - https://github.com/mastodon/mastodon/
+    urls:
+    - https://charts.bitnami.com/bitnami/mastodon-1.0.0.tgz
+    version: 1.0.0
+  - annotations:
+      category: CMS
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 4.0.2
     created: "2023-01-17T07:48:42.19641451Z"
     dependencies:
     - condition: redis.enabled
@@ -106404,4 +106455,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-01-19T11:21:25.010918417Z"
+generated: "2023-01-19T11:46:29.321299831Z"
