@@ -151,7 +151,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
 | `web.hostAliases`                                       | Mastodon web pods host aliases                                                                                           | `[]`             |
 | `web.podLabels`                                         | Extra labels for Mastodon web pods                                                                                       | `{}`             |
-| `web.podAnnotations`                                    | Annotations for Mastodon web pods                                                                                        | `{}`             |
+
 | `web.podAffinityPreset`                                 | Pod affinity preset. Ignored if `web.affinity` is set. Allowed values: `soft` or `hard`                                  | `""`             |
 | `web.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `web.affinity` is set. Allowed values: `soft` or `hard`                             | `soft`           |
 | `web.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `web.affinity` is set. Allowed values: `soft` or `hard`                            | `""`             |
@@ -650,6 +650,12 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## Notable changes
+
+### 1.0.0
+
+This major release bumps the MinIO version to 2023. No major issues are expected during the upgrade.
 
 ## License
 
