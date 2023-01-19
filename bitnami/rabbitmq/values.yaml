@@ -135,9 +135,6 @@ auth:
   ## existingPasswordSecret: name-of-existing-secret
   ##
   existingPasswordSecret: ""
-  ## @param auth.enableGuestUser Enable guest user access? Be advised, that enabling the guest user is a possible security risk!
-  ##
-  enableGuestUser: false
   ## @param auth.erlangCookie Erlang cookie to determine whether different nodes are allowed to communicate with each other
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
   ##
@@ -364,7 +361,7 @@ configuration: |-
   # queue master locator
   queue_master_locator = min-masters
   # enable guest user
-  loopback_users.guest = {{ .Values.auth.enableGuestUser }}
+  loopback_users.guest = false
   {{ tpl .Values.extraConfiguration . }}
   {{- if .Values.auth.tls.enabled }}
   ssl_options.verify = {{ .Values.auth.tls.sslOptionsVerify }}
