@@ -1413,7 +1413,7 @@ metrics:
     ##
     pullSecrets: []
   ## Configure extra options for Redis&reg; containers' liveness, readiness & startup probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
   ## @param metrics.startupProbe.enabled Enable startupProbe on Redis&reg; replicas nodes
   ## @param metrics.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
   ## @param metrics.startupProbe.periodSeconds Period seconds for startupProbe
@@ -1456,13 +1456,13 @@ metrics:
     timeoutSeconds: 1
     successThreshold: 1
     failureThreshold: 3
-  ## @param master.customStartupProbe Custom startupProbe that overrides the default one
+  ## @param metrics.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-  ## @param master.customLivenessProbe Custom livenessProbe that overrides the default one
+  ## @param metrics.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
-  ## @param master.customReadinessProbe Custom readinessProbe that overrides the default one
+  ## @param metrics.customReadinessProbe Custom readinessProbe that overrides the default one
   ##
   customReadinessProbe: {}
   ## @param metrics.command Override default metrics container init command (useful when using custom images)
