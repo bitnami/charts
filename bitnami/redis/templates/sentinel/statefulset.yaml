@@ -541,11 +541,6 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.metrics.livenessProbe.enabled }}
           livenessProbe:
-            initialDelaySeconds: {{ .Values.metrics.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.metrics.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.metrics.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.metrics.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.metrics.livenessProbe.failureThreshold }}
             tcpSocket:
               port: metrics
           {{- end }}
@@ -553,11 +548,6 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.metrics.readinessProbe.enabled }}
           readinessProbe:
-            initialDelaySeconds: {{ .Values.metrics.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.metrics.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.metrics.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.metrics.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.metrics.readinessProbe.failureThreshold }}
             httpGet:
               path: /
               port: metrics
