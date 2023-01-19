@@ -351,7 +351,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 
 | Name                                              | Description                                                                                                  | Value                  |
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ---------------------- |
-| `authProxy.enabled`                               | Specifies whether Kubeapps should configure OAuth login/logout                                               | `false`                |
+| `authProxy.enabled`                               | Specifies whether Kubeapps should configure OAuth login/logout                                               | `true`                 |
 | `authProxy.image.registry`                        | OAuth2 Proxy image registry                                                                                  | `docker.io`            |
 | `authProxy.image.repository`                      | OAuth2 Proxy image repository                                                                                | `bitnami/oauth2-proxy` |
 | `authProxy.image.tag`                             | OAuth2 Proxy image tag (immutable tags are recommended)                                                      | `7.4.0-debian-11-r22`  |
@@ -362,10 +362,11 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `authProxy.oauthLoginURI`                         | OAuth Login URI to which the Kubeapps frontend redirects for authn                                           | `/oauth2/start`        |
 | `authProxy.oauthLogoutURI`                        | OAuth Logout URI to which the Kubeapps frontend redirects for authn                                          | `/oauth2/sign_out`     |
 | `authProxy.skipKubeappsLoginPage`                 | Skip the Kubeapps login page when using OIDC and directly redirect to the IdP                                | `false`                |
-| `authProxy.provider`                              | OAuth provider                                                                                               | `""`                   |
-| `authProxy.clientID`                              | OAuth Client ID                                                                                              | `""`                   |
-| `authProxy.clientSecret`                          | OAuth Client secret                                                                                          | `""`                   |
-| `authProxy.cookieSecret`                          | Secret used by oauth2-proxy to encrypt any credentials                                                       | `""`                   |
+| `authProxy.provider`                              | OAuth provider                                                                                               | `test`                 |
+| `authProxy.clientID`                              | OAuth Client ID                                                                                              | `test`                 |
+| `authProxy.clientSecret`                          | OAuth Client secret                                                                                          | `test`                 |
+| `authProxy.cookieSecret`                          | Secret used by oauth2-proxy to encrypt any credentials                                                       | `test`                 |
+| `authProxy.existingOauth2Secret`                  | Name of an existing secret to use for Kubeapps credentials                                                   | `""`                   |
 | `authProxy.cookieRefresh`                         | Duration after which to refresh the cookie                                                                   | `2m`                   |
 | `authProxy.scope`                                 | OAuth scope specification                                                                                    | `openid email groups`  |
 | `authProxy.emailDomain`                           | Allowed email domains                                                                                        | `*`                    |
