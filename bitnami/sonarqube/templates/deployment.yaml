@@ -71,10 +71,8 @@ spec:
             - name: provisioned-extensions
               mountPath: {{ .Values.plugins.extensionsDir }}
             {{- end }}
-          resources:
-            {{ toYaml .Values.plugins.resources | indent 12 }}
-          securityContext:
-            {{ toYaml .Values.plugins.containerSecurityContext | indent 12 }}
+          resources: {{- toYaml .Values.plugins.resources | nindent 12 }}
+            securityContext: {{- .Values.plugins.containerSecurityContext | toYaml | nindent 12 }}
         {{- end }}
         {{- if .Values.caCerts }}
         - name: {{ include "sonarqube.caCerts.initContainer" . }}
@@ -88,10 +86,8 @@ spec:
               subPath: certs
             - mountPath: /tmp/secrets/ca-certs
               name: ca-certs
-          resources:
-            {{ toYaml .Values.caCerts.resources | indent 10 }}
-          securityContext:
-            {{ toYaml .Values.caCerts.containerSecurityContext | indent 10 }}
+          resources: {{- toYaml .Values.caCerts.resources | nindent 12 }}
+          securityContext: {{- .Values.caCerts.containerSecurityContext | toYaml | nindent 12 }}
         {{- end }}
         {{- if .Values.sysctl.enabled }}
         ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
