@@ -28,7 +28,8 @@ jobs:
           (github.event.issue != null && github.event.issue.user.login == 'bitnami-bot') ||
           (github.event.issue == null && github.event.pull_request.user.login == 'bitnami-bot')
         uses: actions/github-script@v6
-        script: |
-          github.rest.projects.deleteCard({
-            card_id: ${{ steps.send-solved.outputs.card-id }}
-          });
+        with:
+          script: |
+            github.rest.projects.deleteCard({
+              card_id: ${{ steps.send-solved.outputs.card-id }}
+            });
