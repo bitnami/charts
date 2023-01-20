@@ -40,12 +40,12 @@ spec:
   loadBalancerIP: {{ .Values.querier.service.loadBalancerIP }}
   {{- end }}
   ports:
-    - name: http-metrics
-      port: {{ .Values.querier.service.ports.http-metrics }}
-      targetPort: http-metrics
+    - name: http
+      port: {{ .Values.querier.service.ports.http }}
+      targetPort: http
       protocol: TCP
-      {{- if and (or (eq .Values.querier.service.type "NodePort") (eq .Values.querier.service.type "LoadBalancer")) (not (empty .Values.querier.service.nodePorts.http-metrics)) }}
-      nodePort: {{ .Values.querier.service.nodePorts.http-metrics }}
+      {{- if and (or (eq .Values.querier.service.type "NodePort") (eq .Values.querier.service.type "LoadBalancer")) (not (empty .Values.querier.service.nodePorts.http)) }}
+      nodePort: {{ .Values.querier.service.nodePorts.http }}
       {{- else if eq .Values.querier.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}

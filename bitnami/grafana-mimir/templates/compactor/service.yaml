@@ -1,4 +1,3 @@
-{{- if .Values.compactor.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -40,12 +39,12 @@ spec:
   loadBalancerIP: {{ .Values.compactor.service.loadBalancerIP }}
   {{- end }}
   ports:
-    - name: http-metrics
-      port: {{ .Values.compactor.service.ports.http-metrics }}
-      targetPort: http-metrics
+    - name: http
+      port: {{ .Values.compactor.service.ports.http }}
+      targetPort: http
       protocol: TCP
-      {{- if and (or (eq .Values.compactor.service.type "NodePort") (eq .Values.compactor.service.type "LoadBalancer")) (not (empty .Values.compactor.service.nodePorts.http-metrics)) }}
-      nodePort: {{ .Values.compactor.service.nodePorts.http-metrics }}
+      {{- if and (or (eq .Values.compactor.service.type "NodePort") (eq .Values.compactor.service.type "LoadBalancer")) (not (empty .Values.compactor.service.nodePorts.http)) }}
+      nodePort: {{ .Values.compactor.service.nodePorts.http }}
       {{- else if eq .Values.compactor.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
@@ -64,4 +63,3 @@ spec:
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/part-of: grafana-mimir
     app.kubernetes.io/component: compactor
-{{- end }}

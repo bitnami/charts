@@ -1,8 +1,7 @@
-{{- if .Values.distributor.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
-  name:  {{ template "grafana-mimir.distributor.fullname" . }}-headless
+  name:  {{ template "grafana-mimir.querier.fullname" . }}-headless
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: grafana-mimir
@@ -10,10 +9,10 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if or .Values.distributor.service.annotations .Values.commonAnnotations }}
+  {{- if or .Values.querier.service.annotations .Values.commonAnnotations }}
   annotations:
-    {{- if .Values.distributor.service.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.distributor.service.annotations "context" $) | nindent 4 }}
+    {{- if .Values.querier.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.querier.service.annotations "context" $) | nindent 4 }}
     {{- end }}
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -24,28 +23,27 @@ spec:
   type: ClusterIP
   clusterIP: None
   ports:
-    - name: http-metrics
-      port: {{ .Values.distributor.service.ports.http-metrics }}
-      targetPort: http-metrics
+    - name: http
+      port: {{ .Values.querier.service.ports.http }}
+      targetPort: http
       protocol: TCP
-      {{- if and (or (eq .Values.distributor.service.type "NodePort") (eq .Values.distributor.service.type "LoadBalancer")) (not (empty .Values.distributor.service.nodePorts.http-metrics)) }}
-      nodePort: {{ .Values.distributor.service.nodePorts.http-metrics }}
-      {{- else if eq .Values.distributor.service.type "ClusterIP" }}
+      {{- if and (or (eq .Values.querier.service.type "NodePort") (eq .Values.querier.service.type "LoadBalancer")) (not (empty .Values.querier.service.nodePorts.http)) }}
+      nodePort: {{ .Values.querier.service.nodePorts.http }}
+      {{- else if eq .Values.querier.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
     - name: grpc
-      port: {{ .Values.distributor.service.ports.grpc }}
+      port: {{ .Values.querier.service.ports.grpc }}
       targetPort: grpc
       protocol: TCP
-      {{- if and (or (eq .Values.distributor.service.type "NodePort") (eq .Values.distributor.service.type "LoadBalancer")) (not (empty .Values.distributor.service.nodePorts.grpc)) }}
-      nodePort: {{ .Values.distributor.service.nodePorts.grpc }}
-      {{- else if eq .Values.distributor.service.type "ClusterIP" }}
+      {{- if and (or (eq .Values.querier.service.type "NodePort") (eq .Values.querier.service.type "LoadBalancer")) (not (empty .Values.querier.service.nodePorts.grpc)) }}
+      nodePort: {{ .Values.querier.service.nodePorts.grpc }}
+      {{- else if eq .Values.querier.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    {{- if .Values.distributor.service.extraPorts }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.distributor.service.extraPorts "context" $) | nindent 4 }}
+    {{- if .Values.querier.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.querier.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/part-of: grafana-mimir
     app.kubernetes.io/component: distributor
-{{- end }}

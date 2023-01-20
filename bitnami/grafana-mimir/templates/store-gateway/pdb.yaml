@@ -1,5 +1,5 @@
-{{- $replicaCount := int .Values.store-gateway.replicaCount }}
-{{- if and .Values.store-gateway.pdb.create (gt $replicaCount 1) }}
+{{- $replicaCount := int .Values.storeGateway.replicaCount }}
+{{- if and .Values.storeGateway.pdb.create (gt $replicaCount 1) }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
@@ -15,11 +15,11 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if .Values.store-gateway.pdb.minAvailable }}
-  minAvailable: {{ .Values.store-gateway.pdb.minAvailable }}
+  {{- if .Values.storeGateway.pdb.minAvailable }}
+  minAvailable: {{ .Values.storeGateway.pdb.minAvailable }}
   {{- end  }}
-  {{- if .Values.store-gateway.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.store-gateway.pdb.maxUnavailable }}
+  {{- if .Values.storeGateway.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.storeGateway.pdb.maxUnavailable }}
   {{- end  }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}

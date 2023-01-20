@@ -6,6 +6,13 @@ Return the proper Grafana Mimir image name
 {{- end -}}
 
 {{/*
+Return the proper Grafana Mimir gateway image name
+*/}}
+{{- define "grafana-mimir.gateway.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.gateway.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
 Return the proper Grafana Mimir compactor fullname
 */}}
 {{- define "grafana-mimir.compactor.fullname" -}}
@@ -45,6 +52,61 @@ Return the proper Grafana Mimir store-gateway fullname
 */}}
 {{- define "grafana-mimir.store-gateway.fullname" -}}
 {{- printf "%s-%s" (include "common.names.fullname" .) "store-gateway" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Return the proper Grafana Mimir gateway fullname
+*/}}
+{{- define "grafana-mimir.gateway.fullname" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "gateway" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Return the proper Grafana Mimir ruler fullname
+*/}}
+{{- define "grafana-mimir.ruler.fullname" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "ruler" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Return the proper Grafana Mimir ruler fullname
+*/}}
+{{- define "grafana-mimir.gossip-ring.fullname" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "gossip-ring" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Return the proper Grafana Mimir alertmanager fullname
+*/}}
+{{- define "grafana-mimir.alertmanager.fullname" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "alertmanager" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Alertmanager http prefix
+*/}}
+{{- define "grafana-mimir.alertmanager.httpPrefix" -}}
+{{- print "/alertmanager" -}}
+{{- end -}}
+
+
+{{/*
+Prometheus http prefix
+*/}}
+{{- define "grafana-mimir.prometheus.httpPrefix" -}}
+{{- print "/prometheus" -}}
+{{- end -}}
+
+
+{{/*
+Get the Grafana Mimir configuration configmap.
+*/}}
+{{- define "grafana-mimir.mimir.configmapName" -}}
+{{- if .Values.mimir.existingConfigmap -}}
+    {{- .Values.mimir.existingConfigmap -}}
+{{- else }}
+    {{- printf "%s" (include "common.names.fullname" . ) -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -95,8 +157,8 @@ Compile all warnings into a single message.
 */}}
 {{- define "grafana-mimir.validateValues" -}}
 {{- $messages := list -}}
-{{- $messages := append $messages (include "grafana-mimir.validateValues.foo" .) -}}
-{{- $messages := append $messages (include "grafana-mimir.validateValues.bar" .) -}}
+{{/* $messages := append $messages (include "grafana-mimir.validateValues.foo" .) -}}
+{{- $messages := append $messages (include "grafana-mimir.validateValues.bar" .) */}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -212,9 +274,9 @@ Return the S3 credentials secret name
 {{/*
 Return the S3 access key id inside the secret
 */}}
-{{- define "grafana-mimir.s3.accessKeyID" -}}
+{{- define "grafana-mimir.s3.accessKeyIDKey" -}}
     {{- if .Values.minio.enabled -}}
-        {{- print .Values.minio.auth.rootUser  -}}
+        {{- print "root-user"  -}}
     {{- else -}}
         {{- print .Values.externalS3.existingSecretAccessKeyIDKey -}}
     {{- end -}}
@@ -223,9 +285,9 @@ Return the S3 access key id inside the secret
 {{/*
 Return the S3 secret access key inside the secret
 */}}
-{{- define "grafana-mimir.s3.secretAccessKey" -}}
+{{- define "grafana-mimir.s3.secretAccessKeyKey" -}}
     {{- if .Values.minio.enabled -}}
-        {{- print .Values.minio.auth.rootPassword  -}}
+        {{- print "root-password"  -}}
     {{- else -}}
         {{- print .Values.externalS3.existingSecretKeySecretKey -}}
     {{- end -}}

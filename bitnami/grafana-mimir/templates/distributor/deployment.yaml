@@ -1,4 +1,3 @@
-{{- if .Values.distributor.enabled }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
@@ -44,8 +43,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.distributor.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.distributor.podAffinityPreset "component" "%%COMPONENT_NAME%%" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.distributor.podAntiAffinityPreset "component" "%%COMPONENT_NAME%%" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.distributor.podAffinityPreset "component" "distributor" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.distributor.podAntiAffinityPreset "component" "distributor" "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.distributor.nodeAffinityPreset.type "key" .Values.distributor.nodeAffinityPreset.key "values" .Values.distributor.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.distributor.nodeSelector }}
@@ -94,21 +93,24 @@ spec:
             - -target=distributor
             - "-config.expand-env=true"
             - -config.file={{ .Values.mimir.dataDir }}/conf/mimir.yaml
-            {{- if .Values.ingester.zoneAwareReplication.migration.enabled }}
-              {{- if not .Values.ingester.zoneAwareReplication.migration.writePath }}
-            - "-ingester.ring.zone-awareness-enabled=false"
-              {{- end }}
-              {{- if .Values.ingester.zoneAwareReplication.migration.excludeDefaultZone }}
-            - "-ingester.ring.excluded-zones=zone-default"
-              {{- end }}
-            {{- end }}
             {{- if .Values.distributor.extraArgs }}
             {{- include "common.tplvalues.render" (dict "value" .Values.distributor.extraArgs "context" $) | nindent 12 }}
             {{- end }}
           {{- end }}
-          {{- if .Values.distributor.extraEnvVars }}
-          env: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.extraEnvVars "context" $) | nindent 12 }}
-          {{- end }}
+          env:
+            - name: MIMIR_S3_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "grafana-mimir.s3.secretName" . }}
+                  key: {{ include "grafana-mimir.s3.accessKeyIDKey" . }}
+            - name: MIMIR_S3_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "grafana-mimir.s3.secretName" . }}
+                  key: {{ include "grafana-mimir.s3.secretAccessKeyKey" . }}
+            {{- if .Values.compactor.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.compactor.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
           envFrom:
             {{- if .Values.distributor.extraEnvVarsCM }}
             - configMapRef:
@@ -119,11 +121,11 @@ spec:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.distributor.extraEnvVarsSecret "context" $) }}
             {{- end }}
           ports:
-            - containerPort: {{ .Values.loki.containerPorts.http }}
+            - containerPort: {{ .Values.mimir.containerPorts.http }}
               name: http
-            - containerPort: {{ .Values.loki.containerPorts.memberlist }}
-              name: memberlist
-            - containerPort: {{ .Values.loki.containerPorts.grpc }}
+            - containerPort: {{ .Values.mimir.containerPorts.gossipRing }}
+              name: http-memberlist
+            - containerPort: {{ .Values.mimir.containerPorts.grpc }}
               name: grpc
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.distributor.customLivenessProbe }}
@@ -132,7 +134,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.distributor.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /ready
-              port: http-metrics
+              port: http
           {{- end }}
           {{- if .Values.distributor.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.customReadinessProbe "context" $) | nindent 12 }}
@@ -140,14 +142,14 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.distributor.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /ready
-              port: http-metrics
+              port: http
           {{- end }}
           {{- if .Values.distributor.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.customStartupProbe "context" $) | nindent 12 }}
           {{- else if .Values.distributor.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.distributor.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: http-metrics
+              port: http
           {{- end }}
           {{- end }}
           {{- if .Values.distributor.lifecycleHooks }}
@@ -167,16 +169,10 @@ spec:
         {{- end }}
       volumes:
         - name: data
-          {{- if .Values.distributor.persistence.enabled }}
-          persistentVolumeClaim:
-            claimName: {{ .Values.distributor.persistence.existingClaim | default (include "grafana-mimir.distributor.fullname" .) }}
-          {{- else }}
           emptyDir: {}
-          {{- end }}
         - name: mimir-config
           configMap:
             name: {{ template "grafana-mimir.mimir.configmapName" . }}
         {{- if .Values.distributor.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.distributor.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
-{{- end }}

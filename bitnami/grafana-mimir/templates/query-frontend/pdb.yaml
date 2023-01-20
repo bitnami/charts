@@ -1,5 +1,5 @@
-{{- $replicaCount := int .Values.query-frontend.replicaCount }}
-{{- if and .Values.query-frontend.pdb.create (gt $replicaCount 1) }}
+{{- $replicaCount := int .Values.queryFrontend.replicaCount }}
+{{- if and .Values.queryFrontend.pdb.create (gt $replicaCount 1) }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
@@ -15,11 +15,11 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if .Values.query-frontend.pdb.minAvailable }}
-  minAvailable: {{ .Values.query-frontend.pdb.minAvailable }}
+  {{- if .Values.queryFrontend.pdb.minAvailable }}
+  minAvailable: {{ .Values.queryFrontend.pdb.minAvailable }}
   {{- end  }}
-  {{- if .Values.query-frontend.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.query-frontend.pdb.maxUnavailable }}
+  {{- if .Values.queryFrontend.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.queryFrontend.pdb.maxUnavailable }}
   {{- end  }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
