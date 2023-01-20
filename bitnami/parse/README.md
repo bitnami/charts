@@ -7,7 +7,7 @@ Parse is a platform that enables users to add a scalable and powerful backend to
 [Overview of Parse Server](http://parseplatform.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -33,6 +33,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/parse
 ```
 
@@ -329,7 +330,7 @@ The above parameters map to the env variables defined in [bitnami/parse](https:/
 >
 > To reserve a public IP address on GKE:
 >
-> ```bash
+> ```console
 > $ gcloud compute addresses create parse-public-ip
 > ```
 >
