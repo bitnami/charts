@@ -147,7 +147,11 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: ASSET_SYNCER_DB_URL
+              {{- if .Values.postgresql.enabled }}
               value: {{ printf "%s-hl:%d" (include "kubeapps.postgresql.host" .) (int (include "kubeapps.postgresql.port" .)) }}
+              {{- else }}
+              value: {{ printf "%s:%d" (include "kubeapps.postgresql.host" .) (int (include "kubeapps.postgresql.port" .)) }}
+              {{- end }}
             - name: ASSET_SYNCER_DB_NAME
               value: {{ .Values.postgresql.auth.database | quote }}
             - name: ASSET_SYNCER_DB_USERNAME
