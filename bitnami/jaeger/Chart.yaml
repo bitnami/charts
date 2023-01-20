@@ -27,4 +27,4 @@ name: jaeger
 sources:
   - https://github.com/jaegertracing/jaeger
   - https://www.jaegertracing.io/
-version: 1.0.0
+version: 1.0.1
