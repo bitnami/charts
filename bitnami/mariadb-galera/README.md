@@ -7,10 +7,10 @@ MariaDB Galera is a multi-primary database cluster solution for synchronous repl
 [Overview of MariaDB Galera](https://mariadb.com/kb/en/library/galera-cluster/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
-```bash
+```console
 $ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/mariadb-galera
 ```
@@ -29,15 +29,10 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 ## Installing the Chart
 
-Add the `bitnami` charts repo to Helm:
-
-```bash
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-```
-
 To install the chart with the release name `my-release`:
 
-```bash
+```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/mariadb-galera
 ```
 
@@ -49,13 +44,13 @@ The command deploys MariaDB Galera on the Kubernetes cluster in the default conf
 
 For a graceful termination, set the replica count of the Pods in the `mariadb-galera` StatefulSet to `0`:
 
-```bash
+```console
 $ kubectl scale sts my-release-mariadb-galera --replicas=0
 ```
 
 To uninstall/delete the `my-release` release:
 
-```bash
+```console
 $ helm delete --purge my-release
 ```
 
@@ -267,7 +262,7 @@ The above parameters map to the env variables defined in [bitnami/mariadb-galera
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
-```bash
+```console
 $ helm install my-release \
   --set rootUser.password=secretpassword,
   --set db.user=app_database \
@@ -280,7 +275,7 @@ The above command sets the MariaDB `root` account password to `secretpassword`. 
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
-```bash
+```console
 $ helm install my-release -f values.yaml my-repo/mariadb-galera
 ```
 
@@ -292,7 +287,7 @@ While the chart allows you to specify the server configuration using the `.maria
 
 For example, if you want to enable the PAM cleartext plugin, specify the command line parameter while deploying the chart like so:
 
-```bash
+```console
 $ helm install my-release \
   --set extraFlags="--pam-use-cleartext-plugin=ON" \
   my-repo/mariadb-galera
@@ -367,7 +362,7 @@ For example:
 First, create the secret with the cetificates files:
 
 ```console
-kubectl create secret generic certificates-tls-secret --from-file=./cert.pem --from-file=./cert.key --from-file=./ca.pem
+$ kubectl create secret generic certificates-tls-secret --from-file=./cert.pem --from-file=./cert.key --from-file=./ca.pem
 ```
 
 Then, use the following parameters:
@@ -458,7 +453,7 @@ To restart the cluster you need to check the state in which it is after being st
 
 First you need to get the name of the persistent volume claims (pvc), for example:
 
-```bash
+```console
 $ kubectl get pvc
 NAME                              STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
 data-my-galera-mariadb-galera-0   Bound    pvc-a496aded-f604-4a2d-b934-174907c4d235   8Gi        RWO            gp2            25h
@@ -468,8 +463,8 @@ data-my-galera-mariadb-galera-2   Bound    pvc-61644bc9-2d7d-4e84-bf32-35e59d909
 
 The following command will print the content of `grastate.dat` for the persistent volume claim `data-my-galera-mariadb-galera-2`. This needs to be run for each of the pvc. You will need to change this name accordingly with yours for each PVC.
 
-```bash
-kubectl run -i --rm --tty volpod --overrides='
+```console
+$ kubectl run -i --rm --tty volpod --overrides='
 {
     "apiVersion": "v1",
     "kind": "Pod",
@@ -516,8 +511,8 @@ There are two possible scenarios:
 
 In this case you will need the node number `N` and run:
 
-```bash
-helm install my-release my-repo/mariadb-galera \
+```console
+$ helm install my-release my-repo/mariadb-galera \
 --set rootUser.password=XXXX \
 --set galera.mariabackup.password=YYYY \
 --set galera.bootstrap.forceBootstrap=true \
@@ -529,8 +524,8 @@ helm install my-release my-repo/mariadb-galera \
 
 In this case the cluster was not stopped cleanly and you need to pick one to force the bootstrap from. The one to be chosen in the one with the highest `seqno` in `/bitnami/mariadb/data/grastate.dat`. The following example shows how to force bootstrap from node 3.
 
-```bash
-helm install my-release my-repo/mariadb-galera \
+```console
+$ helm install my-release my-repo/mariadb-galera \
 --set rootUser.password=XXXX \
 --set galera.mariabackup.password=YYYY \
 --set galera.bootstrap.forceBootstrap=true \
@@ -544,7 +539,7 @@ helm install my-release my-repo/mariadb-galera \
 After you have started the cluster by forcing the bootstraping on one of the nodes, you will need to remove the forcing so the node can restart with normality.
 
 ```
-helm upgrade my-release my-repo/mariadb-galera \
+$ helm upgrade my-release my-repo/mariadb-galera \
 --set rootUser.password=XXXX \
 --set galera.mariabackup.password=YYYY \
 --set podManagementPolicy=Parallel
@@ -570,7 +565,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 It's necessary to specify the existing passwords while performing a upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `rootUser.password`, `db.password` and `galera.mariabackup.password` parameters when upgrading the chart:
 
-```bash
+```console
 $ helm upgrade my-release my-repo/mariadb-galera \
     --set rootUser.password=[ROOT_PASSWORD] \
     --set db.password=[MARIADB_PASSWORD] \
