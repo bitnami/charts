@@ -1,5 +1,5 @@
 {{- $replicaCount := int .Values.%%MAIN_OBJECT_BLOCK%%.replicaCount }}
-{{- if and .Values.%%MAIN_OBJECT_BLOCK%%.pdb.create (gt $replicaCount 1) }}
+{{- if and .Values.%%MAIN_OBJECT_BLOCK%%.pdb.create (or (gt $replicaCount 1) .Values.%%MAIN_OBJECT_BLOCK%%.autoscaling.enabled) }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
