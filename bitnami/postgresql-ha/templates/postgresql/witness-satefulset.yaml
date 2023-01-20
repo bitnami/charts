@@ -134,7 +134,7 @@ spec:
       containers:
         - name: postgresql
           image: {{ include "postgresql-ha.postgresql.image" . }}
-          imagePullPolicy: {{ .Values.witness.image.pullPolicy | quote }}
+          imagePullPolicy: {{ .Values.postgresql.image.pullPolicy | quote }}
           {{- if .Values.witness.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.witness.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
@@ -167,7 +167,7 @@ spec:
           {{- $clusterDomain:= .Values.clusterDomain }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" (or .Values.witness.image.debug .Values.diagnosticMode.enabled) | quote }}
+              value: {{ ternary "true" "false" (or .Values.postgresql.image.debug .Values.diagnosticMode.enabled) | quote }}
             # PostgreSQL configuration
             - name: POSTGRESQL_VOLUME_DIR
               value: {{ .Values.persistence.mountPath | quote }}
@@ -232,7 +232,7 @@ spec:
             - name: POSTGRESQL_CLIENT_MIN_MESSAGES
               value: {{ .Values.witness.audit.clientMinMessages | quote }}
             - name: POSTGRESQL_SHARED_PRELOAD_LIBRARIES
-              value: {{ .Values.witness.sharedPreloadLibraries | quote }}
+              value: {{ .Values.postgresql.sharedPreloadLibraries | quote }}
             {{- if .Values.witness.maxConnections }}
             - name: POSTGRESQL_MAX_CONNECTIONS
               value: {{ .Values.witness.maxConnections | quote }}
@@ -337,20 +337,6 @@ spec:
             {{- if (include "postgresql-ha.repmgrDatabase" .) }}
             - name: REPMGR_DATABASE
               value: {{ (include "postgresql-ha.repmgrDatabase" .) | quote }}
-            {{- end }}
-            - name: REPMGR_FENCE_OLD_PRIMARY
-              value: {{ ternary "yes" "no" .Values.witness.repmgrFenceOldPrimary | quote }}
-            {{- if .Values.witness.repmgrChildNodesCheckInterval }}
-            - name: REPMGR_CHILD_NODES_CHECK_INTERVAL
-              value: {{ .Values.witness.repmgrChildNodesCheckInterval | quote }}
-            {{- end }}
-            {{- if .Values.witness.repmgrChildNodesConnectedMinCount }}
-            - name: REPMGR_CHILD_NODES_CONNECTED_MIN_COUNT
-              value: {{ .Values.witness.repmgrChildNodesConnectedMinCount | quote }}
-            {{- end }}
-            {{- if .Values.witness.repmgrChildNodesDisconnectTimeout }}
-            - name: REPMGR_CHILD_NODES_DISCONNECT_TIMEOUT
-              value: {{ .Values.witness.repmgrChildNodesDisconnectTimeout | quote }}
             {{- end }}
             {{- if .Values.witness.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.witness.extraEnvVars "context" $) | nindent 12 }}

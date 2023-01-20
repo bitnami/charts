@@ -581,11 +581,8 @@ postgresql:
 witness:
   ## ref: https://hub.docker.com/r/bitnami/postgresql/tags/
   ## @param witness.create Create PostgreSQL witness nodes
-  ## @param witness.image.debug Specify if debug logs should be enabled
   ##
   create: false
-  image:
-    debug: false
   ## @param witness.labels Labels to add to the StatefulSet. Evaluated as template
   ##
   labels: {}
@@ -839,19 +836,11 @@ witness:
   ## @param witness.repmgrConnectTimeout Repmgr backend connection timeout (in seconds)
   ## @param witness.repmgrReconnectAttempts Repmgr backend reconnection attempts
   ## @param witness.repmgrReconnectInterval Repmgr backend reconnection interval (in seconds)
-  ## @param witness.repmgrFenceOldPrimary Set if fencing of old primary in multiple primary situation is desired
-  ## @param witness.repmgrChildNodesCheckInterval Repmgr child nodes check interval (in seconds)
-  ## @param witness.repmgrChildNodesConnectedMinCount Repmgr minimum number of connected child nodes before being considered as failed primary for fencing
-  ## @param witness.repmgrChildNodesDisconnectTimeout Repmgr time before node will be fenced when insufficient child nodes are detected (in seconds)
   ##
   repmgrLogLevel: NOTICE
   repmgrConnectTimeout: 5
   repmgrReconnectAttempts: 2
   repmgrReconnectInterval: 3
-  repmgrFenceOldPrimary: false
-  repmgrChildNodesCheckInterval: 5
-  repmgrChildNodesConnectedMinCount: 1
-  repmgrChildNodesDisconnectTimeout: 30
 
   ## Audit settings
   ## https://github.com/bitnami/containers/tree/main/bitnami/postgresql#auditing
@@ -881,9 +870,6 @@ witness:
     ## @param witness.audit.logTimezone Timezone for the log timestamps
     ##
     logTimezone: ""
-  ## @param witness.sharedPreloadLibraries Shared preload libraries (comma-separated list)
-  ##
-  sharedPreloadLibraries: "pgaudit, repmgr"
   ## @param witness.maxConnections Maximum total connections
   ##
   maxConnections: ""
