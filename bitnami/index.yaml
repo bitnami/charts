@@ -76917,6 +76917,37 @@ entries:
   pinniped:
   - annotations:
       category: Infrastructure
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 0.22.0
+    created: "2023-01-20T08:11:49.668530795Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Pinniped is an identity service provider for Kubernetes. It supplies
+      a consistent and unified login experience across all your clusters. Pinniped
+      is securely integrated with enterprise IDP protocols.
+    digest: f75cc411707449aa76628baf0fcd091f4e7c2488ad3609a8936c049f25b06271
+    home: https://pinniped.dev/
+    icon: https://bitnami.com/assets/stacks/pinniped/img/pinniped-stack-220x234.png
+    keywords:
+    - identity
+    - infrastructure
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: pinniped
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/pinniped
+    - https://github.com/vmware-tanzu/pinniped/
+    urls:
+    - https://charts.bitnami.com/bitnami/pinniped-1.0.2.tgz
+    version: 1.0.2
+  - annotations:
+      category: Infrastructure
     apiVersion: v2
     appVersion: 0.21.0
     created: "2023-01-11T13:45:06.156149297Z"
@@ -106701,4 +106732,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-01-20T07:37:05.884212479Z"
+generated: "2023-01-20T08:11:49.66355322Z"
