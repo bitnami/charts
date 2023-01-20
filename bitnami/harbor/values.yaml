@@ -462,6 +462,24 @@ persistence:
       size: 1Gi
       annotations: {}
       selector: {}
+      ## @param persistence.persistentVolumeClaim.jobservice.scanData.existingClaim Name of an existing PVC to use
+      ## @param persistence.persistentVolumeClaim.jobservice.scanData.storageClass PVC Storage Class for Harbor Jobservice scan data volume
+      ## Note: The default StorageClass will be used if not defined. Set it to `-` to disable dynamic provisioning
+      ## @param persistence.persistentVolumeClaim.jobservice.scanData.subPath The sub path used in the volume
+      ## @param persistence.persistentVolumeClaim.jobservice.scanData.accessModes The access mode of the volume
+      ## @param persistence.persistentVolumeClaim.jobservice.scanData.size The size of the volume
+      ## @param persistence.persistentVolumeClaim.jobservice.scanData.annotations Annotations for the PVC
+      ## @param persistence.persistentVolumeClaim.jobservice.scanData.selector Selector to match an existing Persistent Volume
+      ##
+      scanData:
+        existingClaim: ""
+        storageClass: ""
+        subPath: ""
+        accessModes:
+          - ReadWriteOnce
+        size: 1Gi
+        annotations: {}
+        selector: {}
     ## @param persistence.persistentVolumeClaim.chartmuseum.existingClaim Name of an existing PVC to use
     ## @param persistence.persistentVolumeClaim.chartmuseum.storageClass PVC Storage Class for Chartmuseum data volume
     ## Note: The default StorageClass will be used if not defined. Set it to `-` to disable dynamic provisioning
@@ -1329,6 +1347,28 @@ core:
   ## @param core.secretName Fill the name of a kubernetes secret if you want to use your own TLS certificate and private key for token encryption/decryption. The secret must contain two keys named: `tls.crt` - the certificate and `tls.key` - the private key. The default key pair will be used if it isn't set
   ##
   secretName: ""
+  ## @param core.existingSecret Existing secret for core
+  ## The secret must contain the keys:
+  ## `secret` (required),
+  ## `secretKey` (required),
+  ##
+  existingSecret: ""
+  ## @param core.existingEnvVarsSecret Existing secret for core envvars
+  ## The secret must contain the keys:
+  ## `CSRF_KEY` (required),
+  ## `HARBOR_ADMIN_PASSWORD` (required),
+  ## `POSTGRESQL_PASSWORD` (required),
+  ## `REGISTRY_CREDENTIAL_USERNAME` (required),
+  ## `REGISTRY_CREDENTIAL_PASSWORD` (required),
+  ## `_REDIS_URL_CORE` (optional),
+  ## `_REDIS_URL_REG` (optional),
+  ##
+  ## If you do not know how to start, let the chart generate a full secret for you before defining an existingEnvVarsSecret
+  ## Notes:
+  ##   As a EnvVars secret, this secret also store redis config urls
+  ##   The HARBOR_ADMIN_PASSWORD is only required at initial deployment, once the password is set in database, it is not used anymore
+  ##
+  existingEnvVarsSecret: ""
   ## @param core.csrfKey The CSRF key. Will be generated automatically if it isn't specified
   ##
   csrfKey: ""
@@ -1618,6 +1658,11 @@ jobservice:
   ## Must be a string of 16 chars.
   ##
   secret: ""
+  ## @param jobservice.existingSecret Existing secret for jobservice
+  ## The secret must contain the keys:
+  ## `secret` (required),
+  ##
+  existingSecret: ""
   ## Use TLS in the container
   ##
   tls:
@@ -1860,6 +1905,13 @@ registry:
   ## Must be a string of 16 chars.
   ##
   secret: ""
+  ## @param registry.existingSecret Existing secret for registry
+  ## The secret must contain the keys:
+  ## `REGISTRY_HTPASSWD` (required),
+  ## `REGISTRY_HTTP_SECRET` (required),
+  ## `REGISTRY_REDIS_PASSWORD` (optional),
+  ##
+  existingSecret: ""
   ## @param registry.relativeurls Make the registry return relative URLs in Location headers. The client is responsible for resolving the correct URL.
   ##
   relativeurls: false

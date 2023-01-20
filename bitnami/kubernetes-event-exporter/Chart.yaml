@@ -1,7 +1,6 @@
 annotations:
   category: Infrastructure
-  licenses: |
-    - Apache-2.0
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: 1.1.0
 dependencies:
@@ -27,4 +26,4 @@ name: kubernetes-event-exporter
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/kubernetes-event-exporter
   - https://github.com/resmoio/kubernetes-event-exporter
-version: 2.1.5
+version: 2.1.6

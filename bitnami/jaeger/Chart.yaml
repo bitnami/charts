@@ -1,7 +1,6 @@
 annotations:
   category: Infrastructure
-  licenses: |
-    - Apache-2.0
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: 1.41.0
 dependencies:
@@ -28,4 +27,4 @@ name: jaeger
 sources:
   - https://github.com/jaegertracing/jaeger
   - https://www.jaegertracing.io/
-version: 1.0.0
+version: 1.0.1

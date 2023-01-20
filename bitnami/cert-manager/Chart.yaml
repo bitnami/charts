@@ -1,7 +1,6 @@
 annotations:
   category: CertificateAuthority
-  licenses: |
-    - Apache-2.0
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: 1.11.0
 dependencies:

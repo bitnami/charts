@@ -1,7 +1,6 @@
 annotations:
   category: LogManagement
-  licenses: |
-    - Apache-2.0
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: 8.6.0
 dependencies:

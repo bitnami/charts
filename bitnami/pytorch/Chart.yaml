@@ -1,7 +1,6 @@
 annotations:
   category: MachineLearning
-  licenses: |
-    - Apache-2.0
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: 1.13.1
 dependencies:
@@ -25,4 +24,4 @@ name: pytorch
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/pytorch
   - https://pytorch.org/
-version: 2.5.11
+version: 2.5.12
