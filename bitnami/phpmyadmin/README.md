@@ -475,9 +475,9 @@ To upgrade to `7.0.0`, it should be done reusing the PVCs used to hold both the 
 Obtain the credentials and the names of the PVCs used to hold both the MariaDB and phpMyAdmin data on your current release:
 
 ```console
-^\$ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default phpmyadmin-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
-^\$ export MARIADB_PASSWORD=$(kubectl get secret --namespace default phpmyadmin-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
-^\$ export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=phpmyadmin -o jsonpath="{.items[0].metadata.name}")
+$ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default phpmyadmin-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
+$ export MARIADB_PASSWORD=$(kubectl get secret --namespace default phpmyadmin-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
+$ export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=phpmyadmin -o jsonpath="{.items[0].metadata.name}")
 ```
 
 Delete the phpMyAdmin deployment and delete the MariaDB statefulsets:

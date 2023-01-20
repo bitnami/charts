@@ -498,11 +498,11 @@ To upgrade to `9.0.0`, you can either install a new SuiteCRM chart and migrate y
 Obtain the credentials and the names of the PVCs used to hold both the MariaDB and SuiteCRM data on your current release:
 
 ```console
-^\$ export SUITECRM_HOST=$(kubectl get svc --namespace default suitecrm --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
-^\$ export SUITECRM_PASSWORD=$(kubectl get secret --namespace default suitecrm -o jsonpath="{.data.suitecrm-password}" | base64 -d)
-^\$ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default suitecrm-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
-^\$ export MARIADB_PASSWORD=$(kubectl get secret --namespace default suitecrm-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
-^\$ export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=suitecrm -o jsonpath="{.items[0].metadata.name}")
+$ export SUITECRM_HOST=$(kubectl get svc --namespace default suitecrm --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
+$ export SUITECRM_PASSWORD=$(kubectl get secret --namespace default suitecrm -o jsonpath="{.data.suitecrm-password}" | base64 -d)
+$ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default suitecrm-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
+$ export MARIADB_PASSWORD=$(kubectl get secret --namespace default suitecrm-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
+$ export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=suitecrm -o jsonpath="{.items[0].metadata.name}")
 ```
 
 Upgrade your release (maintaining the version) disabling MariaDB and scaling SuiteCRM replicas to 0:

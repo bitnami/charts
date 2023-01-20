@@ -419,10 +419,10 @@ To upgrade to `9.0.0`, it should be done reusing the PVCs used to hold both the 
 Obtain the credentials and the names of the PVCs used to hold both the MariaDB and JasperReports data on your current release:
 
 ```console
-^\$ export JASPERREPORTS_PASSWORD=$(kubectl get secret --namespace default jasperreports -o jsonpath="{.data.jasperreports-password}" | base64 -d)
-^\$ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default jasperreports-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
-^\$ export MARIADB_PASSWORD=$(kubectl get secret --namespace default jasperreports-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
-^\$ export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=jasperreports -o jsonpath="{.items[0].metadata.name}")
+$ export JASPERREPORTS_PASSWORD=$(kubectl get secret --namespace default jasperreports -o jsonpath="{.data.jasperreports-password}" | base64 -d)
+$ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default jasperreports-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
+$ export MARIADB_PASSWORD=$(kubectl get secret --namespace default jasperreports-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
+$ export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=jasperreports -o jsonpath="{.items[0].metadata.name}")
 ```
 
 Delete the JasperReports deployment and delete the MariaDB statefulset. Notice the option `--cascade=false` in the latter:

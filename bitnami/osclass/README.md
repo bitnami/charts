@@ -513,11 +513,11 @@ To upgrade to `8.0.0`, it should be done reusing the PVCs used to hold both the 
 Obtain the credentials and the names of the PVCs used to hold both the MariaDB and Osclass data on your current release:
 
 ```console
-^\$ export OSCLASS_HOST=$(kubectl get svc --namespace default osclass --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
-^\$ export OSCLASS_PASSWORD=$(kubectl get secret --namespace default osclass -o jsonpath="{.data.osclass-password}" | base64 -d)
-^\$ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default osclass-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
-^\$ export MARIADB_PASSWORD=$(kubectl get secret --namespace default osclass-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
-^\$ export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=osclass -o jsonpath="{.items[0].metadata.name}")
+$ export OSCLASS_HOST=$(kubectl get svc --namespace default osclass --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
+$ export OSCLASS_PASSWORD=$(kubectl get secret --namespace default osclass -o jsonpath="{.data.osclass-password}" | base64 -d)
+$ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default osclass-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
+$ export MARIADB_PASSWORD=$(kubectl get secret --namespace default osclass-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
+$ export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=osclass -o jsonpath="{.items[0].metadata.name}")
 ```
 
 Delete the Osclass deployment and delete the MariaDB statefulset. Notice the option `--cascade=false` in the latter:
