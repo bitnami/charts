@@ -1,4 +1,4 @@
-{{- if and (eq .Values.mode "standalone") (not .Values.gateway.enabled) }}
+{{- if (eq .Values.mode "standalone") }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
