@@ -7,13 +7,12 @@ Kubeapps is a web-based UI for launching and managing applications on Kubernetes
 [Overview of Kubeapps](https://github.com/vmware-tanzu/kubeapps)
 
 
-                           
+
 ## TL;DR
 
-```bash
-helm repo add my-repo https://charts.bitnami.com/bitnami
-kubectl create namespace kubeapps
-helm install kubeapps --namespace kubeapps my-repo/kubeapps
+```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/kubeapps --namespace kubeapps --create-namespace
 ```
 
 > Check out the [getting started](https://github.com/vmware-tanzu/kubeapps/blob/main/site/content/docs/latest/tutorials/getting-started.md) to start deploying apps with Kubeapps.
@@ -44,12 +43,11 @@ It also packages the [Bitnami PostgreSQL chart](https://github.com/bitnami/chart
 
 ## Installing the Chart
 
-To install the chart with the release name `kubeapps`:
+To install the chart with the release name `my-release`:
 
-```bash
-helm repo add my-repo https://charts.bitnami.com/bitnami
-kubectl create namespace kubeapps
-helm install kubeapps --namespace kubeapps my-repo/kubeapps
+```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/kubeapps --namespace kubeapps --create-namespace
 ```
 
 The command deploys Kubeapps on the Kubernetes cluster in the `kubeapps` namespace. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -349,42 +347,43 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 
 ### Auth Proxy parameters
 
-| Name                                              | Description                                                                                                  | Value                  |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ---------------------- |
-| `authProxy.enabled`                               | Specifies whether Kubeapps should configure OAuth login/logout                                               | `false`                |
-| `authProxy.image.registry`                        | OAuth2 Proxy image registry                                                                                  | `docker.io`            |
-| `authProxy.image.repository`                      | OAuth2 Proxy image repository                                                                                | `bitnami/oauth2-proxy` |
-| `authProxy.image.tag`                             | OAuth2 Proxy image tag (immutable tags are recommended)                                                      | `7.4.0-debian-11-r22`  |
-| `authProxy.image.digest`                          | OAuth2 Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
-| `authProxy.image.pullPolicy`                      | OAuth2 Proxy image pull policy                                                                               | `IfNotPresent`         |
-| `authProxy.image.pullSecrets`                     | OAuth2 Proxy image pull secrets                                                                              | `[]`                   |
-| `authProxy.external`                              | Use an external Auth Proxy instead of deploying its own one                                                  | `false`                |
-| `authProxy.oauthLoginURI`                         | OAuth Login URI to which the Kubeapps frontend redirects for authn                                           | `/oauth2/start`        |
-| `authProxy.oauthLogoutURI`                        | OAuth Logout URI to which the Kubeapps frontend redirects for authn                                          | `/oauth2/sign_out`     |
-| `authProxy.skipKubeappsLoginPage`                 | Skip the Kubeapps login page when using OIDC and directly redirect to the IdP                                | `false`                |
-| `authProxy.provider`                              | OAuth provider                                                                                               | `""`                   |
-| `authProxy.clientID`                              | OAuth Client ID                                                                                              | `""`                   |
-| `authProxy.clientSecret`                          | OAuth Client secret                                                                                          | `""`                   |
-| `authProxy.cookieSecret`                          | Secret used by oauth2-proxy to encrypt any credentials                                                       | `""`                   |
-| `authProxy.cookieRefresh`                         | Duration after which to refresh the cookie                                                                   | `2m`                   |
-| `authProxy.scope`                                 | OAuth scope specification                                                                                    | `openid email groups`  |
-| `authProxy.emailDomain`                           | Allowed email domains                                                                                        | `*`                    |
-| `authProxy.extraFlags`                            | Additional command line flags for oauth2-proxy                                                               | `[]`                   |
-| `authProxy.lifecycleHooks`                        | for the Auth Proxy container(s) to automate configuration before or after startup                            | `{}`                   |
-| `authProxy.command`                               | Override default container command (useful when using custom images)                                         | `[]`                   |
-| `authProxy.args`                                  | Override default container args (useful when using custom images)                                            | `[]`                   |
-| `authProxy.extraEnvVars`                          | Array with extra environment variables to add to the Auth Proxy container                                    | `[]`                   |
-| `authProxy.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for Auth Proxy containers(s)                            | `""`                   |
-| `authProxy.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for Auth Proxy containers(s)                               | `""`                   |
-| `authProxy.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Auth Proxy container(s)                     | `[]`                   |
-| `authProxy.containerPorts.proxy`                  | Auth Proxy HTTP container port                                                                               | `3000`                 |
-| `authProxy.containerSecurityContext.enabled`      | Enabled Auth Proxy containers' Security Context                                                              | `true`                 |
-| `authProxy.containerSecurityContext.runAsUser`    | Set Auth Proxy container's Security Context runAsUser                                                        | `1001`                 |
-| `authProxy.containerSecurityContext.runAsNonRoot` | Set Auth Proxy container's Security Context runAsNonRoot                                                     | `true`                 |
-| `authProxy.resources.limits.cpu`                  | The CPU limits for the OAuth2 Proxy container                                                                | `250m`                 |
-| `authProxy.resources.limits.memory`               | The memory limits for the OAuth2 Proxy container                                                             | `128Mi`                |
-| `authProxy.resources.requests.cpu`                | The requested CPU for the OAuth2 Proxy container                                                             | `25m`                  |
-| `authProxy.resources.requests.memory`             | The requested memory for the OAuth2 Proxy container                                                          | `32Mi`                 |
+| Name                                              | Description                                                                                                                         | Value                  |
+| ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `authProxy.enabled`                               | Specifies whether Kubeapps should configure OAuth login/logout                                                                      | `false`                |
+| `authProxy.image.registry`                        | OAuth2 Proxy image registry                                                                                                         | `docker.io`            |
+| `authProxy.image.repository`                      | OAuth2 Proxy image repository                                                                                                       | `bitnami/oauth2-proxy` |
+| `authProxy.image.tag`                             | OAuth2 Proxy image tag (immutable tags are recommended)                                                                             | `7.4.0-debian-11-r22`  |
+| `authProxy.image.digest`                          | OAuth2 Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                        | `""`                   |
+| `authProxy.image.pullPolicy`                      | OAuth2 Proxy image pull policy                                                                                                      | `IfNotPresent`         |
+| `authProxy.image.pullSecrets`                     | OAuth2 Proxy image pull secrets                                                                                                     | `[]`                   |
+| `authProxy.external`                              | Use an external Auth Proxy instead of deploying its own one                                                                         | `false`                |
+| `authProxy.oauthLoginURI`                         | OAuth Login URI to which the Kubeapps frontend redirects for authn                                                                  | `/oauth2/start`        |
+| `authProxy.oauthLogoutURI`                        | OAuth Logout URI to which the Kubeapps frontend redirects for authn                                                                 | `/oauth2/sign_out`     |
+| `authProxy.skipKubeappsLoginPage`                 | Skip the Kubeapps login page when using OIDC and directly redirect to the IdP                                                       | `false`                |
+| `authProxy.provider`                              | OAuth provider                                                                                                                      | `""`                   |
+| `authProxy.clientID`                              | OAuth Client ID                                                                                                                     | `""`                   |
+| `authProxy.clientSecret`                          | OAuth Client secret                                                                                                                 | `""`                   |
+| `authProxy.cookieSecret`                          | Secret used by oauth2-proxy to encrypt any credentials                                                                              | `""`                   |
+| `authProxy.existingOauth2Secret`                  | Name of an existing secret containing the OAuth client secrets, it should contain the keys clientID, clientSecret, and cookieSecret | `""`                   |
+| `authProxy.cookieRefresh`                         | Duration after which to refresh the cookie                                                                                          | `2m`                   |
+| `authProxy.scope`                                 | OAuth scope specification                                                                                                           | `openid email groups`  |
+| `authProxy.emailDomain`                           | Allowed email domains                                                                                                               | `*`                    |
+| `authProxy.extraFlags`                            | Additional command line flags for oauth2-proxy                                                                                      | `[]`                   |
+| `authProxy.lifecycleHooks`                        | for the Auth Proxy container(s) to automate configuration before or after startup                                                   | `{}`                   |
+| `authProxy.command`                               | Override default container command (useful when using custom images)                                                                | `[]`                   |
+| `authProxy.args`                                  | Override default container args (useful when using custom images)                                                                   | `[]`                   |
+| `authProxy.extraEnvVars`                          | Array with extra environment variables to add to the Auth Proxy container                                                           | `[]`                   |
+| `authProxy.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for Auth Proxy containers(s)                                                   | `""`                   |
+| `authProxy.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for Auth Proxy containers(s)                                                      | `""`                   |
+| `authProxy.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Auth Proxy container(s)                                            | `[]`                   |
+| `authProxy.containerPorts.proxy`                  | Auth Proxy HTTP container port                                                                                                      | `3000`                 |
+| `authProxy.containerSecurityContext.enabled`      | Enabled Auth Proxy containers' Security Context                                                                                     | `true`                 |
+| `authProxy.containerSecurityContext.runAsUser`    | Set Auth Proxy container's Security Context runAsUser                                                                               | `1001`                 |
+| `authProxy.containerSecurityContext.runAsNonRoot` | Set Auth Proxy container's Security Context runAsNonRoot                                                                            | `true`                 |
+| `authProxy.resources.limits.cpu`                  | The CPU limits for the OAuth2 Proxy container                                                                                       | `250m`                 |
+| `authProxy.resources.limits.memory`               | The memory limits for the OAuth2 Proxy container                                                                                    | `128Mi`                |
+| `authProxy.resources.requests.cpu`                | The requested CPU for the OAuth2 Proxy container                                                                                    | `25m`                  |
+| `authProxy.resources.requests.memory`             | The requested memory for the OAuth2 Proxy container                                                                                 | `32Mi`                 |
 
 
 ### Pinniped Proxy parameters
@@ -569,8 +568,8 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 
 
 
-```bash
-helm install kubeapps --namespace kubeapps \
+```console
+$ helm install kubeapps --namespace kubeapps \
   --set ingress.enabled=true \
     my-repo/kubeapps
 ```
@@ -579,8 +578,8 @@ The above command enables an Ingress Rule to expose Kubeapps.
 
 Alternatively, a YAML file that specifies the values for parameters can be provided while installing the chart. For example,
 
-```bash
-helm install kubeapps --namespace kubeapps -f custom-values.yaml my-repo/kubeapps
+```console
+$ helm install kubeapps --namespace kubeapps -f custom-values.yaml my-repo/kubeapps
 ```
 
 ## Configuration and installation details
@@ -603,8 +602,8 @@ The simplest way to expose the Kubeapps Dashboard is to assign a LoadBalancer ty
 
 Wait for your cluster to assign a LoadBalancer IP or Hostname to the `kubeapps` Service and access it on that address:
 
-```bash
-kubectl get services --namespace kubeapps --watch
+```console
+$ kubectl get services --namespace kubeapps --watch
 ```
 
 #### Ingress
@@ -663,15 +662,15 @@ You can upgrade Kubeapps from the Kubeapps web interface. Select the namespace i
 
 You can also use the Helm CLI to upgrade Kubeapps, first ensure you have updated your local chart repository cache:
 
-```bash
-helm repo update
+```console
+$ helm repo update
 ```
 
 Now upgrade Kubeapps:
 
-```bash
-export RELEASE_NAME=kubeapps
-helm upgrade $RELEASE_NAME my-repo/kubeapps
+```console
+$ export RELEASE_NAME=kubeapps
+$ helm upgrade $RELEASE_NAME my-repo/kubeapps
 ```
 
 If you find issues upgrading Kubeapps, check the [troubleshooting](#error-while-upgrading-the-chart) section.
@@ -684,11 +683,11 @@ This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](h
 
 To uninstall/delete the `kubeapps` deployment:
 
-```bash
-helm uninstall -n kubeapps kubeapps
+```console
+$ helm uninstall -n kubeapps kubeapps
 
 # Optional: Only if there are no more instances of Kubeapps
-kubectl delete crd apprepositories.kubeapps.com
+$ kubectl delete crd apprepositories.kubeapps.com
 ```
 
 The first command removes most of the Kubernetes components associated with the chart and deletes the release. After that, if there are no more instances of Kubeapps in the cluster you can manually delete the `apprepositories.kubeapps.com` CRD used by Kubeapps that is shared for the entire cluster.
@@ -697,8 +696,8 @@ The first command removes most of the Kubernetes components associated with the 
 
 If you have dedicated a namespace only for Kubeapps you can completely clean the remaining completed/failed jobs or any stale resources by deleting the namespace
 
-```bash
-kubectl delete namespace kubeapps
+```console
+$ kubectl delete namespace kubeapps
 ```
 
 ## FAQ
@@ -734,8 +733,8 @@ Have a look at the [dashboard documentation](https://github.com/vmware-tanzu/kub
 
 The example below will match the URL `http://example.com` to the Kubeapps dashboard. For further configuration, please refer to your specific Ingress configuration docs (e.g., [NGINX](https://github.com/kubernetes/ingress-nginx) or [HAProxy](https://github.com/haproxytech/kubernetes-ingress)).
 
-```bash
-helm install kubeapps my-repo/kubeapps \
+```console
+$ helm install kubeapps my-repo/kubeapps \
   --namespace kubeapps \
   --set ingress.enabled=true \
   --set ingress.hostname=example.com \
@@ -745,7 +744,7 @@ helm install kubeapps my-repo/kubeapps \
 If you are using LDAP via Dex with OIDC or you are getting an error message like `upstream sent too big header while reading response header from upstream` it means the cookie size is too big and can't be processed by the Ingress Controller.
 You can work around this problem by setting the following Nginx ingress annotations (look for similar annotations in your preferred Ingress Controller):
 
-```bash
+```
   # rest of the helm install ... command
   --set ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-read-timeout"=600
   --set ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-buffer-size"=8k
@@ -756,8 +755,8 @@ You can work around this problem by setting the following Nginx ingress annotati
 
 You may want to serve Kubeapps with a subpath, for instance `http://example.com/subpath`, you have to set the proper Ingress configuration. If you are using the ingress configuration provided by the Kubeapps chart, you will have to set the `ingress.hostname` and `path` parameters:
 
-```bash
-helm install kubeapps my-repo/kubeapps \
+```console
+$ helm install kubeapps my-repo/kubeapps \
   --namespace kubeapps \
   --set ingress.enabled=true \
   --set ingress.hostname=example.com \
@@ -767,8 +766,8 @@ helm install kubeapps my-repo/kubeapps \
 
 Besides, if you are using the OAuth2/OIDC login (more information at the [using an OIDC provider documentation](https://github.com/vmware-tanzu/kubeapps/blob/main/site/content/docs/latest/tutorials/using-an-OIDC-provider.md)), you will need, also, to configure the different URLs:
 
-```bash
-helm install kubeapps my-repo/kubeapps \
+```console
+$ helm install kubeapps my-repo/kubeapps \
   --namespace kubeapps \
   # ... other OIDC and ingress flags
   --set authProxy.oauthLoginURI="/subpath/oauth2/login" \
@@ -878,14 +877,14 @@ Error: namespaces "kubeapps" is forbidden: User "system:serviceaccount:kube-syst
 
 It is possible, though uncommon, that your cluster does not have Role-Based Access Control (RBAC) enabled. To check if your cluster has RBAC you can run the following command:
 
-```bash
-kubectl api-versions
+```console
+$ kubectl api-versions
 ```
 
 If the above command does not include entries for `rbac.authorization.k8s.io` you should perform the chart installation by setting `rbac.create=false`:
 
-```bash
-helm install --name kubeapps --namespace kubeapps my-repo/kubeapps --set rbac.create=false
+```console
+$ helm install --name kubeapps --namespace kubeapps my-repo/kubeapps --set rbac.create=false
 ```
 
 ### Error while upgrading the Chart
@@ -899,43 +898,43 @@ It is possible that when upgrading Kubeapps an error appears. That can be caused
 
 1. (Optional) Backup your personal repositories (if you have any):
 
-```bash
-kubectl get apprepository -A -o yaml > <repo name>.yaml
+```console
+$ kubectl get apprepository -A -o yaml > <repo name>.yaml
 ```
 
 2. Delete Kubeapps:
 
-```bash
-helm del --purge kubeapps
+```console
+$ helm del --purge kubeapps
 ```
 
 3. (Optional) Delete the App Repositories CRD:
 
 > **Warning**: Do not run this step if you have more than one Kubeapps installation in your cluster.
 
-```bash
-kubectl delete crd apprepositories.kubeapps.com
+```console
+$ kubectl delete crd apprepositories.kubeapps.com
 ```
 
 4. (Optional) Clean the Kubeapps namespace:
 
 > **Warning**: Do not run this step if you have workloads other than Kubeapps in the `kubeapps` namespace.
 
-```bash
-kubectl delete namespace kubeapps
+```console
+$ kubectl delete namespace kubeapps
 ```
 
 5. Install the latest version of Kubeapps (using any custom modifications you need):
 
-```bash
-helm repo update
-helm install --name kubeapps --namespace kubeapps my-repo/kubeapps
+```console
+$ helm repo update
+$ helm install --name kubeapps --namespace kubeapps my-repo/kubeapps
 ```
 
 6. (Optional) Restore any repositories you backed up in the first step:
 
-```bash
-kubectl apply -f <repo name>.yaml
+```console
+$ kubectl apply -f <repo name>.yaml
 ```
 
 After that you should be able to access the new version of Kubeapps. If the above doesn't work for you or you run into any other issues please open an [issue](https://github.com/vmware-tanzu/kubeapps/issues/new).
@@ -964,7 +963,7 @@ PASSWORDS ERROR: you must provide your current passwords when upgrade the releas
 The error gives you generic instructions for retrieving the PostgreSQL password, but if you have installed a Kubeapps version prior to 2.3.1, the name of the secret will differ. Run the following command:
 
 ```console
-export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace "kubeapps" kubeapps-db -o jsonpath="{.data.postgresql-password}" | base64 -d)
+$ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace "kubeapps" kubeapps-db -o jsonpath="{.data.postgresql-password}" | base64 -d)
 ```
 
 > NOTE: Replace the namespace in the command with the namespace in which you have deployed Kubeapps.
@@ -980,7 +979,7 @@ Error: UPGRADE FAILED: rendered manifests contain a resource that already exists
 To bypass this issue, you will need to before delete all the initialRepos from the chart values (only the `bitnami` repo by default):
 
 ```console
-kubectl delete apprepositories.kubeapps.com -n kubeapps bitnami
+$ kubectl delete apprepositories.kubeapps.com -n kubeapps bitnami
 ```
 
 > NOTE: Replace the namespace in the command with the namespace in which you have deployed Kubeapps.
@@ -990,7 +989,7 @@ After that, you will be able to upgrade Kubeapps to 2.3.1 using the existing dat
 > **WARNING**: Make sure that the variable `$POSTGRESQL_PASSWORD` is properly populated. Setting a wrong (or empty) password will corrupt the release.
 
 ```console
-helm upgrade kubeapps my-repo/kubeapps -n kubeapps --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD
+$ helm upgrade kubeapps my-repo/kubeapps -n kubeapps --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD
 ```
 
 ### Upgrading to 2.0.1 (Chart 5.0.0)
@@ -1014,7 +1013,7 @@ helm upgrade kubeapps my-repo/kubeapps -n kubeapps --set postgresql.postgresqlPa
 > Note: The command below assumes that Kubeapps has been deployed in the kubeapps namespace using "kubeapps" as release name, if that is not the case, adapt the command accordingly.
 
 ```console
-kubectl delete statefulset -n kubeapps kubeapps-postgresql-master kubeapps-postgresql-slave
+$ kubectl delete statefulset -n kubeapps kubeapps-postgresql-master kubeapps-postgresql-slave
 ```
 
 **Useful links**
@@ -1035,8 +1034,8 @@ Due to the last point, it is necessary to run a command before upgrading to Kube
 
 > Note: The command below assumes that Kubeapps has been deployed in the kubeapps namespace using "kubeapps" as release name, if that is not the case, adapt the command accordingly.
 
-```bash
-kubectl delete statefulset -n kubeapps kubeapps-postgresql-master kubeapps-postgresql-slave
+```console
+$ kubectl delete statefulset -n kubeapps kubeapps-postgresql-master kubeapps-postgresql-slave
 ```
 
 After that, you should be able to upgrade Kubeapps as always and the database will be repopulated.

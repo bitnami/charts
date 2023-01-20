@@ -115,6 +115,10 @@ spec:
                 name: "{{ include "harbor.exporter" . }}-envvars"
             - secretRef:
                 name: "{{ include "harbor.exporter" . }}-envvars"
+            {{- if .Values.exporter.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.exporter.extraEnvVarsSecret "context" $) }}
+            {{- end }}
           ports:
             - containerPort: {{ .Values.exporter.containerPorts.metrics }}
               name: metrics

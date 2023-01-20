@@ -7,12 +7,12 @@ Thanos is a highly available metrics system that can be added on top of existing
 [Overview of Thanos](https://thanos.io/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
-```bash
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/thanos
+```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/thanos
 ```
 
 ## Introduction
@@ -31,9 +31,9 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 To install the chart with the release name `my-release`:
 
-```bash
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/thanos
+```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/thanos
 ```
 
 These commands deploy Thanos on the Kubernetes cluster with the default configuration. The [configuration](#configuration-and-installation-details) section lists the parameters that can be configured during installation.
@@ -44,8 +44,8 @@ These commands deploy Thanos on the Kubernetes cluster with the default configur
 
 To uninstall/delete the `my-release` chart:
 
-```bash
-helm uninstall my-release
+```console
+$ helm uninstall my-release
 ```
 
 ## Architecture
@@ -1183,16 +1183,16 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
-```bash
-helm install my-release --set query.replicaCount=2 my-repo/thanos
+```console
+$ helm install my-release --set query.replicaCount=2 my-repo/thanos
 ```
 
 The above command install Thanos chart with 2 Thanos Query replicas.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
-```bash
-helm install my-release -f values.yaml my-repo/thanos
+```console
+$ helm install my-release -f values.yaml my-repo/thanos
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -1356,13 +1356,13 @@ minio:
 
 For Helm 3:
 
-```bash
-kubectl create namespace monitoring
-helm install kube-prometheus \
+```console
+$ kubectl create namespace monitoring
+$ helm install kube-prometheus \
     --set prometheus.thanos.create=true \
     --namespace monitoring \
     bitnami/kube-prometheus
-helm install thanos \
+$ helm install thanos \
     --values values.yaml \
     --namespace monitoring \
     my-repo/thanos
@@ -1400,6 +1400,10 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 12.0.0
+
+This major updates the MinIO&reg; subchart to its newest major, 12.0.0. This subchart's major doesn't include any changes affecting its use as a subchart for Thanos, so no major issues are expected during the upgrade.
 
 ### To 10.0.0
 

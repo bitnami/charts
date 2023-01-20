@@ -1,9 +1,8 @@
 annotations:
   category: Infrastructure
-  licenses: |
-    - Apache-2.0
+  licenses: Apache-2.0
 apiVersion: v2
-appVersion: 0.21.0
+appVersion: 0.22.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami

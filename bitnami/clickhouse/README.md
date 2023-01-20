@@ -7,7 +7,7 @@ ClickHouse is an open-source column-oriented OLAP database management system. Us
 [Overview of ClickHouse](https://clickhouse.com/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -41,7 +41,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release my-repo/clickhouse
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/clickhouse
 ```
 
 The command deploys ClickHouse on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -53,7 +54,7 @@ The command deploys ClickHouse on the Kubernetes cluster in the default configur
 To uninstall/delete the `my-release` deployment:
 
 ```console
-helm delete my-release
+$ helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -92,7 +93,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                                    | ClickHouse image registry                                                                                  | `docker.io`            |
 | `image.repository`                                  | ClickHouse image repository                                                                                | `bitnami/clickhouse`   |
-| `image.tag`                                         | ClickHouse image tag (immutable tags are recommended)                                                      | `22.12.3-debian-11-r0` |
+| `image.tag`                                         | ClickHouse image tag (immutable tags are recommended)                                                      | `22.12.3-debian-11-r3` |
 | `image.digest`                                      | ClickHouse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `image.pullPolicy`                                  | ClickHouse image pull policy                                                                               | `IfNotPresent`         |
 | `image.pullSecrets`                                 | ClickHouse image pull secrets                                                                              | `[]`                   |
@@ -298,7 +299,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r70`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r72`      |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
@@ -353,7 +354,7 @@ The above parameters map to the env variables defined in [bitnami/clickhouse](ht
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-helm install my-release \
+$ helm install my-release \
   --set auth.username=admin \
   --set auth.password=password \
     my-repo/clickhouse
@@ -366,7 +367,7 @@ The above command sets the ClickHouse administrator account username and passwor
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/clickhouse
+$ helm install my-release -f values.yaml my-repo/clickhouse
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

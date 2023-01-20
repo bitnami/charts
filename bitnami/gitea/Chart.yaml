@@ -1,9 +1,8 @@
 annotations:
   category: Analytics
-  licenses: |
-    - Apache-2.0
+  licenses: Apache-2.0
 apiVersion: v2
-appVersion: 1.18.0
+appVersion: 1.18.1
 dependencies:
   - condition: postgresql.enabled
     name: postgresql
@@ -31,4 +30,4 @@ name: gitea
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/gitea
   - https://gitea.io/
-version: 0.1.5
+version: 0.1.6

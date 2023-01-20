@@ -7,6 +7,9 @@ permissions:
   repository-projects: write
   issues: write
   pull-requests: write
+# Avoid concurrency over the same issue
+concurrency:
+  group: card-movement-${{ github.event.issue.number }}
 jobs:
   comments_handler:
     runs-on: ubuntu-latest

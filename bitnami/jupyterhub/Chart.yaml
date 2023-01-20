@@ -1,9 +1,8 @@
 annotations:
   category: MachineLearning
-  licenses: |
-    - Apache-2.0
+  licenses: Apache-2.0
 apiVersion: v2
-appVersion: 3.0.0
+appVersion: 3.1.0
 dependencies:
   - condition: postgresql.enabled
     name: postgresql
@@ -27,4 +26,4 @@ name: jupyterhub
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/jupyterhub
   - https://github.com/jupyterhub/jupyterhub
-version: 3.0.4
+version: 3.0.6

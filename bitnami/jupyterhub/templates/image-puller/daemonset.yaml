@@ -68,6 +68,9 @@ spec:
         - name: pull-{{ $index }}
           image: {{ include "common.images.image" (dict "imageRoot" . "global" $.Values.global) }}
           imagePullPolicy: {{ .pullPolicy }}
+          {{- if $.Values.imagePuller.resources }}
+          resources: {{- toYaml $.Values.imagePuller.resources | nindent 12 }}
+          {{- end }}
           command:
             - /bin/sh
             - -c

@@ -51,7 +51,7 @@ spec:
           command:
             - /bin/bash
             - -c
-            - >-
+            - |-
               set -e;
               echo "Waiting for Minio";
               wait-for-port \

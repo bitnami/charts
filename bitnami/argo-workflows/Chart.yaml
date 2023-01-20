@@ -1,7 +1,6 @@
 annotations:
   category: Infrastructure
-  licenses: |
-    - Apache-2.0
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: 3.4.4
 dependencies:

@@ -1,7 +1,6 @@
 annotations:
   category: Analytics
-  licenses: |
-    - Apache-2.0
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: 1.5.0
 dependencies:
@@ -25,4 +24,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/node-exporter
   - https://github.com/prometheus/node_exporter
   - https://prometheus.io/
-version: 3.2.6
+version: 3.2.7

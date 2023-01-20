@@ -7,10 +7,10 @@ Apache HTTP Server is an open-source HTTP server. The goal of this project is to
 [Overview of Apache](https://httpd.apache.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
-```bash
+```console
 $ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/apache
 ```
@@ -34,7 +34,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 To install the chart with the release name `my-release`:
 
-```bash
+```console
 $ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/apache
 ```
@@ -47,7 +47,7 @@ These commands deploy Apache on the Kubernetes cluster in the default configurat
 
 To uninstall/delete the `my-release` deployment:
 
-```bash
+```console
 $ helm delete my-release
 ```
 
@@ -82,14 +82,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------- |
 | `image.registry`                        | Apache image registry                                                                                                    | `docker.io`            |
 | `image.repository`                      | Apache image repository                                                                                                  | `bitnami/apache`       |
-| `image.tag`                             | Apache image tag (immutable tags are recommended)                                                                        | `2.4.54-debian-11-r72` |
+| `image.tag`                             | Apache image tag (immutable tags are recommended)                                                                        | `2.4.55-debian-11-r0`  |
 | `image.digest`                          | Apache image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                   | `""`                   |
 | `image.pullPolicy`                      | Apache image pull policy                                                                                                 | `IfNotPresent`         |
 | `image.pullSecrets`                     | Apache image pull secrets                                                                                                | `[]`                   |
 | `image.debug`                           | Enable image debug mode                                                                                                  | `false`                |
 | `git.registry`                          | Git image registry                                                                                                       | `docker.io`            |
 | `git.repository`                        | Git image name                                                                                                           | `bitnami/git`          |
-| `git.tag`                               | Git image tag (immutable tags are recommended)                                                                           | `2.39.0-debian-11-r7`  |
+| `git.tag`                               | Git image tag (immutable tags are recommended)                                                                           | `2.39.0-debian-11-r11` |
 | `git.digest`                            | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                      | `""`                   |
 | `git.pullPolicy`                        | Git image pull policy                                                                                                    | `IfNotPresent`         |
 | `git.pullSecrets`                       | Specify docker-registry secret names as an array                                                                         | `[]`                   |
@@ -224,7 +224,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a sidecar prometheus exporter to expose Apache metrics                                                                              | `false`                   |
 | `metrics.image.registry`                   | Apache Exporter image registry                                                                                                            | `docker.io`               |
 | `metrics.image.repository`                 | Apache Exporter image repository                                                                                                          | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache Exporter image tag (immutable tags are recommended)                                                                                | `0.11.0-debian-11-r78`    |
+| `metrics.image.tag`                        | Apache Exporter image tag (immutable tags are recommended)                                                                                | `0.11.0-debian-11-r82`    |
 | `metrics.image.digest`                     | Apache Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                           | `""`                      |
 | `metrics.image.pullPolicy`                 | Apache Exporter image pull policy                                                                                                         | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Apache Exporter image pull secrets                                                                                                        | `[]`                      |
@@ -249,7 +249,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
-```bash
+```console
 $ helm install my-release \
   --set imagePullPolicy=Always \
     my-repo/apache
@@ -259,7 +259,7 @@ The above command sets the `imagePullPolicy` to `Always`.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
-```bash
+```console
 $ helm install my-release -f values.yaml my-repo/apache
 ```
 
