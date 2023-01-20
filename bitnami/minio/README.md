@@ -455,6 +455,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 12.0.0
+
+All gateway features have been removed from Minio since upstream completely dropped this feature.
+
 ### To 11.0.0
 
 This version deprecates the usage of `MINIO_ACCESS_KEY` and `MINIO_SECRET_KEY` environment variables in MINIO&reg; container in favor of `MINIO_ROOT_USER` and `MINIO_ROOT_PASSWORD`.
@@ -529,7 +533,3 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-
-## Warning
-
-All gateway features have been removed from Minio since upstream completely dropped this feature.
