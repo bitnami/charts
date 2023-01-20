@@ -22,4 +22,4 @@ maintainers:
 name: redis
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/redis
-version: 17.5.0
+version: 17.5.1
