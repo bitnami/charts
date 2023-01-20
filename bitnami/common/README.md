@@ -11,7 +11,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
 ```
 
-```bash
+```console
 $ helm dependency update
 ```
 

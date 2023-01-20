@@ -7,7 +7,7 @@ InfluxDB(TM) is an open source time-series database. It is a core component of t
 [Overview of InfluxDB&trade;](https://www.influxdata.com/products/influxdb-overview)
 
 InfluxDB(TM) is a trademark owned by InfluxData, which is not affiliated with, and does not endorse, this site.
-                           
+
 ## TL;DR
 
 ```console
@@ -446,7 +446,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 It's necessary to specify the existing passwords while performing an upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `auth.admin.password`, `user.pwd`, ` auth.readUser.password` and `auth.writeUser.password` parameters when upgrading the chart:
 
-```bash
+```console
 $ helm upgrade my-release my-repo/influxdb \
     --set auth.admin.password=[ADMIN_USER_PASSWORD] \
     --set auth.user.password=[USER_PASSWORD] \
