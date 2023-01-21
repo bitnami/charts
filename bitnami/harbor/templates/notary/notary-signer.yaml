@@ -36,7 +36,7 @@ spec:
         annotations: {{- include "common.tplvalues.render" (dict "value" .Values.notary.signer.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
-      serviceAccountName: {{ template "harbor.notary-signer.serviceAccountName"}}
+      serviceAccountName: {{ include "harbor.notary-signer.serviceAccountName" . }}
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.notary.signer.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.notary.signer.hostAliases "context" $) | nindent 8 }}

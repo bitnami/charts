@@ -42,7 +42,7 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.core.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
-      serviceAccountName: {{ template "harbor.core.serviceAccountName"}}
+      serviceAccountName: {{ include "harbor.core.serviceAccountName" . }}
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.core.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.core.hostAliases "context" $) | nindent 8 }}
