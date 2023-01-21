@@ -7,12 +7,12 @@ PostgreSQL (Postgres) is an open source object-relational database known for rel
 [Overview of PostgreSQL](http://www.postgresql.org)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
-```bash
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/postgresql
+```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/postgresql
 ```
 
 ## Introduction
@@ -33,8 +33,9 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 To install the chart with the release name `my-release`:
 
-```bash
-helm install my-release my-repo/postgresql
+```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/postgresql
 ```
 
 The command deploys PostgreSQL on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -46,15 +47,15 @@ The command deploys PostgreSQL on the Kubernetes cluster in the default configur
 To uninstall/delete the `my-release` deployment:
 
 ```console
-helm delete my-release
+$ helm delete my-release
 ```
 
 The command removes all the Kubernetes components but PVC's associated with the chart and deletes the release.
 
 To delete the PVC's associated with `my-release`:
 
-```bash
-kubectl delete pvc -l release=my-release
+```console
+$ kubectl delete pvc -l release=my-release
 ```
 
 > **Note**: Deleting the PVC's will delete postgresql data as well. Please be cautious before doing it.
@@ -466,7 +467,7 @@ kubectl delete pvc -l release=my-release
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
-```bash
+```console
 $ helm install my-release \
     --set auth.postgresPassword=secretpassword
     my-repo/postgresql
@@ -480,8 +481,8 @@ The above command sets the PostgreSQL `postgres` account password to `secretpass
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
-```bash
-helm install my-release -f values.yaml my-repo/postgresql
+```console
+$ helm install my-release -f values.yaml my-repo/postgresql
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -639,8 +640,8 @@ To enable network policy for PostgreSQL, install [a networking plugin that imple
 
 For Kubernetes v1.5 & v1.6, you must also turn on NetworkPolicy by setting the DefaultDeny namespace annotation. Note: this will enforce policy for _all_ pods in the namespace:
 
-```bash
-kubectl annotate namespace default "net.beta.kubernetes.io/network-policy={\"ingress\":{\"isolation\":\"DefaultDeny\"}}"
+```console
+$ kubectl annotate namespace default "net.beta.kubernetes.io/network-policy={\"ingress\":{\"isolation\":\"DefaultDeny\"}}"
 ```
 
 With NetworkPolicy enabled, traffic will be limited to just port 5432.

@@ -7,12 +7,12 @@ Apache Kafka is a distributed streaming platform designed to build real-time pip
 [Overview of Apache Kafka](http://kafka.apache.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/kafka
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/kafka
 ```
 
 ## Introduction
@@ -32,8 +32,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/kafka
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/kafka
 ```
 
 These commands deploy Kafka on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -45,7 +45,7 @@ These commands deploy Kafka on the Kubernetes cluster in the default configurati
 To uninstall/delete the `my-release` deployment:
 
 ```console
-helm delete my-release
+$ helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -496,7 +496,7 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-helm install my-release \
+$ helm install my-release \
   --set replicaCount=3 \
   my-repo/kafka
 ```
@@ -506,7 +506,7 @@ The above command deploys Kafka with 3 brokers (replicas).
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/kafka
+$ helm install my-release -f values.yaml my-repo/kafka
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -563,8 +563,8 @@ In order to configure TLS authentication/encryption, you **can** create a secret
 For instance, to configure TLS authentication on a Kafka cluster with 2 Kafka brokers use the commands below to create the secrets:
 
 ```console
-kubectl create secret generic kafka-jks-0 --from-file=kafka.truststore.jks=./kafka.truststore.jks --from-file=kafka.keystore.jks=./kafka-0.keystore.jks
-kubectl create secret generic kafka-jks-1 --from-file=kafka.truststore.jks=./kafka.truststore.jks --from-file=kafka.keystore.jks=./kafka-1.keystore.jks
+$ kubectl create secret generic kafka-jks-0 --from-file=kafka.truststore.jks=./kafka.truststore.jks --from-file=kafka.keystore.jks=./kafka-0.keystore.jks
+$ kubectl create secret generic kafka-jks-1 --from-file=kafka.truststore.jks=./kafka.truststore.jks --from-file=kafka.keystore.jks=./kafka-1.keystore.jks
 ```
 
 > **Note**: the command above assumes you already created the truststore and keystores files. This [script](https://raw.githubusercontent.com/confluentinc/confluent-platform-security-tools/master/kafka-generate-ssl.sh) can help you with the JKS files generation.
@@ -1009,8 +1009,8 @@ Backwards compatibility is not guaranteed when Kafka metrics are enabled, unless
 Use the workaround below to upgrade from versions previous to 7.0.0. The following example assumes that the release name is kafka:
 
 ```console
-helm upgrade kafka my-repo/kafka --version 6.1.8 --set metrics.kafka.enabled=false
-helm upgrade kafka my-repo/kafka --version 7.0.0 --set metrics.kafka.enabled=true
+$ helm upgrade kafka my-repo/kafka --version 6.1.8 --set metrics.kafka.enabled=false
+$ helm upgrade kafka my-repo/kafka --version 7.0.0 --set metrics.kafka.enabled=true
 ```
 
 ### To 2.0.0
@@ -1019,8 +1019,8 @@ Backwards compatibility is not guaranteed unless you modify the labels used on t
 Use the workaround below to upgrade from versions previous to 2.0.0. The following example assumes that the release name is kafka:
 
 ```console
-kubectl delete statefulset kafka-kafka --cascade=false
-kubectl delete statefulset kafka-zookeeper --cascade=false
+$ kubectl delete statefulset kafka-kafka --cascade=false
+$ kubectl delete statefulset kafka-zookeeper --cascade=false
 ```
 
 ### To 1.0.0
@@ -1029,8 +1029,8 @@ Backwards compatibility is not guaranteed unless you modify the labels used on t
 Use the workaround below to upgrade from versions previous to 1.0.0. The following example assumes that the release name is kafka:
 
 ```console
-kubectl delete statefulset kafka-kafka --cascade=false
-kubectl delete statefulset kafka-zookeeper --cascade=false
+$ kubectl delete statefulset kafka-kafka --cascade=false
+$ kubectl delete statefulset kafka-zookeeper --cascade=false
 ```
 
 ## License

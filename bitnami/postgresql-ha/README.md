@@ -7,7 +7,7 @@ This PostgreSQL cluster solution includes the PostgreSQL replication manager, an
 [Overview of PostgreSQL HA](https://www.postgresql.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -33,7 +33,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 ## Installing the Chart
 
-Install the PostgreSQL HA helm chart with a release name `my-release`:
+To install the chart with the release name `my-release`:
 
 ```console
 $ helm repo add my-repo https://charts.bitnami.com/bitnami
@@ -562,7 +562,7 @@ LDAP support can be enabled in the chart by specifying the `ldap.` parameters wh
 
 For example:
 
-```bash
+```
 ldap.enabled="true"
 ldap.uri="ldap://my_ldap_server"
 ldap.base="dc=example\,dc=org"
@@ -608,7 +608,7 @@ The allowed extensions are `.sh`, `.sql` and `.sql.gz` in the **postgresql** con
 
 In more complex scenarios, we may have the following tree of dependencies
 
-```bash
+```
                      +--------------+
                      |              |
         +------------+   Chart 1    +-----------+
@@ -628,7 +628,7 @@ In more complex scenarios, we may have the following tree of dependencies
 
 The three charts below depend on the parent chart Chart 1. However, subcharts 1 and 2 may need to connect to PostgreSQL HA as well. In order to do so, subcharts 1 and 2 need to know the PostgreSQL HA credentials, so one option for deploying could be deploy Chart 1 with the following parameters:
 
-```bash
+```
 postgresql.postgresqlPassword=testtest
 subchart1.postgresql.postgresqlPassword=testtest
 subchart2.postgresql.postgresqlPassword=testtest
@@ -639,7 +639,7 @@ subchart2.postgresql.postgresqlDatabase=db1
 
 If the number of dependent sub-charts increases, installing the chart with parameters can become increasingly difficult. An alternative would be to set the credentials using global variables as follows:
 
-```bash
+```
 global.postgresql.postgresqlPassword=testtest
 global.postgresql.postgresqlDatabase=db1
 ```
@@ -665,7 +665,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 It's necessary to specify the existing passwords while performing a upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `postgresql.password` and `postgresql.repmgrPassword` parameters when upgrading the chart:
 
-```bash
+```console
 $ helm upgrade my-release my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRES_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD]
@@ -707,7 +707,7 @@ A new major version of repmgr (5.3) was included. To upgrade to this major versi
 
 - Reduce your PostgreSQL setup to one replica (primary node) and upgrade to `8.0.0`, enabling the repmgr extension upgrade:
 
-```bash
+```console
 $ helm upgrade my-release --version 8.0.0 my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
@@ -717,7 +717,7 @@ $ helm upgrade my-release --version 8.0.0 my-repo/postgresql-ha \
 
 - Scale your PostgreSQL setup to the original number of replicas:
 
-```bash
+```console
 $ helm upgrade my-release --version 8.0.0 my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
@@ -760,7 +760,7 @@ A new  version of repmgr (5.2.0) was included. To upgrade to this version, it's 
 
 - Reduce your PostgreSQL setup to one replica (primary node) and upgrade to `5.2.0`, enabling the repmgr extension upgrade:
 
-```bash
+```console
 $ helm upgrade my-release --version 5.2.0 my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
@@ -770,7 +770,7 @@ $ helm upgrade my-release --version 5.2.0 my-repo/postgresql-ha \
 
 - Scale your PostgreSQL setup to the original number of replicas:
 
-```bash
+```console
 $ helm upgrade my-release --version 5.2.0 my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
@@ -786,7 +786,7 @@ This version is next major version to v3.x.y
 
 - To upgrade to this version you will need to delete the deployment, keep the PVCs and launch a new deployment keeping the deployment name.
 
-```bash
+```console
 $ # e.g. Previous deployment v3.9.1
 $ helm install my-release \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
@@ -814,7 +814,7 @@ A new major version of repmgr (5.1.0) was included. To upgrade to this major ver
 
 - Reduce your PostgreSQL setup to one replica (primary node) and upgrade to `3.0.0`, enabling the repmgr extension upgrade:
 
-```bash
+```console
 $ helm upgrade my-release --version 3.0.0 my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
@@ -824,7 +824,7 @@ $ helm upgrade my-release --version 3.0.0 my-repo/postgresql-ha \
 
 - Scale your PostgreSQL setup to the original number of replicas:
 
-```bash
+```console
 $ helm upgrade my-release --version 3.0.0 my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
@@ -848,7 +848,7 @@ A new major version of repmgr (5.0.0) was included. To upgrade to this major ver
 
 - Reduce your PostgreSQL setup to one replica (primary node) and upgrade to `1.0.0`, enabling the repmgr extension upgrade:
 
-```bash
+```console
 $ helm upgrade my-release --version 1.0.0 my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
@@ -858,7 +858,7 @@ $ helm upgrade my-release --version 1.0.0 my-repo/postgresql-ha \
 
 - Scale your PostgreSQL setup to the original number of replicas:
 
-```bash
+```console
 $ helm upgrade my-release --version 1.0.0 my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
