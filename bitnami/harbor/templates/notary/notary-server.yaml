@@ -37,8 +37,8 @@ spec:
         annotations: {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
+      serviceAccountName: {{ template "harbor.notary-server.serviceAccountName"}}
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
-      automountServiceAccountToken: {{ .Values.notary.server.automountServiceAccountToken }}
       {{- if .Values.notary.server.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.hostAliases "context" $) | nindent 8 }}
       {{- end }}
