@@ -1,5 +1,9 @@
 apiVersion: apps/v1
+{{- if .Values.useDaemonset }}
+kind: DaemonSet
+{{- else }}
 kind: Deployment
+{{- end }}
 metadata:
   name: {{ template "external-dns.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
@@ -11,7 +15,9 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{ if not .Values.useDaemonset -}}
   replicas: {{ coalesce .Values.replicas .Values.replicaCount }}
+  {{- end }}
   {{- if .Values.updateStrategy }}
   strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
   {{- end }}
@@ -498,13 +504,6 @@ spec:
                 secretKeyRef:
                   name: {{ template "external-dns.secretName" . }}
                   key: scw_secret_key
-            {{- end }}
-            {{- if .Values.scaleway.scwDefaultOrganizationId }}
-            - name: SCW_DEFAULT_ORGANIZATION_ID
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "external-dns.secretName" . }}
-                  key: scw_default_organization_id
             {{- end }}
             {{- end }}
             {{- if eq .Values.provider "infoblox" }}

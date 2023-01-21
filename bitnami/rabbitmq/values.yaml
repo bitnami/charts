@@ -31,7 +31,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.11.5-debian-11-r2
+  tag: 3.11.6-debian-11-r0
   digest: ""
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
@@ -409,7 +409,7 @@ configuration: |-
   {{- if .Values.metrics.enabled }}
   ## Prometheus metrics
   ##
-  prometheus.tcp.port = 9419
+  prometheus.tcp.port = {{ .Values.containerPorts.metrics }}
   {{- end }}
   {{- if .Values.memoryHighWatermark.enabled }}
   ## Memory Threshold
@@ -1280,7 +1280,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r62
+    tag: 11-debian-11-r69
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

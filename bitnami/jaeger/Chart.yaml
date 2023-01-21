@@ -1,7 +1,9 @@
 annotations:
   category: Infrastructure
+  licenses: |
+    - Apache-2.0
 apiVersion: v2
-appVersion: 1.40.0
+appVersion: 1.41.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -13,7 +15,6 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     version: 9.x.x
 description: Jaeger is a distributed tracing system. It is used for monitoring and troubleshooting microservices-based distributed systems.
-engine: gotpl
 home: https://github.com/bitnami/charts/tree/main/bitnami/jaeger
 icon: https://bitnami.com/assets/stacks/jaeger/img/jaeger-stack-220x234.png
 keywords:
@@ -27,4 +28,4 @@ name: jaeger
 sources:
   - https://github.com/jaegertracing/jaeger
   - https://www.jaegertracing.io/
-version: 0.1.2
+version: 0.1.3

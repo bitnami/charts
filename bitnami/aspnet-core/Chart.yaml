@@ -1,7 +1,9 @@
 annotations:
   category: DeveloperTools
+  licenses: |
+    - Apache-2.0
 apiVersion: v2
-appVersion: 7.0.1
+appVersion: 7.0.2
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -9,7 +11,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: ASP.NET Core is an open-source framework for web application development created by Microsoft. It runs on both the full .NET Framework, on Windows, and the cross-platform .NET Core.
-engine: gotpl
 home: https://github.com/bitnami/charts/tree/main/bitnami/aspnet-core
 icon: https://bitnami.com/assets/stacks/aspnet-core/img/aspnet-core-stack-220x234.png
 keywords:
@@ -22,4 +23,4 @@ name: aspnet-core
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/aspnet-core
   - https://dotnet.microsoft.com/apps/aspnet
-version: 4.0.1
+version: 4.0.2

@@ -1,5 +1,7 @@
 annotations:
   category: Forum
+  licenses: |
+    - Apache-2.0
 apiVersion: v2
 appVersion: 3.3.9
 dependencies:
@@ -13,7 +15,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: phpBB is a popular bulletin board that features robust messaging capabilities such as flat message structure, subforums, topic split/merge/lock, user groups, full-text search, and attachments.
-engine: gotpl
 home: https://github.com/bitnami/charts/tree/main/bitnami/phpbb
 icon: https://bitnami.com/assets/stacks/phpbb/img/phpbb-stack-220x234.png
 keywords:
@@ -28,4 +29,4 @@ name: phpbb
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/phpbb
   - https://www.phpbb.com/
-version: 12.3.8
+version: 12.3.9

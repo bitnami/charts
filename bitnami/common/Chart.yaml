@@ -1,5 +1,7 @@
 annotations:
   category: Infrastructure
+  licenses: |
+    - Apache-2.0
 apiVersion: v2
 # Please make sure that version and appVersion are always the same.
 appVersion: 2.2.2

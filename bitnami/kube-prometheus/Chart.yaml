@@ -1,7 +1,9 @@
 annotations:
   category: Analytics
+  licenses: |
+    - Apache-2.0
 apiVersion: v2
-appVersion: 0.61.1
+appVersion: 0.62.0
 dependencies:
   - condition: exporters.enabled,exporters.node-exporter.enabled
     name: node-exporter
@@ -17,7 +19,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Prometheus Operator provides easy monitoring definitions for Kubernetes services and deployment and management of Prometheus instances.
-engine: gotpl
 home: https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus
 icon: https://bitnami.com/assets/stacks/prometheus-operator/img/prometheus-operator-stack-220x234.png
 keywords:
@@ -35,4 +36,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/prometheus
   - https://github.com/bitnami/containers/tree/main/bitnami/alertmanager
   - https://github.com/prometheus-operator/kube-prometheus
-version: 8.3.0
+version: 8.3.2

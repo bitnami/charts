@@ -224,7 +224,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                                   | Description                                                                                                   | Value                   |
 | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `persistence.enabled`                                  | Enable persistence using Persistent Volume Claims                                                             | `true`                  |
+| `persistence.enabled`                                  | Enable persistence using Persistent Volume Claims                                                             | `false`                 |
 | `persistence.storageClass`                             | Persistent Volume storage class                                                                               | `""`                    |
 | `persistence.accessModes`                              | Persistent Volume access modes                                                                                | `[]`                    |
 | `persistence.size`                                     | Persistent Volume size                                                                                        | `10Gi`                  |
