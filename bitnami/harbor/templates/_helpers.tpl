@@ -558,7 +558,7 @@ is true or default otherwise.
 */}}
 {{- define "harbor.chartmuseum.serviceAccountName" -}}
     {{- if .Values.core.serviceAccount.create -}}
-        {{ default (include "common.names.fullname" .) .Values.chartmuseum.serviceAccount.name }}
+        {{ default printf "%s-chartmuseum" (include "common.names.fullname" .) .Values.chartmuseum.serviceAccount.name }}
     {{- else -}}
         {{ default "default" .Values.chartmuseum.serviceAccount.name }}
     {{- end -}}
@@ -571,7 +571,7 @@ is true or default otherwise.
 */}}
 {{- define "harbor.core.serviceAccountName" -}}
     {{- if .Values.core.serviceAccount.create -}}
-        {{ default (include "common.names.fullname" .) .Values.core.serviceAccount.name }}
+        {{ default printf "%s-core" (include "common.names.fullname" .) .Values.core.serviceAccount.name }}
     {{- else -}}
         {{ default "default" .Values.core.serviceAccount.name }}
     {{- end -}}
@@ -584,7 +584,7 @@ is true or default otherwise.
 */}}
 {{- define "harbor.jobservice.serviceAccountName" -}}
     {{- if .Values.core.serviceAccount.create -}}
-        {{ default (include "common.names.fullname" .) .Values.jobservice.serviceAccount.name }}
+        {{ default printf "%s-jobservice" (include "common.names.fullname" .) .Values.jobservice.serviceAccount.name }}
     {{- else -}}
         {{ default "default" .Values.jobservice.serviceAccount.name }}
     {{- end -}}
@@ -597,7 +597,7 @@ is true or default otherwise.
 */}}
 {{- define "harbor.notary-server.serviceAccountName" -}}
     {{- if .Values.core.serviceAccount.create -}}
-        {{ default (include "common.names.fullname" .) .Values.notary.server.serviceAccount.name }}
+        {{ default printf "%s-notary-server" (include "common.names.fullname" .) .Values.notary.server.serviceAccount.name }}
     {{- else -}}
         {{ default "default" .Values.notary.server.serviceAccount.name }}
     {{- end -}}
@@ -610,7 +610,7 @@ is true or default otherwise.
 */}}
 {{- define "harbor.notary-signer.serviceAccountName" -}}
     {{- if .Values.core.serviceAccount.create -}}
-        {{ default (include "common.names.fullname" .) .Values.notary.signer.serviceAccount.name }}
+        {{ default printf "%s-notary-signer" (include "common.names.fullname" .) .Values.notary.signer.serviceAccount.name }}
     {{- else -}}
         {{ default "default" .Values.notary.signer.serviceAccount.name }}
     {{- end -}}
@@ -623,7 +623,7 @@ is true or default otherwise.
 */}}
 {{- define "harbor.portal.serviceAccountName" -}}
     {{- if .Values.core.serviceAccount.create -}}
-        {{ default (include "common.names.fullname" .) .Values.portal.serviceAccount.name }}
+        {{ default printf "%s-portal" (include "common.names.fullname" .) .Values.portal.serviceAccount.name }}
     {{- else -}}
         {{ default "default" .Values.portal.serviceAccount.name }}
     {{- end -}}
@@ -636,7 +636,7 @@ is true or default otherwise.
 */}}
 {{- define "harbor.registry.serviceAccountName" -}}
     {{- if .Values.core.serviceAccount.create -}}
-        {{ default (include "common.names.fullname" .) .Values.registry.serviceAccount.name }}
+        {{ default printf "%s-registry" (include "common.names.fullname" .) .Values.registry.serviceAccount.name }}
     {{- else -}}
         {{ default "default" .Values.registry.serviceAccount.name }}
     {{- end -}}
@@ -649,7 +649,7 @@ is true or default otherwise.
 */}}
 {{- define "harbor.trivy.serviceAccountName" -}}
     {{- if .Values.core.serviceAccount.create -}}
-        {{ default (include "common.names.fullname" .) .Values.trivy.serviceAccount.name }}
+        {{ default printf "%s-trivy" (include "common.names.fullname" .) .Values.trivy.serviceAccount.name }}
     {{- else -}}
         {{ default "default" .Values.trivy.serviceAccount.name }}
     {{- end -}}
