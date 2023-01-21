@@ -69,7 +69,7 @@ spec:
       {{- if .Values.trivy.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.trivy.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      automountServiceAccountToken: {{ .Values.trivy.automountServiceAccountToken }}
+      serviceAccountName: {{ include "harbor.trivy.serviceAccountName" . }}
       initContainers:
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions

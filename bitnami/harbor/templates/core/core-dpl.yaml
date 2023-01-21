@@ -42,8 +42,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.core.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
+      serviceAccountName: {{ include "harbor.core.serviceAccountName" . }}
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
-      automountServiceAccountToken: {{ .Values.core.automountServiceAccountToken }}
       {{- if .Values.core.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.core.hostAliases "context" $) | nindent 8 }}
       {{- end }}

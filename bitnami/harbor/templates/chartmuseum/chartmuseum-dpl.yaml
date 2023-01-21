@@ -41,11 +41,11 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
+      serviceAccountName: {{ include "harbor.chartmuseum.serviceAccountName" . }}
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.chartmuseum.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.hostAliases "context" $) | nindent 8 }}
       {{- end }}
-      automountServiceAccountToken: {{ .Values.chartmuseum.automountServiceAccountToken }}
       {{- if .Values.chartmuseum.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.affinity "context" $) | nindent 8 }}
       {{- else }}
