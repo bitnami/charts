@@ -594,7 +594,7 @@ persistence:
   ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
   ##
   storageClass: ""
-  ## @param primary.persistence.accessModes PVC Access Mode for PostgreSQL volume
+  ## @param primary.persistence.accessMode PVC Access Mode for PostgreSQL volume
   ##
   accessMode: ReadWriteOnce
   ## @param persistence.size Persistent Volume size
@@ -926,10 +926,9 @@ primary:
     ##   GKE, AWS & OpenStack)
     ##
     storageClass: ""
-    ## @param primary.persistence.accessModes PVC Access Mode for PostgreSQL volume
+    ## @param primary.persistence.accessMode PVC Access Mode for PostgreSQL volume
     ##
-    accessMode:
-      - ReadWriteOnce
+    accessMode: ReadWriteOnce
     ## @param primary.persistence.size PVC Storage Request for PostgreSQL volume
     ##
     size: 8Gi
