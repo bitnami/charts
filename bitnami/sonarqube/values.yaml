@@ -900,6 +900,9 @@ postgresql:
     ## @param postgresql.auth.database Database to create when deploying the PostgreSQL chart
     ##
     database: bitnami_sonarqube
+## @param primary.name Name of the primary database (eg primary, master, leader, ...)
+##
+primary:
   ## PostgreSQL service
   ##
   service:
