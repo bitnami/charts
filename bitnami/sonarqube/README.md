@@ -226,7 +226,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `persistence.enabled`                                  | Enable persistence using Persistent Volume Claims                                                             | `false`                 |
 | `persistence.storageClass`                             | Persistent Volume storage class                                                                               | `""`                    |
-| `persistence.accessMode`                               | PVC Access Mode for PostgreSQL volume                                                                         | `ReadWriteOnce`         |
+| `persistence.accessModes`                              | Persistent Volume access modes                                                                                | `[]`                    |
 | `persistence.size`                                     | Persistent Volume size                                                                                        | `10Gi`                  |
 | `persistence.dataSource`                               | Custom PVC data source                                                                                        | `{}`                    |
 | `persistence.existingClaim`                            | The name of an existing PVC to use for persistence                                                            | `""`                    |
