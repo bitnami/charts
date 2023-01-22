@@ -226,7 +226,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `persistence.enabled`                                  | Enable persistence using Persistent Volume Claims                                                             | `false`                 |
 | `persistence.storageClass`                             | Persistent Volume storage class                                                                               | `""`                    |
-| `persistence.accessModes`                              | Persistent Volume access modes                                                                                | `[]`                    |
+| `persistence.accessMode`                               | PVC Access Mode for PostgreSQL volume                                                                         | `ReadWriteOnce`         |
 | `persistence.size`                                     | Persistent Volume size                                                                                        | `10Gi`                  |
 | `persistence.dataSource`                               | Custom PVC data source                                                                                        | `{}`                    |
 | `persistence.existingClaim`                            | The name of an existing PVC to use for persistence                                                            | `""`                    |
@@ -308,20 +308,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### PostgreSQL subchart settings
 
-| Name                                   | Description                                                                        | Value               |
-| -------------------------------------- | ---------------------------------------------------------------------------------- | ------------------- |
-| `postgresql.enabled`                   | Deploy PostgreSQL subchart                                                         | `true`              |
-| `postgresql.nameOverride`              | Override name of the PostgreSQL chart                                              | `""`                |
-| `postgresql.auth.existingSecret`       | Existing secret containing the password of the PostgreSQL chart                    | `""`                |
-| `postgresql.auth.password`             | Password for the postgres user of the PostgreSQL chart (auto-generated if not set) | `""`                |
-| `postgresql.auth.username`             | Username to create when deploying the PostgreSQL chart                             | `bn_sonarqube`      |
-| `postgresql.auth.database`             | Database to create when deploying the PostgreSQL chart                             | `bitnami_sonarqube` |
-| `postgresql.primary.service.ports.postgresql`  | PostgreSQL service port for the Database                                           | `5432`              |
-| `postgresql.primary.persistence.enabled`       | Use PVCs when deploying the PostgreSQL chart                                       | `true`              |
-| `postgresql.primary.existingClaim`             | Use an existing PVC when deploying the PostgreSQL chart                            | `""`                |
-| `postgresql.primary.persistence.storageClass`     | storageClass of the created PVCs                                                   | `""`                |
-| `postgresql.primary.persistence.accessMode`       | Access mode of the created PVCs                                                    | `ReadWriteOnce`     |
-| `postgresql.primary.persistence.size`             | Size of the created PVCs                                                           | `8Gi`               |
+| Name                             | Description                                                                        | Value               |
+| -------------------------------- | ---------------------------------------------------------------------------------- | ------------------- |
+| `postgresql.enabled`             | Deploy PostgreSQL subchart                                                         | `true`              |
+| `postgresql.nameOverride`        | Override name of the PostgreSQL chart                                              | `""`                |
+| `postgresql.auth.existingSecret` | Existing secret containing the password of the PostgreSQL chart                    | `""`                |
+| `postgresql.auth.password`       | Password for the postgres user of the PostgreSQL chart (auto-generated if not set) | `""`                |
+| `postgresql.auth.username`       | Username to create when deploying the PostgreSQL chart                             | `bn_sonarqube`      |
+| `postgresql.auth.database`       | Database to create when deploying the PostgreSQL chart                             | `bitnami_sonarqube` |
+
+
+### PostgreSQL Primary parameters
+
+| Name                                | Description                                          | Value           |
+| ----------------------------------- | ---------------------------------------------------- | --------------- |
+| `primary.service.ports.postgresql`  | PostgreSQL service port                              | `5432`          |
+| `primary.persistence.enabled`       | Enable PostgreSQL Primary data persistence using PVC | `true`          |
+| `primary.persistence.existingClaim` | Name of an existing PVC to use                       | `""`            |
+| `primary.persistence.storageClass`  | PVC Storage Class for PostgreSQL Primary data volume | `""`            |
+| `primary.persistence.accessMode`    | PVC Access Mode for PostgreSQL volume                | `ReadWriteOnce` |
+| `primary.persistence.size`          | PVC Storage Request for PostgreSQL volume            | `8Gi`           |
 
 
 ### External Database settings
