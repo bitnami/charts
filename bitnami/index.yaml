@@ -64289,6 +64289,40 @@ entries:
   mysql:
   - annotations:
       category: Database
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 8.0.31
+    created: "2023-01-22T17:56:52.692494203Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: MySQL is a fast, reliable, scalable, and easy to use open source
+      relational database system. Designed to handle mission-critical, heavy-load
+      production applications.
+    digest: 74bd0dcdd1dad181fd343159e563f8a68cbce075a5eb3883d21f27e0e92cd3bf
+    home: https://github.com/bitnami/charts/tree/main/bitnami/mysql
+    icon: https://bitnami.com/assets/stacks/mysql/img/mysql-stack-220x234.png
+    keywords:
+    - mysql
+    - database
+    - sql
+    - cluster
+    - high availability
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: mysql
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/mysql
+    - https://mysql.com
+    urls:
+    - https://charts.bitnami.com/bitnami/mysql-9.4.7.tgz
+    version: 9.4.7
+  - annotations:
+      category: Database
     apiVersion: v2
     appVersion: 8.0.31
     created: "2023-01-09T13:54:43.226660734Z"
@@ -107284,4 +107318,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-01-21T14:13:46.314593461Z"
+generated: "2023-01-22T17:56:52.6879696Z"
