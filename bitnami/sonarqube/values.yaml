@@ -596,8 +596,7 @@ persistence:
   storageClass: ""
   ## @param primary.persistence.accessModes PVC Access Mode for PostgreSQL volume
   ##
-  accessModes:
-    - ReadWriteOnce
+  accessMode: ReadWriteOnce
   ## @param persistence.size Persistent Volume size
   ##
   size: 10Gi
