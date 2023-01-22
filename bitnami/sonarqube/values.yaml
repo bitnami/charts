@@ -929,7 +929,8 @@ primary:
     storageClass: ""
     ## @param primary.persistence.accessModes PVC Access Mode for PostgreSQL volume
     ##
-    accessMode: ReadWriteOnce
+    accessMode:
+      - ReadWriteOnce
     ## @param primary.persistence.size PVC Storage Request for PostgreSQL volume
     ##
     size: 8Gi
