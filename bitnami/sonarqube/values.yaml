@@ -903,7 +903,7 @@ postgresql:
   ## @param postgresql.primary Primary parameters
   ##
   primary:
-    ## PostgreSQL Primary service configuration
+  ## PostgreSQL Primary service configuration
   ##
   service:
     ## @param postgresql.primary.service.ports.postgresql PostgreSQL service port
