@@ -1,4 +1,4 @@
-{{- if and .Values.rbac.create .Values.notifications.enabled }}
+{{- if and .Values.notifications.enabled .Values.rbac.create }}
 kind: Role
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
