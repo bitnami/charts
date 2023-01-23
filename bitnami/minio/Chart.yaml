@@ -25,4 +25,4 @@ name: minio
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/minio
   - https://min.io
-version: 12.0.2
+version: 12.0.3
