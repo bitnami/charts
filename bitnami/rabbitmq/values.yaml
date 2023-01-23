@@ -427,6 +427,13 @@ configuration: |-
   vm_memory_high_watermark.{{ .Values.memoryHighWatermark.type }} = {{ .Values.memoryHighWatermark.value }}
   {{- end }}
 
+## @param configurationExistingSecret Existing secret with the configuration to use as rabbitmq.conf.
+## Must contain the key "rabbitmq.conf"
+## Takes precedence over `configuration`, so do not use both simultaneously
+## With providing an existingSecret, extraConfiguration and extraConfigurationExistingSecret do not take any effect
+##
+configurationExistingSecret:
+
 ## @param extraConfiguration [string] Configuration file content: extra configuration to be appended to RabbitMQ configuration
 ## Use this instead of `configuration` to add more configuration
 ## Do not use simultaneously with `extraConfigurationExistingSecret`
