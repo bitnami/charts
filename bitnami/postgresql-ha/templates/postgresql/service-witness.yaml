@@ -1,7 +1,8 @@
+{{- if .Values.witness.create }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ printf "%s-headless" (include "postgresql-ha.postgresql" .) }}
+  name: {{ printf "%s-witness" (include "postgresql-ha.postgresql" .) }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
@@ -20,4 +21,5 @@ spec:
       protocol: TCP
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: postgresql
-    role: data
+    role: witness
+{{- end }}
