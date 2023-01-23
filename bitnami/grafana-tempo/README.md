@@ -7,7 +7,7 @@ Grafana Tempo is a distributed tracing system that has out-of-the-box integratio
 [Overview of Grafana Tempo](https://github.com/grafana/tempo)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -36,7 +36,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release my-repo/grafana-tempo
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/grafana-tempo
 ```
 
 The command deploys grafana-tempo on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -48,7 +49,7 @@ The command deploys grafana-tempo on the Kubernetes cluster in the default confi
 To uninstall/delete the `my-release` deployment:
 
 ```console
-helm delete my-release
+$ helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -804,7 +805,7 @@ The above parameters map to the env variables defined in [bitnami/grafana-tempo]
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-helm install my-release \
+$ helm install my-release \
   --set tempo.traces.jaeger.grpc=true \
   my-repo/grafana-tempo
 ```
@@ -814,7 +815,7 @@ The above command enables the Jaeger GRPC traces.
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/grafana-tempo
+$ helm install my-release -f values.yaml my-repo/grafana-tempo
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

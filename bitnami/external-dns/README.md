@@ -7,7 +7,7 @@ ExternalDNS is a Kubernetes addon that configures public DNS servers with inform
 [Overview of ExternalDNS](https://github.com/kubernetes-incubator/external-dns)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -30,7 +30,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 To install the chart with the release name `my-release`:
 
-```bash
+```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/external-dns
 ```
 
@@ -347,7 +348,7 @@ $ helm install my-release \
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
-```bash
+```console
 $ helm install my-release -f values.yaml my-repo/external-dns
 ```
 
@@ -386,7 +387,7 @@ For instance, to install ExternalDNS on AWS, you need to:
 - Install ExternalDNS chart using the command below:
 
 > Note: replace the placeholder HOSTED_ZONE_IDENTIFIER and HOSTED_ZONE_NAME, with your hosted zoned identifier and name, respectively.
-```bash
+```console
 $ helm install my-release \
   --set provider=aws \
   --set aws.zoneType=public \
@@ -414,8 +415,8 @@ No issues should be expected when upgrading.
 The CRD was updated according to the latest changes in the upstream project. As a consequence, the CRD API version was moved from `apiextensions.k8s.io/v1beta1` to `apiextensions.k8s.io/v1`. If you deployed the Helm Chart using `crd.create=true` you need to manually delete the old CRD before upgrading the release.
 
 ```console
-kubectl delete crd dnsendpoints.externaldns.k8s.io
-helm upgrade my-release -f my-values.yaml
+$ kubectl delete crd dnsendpoints.externaldns.k8s.io
+$ helm upgrade my-release -f my-values.yaml
 ```
 
 ### To 4.3.0
