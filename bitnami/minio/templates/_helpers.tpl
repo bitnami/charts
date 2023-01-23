@@ -220,3 +220,31 @@ Provisioning job labels (exclude matchLabels from standard labels)
 {{- end -}}
 {{- print ($provisioningLabels | toYaml) -}}
 {{- end -}}
+
+{{/*
+Return the ingress anotation
+*/}}
+{{- define "minio.ingress.annotations" -}}
+{{ .Values.ingress.annotations | toYaml }}
+{{- end -}}
+
+{{/*
+Return the api ingress anotation
+*/}}
+{{- define "minio.apiIngress.annotations" -}}
+{{ .Values.apiIngress.annotations | toYaml }}
+{{- end -}}
+
+{{/*
+Return the ingress hostname
+*/}}
+{{- define "minio.ingress.hostname" -}}
+{{- .Values.ingress.hostname -}}
+{{- end -}}
+
+{{/*
+Return the api ingress hostname
+*/}}
+{{- define "minio.apiIngress.hostname" -}}
+{{- .Values.apiIngress.hostname -}}
+{{- end -}}

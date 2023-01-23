@@ -384,6 +384,22 @@ Refer to the [chart documentation on using an external database](https://docs.bi
 
 > NOTE: Only PostgreSQL database server is supported as external database
 
+It is not supported but possible to run Keycloak with an external MSSQL database with the following settings:
+
+```yaml
+externalDatabase:
+  host: "mssql.example.com"
+  port: 1433
+  user: keycloak
+  database: keycloak
+  existingSecret: passwords
+extraEnvVars:
+  - name: KC_DB # override values from the conf file
+    value: 'mssql'
+  - name: KC_DB_URL
+    value: 'jdbc:sqlserver://mssql.example.com:1433;databaseName=keycloak;'
+```
+
 ### Add extra environment variables
 
 In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
