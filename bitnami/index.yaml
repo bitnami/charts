@@ -93645,6 +93645,53 @@ entries:
   spring-cloud-dataflow:
   - annotations:
       category: DeveloperTools
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 2.10.0
+    created: "2023-01-23T16:34:38.665647407Z"
+    dependencies:
+    - condition: rabbitmq.enabled
+      name: rabbitmq
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.x.x
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - dataflow-database
+      version: 11.x.x
+    - condition: kafka.enabled
+      name: kafka
+      repository: https://charts.bitnami.com/bitnami
+      version: 20.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Spring Cloud Data Flow is a microservices-based toolkit for building
+      streaming and batch data processing pipelines in Cloud Foundry and Kubernetes.
+    digest: 81d716186b0b64622656d3342b8d421c14a988b490814b8f4091d52cbb1eee51
+    home: https://github.com/bitnami/charts/tree/main/bitnami/spring-cloud-dataflow
+    icon: https://bitnami.com/assets/stacks/spring-cloud-dataflow/img/spring-cloud-dataflow-stack-220x234.png
+    keywords:
+    - spring-cloud
+    - dataflow
+    - skipper
+    - spring
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: spring-cloud-dataflow
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/spring-cloud-dataflow
+    - https://github.com/bitnami/containers/tree/main/bitnami/spring-cloud-skipper
+    - https://dataflow.spring.io/
+    urls:
+    - https://charts.bitnami.com/bitnami/spring-cloud-dataflow-15.0.2.tgz
+    version: 15.0.2
+  - annotations:
+      category: DeveloperTools
     apiVersion: v2
     appVersion: 2.9.6
     created: "2022-12-14T06:16:13.501423334Z"
@@ -107807,4 +107854,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-01-23T13:38:30.568287085Z"
+generated: "2023-01-23T16:34:38.641166955Z"
