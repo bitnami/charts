@@ -6,7 +6,7 @@ before(() => {
 });
 
 it('allows creating a stream and deploying it', () => {
-  cy.visit('/dashboard/#/streams/list/create');
+  cy.visit('/dashboard/index.html#/streams/list/create');
   cy.fixture('streams').then((stream) => {
     cy.get('.CodeMirror-line').type(
       `${stream.newStream.app1} | ${stream.newStream.app2}`
@@ -16,7 +16,7 @@ it('allows creating a stream and deploying it', () => {
       stream.newStream.app2
     );
     cy.contains('button', 'Create stream(s)').click();
-    cy.get('.modal-content').should('contain', 'Create Stream');
+    cy.get('.modal-content').should('contain', 'Create the stream');
     cy.get('input[placeholder="Stream Name"]').type(
       `${stream.newStream.name}-${random}`
     );
@@ -24,15 +24,15 @@ it('allows creating a stream and deploying it', () => {
     cy.contains('Stream(s) have been created successfully');
 
     cy.visit(
-      `/dashboard/#/streams/list/${stream.newStream.name}-${random}/deploy`
+      `/dashboard/index.html#/streams/list/${stream.newStream.name}-${random}/deploy`
     );
-    cy.contains('button', 'Deploy stream').click();
+    cy.contains('button', 'Deploy the stream').click();
     cy.contains('Deploy success');
   });
 });
 
 it('allows importing a task from a file and destroying it ', () => {
-  cy.visit('/dashboard/#/manage/tools');
+  cy.visit('/dashboard/index.html#/manage/tools');
   cy.contains('Import tasks').click();
   const newTask = 'cypress/fixtures/task-to-import.json';
   cy.readFile(newTask).then((obj) => {
@@ -43,7 +43,7 @@ it('allows importing a task from a file and destroying it ', () => {
   cy.contains('button', 'Import').click();
   cy.contains('task(s) created');
 
-  cy.visit('dashboard/#/tasks-jobs/tasks');
+  cy.visit('/dashboard/index.html#/tasks-jobs/tasks');
   cy.contains('Group Actions').click();
   cy.get('[aria-label="Select All"]').click({ force: true });
   cy.contains('Destroy task').click();
