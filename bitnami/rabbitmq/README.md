@@ -7,10 +7,10 @@ RabbitMQ is an open source general-purpose message broker that is designed for c
 [Overview of RabbitMQ](https://www.rabbitmq.com)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
-```bash
+```console
 $ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/rabbitmq
 ```
@@ -31,7 +31,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 To install the chart with the release name `my-release`:
 
-```bash
+```console
 $ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/rabbitmq
 ```
@@ -44,7 +44,7 @@ The command deploys RabbitMQ on the Kubernetes cluster in the default configurat
 
 To uninstall/delete the `my-release` deployment:
 
-```bash
+```console
 $ helm delete my-release
 ```
 
@@ -360,7 +360,7 @@ The above parameters map to the env variables defined in [bitnami/rabbitmq](http
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
-```bash
+```console
 $ helm install my-release \
   --set auth.username=admin,auth.password=secretpassword,auth.erlangCookie=secretcookie \
     my-repo/rabbitmq
@@ -372,7 +372,7 @@ The above command sets the RabbitMQ admin username and password to `admin` and `
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
-```bash
+```console
 $ helm install my-release -f values.yaml my-repo/rabbitmq
 ```
 
@@ -543,7 +543,7 @@ The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/stora
 1. Create the PersistentVolumeClaim
 1. Install the chart
 
-```bash
+```console
 $ helm install my-release --set persistence.existingClaim=PVC_NAME my-repo/rabbitmq
 ```
 
@@ -578,7 +578,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 It's necessary to set the `auth.password` and `auth.erlangCookie` parameters when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, some notes will be displayed providing the credentials you must use under the 'Credentials' section. Please note down the password and the cookie, and run the command below to upgrade your chart:
 
-```bash
+```console
 $ helm upgrade my-release my-repo/rabbitmq --set auth.password=[PASSWORD] --set auth.erlangCookie=[RABBITMQ_ERLANG_COOKIE]
 ```
 

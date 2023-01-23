@@ -7,10 +7,10 @@ Redis(R) is an open source, advanced key-value store. It is often referred to as
 [Overview of Redis&reg;](http://redis.io)
 
 Disclaimer: Redis is a registered trademark of Redis Ltd. Any rights therein are reserved to Redis Ltd. Any use by Bitnami is for referential purposes only and does not indicate any sponsorship, endorsement, or affiliation between Redis Ltd.
-                           
+
 ## TL;DR
 
-```bash
+```console
 $ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/redis
 ```
@@ -46,7 +46,8 @@ The main features of each chart are the following:
 
 To install the chart with the release name `my-release`:
 
-```bash
+```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/redis
 ```
 
@@ -58,7 +59,7 @@ The command deploys Redis&reg; on the Kubernetes cluster in the default configur
 
 To uninstall/delete the `my-release` deployment:
 
-```bash
+```console
 $ helm delete my-release
 ```
 
@@ -549,7 +550,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
-```bash
+```console
 $ helm install my-release \
   --set auth.password=secretpassword \
     my-repo/redis
@@ -561,7 +562,7 @@ The above command sets the Redis&reg; server password to `secretpassword`.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
-```bash
+```console
 $ helm install my-release -f values.yaml my-repo/redis
 ```
 
@@ -724,7 +725,7 @@ By default, the chart mounts a [Persistent Volume](https://kubernetes.io/docs/co
 2. Create the PersistentVolumeClaim
 3. Install the chart
 
-```bash
+```console
 $ helm install my-release --set master.persistence.existingClaim=PVC_NAME my-repo/redis
 ```
 
@@ -800,7 +801,7 @@ Backwards compatibility is not guaranteed. To upgrade to `14.0.0`, install a new
 - Create a backup of the database, and restore it on the new release as explained in the [Backup and restore](#backup-and-restore) section.
 - Reuse the PVC used to hold the master data on your previous release. To do so, use the `master.persistence.existingClaim` parameter. The following example assumes that the release name is `redis`:
 
-```bash
+```console
 $ helm install redis my-repo/redis --set auth.password=[PASSWORD] --set master.persistence.existingClaim=[EXISTING_PVC]
 ```
 
@@ -873,14 +874,14 @@ This version causes a change in the Redis&reg; Master StatefulSet definition, so
 - Recommended: Create a clone of the Redis&reg; Master PVC (for example, using projects like [this one](https://github.com/edseymour/pvc-transfer)). Then launch a fresh release reusing this cloned PVC.
 
    ```
-   helm install my-release my-repo/redis --set persistence.existingClaim=<NEW PVC>
+ $ helm install my-release my-repo/redis --set persistence.existingClaim=<NEW PVC>
    ```
 
 - Alternative (not recommended, do at your own risk): `helm delete --purge` does not remove the PVC assigned to the Redis&reg; Master StatefulSet. As a consequence, the following commands can be done to upgrade the release
 
    ```
-   helm delete --purge <RELEASE>
-   helm install <RELEASE> my-repo/redis
+ $ helm delete --purge <RELEASE>
+ $ helm install <RELEASE> my-repo/redis
    ```
 
 Previous versions of the chart were not using persistence in the slaves, so this upgrade would add it to them. Another important change is that no values are inherited from master to slaves. For example, in 6.0.0 `slaves.readinessProbe.periodSeconds`, if empty, would be set to `master.readinessProbe.periodSeconds`. This approach lacked transparency and was difficult to maintain. From now on, all the slave parameters must be configured just as it is done with the masters.
@@ -920,15 +921,15 @@ Finally, it fixes https://github.com/helm/charts/issues/7803 by removing mutable
 
 In order to upgrade, delete the Redis&reg; StatefulSet before upgrading:
 
-```bash
-kubectl delete statefulsets.apps --cascade=false my-release-redis-master
+```console
+$ kubectl delete statefulsets.apps --cascade=false my-release-redis-master
 ```
 
 And edit the Redis&reg; slave (and metrics if enabled) deployment:
 
-```bash
-kubectl patch deployments my-release-redis-slave --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
-kubectl patch deployments my-release-redis-metrics --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+```console
+$ kubectl patch deployments my-release-redis-slave --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+$ kubectl patch deployments my-release-redis-metrics --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
 ```
 
 ## License

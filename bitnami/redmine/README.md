@@ -7,10 +7,10 @@ Redmine is an open source management application. It includes a tracking issue s
 [Overview of Redmine](http://www.redmine.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
-```bash
+```console
 $ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/redmine
 ```
@@ -34,7 +34,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 To install the chart with the release name `my-release`:
 
-```bash
+```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/redmine
 ```
 
@@ -46,7 +47,7 @@ The command deploys Redmine on the Kubernetes cluster in the default configurati
 
 To uninstall/delete the `my-release` deployment:
 
-```bash
+```console
 $ helm delete my-release
 ```
 
@@ -57,7 +58,7 @@ The command removes all the Kubernetes components associated with the chart and 
 This chart includes the option to use a PostgreSQL database for Redmine instead of MariaDB. To use this, set the `databaseType` parameter to `postgresql`:
 
 ```
-helm install my-release my-repo/redmine --set databaseType=postgresql
+$ helm install my-release my-repo/redmine --set databaseType=postgresql
 ```
 
 ## Parameters
@@ -376,7 +377,7 @@ The above parameters map to the env variables defined in [bitnami/redmine](https
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
-```bash
+```console
 $ helm install my-release \
   --set redmineUsername=admin,redminePassword=password,mariadb.mariadb.auth.rootPassword=secretpassword \
     my-repo/redmine
@@ -388,7 +389,7 @@ The above command sets the Redmine administrator account username and password t
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
-```bash
+```console
 $ helm install my-release -f values.yaml my-repo/redmine
 ```
 
@@ -503,7 +504,7 @@ The following example includes two PVCs, one for Redmine and another for MariaDB
 1. Create the directory, on a worker
 1. Install the chart
 
-```bash
+```console
 $ helm install test --set persistence.existingClaim=PVC_REDMINE,mariadb.persistence.existingClaim=PVC_MARIADB my-repo/redmine
 ```
 
@@ -526,8 +527,8 @@ certificates:
 
 Secret can be created with:
 
-```bash
-kubectl create secret generic my-ca-1 --from-file my-ca-1.crt
+```console
+$ kubectl create secret generic my-ca-1 --from-file my-ca-1.crt
 ```
 
 ### TLS Certificate
@@ -551,14 +552,14 @@ certificates:
 
 The certificate tls secret can be created with:
 
-```bash
-kubectl create secret tls my-secret --cert tls.crt --key tls.key
+```console
+$ kubectl create secret tls my-secret --cert tls.crt --key tls.key
 ```
 
 The certificate chain is created with:
 
-```bash
-kubectl create secret generic my-cert-chain --from-file chain.pem
+```console
+$ kubectl create secret generic my-cert-chain --from-file chain.pem
 ```
 
 ## Troubleshooting
