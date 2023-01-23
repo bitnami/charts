@@ -913,7 +913,7 @@ primary:
   ## PostgreSQL Primary persistence configuration
   ##
   persistence:
-    ## @param primary.persistence.enabled Enable PostgreSQL Primary data persistence using PVC
+    ## @param postgresql.primary.persistence.enabled Enable PostgreSQL Primary data persistence using PVC
     ##
     enabled: true
     ## @param primary.persistence.existingClaim Name of an existing PVC to use
