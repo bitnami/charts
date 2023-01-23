@@ -455,9 +455,9 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
-### To 12.1.0
+### To 12.0.0
 
-All gateway features have been removed from Minio since upstream completely dropped this feature.
+This version updates MinIO&reg; to major version 2023. All gateway features have been removed from Minio since upstream completely dropped this feature. The related options have been removed in version 12.1.0.
 
 ### To 11.0.0
 
