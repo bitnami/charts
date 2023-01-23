@@ -900,26 +900,26 @@ postgresql:
     ## @param postgresql.auth.database Database to create when deploying the PostgreSQL chart
     ##
     database: bitnami_sonarqube
-  ## @param postgresql.primary Primary parameters
-  ##
-  primary:
+## @section PostgreSQL Primary parameters
+##
+primary:
   ## PostgreSQL Primary service configuration
   ##
   service:
-    ## @param postgresql.primary.service.ports.postgresql PostgreSQL service port
+    ## @param primary.service.ports.postgresql PostgreSQL service port
     ##
     ports:
       postgresql: 5432
   ## PostgreSQL Primary persistence configuration
   ##
   persistence:
-    ## @param postgresql.primary.persistence.enabled Enable PostgreSQL Primary data persistence using PVC
+    ## @param primary.persistence.enabled Enable PostgreSQL Primary data persistence using PVC
     ##
     enabled: true
-    ## @param postgresql.primary.persistence.existingClaim Name of an existing PVC to use
+    ## @param primary.persistence.existingClaim Name of an existing PVC to use
     ##
     existingClaim: ""
-    ## @param postgresql.primary.persistence.storageClass PVC Storage Class for PostgreSQL Primary data volume
+    ## @param primary.persistence.storageClass PVC Storage Class for PostgreSQL Primary data volume
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
     ## If undefined (the default) or set to null, no storageClassName spec is
@@ -927,10 +927,10 @@ postgresql:
     ##   GKE, AWS & OpenStack)
     ##
     storageClass: ""
-    ## @param postgresql.primary.persistence.accessMode PVC Access Mode for PostgreSQL volume
+    ## @param primary.persistence.accessMode PVC Access Mode for PostgreSQL volume
     ##
     accessMode: ReadWriteOnce
-    ## @param postgresql.primary.persistence.size PVC Storage Request for PostgreSQL volume
+    ## @param primary.persistence.size PVC Storage Request for PostgreSQL volume
     ##
     size: 8Gi
 
