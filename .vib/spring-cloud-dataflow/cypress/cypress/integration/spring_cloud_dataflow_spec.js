@@ -48,5 +48,5 @@ it('allows importing a task from a file and destroying it ', () => {
   cy.get('[aria-label="Select All"]').click({ force: true });
   cy.contains('Destroy task').click();
   cy.contains('Destroy the task').click();
-  cy.contains('task definition(s) destroyed');
+  cy.contains('Successfully removed task');
 });
