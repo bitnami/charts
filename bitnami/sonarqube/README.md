@@ -320,14 +320,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### PostgreSQL Primary parameters
 
-| Name                                | Description                                          | Value           |
-| ----------------------------------- | ---------------------------------------------------- | --------------- |
-| `primary.service.ports.postgresql`  | PostgreSQL service port                              | `5432`          |
-| `primary.persistence.enabled`       | Enable PostgreSQL Primary data persistence using PVC | `true`          |
-| `primary.persistence.existingClaim` | Name of an existing PVC to use                       | `""`            |
-| `primary.persistence.storageClass`  | PVC Storage Class for PostgreSQL Primary data volume | `""`            |
-| `primary.persistence.accessMode`    | PVC Access Mode for PostgreSQL volume                | `ReadWriteOnce` |
-| `primary.persistence.size`          | PVC Storage Request for PostgreSQL volume            | `8Gi`           |
+| Name                                           | Description                                          | Value           |
+| ---------------------------------------------- | ---------------------------------------------------- | --------------- |
+| `postgresql.primary.service.ports.postgresql`  | PostgreSQL service port                              | `5432`          |
+| `postgresql.primary.persistence.enabled`       | Enable PostgreSQL Primary data persistence using PVC | `true`          |
+| `postgresql.primary.persistence.existingClaim` | Name of an existing PVC to use                       | `""`            |
+| `postgresql.primary.persistence.storageClass`  | PVC Storage Class for PostgreSQL Primary data volume | `""`            |
+| `postgresql.primary.persistence.accessMode`    | PVC Access Mode for PostgreSQL volume                | `ReadWriteOnce` |
+| `postgresql.primary.persistence.size`          | PVC Storage Request for PostgreSQL volume            | `8Gi`           |
 
 
 ### External Database settings
