@@ -135,7 +135,7 @@ sonarqubeUsername: user
 ## Defaults to a random 10-character alphanumeric string if not set
 ##
 sonarqubePassword: ""
-## @param sonarqubeFolder Base sonarqube folder
+## @param sonarqubeFolder Base sonarqube folder. The chart and the bitnami container will use this folder as the main application folder during the installation steps. Then, it will be mapped/symlinked to /opt/bitnami/sonarqube
 sonarqubeFolder: "/bitnami/sonarqube"
 ## @param provisioningFolder Directory to use for provisioning content to Sonarqube
 provisioningFolder: "/bitnami/sonarqube-provisioning"
