@@ -67,11 +67,9 @@ spec:
           volumeMounts:
             - name: install-plugins
               mountPath: /tmp/scripts/
-            {{- if .Values.plugins.install }}
             - name: provisioning
               mountPath: {{ .Values.provisioningFolder }}/extensions/plugins/
               subPath: extensions/plugins
-            {{- end }}
           resources: {{- toYaml .Values.plugins.resources | nindent 12 }}
           securityContext: {{- .Values.plugins.containerSecurityContext | toYaml | nindent 12 }}
         {{- end }}
@@ -166,6 +164,10 @@ spec:
                   key: sonarqube-password
             - name: SONARQUBE_EMAIL
               value: {{ .Values.sonarqubeEmail | quote }}
+            {{- if or .Values.plugins.install .Values.caCerts.enabled}}
+            - name: SONARQUBE_MOUNTED_PROVISIONING_DIR
+              value: {{ .Values.provisioningFolder }}
+            {{- end }}
             {{- if .Values.minHeapSize }}
             - name: SONARQUBE_MIN_HEAP_SIZE
               value: {{ .Values.minHeapSize | quote }}
