@@ -115,9 +115,9 @@ spec:
           args:
             - -ec
             - |
-              mkdir -p /bitnami/sonarqube
-              chmod 700 /bitnami/sonarqube
-              find /bitnami/sonarqube -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
+              mkdir -p {{ .Values.sonarqubeFolder }}
+              chmod 700 {{ .Values.sonarqubeFolder }}
+              find {{ .Values.sonarqubeFolder }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
           {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
@@ -126,7 +126,7 @@ spec:
           {{- end }}
           volumeMounts:
             - name: sonarqube
-              mountPath: /bitnami/sonarqube
+              mountPath: {{ .Values.sonarqubeFolder }}
               subPath: data
         {{- end }}
         {{- if .Values.initContainers }}
@@ -343,10 +343,10 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - mountPath: /bitnami/sonarqube/data
+            - mountPath: {{ .Values.sonarqubeFolder }}/data
               name: sonarqube
               subPath: data
-            - mountPath: /bitnami/sonarqube/extensions
+            - mountPath: {{ .Values.sonarqubeFolder }}/extensions
               name: sonarqube
               subPath: extensions
             {{- if or .Values.plugins.install .Values.caCerts.enabled }}
