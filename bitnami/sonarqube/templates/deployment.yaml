@@ -68,8 +68,9 @@ spec:
             - name: install-plugins
               mountPath: /tmp/scripts/
             {{- if .Values.plugins.install }}
-            - name: provisioned-extensions
-              mountPath: {{ .Values.plugins.extensionsDir }}
+            - name: provisioning
+              mountPath: {{ .Values.provisioningFolder }}/extensions/plugins/
+              subPath: extensions/plugins
             {{- end }}
           resources: {{- toYaml .Values.plugins.resources | nindent 12 }}
           securityContext: {{- .Values.plugins.containerSecurityContext | toYaml | nindent 12 }}
@@ -79,10 +80,10 @@ spec:
           image: {{ include "sonarqube.image" . }}
           imagePullPolicy: {{ .Values.caCerts.image.pullPolicy  }}
           command: [ "sh" ]
-          args: [ "-c", "mkdir  /tmp/certs/data && cp -f \"${JAVA_HOME}/lib/security/cacerts\" /tmp/certs/cacerts; if [ \"$(ls /tmp/secrets/ca-certs)\" ]; then for f in /tmp/secrets/ca-certs/*; do keytool -importcert -file \"${f}\" -alias \"$(basename \"${f}\")\" -keystore /tmp/certs/cacerts -storepass changeit -trustcacerts -noprompt; done; fi;" ]
+          args: [ "-c", "cp -f \"${JAVA_HOME}/lib/security/cacerts\" {{ .Values.provisioningFolder }}/certs/cacerts; if [ \"$(ls /tmp/secrets/ca-certs)\" ]; then for f in /tmp/secrets/ca-certs/*; do keytool -importcert -file \"${f}\" -alias \"$(basename \"${f}\")\" -keystore {{ .Values.provisioningFolder }}/certs/cacerts -storepass changeit -trustcacerts -noprompt; done; fi;" ]
           volumeMounts:
-            - mountPath: /tmp/certs
-              name: sonarqube
+            - name: provisioning
+              mountPath: {{ .Values.provisioningFolder }}/certs
               subPath: certs
             - mountPath: /tmp/secrets/ca-certs
               name: ca-certs
@@ -340,20 +341,15 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            {{- if .Values.caCerts.enabled }}
-            - mountPath: /bitnami/sonarqube/certs
-              name: sonarqube
-              subPath: certs
-            {{- end }}
             - mountPath: /bitnami/sonarqube/data
               name: sonarqube
               subPath: data
             - mountPath: /bitnami/sonarqube/extensions
               name: sonarqube
               subPath: extensions
-            {{- if .Values.plugins.install }}
-            - name: provisioned-extensions
-              mountPath: {{ .Values.plugins.extensionsDir }}
+            {{- if or .Values.plugins.install .Values.caCerts.enabled }}
+            - name: provisioning
+              mountPath: {{ .Values.provisioningFolder }}
             {{- end }}
           {{- if .Values.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
@@ -395,7 +391,7 @@ spec:
         {{- end }}
       volumes:
         {{- if .Values.plugins.install }}
-        - name: provisioned-extensions
+        - name: provisioning
           emptyDir: {}
         {{- end }}
         {{- if .Values.caCerts.enabled }}

@@ -14,10 +14,8 @@ metadata:
 data:
   install_plugins.sh: |-
     {{- if .Values.plugins.install }}
-    mkdir {{.Values.plugins.extensionsDir}}/plugins
-    mkdir  {{.Values.plugins.extensionsDir}}/data
-    [ -e {{.Values.plugins.extensionsDir}}/plugins/* ] && rm {{.Values.plugins.extensionsDir}}/extensions/plugins/*
-    cd {{.Values.plugins.extensionsDir}}/plugins
+    [ -e {{.Values.provisioningFolder}}/extensions/plugins/* ] && rm {{.Values.provisioningFolder}}/extensions/plugins/*
+    cd {{.Values.provisioningFolder}}/extensions/plugins/
       {{- range $index, $val := .Values.plugins.install }}
     curl {{ if $.Values.plugins.noCheckCertificate }}--insecure{{ end }} {{ if $.Values.plugins.netrcCreds }}--netrc-file /root/.netrc{{ end }} -fsSLO {{ $val | quote }}
       {{- end }}
