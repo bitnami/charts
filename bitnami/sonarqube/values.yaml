@@ -902,37 +902,37 @@ postgresql:
     database: bitnami_sonarqube
   ## @param postgresql.primary Primary parameters
   ##
-  primary:
-    ## PostgreSQL Primary service configuration
-  ##
-  service:
-    ## @param primary.service.ports.postgresql PostgreSQL service port
+    primary:
+      ## PostgreSQL Primary service configuration
+      ##
+    service:
+      ## @param primary.service.ports.postgresql PostgreSQL service port
+      ##
+      ports:
+        postgresql: 5432
+    ## PostgreSQL Primary persistence configuration
     ##
-    ports:
-      postgresql: 5432
-  ## PostgreSQL Primary persistence configuration
-  ##
-  persistence:
-    ## @param postgresql.primary.persistence.enabled Enable PostgreSQL Primary data persistence using PVC
-    ##
-    enabled: true
-    ## @param primary.persistence.existingClaim Name of an existing PVC to use
-    ##
-    existingClaim: ""
-    ## @param primary.persistence.storageClass PVC Storage Class for PostgreSQL Primary data volume
-    ## If defined, storageClassName: <storageClass>
-    ## If set to "-", storageClassName: "", which disables dynamic provisioning
-    ## If undefined (the default) or set to null, no storageClassName spec is
-    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-    ##   GKE, AWS & OpenStack)
-    ##
-    storageClass: ""
-    ## @param primary.persistence.accessMode PVC Access Mode for PostgreSQL volume
-    ##
-    accessMode: ReadWriteOnce
-    ## @param primary.persistence.size PVC Storage Request for PostgreSQL volume
-    ##
-    size: 8Gi
+    persistence:
+      ## @param postgresql.primary.persistence.enabled Enable PostgreSQL Primary data persistence using PVC
+      ##
+      enabled: true
+      ## @param primary.persistence.existingClaim Name of an existing PVC to use
+      ##
+      existingClaim: ""
+      ## @param primary.persistence.storageClass PVC Storage Class for PostgreSQL Primary data volume
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If undefined (the default) or set to null, no storageClassName spec is
+      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+      ##   GKE, AWS & OpenStack)
+      ##
+      storageClass: ""
+      ## @param primary.persistence.accessMode PVC Access Mode for PostgreSQL volume
+      ##
+      accessMode: ReadWriteOnce
+      ## @param primary.persistence.size PVC Storage Request for PostgreSQL volume
+      ##
+      size: 8Gi
 
 ## @section External Database settings
 ##
