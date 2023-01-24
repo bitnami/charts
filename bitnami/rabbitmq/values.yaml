@@ -135,6 +135,9 @@ auth:
   ## existingPasswordSecret: name-of-existing-secret
   ##
   existingPasswordSecret: ""
+  ## @param auth.enableLoopbackUser Enable Loopback user access? Be advised, that enabling the loopback user is a possible security risk!
+  ##
+  enableLoopbackUser: false
   ## @param auth.erlangCookie Erlang cookie to determine whether different nodes are allowed to communicate with each other
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
   ##
@@ -349,8 +352,12 @@ configuration: |-
   {{- end }}
   # queue master locator
   queue_master_locator = min-masters
-  # enable guest user
-  loopback_users.guest = false
+  # enable loopback user
+  {{- if not (empty .Values.auth.username) }}
+  loopback_users.{{ .Values.auth.username }} = {{ .Values.auth.enableLoopbackUser }}
+  {{- else}}
+  loopback_users.guest = {{ .Values.auth.enableLoopbackUser }}
+  {{- end }}
   {{ tpl .Values.extraConfiguration . }}
   {{- if .Values.auth.tls.enabled }}
   ssl_options.verify = {{ .Values.auth.tls.sslOptionsVerify }}

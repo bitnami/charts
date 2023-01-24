@@ -7,7 +7,7 @@ NGINX Open Source is a web server that can be also used as a reverse proxy, load
 [Overview of NGINX Open Source](http://nginx.org)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -80,21 +80,21 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### NGINX parameters
 
-| Name                 | Description                                                                                           | Value                 |
-| -------------------- | ----------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`     | NGINX image registry                                                                                  | `docker.io`           |
-| `image.repository`   | NGINX image repository                                                                                | `bitnami/nginx`       |
-| `image.tag`          | NGINX image tag (immutable tags are recommended)                                                      | `1.23.3-debian-11-r8` |
-| `image.digest`       | NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `image.pullPolicy`   | NGINX image pull policy                                                                               | `IfNotPresent`        |
-| `image.pullSecrets`  | Specify docker-registry secret names as an array                                                      | `[]`                  |
-| `image.debug`        | Set to true if you would like to see extra information on logs                                        | `false`               |
-| `hostAliases`        | Deployment pod host aliases                                                                           | `[]`                  |
-| `command`            | Override default container command (useful when using custom images)                                  | `[]`                  |
-| `args`               | Override default container args (useful when using custom images)                                     | `[]`                  |
-| `extraEnvVars`       | Extra environment variables to be set on NGINX containers                                             | `[]`                  |
-| `extraEnvVarsCM`     | ConfigMap with extra environment variables                                                            | `""`                  |
-| `extraEnvVarsSecret` | Secret with extra environment variables                                                               | `""`                  |
+| Name                 | Description                                                                                           | Value                  |
+| -------------------- | ----------------------------------------------------------------------------------------------------- | ---------------------- |
+| `image.registry`     | NGINX image registry                                                                                  | `docker.io`            |
+| `image.repository`   | NGINX image repository                                                                                | `bitnami/nginx`        |
+| `image.tag`          | NGINX image tag (immutable tags are recommended)                                                      | `1.23.3-debian-11-r17` |
+| `image.digest`       | NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `image.pullPolicy`   | NGINX image pull policy                                                                               | `IfNotPresent`         |
+| `image.pullSecrets`  | Specify docker-registry secret names as an array                                                      | `[]`                   |
+| `image.debug`        | Set to true if you would like to see extra information on logs                                        | `false`                |
+| `hostAliases`        | Deployment pod host aliases                                                                           | `[]`                   |
+| `command`            | Override default container command (useful when using custom images)                                  | `[]`                   |
+| `args`               | Override default container args (useful when using custom images)                                     | `[]`                   |
+| `extraEnvVars`       | Extra environment variables to be set on NGINX containers                                             | `[]`                   |
+| `extraEnvVarsCM`     | ConfigMap with extra environment variables                                                            | `""`                   |
+| `extraEnvVarsSecret` | Secret with extra environment variables                                                               | `""`                   |
 
 
 ### NGINX deployment parameters
@@ -179,7 +179,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cloneStaticSiteFromGit.enabled`           | Get the server static content from a Git repository                                                 | `false`               |
 | `cloneStaticSiteFromGit.image.registry`    | Git image registry                                                                                  | `docker.io`           |
 | `cloneStaticSiteFromGit.image.repository`  | Git image repository                                                                                | `bitnami/git`         |
-| `cloneStaticSiteFromGit.image.tag`         | Git image tag (immutable tags are recommended)                                                      | `2.39.0-debian-11-r7` |
+| `cloneStaticSiteFromGit.image.tag`         | Git image tag (immutable tags are recommended)                                                      | `2.39.1-debian-11-r2` |
 | `cloneStaticSiteFromGit.image.digest`      | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `cloneStaticSiteFromGit.image.pullPolicy`  | Git image pull policy                                                                               | `IfNotPresent`        |
 | `cloneStaticSiteFromGit.image.pullSecrets` | Specify docker-registry secret names as an array                                                    | `[]`                  |
@@ -252,7 +252,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.port`                             | NGINX Container Status Port scraped by Prometheus Exporter                                                                                | `""`                     |
 | `metrics.image.registry`                   | NGINX Prometheus exporter image registry                                                                                                  | `docker.io`              |
 | `metrics.image.repository`                 | NGINX Prometheus exporter image repository                                                                                                | `bitnami/nginx-exporter` |
-| `metrics.image.tag`                        | NGINX Prometheus exporter image tag (immutable tags are recommended)                                                                      | `0.11.0-debian-11-r37`   |
+| `metrics.image.tag`                        | NGINX Prometheus exporter image tag (immutable tags are recommended)                                                                      | `0.11.0-debian-11-r44`   |
 | `metrics.image.digest`                     | NGINX Prometheus exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                 | `""`                     |
 | `metrics.image.pullPolicy`                 | NGINX Prometheus exporter image pull policy                                                                                               | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                          | `[]`                     |

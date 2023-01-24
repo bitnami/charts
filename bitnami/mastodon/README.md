@@ -91,23 +91,23 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Mastodon common parameters
 
-| Name                           | Description                                                                    | Value              |
-| ------------------------------ | ------------------------------------------------------------------------------ | ------------------ |
-| `adminUser`                    | Mastodon admin username                                                        | `user`             |
-| `adminEmail`                   | Mastodon admin email                                                           | `user@example.com` |
-| `adminPassword`                | Mastodon admin password                                                        | `""`               |
-| `defaultConfig`                | Default configuration for Mastodon in the form of environment variables        | `""`               |
-| `defaultSecretConfig`          | Default secret configuration for Mastodon in the form of environment variables | `""`               |
-| `extraConfig`                  | Extra configuration for Mastodon in the form of environment variables          | `{}`               |
-| `extraSecretConfig`            | Extra secret configuration for Mastodon in the form of environment variables   | `{}`               |
-| `existingConfigmap`            | The name of an existing ConfigMap with your default configuration for Mastodon | `""`               |
-| `existingSecret`               | The name of an existing Secret with your default configuration for Mastodon    | `""`               |
-| `extraConfigExistingConfigmap` | The name of an existing ConfigMap with your extra configuration for Mastodon   | `""`               |
-| `extraConfigExistingSecret`    | The name of an existing Secret with your extra configuration for Mastodon      | `""`               |
-| `enableSearches`               | Enable the search engine (uses Elasticsearch under the hood)                   | `true`             |
-| `enableS3`                     | Enable the S3 storage engine                                                   | `true`             |
-| `webDomain`                    | Web domain for Mastodon                                                        | `""`               |
-| `s3AliasHost`                  | S3 alias host for Mastodon (will use http://webDomain/bucket if not set)       | `""`               |
+| Name                           | Description                                                                    | Value               |
+| ------------------------------ | ------------------------------------------------------------------------------ | ------------------- |
+| `adminUser`                    | Mastodon admin username                                                        | `user`              |
+| `adminEmail`                   | Mastodon admin email                                                           | `user@changeme.com` |
+| `adminPassword`                | Mastodon admin password                                                        | `""`                |
+| `defaultConfig`                | Default configuration for Mastodon in the form of environment variables        | `""`                |
+| `defaultSecretConfig`          | Default secret configuration for Mastodon in the form of environment variables | `""`                |
+| `extraConfig`                  | Extra configuration for Mastodon in the form of environment variables          | `{}`                |
+| `extraSecretConfig`            | Extra secret configuration for Mastodon in the form of environment variables   | `{}`                |
+| `existingConfigmap`            | The name of an existing ConfigMap with your default configuration for Mastodon | `""`                |
+| `existingSecret`               | The name of an existing Secret with your default configuration for Mastodon    | `""`                |
+| `extraConfigExistingConfigmap` | The name of an existing ConfigMap with your extra configuration for Mastodon   | `""`                |
+| `extraConfigExistingSecret`    | The name of an existing Secret with your extra configuration for Mastodon      | `""`                |
+| `enableSearches`               | Enable the search engine (uses Elasticsearch under the hood)                   | `true`              |
+| `enableS3`                     | Enable the S3 storage engine                                                   | `true`              |
+| `webDomain`                    | Web domain for Mastodon                                                        | `""`                |
+| `s3AliasHost`                  | S3 alias host for Mastodon (will use http://webDomain/bucket if not set)       | `""`                |
 
 
 ### Mastodon Web Parameters
@@ -152,7 +152,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
 | `web.hostAliases`                                       | Mastodon web pods host aliases                                                                                           | `[]`             |
 | `web.podLabels`                                         | Extra labels for Mastodon web pods                                                                                       | `{}`             |
-
+| `web.podAnnotations`                                    | Annotations for Mastodon web pods                                                                                        | `{}`             |
 | `web.podAffinityPreset`                                 | Pod affinity preset. Ignored if `web.affinity` is set. Allowed values: `soft` or `hard`                                  | `""`             |
 | `web.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `web.affinity` is set. Allowed values: `soft` or `hard`                             | `soft`           |
 | `web.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `web.affinity` is set. Allowed values: `soft` or `hard`                            | `""`             |

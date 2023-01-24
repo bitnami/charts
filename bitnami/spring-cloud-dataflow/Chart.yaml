@@ -2,7 +2,7 @@ annotations:
   category: DeveloperTools
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 2.9.6
+appVersion: 2.10.0
 dependencies:
   - condition: rabbitmq.enabled
     name: rabbitmq
@@ -39,4 +39,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/spring-cloud-dataflow
   - https://github.com/bitnami/containers/tree/main/bitnami/spring-cloud-skipper
   - https://dataflow.spring.io/
-version: 15.0.1
+version: 15.0.2
