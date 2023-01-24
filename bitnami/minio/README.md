@@ -26,7 +26,6 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 - Kubernetes 1.19+
 - Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
-- ReadWriteMany volume for Gateway NAS deployment scaling
 
 ## Installing the Chart
 
@@ -314,40 +313,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.rules`             | Prometheus Rule definitions                                                                                                   | `[]`                        |
 
 
-### Gateway parameters
-
-| Name                                                     | Description                                                                                        | Value                      |
-| -------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | -------------------------- |
-| `gateway.enabled`                                        | Use MinIO&reg; as Gateway for other storage systems                                                | `false`                    |
-| `gateway.type`                                           | Gateway type. Supported types are: `azure`, `gcs`, `nas`, `s3`                                     | `s3`                       |
-| `gateway.replicaCount`                                   | Number of MinIO&reg; Gateway replicas                                                              | `4`                        |
-| `gateway.updateStrategy.type`                            | Update strategy type for MinIO&reg; Gateway replicas                                               | `Recreate`                 |
-| `gateway.autoscaling.enabled`                            | Enable autoscaling for MinIO&reg; Gateway deployment                                               | `false`                    |
-| `gateway.autoscaling.minReplicas`                        | Minimum number of replicas to scale back                                                           | `4`                        |
-| `gateway.autoscaling.maxReplicas`                        | Maximum number of replicas to scale out                                                            | `4`                        |
-| `gateway.autoscaling.targetCPU`                          | Target CPU utilization percentage                                                                  | `""`                       |
-| `gateway.autoscaling.targetMemory`                       | Target Memory utilization percentage                                                               | `""`                       |
-| `gateway.priorityClassName`                              | Pod priority class name for MinIO&reg; Gateway                                                     | `""`                       |
-| `gateway.auth.azure.accessKey`                           | Access key to access MinIO&reg; using Azure Gateway                                                | `""`                       |
-| `gateway.auth.azure.secretKey`                           | Secret key to access MinIO&reg; using Azure Gateway                                                | `""`                       |
-| `gateway.auth.azure.serviceEndpoint`                     | Azure Blob Storage custom endpoint                                                                 | `""`                       |
-| `gateway.auth.azure.storageAccountName`                  | Azure Storage Account Name to use to access Azure Blob Storage                                     | `""`                       |
-| `gateway.auth.azure.storageAccountKey`                   | Azure Storage Account Key to use to access Azure Blob Storage                                      | `""`                       |
-| `gateway.auth.azure.storageAccountNameExistingSecret`    | Existing Secret name to extract Azure Storage Account Name from to access Azure Blob Storage       | `""`                       |
-| `gateway.auth.azure.storageAccountNameExistingSecretKey` | Existing Secret key to extract Azure Storage Account Name from to use to access Azure Blob Storage | `""`                       |
-| `gateway.auth.azure.storageAccountKeyExistingSecret`     | Existing Secret name to extract Azure Storage Account Key from to access Azure Blob Storage        | `""`                       |
-| `gateway.auth.azure.storageAccountKeyExistingSecretKey`  | Existing Secret key to extract Azure Storage Account Key from to use to access Azure Blob Storage  | `""`                       |
-| `gateway.auth.gcs.accessKey`                             | Access key to access MinIO&reg; using GCS Gateway                                                  | `""`                       |
-| `gateway.auth.gcs.secretKey`                             | Secret key to access MinIO&reg; using GCS Gateway                                                  | `""`                       |
-| `gateway.auth.gcs.keyJSON`                               | Service Account key to access GCS                                                                  | `""`                       |
-| `gateway.auth.gcs.projectID`                             | GCP Project ID to use                                                                              | `""`                       |
-| `gateway.auth.nas.accessKey`                             | Access key to access MinIO&reg; using NAS Gateway                                                  | `""`                       |
-| `gateway.auth.nas.secretKey`                             | Secret key to access MinIO&reg; using NAS Gateway                                                  | `""`                       |
-| `gateway.auth.s3.accessKey`                              | Access key to use to access AWS S3                                                                 | `""`                       |
-| `gateway.auth.s3.secretKey`                              | Secret key to use to access AWS S3                                                                 | `""`                       |
-| `gateway.auth.s3.serviceEndpoint`                        | AWS S3 endpoint                                                                                    | `https://s3.amazonaws.com` |
-
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
@@ -436,32 +401,6 @@ To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hos
 
 The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/infrastructure/geode/administration/enable-tls-ingress/).
 
-### MinIO&reg; Gateway
-
-MinIO&reg; can be configured as a Gateway for other other storage systems. Currently this chart supports to setup MinIO&reg; as a Gateway for the storage systems below:
-
-- [Azure Blob Storage](https://azure.microsoft.com/en-us/services/storage/blobs/)
-- [GCS](https://cloud.google.com/storage)
-- NAS: Network Attached Storage
-- [AWS S3](https://aws.amazon.com/s3/)
-
-The enable this feature, install the chart setting `gateway.enabled` to `true`. You can choose the Gateway type setting the `gateway.type` parameter. For instance, to install the chart as a S3 Gateway, install the chart the using the following parameters:
-
-```console
-gateway.enabled=true
-gateway.replicaCount=4
-gateway.type=s3
-gateway.auth.s3.serviceEndpoint=https://s3.amazonaws.com
-gateway.auth.s3.accessKey=S3_ACCESS_KEY
-gateway.auth.s3.secretKey=S3_SECRET_KEY
-```
-
-> Note: remember to replace the S3_ACCESS_KEY and S3_SECRET_KEY placeholders with your actual S3 access & secret keys.
-
-Find all the available parameters to configure MinIO&reg; as a Gateway in the [Gateway parameters section](#gateway-parameters).
-
-> Note: when using MinIO&reg; as a NAS Gateway, you need ReadWriteMany PVs to deploy multiple MinIO&reg; instances. Ensure you K8s cluster supports this kind of cluster, and install the chart setting `persistence.accessModes[0]` to `ReadWriteMany` to do so.
-
 ### Adding extra environment variables
 
 In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
@@ -515,6 +454,10 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 12.0.0
+
+This version updates MinIO&reg; to major version 2023. All gateway features have been removed from Minio since upstream completely dropped this feature. The related options have been removed in version 12.1.0.
 
 ### To 11.0.0
 
