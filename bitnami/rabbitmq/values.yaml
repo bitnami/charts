@@ -432,7 +432,7 @@ configuration: |-
 ## Takes precedence over `configuration`, so do not use both simultaneously
 ## With providing an existingSecret, extraConfiguration and extraConfigurationExistingSecret do not take any effect
 ##
-configurationExistingSecret:
+configurationExistingSecret: ""
 
 ## @param extraConfiguration [string] Configuration file content: extra configuration to be appended to RabbitMQ configuration
 ## Use this instead of `configuration` to add more configuration
