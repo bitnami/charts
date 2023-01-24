@@ -905,11 +905,11 @@ postgresql:
   primary:
     ## PostgreSQL Primary service configuration
     ##
-  service:
-    ## @param postgresql.primary.service.ports.postgresql PostgreSQL service port
-    ##
-    ports:
-      postgresql: 5432
+    service:
+      ## @param postgresql.primary.service.ports.postgresql PostgreSQL service port
+      ##
+      ports:
+        postgresql: 5432
     ## PostgreSQL Primary persistence configuration
     ##
     persistence:
