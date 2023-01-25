@@ -518,7 +518,7 @@ advancedConfigurationExistingSecret: ""
 ## Feature flags are a mechanism that controls what features are considered to be enabled or available on all cluster nodes. If a feature flag is enabled, so is its associated feature (or behavior). If not then all nodes in the cluster will disable the feature (behavior).
 ## e.g, drop_unroutable_metric,empty_basic_get_metric,implicit_default_bindings,maintenance_mode_status,quorum_queue,virtual_host_metadata
 ## @param featureFlags that controls what features are considered to be enabled or available on all cluster nodes.
-featureFlags:
+featureFlags: ""
 
 ## LDAP configuration
 ##
