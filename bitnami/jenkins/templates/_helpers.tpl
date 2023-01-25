@@ -57,67 +57,6 @@ When using Ingress, it will be set to the Ingress hostname.
 {{- end -}}
 
 {{/*
-Returns kubernetes pod template configuration as code
-*/}}
-{{- define "jenkins.agent.podTemplate" -}}
-- name: {{ printf "%s-agent" (include "common.names.fullname" .) }}
-  namespace: {{ template "common.names.namespace" . }}
-  id: "agent-template"
-  {{- if or .Values.agent.annotations }}
-  annotations:
-    {{- range $key, $value := .Values.commonAnnotations }}
-    - key: {{ $key }}
-      value: {{ $value | quote }}
-    {{- end }}
-    {{- range $key, $value := .Values.agent.annotations }}
-    - key: {{ $key }}
-      value: {{ $value | quote }}
-    {{- end }}
-  {{- end }}
-  containers:
-    - name: jenkins
-      alwaysPullImage: {{ ternary "true" "false" (eq .Values.image.pullPolicy "Always") }}
-      {{- if .Values.agent.command }}
-      command: {{- include "common.tplvalues.render" (dict "value" .Values.agent.command "context" $) | nindent 12 }}
-      {{- end }}
-      {{- if .Values.agent.args }}
-      args: {{- include "common.tplvalues.render" (dict "value" .Values.agent.args "context" $) | nindent 12 }}
-      {{- end }}
-      envVars:
-        - envVar:
-            key: JENKINS_SKIP_BOOTSTRAP
-            value: "true"
-      image: {{ include "jenkins.image" . }}
-      {{- if .Values.agent.resources.limits.cpu }}
-      resourceLimitCpu: {{ .Values.agent.resources.limits.cpu }}
-      {{- end}}
-      {{- if .Values.agent.resources.limits.memory }}
-      resourceLimitMemory: {{ .Values.agent.resources.limits.memory }}
-      {{- end}}
-      {{- if .Values.agent.resources.requests.cpu }}
-      resourceRequestCpu: {{ .Values.agent.resources.requests.cpu }}
-      {{- end}}
-      {{- if .Values.agent.resources.requests.memory }}
-      resourceRequestMemory: {{ .Values.agent.resources.requests.memory }}
-      {{- end}}
-      {{- if .Values.agent.containerSecurityContext.enabled }}
-      privileged: {{ .Values.agent.containerSecurityContext.privileged }}
-      runAsUser: {{ .Values.agent.containerSecurityContext.runAsUser }}
-      runAsGroup: {{ .Values.agent.containerSecurityContext.runAsGroup }}
-      {{- end }}
-    {{- if .Values.agent.sidecars }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.agent.sidecars "context" $) | nindent 4 }}
-    {{- end }}
-  {{- if .Values.agent.extraEnvVars }}
-  envVars: {{- include "common.tplvalues.render" (dict "value" .Values.agent.extraEnvVars "context" $) | nindent 4 }}
-  {{- end }}
-  {{- include "jenkins.imagePullSecrets" . | nindent 2 }}
-  {{- if .Values.agent.extraAgentTemplate }}
-  {{- include "common.tplvalues.render" ( dict "value" .Values.agent.extraAgentTemplate "context" $) | nindent 2 }}
-  {{- end }}
-{{- end -}}
-
-{{/*
 Return the Jenkins TLS secret name
 */}}
 {{- define "jenkins.tlsSecretName" -}}
