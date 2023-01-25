@@ -140,13 +140,13 @@ extraEnvVarsSecret: ""
 ##   - configuration-as-code:1569.vb_72405b_80249
 ##
 plugins: []
-## @param List of plugins to install in addition to those listed in `plugins`
+## @param extraPlugins List of plugins to install in addition to those listed in `plugins`
 ##
 extraPlugins: []
-## @param Set to true to download the latest version of all dependencies, even if the version(s) of the requested plugin(s) are not the latest.
+## @param latestPlugins Set to true to download the latest version of all dependencies, even if the version(s) of the requested plugin(s) are not the latest.
 ##
 latestPlugins: true
-## @param Set to true download the latest dependencies of any plugin that is requested to have the latest version.
+## @param latestSpecifiedPlugins Set to true download the latest dependencies of any plugin that is requested to have the latest version.
 ##
 latestSpecifiedPlugins: false
 ## @param skipImagePlugins Set this value to true to skip installing plugins stored under /opt/bitnami/jenkins/plugins
@@ -328,6 +328,8 @@ configAsCode:
 ## NOTE: Values under this field may use Jenkins syntax instead of Kubernetes syntax
 ## Ref: https://www.jenkins.io/doc/pipeline/steps/kubernetes/
 agent:
+  ## @param agent.enabled Set to true to enable the configuration of Jenkins kubernetes agents
+  ##
   enabled: false
   ## @param agent.podLabels Additional pod labels for the Jenkins agent pods
   ##

@@ -86,15 +86,16 @@ data:
                     runAsGroup: {{ .Values.agent.containerSecurityContext.runAsGroup }}
                     {{- end }}
                   {{- if .Values.agent.sidecars }}
-                  {{- include "common.tplvalues.render" ( dict "value" .Values.agent.sidecars "context" $) | nindent 4 }}
+                  {{- include "common.tplvalues.render" ( dict "value" .Values.agent.sidecars "context" $) | nindent 18 }}
                   {{- end }}
                 {{- if .Values.agent.extraEnvVars }}
-                envVars: {{- include "common.tplvalues.render" (dict "value" .Values.agent.extraEnvVars "context" $) | nindent 4 }}
+                envVars: {{- include "common.tplvalues.render" (dict "value" .Values.agent.extraEnvVars "context" $) | nindent 18 }}
                 {{- end }}
-                {{- include "jenkins.imagePullSecrets" . | nindent 2 }}
+                {{- include "jenkins.imagePullSecrets" . | nindent 16 }}
                 {{- if .Values.agent.extraAgentTemplate }}
-                {{- include "common.tplvalues.render" ( dict "value" .Values.agent.extraAgentTemplate "context" $) | nindent 2 }}
-                {{- end }}              {{- if .Values.agent.extraTemplates }}
+                {{- include "common.tplvalues.render" ( dict "value" .Values.agent.extraAgentTemplate "context" $) | nindent 16 }}
+                {{- end }}
+              {{- if .Values.agent.extraTemplates }}
               {{- include "common.tplvalues.render" ( dict "value" .Values.agent.extraTemplates "context" $ ) | nindent 14 }}
               {{- end }}
             {{- if .Values.configAsCode.extraKubernetes }}
