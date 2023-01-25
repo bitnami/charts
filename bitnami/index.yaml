@@ -11123,6 +11123,39 @@ entries:
   contour:
   - annotations:
       category: Infrastructure
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 1.23.2
+    created: "2023-01-25T08:55:39.561141116Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Contour is an open source Kubernetes ingress controller that works
+      by deploying the Envoy proxy as a reverse proxy and load balancer.
+    digest: d84dff3bf39ae9f571ba435d51d74f8584392591113271d3dd63e23f191e5877
+    home: https://github.com/bitnami/charts/tree/main/bitnami/contour
+    icon: https://bitnami.com/assets/stacks/contour/img/contour-stack-220x234.png
+    keywords:
+    - ingress
+    - envoy
+    - contour
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: contour
+    sources:
+    - https://github.com/projectcontour/contour
+    - https://github.com/envoyproxy/envoy
+    - https://github.com/bitnami/containers/tree/main/bitnami/contour
+    - https://projectcontour.io
+    urls:
+    - https://charts.bitnami.com/bitnami/contour-10.1.5.tgz
+    version: 10.1.5
+  - annotations:
+      category: Infrastructure
       licenses: |
         - Apache-2.0
     apiVersion: v2
@@ -108096,4 +108129,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-01-25T04:37:00.522274148Z"
+generated: "2023-01-25T08:55:39.553319418Z"
