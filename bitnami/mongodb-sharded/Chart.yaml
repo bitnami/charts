@@ -2,7 +2,7 @@ annotations:
   category: Database
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 6.0.3
+appVersion: 6.0.4
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -26,4 +26,4 @@ name: mongodb-sharded
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/mongodb-sharded
   - https://mongodb.org
-version: 6.2.2
+version: 6.2.3

@@ -7,10 +7,10 @@ MariaDB is an open source, community-developed SQL database server that is widel
 [Overview of MariaDB](https://mariadb.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
-```bash
+```console
 $ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/mariadb
 ```
@@ -33,7 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 To install the chart with the release name `my-release`:
 
-```bash
+```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/mariadb
 ```
 
@@ -45,7 +46,7 @@ The command deploys MariaDB on the Kubernetes cluster in the default configurati
 
 To uninstall/delete the `my-release` deployment:
 
-```bash
+```console
 $ helm delete my-release
 ```
 
@@ -383,7 +384,7 @@ The above parameters map to the env variables defined in [bitnami/mariadb](https
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
-```bash
+```console
 $ helm install my-release \
   --set auth.rootPassword=secretpassword,auth.database=app_database \
     my-repo/mariadb
@@ -395,7 +396,7 @@ The above command sets the MariaDB `root` account password to `secretpassword`. 
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
-```bash
+```console
 $ helm install my-release -f values.yaml my-repo/mariadb
 ```
 
@@ -455,7 +456,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 It's necessary to set the `auth.rootPassword` parameter when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, some notes will be displayed providing the credentials you must use under the 'Administrator credentials' section. Please note down the password and run the command below to upgrade your chart:
 
-```bash
+```console
 $ helm upgrade my-release my-repo/mariadb --set auth.rootPassword=[ROOT_PASSWORD]
 ```
 
@@ -512,7 +513,7 @@ Backwards compatibility is not guaranteed. To upgrade to `8.0.0`, install a new 
 - Create a backup of the database, and restore it on the new release using tools such as [mysqldump](https://mariadb.com/kb/en/mysqldump/).
 - Reuse the PVC used to hold the master data on your previous release. To do so, use the `primary.persistence.existingClaim` parameter. The following example assumes that the release name is `mariadb`:
 
-```bash
+```console
 $ helm install mariadb my-repo/mariadb --set auth.rootPassword=[ROOT_PASSWORD] --set primary.persistence.existingClaim=[EXISTING_PVC]
 ```
 

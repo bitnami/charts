@@ -100,7 +100,7 @@ image:
 adminUser: "user"
 ## @param adminEmail Mastodon admin email
 ##
-adminEmail: "user@example.com"
+adminEmail: "user@changeme.com"
 ## @param adminPassword Mastodon admin password
 ##
 adminPassword: ""

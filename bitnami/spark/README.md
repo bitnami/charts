@@ -7,7 +7,7 @@ Apache Spark is a high-performance engine for large-scale computing tasks, such 
 [Overview of Apache Spark](https://spark.apache.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -372,7 +372,7 @@ To submit an application to the Apache Spark cluster, use the `spark-submit` scr
 
 The command below illustrates the process of deploying one of the sample applications included with Apache Spark. Replace the `k8s-apiserver-host`, `k8s-apiserver-port`, `spark-master-svc`, and `spark-master-port` placeholders with the correct master host/IP address and port for your deployment.
 
-```bash
+```console
 $ ./bin/spark-submit \
     --class org.apache.spark.examples.SparkPi \
     --conf spark.kubernetes.container.image=bitnami/spark:3 \

@@ -7,10 +7,10 @@ MongoDB(R) is a relational open source NoSQL database. Easy to use, it stores da
 [Overview of MongoDB&reg;](http://www.mongodb.org)
 
 Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide a commercial license for any of these products. This listing has an open-source license. MongoDB(R) is run and maintained by MongoDB, which is a completely separate project from Bitnami.
-                           
+
 ## TL;DR
 
-```bash
+```console
 $ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/mongodb
 ```
@@ -31,7 +31,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 To install the chart with the release name `my-release`:
 
-```bash
+```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/mongodb
 ```
 
@@ -43,7 +44,7 @@ The command deploys MongoDB(&reg;) on the Kubernetes cluster in the default conf
 
 To uninstall/delete the `my-release` deployment:
 
-```bash
+```console
 $ helm delete my-release
 ```
 
@@ -96,7 +97,7 @@ Refer to the [chart documentation for more information on each of these architec
 | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------- |
 | `image.registry`                 | MongoDB(&reg;) image registry                                                                                                                                | `docker.io`            |
 | `image.repository`               | MongoDB(&reg;) image registry                                                                                                                                | `bitnami/mongodb`      |
-| `image.tag`                      | MongoDB(&reg;) image tag (immutable tags are recommended)                                                                                                    | `6.0.3-debian-11-r20`  |
+| `image.tag`                      | MongoDB(&reg;) image tag (immutable tags are recommended)                                                                                                    | `6.0.4-debian-11-r0`   |
 | `image.digest`                   | MongoDB(&reg;) image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                               | `""`                   |
 | `image.pullPolicy`               | MongoDB(&reg;) image pull policy                                                                                                                             | `IfNotPresent`         |
 | `image.pullSecrets`              | Specify docker-registry secret names as an array                                                                                                             | `[]`                   |
@@ -126,7 +127,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `tls.arbiter.existingSecret`     | Existing secret with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).                                                                                      | `""`                   |
 | `tls.image.registry`             | Init container TLS certs setup image registry                                                                                                                | `docker.io`            |
 | `tls.image.repository`           | Init container TLS certs setup image repository                                                                                                              | `bitnami/nginx`        |
-| `tls.image.tag`                  | Init container TLS certs setup image tag (immutable tags are recommended)                                                                                    | `1.23.3-debian-11-r12` |
+| `tls.image.tag`                  | Init container TLS certs setup image tag (immutable tags are recommended)                                                                                    | `1.23.3-debian-11-r15` |
 | `tls.image.digest`               | Init container TLS certs setup image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                               | `""`                   |
 | `tls.image.pullPolicy`           | Init container TLS certs setup image pull policy                                                                                                             | `IfNotPresent`         |
 | `tls.image.pullSecrets`          | Init container TLS certs specify docker-registry secret names as an array                                                                                    | `[]`                   |
@@ -249,7 +250,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `externalAccess.autoDiscovery.enabled`                   | Enable using an init container to auto-detect external IPs by querying the K8s API                                                              | `false`                |
 | `externalAccess.autoDiscovery.image.registry`            | Init container auto-discovery image registry                                                                                                    | `docker.io`            |
 | `externalAccess.autoDiscovery.image.repository`          | Init container auto-discovery image repository                                                                                                  | `bitnami/kubectl`      |
-| `externalAccess.autoDiscovery.image.tag`                 | Init container auto-discovery image tag (immutable tags are recommended)                                                                        | `1.25.5-debian-11-r11` |
+| `externalAccess.autoDiscovery.image.tag`                 | Init container auto-discovery image tag (immutable tags are recommended)                                                                        | `1.25.5-debian-11-r14` |
 | `externalAccess.autoDiscovery.image.digest`              | Init container auto-discovery image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                   | `""`                   |
 | `externalAccess.autoDiscovery.image.pullPolicy`          | Init container auto-discovery image pull policy                                                                                                 | `IfNotPresent`         |
 | `externalAccess.autoDiscovery.image.pullSecrets`         | Init container auto-discovery image pull secrets                                                                                                | `[]`                   |
@@ -326,7 +327,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r71`      |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r74`      |
 | `volumePermissions.image.digest`              | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
@@ -508,7 +509,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `metrics.enabled`                            | Enable using a sidecar Prometheus exporter                                                                            | `false`                    |
 | `metrics.image.registry`                     | MongoDB(&reg;) Prometheus exporter image registry                                                                     | `docker.io`                |
 | `metrics.image.repository`                   | MongoDB(&reg;) Prometheus exporter image repository                                                                   | `bitnami/mongodb-exporter` |
-| `metrics.image.tag`                          | MongoDB(&reg;) Prometheus exporter image tag (immutable tags are recommended)                                         | `0.36.0-debian-11-r3`      |
+| `metrics.image.tag`                          | MongoDB(&reg;) Prometheus exporter image tag (immutable tags are recommended)                                         | `0.36.0-debian-11-r6`      |
 | `metrics.image.digest`                       | MongoDB(&reg;) image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag        | `""`                       |
 | `metrics.image.pullPolicy`                   | MongoDB(&reg;) Prometheus exporter image pull policy                                                                  | `IfNotPresent`             |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                      | `[]`                       |
@@ -563,7 +564,7 @@ Refer to the [chart documentation for more information on each of these architec
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
-```bash
+```console
 $ helm install my-release \
     --set auth.rootPassword=secretpassword,auth.username=my-user,auth.password=my-password,auth.database=my-database \
     my-repo/mongodb
@@ -575,7 +576,7 @@ The above command sets the MongoDB(&reg;) `root` account password to `secretpass
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
-```bash
+```console
 $ helm install my-release -f values.yaml my-repo/mongodb
 ```
 
@@ -659,7 +660,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 If authentication is enabled, it's necessary to set the `auth.rootPassword` (also `auth.replicaSetKey` when using a replicaset architecture) when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, some notes will be displayed providing the credentials you must use under the 'Credentials' section. Please note down the password, and run the command below to upgrade your chart:
 
-```bash
+```console
 $ helm upgrade my-release my-repo/mongodb --set auth.rootPassword=[PASSWORD] (--set auth.replicaSetKey=[REPLICASETKEY])
 ```
 

@@ -7,7 +7,7 @@ Contour is an open source Kubernetes ingress controller that works by deploying 
 [Overview of Contour](https://github.com/projectcontour/contour)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -267,6 +267,7 @@ $ helm uninstall my-release
 | `envoy.customStartupProbe`                          | Override default startup probe                                                                                        | `{}`                   |
 | `envoy.terminationGracePeriodSeconds`               | Envoy termination grace period in seconds                                                                             | `300`                  |
 | `envoy.logLevel`                                    | Envoy log level                                                                                                       | `info`                 |
+| `envoy.service.name`                                | envoy service name                                                                                                    | `""`                   |
 | `envoy.service.targetPorts`                         | Map the controller service HTTP/HTTPS port                                                                            | `{}`                   |
 | `envoy.service.type`                                | Type of Envoy service to create                                                                                       | `LoadBalancer`         |
 | `envoy.service.externalTrafficPolicy`               | Envoy Service external cluster policy. If `envoy.service.type` is NodePort or LoadBalancer                            | `Local`                |

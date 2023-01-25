@@ -7,7 +7,7 @@ Grafana is an open source metric analytics and visualization suite for visualizi
 [Overview of Grafana](https://grafana.com/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -636,8 +636,8 @@ This major release renames several values in this chart and adds missing feature
 Since the volume access mode when persistence is enabled is `ReadWriteOnce` in order to upgrade the deployment you will need to either use the `Recreate` strategy or delete the old deployment.
 
 ```console
-kubectl delete deployment <deployment-name>
-helm upgrade <release-name> my-repo/grafana
+$ kubectl delete deployment <deployment-name>
+$ helm upgrade <release-name> my-repo/grafana
 ```
 
 ### To 4.1.0
