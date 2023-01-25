@@ -267,6 +267,7 @@ $ helm uninstall my-release
 | `envoy.customStartupProbe`                          | Override default startup probe                                                                                        | `{}`                   |
 | `envoy.terminationGracePeriodSeconds`               | Envoy termination grace period in seconds                                                                             | `300`                  |
 | `envoy.logLevel`                                    | Envoy log level                                                                                                       | `info`                 |
+| `envoy.service.name`                                | envoy service name                                                                                                    | `""`                   |
 | `envoy.service.targetPorts`                         | Map the controller service HTTP/HTTPS port                                                                            | `{}`                   |
 | `envoy.service.type`                                | Type of Envoy service to create                                                                                       | `LoadBalancer`         |
 | `envoy.service.externalTrafficPolicy`               | Envoy Service external cluster policy. If `envoy.service.type` is NodePort or LoadBalancer                            | `Local`                |
