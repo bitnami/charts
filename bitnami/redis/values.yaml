@@ -1152,6 +1152,9 @@ sentinel:
     ## @param sentinel.persistence.medium Provide a medium for `emptyDir` volumes.
     ##
     medium: ""
+    ## @param sentinel.persistence.sizeLimit Set this to enable a size limit for `emptyDir` volumes.
+    ##
+    sizeLimit: ""
   ## Redis&reg; Sentinel resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param sentinel.resources.limits The resources limits for the Redis&reg; Sentinel containers

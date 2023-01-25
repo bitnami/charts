@@ -742,6 +742,9 @@ envoy:
   ## Envoy Service properties
   ##
   service:
+    ## @param envoy.service.name envoy service name
+    ##
+    name: ""
     ## @param envoy.service.targetPorts [object] Map the controller service HTTP/HTTPS port
     ##
     targetPorts:
