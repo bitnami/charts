@@ -173,7 +173,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraVolumes`                        | Optionally specify extra list of additional volumes .                                                                                                                   | `[]`                                              |
 | `extraSecrets`                        | Optionally specify extra secrets to be created by the chart.                                                                                                            | `{}`                                              |
 | `extraSecretsPrependReleaseName`      | Set this flag to true if extraSecrets should be created with <release-name> prepended.                                                                                  | `false`                                           |
-| `featureFlags`      | RabbitMQ controls what features are considered to be enabled or available on all cluster nodes.                                                                                  | `drop_unroutable_metric,empty_basic_get_metric,implicit_default_bindings,maintenance_mode_status,quorum_queue,virtual_host_metadata`                                           |
+| `featureFlags`      | RabbitMQ controls what features are considered to be enabled or available on all cluster nodes.                                                                                      |   `""`                                            |
 
 
 ### Statefulset parameters
