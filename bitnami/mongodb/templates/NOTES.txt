@@ -187,7 +187,7 @@ To connect to your database from outside the cluster execute the following comma
 
 To access the MongoDB&reg; Prometheus metrics, get the MongoDB&reg; Prometheus URL by running:
 
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "mongodb.service.nameOverride" . }}-metrics {{ .Values.metrics.service.ports.metrics }}:{{ .Values.metrics.service.ports.metrics }} &
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ printf "%s-metrics" (include "mongodb.fullname" .) }} {{ .Values.metrics.service.ports.metrics }}:{{ .Values.metrics.service.ports.metrics }} &
     echo "Prometheus Metrics URL: http://127.0.0.1:{{ .Values.metrics.service.ports.metrics }}/metrics"
 
 Then, open the obtained URL in a browser.
