@@ -164,6 +164,8 @@ spec:
                   key: sonarqube-password
             - name: SONARQUBE_EMAIL
               value: {{ .Values.sonarqubeEmail | quote }}
+            - name: SONARQUBE_VOLUME_DIR
+              value: {{ .Values.sonarqubeFolder }}
             {{- if or .Values.plugins.install .Values.caCerts.enabled}}
             - name: SONARQUBE_MOUNTED_PROVISIONING_DIR
               value: {{ .Values.provisioningFolder }}
