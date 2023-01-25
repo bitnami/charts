@@ -308,26 +308,20 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### PostgreSQL subchart settings
 
-| Name                             | Description                                                                        | Value               |
-| -------------------------------- | ---------------------------------------------------------------------------------- | ------------------- |
-| `postgresql.enabled`             | Deploy PostgreSQL subchart                                                         | `true`              |
-| `postgresql.nameOverride`        | Override name of the PostgreSQL chart                                              | `""`                |
-| `postgresql.auth.existingSecret` | Existing secret containing the password of the PostgreSQL chart                    | `""`                |
-| `postgresql.auth.password`       | Password for the postgres user of the PostgreSQL chart (auto-generated if not set) | `""`                |
-| `postgresql.auth.username`       | Username to create when deploying the PostgreSQL chart                             | `bn_sonarqube`      |
-| `postgresql.auth.database`       | Database to create when deploying the PostgreSQL chart                             | `bitnami_sonarqube` |
-
-
-### PostgreSQL Primary parameters
-
-| Name                                           | Description                                          | Value           |
-| ---------------------------------------------- | ---------------------------------------------------- | --------------- |
-| `postgresql.primary.service.ports.postgresql`  | PostgreSQL service port                              | `5432`          |
-| `postgresql.primary.persistence.enabled`       | Enable PostgreSQL Primary data persistence using PVC | `true`          |
-| `postgresql.primary.persistence.existingClaim` | Name of an existing PVC to use                       | `""`            |
-| `postgresql.primary.persistence.storageClass`  | PVC Storage Class for PostgreSQL Primary data volume | `""`            |
-| `postgresql.primary.persistence.accessMode`    | PVC Access Mode for PostgreSQL volume                | `ReadWriteOnce` |
-| `postgresql.primary.persistence.size`          | PVC Storage Request for PostgreSQL volume            | `8Gi`           |
+| Name                                           | Description                                                                        | Value               |
+| ---------------------------------------------- | ---------------------------------------------------------------------------------- | ------------------- |
+| `postgresql.enabled`                           | Deploy PostgreSQL subchart                                                         | `true`              |
+| `postgresql.nameOverride`                      | Override name of the PostgreSQL chart                                              | `""`                |
+| `postgresql.auth.existingSecret`               | Existing secret containing the password of the PostgreSQL chart                    | `""`                |
+| `postgresql.auth.password`                     | Password for the postgres user of the PostgreSQL chart (auto-generated if not set) | `""`                |
+| `postgresql.auth.username`                     | Username to create when deploying the PostgreSQL chart                             | `bn_sonarqube`      |
+| `postgresql.auth.database`                     | Database to create when deploying the PostgreSQL chart                             | `bitnami_sonarqube` |
+| `postgresql.primary.service.ports.postgresql`  | PostgreSQL service port                                                            | `5432`              |
+| `postgresql.primary.persistence.enabled`       | Enable PostgreSQL Primary data persistence using PVC                               | `true`              |
+| `postgresql.primary.persistence.existingClaim` | Name of an existing PVC to use                                                     | `""`                |
+| `postgresql.primary.persistence.storageClass`  | PVC Storage Class for PostgreSQL Primary data volume                               | `""`                |
+| `postgresql.primary.persistence.accessMode`    | PVC Access Mode for PostgreSQL volume                                              | `ReadWriteOnce`     |
+| `postgresql.primary.persistence.size`          | PVC Storage Request for PostgreSQL volume                                          | `8Gi`               |
 
 
 ### External Database settings
