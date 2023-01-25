@@ -7,7 +7,7 @@ MinIO(R) is an object storage server, compatible with Amazon S3 cloud storage se
 [Overview of Bitnami Object Storage based on MinIO&reg;](https://min.io/)
 
 Disclaimer: All software products, projects and company names are trademark(TM) or registered(R) trademarks of their respective holders, and use of them does not imply any affiliation or endorsement. This software is licensed to you subject to one or more open source licenses and VMware provides the software on an AS-IS basis. MinIO(R) is a registered trademark of the MinIO Inc. in the US and other countries. Bitnami is not affiliated, associated, authorized, endorsed by, or in any way officially connected with MinIO Inc. MinIO(R) is licensed under GNU AGPL v3.0.
-
+                           
 ## TL;DR
 
 ```console
@@ -80,14 +80,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `image.registry`           | MinIO&reg; image registry                                                                                                                                                                                 | `docker.io`              |
 | `image.repository`         | MinIO&reg; image repository                                                                                                                                                                               | `bitnami/minio`          |
-| `image.tag`                | MinIO&reg; image tag (immutable tags are recommended)                                                                                                                                                     | `2023.1.20-debian-11-r0` |
+| `image.tag`                | MinIO&reg; image tag (immutable tags are recommended)                                                                                                                                                     | `2023.1.25-debian-11-r0` |
 | `image.digest`             | MinIO&reg; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                | `""`                     |
 | `image.pullPolicy`         | Image pull policy                                                                                                                                                                                         | `IfNotPresent`           |
 | `image.pullSecrets`        | Specify docker-registry secret names as an array                                                                                                                                                          | `[]`                     |
 | `image.debug`              | Specify if debug logs should be enabled                                                                                                                                                                   | `false`                  |
 | `clientImage.registry`     | MinIO&reg; Client image registry                                                                                                                                                                          | `docker.io`              |
 | `clientImage.repository`   | MinIO&reg; Client image repository                                                                                                                                                                        | `bitnami/minio-client`   |
-| `clientImage.tag`          | MinIO&reg; Client image tag (immutable tags are recommended)                                                                                                                                              | `2023.1.11-debian-11-r2` |
+| `clientImage.tag`          | MinIO&reg; Client image tag (immutable tags are recommended)                                                                                                                                              | `2023.1.11-debian-11-r4` |
 | `clientImage.digest`       | MinIO&reg; Client image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                         | `""`                     |
 | `mode`                     | MinIO&reg; server mode (`standalone` or `distributed`)                                                                                                                                                    | `standalone`             |
 | `auth.rootUser`            | MinIO&reg; root username                                                                                                                                                                                  | `admin`                  |
@@ -262,7 +262,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r74`      |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r76`      |
 | `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
