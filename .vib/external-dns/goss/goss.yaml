@@ -1,27 +1,18 @@
-port:
-  tcp6:7979:
-    listening: true
-    ip:
-    - '::'
-file:
-  /opt/bitnami/external-dns/bin:
-    mode: "0755"
-    filetype: directory
-    exists: true
+http:
+  http://127.0.0.1:{{ .Vars.containerPorts.http }}/metrics:
+    status: 200
 command:
-  user-id-test:
-    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
+  {{- $uid := .Vars.podSecurityContext.runAsUser }}
+  {{- $gid := .Vars.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
     exit-status: 0
-    stdout: []
-    stderr: []
-  external-dns-version:
-    exec: external-dns --version 2>&1 | grep --quiet "$APP_VERSION"
+  {{ if and .Vars.serviceAccount.create .Vars.serviceAccount.automountServiceAccountToken }}
+  check-sa:
+    exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
     exit-status: 0
-    stdout: []
-    stderr: []
-  external-dns-process:
-    exec: ps aux | grep external-dns
-    exit-status: 0
-    stdout: 
-      - /external-dns/
-    stderr: []  
+    stdout:
+    - /serviceaccount.*name.*{{.Env.BITNAMI_APP_NAME }}/
+  {{ end }}
