@@ -7,7 +7,7 @@ Wavefront Storage Adapter is a Prometheus integration to transfer metrics from P
 [Overview of Wavefront Prometheus Adapter](https://github.com/wavefrontHQ/prometheus-storage-adapter)
 
 
-                           
+
 ## TL;DR
 
 ```console
@@ -196,7 +196,7 @@ The above command sets the `livenessProbe.successThreshold` to `5`.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
-```bash
+```console
 $ helm install my-release -f values.yaml my-repo/wavefront-prometheus-storage-adapter
 ```
 
@@ -231,7 +231,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
-```bash
+```console
 $ helm upgrade my-release my-repo/wavefront-prometheus-storage-adapter
 ```
 

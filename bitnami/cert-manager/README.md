@@ -7,7 +7,7 @@ cert-manager is a Kubernetes add-on to automate the management and issuance of T
 [Overview of cert-manager](https://github.com/jetstack/cert-manager)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.replicaCount`                                | Number of Controller replicas                                                                              | `1`                    |
 | `controller.image.registry`                              | Controller image registry                                                                                  | `docker.io`            |
 | `controller.image.repository`                            | Controller image repository                                                                                | `bitnami/cert-manager` |
-| `controller.image.tag`                                   | Controller image tag (immutable tags are recommended)                                                      | `1.10.2-debian-11-r0`  |
+| `controller.image.tag`                                   | Controller image tag (immutable tags are recommended)                                                      | `1.11.0-debian-11-r0`  |
 | `controller.image.digest`                                | Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `controller.image.pullPolicy`                            | Controller image pull policy                                                                               | `IfNotPresent`         |
 | `controller.image.pullSecrets`                           | Controller image pull secrets                                                                              | `[]`                   |

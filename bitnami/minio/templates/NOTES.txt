@@ -4,10 +4,6 @@ APP VERSION: {{ .Chart.AppVersion }}
 
 ** Please be patient while the chart is being deployed **
 
-{{- if .Values.gateway.enabled }}
-MinIO&reg; deployed as a {{ upper .Values.gateway.type }} Gateway
-{{- end }}
-
 MinIO&reg; can be accessed via port {{ .Values.service.port }} on the following DNS name from within your cluster:
 
    {{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
@@ -37,7 +33,7 @@ To connect to your MinIO&reg; server using a client:
    "{{ template "common.names.fullname" . }}-client=true" will be able to connect to MinIO&reg;.
 
 {{- end }}
-{{- if or .Values.gateway.enabled (not .Values.disableWebUI) }}
+{{- if (not .Values.disableWebUI) }}
 
 To access the MinIO&reg; web UI:
 
@@ -81,7 +77,8 @@ To access the MinIO&reg; web UI:
 
 {{- $requiredPasswords := list -}}
 {{- $secretName := include "minio.secretName" . -}}
-{{- if and (not .Values.auth.existingSecret) (not .Values.auth.forceNewKeys) (not .Values.gateway.enabled) -}}
+{{- $rootPassword := include "minio.secret.existingPassword" . -}}
+{{- if not $rootPassword }}
   {{- $requiredRootUser := dict "valueKey" "auth.rootUser" "secret" $secretName "field" "root-user" -}}
   {{- $requiredRootPassword := dict "valueKey" "auth.rootPassword" "secret" $secretName "field" "root-password" -}}
   {{- $requiredPasswords = append $requiredPasswords $requiredRootUser -}}

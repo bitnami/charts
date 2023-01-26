@@ -1,5 +1,6 @@
 annotations:
   category: CRM
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: 16.0.20221115
 dependencies:
@@ -13,7 +14,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Odoo is an open source ERP and CRM platform, formerly known as OpenERP, that can connect a wide variety of business operations such as sales, supply chain, finance, and project management.
-engine: gotpl
 home: https://github.com/bitnami/charts/tree/main/bitnami/odoo
 icon: https://bitnami.com/assets/stacks/odoo/img/odoo-stack-220x234.png
 keywords:

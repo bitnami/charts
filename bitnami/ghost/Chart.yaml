@@ -1,7 +1,8 @@
 annotations:
   category: CMS
+  licenses: Apache-2.0
 apiVersion: v2
-appVersion: 5.29.0
+appVersion: 5.32.0
 dependencies:
   - condition: mysql.enabled
     name: mysql
@@ -15,7 +16,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Ghost is an open source publishing platform designed to create blogs, magazines, and news sites. It includes a simple markdown editor with preview, theming, and SEO built-in to simplify editing.
-engine: gotpl
 home: https://github.com/bitnami/charts/tree/main/bitnami/ghost
 icon: https://bitnami.com/assets/stacks/ghost/img/ghost-stack-220x234.png
 keywords:
@@ -33,4 +33,4 @@ name: ghost
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/ghost
   - https://www.ghost.org/
-version: 19.1.57
+version: 19.1.61

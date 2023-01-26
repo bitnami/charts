@@ -7,7 +7,7 @@ phpMyAdmin is a free software tool written in PHP, intended to handle the admini
 [Overview of phpMyAdmin](https://www.phpmyadmin.net/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -33,6 +33,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/phpmyadmin
 ```
 
@@ -202,6 +203,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `db.ssl.ciphers`           | List of allowable ciphers for connections when using SSL          | `[]`    |
 | `db.ssl.verify`            | Enable SSL certificate validation                                 | `true`  |
 | `mariadb`                  | MariaDB chart configuration                                       | `{}`    |
+
+
+### Other Parameters
+
+| Name                                          | Description                                                            | Value   |
+| --------------------------------------------- | ---------------------------------------------------------------------- | ------- |
+| `serviceAccount.create`                       | Enable creation of ServiceAccount for PhpMyAdmin pod                   | `false` |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true`  |
+| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
 
 
 ### Metrics parameters
@@ -464,9 +475,9 @@ To upgrade to `7.0.0`, it should be done reusing the PVCs used to hold both the 
 Obtain the credentials and the names of the PVCs used to hold both the MariaDB and phpMyAdmin data on your current release:
 
 ```console
-export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default phpmyadmin-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
-export MARIADB_PASSWORD=$(kubectl get secret --namespace default phpmyadmin-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
-export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=phpmyadmin -o jsonpath="{.items[0].metadata.name}")
+$ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default phpmyadmin-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
+$ export MARIADB_PASSWORD=$(kubectl get secret --namespace default phpmyadmin-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
+$ export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=phpmyadmin -o jsonpath="{.items[0].metadata.name}")
 ```
 
 Delete the phpMyAdmin deployment and delete the MariaDB statefulsets:

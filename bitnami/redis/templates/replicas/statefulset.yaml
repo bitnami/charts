@@ -321,6 +321,30 @@ spec:
           ports:
             - name: metrics
               containerPort: 9121
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.metrics.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: metrics
+          {{- end }}
+          {{- if .Values.metrics.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: metrics
+          {{- end }}
+          {{- if .Values.metrics.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /
+              port: metrics
+          {{- end }}
+          {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
@@ -423,9 +447,11 @@ spec:
             path: /sys
         {{- end }}
         - name: redis-tmp-conf
-          {{- if .Values.replica.persistence.medium }}
+          {{- if or .Values.replica.persistence.medium .Values.replica.persistence.sizeLimit }}
           emptyDir:
+            {{- if .Values.replica.persistence.medium }}
             medium: {{ .Values.replica.persistence.medium | quote }}
+            {{- end }}
             {{- if .Values.replica.persistence.sizeLimit }}
             sizeLimit: {{ .Values.replica.persistence.sizeLimit | quote }}
             {{- end }}
@@ -446,10 +472,14 @@ spec:
         {{- end }}
   {{- if not .Values.replica.persistence.enabled }}
         - name: redis-data
-          {{- if .Values.replica.persistence.medium }}
-          emptyDir: {
+          {{- if or .Values.replica.persistence.medium .Values.replica.persistence.sizeLimit }}
+          emptyDir:
+            {{- if .Values.replica.persistence.medium }}
             medium: {{ .Values.replica.persistence.medium | quote }}
-          }
+            {{- end }}
+            {{- if .Values.replica.persistence.sizeLimit }}
+            sizeLimit: {{ .Values.replica.persistence.sizeLimit | quote }}
+            {{- end }}
           {{- else }}
           emptyDir: {}
           {{- end }}

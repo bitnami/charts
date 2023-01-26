@@ -7,7 +7,7 @@ Sealed Secrets are "one-way" encrypted K8s Secrets that can be created by anyone
 [Overview of Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets)
 
 
-                           
+
 ## TL;DR
 
 ```console
@@ -33,7 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release my-repo/sealed-secrets
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/sealed-secrets
 ```
 
 The command deploys the Sealed Secrets controller on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -45,7 +46,7 @@ The command deploys the Sealed Secrets controller on the Kubernetes cluster in t
 To uninstall/delete the `my-release` deployment:
 
 ```console
-helm delete my-release
+$ helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -81,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
 | `image.registry`                                    | Sealed Secrets image registry                                                                                            | `docker.io`              |
 | `image.repository`                                  | Sealed Secrets image repository                                                                                          | `bitnami/sealed-secrets` |
-| `image.tag`                                         | Sealed Secrets image tag (immutable tags are recommended)                                                                | `0.19.3-scratch-r0`      |
+| `image.tag`                                         | Sealed Secrets image tag (immutable tags are recommended)                                                                | `0.19.4-scratch-r0`      |
 | `image.digest`                                      | Sealed Secrets image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag           | `""`                     |
 | `image.pullPolicy`                                  | Sealed Secrets image pull policy                                                                                         | `IfNotPresent`           |
 | `image.pullSecrets`                                 | Sealed Secrets image pull secrets                                                                                        | `[]`                     |
@@ -228,7 +229,7 @@ The above command sets the `livenessProbe.successThreshold` to `5`.
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/sealed-secrets
+$ helm install my-release -f values.yaml my-repo/sealed-secrets
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -241,8 +242,8 @@ The easiest way to interact with the Sealed Secrets controller is using the **ku
 
 Once installed, you can start using it to encrypt your secrets or fetching the controller public certificate as shown in the example below:
 
-```bash
-kubeseal --fetch-cert \
+```console
+$ kubeseal --fetch-cert \
 --controller-name=my-release \
 --controller-namespace=my-release-namespace \
 > pub-cert.pem

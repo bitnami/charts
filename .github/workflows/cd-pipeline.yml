@@ -74,7 +74,6 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/odoo/**'
       - 'bitnami/opencart/**'
       - 'bitnami/osclass/**'
-      - 'bitnami/owncloud/**'
       - 'bitnami/parse/**'
       - 'bitnami/phpbb/**'
       - 'bitnami/phpmyadmin/**'
@@ -178,7 +177,7 @@ jobs:
             verification_mode="$(cat $config_file | grep 'verification-mode' | cut -d'=' -f2)"
           fi
           echo "verification_mode=${verification_mode}" >> $GITHUB_OUTPUT
-      - uses: vmware-labs/vmware-image-builder-action@0.4.18
+      - uses: vmware-labs/vmware-image-builder-action@main
         name: Verify and publish ${{ needs.get-chart.outputs.chart }}
         with:
           pipeline: ${{ needs.get-chart.outputs.chart }}/vib-publish.json
@@ -221,10 +220,10 @@ jobs:
       - id: update-index
         name: Fetch chart and update index
         run: |
-          # Extract chart release metadata from the publish result file
-          vib_publish_result_file=$(find ~/artifacts -name "result.json" -print -quit)
-          chart_name=$(jq -re '.actions|map(select(.action_id == "helm-publish"))[0] | .application.name' $vib_publish_result_file)
-          chart_version=$(jq -re '.actions|map(select(.action_id == "helm-publish"))[0] | .application.version' $vib_publish_result_file)
+          # Extract chart release metadata from the publish report file
+          vib_publish_report_file=$(find ~/artifacts -name "report.json" -print -quit)
+          chart_name=$(jq -re '.actions|map(select(.action_id == "helm-publish"))[0] | .application.name' $vib_publish_report_file)
+          chart_version=$(jq -re '.actions|map(select(.action_id == "helm-publish"))[0] | .application.version' $vib_publish_report_file)
           # Download published asset
           mkdir download
           aws s3 cp s3://${{ secrets.AWS_S3_BUCKET }}/bitnami/${chart_name}-${chart_version}.tgz download/

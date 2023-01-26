@@ -1,7 +1,8 @@
 annotations:
   category: CMS
+  licenses: Apache-2.0
 apiVersion: v2
-appVersion: 1.9.2
+appVersion: 1.9.4
 dependencies:
   - condition: redis.enabled
     name: redis
@@ -17,7 +18,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Appsmith is an open source platform for building and maintaining internal tools, such as custom dashboards, admin panels or CRUD apps.
-engine: gotpl
 home: https://www.appsmith.com/
 icon: https://bitnami.com/assets/stacks/appsmith/img/appsmith-stack-220x234.png
 keywords:
@@ -30,4 +30,4 @@ name: appsmith
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/appsmith
   - https://github.com/appsmithorg/appsmith/
-version: 0.1.9
+version: 0.1.10

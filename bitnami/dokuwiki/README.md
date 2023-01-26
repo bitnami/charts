@@ -7,7 +7,7 @@ DokuWiki is a standards-compliant wiki optimized for creating documentation. Des
 [Overview of DokuWiki](https://www.splitbrain.org/projects/dokuwiki)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -33,6 +33,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/dokuwiki
 ```
 
@@ -80,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
 | `image.registry`                        | DokuWiki image registry                                                                                               | `docker.io`                  |
 | `image.repository`                      | DokuWiki image repository                                                                                             | `bitnami/dokuwiki`           |
-| `image.tag`                             | DokuWiki image tag                                                                                                    | `20220731.1.0-debian-11-r40` |
+| `image.tag`                             | DokuWiki image tag                                                                                                    | `20220731.1.0-debian-11-r42` |
 | `image.digest`                          | DokuWiki image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                         |
 | `image.pullPolicy`                      | Image pull policy                                                                                                     | `IfNotPresent`               |
 | `image.pullSecrets`                     | Image pull policy                                                                                                     | `[]`                         |
@@ -195,7 +196,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r70`      |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r71`      |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                    |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
@@ -210,7 +211,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`           | Start a exporter side-car                                                                                       | `false`                   |
 | `metrics.image.registry`    | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`  | Apache exporter image name                                                                                      | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag                                                                                       | `0.11.0-debian-11-r80`    |
+| `metrics.image.tag`         | Apache exporter image tag                                                                                       | `0.11.0-debian-11-r81`    |
 | `metrics.image.digest`      | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`  | Image pull policy                                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array                                                                | `[]`                      |
@@ -236,7 +237,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                      | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                                                                        | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image                                                                                           | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag                                                                                       | `11-debian-11-r70`                       |
+| `certificates.image.tag`                             | Container sidecar image tag                                                                                       | `11-debian-11-r71`                       |
 | `certificates.image.digest`                          | Container sidecar image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                              | `[]`                                     |
@@ -305,8 +306,8 @@ certificates:
 
 Secret can be created with:
 
-```bash
-kubectl create secret generic my-ca-1 --from-file my-ca-1.crt
+```console
+$ kubectl create secret generic my-ca-1 --from-file my-ca-1.crt
 ```
 
 ### TLS Certificate
@@ -330,13 +331,13 @@ certificates:
 
 The certificate tls secret can be created with:
 
-```bash
-kubectl create secret tls my-secret --cert tls.crt --key tls.key
+```console
+$ kubectl create secret tls my-secret --cert tls.crt --key tls.key
 ```
 
 The certificate chain is created with:
-```bash
-kubectl create secret generic my-ca-1 --from-file my-ca-1.crt
+```console
+$ kubectl create secret generic my-ca-1 --from-file my-ca-1.crt
 ```
 
 ## Troubleshooting

@@ -1,5 +1,6 @@
 annotations:
   category: Analytics
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: 1.5.0
 dependencies:
@@ -9,7 +10,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Prometheus exporter for hardware and OS metrics exposed by UNIX kernels, with pluggable metric collectors.
-engine: gotpl
 home: https://github.com/bitnami/charts/tree/main/bitnami/node-exporter
 icon: https://bitnami.com/assets/stacks/node-exporter/img/node-exporter-stack-220x234.png
 keywords:
@@ -24,4 +24,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/node-exporter
   - https://github.com/prometheus/node_exporter
   - https://prometheus.io/
-version: 3.2.6
+version: 3.2.7
