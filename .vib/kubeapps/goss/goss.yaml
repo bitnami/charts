@@ -19,10 +19,6 @@ file:
       - /domain.*{{ .domain }}/
       - /name.*{{ .name }}/
     {{ end }}
-  /var/run/secrets/kubernetes.io/serviceaccount:
-    exists: {{ .Vars.kubeappsapis.serviceAccount.automountServiceAccountToken }}
-    filetype: directory
-    mode: "3777"
 command:
   {{- $uid := .Vars.kubeappsapis.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.kubeappsapis.podSecurityContext.fsGroup }}
@@ -31,3 +27,10 @@ command:
     # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
     exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
     exit-status: 0
+  {{ if .Vars.kubeappsapis.serviceAccount.automountServiceAccountToken }}
+  check-sa:
+    exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
+    exit-status: 0
+    stdout:
+    - /serviceaccount.*name.*{{.Env.BITNAMI_APP_NAME }}/
+  {{ end }}

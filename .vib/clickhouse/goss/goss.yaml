@@ -1,8 +1,4 @@
 file:
-  /var/run/secrets/kubernetes.io/serviceaccount:
-    exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
-    filetype: directory
-    mode: "3777"
   /opt/bitnami/clickhouse/etc/conf.d/00_default_overrides.xml:
     mode: "0644"
     filetype: file
@@ -42,3 +38,10 @@ command:
     exit-status: 0
     stdout:
       - {{ $insertValue }}
+  {{ if .Vars.serviceAccount.automountServiceAccountToken }}
+  check-sa:
+    exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
+    exit-status: 0
+    stdout:
+    - /serviceaccount.*name.*{{.Env.BITNAMI_APP_NAME }}/
+  {{ end }}

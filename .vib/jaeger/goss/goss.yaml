@@ -16,11 +16,6 @@ http:
       - Server available
   http://localhost:{{ .Vars.agent.containerPorts.admin }}/:
     status: 200
-file:
-  /var/run/secrets/kubernetes.io/serviceaccount:
-    exists: {{ .Vars.agent.serviceAccount.automountServiceAccountToken }}
-    filetype: directory
-    mode: "3777"
 command:
   check-cassandra-auth:
     exec: \[ $CASSANDRA_USERNAME = {{ .Vars.cassandra.dbUser.user }} ] && [ $CASSANDRA_PASSWORD = {{ .Vars.cassandra.dbUser.password }} ] && [ $CASSANDRA_KEYSPACE = {{ .Vars.cassandra.keyspace }} ];
