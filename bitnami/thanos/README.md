@@ -1322,7 +1322,7 @@ objstoreConfig: |-
     insecure: true
 query:
   dnsDiscovery:
-    sidecarsService: bitnami-kube-prometheus-prometheus-thanos
+    sidecarsService: kube-prometheus-prometheus-thanos
     sidecarsNamespace: monitoring
 bucketweb:
   enabled: true
