@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/external-dns"
         },
-        "runtime_parameters": "Y29udGFpbmVyUG9ydHM6CiAgaHR0cDogNzk4MApjbG91ZGZsYXJlOgogIGFwaUtleTogdGVzdGluZ2FwaWtleTEyMzQKICBlbWFpbDogdGVzdEB0ZXN0Lm9yZwpwcm92aWRlcjogY2xvdWRmbGFyZQppbnRlcnZhbDogIjFtIgpsb2dMZXZlbDogaW5mbwpsb2dGb3JtYXQ6IHRleHQKcG9saWN5OiB1cHNlcnQtb25seQpyZWdpc3RyeTogInR4dCIKc2VydmljZToKICBwb3J0czoKICAgIGh0dHA6IDgwCiAgdHlwZTogTG9hZEJhbGFuY2VyCnNlcnZpY2VBY2NvdW50OgogIGNyZWF0ZTogdHJ1ZQogIGF1dG9tb3VudFNlcnZpY2VBY2NvdW50VG9rZW46IHRydWUKcmJhYzoKICBjcmVhdGU6IHRydWUKICBjbHVzdGVyUm9sZTogdHJ1ZQpwb2RTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIGZzR3JvdXA6IDEwMDIKICBydW5Bc1VzZXI6IDEwMDI=",
+        "runtime_parameters": "Y29udGFpbmVyUG9ydHM6CiAgaHR0cDogNzk4MApjbG91ZGZsYXJlOgogIGFwaUtleTogdGVzdGluZ2FwaWtleTEyMzQKICBlbWFpbDogdGVzdEB0ZXN0Lm9yZwpwcm92aWRlcjogY2xvdWRmbGFyZQpzZXJ2aWNlOgogIHBvcnRzOgogICAgaHR0cDogODAKICB0eXBlOiBMb2FkQmFsYW5jZXIKc2VydmljZUFjY291bnQ6CiAgY3JlYXRlOiB0cnVlCiAgYXV0b21vdW50U2VydmljZUFjY291bnRUb2tlbjogdHJ1ZQpyYmFjOgogIGNyZWF0ZTogdHJ1ZQogIGNsdXN0ZXJSb2xlOiB0cnVlCnBvZFNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgZnNHcm91cDogMTAwMgogIHJ1bkFzVXNlcjogMTAwMg==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
