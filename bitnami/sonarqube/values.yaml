@@ -106,7 +106,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/sonarqube
-  tag: 9.8.0-debian-11-r11
+  tag: 9.8.0-debian-11-r14
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -135,8 +135,6 @@ sonarqubeUsername: user
 ## Defaults to a random 10-character alphanumeric string if not set
 ##
 sonarqubePassword: ""
-## @param sonarqubeFolder Base sonarqube folder. The chart and the bitnami container will use this folder as the main application folder during the installation steps. Then, it will be mapped/symlinked to /opt/bitnami/sonarqube
-sonarqubeFolder: "/bitnami/sonarqube"
 ## @param provisioningFolder Directory to use for provisioning content to Sonarqube
 provisioningFolder: "/bitnami/sonarqube-provisioning"
 ## @param existingSecret Name of existing secret containing SonarQube&trade; credentials
@@ -626,7 +624,7 @@ ingress:
 ## Provide a secret containing one or more certificate files in the keys that will be added to cacerts
 ## The cacerts file will be set via SONARQUBE_WEB_JVM_OPTS and SONAR_CE_JAVAOPTS
 caCerts:
-  ## @param enabled Enable the use of caCerts
+  ## @param caCerts.enabled Enable the use of caCerts
   enabled: true
   ## Bitnami Shell image
   ## ref: https://hub.docker.com/r/bitnami/bitnami-shell/tags/
@@ -643,19 +641,27 @@ caCerts:
     tag: 11-debian-11-r63
     digest: ""
     pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
   ## @param caCerts.secret Name of the secret containing the certificates
   secret: ca-certs-secret
   ## Init container's resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param plugins.resources.limits The resources limits for the init container
-  ## @param plugins.resources.requests The requested resources for the init container
+  ## @param caCerts.resources.limits The resources limits for the init container
+  ## @param caCerts.resources.requests The requested resources for the init container
   ##
   resources:
     limits: {}
     requests: {}
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param plugins.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
+  ## @param caCerts.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
   ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
   ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
   ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
@@ -693,6 +699,14 @@ plugins:
     tag: 11-debian-11-r63
     digest: ""
     pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
   ## Init container's resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param plugins.resources.limits The resources limits for the init container
