@@ -1316,35 +1316,35 @@ objstoreConfig: |-
   type: s3
   config:
     bucket: thanos
-    endpoint: thanos-minio.monitoring.svc.cluster.local:9000
+    endpoint: {{ include "thanos.minio.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:9000
     access_key: minio
     secret_key: minio123
     insecure: true
- query:
+query:
   dnsDiscovery:
     sidecarsService: bitnami-kube-prometheus-prometheus-thanos
     sidecarsNamespace: monitoring
- bucketweb:
+bucketweb:
   enabled: true
- compactor:
+compactor:
   enabled: true
- storegateway:
+storegateway:
   enabled: true
- ruler:
+ruler:
   enabled: true
   alertmanagers:
     - http://kube-prometheus-alertmanager.monitoring.svc.cluster.local:9093
-  config: |-
+config: |-
     groups:
       - name: "metamonitoring"
         rules:
           - alert: "PrometheusDown"
             expr: absent(up{prometheus="monitoring/kube-prometheus"})
- metrics:
+metrics:
   enabled: true
   serviceMonitor:
     enabled: true 
- minio:
+minio:
   auth:
     rootPassword: minio123
     rootUser: minio
