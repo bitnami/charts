@@ -42516,6 +42516,40 @@ entries:
   kibana:
   - annotations:
       category: Analytics
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 8.6.1
+    created: "2023-01-27T08:33:18.124071562Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Kibana is an open source, browser based analytics and search dashboard
+      for Elasticsearch. Kibana strives to be easy to get started with, while also
+      being flexible and powerful.
+    digest: 806f6888711b0ce7368a70f9a036afc4ff23895f17b1a81b8a5dc261325c2ac8
+    home: https://github.com/bitnami/charts/tree/main/bitnami/kibana
+    icon: https://bitnami.com/assets/stacks/kibana/img/kibana-stack-220x234.png
+    keywords:
+    - kibana
+    - analytics
+    - monitoring
+    - metrics
+    - logs
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: kibana
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/kibana
+    - https://www.elastic.co/products/kibana
+    urls:
+    - https://charts.bitnami.com/bitnami/kibana-10.2.13.tgz
+    version: 10.2.13
+  - annotations:
+      category: Analytics
     apiVersion: v2
     appVersion: 8.6.0
     created: "2023-01-11T08:49:22.986116539Z"
@@ -108962,4 +108996,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-01-26T23:27:16.919673956Z"
+generated: "2023-01-27T08:33:18.120036554Z"
