@@ -1343,13 +1343,13 @@ config: |-
 metrics:
   enabled: true
   serviceMonitor:
-    enabled: true 
+    enabled: true
 minio:
+  enabled: true
   auth:
     rootPassword: minio123
     rootUser: minio
   monitoringBuckets: thanos
-  enabled: true
   accessKey:
     password: minio
   secretKey:
