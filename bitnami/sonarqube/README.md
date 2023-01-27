@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ---------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`    | SonarQube&trade; image registry                                                                                  | `docker.io`           |
 | `image.repository`  | SonarQube&trade; image repository                                                                                | `bitnami/sonarqube`   |
-| `image.tag`         | SonarQube&trade; image tag (immutable tags are recommended)                                                      | `9.8.0-debian-11-r11` |
+| `image.tag`         | SonarQube&trade; image tag (immutable tags are recommended)                                                      | `9.8.0-debian-11-r15` |
 | `image.digest`      | SonarQube&trade; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`  | SonarQube&trade; image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets` | SonarQube&trade; image pull secrets                                                                              | `[]`                  |
@@ -95,10 +95,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
 | `sonarqubeUsername`           | SonarQube&trade; username                                                                                                                                                 | `user`                                                   |
 | `sonarqubePassword`           | SonarQube&trade; user password                                                                                                                                            | `""`                                                     |
+| `provisioningFolder`          | Directory to use for provisioning content to Sonarqube                                                                                                                    | `/bitnami/sonarqube-provisioning`                        |
 | `existingSecret`              | Name of existing secret containing SonarQube&trade; credentials                                                                                                           | `""`                                                     |
 | `sonarqubeEmail`              | SonarQube&trade; user email                                                                                                                                               | `user@example.com`                                       |
 | `minHeapSize`                 | Minimum heap size for SonarQube&trade;                                                                                                                                    | `1024m`                                                  |
 | `maxHeapSize`                 | Maximum heap size for SonarQube&trade;                                                                                                                                    | `2048m`                                                  |
+| `jvmOpts`                     | Values to add to SONARQUBE_WEB_JVM_OPTS                                                                                                                                   | `""`                                                     |
+| `jvmCeOpts`                   | Values to add to SONAR_CE_JAVAOPTS                                                                                                                                        | `""`                                                     |
 | `startTimeout`                | Timeout for the application to start in seconds                                                                                                                           | `150`                                                    |
 | `extraProperties`             | List of extra properties to be set in the sonar.properties file (key=value format)                                                                                        | `[]`                                                     |
 | `sonarqubeSkipInstall`        | Skip wizard installation                                                                                                                                                  | `false`                                                  |
@@ -190,48 +193,70 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                                         | Description                                                                                                                      | Value                           |
-| -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
-| `service.type`                               | SonarQube&trade; service type                                                                                                    | `LoadBalancer`                  |
-| `service.ports.http`                         | SonarQube&trade; service HTTP port                                                                                               | `80`                            |
-| `service.ports.elastic`                      | SonarQube&trade; service ElasticSearch port                                                                                      | `9001`                          |
-| `service.nodePorts.http`                     | Node port for HTTP                                                                                                               | `""`                            |
-| `service.nodePorts.elastic`                  | Node port for ElasticSearch                                                                                                      | `""`                            |
-| `service.clusterIP`                          | SonarQube&trade; service Cluster IP                                                                                              | `""`                            |
-| `service.loadBalancerIP`                     | SonarQube&trade; service Load Balancer IP                                                                                        | `""`                            |
-| `service.loadBalancerSourceRanges`           | SonarQube&trade; service Load Balancer sources                                                                                   | `[]`                            |
-| `service.externalTrafficPolicy`              | SonarQube&trade; service external traffic policy                                                                                 | `Cluster`                       |
-| `service.annotations`                        | Additional custom annotations for SonarQube&trade; service                                                                       | `{}`                            |
-| `service.extraPorts`                         | Extra ports to expose in SonarQube&trade; service (normally used with the `sidecars` value)                                      | `[]`                            |
-| `service.sessionAffinity`                    | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                          |
-| `service.sessionAffinityConfig`              | Additional settings for the sessionAffinity                                                                                      | `{}`                            |
-| `ingress.enabled`                            | Enable ingress record generation for SonarQube&trade;                                                                            | `false`                         |
-| `ingress.pathType`                           | Ingress path type                                                                                                                | `ImplementationSpecific`        |
-| `ingress.apiVersion`                         | Force Ingress API version (automatically detected if not set)                                                                    | `""`                            |
-| `ingress.ingressClassName`                   | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                            |
-| `ingress.hostname`                           | Default host for the ingress record                                                                                              | `sonarqube.local`               |
-| `ingress.path`                               | Default path for the ingress record                                                                                              | `/`                             |
-| `ingress.annotations`                        | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                            |
-| `ingress.tls`                                | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                         |
-| `ingress.selfSigned`                         | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                         |
-| `ingress.extraHosts`                         | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                            |
-| `ingress.extraPaths`                         | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                            |
-| `ingress.extraTls`                           | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                            |
-| `ingress.secrets`                            | Custom TLS certificates as secrets                                                                                               | `[]`                            |
-| `ingress.extraRules`                         | Additional rules to be covered with this ingress record                                                                          | `[]`                            |
-| `plugins.install`                            | List of plugin URLS to download and install                                                                                      | `[]`                            |
-| `plugins.netrcCreds`                         | .netrc secret file with a key "netrc" to use basic auth while downloading plugins                                                | `""`                            |
-| `plugins.extensionsDir`                      | Extensions base directory where to preload and provisioning plugins folder (extensionsDir/plugins)                               | `/bitnami/sonarqube-extensions` |
-| `plugins.noCheckCertificate`                 | Set to true to not validate the server's certificate to download plugin                                                          | `true`                          |
-| `plugins.image.registry`                     | Bitnami Shell image registry                                                                                                     | `docker.io`                     |
-| `plugins.image.repository`                   | Bitnami Shell image repository                                                                                                   | `bitnami/bitnami-shell`         |
-| `plugins.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                                         | `11-debian-11-r63`              |
-| `plugins.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                    | `""`                            |
-| `plugins.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                                                  | `IfNotPresent`                  |
-| `plugins.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                                                 | `[]`                            |
-| `plugins.resources.limits`                   | The resources limits for the init container                                                                                      | `{}`                            |
-| `plugins.resources.requests`                 | The requested resources for the init container                                                                                   | `{}`                            |
-| `plugins.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                                                  | `0`                             |
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | SonarQube&trade; service type                                                                                                    | `LoadBalancer`           |
+| `service.ports.http`               | SonarQube&trade; service HTTP port                                                                                               | `80`                     |
+| `service.ports.elastic`            | SonarQube&trade; service ElasticSearch port                                                                                      | `9001`                   |
+| `service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
+| `service.nodePorts.elastic`        | Node port for ElasticSearch                                                                                                      | `""`                     |
+| `service.clusterIP`                | SonarQube&trade; service Cluster IP                                                                                              | `""`                     |
+| `service.loadBalancerIP`           | SonarQube&trade; service Load Balancer IP                                                                                        | `""`                     |
+| `service.loadBalancerSourceRanges` | SonarQube&trade; service Load Balancer sources                                                                                   | `[]`                     |
+| `service.externalTrafficPolicy`    | SonarQube&trade; service external traffic policy                                                                                 | `Cluster`                |
+| `service.annotations`              | Additional custom annotations for SonarQube&trade; service                                                                       | `{}`                     |
+| `service.extraPorts`               | Extra ports to expose in SonarQube&trade; service (normally used with the `sidecars` value)                                      | `[]`                     |
+| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `ingress.enabled`                  | Enable ingress record generation for SonarQube&trade;                                                                            | `false`                  |
+| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.hostname`                 | Default host for the ingress record                                                                                              | `sonarqube.local`        |
+| `ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
+| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
+| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+
+
+### SonarQube caCerts provisioning parameters
+
+| Name                                         | Description                                                                                                   | Value                   |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `caCerts.enabled`                            | Enable the use of caCerts                                                                                     | `true`                  |
+| `caCerts.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
+| `caCerts.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
+| `caCerts.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r63`      |
+| `caCerts.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `caCerts.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
+| `caCerts.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
+| `caCerts.secret`                             | Name of the secret containing the certificates                                                                | `ca-certs-secret`       |
+| `caCerts.resources.limits`                   | The resources limits for the init container                                                                   | `{}`                    |
+| `caCerts.resources.requests`                 | The requested resources for the init container                                                                | `{}`                    |
+| `caCerts.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                               | `0`                     |
+
+
+### SonarQube plugin provisioning parameters
+
+| Name                                         | Description                                                                                                   | Value                                                                                                    |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `plugins.install`                            | List of plugin URLS to download and install                                                                   | `["https://github.com/AmadeusITGroup/sonar-stash/releases/download/1.6.0/sonar-stash-plugin-1.6.0.jar"]` |
+| `plugins.netrcCreds`                         | .netrc secret file with a key "netrc" to use basic auth while downloading plugins                             | `""`                                                                                                     |
+| `plugins.noCheckCertificate`                 | Set to true to not validate the server's certificate to download plugin                                       | `true`                                                                                                   |
+| `plugins.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`                                                                                              |
+| `plugins.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell`                                                                                  |
+| `plugins.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r63`                                                                                       |
+| `plugins.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                                                                                     |
+| `plugins.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`                                                                                           |
+| `plugins.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                                                                                                     |
+| `plugins.resources.limits`                   | The resources limits for the init container                                                                   | `{}`                                                                                                     |
+| `plugins.resources.requests`                 | The requested resources for the init container                                                                | `{}`                                                                                                     |
+| `plugins.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                               | `0`                                                                                                      |
 
 
 ### Persistence Parameters
