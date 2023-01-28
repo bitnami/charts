@@ -29,4 +29,4 @@ name: odoo
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/odoo
   - https://www.odoo.com/
-version: 23.0.4
+version: 23.0.5
