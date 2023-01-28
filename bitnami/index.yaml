@@ -71767,6 +71767,38 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 1.5.0
+    created: "2023-01-28T23:07:38.258995461Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Prometheus exporter for hardware and OS metrics exposed by UNIX kernels,
+      with pluggable metric collectors.
+    digest: 7a85312ec82de89608f7030a26a0035a78c3f8092aedc4acca9bd22f30f67d4b
+    home: https://github.com/bitnami/charts/tree/main/bitnami/node-exporter
+    icon: https://bitnami.com/assets/stacks/node-exporter/img/node-exporter-stack-220x234.png
+    keywords:
+    - prometheus
+    - node-exporter
+    - monitoring
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: node-exporter
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/node-exporter
+    - https://github.com/prometheus/node_exporter
+    - https://prometheus.io/
+    urls:
+    - https://charts.bitnami.com/bitnami/node-exporter-3.2.8.tgz
+    version: 3.2.8
+  - annotations:
+      category: Analytics
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 1.5.0
     created: "2023-01-17T08:23:58.257380838Z"
     dependencies:
     - name: common
@@ -109245,4 +109277,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-01-28T20:39:30.39624976Z"
+generated: "2023-01-28T23:07:38.251809693Z"
