@@ -92446,6 +92446,42 @@ entries:
   solr:
   - annotations:
       category: Infrastructure
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 9.1.1
+    created: "2023-01-30T12:57:50.639956776Z"
+    dependencies:
+    - condition: zookeeper.enabled
+      name: zookeeper
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Apache Solr is an extremely powerful, open source enterprise search
+      platform built on Apache Lucene. It is highly reliable and flexible, scalable,
+      and designed to add value very quickly after launch.
+    digest: 04fb1def6986d51886b5483799c288e0d76016dd75535190fe1dce08e3b30196
+    home: https://github.com/bitnami/charts/tree/main/bitnami/solr
+    icon: https://bitnami.com/assets/stacks/solr/img/solr-stack-220x234.png
+    keywords:
+    - solr
+    - zookeeper
+    - apache
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: solr
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/solr
+    - https://lucene.apache.org/solr/
+    urls:
+    - https://charts.bitnami.com/bitnami/solr-7.1.2.tgz
+    version: 7.1.2
+  - annotations:
+      category: Infrastructure
     apiVersion: v2
     appVersion: 9.1.0
     created: "2023-01-10T13:13:50.230882512Z"
@@ -109498,4 +109534,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-01-30T10:29:27.386657286Z"
+generated: "2023-01-30T12:57:50.632375038Z"
