@@ -7,7 +7,7 @@ This PostgreSQL cluster solution includes the PostgreSQL replication manager, an
 [Overview of PostgreSQL HA](https://www.postgresql.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -103,6 +103,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `postgresql.image.debug`                                     | Specify if debug logs should be enabled                                                                                                                                                                       | `false`                     |
 | `postgresql.labels`                                          | Labels to add to the StatefulSet. Evaluated as template                                                                                                                                                       | `{}`                        |
 | `postgresql.podLabels`                                       | Labels to add to the StatefulSet pods. Evaluated as template                                                                                                                                                  | `{}`                        |
+| `postgresql.serviceAnnotations`                              | Provide any additional annotations for PostgreSQL service                                                                                                                                                     | `{}`                        |
 | `postgresql.replicaCount`                                    | Number of replicas to deploy. Use an odd number. Having 3 replicas is the minimum to get quorum when promoting a new primary.                                                                                 | `3`                         |
 | `postgresql.updateStrategy.type`                             | Postgresql statefulset strategy type                                                                                                                                                                          | `RollingUpdate`             |
 | `postgresql.containerPorts.postgresql`                       | PostgreSQL port                                                                                                                                                                                               | `5432`                      |
@@ -338,6 +339,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `pgpool.labels`                                          | Labels to add to the Deployment. Evaluated as template                                                                                   | `{}`                 |
 | `pgpool.podLabels`                                       | Labels to add to the pods. Evaluated as template                                                                                         | `{}`                 |
 | `pgpool.serviceLabels`                                   | Labels to add to the service. Evaluated as template                                                                                      | `{}`                 |
+| `pgpool.serviceAnnotations`                              | Provide any additional annotations for Pgpool service                                                                                    | `{}`                 |
 | `pgpool.customLivenessProbe`                             | Override default liveness probe                                                                                                          | `{}`                 |
 | `pgpool.customReadinessProbe`                            | Override default readiness probe                                                                                                         | `{}`                 |
 | `pgpool.customStartupProbe`                              | Override default startup probe                                                                                                           | `{}`                 |
@@ -567,7 +569,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `service.extraPorts`                                  | Extra ports to expose (normally used with the `sidecar` value)                                | `[]`         |
 | `service.sessionAffinity`                             | Control where client requests go, to the same pod or round-robin                              | `None`       |
 | `service.sessionAffinityConfig`                       | Additional settings for the sessionAffinity                                                   | `{}`         |
-| `service.annotations`                                 | Provide any additional annotations for PostgreSQL service                                     | `{}`         |
+| `service.annotations`                                 | Provide any additional annotations both for PostgreSQL and Pgpool services                    | `{}`         |
 | `service.serviceLabels`                               | Labels for PostgreSQL service                                                                 | `{}`         |
 | `networkPolicy.enabled`                               | Enable NetworkPolicy                                                                          | `false`      |
 | `networkPolicy.allowExternal`                         | Don't require client label for connections                                                    | `true`       |
