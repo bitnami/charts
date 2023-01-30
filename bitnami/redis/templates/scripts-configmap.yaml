@@ -44,11 +44,17 @@ data:
         hostname="$1"
 
         {{- if .Values.useExternalDNS.enabled }}
-        echo "${hostname}.{{- include "redis.externalDNS.suffix" . }}"
+        full_hostname="${hostname}.{{- include "redis.externalDNS.suffix" . }}"
         {{- else if eq .Values.sentinel.service.type "NodePort" }}
-        echo "${hostname}.{{- .Release.Namespace }}"
+        full_hostname="${hostname}.{{- .Release.Namespace }}"
         {{- else }}
-        echo "${hostname}.${HEADLESS_SERVICE}"
+        full_hostname="${hostname}.${HEADLESS_SERVICE}"
+        {{- end }}
+
+        {{- if .Values.useHostnames }}
+        echo "${full_hostname}"
+        {{- else }}
+        getent hosts "${full_hostname}" | awk '{ print $1 ; exit }'
         {{- end }}
     }
 
@@ -262,11 +268,17 @@ data:
         hostname="$1"
 
         {{- if .Values.useExternalDNS.enabled }}
-        echo "${hostname}.{{- include "redis.externalDNS.suffix" . }}"
+        full_hostname="${hostname}.{{- include "redis.externalDNS.suffix" . }}"
         {{- else if eq .Values.sentinel.service.type "NodePort" }}
-        echo "${hostname}.{{- .Release.Namespace }}"
+        full_hostname="${hostname}.{{- .Release.Namespace }}"
         {{- else }}
-        echo "${hostname}.${HEADLESS_SERVICE}"
+        full_hostname="${hostname}.${HEADLESS_SERVICE}"
+        {{- end }}
+
+        {{- if .Values.useHostnames }}
+        echo "${full_hostname}"
+        {{- else }}
+        getent hosts "${full_hostname}" | awk '{ print $1 ; exit }'
         {{- end }}
     }
 
@@ -426,13 +438,20 @@ data:
         hostname="$1"
 
         {{- if .Values.useExternalDNS.enabled }}
-        echo "${hostname}.{{- include "redis.externalDNS.suffix" . }}"
+        full_hostname="${hostname}.{{- include "redis.externalDNS.suffix" . }}"
         {{- else if eq .Values.sentinel.service.type "NodePort" }}
-        echo "${hostname}.{{- .Release.Namespace }}"
+        full_hostname="${hostname}.{{- .Release.Namespace }}"
         {{- else }}
-        echo "${hostname}.${HEADLESS_SERVICE}"
+        full_hostname="${hostname}.${HEADLESS_SERVICE}"
+        {{- end }}
+
+        {{- if .Values.useHostnames }}
+        echo "${full_hostname}"
+        {{- else }}
+        getent hosts "${full_hostname}" | awk '{ print $1 ; exit }'
         {{- end }}
     }
+
     run_sentinel_command() {
         if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
             redis-cli -h "$REDIS_SERVICE" -p "$SENTINEL_SERVICE_PORT" --tls --cert "$REDIS_SENTINEL_TLS_CERT_FILE" --key "$REDIS_SENTINEL_TLS_KEY_FILE" --cacert "$REDIS_SENTINEL_TLS_CA_FILE" sentinel "$@"
@@ -492,13 +511,20 @@ data:
         hostname="$1"
 
         {{- if .Values.useExternalDNS.enabled }}
-        echo "${hostname}.{{- include "redis.externalDNS.suffix" . }}"
+        full_hostname="${hostname}.{{- include "redis.externalDNS.suffix" . }}"
         {{- else if eq .Values.sentinel.service.type "NodePort" }}
-        echo "${hostname}.{{- .Release.Namespace }}"
+        full_hostname="${hostname}.{{- .Release.Namespace }}"
         {{- else }}
-        echo "${hostname}.${HEADLESS_SERVICE}"
+        full_hostname="${hostname}.${HEADLESS_SERVICE}"
+        {{- end }}
+
+        {{- if .Values.useHostnames }}
+        echo "${full_hostname}"
+        {{- else }}
+        getent hosts "${full_hostname}" | awk '{ print $1 ; exit }'
         {{- end }}
     }
+
     run_sentinel_command() {
         if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
             {{ .Values.auth.sentinel | ternary "" "env -u REDISCLI_AUTH " -}} redis-cli -h "$REDIS_SERVICE" -p "$SENTINEL_SERVICE_PORT" --tls --cert "$REDIS_SENTINEL_TLS_CERT_FILE" --key "$REDIS_SENTINEL_TLS_KEY_FILE" --cacert "$REDIS_SENTINEL_TLS_CA_FILE" sentinel "$@"
@@ -614,13 +640,20 @@ data:
         hostname="$1"
 
         {{- if .Values.useExternalDNS.enabled }}
-        echo "${hostname}.{{- include "redis.externalDNS.suffix" . }}"
+        full_hostname="${hostname}.{{- include "redis.externalDNS.suffix" . }}"
         {{- else if eq .Values.sentinel.service.type "NodePort" }}
-        echo "${hostname}.{{- .Release.Namespace }}"
+        full_hostname="${hostname}.{{- .Release.Namespace }}"
         {{- else }}
-        echo "${hostname}.${HEADLESS_SERVICE}"
+        full_hostname="${hostname}.${HEADLESS_SERVICE}"
+        {{- end }}
+
+        {{- if .Values.useHostnames }}
+        echo "${full_hostname}"
+        {{- else }}
+        getent hosts "${full_hostname}" | awk '{ print $1 ; exit }'
         {{- end }}
     }
+
 
     REDISPORT=$(get_port "$HOSTNAME" "REDIS")
 

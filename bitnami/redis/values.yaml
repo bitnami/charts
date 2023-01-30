@@ -47,6 +47,9 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+## @param useHostnames Use hostnames internally when announcing replication
+###
+useHostnames: true
 
 ## Enable diagnostic mode in the deployment
 ##
