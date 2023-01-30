@@ -1,7 +1,6 @@
 annotations:
   category: CRM
-  licenses: |
-    - Apache-2.0
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: 16.0.20221115
 dependencies:
@@ -30,4 +29,4 @@ name: odoo
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/odoo
   - https://www.odoo.com/
-version: 23.0.4
+version: 23.0.5

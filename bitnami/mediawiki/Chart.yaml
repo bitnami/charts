@@ -1,7 +1,6 @@
 annotations:
   category: Wiki
-  licenses: |
-    - Apache-2.0
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: 1.39.1
 dependencies:
@@ -33,4 +32,4 @@ name: mediawiki
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/mediawiki
   - https://www.mediawiki.org/
-version: 14.3.11
+version: 14.3.12

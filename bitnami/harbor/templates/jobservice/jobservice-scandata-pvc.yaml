@@ -1,0 +1,34 @@
+{{- if and .Values.persistence.enabled (not .Values.persistence.persistentVolumeClaim.jobservice.scanData.existingClaim) }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "harbor.jobserviceScanData" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    app.kubernetes.io/component: jobservice
+  annotations:
+    {{- if eq .Values.persistence.resourcePolicy "keep" }}
+    helm.sh/resource-policy: keep
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.persistence.persistentVolumeClaim.jobservice.scanData.annotations }}
+    {{- toYaml .Values.persistence.persistentVolumeClaim.jobservice.scanData.annotations | nindent 4 }}
+    {{- end }}
+spec:
+  accessModes:
+  {{- range .Values.persistence.persistentVolumeClaim.jobservice.scanData.accessModes }}
+    - {{ . | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.persistentVolumeClaim.jobservice.scanData.size }}
+  {{- if .Values.persistence.persistentVolumeClaim.jobservice.scanData.selector }}
+  selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.persistentVolumeClaim.jobservice.scanData.selector "context" $) | nindent 2 }}
+  {{- end }}
+  {{- include "common.storage.class" ( dict "persistence" .Values.persistence.persistentVolumeClaim.jobservice.scanData "global" .Values.global ) | nindent 2 }}
+{{- end }}

@@ -76,7 +76,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/zookeeper
-  tag: 3.8.0-debian-11-r74
+  tag: 3.8.1-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -539,10 +539,12 @@ service:
   extraPorts: []
   ## @param service.headless.annotations Annotations for the Headless Service
   ## @param service.headless.publishNotReadyAddresses If the ZooKeeper headless service should publish DNS records for not ready pods
+  ## @param service.headless.servicenameOverride String to partially override headless service name
   ##
   headless:
     publishNotReadyAddresses: true
     annotations: {}
+    servicenameOverride: ""
 ## Network policies
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
@@ -658,7 +660,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r69
+    tag: 11-debian-11-r77
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

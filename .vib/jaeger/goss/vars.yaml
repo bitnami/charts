@@ -17,8 +17,6 @@ agent:
     fsGroup: 1002
   containerSecurityContext:
     runAsUser: 1002
-  serviceAccount:
-    automountServiceAccountToken: true
 cassandra:
   keyspace: bitnami_test_jaeger
   dbUser:

@@ -1,7 +1,6 @@
 annotations:
   category: Database
-  licenses: |
-    - Apache-2.0
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: 2.6.1
 dependencies:
@@ -25,4 +24,4 @@ name: influxdb
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/influxdb
   - https://www.influxdata.com/products/influxdb-overview/
-version: 5.4.14
+version: 5.4.15

@@ -1,9 +1,8 @@
 annotations:
   category: E-Learning
-  licenses: |
-    - Apache-2.0
+  licenses: Apache-2.0
 apiVersion: v2
-appVersion: 4.1.0
+appVersion: 4.1.1
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
@@ -28,4 +27,4 @@ name: moodle
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/moodle
   - https://www.moodle.org/
-version: 14.3.4
+version: 14.3.5

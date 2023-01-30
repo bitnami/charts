@@ -1,7 +1,6 @@
 annotations:
   category: MachineLearning
-  licenses: |
-    - Apache-2.0
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: 2.11.0
 dependencies:
@@ -28,4 +27,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/tensorflow-serving
   - https://github.com/bitnami/containers/tree/main/bitnami/tensorflow-resnet
   - https://www.tensorflow.org/serving/
-version: 3.6.10
+version: 3.6.11

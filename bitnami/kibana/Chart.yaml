@@ -1,9 +1,8 @@
 annotations:
   category: Analytics
-  licenses: |
-    - Apache-2.0
+  licenses: Apache-2.0
 apiVersion: v2
-appVersion: 8.6.0
+appVersion: 8.6.1
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -26,4 +25,4 @@ name: kibana
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/kibana
   - https://www.elastic.co/products/kibana
-version: 10.2.12
+version: 10.2.13

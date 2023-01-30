@@ -1,7 +1,6 @@
 annotations:
   category: Infrastructure
-  licenses: |
-    - Apache-2.0
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: 1.6.0
 dependencies:
@@ -28,4 +27,4 @@ name: nginx-ingress-controller
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/nginx-ingress-controller
   - https://github.com/kubernetes/ingress-nginx
-version: 9.3.25
+version: 9.3.26

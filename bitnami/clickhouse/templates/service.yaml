@@ -47,6 +47,17 @@ spec:
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- if .Values.tls.enabled }}
+    - name: https
+      targetPort: https
+      port: {{ .Values.service.ports.https }}
+      protocol: TCP
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.https)) }}
+      nodePort: {{ .Values.service.nodePorts.https }}
+      {{- else if eq .Values.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- end }}
     - name: tcp
       targetPort: tcp
       port: {{ .Values.service.ports.tcp }}

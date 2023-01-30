@@ -1,7 +1,6 @@
 annotations:
   category: Infrastructure
-  licenses: |
-    - Apache-2.0
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: 0.13.7
 dependencies:
@@ -30,4 +29,4 @@ sources:
   - https://github.com/metallb/metallb
   - https://github.com/bitnami/containers/tree/main/bitnami/metallb
   - https://metallb.universe.tf
-version: 4.1.13
+version: 4.1.14

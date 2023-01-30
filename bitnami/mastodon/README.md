@@ -7,7 +7,7 @@ Mastodon is self-hosted social network server based on ActivityPub. Written in R
 [Overview of Mastodon](https://joinmastodon.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -36,7 +36,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release my-repo/mastodon
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/mastodon
 ```
 
 The command deploys Mastodon on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -48,7 +49,7 @@ The command deploys Mastodon on the Kubernetes cluster in the default configurat
 To uninstall/delete the `my-release` deployment:
 
 ```console
-helm delete my-release
+$ helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -66,47 +67,47 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                     | Description                                                                                                                                         | Value                |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
-| `kubeVersion`            | Override Kubernetes version                                                                                                                         | `""`                 |
-| `nameOverride`           | String to partially override common.names.name                                                                                                      | `""`                 |
-| `fullnameOverride`       | String to fully override common.names.fullname                                                                                                      | `""`                 |
-| `namespaceOverride`      | String to fully override common.names.namespace                                                                                                     | `""`                 |
-| `commonLabels`           | Labels to add to all deployed objects                                                                                                               | `{}`                 |
-| `commonAnnotations`      | Annotations to add to all deployed objects                                                                                                          | `{}`                 |
-| `clusterDomain`          | Kubernetes cluster domain name                                                                                                                      | `cluster.local`      |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                                                                                   | `[]`                 |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                             | `false`              |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                                                                                | `["sleep"]`          |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                   | `["infinity"]`       |
-| `image.registry`         | Mastodon image registry                                                                                                                             | `docker.io`          |
-| `image.repository`       | Mastodon image repository                                                                                                                           | `bitnami/mastodon`   |
-| `image.tag`              | Mastodon image tag (immutable tags are recommended)                                                                                                 | `4.0.2-debian-11-r7` |
-| `image.digest`           | Mastodon image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                 |
-| `image.pullPolicy`       | Mastodon image pull policy                                                                                                                          | `IfNotPresent`       |
-| `image.pullSecrets`      | Mastodon image pull secrets                                                                                                                         | `[]`                 |
-| `image.debug`            | Enable Mastodon image debug mode                                                                                                                    | `false`              |
+| Name                     | Description                                                                                                                                         | Value                 |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `kubeVersion`            | Override Kubernetes version                                                                                                                         | `""`                  |
+| `nameOverride`           | String to partially override common.names.name                                                                                                      | `""`                  |
+| `fullnameOverride`       | String to fully override common.names.fullname                                                                                                      | `""`                  |
+| `namespaceOverride`      | String to fully override common.names.namespace                                                                                                     | `""`                  |
+| `commonLabels`           | Labels to add to all deployed objects                                                                                                               | `{}`                  |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                                                                                          | `{}`                  |
+| `clusterDomain`          | Kubernetes cluster domain name                                                                                                                      | `cluster.local`       |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                                                                                   | `[]`                  |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                             | `false`               |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                                                                                | `["sleep"]`           |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                   | `["infinity"]`        |
+| `image.registry`         | Mastodon image registry                                                                                                                             | `docker.io`           |
+| `image.repository`       | Mastodon image repository                                                                                                                           | `bitnami/mastodon`    |
+| `image.tag`              | Mastodon image tag (immutable tags are recommended)                                                                                                 | `4.0.2-debian-11-r18` |
+| `image.digest`           | Mastodon image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                  |
+| `image.pullPolicy`       | Mastodon image pull policy                                                                                                                          | `IfNotPresent`        |
+| `image.pullSecrets`      | Mastodon image pull secrets                                                                                                                         | `[]`                  |
+| `image.debug`            | Enable Mastodon image debug mode                                                                                                                    | `false`               |
 
 
 ### Mastodon common parameters
 
-| Name                           | Description                                                                    | Value              |
-| ------------------------------ | ------------------------------------------------------------------------------ | ------------------ |
-| `adminUser`                    | Mastodon admin username                                                        | `user`             |
-| `adminEmail`                   | Mastodon admin email                                                           | `user@example.com` |
-| `adminPassword`                | Mastodon admin password                                                        | `""`               |
-| `defaultConfig`                | Default configuration for Mastodon in the form of environment variables        | `""`               |
-| `defaultSecretConfig`          | Default secret configuration for Mastodon in the form of environment variables | `""`               |
-| `extraConfig`                  | Extra configuration for Mastodon in the form of environment variables          | `{}`               |
-| `extraSecretConfig`            | Extra secret configuration for Mastodon in the form of environment variables   | `{}`               |
-| `existingConfigmap`            | The name of an existing ConfigMap with your default configuration for Mastodon | `""`               |
-| `existingSecret`               | The name of an existing Secret with your default configuration for Mastodon    | `""`               |
-| `extraConfigExistingConfigmap` | The name of an existing ConfigMap with your extra configuration for Mastodon   | `""`               |
-| `extraConfigExistingSecret`    | The name of an existing Secret with your extra configuration for Mastodon      | `""`               |
-| `enableSearches`               | Enable the search engine (uses Elasticsearch under the hood)                   | `true`             |
-| `enableS3`                     | Enable the S3 storage engine                                                   | `true`             |
-| `webDomain`                    | Web domain for Mastodon                                                        | `""`               |
-| `s3AliasHost`                  | S3 alias host for Mastodon (will use http://webDomain/bucket if not set)       | `""`               |
+| Name                           | Description                                                                    | Value               |
+| ------------------------------ | ------------------------------------------------------------------------------ | ------------------- |
+| `adminUser`                    | Mastodon admin username                                                        | `user`              |
+| `adminEmail`                   | Mastodon admin email                                                           | `user@changeme.com` |
+| `adminPassword`                | Mastodon admin password                                                        | `""`                |
+| `defaultConfig`                | Default configuration for Mastodon in the form of environment variables        | `""`                |
+| `defaultSecretConfig`          | Default secret configuration for Mastodon in the form of environment variables | `""`                |
+| `extraConfig`                  | Extra configuration for Mastodon in the form of environment variables          | `{}`                |
+| `extraSecretConfig`            | Extra secret configuration for Mastodon in the form of environment variables   | `{}`                |
+| `existingConfigmap`            | The name of an existing ConfigMap with your default configuration for Mastodon | `""`                |
+| `existingSecret`               | The name of an existing Secret with your default configuration for Mastodon    | `""`                |
+| `extraConfigExistingConfigmap` | The name of an existing ConfigMap with your extra configuration for Mastodon   | `""`                |
+| `extraConfigExistingSecret`    | The name of an existing Secret with your extra configuration for Mastodon      | `""`                |
+| `enableSearches`               | Enable the search engine (uses Elasticsearch under the hood)                   | `true`              |
+| `enableS3`                     | Enable the S3 storage engine                                                   | `true`              |
+| `webDomain`                    | Web domain for Mastodon                                                        | `""`                |
+| `s3AliasHost`                  | S3 alias host for Mastodon (will use http://webDomain/bucket if not set)       | `""`                |
 
 
 ### Mastodon Web Parameters
@@ -394,7 +395,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r62`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r71`      |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
@@ -538,7 +539,7 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-helm install my-release \
+$ helm install my-release \
   --set adminUsername=admin \
   --set adminPassword=password \
     my-repo/mastodon
@@ -551,7 +552,7 @@ The above command sets the mastodon administrator account username and password 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/mastodon
+$ helm install my-release -f values.yaml my-repo/mastodon
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -650,6 +651,12 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## Notable changes
+
+### 1.0.0
+
+This major updates the MinIO&reg; subchart to its newest major, 12.0.0. This subchart's major doesn't include any changes affecting its use as a subchart for Mastodon, so no major issues are expected during the upgrade.
 
 ## License
 

@@ -1,9 +1,8 @@
 annotations:
   category: CMS
-  licenses: |
-    - Apache-2.0
+  licenses: Apache-2.0
 apiVersion: v2
-appVersion: 5.29.0
+appVersion: 5.32.0
 dependencies:
   - condition: mysql.enabled
     name: mysql
@@ -34,4 +33,4 @@ name: ghost
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/ghost
   - https://www.ghost.org/
-version: 19.1.57
+version: 19.1.61

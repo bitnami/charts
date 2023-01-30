@@ -70,7 +70,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/etcd
-  tag: 3.5.6-debian-11-r10
+  tag: 3.5.7-debian-11-r0
   digest: ""
   ## @param image.pullPolicy etcd image pull policy
   ## Specify a imagePullPolicy
@@ -117,6 +117,9 @@ auth:
   ## ref: https://etcd.io/docs/latest/learning/design-auth-v3/#two-types-of-tokens-simple-and-jwt
   ##
   token:
+    ## @param auth.token.enabled Enables token authentication
+    ##
+    enabled: true
     ## @param auth.token.type Authentication token type. Allowed values: 'simple' or 'jwt'
     ## ref: https://etcd.io/docs/latest/op-guide/configuration/#--auth-token
     ##
@@ -609,7 +612,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r63
+    tag: 11-debian-11-r74
     digest: ""
     ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
     ##

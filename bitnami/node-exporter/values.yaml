@@ -99,7 +99,7 @@ serviceAccount:
 image:
   registry: docker.io
   repository: bitnami/node-exporter
-  tag: 1.5.0-debian-11-r9
+  tag: 1.5.0-debian-11-r21
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -267,6 +267,8 @@ updateStrategy:
     maxUnavailable: 1
 ## @param hostNetwork Expose the service to the host network
 hostNetwork: true
+## @param hostPID Allows visibility of processes on the host, potentially leaking information such as environment variables and configuration
+hostPID: true
 ## @param minReadySeconds `minReadySeconds` to avoid killing pods before we are ready
 ##
 minReadySeconds: 0

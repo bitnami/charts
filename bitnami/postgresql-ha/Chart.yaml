@@ -1,7 +1,6 @@
 annotations:
   category: Database
-  licenses: |
-    - Apache-2.0
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: 15.1.0
 dependencies:
@@ -30,4 +29,4 @@ name: postgresql-ha
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/postgresql
   - https://www.postgresql.org/
-version: 10.0.9
+version: 11.0.1

@@ -7,7 +7,7 @@ Grafana Operator is a Kubernetes operator that enables the installation and mana
 [Overview of Grafana Operator](https://github.com/integr8ly/grafana-operator)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -285,7 +285,7 @@ The above command sets the `livenessProbe.successThreshold` to `5`.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
-```bash
+```console
 $ helm install my-release -f values.yaml my-repo/grafana-operator
 ```
 
@@ -315,7 +315,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
-```bash
+```console
 $ helm upgrade my-release my-repo/grafana-operator
 ```
 

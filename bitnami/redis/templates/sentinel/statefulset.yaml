@@ -529,6 +529,30 @@ spec:
           ports:
             - name: metrics
               containerPort: 9121
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.metrics.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: metrics
+          {{- end }}
+          {{- if .Values.metrics.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: metrics
+          {{- end }}
+          {{- if .Values.metrics.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /
+              port: metrics
+          {{- end }}
+          {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
@@ -632,27 +656,39 @@ spec:
         {{- end }}
         {{- if not .Values.sentinel.persistence.enabled }}
         - name: sentinel-data
-          {{- if .Values.sentinel.persistence.medium }}
-          emptyDir: {
+          {{- if or .Values.sentinel.persistence.medium .Values.sentinel.persistence.sizeLimit }}
+          emptyDir:
+            {{- if .Values.sentinel.persistence.medium }}
             medium: {{ .Values.sentinel.persistence.medium | quote }}
-          }
+            {{- end }}
+            {{- if .Values.sentinel.persistence.sizeLimit }}
+            sizeLimit: {{ .Values.sentinel.persistence.sizeLimit | quote }}
+            {{- end }}
           {{- else }}
           emptyDir: {}
           {{- end }}
         {{- end }}
         - name: redis-tmp-conf
-          {{- if .Values.replica.persistence.medium }}
-          emptyDir: {
-            medium: {{ .Values.replica.persistence.medium | quote }}
-          }
+          {{- if or .Values.sentinel.persistence.medium .Values.sentinel.persistence.sizeLimit }}
+          emptyDir:
+            {{- if .Values.sentinel.persistence.medium }}
+            medium: {{ .Values.sentinel.persistence.medium | quote }}
+            {{- end }}
+            {{- if .Values.sentinel.persistence.sizeLimit }}
+            sizeLimit: {{ .Values.sentinel.persistence.sizeLimit | quote }}
+            {{- end }}
           {{- else }}
           emptyDir: {}
           {{- end }}
         - name: tmp
-          {{- if .Values.replica.persistence.medium }}
-          emptyDir: {
-            medium: {{ .Values.replica.persistence.medium | quote }}
-          }
+          {{- if or .Values.sentinel.persistence.medium .Values.sentinel.persistence.sizeLimit }}
+          emptyDir:
+            {{- if .Values.sentinel.persistence.medium }}
+            medium: {{ .Values.sentinel.persistence.medium | quote }}
+            {{- end }}
+            {{- if .Values.sentinel.persistence.sizeLimit }}
+            sizeLimit: {{ .Values.sentinel.persistence.sizeLimit | quote }}
+            {{- end }}
           {{- else }}
           emptyDir: {}
           {{- end }}
@@ -673,10 +709,14 @@ spec:
         {{- end }}
   {{- if not .Values.replica.persistence.enabled }}
         - name: redis-data
-          {{- if .Values.replica.persistence.medium }}
-          emptyDir: {
-            medium: {{ .Values.replica.persistence.medium | quote }}
-          }
+          {{- if or .Values.sentinel.persistence.medium .Values.sentinel.persistence.sizeLimit }}
+          emptyDir:
+            {{- if .Values.sentinel.persistence.medium }}
+            medium: {{ .Values.sentinel.persistence.medium | quote }}
+            {{- end }}
+            {{- if .Values.sentinel.persistence.sizeLimit }}
+            sizeLimit: {{ .Values.sentinel.persistence.sizeLimit | quote }}
+            {{- end }}
           {{- else }}
           emptyDir: {}
           {{- end }}

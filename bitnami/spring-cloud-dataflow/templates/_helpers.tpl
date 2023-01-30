@@ -318,17 +318,6 @@ Return the RabbitMQ host
 {{- end -}}
 
 {{/*
-Return the Hibernate dialect
-*/}}
-{{- define "scdf.database.hibernate.dialect" -}}
-  {{- if .Values.mariadb.enabled -}}
-    {{- printf "org.hibernate.dialect.MariaDB102Dialect" -}}
-  {{- else -}}
-    {{- .Values.externalDatabase.hibernateDialect -}}
-  {{- end -}}
-{{- end -}}
-
-{{/*
 Compile all warnings into a single message, and call fail.
 */}}
 {{- define "scdf.validateValues" -}}

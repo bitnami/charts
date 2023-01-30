@@ -7,13 +7,12 @@ Wavefront is a high-performance streaming analytics platform for monitoring and 
 [Overview of Wavefront](https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes)
 
 
-                           
+
 ## TL;DR
 
 ```console
 $ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ kubectl create namespace wavefront
-$ helm install my-release my-repo/wavefront --namespace wavefront \
+$ helm install my-release my-repo/wavefront --namespace wavefront --create-namespace \
     --set clusterName=<K8s-CLUSTER-NAME> \
     --set wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
     --set wavefront.token=<YOUR_API_TOKEN>
@@ -35,12 +34,11 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 ## Installing the Chart
 
-To install the chart with the release name `my-release` (if not already done, create a `wavefront` namespace):
+To install the chart with the release name `my-release`:
 
 ```console
 $ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ kubectl create namespace wavefront
-$ helm install my-release my-repo/wavefront --namespace wavefront \
+$ helm install my-release my-repo/wavefront --namespace wavefront --create-namespace\
     --set clusterName=<K8s-CLUSTER-NAME> \
     --set wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
     --set wavefront.token=<YOUR_API_TOKEN>
@@ -56,7 +54,7 @@ The **required** parameters are `clusterName`, `wavefront.url` and `wavefront.to
 
 To uninstall/delete the `my-release` deployment:
 
-```bash
+```console
 $ helm delete my-release
 ```
 
@@ -114,7 +112,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `collector.enabled`                                         | Setup and enable the Wavefront collector to gather metrics                                                              | `true`                                   |
 | `collector.image.registry`                                  | Wavefront collector image registry                                                                                      | `docker.io`                              |
 | `collector.image.repository`                                | Wavefront collector image repository                                                                                    | `bitnami/wavefront-kubernetes-collector` |
-| `collector.image.tag`                                       | Wavefront collector image tag (immutable tags are recommended)                                                          | `1.13.0-scratch-r0`                      |
+| `collector.image.tag`                                       | Wavefront collector image tag (immutable tags are recommended)                                                          | `1.13.0-scratch-r1`                      |
 | `collector.image.digest`                                    | Wavefront collector image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag     | `""`                                     |
 | `collector.image.pullPolicy`                                | image pull policy                                                                                                       | `IfNotPresent`                           |
 | `collector.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                        | `[]`                                     |
@@ -189,7 +187,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.enabled`                                         | Setup and enable Wavefront proxy to send metrics through                                                                                | `true`                    |
 | `proxy.image.registry`                                  | Wavefront proxy image registry                                                                                                          | `docker.io`               |
 | `proxy.image.repository`                                | Wavefront proxy image repository                                                                                                        | `bitnami/wavefront-proxy` |
-| `proxy.image.tag`                                       | Wavefront proxy image tag (immutable tags are recommended)                                                                              | `11.4.0-debian-11-r36`    |
+| `proxy.image.tag`                                       | Wavefront proxy image tag (immutable tags are recommended)                                                                              | `11.4.0-debian-11-r46`    |
 | `proxy.image.digest`                                    | Wavefront proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                      |
 | `proxy.image.pullPolicy`                                | Wavefront proxy image pull policy                                                                                                       | `IfNotPresent`            |
 | `proxy.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                                        | `[]`                      |
@@ -278,7 +276,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
-```bash
+```console
 $ helm install my-release \
   --set proxy.replicaCount=3 \
     my-repo/wavefront
@@ -288,7 +286,7 @@ The above command sets 3 proxy replicas.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
-```bash
+```console
 $ helm install my-release -f values.yaml my-repo/wavefront
 ```
 

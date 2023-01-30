@@ -88,7 +88,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ----------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`    | Spark image registry                                                                                  | `docker.io`           |
 | `image.repository`  | Spark image repository                                                                                | `bitnami/spark`       |
-| `image.tag`         | Spark image tag (immutable tags are recommended)                                                      | `3.3.1-debian-11-r28` |
+| `image.tag`         | Spark image tag (immutable tags are recommended)                                                      | `3.3.1-debian-11-r35` |
 | `image.digest`      | Spark image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`  | Spark image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                                                      | `[]`                  |
@@ -372,7 +372,7 @@ To submit an application to the Apache Spark cluster, use the `spark-submit` scr
 
 The command below illustrates the process of deploying one of the sample applications included with Apache Spark. Replace the `k8s-apiserver-host`, `k8s-apiserver-port`, `spark-master-svc`, and `spark-master-port` placeholders with the correct master host/IP address and port for your deployment.
 
-```bash
+```console
 $ ./bin/spark-submit \
     --class org.apache.spark.examples.SparkPi \
     --conf spark.kubernetes.container.image=bitnami/spark:3 \

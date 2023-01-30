@@ -10,7 +10,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
                            
 ## TL;DR
 
-```bash
+```console
 $ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/kube-state-metrics
 ```
@@ -28,15 +28,10 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 ## Installing the Chart
 
-Add the `bitnami` charts repo to Helm:
-
-```bash
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-```
-
 To install the chart with the release name `my-release`:
 
-```bash
+```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/kube-state-metrics
 ```
 
@@ -46,7 +41,7 @@ The command deploys kube-state-metrics on the Kubernetes cluster in the default 
 
 To uninstall/delete the `my-release` release:
 
-```bash
+```console
 $ helm delete my-release
 ```
 
@@ -92,7 +87,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.annotations`                    | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                                         | `{}`                         |
 | `image.registry`                                | kube-state-metrics image registry                                                                                                                                  | `docker.io`                  |
 | `image.repository`                              | kube-state-metrics image repository                                                                                                                                | `bitnami/kube-state-metrics` |
-| `image.tag`                                     | kube-state-metrics image tag (immutable tags are recommended)                                                                                                      | `2.7.0-debian-11-r9`         |
+| `image.tag`                                     | kube-state-metrics image tag (immutable tags are recommended)                                                                                                      | `2.7.0-debian-11-r21`        |
 | `image.digest`                                  | kube-state-metrics image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                 | `""`                         |
 | `image.pullPolicy`                              | kube-state-metrics image pull policy                                                                                                                               | `IfNotPresent`               |
 | `image.pullSecrets`                             | Specify docker-registry secret names as an array                                                                                                                   | `[]`                         |
@@ -208,13 +203,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example the following command sets the `replicas` of the kube-state-metrics Pods to `2`.
 
-```bash
+```console
 $ helm install my-release --set replicas=2 my-repo/kube-state-metrics
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
-```bash
+```console
 $ helm install my-release -f values.yaml my-repo/kube-state-metrics
 ```
 
@@ -246,7 +241,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
-```bash
+```console
 $ helm upgrade my-release my-repo/kube-state-metrics
 ```
 

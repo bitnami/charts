@@ -1,9 +1,8 @@
 annotations:
   category: Database
-  licenses: |
-    - Apache-2.0
+  licenses: Apache-2.0
 apiVersion: v2
-appVersion: 6.0.3
+appVersion: 6.0.4
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -27,4 +26,4 @@ name: mongodb
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/mongodb
   - https://mongodb.org
-version: 13.6.2
+version: 13.6.6

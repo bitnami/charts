@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/keycloak"
         },
-        "runtime_parameters": "YXV0aDoKICBhZG1pblVzZXI6IHVzZXIKICBhZG1pblBhc3N3b3JkOiBDb21wbGljYXRlZFBhc3N3b3JkMTIzITQKY29udGFpbmVyUG9ydHM6CiAgaHR0cDogODA4MApwb3N0Z3Jlc3FsOgogIGF1dGg6CiAgICB1c2VybmFtZTogYm5fa2V5Y2xvYWsKbG9nZ2luZzoKICBvdXRwdXQ6IGRlZmF1bHQKc2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGh0dHA6IDgwCg==",
+        "runtime_parameters": "YXV0aDoKICBhZG1pblVzZXI6IHVzZXIKICBhZG1pblBhc3N3b3JkOiBDb21wbGljYXRlZFBhc3N3b3JkMTIzITQKY29udGFpbmVyUG9ydHM6CiAgaHR0cDogODA4MApwb3N0Z3Jlc3FsOgogIGF1dGg6CiAgICB1c2VybmFtZTogYm5fa2V5Y2xvYWsKbG9nZ2luZzoKICBvdXRwdXQ6IGRlZmF1bHQKc2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGh0dHA6IDgwCnNlcnZpY2VBY2NvdW50OgogIGNyZWF0ZTogdHJ1ZQogIGF1dG9tb3VudFNlcnZpY2VBY2NvdW50VG9rZW46IHRydWU=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {

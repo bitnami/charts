@@ -1,7 +1,6 @@
 annotations:
   category: Forum
-  licenses: |
-    - Apache-2.0
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: 2.8.13
 dependencies:
@@ -36,4 +35,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/discourse
   - https://github.com/spinnaker
   - https://www.discourse.org/
-version: 9.0.7
+version: 9.0.8

@@ -1,7 +1,6 @@
 annotations:
   category: Infrastructure
-  licenses: |
-    - Apache-2.0
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: 2.375.2
 dependencies:
@@ -27,4 +26,4 @@ name: jenkins
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/jenkins
   - https://jenkins.io/
-version: 11.0.12
+version: 11.0.13
