@@ -25,11 +25,11 @@ keywords:
   - dashboard
   - service catalog
   - deployment
-kubeVersion: ">=1.21.0-0"
+kubeVersion: '>=1.21.0-0'
 maintainers:
   - name: Bitnami
     url: https://github.com/bitnami/charts
 name: kubeapps
 sources:
   - https://github.com/vmware-tanzu/kubeapps
-version: 12.2.0
+version: 12.2.1
