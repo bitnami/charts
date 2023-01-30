@@ -2,7 +2,7 @@ annotations:
   category: Infrastructure
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 3.8.0
+appVersion: 3.8.1
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -21,4 +21,4 @@ name: zookeeper
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/zookeeper
   - https://zookeeper.apache.org/
-version: 11.1.0
+version: 11.1.1
