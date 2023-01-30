@@ -1099,7 +1099,7 @@ metrics:
   ##     readOnlyRootFilesystem: true
   ##
   containerSecurityContext:
-    enabled: true
+    enabled: false
     privileged: false
     allowPrivilegeEscalation: false
   ## Mysqld Prometheus exporter resource requests and limits
