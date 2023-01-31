@@ -35,6 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/odoo
 ```
 
@@ -82,7 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`    | Args to override all containers in the the statefulset                                               | `["infinity"]`                |
 | `image.registry`         | Odoo image registry                                                                                  | `docker.io`                   |
 | `image.repository`       | Odoo image repository                                                                                | `bitnami/odoo`                |
-| `image.tag`              | Odoo image tag (immutable tags are recommended)                                                      | `16.0.20221115-debian-11-r13` |
+| `image.tag`              | Odoo image tag (immutable tags are recommended)                                                      | `16.0.20221115-debian-11-r24` |
 | `image.digest`           | Odoo image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                          |
 | `image.pullPolicy`       | Odoo image pull policy                                                                               | `IfNotPresent`                |
 | `image.pullSecrets`      | Odoo image pull secrets                                                                              | `[]`                          |
@@ -392,7 +393,7 @@ New versions are not going to be affected. Once a new version is released in the
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -7,7 +7,7 @@ Wildfly is a lightweight, open source application server, formerly known as JBos
 [Overview of WildFly](http://www.wildfly.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -359,7 +359,7 @@ $ kubectl patch deployment wildfly --type=json -p='[{"op": "remove", "path": "/s
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

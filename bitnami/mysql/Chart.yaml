@@ -2,7 +2,7 @@ annotations:
   category: Database
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 8.0.31
+appVersion: 8.0.32
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -25,4 +25,4 @@ name: mysql
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/mysql
   - https://mysql.com
-version: 9.4.6
+version: 9.4.8

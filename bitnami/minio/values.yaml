@@ -55,7 +55,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2023.1.12-debian-11-r0
+  tag: 2023.1.31-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -83,7 +83,7 @@ image:
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2023.1.11-debian-11-r0
+  tag: 2023.1.11-debian-11-r6
   digest: ""
 ## @param mode MinIO&reg; server mode (`standalone` or `distributed`)
 ## ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
@@ -165,7 +165,7 @@ schedulerName: ""
 ##
 terminationGracePeriodSeconds: ""
 ## MinIO&reg; deployment parameters
-## Only when 'mode' is 'standalone' or 'gateway.enabled' is 'true'
+## Only when 'mode' is 'standalone'
 ##
 deployment:
   ## @param deployment.updateStrategy.type Deployment strategy type
@@ -925,7 +925,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r72
+    tag: 11-debian-11-r78
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -982,7 +982,6 @@ serviceAccount:
 ## @section Other parameters
 
 ## MinIO&reg; Pod Disruption Budget configuration in distributed mode.
-## If MinIO&reg; Gateway is enabled, creates a Pod Disruption Budget for the Gateway instead (mutually exclusive with distributed mode).
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 ##
 pdb:
@@ -1068,89 +1067,3 @@ metrics:
       #     group: PaaS
     ##
     rules: []
-
-## @section Gateway parameters
-
-gateway:
-  ## @param gateway.enabled Use MinIO&reg; as Gateway for other storage systems
-  ##
-  enabled: false
-  ## @param gateway.type Gateway type. Supported types are: `azure`, `gcs`, `nas`, `s3`
-  ## ref: https://docs.minio.io/docs/minio-gateway-for-azure
-  ## ref: https://docs.minio.io/docs/minio-gateway-for-gcs
-  ## ref: https://docs.minio.io/docs/minio-gateway-for-nas
-  ## ref: https://docs.minio.io/docs/minio-gateway-for-s3
-  ##
-  type: s3
-  ## @param gateway.replicaCount Number of MinIO&reg; Gateway replicas
-  ##
-  replicaCount: 4
-  ## @param gateway.updateStrategy.type Update strategy type for MinIO&reg; Gateway replicas
-  updateStrategy:
-    type: Recreate
-  ## Autoscaling configuration for MinIO&reg; Gateway. overrides gateway.replicaCount if enabled
-  ## @param gateway.autoscaling.enabled Enable autoscaling for MinIO&reg; Gateway deployment
-  ## @param gateway.autoscaling.minReplicas Minimum number of replicas to scale back
-  ## @param gateway.autoscaling.maxReplicas Maximum number of replicas to scale out
-  ## @param gateway.autoscaling.targetCPU Target CPU utilization percentage
-  ## @param gateway.autoscaling.targetMemory Target Memory utilization percentage
-  autoscaling:
-    enabled: false
-    minReplicas: "4"
-    maxReplicas: "4"
-    targetCPU: ""
-    targetMemory: ""
-  ## @param gateway.priorityClassName Pod priority class name for MinIO&reg; Gateway
-  ##
-  priorityClassName: ""
-  ## Gateway authentication configuration
-  ##
-  auth:
-    ## Authentication configuration for Azure. Ignored unless type=azure
-    ## @param gateway.auth.azure.accessKey Access key to access MinIO&reg; using Azure Gateway
-    ## @param gateway.auth.azure.secretKey Secret key to access MinIO&reg; using Azure Gateway
-    ## @param gateway.auth.azure.serviceEndpoint Azure Blob Storage custom endpoint
-    ## @param gateway.auth.azure.storageAccountName Azure Storage Account Name to use to access Azure Blob Storage
-    ## @param gateway.auth.azure.storageAccountKey Azure Storage Account Key to use to access Azure Blob Storage
-    ## @param gateway.auth.azure.storageAccountNameExistingSecret Existing Secret name to extract Azure Storage Account Name from to access Azure Blob Storage
-    ## @param gateway.auth.azure.storageAccountNameExistingSecretKey Existing Secret key to extract Azure Storage Account Name from to use to access Azure Blob Storage
-    ## @param gateway.auth.azure.storageAccountKeyExistingSecret Existing Secret name to extract Azure Storage Account Key from to access Azure Blob Storage
-    ## @param gateway.auth.azure.storageAccountKeyExistingSecretKey Existing Secret key to extract Azure Storage Account Key from to use to access Azure Blob Storage
-    ##
-    azure:
-      accessKey: ""
-      secretKey: ""
-      serviceEndpoint: ""
-      storageAccountName: ""
-      storageAccountKey: ""
-      storageAccountNameExistingSecret: ""
-      storageAccountNameExistingSecretKey: ""
-      storageAccountKeyExistingSecret: ""
-      storageAccountKeyExistingSecretKey: ""
-    ## Authentication configuration for GCS. Ignored unless type=gcs
-    ## @param gateway.auth.gcs.accessKey Access key to access MinIO&reg; using GCS Gateway
-    ## @param gateway.auth.gcs.secretKey Secret key to access MinIO&reg; using GCS Gateway
-    ## @param gateway.auth.gcs.keyJSON Service Account key to access GCS
-    ## @param gateway.auth.gcs.projectID GCP Project ID to use
-    ##
-    gcs:
-      accessKey: ""
-      secretKey: ""
-      keyJSON: ""
-      projectID: ""
-    ## Authentication configuration for NAS. Ignored unless type=nas
-    ## @param gateway.auth.nas.accessKey Access key to access MinIO&reg; using NAS Gateway
-    ## @param gateway.auth.nas.secretKey Secret key to access MinIO&reg; using NAS Gateway
-    ##
-    nas:
-      accessKey: ""
-      secretKey: ""
-    ## Authentication configuration for S3. Ignored unless type=s3
-    ## @param gateway.auth.s3.accessKey Access key to use to access AWS S3
-    ## @param gateway.auth.s3.secretKey Secret key to use to access AWS S3
-    ## @param gateway.auth.s3.serviceEndpoint AWS S3 endpoint
-    ##
-    s3:
-      accessKey: ""
-      secretKey: ""
-      serviceEndpoint: https://s3.amazonaws.com

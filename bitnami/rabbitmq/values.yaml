@@ -31,7 +31,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.11.6-debian-11-r0
+  tag: 3.11.8-debian-11-r0
   digest: ""
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
@@ -135,6 +135,9 @@ auth:
   ## existingPasswordSecret: name-of-existing-secret
   ##
   existingPasswordSecret: ""
+  ## @param auth.enableLoopbackUser Enable Loopback user access? Be advised, that enabling the loopback user is a possible security risk!
+  ##
+  enableLoopbackUser: false
   ## @param auth.erlangCookie Erlang cookie to determine whether different nodes are allowed to communicate with each other
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
   ##
@@ -349,9 +352,13 @@ configuration: |-
   {{- end }}
   # queue master locator
   queue_master_locator = min-masters
-  # enable guest user
-  loopback_users.guest = false
-  {{ tpl .Values.extraConfiguration . }}
+  # enable loopback user
+  {{- if not (empty .Values.auth.username) }}
+  loopback_users.{{ .Values.auth.username }} = {{ .Values.auth.enableLoopbackUser }}
+  {{- else}}
+  loopback_users.guest = {{ .Values.auth.enableLoopbackUser }}
+  {{- end }}
+  {{ template "rabbitmq.extraConfiguration" . }}
   {{- if .Values.auth.tls.enabled }}
   ssl_options.verify = {{ .Values.auth.tls.sslOptionsVerify }}
   listeners.ssl.default = {{ .Values.service.ports.amqpTls }}
@@ -420,12 +427,26 @@ configuration: |-
   vm_memory_high_watermark.{{ .Values.memoryHighWatermark.type }} = {{ .Values.memoryHighWatermark.value }}
   {{- end }}
 
+## @param configurationExistingSecret Existing secret with the configuration to use as rabbitmq.conf.
+## Must contain the key "rabbitmq.conf"
+## Takes precedence over `configuration`, so do not use both simultaneously
+## With providing an existingSecret, extraConfiguration and extraConfigurationExistingSecret do not take any effect
+##
+configurationExistingSecret: ""
+
 ## @param extraConfiguration [string] Configuration file content: extra configuration to be appended to RabbitMQ configuration
 ## Use this instead of `configuration` to add more configuration
+## Do not use simultaneously with `extraConfigurationExistingSecret`
 ##
 extraConfiguration: |-
   #default_vhost = {{ .Release.Namespace }}-vhost
   #disk_free_limit.absolute = 50MB
+
+## @param extraConfigurationExistingSecret Existing secret with the extra configuration to append to `configuration`.
+## Must contain the key "extraConfiguration"
+## Takes precedence over `extraConfiguration`, so do not use both simultaneously
+##
+extraConfigurationExistingSecret: ""
 
 ## @param advancedConfiguration Configuration file content: advanced configuration
 ## Use this as additional configuration in classic config format (Erlang term configuration format)
@@ -1282,7 +1303,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r69
+    tag: 11-debian-11-r78
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

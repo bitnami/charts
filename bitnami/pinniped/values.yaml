@@ -88,7 +88,7 @@ concierge:
   ##
   containerPorts:
     api: 10250
-    proxy: 8443
+    proxy: 8444
 
   ## @param concierge.configurationPorts.aggregatedAPIServerPort Concierge API configuration port
   ## @param concierge.configurationPorts.impersonationProxyServerPort Concierge Proxy configuration port
@@ -98,8 +98,8 @@ concierge:
   ## If changed, other YAML references to the default ports may also need to be updated
   ##
   configurationPorts:
-    aggregatedAPIServerPort: ""
-    impersonationProxyServerPort: ""
+    aggregatedAPIServerPort: 10250
+    impersonationProxyServerPort: 8444
 
   ## @param concierge.hostNetwork Concierge API and Proxy container hostNetwork
   ##
@@ -135,7 +135,7 @@ concierge:
       impersonationCACertificateSecret: {{ printf "%s-%s" (include "pinniped.concierge.impersonation-proxy.fullname" .) "ca-certificate" | trunc 63 | trimSuffix "-" }}
       impersonationSignerSecret: {{ printf "%s-%s" (include "pinniped.concierge.impersonation-proxy.fullname" .) "signer-ca-certificate" | trunc 63 | trimSuffix "-" }}
       agentServiceAccount: {{ template "pinniped.concierge.kube-cert-agent.fullname" . }}
-    labels: {"app.kubernetes.io/part-of":"pinniped", "app.kubernetes.io/component": "concierge", "app.kubernetes.io/instance": "{{ .Release.Name }}"}
+    labels: {"app":"pinniped-concierge","app.kubernetes.io/part-of":"pinniped", "app.kubernetes.io/component": "concierge", "app.kubernetes.io/instance": "{{ .Release.Name }}"}
     kubeCertAgent:
       namePrefix: {{ printf "%s-%s" (include "pinniped.concierge.fullname" .) "kube-cert-agent" | trunc 63 | trimSuffix "-" }}-
       image: {{ template "pinniped.image" . }}

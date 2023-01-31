@@ -7,7 +7,7 @@ Magento is a powerful open source e-commerce platform. With easy customizations 
 [Overview of Magento](http://www.magento.com)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -35,6 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/magento
 ```
 
@@ -359,7 +360,7 @@ The above parameters map to the env variables defined in [bitnami/magento](https
 >
 > To reserve a public IP address on GKE:
 >
-> ```bash
+> ```console
 > $ gcloud compute addresses create magento-public-ip
 > ```
 >
@@ -554,7 +555,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 1. Create the PersistentVolumeClaim
 1. Install the chart
 
-    ```bash
+    ```console
     $ helm install my-release --set persistence.existingClaim=PVC_NAME my-repo/magento
     ```
 
@@ -570,7 +571,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 1. The specified `hostPath` directory must already exist (create one if it does not).
 1. Install the chart
 
-    ```bash
+    ```console
     $ helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT my-repo/magento
     ```
 
@@ -589,8 +590,8 @@ certificates:
 ```
 
 > Tip! You can create a secret containing your CA certificates using the following command:
-```bash
-kubectl create secret generic my-ca-1 --from-file my-ca-1.crt
+```console
+$ kubectl create secret generic my-ca-1 --from-file my-ca-1.crt
 ```
 
 ## Troubleshooting
@@ -824,7 +825,7 @@ New versions are not going to be affected. Once a new version is released in the
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

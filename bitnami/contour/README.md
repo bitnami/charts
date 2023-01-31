@@ -7,7 +7,7 @@ Contour is an open source Kubernetes ingress controller that works by deploying 
 [Overview of Contour](https://github.com/projectcontour/contour)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -110,6 +110,9 @@ $ helm uninstall my-release
 | `contour.resources.limits`                                    | Specify resource limits which the container is not allowed to succeed.                                                             | `{}`                  |
 | `contour.resources.requests`                                  | Specify resource requests which the container needs to spawn.                                                                      | `{}`                  |
 | `contour.manageCRDs`                                          | Manage the creation, upgrade and deletion of Contour CRDs.                                                                         | `true`                |
+| `contour.envoyServiceNamespace`                               | Namespace of the envoy service to inspect for Ingress status details.                                                              | `""`                  |
+| `contour.envoyServiceName`                                    | Name of the envoy service to inspect for Ingress status details.                                                                   | `""`                  |
+| `contour.ingressStatusAddress`                                | Address to set in Ingress object status. It is exclusive with `envoyServiceName` and `envoyServiceNamespace`.                      | `""`                  |
 | `contour.podAffinityPreset`                                   | Contour Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                        | `""`                  |
 | `contour.podAntiAffinityPreset`                               | Contour Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                   | `soft`                |
 | `contour.podLabels`                                           | Extra labels for Contour pods                                                                                                      | `{}`                  |
@@ -267,6 +270,7 @@ $ helm uninstall my-release
 | `envoy.customStartupProbe`                          | Override default startup probe                                                                                        | `{}`                   |
 | `envoy.terminationGracePeriodSeconds`               | Envoy termination grace period in seconds                                                                             | `300`                  |
 | `envoy.logLevel`                                    | Envoy log level                                                                                                       | `info`                 |
+| `envoy.service.name`                                | envoy service name                                                                                                    | `""`                   |
 | `envoy.service.targetPorts`                         | Map the controller service HTTP/HTTPS port                                                                            | `{}`                   |
 | `envoy.service.type`                                | Type of Envoy service to create                                                                                       | `LoadBalancer`         |
 | `envoy.service.externalTrafficPolicy`               | Envoy Service external cluster policy. If `envoy.service.type` is NodePort or LoadBalancer                            | `Local`                |
@@ -667,7 +671,7 @@ This version also introduces `bitnami/common`, a [library chart](https://helm.sh
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

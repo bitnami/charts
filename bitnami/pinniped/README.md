@@ -7,7 +7,7 @@ Pinniped is an identity service provider for Kubernetes. It supplies a consisten
 [Overview of Pinniped](https://pinniped.dev/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -35,7 +35,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release my-repo/pinniped
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/pinniped
 ```
 
 The command deploys pinniped on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -47,7 +48,7 @@ The command deploys pinniped on the Kubernetes cluster in the default configurat
 To uninstall/delete the `my-release` deployment:
 
 ```console
-helm delete my-release
+$ helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -90,9 +91,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `concierge.enabled`                                         | Deploy Concierge                                                                                                         | `true`          |
 | `concierge.replicaCount`                                    | Number of Concierge replicas to deploy                                                                                   | `1`             |
 | `concierge.containerPorts.api`                              | Concierge API container port                                                                                             | `10250`         |
-| `concierge.containerPorts.proxy`                            | Concierge Proxy container port                                                                                           | `8443`          |
-| `concierge.configurationPorts.aggregatedAPIServerPort`      | Concierge API configuration port                                                                                         | `""`            |
-| `concierge.configurationPorts.impersonationProxyServerPort` | Concierge Proxy configuration port                                                                                       | `""`            |
+| `concierge.containerPorts.proxy`                            | Concierge Proxy container port                                                                                           | `8444`          |
+| `concierge.configurationPorts.aggregatedAPIServerPort`      | Concierge API configuration port                                                                                         | `10250`         |
+| `concierge.configurationPorts.impersonationProxyServerPort` | Concierge Proxy configuration port                                                                                       | `8444`          |
 | `concierge.hostNetwork`                                     | Concierge API and Proxy container hostNetwork                                                                            | `false`         |
 | `concierge.dnsPolicy`                                       | Concierge API and Proxy container dnsPolicy                                                                              | `""`            |
 | `concierge.configuration`                                   | Concierge pinniped.yaml configuration file                                                                               | `""`            |
@@ -323,7 +324,7 @@ The above parameters map to the env variables defined in [bitnami/pinniped](http
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-helm install my-release \
+$ helm install my-release \
   --set supervisor.enabled=false \
     my-repo/pinniped
 ```
@@ -333,7 +334,7 @@ The above command sets disables the supervisor compoment deployment.
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/pinniped
+$ helm install my-release -f values.yaml my-repo/pinniped
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -391,7 +392,7 @@ This version updates Pinniped to its newest version, 0.20.x. For more informatio
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

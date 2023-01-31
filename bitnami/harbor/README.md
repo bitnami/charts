@@ -7,12 +7,12 @@ Harbor is an open source trusted cloud-native registry to store, sign, and scan 
 [Overview of Harbor](https://goharbor.io/)
 
 
-                           
+
 ## TL;DR
 
-```bash
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/harbor
+```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/harbor
 ```
 
 ## Introduction
@@ -42,19 +42,19 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 ## Installing the Chart
 
-Install the Harbor helm chart with a release name `my-release`:
+To install the chart with the release name `my-release`:
 
-```bash
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/harbor
+```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/harbor
 ```
 
 ## Uninstalling the Chart
 
 To uninstall/delete the `my-release` deployment:
 
-```bash
-helm delete --purge my-release
+```console
+$ helm delete --purge my-release
 ```
 
 Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manually delete the PVCs.
@@ -1333,7 +1333,7 @@ Refer to the [chart documentation for more information about how to upgrade from
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

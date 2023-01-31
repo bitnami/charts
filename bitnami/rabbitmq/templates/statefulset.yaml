@@ -373,11 +373,17 @@ spec:
         - name: configuration
           projected:
             sources:
+              {{- if or (and (empty .Values.configurationExistingSecret) .Values.configuration) (and (not .Values.advancedConfigurationExistingSecret) .Values.advancedConfiguration) }}
               - secret:
                   name: {{ printf "%s-config" (include "common.names.fullname" .) }}
+              {{- end }}    
               {{- if and .Values.advancedConfigurationExistingSecret (not .Values.advancedConfiguration) }}
               - secret:
                   name: {{ tpl .Values.advancedConfigurationExistingSecret . | quote }}
+              {{- end }}
+              {{- if not (empty .Values.configurationExistingSecret) }}
+              - secret:
+                  name: {{ tpl .Values.configurationExistingSecret . | quote }}
               {{- end }}
         {{- if .Values.loadDefinition.enabled }}
         - name: load-definition-volume

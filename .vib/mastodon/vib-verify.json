@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/mastodon"
         },
-        "runtime_parameters": "YWRtaW5FbWFpbDogInZpYi11c2VyQGdtYWlsLmNvbSIKYWRtaW5QYXNzd29yZDogImJpdG5hbWkhMTIzNCIKCndlYkRvbWFpbjogYml0bmFtaS1tYXN0b2Rvbi5teQoKc2VydmljZUFjY291bnQ6CiAgY3JlYXRlOiB0cnVlCiAgYXV0b21vdW50U2VydmljZUFjY291bnRUb2tlbjogdHJ1ZQoKd2ViOgogIGNvbnRhaW5lclBvcnRzOgogICAgaHR0cDogODEyMwogIGNvbnRhaW5lclNlY3VyaXR5Q29udGV4dDoKICAgIGVuYWJsZWQ6IHRydWUKICAgIHJ1bkFzVXNlcjogMTAwMgogICAgY2FwYWJpbGl0aWVzOgogICAgICBkcm9wOiBbIkFMTCJdCiAgcG9kU2VjdXJpdHlDb250ZXh0OgogICAgZW5hYmxlZDogdHJ1ZQogICAgZnNHcm91cDogMTAwMgogICAgc2VjY29tcFByb2ZpbGU6CiAgICAgIHR5cGU6ICJSdW50aW1lRGVmYXVsdCIKICBzZXJ2aWNlOgogICAgcG9ydHM6CiAgICAgIGh0dHA6IDg1MDAKCnN0cmVhbWluZzoKICBzZXJ2aWNlOgogICAgcG9ydHM6CiAgICAgIGh0dHA6IDg2MDAKCmFwYWNoZToKICBlbmFibGVkOiB0cnVlCiAgc2VydmljZToKICAgIHR5cGU6IExvYWRCYWxhbmNlcgogICAgcG9ydHM6CiAgICAgIGh0dHA6IDgwCgpwb3N0Z3Jlc3FsOgogIGVuYWJsZWQ6IHRydWUKICBwcmltYXJ5OgogICAgc2VydmljZToKICAgICAgcG9ydHM6CiAgICAgICAgcG9zdGdyZXNxbDogOTM5MwoKbWluaW86CiAgZW5hYmxlZDogdHJ1ZQogIHNlcnZpY2U6CiAgICBwb3J0czoKICAgICAgYXBpOiA4MDExCgpyZWRpczoKICBlbmFibGVkOiB0cnVlCiAgbWFzdGVyOgogICAgc2VydmljZToKICAgICAgcG9ydHM6CiAgICAgICAgcmVkaXM6IDY4MDAKCmVsYXN0aWNzZWFyY2g6CiAgZW5hYmxlZDogdHJ1ZQogIHNlcnZpY2U6CiAgICBwb3J0czoKICAgICAgcmVzdEFQSTogNzc3Nwo=",
+        "runtime_parameters": "YWRtaW5FbWFpbDogInZpYi11c2VyQGNoYW5nZW1lLmNvbSIKYWRtaW5QYXNzd29yZDogImJpdG5hbWkhMTIzNCIKCndlYkRvbWFpbjogYml0bmFtaS1tYXN0b2Rvbi5teQoKc2VydmljZUFjY291bnQ6CiAgY3JlYXRlOiB0cnVlCiAgYXV0b21vdW50U2VydmljZUFjY291bnRUb2tlbjogdHJ1ZQoKd2ViOgogIGNvbnRhaW5lclBvcnRzOgogICAgaHR0cDogODEyMwogIGNvbnRhaW5lclNlY3VyaXR5Q29udGV4dDoKICAgIGVuYWJsZWQ6IHRydWUKICAgIHJ1bkFzVXNlcjogMTAwMgogICAgY2FwYWJpbGl0aWVzOgogICAgICBkcm9wOiBbIkFMTCJdCiAgcG9kU2VjdXJpdHlDb250ZXh0OgogICAgZW5hYmxlZDogdHJ1ZQogICAgZnNHcm91cDogMTAwMgogICAgc2VjY29tcFByb2ZpbGU6CiAgICAgIHR5cGU6ICJSdW50aW1lRGVmYXVsdCIKICBzZXJ2aWNlOgogICAgcG9ydHM6CiAgICAgIGh0dHA6IDg1MDAKCnN0cmVhbWluZzoKICBzZXJ2aWNlOgogICAgcG9ydHM6CiAgICAgIGh0dHA6IDg2MDAKCmFwYWNoZToKICBlbmFibGVkOiB0cnVlCiAgc2VydmljZToKICAgIHR5cGU6IExvYWRCYWxhbmNlcgogICAgcG9ydHM6CiAgICAgIGh0dHA6IDgwCgpwb3N0Z3Jlc3FsOgogIGVuYWJsZWQ6IHRydWUKICBwcmltYXJ5OgogICAgc2VydmljZToKICAgICAgcG9ydHM6CiAgICAgICAgcG9zdGdyZXNxbDogOTM5MwoKbWluaW86CiAgZW5hYmxlZDogdHJ1ZQogIHNlcnZpY2U6CiAgICBwb3J0czoKICAgICAgYXBpOiA4MDExCgpyZWRpczoKICBlbmFibGVkOiB0cnVlCiAgbWFzdGVyOgogICAgc2VydmljZToKICAgICAgcG9ydHM6CiAgICAgICAgcmVkaXM6IDY4MDAKCmVsYXN0aWNzZWFyY2g6CiAgZW5hYmxlZDogdHJ1ZQogIHNlcnZpY2U6CiAgICBwb3J0czoKICAgICAgcmVzdEFQSTogNzc3Nwo=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -59,7 +59,7 @@
             "endpoint": "lb-mastodon-apache-http",
             "app_protocol": "HTTP",
             "env": {
-              "user": "vib-user@gmail.com",
+              "user": "vib-user@changeme.com",
               "password": "bitnami!1234"
             }
           }

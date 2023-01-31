@@ -10,7 +10,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
                            
 ## TL;DR
 
-```bash
+```console
 $ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/rabbitmq
 ```
@@ -31,7 +31,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 To install the chart with the release name `my-release`:
 
-```bash
+```console
 $ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/rabbitmq
 ```
@@ -44,7 +44,7 @@ The command deploys RabbitMQ on the Kubernetes cluster in the default configurat
 
 To uninstall/delete the `my-release` deployment:
 
-```bash
+```console
 $ helm delete my-release
 ```
 
@@ -67,7 +67,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | -------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`    | RabbitMQ image registry                                                                                  | `docker.io`           |
 | `image.repository`  | RabbitMQ image repository                                                                                | `bitnami/rabbitmq`    |
-| `image.tag`         | RabbitMQ image tag (immutable tags are recommended)                                                      | `3.11.6-debian-11-r0` |
+| `image.tag`         | RabbitMQ image tag (immutable tags are recommended)                                                      | `3.11.8-debian-11-r0` |
 | `image.digest`      | RabbitMQ image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`  | RabbitMQ image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                                                         | `[]`                  |
@@ -97,6 +97,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.password`                       | RabbitMQ application password                                                                                                                                           | `""`                                              |
 | `auth.securePassword`                 | Whether to set the RabbitMQ password securely. This is incompatible with loading external RabbitMQ definitions and 'true' when not setting the auth.password parameter. | `true`                                            |
 | `auth.existingPasswordSecret`         | Existing secret with RabbitMQ credentials (must contain a value for `rabbitmq-password` key)                                                                            | `""`                                              |
+| `auth.enableLoopbackUser`             | Enable Loopback user access? Be advised, that enabling the loopback user is a possible security risk!                                                                   | `false`                                           |
 | `auth.erlangCookie`                   | Erlang cookie to determine whether different nodes are allowed to communicate with each other                                                                           | `""`                                              |
 | `auth.existingErlangSecret`           | Existing secret with RabbitMQ Erlang cookie (must contain a value for `rabbitmq-erlang-cookie` key)                                                                     | `""`                                              |
 | `auth.tls.enabled`                    | Enable TLS support on RabbitMQ                                                                                                                                          | `false`                                           |
@@ -145,7 +146,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initScriptsSecret`                   | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template.                     | `""`                                              |
 | `extraContainerPorts`                 | Extra ports to be included in container spec, primarily informational                                                                                                   | `[]`                                              |
 | `configuration`                       | RabbitMQ Configuration file content: required cluster configuration                                                                                                     | `""`                                              |
+| `configurationExistingSecret`         | Existing secret with the configuration to use as rabbitmq.conf.                                                                                                         | `""`                                              |
 | `extraConfiguration`                  | Configuration file content: extra configuration to be appended to RabbitMQ configuration                                                                                | `""`                                              |
+| `extraConfigurationExistingSecret`    | Existing secret with the extra configuration to append to `configuration`.                                                                                              | `""`                                              |
 | `advancedConfiguration`               | Configuration file content: advanced configuration                                                                                                                      | `""`                                              |
 | `advancedConfigurationExistingSecret` | Existing secret with the advanced configuration file (must contain a key `advanced.config`).                                                                            | `""`                                              |
 | `ldap.enabled`                        | Enable LDAP support                                                                                                                                                     | `false`                                           |
@@ -347,7 +350,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag                                                                                       | `11-debian-11-r69`      |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag                                                                                       | `11-debian-11-r78`      |
 | `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
@@ -360,7 +363,7 @@ The above parameters map to the env variables defined in [bitnami/rabbitmq](http
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
-```bash
+```console
 $ helm install my-release \
   --set auth.username=admin,auth.password=secretpassword,auth.erlangCookie=secretcookie \
     my-repo/rabbitmq
@@ -372,7 +375,7 @@ The above command sets the RabbitMQ admin username and password to `admin` and `
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
-```bash
+```console
 $ helm install my-release -f values.yaml my-repo/rabbitmq
 ```
 
@@ -543,7 +546,7 @@ The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/stora
 1. Create the PersistentVolumeClaim
 1. Install the chart
 
-```bash
+```console
 $ helm install my-release --set persistence.existingClaim=PVC_NAME my-repo/rabbitmq
 ```
 
@@ -578,7 +581,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 It's necessary to set the `auth.password` and `auth.erlangCookie` parameters when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, some notes will be displayed providing the credentials you must use under the 'Credentials' section. Please note down the password and the cookie, and run the command below to upgrade your chart:
 
-```bash
+```console
 $ helm upgrade my-release my-repo/rabbitmq --set auth.password=[PASSWORD] --set auth.erlangCookie=[RABBITMQ_ERLANG_COOKIE]
 ```
 
@@ -706,7 +709,7 @@ Bitnami Kubernetes documentation is available at [https://docs.bitnami.com/](htt
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

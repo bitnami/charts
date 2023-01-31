@@ -7,7 +7,7 @@ SonarQube(TM) is an open source quality management platform that analyzes and me
 [Overview of SonarQube&trade;](http://www.sonarqube.org)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement. SonarQube is a registered trademark of SonarSource SA.
-                           
+
 ## TL;DR
 
 ```console
@@ -31,6 +31,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/sonarqube
 ```
 
@@ -308,20 +309,20 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### PostgreSQL subchart settings
 
-| Name                                   | Description                                                                        | Value               |
-| -------------------------------------- | ---------------------------------------------------------------------------------- | ------------------- |
-| `postgresql.enabled`                   | Deploy PostgreSQL subchart                                                         | `true`              |
-| `postgresql.nameOverride`              | Override name of the PostgreSQL chart                                              | `""`                |
-| `postgresql.auth.existingSecret`       | Existing secret containing the password of the PostgreSQL chart                    | `""`                |
-| `postgresql.auth.password`             | Password for the postgres user of the PostgreSQL chart (auto-generated if not set) | `""`                |
-| `postgresql.auth.username`             | Username to create when deploying the PostgreSQL chart                             | `bn_sonarqube`      |
-| `postgresql.auth.database`             | Database to create when deploying the PostgreSQL chart                             | `bitnami_sonarqube` |
-| `postgresql.service.ports.postgresql`  | PostgreSQL service port                                                            | `5432`              |
-| `postgresql.persistence.enabled`       | Use PVCs when deploying the PostgreSQL chart                                       | `true`              |
-| `postgresql.persistence.existingClaim` | Use an existing PVC when deploying the PostgreSQL chart                            | `""`                |
-| `postgresql.persistence.storageClass`  | storageClass of the created PVCs                                                   | `""`                |
-| `postgresql.persistence.accessMode`    | Access mode of the created PVCs                                                    | `ReadWriteOnce`     |
-| `postgresql.persistence.size`          | Size of the created PVCs                                                           | `8Gi`               |
+| Name                                           | Description                                                                        | Value               |
+| ---------------------------------------------- | ---------------------------------------------------------------------------------- | ------------------- |
+| `postgresql.enabled`                           | Deploy PostgreSQL subchart                                                         | `true`              |
+| `postgresql.nameOverride`                      | Override name of the PostgreSQL chart                                              | `""`                |
+| `postgresql.auth.existingSecret`               | Existing secret containing the password of the PostgreSQL chart                    | `""`                |
+| `postgresql.auth.password`                     | Password for the postgres user of the PostgreSQL chart (auto-generated if not set) | `""`                |
+| `postgresql.auth.username`                     | Username to create when deploying the PostgreSQL chart                             | `bn_sonarqube`      |
+| `postgresql.auth.database`                     | Database to create when deploying the PostgreSQL chart                             | `bitnami_sonarqube` |
+| `postgresql.primary.service.ports.postgresql`  | PostgreSQL service port                                                            | `5432`              |
+| `postgresql.primary.persistence.enabled`       | Enable PostgreSQL Primary data persistence using PVC                               | `true`              |
+| `postgresql.primary.persistence.existingClaim` | Name of an existing PVC to use                                                     | `""`                |
+| `postgresql.primary.persistence.storageClass`  | PVC Storage Class for PostgreSQL Primary data volume                               | `""`                |
+| `postgresql.primary.persistence.accessMode`    | PVC Access Mode for PostgreSQL volume                                              | `ReadWriteOnce`     |
+| `postgresql.primary.persistence.size`          | PVC Storage Request for PostgreSQL volume                                          | `8Gi`               |
 
 
 ### External Database settings
@@ -444,7 +445,7 @@ Refer to the [chart documentation for more information about how to upgrade from
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
