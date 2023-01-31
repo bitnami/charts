@@ -30,21 +30,21 @@ rules:
     verbs:
       - create
   - apiGroups:
-    - coordination.k8s.io
+      - coordination.k8s.io
     resourceNames:
-    - {{ $config.leaderElection.leaderElectionID }}
+      - {{ $config.leaderElection.leaderElectionID }}
     resources:
-    - leases
+      - leases
     verbs:
-    - get
-    - update
-    - patch
+      - get
+      - update
+      - patch
   - apiGroups:
-    - coordination.k8s.io
+      - coordination.k8s.io
     resources:
-    - leases
+      - leases
     verbs:
-    - create
+      - create
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
