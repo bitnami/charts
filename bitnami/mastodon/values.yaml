@@ -118,6 +118,7 @@ defaultConfig: |
   ES_HOST: {{ include "mastodon.elasticsearch.host" . | quote }}
   ES_PORT: {{ include "mastodon.elasticsearch.port" . | quote }}
   WEB_DOMAIN: {{ include "mastodon.web.domain" . | quote }}
+  LOCAL_DOMAIN: {{ include "mastodon.web.domain" . | quote }}
   STREAMING_API_BASE_URL: {{ include "mastodon.streaming.url" . | quote }}
   REDIS_HOST: {{ include "mastodon.redis.host" . | quote }}
   REDIS_PORT: {{ include "mastodon.redis.port" . | quote }}
