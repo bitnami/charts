@@ -191,6 +191,40 @@ mimir:
       sharding_ring:
         wait_stability_min_duration: 1m
         tokens_file_path: {{ .Values.mimir.dataDir }}/tokens
+    {{- if .Values.ruler.enabled }}
+    ruler:
+      alertmanager_url: dnssrvnoa+http://_http-metrics._tcp.{{ include "grafana-mimir.alertmanager.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}/alertmanager
+      enable_api: true
+      rule_path: {{ .Values.mimir.dataDir }}/ruler
+    {{- if .Values.minio.enabled }}
+    ruler_storage:
+      backend: s3
+      s3:
+        access_key_id: ${MIMIR_S3_ACCESS_KEY_ID}
+        bucket_name: {{ include "grafana-mimir.s3.bucket" . }}
+        endpoint: {{ include "grafana-mimir.s3.host" . }}:{{ include "grafana-mimir.s3.port" . }}
+        region: {{ include "grafana-mimir.s3.region" . }}
+        insecure: {{ ternary true false (eq "http" (lower (include "grafana-mimir.s3.protocol" . ))) }}
+        secret_access_key: ${MIMIR_S3_SECRET_ACCESS_KEY}
+    {{- end }}
+    {{- end }}
+    {{- if .Values.alertmanager.enabled }}
+    alertmanager:
+      data_dir: {{ .Values.mimir.dataDir }}/alert-manager
+      enable_api: true
+      external_url: {{ template "grafana-mimir.alertmanager.httpPrefix" . }}
+    {{- if .Values.minio.enabled }}
+    alertmanager_storage:
+      backend: s3
+      s3:
+        access_key_id: ${MIMIR_S3_ACCESS_KEY_ID}
+        bucket_name: {{ include "grafana-mimir.s3.bucket" . }}
+        endpoint: {{ include "grafana-mimir.s3.host" . }}:{{ include "grafana-mimir.s3.port" . }}
+        region: {{ include "grafana-mimir.s3.region" . }}
+        insecure: {{ ternary true false (eq "http" (lower (include "grafana-mimir.s3.protocol" . ))) }}
+        secret_access_key: ${MIMIR_S3_SECRET_ACCESS_KEY}
+    {{- end }}
+    {{- end }}
 
   ## @param mimir.overrideConfiguration [object] Loki components configuration override. Values defined here takes precedence over mimir.configuration
   ## e.g:
@@ -224,6 +258,291 @@ mimir:
       ## @param mimir.gossipRing.service.annotations Additional custom annotations for Gossip Ring headless service
       ##
       annotations: {}
+
+## @section Alertmanager Deployment Parameters
+##
+alertmanager:
+  enabled: false
+  ## @param alertmanager.extraEnvVars Array with extra environment variables to add to alertmanager nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param alertmanager.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for alertmanager nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param alertmanager.extraEnvVarsSecret Name of existing Secret containing extra env vars for alertmanager nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param alertmanager.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param alertmanager.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param alertmanager.extraArgs Add additional argsto the default container args (useful to override configuration)
+  ## e.g:
+  ## extraArgs:
+  ##   - "-log.level=debug"
+  extraArgs: []
+  ## @param alertmanager.replicaCount Number of Compactor replicas to deploy
+  ##
+  replicaCount: 1
+  ## Configure extra options for Compactor containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param alertmanager.livenessProbe.enabled Enable livenessProbe on Compactor nodes
+  ## @param alertmanager.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param alertmanager.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param alertmanager.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param alertmanager.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param alertmanager.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param alertmanager.readinessProbe.enabled Enable readinessProbe on Compactor nodes
+  ## @param alertmanager.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param alertmanager.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param alertmanager.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param alertmanager.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param alertmanager.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param alertmanager.startupProbe.enabled Enable startupProbe on Compactor containers
+  ## @param alertmanager.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param alertmanager.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param alertmanager.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param alertmanager.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param alertmanager.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param alertmanager.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param alertmanager.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param alertmanager.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## alertmanager resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param alertmanager.resources.limits The resources limits for the alertmanager containers
+  ## @param alertmanager.resources.requests The requested resources for the alertmanager containers
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param alertmanager.podSecurityContext.enabled Enabled Compactor pods' Security Context
+  ## @param alertmanager.podSecurityContext.fsGroup Set Compactor pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param alertmanager.containerSecurityContext.enabled Enabled Compactor containers' Security Context
+  ## @param alertmanager.containerSecurityContext.runAsUser Set Compactor containers' Security Context runAsUser
+  ## @param alertmanager.containerSecurityContext.runAsNonRoot Set Compactor containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  ## @param alertmanager.lifecycleHooks for the ingester container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param alertmanager.hostAliases ingester pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param alertmanager.podLabels Extra labels for ingester pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param alertmanager.podAnnotations Annotations for ingester pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param alertmanager.podAffinityPreset Pod affinity preset. Ignored if `alertmanager.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param alertmanager.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `alertmanager.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node alertmanager.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param alertmanager.nodeAffinityPreset.type Node affinity preset type. Ignored if `alertmanager.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param alertmanager.nodeAffinityPreset.key Node label key to match. Ignored if `alertmanager.affinity` is set
+    ##
+    key: ""
+    ## @param alertmanager.nodeAffinityPreset.values Node label values to match. Ignored if `alertmanager.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param alertmanager.affinity Affinity for Compactor pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `alertmanager.podAffinityPreset`, `alertmanager.podAntiAffinityPreset`, and `alertmanager.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param alertmanager.nodeSelector Node labels for Compactor pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param alertmanager.tolerations Tolerations for Compactor pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param alertmanager.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param alertmanager.priorityClassName Compactor pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param alertmanager.schedulerName Kubernetes pod scheduler registry
+  ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param alertmanager.terminationGracePeriodSeconds Seconds pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param alertmanager.updateStrategy.type Compactor statefulset strategy type
+  ## @param alertmanager.updateStrategy.rollingUpdate Compactor statefulset rolling update configuration parameters
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate: {}
+  ## @param alertmanager.extraVolumes Optionally specify extra list of additional volumes for the Compactor pod(s)
+  ##
+  extraVolumes: []
+  ## @param alertmanager.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Compactor container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param alertmanager.sidecars Add additional sidecar containers to the Compactor pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param alertmanager.initContainers Add additional init containers to the Compactor pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+
+  ## @section Compactor Traffic Exposure Parameters
+  ##
+
+  ## ingester service parameters
+  ##
+  service:
+    ## @param alertmanager.service.type Compactor service type
+    ##
+    type: ClusterIP
+    ## @param alertmanager.service.ports.http Compactor HTTP service port
+    ## @param alertmanager.service.ports.grpc Compactor GRPC service port
+    ##
+    ports:
+      http: 8080
+      grpc: 9095
+
+    ## Node ports to expose
+    ## NOTE: choose port between <30000-32767>
+    ## @param alertmanager.service.nodePorts.http Node port for HTTP
+    ## @param alertmanager.service.nodePorts.grpc Node port for GRPC
+    ##
+    nodePorts:
+      http: ""
+      grpc: 9095
+    ## @param alertmanager.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+    ## @param alertmanager.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ##
+    sessionAffinity: None
+    ## @param alertmanager.service.clusterIP Compactor service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param alertmanager.service.loadBalancerIP Compactor service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param alertmanager.service.loadBalancerSourceRanges Compactor service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param alertmanager.service.externalTrafficPolicy Compactor service external traffic policy
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param alertmanager.service.annotations Additional custom annotations for Compactor service
+    ##
+    annotations: {}
+    ## @param alertmanager.service.extraPorts Extra ports to expose in the Compactor service
+    ##
+    extraPorts: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param alertmanager.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param alertmanager.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param alertmanager.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
 
 
 ## @section Compactor Deployment Parameters
@@ -2470,12 +2789,315 @@ storeGateway:
 ## @section Ruler Deployment Parameters
 ##
 ruler:
+  ## @param ruler.enabled Deploy ruler component
+  ##
   enabled: false
+  ## @param ruler.extraEnvVars Array with extra environment variables to add to ruler nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param ruler.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for ruler nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param ruler.extraEnvVarsSecret Name of existing Secret containing extra env vars for ruler nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param ruler.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param ruler.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param ruler.podManagementPolicy podManagementPolicy to manage scaling operation
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: ""
+  ## @param ruler.replicaCount Number of Ruler replicas to deploy
+  ##
+  replicaCount: 1
+  ## Configure extra options for Ruler containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param ruler.livenessProbe.enabled Enable livenessProbe on Ruler nodes
+  ## @param ruler.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param ruler.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param ruler.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param ruler.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param ruler.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param ruler.readinessProbe.enabled Enable readinessProbe on Ruler nodes
+  ## @param ruler.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param ruler.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param ruler.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param ruler.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param ruler.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param ruler.startupProbe.enabled Enable startupProbe on Ruler containers
+  ## @param ruler.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param ruler.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param ruler.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param ruler.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param ruler.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param ruler.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param ruler.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param ruler.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param ruler.lifecycleHooks for the ruler container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## ruler resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param ruler.resources.limits The resources limits for the Ruler containers
+  ## @param ruler.resources.requests The requested resources for the Ruler containers
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param ruler.podSecurityContext.enabled Enabled Ruler pods' Security Context
+  ## @param ruler.podSecurityContext.fsGroup Set Ruler pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param ruler.containerSecurityContext.enabled Enabled Ruler containers' Security Context
+  ## @param ruler.containerSecurityContext.runAsUser Set Ruler containers' Security Context runAsUser
+  ## @param ruler.containerSecurityContext.runAsNonRoot Set Ruler containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  ## @param ruler.hostAliases ruler pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param ruler.podLabels Extra labels for ruler pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param ruler.podAnnotations Annotations for ruler pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param ruler.podAffinityPreset Pod affinity preset. Ignored if `ruler.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param ruler.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `ruler.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node ruler.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param ruler.nodeAffinityPreset.type Node affinity preset type. Ignored if `ruler.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param ruler.nodeAffinityPreset.key Node label key to match. Ignored if `ruler.affinity` is set
+    ##
+    key: ""
+    ## @param ruler.nodeAffinityPreset.values Node label values to match. Ignored if `ruler.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param ruler.affinity Affinity for ruler pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `ruler.podAffinityPreset`, `ruler.podAntiAffinityPreset`, and `ruler.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param ruler.nodeSelector Node labels for Ruler pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param ruler.tolerations Tolerations for Ruler pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param ruler.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param ruler.priorityClassName Ruler pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param ruler.schedulerName Kubernetes pod scheduler registry
+  ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param ruler.updateStrategy.type Ruler statefulset strategy type
+  ## @param ruler.updateStrategy.rollingUpdate Ruler statefulset rolling update configuration parameters
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate: {}
+  ## @param ruler.extraVolumes Optionally specify extra list of additional volumes for the Ruler pod(s)
+  ##
+  extraVolumes: []
+  ## @param ruler.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the ruler container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param ruler.sidecars Add additional sidecar containers to the Ruler pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param ruler.initContainers Add additional init containers to the Ruler pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
 
-## @section Alert Manager Deployment Parameters
-##
-alertmanager:
-  enabled: false
+  ## @section Ruler Persistence Parameters
+  ##
+
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    ## @param ruler.persistence.enabled Enable persistence in Ruler instances
+    ##
+    enabled: true
+    ## @param ruler.persistence.storageClass PVC Storage Class for Memcached data volume
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param ruler.persistence.subPath The subdirectory of the volume to mount to
+    ##
+    subPath: ""
+    ## @param ruler.persistence.accessModes PVC Access modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param ruler.persistence.size PVC Storage Request for Memcached data volume
+    ##
+    size: 8Gi
+    ## @param ruler.persistence.annotations Additional PVC annotations
+    ##
+    annotations: {}
+    ## @param ruler.persistence.selector Selector to match an existing Persistent Volume for Ruler's data PVC
+    ## If set, the PVC can't have a PV dynamically provisioned for it
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+
+  ## @section Ruler Traffic Exposure Parameters
+  ##
+
+  ## ruler service parameters
+  ##
+  service:
+    ## @param ruler.service.type Ruler service type
+    ##
+    type: ClusterIP
+    ## @param ruler.service.ports.http Ruler HTTP service port
+    ## @param ruler.service.ports.grpc Ruler GRPC service port
+    ##
+    ports:
+      http: 3100
+      grpc: 9095
+    ## Node ports to expose
+    ## NOTE: choose port between <30000-32767>
+    ## @param ruler.service.nodePorts.http Node port for HTTP
+    ## @param ruler.service.nodePorts.grpc Node port for GRPC
+    ##
+    nodePorts:
+      http: ""
+      grpc: ""
+    ## @param ruler.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+    ## @param ruler.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ##
+    sessionAffinity: None
+    ## @param ruler.service.clusterIP Ruler service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param ruler.service.loadBalancerIP Ruler service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param ruler.service.loadBalancerSourceRanges Ruler service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param ruler.service.externalTrafficPolicy Ruler service external traffic policy
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param ruler.service.annotations Additional custom annotations for Ruler service
+    ##
+    annotations: {}
+    ## @param ruler.service.extraPorts Extra ports to expose in the Ruler service
+    ##
+    extraPorts: []
+
+
 
 ## @section Persistence Parameters
 ##

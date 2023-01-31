@@ -1,4 +1,3 @@
-{{- if .Values.querier.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -64,4 +63,3 @@ spec:
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/part-of: grafana-mimir
     app.kubernetes.io/component: querier
-{{- end }}
