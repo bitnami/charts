@@ -79,6 +79,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                              | Description                                                                                                         | Value                               |
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
 | `replicaCount`                                    | Desired number of pod replicas                                                                                      | `1`                                 |
+| `containerPorts.http`                   | HTTP container port                                                                                             | `8080`          |
+| `extraContainerPorts`                   | Optionally specify extra list of additional port-mappings for the container                                         | `[]`  
 | `image.registry`                                  | Container image registry                                                                                            | `docker.io`                         |
 | `image.repository`                                | Container image name                                                                                                | `bitnami/kubernetes-event-exporter` |
 | `image.tag`                                       | Container image tag                                                                                                 | `1.1.0-debian-11-r11`               |
@@ -132,6 +134,31 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraVolumes`                                    | Array to add extra volumes                                                                                          | `[]`                                |
 | `initContainers`                                  | Attach additional init containers to pods                                                                           | `[]`                                |
 | `sidecars`                                        | Add additional sidecar containers to pods                                                                           | `[]`                                |
+
+### Metrics parameters
+
+| Name                                       | Description                                                                                                               | Value   |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `metrics.enabled`                          | Enable exposing statistics                                                                                       | `false` |
+| `metrics.service.ports.http`               | Metrics service HTTP port                                                                                                 | `8080`  |
+| `metrics.service.annotations`              | Annotations for enabling prometheus to access the metrics endpoints                                                       | `{}`    |
+| `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                              | `false` |
+| `metrics.serviceMonitor.port`              | Metrics service HTTP port                                                                                                 | `http`  |
+| `metrics.serviceMonitor.endpoints`         | The endpoint configuration of the ServiceMonitor. Path is mandatory. Interval, timeout and labellings can be overwritten. | `[]`    |
+| `metrics.serviceMonitor.path`              | Metrics service HTTP path. Deprecated: Use @param metrics.serviceMonitor.endpoints instead                                | `""`    |
+| `metrics.serviceMonitor.namespace`         | Namespace which Prometheus is running in                                                                                  | `""`    |
+| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped                                                                               | `30s`   |
+| `metrics.serviceMonitor.scrapeTimeout`     | Specify the timeout after which the scrape is ended                                                                       | `""`    |
+| `metrics.serviceMonitor.labels`            | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                                     | `{}`    |
+| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                                       | `{}`    |
+| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                                                        | `[]`    |
+| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                                                                 | `[]`    |
+| `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels                                                  | `false` |
+| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.                                         | `""`    |
+| `metrics.prometheusRule.enabled`           | Create PrometheusRule Resource for scraping metrics using PrometheusOperator                                              | `false` |
+| `metrics.prometheusRule.namespace`         | Namespace which Prometheus is running in                                                                                  | `""`    |
+| `metrics.prometheusRule.labels`            | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                     | `{}`    |
+| `metrics.prometheusRule.groups`            | Groups, containing the alert rules.                                                                                       | `[]`    |
 
 
 ## Configuration and installation details
