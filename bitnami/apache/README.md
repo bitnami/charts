@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------- |
 | `image.registry`                        | Apache image registry                                                                                                    | `docker.io`           |
 | `image.repository`                      | Apache image repository                                                                                                  | `bitnami/apache`      |
-| `image.tag`                             | Apache image tag (immutable tags are recommended)                                                                        | `2.4.55-debian-11-r7` |
+| `image.tag`                             | Apache image tag (immutable tags are recommended)                                                                        | `2.4.55-debian-11-r8` |
 | `image.digest`                          | Apache image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                   | `""`                  |
 | `image.pullPolicy`                      | Apache image pull policy                                                                                                 | `IfNotPresent`        |
 | `image.pullSecrets`                     | Apache image pull secrets                                                                                                | `[]`                  |
