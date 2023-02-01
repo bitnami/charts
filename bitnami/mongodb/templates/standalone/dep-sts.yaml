@@ -382,7 +382,7 @@ spec:
           {{- else if .Values.metrics.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: /metrics
+              path: /
               port: metrics
           {{- end }}
           {{- if .Values.metrics.customReadinessProbe }}
@@ -390,7 +390,7 @@ spec:
           {{- else if .Values.metrics.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: /metrics
+              path: /
               port: metrics
           {{- end }}
           {{- if .Values.metrics.customStartupProbe }}
