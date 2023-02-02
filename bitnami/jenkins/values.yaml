@@ -839,7 +839,7 @@ persistence:
   ##
   selector: {}
 ## 'volumePermissions' init container parameters
-## Changes the owner and group of the persistent volume mount point to `runAsUser:fsGroup values
+## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
 ## based on the podSecurityContext/containerSecurityContext parameters
 ##
 volumePermissions:
