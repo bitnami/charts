@@ -257,5 +257,3 @@ Set sonarqube.jvmCEOpts
         {{ printf "" }}
     {{- end -}}
 {{- end -}}
-
-
