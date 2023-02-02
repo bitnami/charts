@@ -348,12 +348,8 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - mountPath: /bitnami/sonarqube/data
+            - mountPath: /bitnami/sonarqube
               name: sonarqube
-              subPath: data
-            - mountPath: /bitnami/sonarqube/extensions
-              name: sonarqube
-              subPath: extensions
             {{- if or .Values.plugins.install .Values.caCerts.enabled }}
             - name: provisioning
               mountPath: {{ .Values.provisioningFolder }}
