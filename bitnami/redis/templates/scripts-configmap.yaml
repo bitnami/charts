@@ -654,7 +654,6 @@ data:
         {{- end }}
     }
 
-
     REDISPORT=$(get_port "$HOSTNAME" "REDIS")
 
     [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
