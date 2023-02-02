@@ -29,4 +29,4 @@ name: phpmyadmin
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/phpmyadmin
   - https://www.phpmyadmin.net/
-version: 10.4.0
+version: 10.4.1

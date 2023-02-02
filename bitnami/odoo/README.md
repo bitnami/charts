@@ -127,21 +127,21 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.enabled`   | Enabled Odoo containers' Security Context                                                                                | `false`         |
 | `containerSecurityContext.runAsUser` | Set Odoo container's Security Context runAsUser                                                                          | `1001`          |
 | `livenessProbe.enabled`              | Enable livenessProbe                                                                                                     | `true`          |
-| `livenessProbe.path`                 | Path for to check for livenessProbe                                                                                      | `/`             |
+| `livenessProbe.path`                 | Path for to check for livenessProbe                                                                                      | `/web/health`   |
 | `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                  | `600`           |
 | `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                         | `30`            |
 | `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                        | `5`             |
 | `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                      | `6`             |
 | `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                      | `1`             |
 | `readinessProbe.enabled`             | Enable readinessProbe                                                                                                    | `true`          |
-| `readinessProbe.path`                | Path to check for readinessProbe                                                                                         | `/`             |
+| `readinessProbe.path`                | Path to check for readinessProbe                                                                                         | `/web/health`   |
 | `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                                 | `30`            |
 | `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                        | `10`            |
 | `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                       | `5`             |
 | `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                     | `6`             |
 | `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                     | `1`             |
 | `startupProbe.enabled`               | Enable startupProbe                                                                                                      | `false`         |
-| `startupProbe.path`                  | Path to check for startupProbe                                                                                           | `/`             |
+| `startupProbe.path`                  | Path to check for startupProbe                                                                                           | `/web/health`   |
 | `startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                                   | `300`           |
 | `startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                          | `10`            |
 | `startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                         | `5`             |
