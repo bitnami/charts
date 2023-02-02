@@ -391,7 +391,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        {{- if .Values.plugins.install }}
+        {{- if or .Values.plugins.install .Values.caCerts.enabled }}
         - name: provisioning
           emptyDir: {}
         {{- end }}
