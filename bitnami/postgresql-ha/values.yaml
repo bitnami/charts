@@ -124,6 +124,9 @@ postgresql:
   ## @param postgresql.podLabels Labels to add to the StatefulSet pods. Evaluated as template
   ##
   podLabels: {}
+  ## @param postgresql.serviceAnnotations Provide any additional annotations for PostgreSQL service
+  ##
+  serviceAnnotations: {}
   ## @param postgresql.replicaCount Number of replicas to deploy. Use an odd number. Having 3 replicas is the minimum to get quorum when promoting a new primary.
   ##
   replicaCount: 3
@@ -1049,6 +1052,9 @@ pgpool:
   ## @param pgpool.serviceLabels Labels to add to the service. Evaluated as template
   ##
   serviceLabels: {}
+  ## @param pgpool.serviceAnnotations Provide any additional annotations for Pgpool service
+  ##
+  serviceAnnotations: {}
   ## @param pgpool.customLivenessProbe Override default liveness probe
   ##
   customLivenessProbe: {}
@@ -1891,7 +1897,7 @@ service:
   ##   clientIP:
   ##     timeoutSeconds: 300
   sessionAffinityConfig: {}
-  ## @param service.annotations Provide any additional annotations for PostgreSQL service
+  ## @param service.annotations Provide any additional annotations both for PostgreSQL and Pgpool services
   ##
   annotations: {}
   ## @param service.serviceLabels Labels for PostgreSQL service

@@ -2,7 +2,7 @@ annotations:
   category: DeveloperTools
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 5.4.0
+appVersion: 5.4.1
 dependencies:
   - name: mongodb
     repository: https://charts.bitnami.com/bitnami

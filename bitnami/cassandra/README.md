@@ -461,7 +461,7 @@ This release make it possible to specify custom initialization scripts in both c
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
