@@ -103,6 +103,7 @@ sonarqubeUsername: user
 ##
 sonarqubePassword: ""
 ## @param provisioningFolder Directory to use for provisioning content to Sonarqube
+##
 provisioningFolder: "/bitnami/sonarqube-provisioning"
 ## @param existingSecret Name of existing secret containing SonarQube&trade; credentials
 ## NOTE: Must contain key `sonarqube-password`
@@ -592,7 +593,8 @@ ingress:
 ## The cacerts file will be set via SONARQUBE_WEB_JVM_OPTS and SONAR_CE_JAVAOPTS
 caCerts:
   ## @param caCerts.enabled Enable the use of caCerts
-  enabled: true
+  ##
+  enabled: false
   ## Bitnami Shell image
   ## ref: https://hub.docker.com/r/bitnami/bitnami-shell/tags/
   ## @param caCerts.image.registry Bitnami Shell image registry
@@ -617,6 +619,7 @@ caCerts:
     ##
     pullSecrets: []
   ## @param caCerts.secret Name of the secret containing the certificates
+  ##
   secret: ca-certs-secret
   ## Init container's resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
@@ -648,8 +651,10 @@ plugins:
   ##
   install: []
   ## @param plugins.netrcCreds .netrc secret file with a key "netrc" to use basic auth while downloading plugins
+  ##
   netrcCreds: ""
   ## @param plugins.noCheckCertificate Set to true to not validate the server's certificate to download plugin
+  ##
   noCheckCertificate: true
   ## Bitnami Shell image
   ## ref: https://hub.docker.com/r/bitnami/bitnami-shell/tags/
