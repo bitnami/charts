@@ -84,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | -------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                        | SuiteCRM image registry                                                                                  | `docker.io`           |
 | `image.repository`                      | SuiteCRM image repository                                                                                | `bitnami/suitecrm`    |
-| `image.tag`                             | SuiteCRM image tag (immutable tags are recommended)                                                      | `7.13.1-debian-11-r1` |
+| `image.tag`                             | SuiteCRM image tag (immutable tags are recommended)                                                      | `7.13.1-debian-11-r2` |
 | `image.digest`                          | SuiteCRM image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`                      | SuiteCRM image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                         | `[]`                  |
