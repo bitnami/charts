@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/thanos"
         },
-        "runtime_parameters": "b2Jqc3RvcmVDb25maWc6IHwtCiAgdHlwZTogRklMRVNZU1RFTQogIGNvbmZpZzoKICAgIGRpcmVjdG9yeTogIi8iCgpxdWVyeUZyb250ZW5kOgogIGVuYWJsZWQ6IHRydWUKICBzZXJ2aWNlOgogICAgdHlwZTogTG9hZEJhbGFuY2VyCiAgICBwb3J0czoKICAgICAgaHR0cDogODAKCnN0b3JlZ2F0ZXdheToKICBlbmFibGVkOiB0cnVlCg==",
+        "runtime_parameters": "b2Jqc3RvcmVDb25maWc6IHwtCiAgdHlwZTogczMKICBjb25maWc6CiAgICBidWNrZXQ6IHRoYW5vcy10ZXN0CiAgICBlbmRwb2ludDoge3sgaW5jbHVkZSAidGhhbm9zLm1pbmlvLmZ1bGxuYW1lIiAuIH19Lnt7IC5SZWxlYXNlLk5hbWVzcGFjZSB9fS5zdmMuY2x1c3Rlci5sb2NhbDo5MDAwCiAgICBhY2Nlc3Nfa2V5OiBtaW5pby12aWIKICAgIHNlY3JldF9rZXk6IG1pbmlvMTIzCiAgICBpbnNlY3VyZTogdHJ1ZQptaW5pbzoKICBlbmFibGVkOiB0cnVlCiAgYXV0aDoKICAgIHJvb3RVc2VyOiAibWluaW8tdmliIgogICAgcm9vdFBhc3N3b3JkOiAibWluaW8xMjMiCiAgZGVmYXVsdEJ1Y2tldHM6ICJ0aGFub3MtdGVzdCIKICBzZXJ2aWNlOgogICAgcG9ydHM6CiAgICAgIGFwaTogOTAwMApxdWVyeToKICBlbmFibGVkOiB0cnVlCnF1ZXJ5RnJvbnRlbmQ6CiAgZW5hYmxlZDogdHJ1ZQogIHNlcnZpY2U6CiAgICB0eXBlOiBMb2FkQmFsYW5jZXIKICAgIHBvcnRzOgogICAgICBodHRwOiA4MApidWNrZXR3ZWI6CiAgZW5hYmxlZDogdHJ1ZQpzdG9yZWdhdGV3YXk6CiAgZW5hYmxlZDogdHJ1ZQogIHNlcnZpY2U6CiAgICBwb3J0czoKICAgICAgZ3JwYzogMTA5MDMKcmVjZWl2ZToKICBlbmFibGVkOiB0cnVlCiAgc2VydmljZToKICAgIHBvcnRzOgogICAgICBncnBjOiAxMDkwNA==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -42,10 +42,14 @@
           "action_id": "cypress",
           "params": {
             "resources": {
-              "path": "/.vib/thanos/queryfrontend/cypress"
+              "path": "/.vib/thanos/cypress"
             },
             "endpoint": "lb-thanos-query-frontend-http",
-            "app_protocol": "HTTP"
+            "app_protocol": "HTTP",
+            "env": {
+              "storePort": "10903",
+              "receivePort": "10904"
+            }
           }
         }
       ]

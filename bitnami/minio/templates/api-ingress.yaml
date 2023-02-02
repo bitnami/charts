@@ -9,8 +9,9 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   annotations:
-    {{- if .Values.apiIngress.annotations }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.apiIngress.annotations "context" $) | nindent 4 }}
+    {{- $annotations := fromYaml (include "minio.apiIngress.annotations" .) -}}
+    {{- if $annotations }}
+    {{- include "common.tplvalues.render" (dict "value" $annotations "context" $) | nindent 4 }}
     {{- end }}
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -20,8 +21,8 @@ spec:
   ingressClassName: {{ .Values.apiIngress.ingressClassName | quote }}
   {{- end }}
   rules:
-    {{- if .Values.apiIngress.hostname }}
-    - host: {{ .Values.apiIngress.hostname }}
+    {{- if (include "minio.apiIngress.hostname" .) }}
+    - host: {{ include "minio.apiIngress.hostname" . }}
       http:
         paths:
           {{- if .Values.apiIngress.extraPaths }}
@@ -46,12 +47,12 @@ spec:
     {{- if .Values.apiIngress.extraRules }}
     {{- include "common.tplvalues.render" (dict "value" .Values.apiIngress.extraRules "context" $) | nindent 4 }}
     {{- end }}
-  {{- if or (and .Values.apiIngress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.apiIngress.annotations )) .Values.apiIngress.selfSigned)) .Values.apiIngress.extraTls }}
+  {{- if or (and .Values.apiIngress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" $annotations )) .Values.apiIngress.selfSigned)) .Values.apiIngress.extraTls }}
   tls:
-    {{- if and .Values.apiIngress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.apiIngress.annotations )) .Values.apiIngress.selfSigned) }}
+    {{- if and .Values.apiIngress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" $annotations )) .Values.apiIngress.selfSigned) }}
     - hosts:
-        - {{ .Values.apiIngress.hostname }}
-      secretName: {{ printf "%s-tls" .Values.apiIngress.hostname }}
+        - {{ include "minio.apiIngress.hostname" . }}
+      secretName: {{ printf "%s-tls" (include "minio.apiIngress.hostname" .) }}
     {{- end }}
     {{- if .Values.apiIngress.extraTls }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.apiIngress.extraTls "context" $ ) | nindent 4 }}

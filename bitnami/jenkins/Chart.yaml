@@ -1,7 +1,8 @@
 annotations:
   category: Infrastructure
+  licenses: Apache-2.0
 apiVersion: v2
-appVersion: 2.375.1
+appVersion: 2.375.2
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -9,7 +10,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Jenkins is an open source Continuous Integration and Continuous Delivery (CI/CD) server designed to automate the building, testing, and deploying of any software project.
-engine: gotpl
 home: https://github.com/bitnami/charts/tree/main/bitnami/jenkins
 icon: https://bitnami.com/assets/stacks/jenkins/img/jenkins-stack-220x234.png
 keywords:
@@ -26,4 +26,4 @@ name: jenkins
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/jenkins
   - https://jenkins.io/
-version: 11.0.11
+version: 11.0.14

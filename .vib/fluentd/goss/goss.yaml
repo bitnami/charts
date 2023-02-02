@@ -9,15 +9,9 @@ file:
   /var/log:
     exists: true
     filetype: directory
-    mode: "0755"
-    owner: root
-    group: root
   /var/lib/docker/containers:
     exists: true
     filetype: directory
-    mode: "0701"
-    owner: root
-    group: root
 command:
   # The Chart is configured to keep track of the logs in the /var/log/containers directory. Creating a log file
   # should trigger the Forwarder to send the contents to the Aggregator.

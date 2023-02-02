@@ -111,7 +111,7 @@ For more information, refer to the [documentation on the differences between the
 | `operator.updateStrategy.type`                               | Set up update strategy for Grafana Operator installation.                                                                                 | `Recreate`                 |
 | `operator.image.registry`                                    | Grafana Operator image registry                                                                                                           | `docker.io`                |
 | `operator.image.repository`                                  | Grafana Operator image name                                                                                                               | `bitnami/grafana-operator` |
-| `operator.image.tag`                                         | Grafana Operator image tag                                                                                                                | `4.8.0-debian-11-r9`       |
+| `operator.image.tag`                                         | Grafana Operator image tag                                                                                                                | `4.8.0-debian-11-r23`      |
 | `operator.image.digest`                                      | Grafana Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                          | `""`                       |
 | `operator.image.pullPolicy`                                  | Grafana Operator image pull policy                                                                                                        | `IfNotPresent`             |
 | `operator.image.pullSecrets`                                 | Grafana Operator image pull secrets                                                                                                       | `[]`                       |
@@ -196,7 +196,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.enabled`                                           | Enabled the deployment of the Grafana CRD object into the cluster                                          | `true`                   |
 | `grafana.image.registry`                                    | Grafana image registry                                                                                     | `docker.io`              |
 | `grafana.image.repository`                                  | Grafana image name                                                                                         | `bitnami/grafana`        |
-| `grafana.image.tag`                                         | Grafana image tag                                                                                          | `9.3.2-debian-11-r4`     |
+| `grafana.image.tag`                                         | Grafana image tag                                                                                          | `9.3.6-debian-11-r1`     |
 | `grafana.image.digest`                                      | Grafana image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag    | `""`                     |
 | `grafana.image.pullSecrets`                                 | Grafana image pull secrets                                                                                 | `[]`                     |
 | `grafana.pluginsInitContainerImage.registry`                | Grafana Plugins image registry                                                                             | `""`                     |
@@ -270,7 +270,6 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.updateStrategy`                                    | Set up update strategy for Grafana installation.                                                           | `{}`                     |
 | `grafana.extraVolumes`                                      | Optionally specify extra list of additional volumes for the grafana pod(s)                                 | `[]`                     |
 | `grafana.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the grafana container(s)                      | `[]`                     |
-| `grafana.initContainers`                                    | Add additional init containers to the grafana pods                                                         | `[]`                     |
 | `grafana.sidecars`                                          | Add additional sidecar containers to the grafana pod(s)                                                    | `[]`                     |
 
 
@@ -286,7 +285,7 @@ The above command sets the `livenessProbe.successThreshold` to `5`.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
-```bash
+```console
 $ helm install my-release -f values.yaml my-repo/grafana-operator
 ```
 
@@ -316,7 +315,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
-```bash
+```console
 $ helm upgrade my-release my-repo/grafana-operator
 ```
 
@@ -367,7 +366,7 @@ See [PR#7114](https://github.com/bitnami/charts/pull/7114) for more info about t
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

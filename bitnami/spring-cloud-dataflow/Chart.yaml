@@ -1,7 +1,8 @@
 annotations:
   category: DeveloperTools
+  licenses: Apache-2.0
 apiVersion: v2
-appVersion: 2.9.6
+appVersion: 2.10.0
 dependencies:
   - condition: rabbitmq.enabled
     name: rabbitmq
@@ -23,7 +24,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Spring Cloud Data Flow is a microservices-based toolkit for building streaming and batch data processing pipelines in Cloud Foundry and Kubernetes.
-engine: gotpl
 home: https://github.com/bitnami/charts/tree/main/bitnami/spring-cloud-dataflow
 icon: https://bitnami.com/assets/stacks/spring-cloud-dataflow/img/spring-cloud-dataflow-stack-220x234.png
 keywords:
@@ -39,4 +39,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/spring-cloud-dataflow
   - https://github.com/bitnami/containers/tree/main/bitnami/spring-cloud-skipper
   - https://dataflow.spring.io/
-version: 15.0.1
+version: 15.0.3

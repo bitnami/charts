@@ -7,12 +7,12 @@ Confluent Schema Registry provides a RESTful interface by adding a serving layer
 [Overview of Confluent Schema Registry](https://www.confluent.io)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
-```bash
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/schema-registry
+```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/schema-registry
 ```
 
 ## Introduction
@@ -32,9 +32,9 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 To install the chart with the release name `my-release`:
 
-```bash
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/schema-registry
+```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/schema-registry
 ```
 
 These commands deploy Schema Registry on the Kubernetes cluster with the default configuration. The [parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -45,8 +45,8 @@ These commands deploy Schema Registry on the Kubernetes cluster with the default
 
 To uninstall/delete the `my-release` chart:
 
-```bash
-helm delete my-release
+```console
+$ helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                                | Schema Registry image registry                                                                                  | `docker.io`               |
 | `image.repository`                              | Schema Registry image repository                                                                                | `bitnami/schema-registry` |
-| `image.tag`                                     | Schema Registry image tag (immutable tags are recommended)                                                      | `7.3.1-debian-11-r0`      |
+| `image.tag`                                     | Schema Registry image tag (immutable tags are recommended)                                                      | `7.3.1-debian-11-r10`     |
 | `image.digest`                                  | Schema Registry image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `image.pullPolicy`                              | Schema Registry image pull policy                                                                               | `IfNotPresent`            |
 | `image.pullSecrets`                             | Schema Registry image pull secrets                                                                              | `[]`                      |
@@ -255,8 +255,8 @@ The command removes all the Kubernetes components associated with the chart and 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
-```bash
-helm install my-release \
+```console
+$ helm install my-release \
   --set replicaCount=2 \
     my-repo/schema-registry
 ```
@@ -265,8 +265,8 @@ The above command installs Schema Registry chart with 2 replicas.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
-```bash
-helm install my-release -f values.yaml my-repo/schema-registry
+```console
+$ helm install my-release -f values.yaml my-repo/schema-registry
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -314,9 +314,9 @@ In order to configure TLS authentication/encryption, you **can** create a secret
 For instance, to configure TLS authentication on a cluster with 2 Kafka brokers, and 1 Schema Registry replica use the commands below to create the secrets:
 
 ```console
-kubectl create secret generic schema-registry-jks --from-file=/schema-registry.truststore.jks --from-file=./schema-registry-0.keystore.jks
-kubectl create secret generic kafka-jks-0 --from-file=kafka.truststore.jks=./kafka.truststore.jks --from-file=kafka.keystore.jks=./kafka-0.keystore.jks
-kubectl create secret generic kafka-jks-1 --from-file=kafka.truststore.jks=./kafka.truststore.jks --from-file=kafka.keystore.jks=./kafka-1.keystore.jks
+$ kubectl create secret generic schema-registry-jks --from-file=/schema-registry.truststore.jks --from-file=./schema-registry-0.keystore.jks
+$ kubectl create secret generic kafka-jks-0 --from-file=kafka.truststore.jks=./kafka.truststore.jks --from-file=kafka.keystore.jks=./kafka-0.keystore.jks
+$ kubectl create secret generic kafka-jks-1 --from-file=kafka.truststore.jks=./kafka.truststore.jks --from-file=kafka.keystore.jks=./kafka-1.keystore.jks
 ```
 
 > **Note**: the command above assumes you already created the truststore and keystores files. This [script](https://raw.githubusercontent.com/confluentinc/confluent-platform-security-tools/master/kafka-generate-ssl.sh) can help you with the JKS files generation.
@@ -337,8 +337,8 @@ kafka.auth.tls.password=jksPassword
 In case you want to ignore hostname verification on Kafka certificates, set the parameter `auth.kafka.tls.endpointIdentificationAlgorithm` with an empty string `""`. In this case, you can reuse the same truststore and keystore for every Kafka broker and Schema Registry replica. For instance, to configure TLS authentication on a cluster with 2 Kafka brokers, and 1 Schema Registry replica use the commands below to create the secrets:
 
 ```console
-kubectl create secret generic schema-registry-jks --from-file=schema-registry.truststore.jks=common.truststore.jks --from-file=schema-registry-0.keystore.jks=common.keystore.jks
-kubectl create secret generic kafka-jks --from-file=kafka.truststore.jks=common.truststore.jks --from-file=kafka.keystore.jks=common.keystore.jks
+$ kubectl create secret generic schema-registry-jks --from-file=schema-registry.truststore.jks=common.truststore.jks --from-file=schema-registry-0.keystore.jks=common.keystore.jks
+$ kubectl create secret generic kafka-jks --from-file=kafka.truststore.jks=common.truststore.jks --from-file=kafka.keystore.jks=common.keystore.jks
 ```
 
 ### Adding extra flags
@@ -469,7 +469,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

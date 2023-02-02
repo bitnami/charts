@@ -7,7 +7,7 @@ Wavefront HPA Adapter for Kubernetes is a Kubernetes Horizontal Pod Autoscaler a
 [Overview of Wavefront HPA Adapter for Kubernetes](https://github.com/wavefrontHQ/wavefront-kubernetes-adapter)
 
 
-                           
+
 ## TL;DR
 
 ```console
@@ -76,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------ |
 | `image.registry`                                  | Adapter image registry                                                                                  | `docker.io`                          |
 | `image.repository`                                | Adapter image repository                                                                                | `bitnami/wavefront-hpa-adapter`      |
-| `image.tag`                                       | Adapter image tag (immutable tags are recommended)                                                      | `0.9.9-scratch-r12`                  |
+| `image.tag`                                       | Adapter image tag (immutable tags are recommended)                                                      | `0.9.9-scratch-r13`                  |
 | `image.digest`                                    | Adapter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                 |
 | `image.pullPolicy`                                | Adapter image pull policy                                                                               | `IfNotPresent`                       |
 | `image.pullSecrets`                               | Specify docker-registry secret names as an array                                                        | `[]`                                 |
@@ -188,7 +188,7 @@ The above command sets the `livenessProbe.successThreshold` to `5`.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
-```bash
+```console
 $ helm install my-release -f values.yaml my-repo/wavefront-hpa-adapter
 ```
 
@@ -210,7 +210,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
-```bash
+```console
 $ helm upgrade my-release my-repo/wavefront-hpa-adapter
 ```
 
@@ -225,7 +225,7 @@ No issues should be expected when upgrading.
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

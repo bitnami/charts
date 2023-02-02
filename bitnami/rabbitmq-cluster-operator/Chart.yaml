@@ -1,5 +1,6 @@
 annotations:
   category: Infrastructure
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: 2.1.0
 dependencies:
@@ -9,7 +10,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: The RabbitMQ Cluster Kubernetes Operator automates provisioning, management, and operations of RabbitMQ clusters running on Kubernetes.
-engine: gotpl
 home: https://github.com/rabbitmq/cluster-operator
 icon: https://bitnami.com/assets/stacks/rabbitmq-cluster-operator/img/rabbitmq-cluster-operator-stack-220x234.png
 keywords:
@@ -26,4 +26,4 @@ name: rabbitmq-cluster-operator
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq-cluster-operator
   - https://github.com/rabbitmq/cluster-operator
-version: 3.2.0
+version: 3.2.1

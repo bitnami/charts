@@ -85,13 +85,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ---------------------------- |
 | `server.image.registry`                 | TensorFlow Serving image registry                                                                                  | `docker.io`                  |
 | `server.image.repository`               | TensorFlow Serving image repository                                                                                | `bitnami/tensorflow-serving` |
-| `server.image.tag`                      | TensorFlow Serving Image tag (immutable tags are recommended)                                                      | `2.11.0-debian-11-r7`        |
+| `server.image.tag`                      | TensorFlow Serving Image tag (immutable tags are recommended)                                                      | `2.11.0-debian-11-r18`       |
 | `server.image.digest`                   | TensorFlow Serving image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
 | `server.image.pullPolicy`               | TensorFlow Serving image pull policy                                                                               | `IfNotPresent`               |
 | `server.image.pullSecrets`              | Specify docker-registry secret names as an array                                                                   | `[]`                         |
 | `client.image.registry`                 | TensorFlow ResNet image registry                                                                                   | `docker.io`                  |
 | `client.image.repository`               | TensorFlow ResNet image repository                                                                                 | `bitnami/tensorflow-resnet`  |
-| `client.image.tag`                      | TensorFlow ResNet image tag (immutable tags are recommended)                                                       | `2.11.0-debian-11-r10`       |
+| `client.image.tag`                      | TensorFlow ResNet image tag (immutable tags are recommended)                                                       | `2.11.0-debian-11-r22`       |
 | `client.image.digest`                   | TensorFlow ResNet image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag  | `""`                         |
 | `client.image.pullPolicy`               | TensorFlow ResNet image pull policy                                                                                | `IfNotPresent`               |
 | `client.image.pullSecrets`              | Specify docker-registry secret names as an array                                                                   | `[]`                         |
@@ -232,7 +232,7 @@ $ kubectl delete rs "$(kubectl get rs -l app=tensorflow-resnet -o jsonpath='{.it
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

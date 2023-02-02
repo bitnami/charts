@@ -33,6 +33,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/parse
 ```
 
@@ -83,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------- |
 | `server.image.registry`                                  | Parse image registry                                                                                                     | `docker.io`          |
 | `server.image.repository`                                | Parse image repository                                                                                                   | `bitnami/parse`      |
-| `server.image.tag`                                       | Parse image tag (immutable tags are recommended)                                                                         | `5.4.0-debian-11-r9` |
+| `server.image.tag`                                       | Parse image tag (immutable tags are recommended)                                                                         | `5.4.1-debian-11-r0` |
 | `server.image.digest`                                    | Parse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                    | `""`                 |
 | `server.image.pullPolicy`                                | Image pull policy                                                                                                        | `IfNotPresent`       |
 | `server.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                         | `[]`                 |
@@ -169,7 +170,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dashboard.enabled`                                         | Enable parse dashboard                                                                                                   | `true`                    |
 | `dashboard.image.registry`                                  | Dashboard image registry                                                                                                 | `docker.io`               |
 | `dashboard.image.repository`                                | Dashboard image repository                                                                                               | `bitnami/parse-dashboard` |
-| `dashboard.image.tag`                                       | Dashboard image tag (immutable tags are recommended)                                                                     | `5.0.0-debian-11-r13`     |
+| `dashboard.image.tag`                                       | Dashboard image tag (immutable tags are recommended)                                                                     | `5.0.0-debian-11-r29`     |
 | `dashboard.image.digest`                                    | Dashboard image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                      |
 | `dashboard.image.pullPolicy`                                | image pull policy                                                                                                        | `IfNotPresent`            |
 | `dashboard.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                         | `[]`                      |
@@ -292,7 +293,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r62`      |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r78`      |
 | `volumePermissions.image.digest`              | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                    |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Init container volume-permissions image pull secrets                                                                                                      | `[]`                    |
@@ -329,7 +330,7 @@ The above parameters map to the env variables defined in [bitnami/parse](https:/
 >
 > To reserve a public IP address on GKE:
 >
-> ```bash
+> ```console
 > $ gcloud compute addresses create parse-public-ip
 > ```
 >
@@ -545,7 +546,7 @@ $ kubectl patch deployment parse-mongodb --type=json -p='[{"op": "remove", "path
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

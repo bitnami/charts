@@ -11,8 +11,11 @@ metadata:
     {{- if .Values.service.serviceLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.service.serviceLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if or .Values.service.annotations .Values.commonAnnotations }}
+  {{- if or .Values.postgresql.serviceAnnotations .Values.service.annotations .Values.commonAnnotations }}
   annotations:
+    {{- if .Values.postgresql.serviceAnnotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.serviceAnnotations "context" $) | nindent 4 }}
+    {{- end }}
     {{- if .Values.service.annotations }}
     {{- include "common.tplvalues.render" (dict "value" .Values.service.annotations "context" $) | nindent 4 }}
     {{- end }}
@@ -32,3 +35,4 @@ spec:
     {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: postgresql
+    role: data

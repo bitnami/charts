@@ -7,7 +7,7 @@ Jaeger is a distributed tracing system. It is used for monitoring and troublesho
 [Overview of Jaeger](https://jaegertracing.io/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------------------------------------------------------ | --------------------- |
 | `image.registry`    | Jaeger image registry                                                                                  | `docker.io`           |
 | `image.repository`  | Jaeger image repository                                                                                | `bitnami/jaeger`      |
-| `image.tag`         | Jaeger image tag (immutable tags are recommended)                                                      | `1.41.0-debian-11-r0` |
+| `image.tag`         | Jaeger image tag (immutable tags are recommended)                                                      | `1.41.0-debian-11-r6` |
 | `image.digest`      | Jaeger image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`  | image pull policy                                                                                      | `IfNotPresent`        |
 | `image.pullSecrets` | Jaeger image pull secrets                                                                              | `[]`                  |
@@ -362,7 +362,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------- |
 | `cqlshImage.registry`                        | Cassandra image registry                                                                                  | `docker.io`           |
 | `cqlshImage.repository`                      | Cassandra image repository                                                                                | `bitnami/cassandra`   |
-| `cqlshImage.tag`                             | Cassandra image tag (immutable tags are recommended)                                                      | `4.0.7-debian-11-r23` |
+| `cqlshImage.tag`                             | Cassandra image tag (immutable tags are recommended)                                                      | `4.0.7-debian-11-r27` |
 | `cqlshImage.digest`                          | Cassandra image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `cqlshImage.pullPolicy`                      | image pull policy                                                                                         | `IfNotPresent`        |
 | `cqlshImage.pullSecrets`                     | Cassandra image pull secrets                                                                              | `[]`                  |
@@ -450,9 +450,15 @@ externalDatabase.port=9042
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
+## Upgrading
+
+### To 1.0.0
+
+This major updates the Cassandra subchart to its newest major, 10.0.0. [Here](https://github.com/bitnami/charts/pull/14076) you can find more information about the changes introduced in that version.
+
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

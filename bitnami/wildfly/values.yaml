@@ -69,7 +69,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/wildfly
-  tag: 27.0.1-debian-11-r0
+  tag: 27.0.1-debian-11-r18
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -252,6 +252,15 @@ resources:
 containerPorts:
   http: 8080
   mgmt: 9990
+
+## @param extraContainerPorts [array] Array with extra container ports to add to the WildFly container
+## e.g:
+## extraContainerPorts:
+##   - name: additional-port
+##     value: 8888
+##
+extraContainerPorts: []
+
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled WildFly pods' Security Context
@@ -635,7 +644,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r62
+    tag: 11-debian-11-r78
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

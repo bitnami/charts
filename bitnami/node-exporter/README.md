@@ -10,7 +10,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
                            
 ## TL;DR
 
-```bash
+```console
 $ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/node-exporter
 ```
@@ -28,15 +28,10 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 ## Installing the Chart
 
-Add the `bitnami` charts repo to Helm:
-
-```bash
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-```
-
 To install the chart with the release name `my-release`:
 
-```bash
+```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/node-exporter
 ```
 
@@ -46,7 +41,7 @@ The command deploys Node Exporter on the Kubernetes cluster in the default confi
 
 To uninstall/delete the `my-release` release:
 
-```bash
+```console
 $ helm delete my-release
 ```
 
@@ -93,7 +88,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                                         | `{}`                    |
 | `image.registry`                              | Node Exporter image registry                                                                                                                                       | `docker.io`             |
 | `image.repository`                            | Node Exporter image repository                                                                                                                                     | `bitnami/node-exporter` |
-| `image.tag`                                   | Node Exporter image tag (immutable tags are recommended)                                                                                                           | `1.5.0-debian-11-r9`    |
+| `image.tag`                                   | Node Exporter image tag (immutable tags are recommended)                                                                                                           | `1.5.0-debian-11-r21`   |
 | `image.digest`                                | Node Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                      | `""`                    |
 | `image.pullPolicy`                            | Node Exporter image pull policy                                                                                                                                    | `IfNotPresent`          |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                                                   | `[]`                    |
@@ -130,6 +125,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `updateStrategy.type`                         | The update strategy type to apply to the DaemonSet                                                                                                                 | `RollingUpdate`         |
 | `updateStrategy.rollingUpdate.maxUnavailable` | Maximum number of pods that may be made unavailable                                                                                                                | `1`                     |
 | `hostNetwork`                                 | Expose the service to the host network                                                                                                                             | `true`                  |
+| `hostPID`                                     | Allows visibility of processes on the host, potentially leaking information such as environment variables and configuration                                        | `true`                  |
 | `minReadySeconds`                             | `minReadySeconds` to avoid killing pods before we are ready                                                                                                        | `0`                     |
 | `priorityClassName`                           | Priority class assigned to the Pods                                                                                                                                | `""`                    |
 | `terminationGracePeriodSeconds`               | In seconds, time the given to the Node exporter pod needs to terminate gracefully                                                                                  | `""`                    |
@@ -180,13 +176,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example the following command sets the `minReadySeconds` of the Node Exporter Pods to `120` seconds.
 
-```bash
+```console
 $ helm install my-release --set minReadySeconds=120 my-repo/node-exporter
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
-```bash
+```console
 $ helm install my-release -f values.yaml my-repo/node-exporter
 ```
 
@@ -212,7 +208,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
-```bash
+```console
 $ helm upgrade my-release my-repo/node-exporter
 ```
 
@@ -239,7 +235,7 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

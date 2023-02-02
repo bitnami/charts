@@ -7,10 +7,10 @@ Prometheus Operator provides easy monitoring definitions for Kubernetes services
 [Overview of Prometheus Operator](https://github.com/coreos/prometheus-operator)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
-```bash
+```console
 $ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/kube-prometheus
 ```
@@ -38,15 +38,10 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 ## Installing the Chart
 
-Add the `bitnami` charts repo to Helm:
-
-```bash
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-```
-
 To install the chart with the release name `my-release`:
 
-```bash
+```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/kube-prometheus
 ```
 
@@ -58,7 +53,7 @@ The command deploys kube-prometheus on the Kubernetes cluster in the default con
 
 To uninstall/delete the `my-release` release:
 
-```bash
+```console
 $ helm delete my-release
 ```
 
@@ -704,7 +699,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
-```bash
+```console
 $ helm install my-release \
   --set operator.logLevel=debug \
   --set prometheus.replicaCount=5 \
@@ -715,7 +710,7 @@ The above command sets the Prometheus Operator `logLevel` to `debug`. Additional
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
-```bash
+```console
 $ helm install my-release -f values.yaml my-repo/kube-prometheus
 ```
 
@@ -763,7 +758,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
-```bash
+```console
 $ helm upgrade my-release my-repo/kube-prometheus
 ```
 
@@ -885,7 +880,7 @@ The Thanos sidecar svc is transformed into a headless service by default so Than
 
 To upgrade from version 2.0.0, previously remove the Thanos sidecar svc to avoid issues with immutable fields:
 
-```bash
+```console
 $ kubectl delete svc my-relase-kube-prometheus-prometheus-thanos
 $ helm upgrade my-release --set prometheus.thanos.create=true my-repo/kube-prometheus
 ```
@@ -906,7 +901,7 @@ $ helm upgrade my-release --set prometheus.thanos.create=true my-repo/kube-prome
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

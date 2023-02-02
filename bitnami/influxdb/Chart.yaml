@@ -1,5 +1,6 @@
 annotations:
   category: Database
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: 2.6.1
 dependencies:
@@ -9,7 +10,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: InfluxDB(TM) is an open source time-series database. It is a core component of the TICK (Telegraf, InfluxDB(TM), Chronograf, Kapacitor) stack.
-engine: gotpl
 home: https://github.com/bitnami/charts/tree/main/bitnami/influxdb
 icon: https://bitnami.com/assets/stacks/influxdb/img/influxdb-stack-220x234.png
 keywords:
@@ -24,4 +24,4 @@ name: influxdb
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/influxdb
   - https://www.influxdata.com/products/influxdb-overview/
-version: 5.4.14
+version: 5.4.15

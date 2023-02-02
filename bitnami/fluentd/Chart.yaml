@@ -1,5 +1,6 @@
 annotations:
   category: Analytics
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: 1.15.3
 dependencies:
@@ -9,7 +10,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Fluentd collects events from various data sources and writes them to files, RDBMS, NoSQL, IaaS, SaaS, Hadoop and so on.
-engine: gotpl
 home: https://github.com/bitnami/charts/tree/main/bitnami/fluentd
 icon: https://bitnami.com/assets/stacks/fluentd/img/fluentd-stack-220x234.png
 keywords:
@@ -25,4 +25,4 @@ name: fluentd
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/fluentd
   - https://www.fluentd.org/
-version: 5.5.12
+version: 5.5.14
