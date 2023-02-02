@@ -21,7 +21,7 @@ it('allows executing a query and displaying response data for each service monit
     const query = Object.values(monitors)[i].query;
 
     cy.get('[role="textbox"]').clear().type(query);
-    cy.contains('Execute').click();
+    cy.contains('Execute').click({force: true});
     cy.contains('.data-table', `job="${jobName}"`)
   })
 });
