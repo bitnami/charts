@@ -228,7 +228,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                         | Description                                                                                                   | Value                   |
 | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `caCerts.enabled`                            | Enable the use of caCerts                                                                                     | `true`                  |
+| `caCerts.enabled`                            | Enable the use of caCerts                                                                                     | `false`                 |
 | `caCerts.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `caCerts.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
 | `caCerts.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r63`      |
