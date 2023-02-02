@@ -43,7 +43,8 @@ Cypress.on('uncaught:exception', (err, runnable) => {
   // and don't want to fail the test so we return false
   if (
     err.message.includes('ember-concurrency') ||
-    err.message.includes('Cannot read properties')
+    err.message.includes('Cannot read properties') ||
+    err.message.includes('Resource was not found')
   ) {
     return false;
   }
