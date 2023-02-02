@@ -2,7 +2,7 @@ annotations:
   category: CRM
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 7.12.8
+appVersion: 7.13.1
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
@@ -29,4 +29,4 @@ name: suitecrm
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/suitecrm
   - https://www.suitecrm.com/
-version: 11.2.7
+version: 11.2.8
