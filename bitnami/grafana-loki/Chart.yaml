@@ -2,7 +2,7 @@ annotations:
   category: Infrastructure
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 2.7.2
+appVersion: 2.7.3
 dependencies:
   - alias: memcachedchunks
     condition: memcachedchunks.enabled
@@ -44,4 +44,4 @@ name: grafana-loki
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/grafana-loki
   - https://github.com/grafana/loki/
-version: 2.5.4
+version: 2.5.6
