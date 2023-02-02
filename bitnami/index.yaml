@@ -28267,6 +28267,59 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 2.7.2
+    created: "2023-02-02T08:22:39.426251875Z"
+    dependencies:
+    - alias: memcachedchunks
+      condition: memcachedchunks.enabled
+      name: memcached
+      repository: https://charts.bitnami.com/bitnami
+      version: 6.x.x
+    - alias: memcachedfrontend
+      condition: memcachedfrontend.enabled
+      name: memcached
+      repository: https://charts.bitnami.com/bitnami
+      version: 6.x.x
+    - alias: memcachedindexqueries
+      condition: memcachedindexqueries.enabled
+      name: memcached
+      repository: https://charts.bitnami.com/bitnami
+      version: 6.x.x
+    - alias: memcachedindexwrites
+      condition: memcachedindexwrites.enabled
+      name: memcached
+      repository: https://charts.bitnami.com/bitnami
+      version: 6.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Grafana Loki is a horizontally scalable, highly available, and multi-tenant
+      log aggregation system. It provides real-time long tailing and full persistence
+      to object storage.
+    digest: b79f157ce7c429e475317872ba7ff594f6b304071352041bdbc615aec8cdb957
+    home: https://github.com/grafana/loki/
+    icon: https://bitnami.com/assets/stacks/grafana-loki/img/grafana-loki-stack-220x234.png
+    keywords:
+    - grafana
+    - tracing
+    - metrics
+    - infrastructure
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: grafana-loki
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/grafana-loki
+    - https://github.com/grafana/loki/
+    urls:
+    - https://charts.bitnami.com/bitnami/grafana-loki-2.5.5.tgz
+    version: 2.5.5
+  - annotations:
+      category: Infrastructure
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 2.7.2
     created: "2023-01-26T17:59:35.855737645Z"
     dependencies:
     - alias: memcachedchunks
@@ -112167,4 +112220,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-02-02T08:22:24.099886264Z"
+generated: "2023-02-02T08:22:39.4122761Z"
