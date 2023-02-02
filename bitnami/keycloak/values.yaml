@@ -251,7 +251,10 @@ containerPorts:
   https: 8443
 ## @param extraContainerPorts Optionally specify extra list of additional port-mappings for Keycloak container
 ##
-extraContainerPorts: []
+extraContainerPorts: 
+  - name: infinispan
+    containerPort: 7800
+    protocol: TCP
 
 ## Keycloak pods' SecurityContext
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
