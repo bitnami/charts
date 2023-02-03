@@ -74,7 +74,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 19.0.3-debian-11-r15
+  tag: 20.0.3-debian-11-r9
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -821,7 +821,7 @@ keycloakConfigCli:
   image:
     registry: docker.io
     repository: bitnami/keycloak-config-cli
-    tag: 5.5.0-debian-11-r4
+    tag: 5.5.0-debian-11-r26
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1015,6 +1015,8 @@ cache:
 ## Keycloak logging configuration
 ## ref: https://www.keycloak.org/server/logging
 ## @param logging.output Alternates between the default log output format or json format
+## @param logging.level Allowed values as documented: FATAL, ERROR, WARN, INFO, DEBUG, TRACE, ALL, OFF
 ##
 logging:
   output: default
+  level: INFO

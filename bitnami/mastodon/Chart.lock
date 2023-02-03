@@ -1,0 +1,21 @@
+dependencies:
+- name: redis
+  repository: https://charts.bitnami.com/bitnami
+  version: 17.4.3
+- name: postgresql
+  repository: https://charts.bitnami.com/bitnami
+  version: 12.1.9
+- name: elasticsearch
+  repository: https://charts.bitnami.com/bitnami
+  version: 19.5.8
+- name: minio
+  repository: https://charts.bitnami.com/bitnami
+  version: 12.0.0
+- name: apache
+  repository: https://charts.bitnami.com/bitnami
+  version: 9.2.11
+- name: common
+  repository: https://charts.bitnami.com/bitnami
+  version: 2.2.2
+digest: sha256:3384c1d4cb36fb52550f3403ef7167fb4184c7cb86735094b721e2563c93ad6b
+generated: "2023-01-19T11:34:23.66187+01:00"

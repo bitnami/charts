@@ -21,7 +21,7 @@ spec:
   parallelism: 1
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "minio.labels.provisioning" . | nindent 8 }}
         app.kubernetes.io/component: minio-provisioning
         {{- if .Values.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
@@ -51,7 +51,7 @@ spec:
           command:
             - /bin/bash
             - -c
-            - >-
+            - |-
               set -e;
               echo "Waiting for Minio";
               wait-for-port \
@@ -165,7 +165,7 @@ spec:
               mc admin group {{ $groupStatus }} {{ $minioAlias }} {{ $group.name }};
               {{- end }}
 
-              {{- $isDistributedMode := and (eq .Values.mode "distributed") (not .Values.gateway.enabled) }}
+              {{- $isDistributedMode := (eq .Values.mode "distributed") }}
               {{- range $bucket := .Values.provisioning.buckets }}
               {{- $target := printf "%s/%s" $minioAlias $bucket.name }}
               {{- $region := ternary (printf "--region=%s" $bucket.region) ("") (not (empty $bucket.region)) }}

@@ -50,6 +50,16 @@ spec:
       {{- else }}
       nodePort: null
       {{- end }}
+    {{- if $.Values.tls.enabled }}
+    - name: https
+      port: {{ $.Values.externalAccess.service.ports.https }}
+      targetPort: https
+      {{- if not (empty $.Values.externalAccess.service.nodePorts.https) }}
+      nodePort: {{ index $.Values.externalAccess.service.nodePorts.https $i }}
+      {{- else }}
+      nodePort: null
+      {{- end }}
+    {{- end }}
     {{- if $.Values.metrics.enabled }}
     - name: http-metrics
       port: {{ $.Values.externalAccess.service.ports.metrics }}

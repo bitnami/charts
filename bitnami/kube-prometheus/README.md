@@ -7,10 +7,10 @@ Prometheus Operator provides easy monitoring definitions for Kubernetes services
 [Overview of Prometheus Operator](https://github.com/coreos/prometheus-operator)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
-```bash
+```console
 $ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/kube-prometheus
 ```
@@ -38,15 +38,10 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 ## Installing the Chart
 
-Add the `bitnami` charts repo to Helm:
-
-```bash
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-```
-
 To install the chart with the release name `my-release`:
 
-```bash
+```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/kube-prometheus
 ```
 
@@ -58,7 +53,7 @@ The command deploys kube-prometheus on the Kubernetes cluster in the default con
 
 To uninstall/delete the `my-release` release:
 
-```bash
+```console
 $ helm delete my-release
 ```
 
@@ -96,7 +91,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `operator.enabled`                                                                    | Deploy Prometheus Operator to the cluster                                                                              | `true`                        |
 | `operator.image.registry`                                                             | Prometheus Operator image registry                                                                                     | `docker.io`                   |
 | `operator.image.repository`                                                           | Prometheus Operator image repository                                                                                   | `bitnami/prometheus-operator` |
-| `operator.image.tag`                                                                  | Prometheus Operator image tag (immutable tags are recommended)                                                         | `0.61.1-debian-11-r0`         |
+| `operator.image.tag`                                                                  | Prometheus Operator image tag (immutable tags are recommended)                                                         | `0.62.0-debian-11-r0`         |
 | `operator.image.digest`                                                               | Prometheus Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag    | `""`                          |
 | `operator.image.pullPolicy`                                                           | Prometheus Operator image pull policy                                                                                  | `IfNotPresent`                |
 | `operator.image.pullSecrets`                                                          | Specify docker-registry secret names as an array                                                                       | `[]`                          |
@@ -212,7 +207,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.enabled`                                                  | Deploy Prometheus to the cluster                                                                                                 | `true`                    |
 | `prometheus.image.registry`                                           | Prometheus image registry                                                                                                        | `docker.io`               |
 | `prometheus.image.repository`                                         | Prometheus image repository                                                                                                      | `bitnami/prometheus`      |
-| `prometheus.image.tag`                                                | Prometheus image tag (immutable tags are recommended)                                                                            | `2.40.3-debian-11-r0`     |
+| `prometheus.image.tag`                                                | Prometheus image tag (immutable tags are recommended)                                                                            | `2.41.0-debian-11-r5`     |
 | `prometheus.image.digest`                                             | Prometheus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                       | `""`                      |
 | `prometheus.image.pullSecrets`                                        | Specify docker-registry secret names as an array                                                                                 | `[]`                      |
 | `prometheus.serviceAccount.create`                                    | Specify whether to create a ServiceAccount for Prometheus                                                                        | `true`                    |
@@ -351,7 +346,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.thanos.create`                                            | Create a Thanos sidecar container                                                                                                | `false`                   |
 | `prometheus.thanos.image.registry`                                    | Thanos image registry                                                                                                            | `docker.io`               |
 | `prometheus.thanos.image.repository`                                  | Thanos image name                                                                                                                | `bitnami/thanos`          |
-| `prometheus.thanos.image.tag`                                         | Thanos image tag                                                                                                                 | `0.29.0-scratch-r0`       |
+| `prometheus.thanos.image.tag`                                         | Thanos image tag                                                                                                                 | `0.30.1-scratch-r0`       |
 | `prometheus.thanos.image.digest`                                      | Thanos image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                           | `""`                      |
 | `prometheus.thanos.image.pullPolicy`                                  | Thanos image pull policy                                                                                                         | `IfNotPresent`            |
 | `prometheus.thanos.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                 | `[]`                      |
@@ -415,7 +410,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `alertmanager.enabled`                                           | Deploy Alertmanager to the cluster                                                                                                                                                                                                                                                                         | `true`                   |
 | `alertmanager.image.registry`                                    | Prometheus image registry                                                                                                                                                                                                                                                                                  | `docker.io`              |
 | `alertmanager.image.repository`                                  | Prometheus image repository                                                                                                                                                                                                                                                                                | `bitnami/alertmanager`   |
-| `alertmanager.image.tag`                                         | Prometheus image tag (immutable tags are recommended)                                                                                                                                                                                                                                                      | `0.24.0-debian-11-r61`   |
+| `alertmanager.image.tag`                                         | Prometheus image tag (immutable tags are recommended)                                                                                                                                                                                                                                                      | `0.25.0-debian-11-r4`    |
 | `alertmanager.image.digest`                                      | Prometheus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                                                                                 | `""`                     |
 | `alertmanager.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                                                                                                                                                                                           | `[]`                     |
 | `alertmanager.serviceAccount.create`                             | Specify whether to create a ServiceAccount for Alertmanager                                                                                                                                                                                                                                                | `true`                   |
@@ -525,22 +520,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Exporters
 
-| Name                                               | Description                                                                                            | Value         |
-| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------- |
-| `exporters.node-exporter.enabled`                  | Enable node-exporter                                                                                   | `true`        |
-| `exporters.kube-state-metrics.enabled`             | Enable kube-state-metrics                                                                              | `true`        |
-| `node-exporter`                                    | Node Exporter deployment configuration                                                                 | `{}`          |
-| `kube-state-metrics`                               | Kube State Metrics deployment configuration                                                            | `{}`          |
-| `kubelet.enabled`                                  | Create a ServiceMonitor to scrape kubelet service                                                      | `true`        |
-| `kubelet.namespace`                                | Namespace where kubelet service is deployed. Related configuration `operator.kubeletService.namespace` | `kube-system` |
-| `kubelet.serviceMonitor.https`                     | Enable scraping of the kubelet over HTTPS                                                              | `true`        |
-| `kubelet.serviceMonitor.interval`                  | Scrape interval (use by default, falling back to Prometheus' default)                                  | `""`          |
-| `kubelet.serviceMonitor.metricRelabelings`         | Metric relabeling                                                                                      | `[]`          |
-| `kubelet.serviceMonitor.relabelings`               | Relabel configs                                                                                        | `[]`          |
-| `kubelet.serviceMonitor.cAdvisorMetricRelabelings` | Metric relabeling for scraping cAdvisor                                                                | `[]`          |
-| `kubelet.serviceMonitor.cAdvisorRelabelings`       | Relabel configs for scraping cAdvisor                                                                  | `[]`          |
-| `kubelet.serviceMonitor.labels`                    | Extra labels for the ServiceMonitor                                                                    | `{}`          |
-| `kubelet.serviceMonitor.annotations`               | Extra annotations for the ServiceMonitor                                                               | `{}`          |
+| Name                                               | Description                                                                                            | Value                        |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ---------------------------- |
+| `exporters.node-exporter.enabled`                  | Enable node-exporter                                                                                   | `true`                       |
+| `exporters.kube-state-metrics.enabled`             | Enable kube-state-metrics                                                                              | `true`                       |
+| `node-exporter`                                    | Node Exporter deployment configuration                                                                 | `{}`                         |
+| `kube-state-metrics`                               | Kube State Metrics deployment configuration                                                            | `{}`                         |
+| `kubelet.enabled`                                  | Create a ServiceMonitor to scrape kubelet service                                                      | `true`                       |
+| `kubelet.namespace`                                | Namespace where kubelet service is deployed. Related configuration `operator.kubeletService.namespace` | `kube-system`                |
+| `kubelet.serviceMonitor.https`                     | Enable scraping of the kubelet over HTTPS                                                              | `true`                       |
+| `kubelet.serviceMonitor.interval`                  | Scrape interval (use by default, falling back to Prometheus' default)                                  | `""`                         |
+| `kubelet.serviceMonitor.resource`                  | Enable scraping /metrics/resource from kubelet's service                                               | `false`                      |
+| `kubelet.serviceMonitor.resourcePath`              | From kubernetes 1.18, /metrics/resource/v1alpha1 was renamed to /metrics/resource                      | `/metrics/resource/v1alpha1` |
+| `kubelet.serviceMonitor.resourceRelabelings`       | Metric relabeling                                                                                      | `[]`                         |
+| `kubelet.serviceMonitor.resourceMetricRelabelings` | Metric relabeling                                                                                      | `[]`                         |
+| `kubelet.serviceMonitor.metricRelabelings`         | Metric relabeling                                                                                      | `[]`                         |
+| `kubelet.serviceMonitor.relabelings`               | Relabel configs                                                                                        | `[]`                         |
+| `kubelet.serviceMonitor.cAdvisor`                  | Enable scraping /metrics/cadvisor from kubelet's service                                               | `true`                       |
+| `kubelet.serviceMonitor.cAdvisorMetricRelabelings` | Metric relabeling for scraping cAdvisor                                                                | `[]`                         |
+| `kubelet.serviceMonitor.cAdvisorRelabelings`       | Relabel configs for scraping cAdvisor                                                                  | `[]`                         |
+| `kubelet.serviceMonitor.labels`                    | Extra labels for the ServiceMonitor                                                                    | `{}`                         |
+| `kubelet.serviceMonitor.annotations`               | Extra annotations for the ServiceMonitor                                                               | `{}`                         |
 
 
 ### Blackbox Exporter Deployment Parameters
@@ -551,7 +551,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `blackboxExporter.image.registry`                              | Blackbox Exporter image registry                                                                                  | `docker.io`                 |
 | `blackboxExporter.image.repository`                            | Blackbox Exporter image repository                                                                                | `bitnami/blackbox-exporter` |
 | `blackboxExporter.image.pullPolicy`                            | Blackbox Exporter image pull policy                                                                               | `IfNotPresent`              |
-| `blackboxExporter.image.tag`                                   | Blackbox Exporter image tag (immutable tags are recommended)                                                      | `0.22.0-debian-11-r38`      |
+| `blackboxExporter.image.tag`                                   | Blackbox Exporter image tag (immutable tags are recommended)                                                      | `0.23.0-debian-11-r10`      |
 | `blackboxExporter.image.digest`                                | Blackbox Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                        |
 | `blackboxExporter.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                  | `[]`                        |
 | `blackboxExporter.extraEnvVars`                                | Array with extra environment variables to add to blackboxExporter nodes                                           | `[]`                        |
@@ -699,7 +699,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
-```bash
+```console
 $ helm install my-release \
   --set operator.logLevel=debug \
   --set prometheus.replicaCount=5 \
@@ -710,7 +710,7 @@ The above command sets the Prometheus Operator `logLevel` to `debug`. Additional
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
-```bash
+```console
 $ helm install my-release -f values.yaml my-repo/kube-prometheus
 ```
 
@@ -758,7 +758,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
-```bash
+```console
 $ helm upgrade my-release my-repo/kube-prometheus
 ```
 
@@ -880,7 +880,7 @@ The Thanos sidecar svc is transformed into a headless service by default so Than
 
 To upgrade from version 2.0.0, previously remove the Thanos sidecar svc to avoid issues with immutable fields:
 
-```bash
+```console
 $ kubectl delete svc my-relase-kube-prometheus-prometheus-thanos
 $ helm upgrade my-release --set prometheus.thanos.create=true my-repo/kube-prometheus
 ```
@@ -901,7 +901,7 @@ $ helm upgrade my-release --set prometheus.thanos.create=true my-repo/kube-prome
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

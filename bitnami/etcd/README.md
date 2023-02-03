@@ -7,7 +7,7 @@ etcd is a distributed key-value store designed to securely store data across a c
 [Overview of Etcd](https://etcd.io/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -83,7 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                       | etcd image registry                                                                                         | `docker.io`          |
 | `image.repository`                     | etcd image name                                                                                             | `bitnami/etcd`       |
-| `image.tag`                            | etcd image tag                                                                                              | `3.5.6-debian-11-r0` |
+| `image.tag`                            | etcd image tag                                                                                              | `3.5.7-debian-11-r0` |
 | `image.digest`                         | etcd image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag        | `""`                 |
 | `image.pullPolicy`                     | etcd image pull policy                                                                                      | `IfNotPresent`       |
 | `image.pullSecrets`                    | etcd image pull secrets                                                                                     | `[]`                 |
@@ -93,6 +93,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.rbac.rootPassword`               | Root user password. The root user is always `root`                                                          | `""`                 |
 | `auth.rbac.existingSecret`             | Name of the existing secret containing credentials for the root user                                        | `""`                 |
 | `auth.rbac.existingSecretPasswordKey`  | Name of key containing password to be retrieved from the existing secret                                    | `""`                 |
+| `auth.token.enabled`                   | Enables token authentication                                                                                | `true`               |
 | `auth.token.type`                      | Authentication token type. Allowed values: 'simple' or 'jwt'                                                | `jwt`                |
 | `auth.token.privateKey.filename`       | Name of the file containing the private key for signing the JWT token                                       | `jwt-token.pem`      |
 | `auth.token.privateKey.existingSecret` | Name of the existing secret containing the private key for signing the JWT token                            | `""`                 |
@@ -185,6 +186,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `schedulerName`                                     | Name of the k8s scheduler (other than default)                                            | `""`            |
 | `priorityClassName`                                 | Name of the priority class to be used by etcd pods                                        | `""`            |
 | `runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                            | `""`            |
+| `shareProcessNamespace`                             | Enable shared process namespace in a pod.                                                 | `false`         |
 | `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                            | `[]`            |
 | `persistentVolumeClaimRetentionPolicy.enabled`      | Controls if and how PVCs are deleted during the lifecycle of a StatefulSet                | `false`         |
 | `persistentVolumeClaimRetentionPolicy.whenScaled`   | Volume retention behavior when the replica count of the StatefulSet is reduced            | `Retain`        |
@@ -233,7 +235,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                      | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                       | `11-debian-11-r54`      |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                       | `11-debian-11-r74`      |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
@@ -529,7 +531,7 @@ $ kubectl delete statefulset etcd --cascade=false
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

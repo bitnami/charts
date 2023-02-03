@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-  helm repo add my-repo https://charts.bitnami.com/bitnami
-  helm install my-release my-repo/kong
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/kong
 ```
 
 ## Introduction
@@ -34,8 +34,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-  helm repo add my-repo https://charts.bitnami.com/bitnami
-  helm install my-release my-repo/kong
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/kong
 ```
 
 These commands deploy kong on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -47,7 +47,7 @@ These commands deploy kong on the Kubernetes cluster in the default configuratio
 To uninstall/delete the `my-release` deployment:
 
 ```console
-  helm delete my-release
+$ helm delete my-release
 ```
 
 ## Parameters
@@ -79,16 +79,16 @@ To uninstall/delete the `my-release` deployment:
 
 ### Kong common parameters
 
-| Name                | Description                                                                                          | Value                |
-| ------------------- | ---------------------------------------------------------------------------------------------------- | -------------------- |
-| `image.registry`    | kong image registry                                                                                  | `docker.io`          |
-| `image.repository`  | kong image repository                                                                                | `bitnami/kong`       |
-| `image.tag`         | kong image tag (immutable tags are recommended)                                                      | `3.1.1-debian-11-r0` |
-| `image.digest`      | kong image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
-| `image.pullPolicy`  | kong image pull policy                                                                               | `IfNotPresent`       |
-| `image.pullSecrets` | Specify docker-registry secret names as an array                                                     | `[]`                 |
-| `image.debug`       | Enable image debug mode                                                                              | `false`              |
-| `database`          | Select which database backend Kong will use. Can be 'postgresql' or 'cassandra'                      | `postgresql`         |
+| Name                | Description                                                                                          | Value                 |
+| ------------------- | ---------------------------------------------------------------------------------------------------- | --------------------- |
+| `image.registry`    | kong image registry                                                                                  | `docker.io`           |
+| `image.repository`  | kong image repository                                                                                | `bitnami/kong`        |
+| `image.tag`         | kong image tag (immutable tags are recommended)                                                      | `3.1.1-debian-11-r23` |
+| `image.digest`      | kong image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
+| `image.pullPolicy`  | kong image pull policy                                                                               | `IfNotPresent`        |
+| `image.pullSecrets` | Specify docker-registry secret names as an array                                                     | `[]`                  |
+| `image.debug`       | Enable image debug mode                                                                              | `false`               |
+| `database`          | Select which database backend Kong will use. Can be 'postgresql' or 'cassandra'                      | `postgresql`          |
 
 
 ### Kong deployment / daemonset parameters
@@ -219,7 +219,7 @@ To uninstall/delete the `my-release` deployment:
 | `ingressController.enabled`                                     | Enable/disable the Kong Ingress Controller                                                                                                    | `true`                            |
 | `ingressController.image.registry`                              | Kong Ingress Controller image registry                                                                                                        | `docker.io`                       |
 | `ingressController.image.repository`                            | Kong Ingress Controller image name                                                                                                            | `bitnami/kong-ingress-controller` |
-| `ingressController.image.tag`                                   | Kong Ingress Controller image tag                                                                                                             | `2.7.0-debian-11-r24`             |
+| `ingressController.image.tag`                                   | Kong Ingress Controller image tag                                                                                                             | `2.8.1-debian-11-r7`              |
 | `ingressController.image.digest`                                | Kong Ingress Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                       | `""`                              |
 | `ingressController.image.pullPolicy`                            | Kong Ingress Controller image pull policy                                                                                                     | `IfNotPresent`                    |
 | `ingressController.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                              | `[]`                              |
@@ -284,27 +284,27 @@ To uninstall/delete the `my-release` deployment:
 
 ### PostgreSQL Parameters
 
-| Name                                            | Description                                                                                                | Value                 |
-| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------- |
-| `postgresql.enabled`                            | Switch to enable or disable the PostgreSQL helm chart                                                      | `true`                |
-| `postgresql.auth.postgresPassword`              | Password for the "postgres" admin user                                                                     | `""`                  |
-| `postgresql.auth.username`                      | Name for a custom user to create                                                                           | `kong`                |
-| `postgresql.auth.password`                      | Password for the custom user to create                                                                     | `""`                  |
-| `postgresql.auth.database`                      | Name for a custom database to create                                                                       | `kong`                |
-| `postgresql.auth.existingSecret`                | Name of existing secret to use for PostgreSQL credentials                                                  | `""`                  |
-| `postgresql.auth.usePasswordFiles`              | Mount credentials as a files instead of using an environment variable                                      | `false`               |
-| `postgresql.architecture`                       | PostgreSQL architecture (`standalone` or `replication`)                                                    | `standalone`          |
-| `postgresql.image.registry`                     | PostgreSQL image registry                                                                                  | `docker.io`           |
-| `postgresql.image.repository`                   | PostgreSQL image repository                                                                                | `bitnami/postgresql`  |
-| `postgresql.image.tag`                          | PostgreSQL image tag (immutable tags are recommended)                                                      | `14.6.0-debian-11-r8` |
-| `postgresql.image.digest`                       | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `postgresql.external.host`                      | Database host                                                                                              | `""`                  |
-| `postgresql.external.port`                      | Database port number                                                                                       | `5432`                |
-| `postgresql.external.user`                      | Non-root username for Kong                                                                                 | `kong`                |
-| `postgresql.external.password`                  | Password for the non-root username for Kong                                                                | `""`                  |
-| `postgresql.external.database`                  | Kong database name                                                                                         | `kong`                |
-| `postgresql.external.existingSecret`            | Name of an existing secret resource containing the database credentials                                    | `""`                  |
-| `postgresql.external.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials                                         | `""`                  |
+| Name                                            | Description                                                                                                | Value                  |
+| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `postgresql.enabled`                            | Switch to enable or disable the PostgreSQL helm chart                                                      | `true`                 |
+| `postgresql.auth.postgresPassword`              | Password for the "postgres" admin user                                                                     | `""`                   |
+| `postgresql.auth.username`                      | Name for a custom user to create                                                                           | `kong`                 |
+| `postgresql.auth.password`                      | Password for the custom user to create                                                                     | `""`                   |
+| `postgresql.auth.database`                      | Name for a custom database to create                                                                       | `kong`                 |
+| `postgresql.auth.existingSecret`                | Name of existing secret to use for PostgreSQL credentials                                                  | `""`                   |
+| `postgresql.auth.usePasswordFiles`              | Mount credentials as a files instead of using an environment variable                                      | `false`                |
+| `postgresql.architecture`                       | PostgreSQL architecture (`standalone` or `replication`)                                                    | `standalone`           |
+| `postgresql.image.registry`                     | PostgreSQL image registry                                                                                  | `docker.io`            |
+| `postgresql.image.repository`                   | PostgreSQL image repository                                                                                | `bitnami/postgresql`   |
+| `postgresql.image.tag`                          | PostgreSQL image tag (immutable tags are recommended)                                                      | `14.6.0-debian-11-r28` |
+| `postgresql.image.digest`                       | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `postgresql.external.host`                      | Database host                                                                                              | `""`                   |
+| `postgresql.external.port`                      | Database port number                                                                                       | `5432`                 |
+| `postgresql.external.user`                      | Non-root username for Kong                                                                                 | `kong`                 |
+| `postgresql.external.password`                  | Password for the non-root username for Kong                                                                | `""`                   |
+| `postgresql.external.database`                  | Kong database name                                                                                         | `kong`                 |
+| `postgresql.external.existingSecret`            | Name of an existing secret resource containing the database credentials                                    | `""`                   |
+| `postgresql.external.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials                                         | `""`                   |
 
 
 ### Cassandra Parameters
@@ -352,7 +352,7 @@ To uninstall/delete the `my-release` deployment:
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-  helm install my-release \
+$ helm install my-release \
   --set service.exposeAdmin=true my-repo/kong
 ```
 
@@ -361,7 +361,7 @@ The above command exposes the Kong admin ports inside the Kong service.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-  helm install my-release -f values.yaml my-repo/kong
+$ helm install my-release -f values.yaml my-repo/kong
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -381,13 +381,13 @@ The Bitnami Kong chart allows setting two database backends: PostgreSQL or Cassa
 - Deploy the PostgreSQL sub-chart (default)
 
 ```console
-  helm install my-release my-repo/kong
+$ helm install my-release my-repo/kong
 ```
 
 - Use an external PostgreSQL database
 
 ```console
-  helm install my-release my-repo/kong \
+$ helm install my-release my-repo/kong \
     --set postgresql.enabled=false \
     --set postgresql.external.host=_HOST_OF_YOUR_POSTGRESQL_INSTALLATION_ \
     --set postgresql.external.password=_PASSWORD_OF_YOUR_POSTGRESQL_INSTALLATION_ \
@@ -397,7 +397,7 @@ The Bitnami Kong chart allows setting two database backends: PostgreSQL or Cassa
 - Deploy the Cassandra sub-chart
 
 ```console
-  helm install my-release my-repo/kong \
+$ helm install my-release my-repo/kong \
     --set database=cassandra \
     --set postgresql.enabled=false \
     --set cassandra.enabled=true
@@ -406,7 +406,7 @@ The Bitnami Kong chart allows setting two database backends: PostgreSQL or Cassa
 - Use an existing Cassandra installation
 
 ```console
-  helm install my-release my-repo/kong \
+$ helm install my-release my-repo/kong \
     --set database=cassandra \
     --set postgresql.enabled=false \
     --set cassandra.enabled=false \
@@ -518,7 +518,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 It's necessary to specify the existing passwords while performing a upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `postgresql.postgresqlPassword` or `cassandra.password` parameters when upgrading the chart:
 
-```bash
+```console
 $ helm upgrade my-release my-repo/kong \
     --set database=postgresql
     --set postgresql.enabled=true
@@ -527,6 +527,10 @@ $ helm upgrade my-release my-repo/kong \
 ```
 
 > Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_ with the values obtained from instructions in the installation notes.
+
+### To 9.0.0
+
+This major updates the Cassandra subchart to its newest major, 10.0.0. [Here](https://github.com/bitnami/charts/pull/14076) you can find more information about the changes introduced in that version.
 
 ### To 8.0.0
 
@@ -627,7 +631,7 @@ In order to properly migrate your data to this new version:
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -7,10 +7,10 @@ MariaDB is an open source, community-developed SQL database server that is widel
 [Overview of MariaDB](https://mariadb.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
-```bash
+```console
 $ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/mariadb
 ```
@@ -33,7 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 To install the chart with the release name `my-release`:
 
-```bash
+```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/mariadb
 ```
 
@@ -45,7 +46,7 @@ The command deploys MariaDB on the Kubernetes cluster in the default configurati
 
 To uninstall/delete the `my-release` deployment:
 
-```bash
+```console
 $ helm delete my-release
 ```
 
@@ -82,210 +83,214 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### MariaDB common parameters
 
-| Name                       | Description                                                                                                                                                                                                                                                                   | Value                  |
-| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `image.registry`           | MariaDB image registry                                                                                                                                                                                                                                                        | `docker.io`            |
-| `image.repository`         | MariaDB image repository                                                                                                                                                                                                                                                      | `bitnami/mariadb`      |
-| `image.tag`                | MariaDB image tag (immutable tags are recommended)                                                                                                                                                                                                                            | `10.6.11-debian-11-r9` |
-| `image.digest`             | MariaDB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                                                       | `""`                   |
-| `image.pullPolicy`         | MariaDB image pull policy                                                                                                                                                                                                                                                     | `IfNotPresent`         |
-| `image.pullSecrets`        | Specify docker-registry secret names as an array                                                                                                                                                                                                                              | `[]`                   |
-| `image.debug`              | Specify if debug logs should be enabled                                                                                                                                                                                                                                       | `false`                |
-| `architecture`             | MariaDB architecture (`standalone` or `replication`)                                                                                                                                                                                                                          | `standalone`           |
-| `auth.rootPassword`        | Password for the `root` user. Ignored if existing secret is provided.                                                                                                                                                                                                         | `""`                   |
-| `auth.database`            | Name for a custom database to create                                                                                                                                                                                                                                          | `my_database`          |
-| `auth.username`            | Name for a custom user to create                                                                                                                                                                                                                                              | `""`                   |
-| `auth.password`            | Password for the new user. Ignored if existing secret is provided                                                                                                                                                                                                             | `""`                   |
-| `auth.replicationUser`     | MariaDB replication user                                                                                                                                                                                                                                                      | `replicator`           |
-| `auth.replicationPassword` | MariaDB replication user password. Ignored if existing secret is provided                                                                                                                                                                                                     | `""`                   |
-| `auth.existingSecret`      | Use existing secret for password details (`auth.rootPassword`, `auth.password`, `auth.replicationPassword` will be ignored and picked up from this secret). The secret has to contain the keys `mariadb-root-password`, `mariadb-replication-password` and `mariadb-password` | `""`                   |
-| `auth.forcePassword`       | Force users to specify required passwords                                                                                                                                                                                                                                     | `false`                |
-| `auth.usePasswordFiles`    | Mount credentials as files instead of using environment variables                                                                                                                                                                                                             | `false`                |
-| `auth.customPasswordFiles` | Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication`                                                                                           | `{}`                   |
-| `initdbScripts`            | Dictionary of initdb scripts                                                                                                                                                                                                                                                  | `{}`                   |
-| `initdbScriptsConfigMap`   | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                                                                                                                                           | `""`                   |
+| Name                       | Description                                                                                                                                                                                                                                                                   | Value                   |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `image.registry`           | MariaDB image registry                                                                                                                                                                                                                                                        | `docker.io`             |
+| `image.repository`         | MariaDB image repository                                                                                                                                                                                                                                                      | `bitnami/mariadb`       |
+| `image.tag`                | MariaDB image tag (immutable tags are recommended)                                                                                                                                                                                                                            | `10.6.11-debian-11-r22` |
+| `image.digest`             | MariaDB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                                                       | `""`                    |
+| `image.pullPolicy`         | MariaDB image pull policy                                                                                                                                                                                                                                                     | `IfNotPresent`          |
+| `image.pullSecrets`        | Specify docker-registry secret names as an array                                                                                                                                                                                                                              | `[]`                    |
+| `image.debug`              | Specify if debug logs should be enabled                                                                                                                                                                                                                                       | `false`                 |
+| `architecture`             | MariaDB architecture (`standalone` or `replication`)                                                                                                                                                                                                                          | `standalone`            |
+| `auth.rootPassword`        | Password for the `root` user. Ignored if existing secret is provided.                                                                                                                                                                                                         | `""`                    |
+| `auth.database`            | Name for a custom database to create                                                                                                                                                                                                                                          | `my_database`           |
+| `auth.username`            | Name for a custom user to create                                                                                                                                                                                                                                              | `""`                    |
+| `auth.password`            | Password for the new user. Ignored if existing secret is provided                                                                                                                                                                                                             | `""`                    |
+| `auth.replicationUser`     | MariaDB replication user                                                                                                                                                                                                                                                      | `replicator`            |
+| `auth.replicationPassword` | MariaDB replication user password. Ignored if existing secret is provided                                                                                                                                                                                                     | `""`                    |
+| `auth.existingSecret`      | Use existing secret for password details (`auth.rootPassword`, `auth.password`, `auth.replicationPassword` will be ignored and picked up from this secret). The secret has to contain the keys `mariadb-root-password`, `mariadb-replication-password` and `mariadb-password` | `""`                    |
+| `auth.forcePassword`       | Force users to specify required passwords                                                                                                                                                                                                                                     | `false`                 |
+| `auth.usePasswordFiles`    | Mount credentials as files instead of using environment variables                                                                                                                                                                                                             | `false`                 |
+| `auth.customPasswordFiles` | Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication`                                                                                           | `{}`                    |
+| `initdbScripts`            | Dictionary of initdb scripts                                                                                                                                                                                                                                                  | `{}`                    |
+| `initdbScriptsConfigMap`   | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                                                                                                                                           | `""`                    |
 
 
 ### MariaDB Primary parameters
 
-| Name                                            | Description                                                                                                       | Value               |
-| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `primary.name`                                  | Name of the primary database (eg primary, master, leader, ...)                                                    | `primary`           |
-| `primary.command`                               | Override default container command on MariaDB Primary container(s) (useful when using custom images)              | `[]`                |
-| `primary.args`                                  | Override default container args on MariaDB Primary container(s) (useful when using custom images)                 | `[]`                |
-| `primary.lifecycleHooks`                        | for the MariaDB Primary container(s) to automate configuration before or after startup                            | `{}`                |
-| `primary.hostAliases`                           | Add deployment host aliases                                                                                       | `[]`                |
-| `primary.configuration`                         | MariaDB Primary configuration to be injected as ConfigMap                                                         | `""`                |
-| `primary.existingConfigmap`                     | Name of existing ConfigMap with MariaDB Primary configuration.                                                    | `""`                |
-| `primary.updateStrategy.type`                   | MariaDB primary statefulset strategy type                                                                         | `RollingUpdate`     |
-| `primary.rollingUpdatePartition`                | Partition update strategy for Mariadb Primary statefulset                                                         | `""`                |
-| `primary.podAnnotations`                        | Additional pod annotations for MariaDB primary pods                                                               | `{}`                |
-| `primary.podLabels`                             | Extra labels for MariaDB primary pods                                                                             | `{}`                |
-| `primary.podAffinityPreset`                     | MariaDB primary pod affinity preset. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`       | `""`                |
-| `primary.podAntiAffinityPreset`                 | MariaDB primary pod anti-affinity preset. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`  | `soft`              |
-| `primary.nodeAffinityPreset.type`               | MariaDB primary node affinity preset type. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard` | `""`                |
-| `primary.nodeAffinityPreset.key`                | MariaDB primary node label key to match Ignored if `primary.affinity` is set.                                     | `""`                |
-| `primary.nodeAffinityPreset.values`             | MariaDB primary node label values to match. Ignored if `primary.affinity` is set.                                 | `[]`                |
-| `primary.affinity`                              | Affinity for MariaDB primary pods assignment                                                                      | `{}`                |
-| `primary.nodeSelector`                          | Node labels for MariaDB primary pods assignment                                                                   | `{}`                |
-| `primary.tolerations`                           | Tolerations for MariaDB primary pods assignment                                                                   | `[]`                |
-| `primary.schedulerName`                         | Name of the k8s scheduler (other than default)                                                                    | `""`                |
-| `primary.podManagementPolicy`                   | podManagementPolicy to manage scaling operation of MariaDB primary pods                                           | `""`                |
-| `primary.topologySpreadConstraints`             | Topology Spread Constraints for MariaDB primary pods assignment                                                   | `[]`                |
-| `primary.priorityClassName`                     | Priority class for MariaDB primary pods assignment                                                                | `""`                |
-| `primary.runtimeClassName`                      | Runtime Class for MariaDB primary pods                                                                            | `""`                |
-| `primary.podSecurityContext.enabled`            | Enable security context for MariaDB primary pods                                                                  | `true`              |
-| `primary.podSecurityContext.fsGroup`            | Group ID for the mounted volumes' filesystem                                                                      | `1001`              |
-| `primary.containerSecurityContext.enabled`      | MariaDB primary container securityContext                                                                         | `true`              |
-| `primary.containerSecurityContext.runAsUser`    | User ID for the MariaDB primary container                                                                         | `1001`              |
-| `primary.containerSecurityContext.runAsNonRoot` | Set Controller container's Security Context runAsNonRoot                                                          | `true`              |
-| `primary.resources.limits`                      | The resources limits for MariaDB primary containers                                                               | `{}`                |
-| `primary.resources.requests`                    | The requested resources for MariaDB primary containers                                                            | `{}`                |
-| `primary.startupProbe.enabled`                  | Enable startupProbe                                                                                               | `false`             |
-| `primary.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                            | `120`               |
-| `primary.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                   | `15`                |
-| `primary.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                  | `5`                 |
-| `primary.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                | `10`                |
-| `primary.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                | `1`                 |
-| `primary.livenessProbe.enabled`                 | Enable livenessProbe                                                                                              | `true`              |
-| `primary.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                           | `120`               |
-| `primary.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                  | `10`                |
-| `primary.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                 | `1`                 |
-| `primary.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                               | `3`                 |
-| `primary.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                               | `1`                 |
-| `primary.readinessProbe.enabled`                | Enable readinessProbe                                                                                             | `true`              |
-| `primary.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                          | `30`                |
-| `primary.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                 | `10`                |
-| `primary.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                | `1`                 |
-| `primary.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                              | `3`                 |
-| `primary.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                              | `1`                 |
-| `primary.customStartupProbe`                    | Override default startup probe for MariaDB primary containers                                                     | `{}`                |
-| `primary.customLivenessProbe`                   | Override default liveness probe for MariaDB primary containers                                                    | `{}`                |
-| `primary.customReadinessProbe`                  | Override default readiness probe for MariaDB primary containers                                                   | `{}`                |
-| `primary.startupWaitOptions`                    | Override default builtin startup wait check options for MariaDB primary containers                                | `{}`                |
-| `primary.extraFlags`                            | MariaDB primary additional command line flags                                                                     | `""`                |
-| `primary.extraEnvVars`                          | Extra environment variables to be set on MariaDB primary containers                                               | `[]`                |
-| `primary.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for MariaDB primary containers                               | `""`                |
-| `primary.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for MariaDB primary containers                                  | `""`                |
-| `primary.persistence.enabled`                   | Enable persistence on MariaDB primary replicas using a `PersistentVolumeClaim`. If false, use emptyDir            | `true`              |
-| `primary.persistence.existingClaim`             | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                                          | `""`                |
-| `primary.persistence.subPath`                   | Subdirectory of the volume to mount at                                                                            | `""`                |
-| `primary.persistence.storageClass`              | MariaDB primary persistent volume storage Class                                                                   | `""`                |
-| `primary.persistence.annotations`               | MariaDB primary persistent volume claim annotations                                                               | `{}`                |
-| `primary.persistence.accessModes`               | MariaDB primary persistent volume access Modes                                                                    | `["ReadWriteOnce"]` |
-| `primary.persistence.size`                      | MariaDB primary persistent volume size                                                                            | `8Gi`               |
-| `primary.persistence.selector`                  | Selector to match an existing Persistent Volume                                                                   | `{}`                |
-| `primary.extraVolumes`                          | Optionally specify extra list of additional volumes to the MariaDB Primary pod(s)                                 | `[]`                |
-| `primary.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the MariaDB Primary container(s)                     | `[]`                |
-| `primary.initContainers`                        | Add additional init containers for the MariaDB Primary pod(s)                                                     | `[]`                |
-| `primary.sidecars`                              | Add additional sidecar containers for the MariaDB Primary pod(s)                                                  | `[]`                |
-| `primary.service.type`                          | MariaDB Primary Kubernetes service type                                                                           | `ClusterIP`         |
-| `primary.service.ports.mysql`                   | MariaDB Primary Kubernetes service port for MariaDB                                                               | `3306`              |
-| `primary.service.ports.metrics`                 | MariaDB Primary Kubernetes service port for metrics                                                               | `9104`              |
-| `primary.service.nodePorts.mysql`               | MariaDB Primary Kubernetes service node port                                                                      | `""`                |
-| `primary.service.clusterIP`                     | MariaDB Primary Kubernetes service clusterIP IP                                                                   | `""`                |
-| `primary.service.loadBalancerIP`                | MariaDB Primary loadBalancerIP if service type is `LoadBalancer`                                                  | `""`                |
-| `primary.service.externalTrafficPolicy`         | Enable client source IP preservation                                                                              | `Cluster`           |
-| `primary.service.loadBalancerSourceRanges`      | Address that are allowed when MariaDB Primary service is LoadBalancer                                             | `[]`                |
-| `primary.service.extraPorts`                    | Extra ports to expose (normally used with the `sidecar` value)                                                    | `[]`                |
-| `primary.service.annotations`                   | Provide any additional annotations which may be required                                                          | `{}`                |
-| `primary.service.sessionAffinity`               | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                              | `None`              |
-| `primary.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                       | `{}`                |
-| `primary.pdb.create`                            | Enable/disable a Pod Disruption Budget creation for MariaDB primary pods                                          | `false`             |
-| `primary.pdb.minAvailable`                      | Minimum number/percentage of MariaDB primary pods that must still be available after the eviction                 | `1`                 |
-| `primary.pdb.maxUnavailable`                    | Maximum number/percentage of MariaDB primary pods that can be unavailable after the eviction                      | `""`                |
-| `primary.revisionHistoryLimit`                  | Maximum number of revisions that will be maintained in the StatefulSet                                            | `10`                |
+| Name                                                        | Description                                                                                                       | Value               |
+| ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `primary.name`                                              | Name of the primary database (eg primary, master, leader, ...)                                                    | `primary`           |
+| `primary.command`                                           | Override default container command on MariaDB Primary container(s) (useful when using custom images)              | `[]`                |
+| `primary.args`                                              | Override default container args on MariaDB Primary container(s) (useful when using custom images)                 | `[]`                |
+| `primary.lifecycleHooks`                                    | for the MariaDB Primary container(s) to automate configuration before or after startup                            | `{}`                |
+| `primary.hostAliases`                                       | Add deployment host aliases                                                                                       | `[]`                |
+| `primary.configuration`                                     | MariaDB Primary configuration to be injected as ConfigMap                                                         | `""`                |
+| `primary.existingConfigmap`                                 | Name of existing ConfigMap with MariaDB Primary configuration.                                                    | `""`                |
+| `primary.updateStrategy.type`                               | MariaDB primary statefulset strategy type                                                                         | `RollingUpdate`     |
+| `primary.rollingUpdatePartition`                            | Partition update strategy for Mariadb Primary statefulset                                                         | `""`                |
+| `primary.podAnnotations`                                    | Additional pod annotations for MariaDB primary pods                                                               | `{}`                |
+| `primary.podLabels`                                         | Extra labels for MariaDB primary pods                                                                             | `{}`                |
+| `primary.podAffinityPreset`                                 | MariaDB primary pod affinity preset. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`       | `""`                |
+| `primary.podAntiAffinityPreset`                             | MariaDB primary pod anti-affinity preset. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`  | `soft`              |
+| `primary.nodeAffinityPreset.type`                           | MariaDB primary node affinity preset type. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard` | `""`                |
+| `primary.nodeAffinityPreset.key`                            | MariaDB primary node label key to match Ignored if `primary.affinity` is set.                                     | `""`                |
+| `primary.nodeAffinityPreset.values`                         | MariaDB primary node label values to match. Ignored if `primary.affinity` is set.                                 | `[]`                |
+| `primary.affinity`                                          | Affinity for MariaDB primary pods assignment                                                                      | `{}`                |
+| `primary.nodeSelector`                                      | Node labels for MariaDB primary pods assignment                                                                   | `{}`                |
+| `primary.tolerations`                                       | Tolerations for MariaDB primary pods assignment                                                                   | `[]`                |
+| `primary.schedulerName`                                     | Name of the k8s scheduler (other than default)                                                                    | `""`                |
+| `primary.podManagementPolicy`                               | podManagementPolicy to manage scaling operation of MariaDB primary pods                                           | `""`                |
+| `primary.topologySpreadConstraints`                         | Topology Spread Constraints for MariaDB primary pods assignment                                                   | `[]`                |
+| `primary.priorityClassName`                                 | Priority class for MariaDB primary pods assignment                                                                | `""`                |
+| `primary.runtimeClassName`                                  | Runtime Class for MariaDB primary pods                                                                            | `""`                |
+| `primary.podSecurityContext.enabled`                        | Enable security context for MariaDB primary pods                                                                  | `true`              |
+| `primary.podSecurityContext.fsGroup`                        | Group ID for the mounted volumes' filesystem                                                                      | `1001`              |
+| `primary.containerSecurityContext.enabled`                  | MariaDB primary container securityContext                                                                         | `true`              |
+| `primary.containerSecurityContext.runAsUser`                | User ID for the MariaDB primary container                                                                         | `1001`              |
+| `primary.containerSecurityContext.runAsNonRoot`             | Set primary container's Security Context runAsNonRoot                                                             | `true`              |
+| `primary.containerSecurityContext.privileged`               | Set primary container's Security Context privileged                                                               | `false`             |
+| `primary.containerSecurityContext.allowPrivilegeEscalation` | Set primary container's Security Context allowPrivilegeEscalation                                                 | `false`             |
+| `primary.resources.limits`                                  | The resources limits for MariaDB primary containers                                                               | `{}`                |
+| `primary.resources.requests`                                | The requested resources for MariaDB primary containers                                                            | `{}`                |
+| `primary.startupProbe.enabled`                              | Enable startupProbe                                                                                               | `false`             |
+| `primary.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                            | `120`               |
+| `primary.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                   | `15`                |
+| `primary.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                  | `5`                 |
+| `primary.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                | `10`                |
+| `primary.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                | `1`                 |
+| `primary.livenessProbe.enabled`                             | Enable livenessProbe                                                                                              | `true`              |
+| `primary.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                           | `120`               |
+| `primary.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                  | `10`                |
+| `primary.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                 | `1`                 |
+| `primary.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                               | `3`                 |
+| `primary.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                               | `1`                 |
+| `primary.readinessProbe.enabled`                            | Enable readinessProbe                                                                                             | `true`              |
+| `primary.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                          | `30`                |
+| `primary.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                 | `10`                |
+| `primary.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                | `1`                 |
+| `primary.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                              | `3`                 |
+| `primary.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                              | `1`                 |
+| `primary.customStartupProbe`                                | Override default startup probe for MariaDB primary containers                                                     | `{}`                |
+| `primary.customLivenessProbe`                               | Override default liveness probe for MariaDB primary containers                                                    | `{}`                |
+| `primary.customReadinessProbe`                              | Override default readiness probe for MariaDB primary containers                                                   | `{}`                |
+| `primary.startupWaitOptions`                                | Override default builtin startup wait check options for MariaDB primary containers                                | `{}`                |
+| `primary.extraFlags`                                        | MariaDB primary additional command line flags                                                                     | `""`                |
+| `primary.extraEnvVars`                                      | Extra environment variables to be set on MariaDB primary containers                                               | `[]`                |
+| `primary.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for MariaDB primary containers                               | `""`                |
+| `primary.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for MariaDB primary containers                                  | `""`                |
+| `primary.persistence.enabled`                               | Enable persistence on MariaDB primary replicas using a `PersistentVolumeClaim`. If false, use emptyDir            | `true`              |
+| `primary.persistence.existingClaim`                         | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                                          | `""`                |
+| `primary.persistence.subPath`                               | Subdirectory of the volume to mount at                                                                            | `""`                |
+| `primary.persistence.storageClass`                          | MariaDB primary persistent volume storage Class                                                                   | `""`                |
+| `primary.persistence.annotations`                           | MariaDB primary persistent volume claim annotations                                                               | `{}`                |
+| `primary.persistence.accessModes`                           | MariaDB primary persistent volume access Modes                                                                    | `["ReadWriteOnce"]` |
+| `primary.persistence.size`                                  | MariaDB primary persistent volume size                                                                            | `8Gi`               |
+| `primary.persistence.selector`                              | Selector to match an existing Persistent Volume                                                                   | `{}`                |
+| `primary.extraVolumes`                                      | Optionally specify extra list of additional volumes to the MariaDB Primary pod(s)                                 | `[]`                |
+| `primary.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the MariaDB Primary container(s)                     | `[]`                |
+| `primary.initContainers`                                    | Add additional init containers for the MariaDB Primary pod(s)                                                     | `[]`                |
+| `primary.sidecars`                                          | Add additional sidecar containers for the MariaDB Primary pod(s)                                                  | `[]`                |
+| `primary.service.type`                                      | MariaDB Primary Kubernetes service type                                                                           | `ClusterIP`         |
+| `primary.service.ports.mysql`                               | MariaDB Primary Kubernetes service port for MariaDB                                                               | `3306`              |
+| `primary.service.ports.metrics`                             | MariaDB Primary Kubernetes service port for metrics                                                               | `9104`              |
+| `primary.service.nodePorts.mysql`                           | MariaDB Primary Kubernetes service node port                                                                      | `""`                |
+| `primary.service.clusterIP`                                 | MariaDB Primary Kubernetes service clusterIP IP                                                                   | `""`                |
+| `primary.service.loadBalancerIP`                            | MariaDB Primary loadBalancerIP if service type is `LoadBalancer`                                                  | `""`                |
+| `primary.service.externalTrafficPolicy`                     | Enable client source IP preservation                                                                              | `Cluster`           |
+| `primary.service.loadBalancerSourceRanges`                  | Address that are allowed when MariaDB Primary service is LoadBalancer                                             | `[]`                |
+| `primary.service.extraPorts`                                | Extra ports to expose (normally used with the `sidecar` value)                                                    | `[]`                |
+| `primary.service.annotations`                               | Provide any additional annotations which may be required                                                          | `{}`                |
+| `primary.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                              | `None`              |
+| `primary.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                                       | `{}`                |
+| `primary.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation for MariaDB primary pods                                          | `false`             |
+| `primary.pdb.minAvailable`                                  | Minimum number/percentage of MariaDB primary pods that must still be available after the eviction                 | `1`                 |
+| `primary.pdb.maxUnavailable`                                | Maximum number/percentage of MariaDB primary pods that can be unavailable after the eviction                      | `""`                |
+| `primary.revisionHistoryLimit`                              | Maximum number of revisions that will be maintained in the StatefulSet                                            | `10`                |
 
 
 ### MariaDB Secondary parameters
 
-| Name                                              | Description                                                                                                           | Value               |
-| ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `secondary.name`                                  | Name of the secondary database (eg secondary, slave, ...)                                                             | `secondary`         |
-| `secondary.replicaCount`                          | Number of MariaDB secondary replicas                                                                                  | `1`                 |
-| `secondary.command`                               | Override default container command on MariaDB Secondary container(s) (useful when using custom images)                | `[]`                |
-| `secondary.args`                                  | Override default container args on MariaDB Secondary container(s) (useful when using custom images)                   | `[]`                |
-| `secondary.lifecycleHooks`                        | for the MariaDB Secondary container(s) to automate configuration before or after startup                              | `{}`                |
-| `secondary.hostAliases`                           | Add deployment host aliases                                                                                           | `[]`                |
-| `secondary.configuration`                         | MariaDB Secondary configuration to be injected as ConfigMap                                                           | `""`                |
-| `secondary.existingConfigmap`                     | Name of existing ConfigMap with MariaDB Secondary configuration.                                                      | `""`                |
-| `secondary.updateStrategy.type`                   | MariaDB secondary statefulset strategy type                                                                           | `RollingUpdate`     |
-| `secondary.rollingUpdatePartition`                | Partition update strategy for Mariadb Secondary statefulset                                                           | `""`                |
-| `secondary.podAnnotations`                        | Additional pod annotations for MariaDB secondary pods                                                                 | `{}`                |
-| `secondary.podLabels`                             | Extra labels for MariaDB secondary pods                                                                               | `{}`                |
-| `secondary.podAffinityPreset`                     | MariaDB secondary pod affinity preset. Ignored if `secondary.affinity` is set. Allowed values: `soft` or `hard`       | `""`                |
-| `secondary.podAntiAffinityPreset`                 | MariaDB secondary pod anti-affinity preset. Ignored if `secondary.affinity` is set. Allowed values: `soft` or `hard`  | `soft`              |
-| `secondary.nodeAffinityPreset.type`               | MariaDB secondary node affinity preset type. Ignored if `secondary.affinity` is set. Allowed values: `soft` or `hard` | `""`                |
-| `secondary.nodeAffinityPreset.key`                | MariaDB secondary node label key to match Ignored if `secondary.affinity` is set.                                     | `""`                |
-| `secondary.nodeAffinityPreset.values`             | MariaDB secondary node label values to match. Ignored if `secondary.affinity` is set.                                 | `[]`                |
-| `secondary.affinity`                              | Affinity for MariaDB secondary pods assignment                                                                        | `{}`                |
-| `secondary.nodeSelector`                          | Node labels for MariaDB secondary pods assignment                                                                     | `{}`                |
-| `secondary.tolerations`                           | Tolerations for MariaDB secondary pods assignment                                                                     | `[]`                |
-| `secondary.topologySpreadConstraints`             | Topology Spread Constraints for MariaDB secondary pods assignment                                                     | `[]`                |
-| `secondary.priorityClassName`                     | Priority class for MariaDB secondary pods assignment                                                                  | `""`                |
-| `secondary.runtimeClassName`                      | Runtime Class for MariaDB secondary pods                                                                              | `""`                |
-| `secondary.schedulerName`                         | Name of the k8s scheduler (other than default)                                                                        | `""`                |
-| `secondary.podManagementPolicy`                   | podManagementPolicy to manage scaling operation of MariaDB secondary pods                                             | `""`                |
-| `secondary.podSecurityContext.enabled`            | Enable security context for MariaDB secondary pods                                                                    | `true`              |
-| `secondary.podSecurityContext.fsGroup`            | Group ID for the mounted volumes' filesystem                                                                          | `1001`              |
-| `secondary.containerSecurityContext.enabled`      | MariaDB secondary container securityContext                                                                           | `true`              |
-| `secondary.containerSecurityContext.runAsUser`    | User ID for the MariaDB secondary container                                                                           | `1001`              |
-| `secondary.containerSecurityContext.runAsNonRoot` | Set Controller container's Security Context runAsNonRoot                                                              | `true`              |
-| `secondary.resources.limits`                      | The resources limits for MariaDB secondary containers                                                                 | `{}`                |
-| `secondary.resources.requests`                    | The requested resources for MariaDB secondary containers                                                              | `{}`                |
-| `secondary.startupProbe.enabled`                  | Enable startupProbe                                                                                                   | `false`             |
-| `secondary.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                | `120`               |
-| `secondary.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                       | `15`                |
-| `secondary.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                      | `5`                 |
-| `secondary.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                    | `10`                |
-| `secondary.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                    | `1`                 |
-| `secondary.livenessProbe.enabled`                 | Enable livenessProbe                                                                                                  | `true`              |
-| `secondary.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                               | `120`               |
-| `secondary.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                      | `10`                |
-| `secondary.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                     | `1`                 |
-| `secondary.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                   | `3`                 |
-| `secondary.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                   | `1`                 |
-| `secondary.readinessProbe.enabled`                | Enable readinessProbe                                                                                                 | `true`              |
-| `secondary.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                              | `30`                |
-| `secondary.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                     | `10`                |
-| `secondary.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                    | `1`                 |
-| `secondary.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                  | `3`                 |
-| `secondary.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                                  | `1`                 |
-| `secondary.customStartupProbe`                    | Override default startup probe for MariaDB secondary containers                                                       | `{}`                |
-| `secondary.customLivenessProbe`                   | Override default liveness probe for MariaDB secondary containers                                                      | `{}`                |
-| `secondary.customReadinessProbe`                  | Override default readiness probe for MariaDB secondary containers                                                     | `{}`                |
-| `secondary.startupWaitOptions`                    | Override default builtin startup wait check options for MariaDB secondary containers                                  | `{}`                |
-| `secondary.extraFlags`                            | MariaDB secondary additional command line flags                                                                       | `""`                |
-| `secondary.extraEnvVars`                          | Extra environment variables to be set on MariaDB secondary containers                                                 | `[]`                |
-| `secondary.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for MariaDB secondary containers                                 | `""`                |
-| `secondary.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for MariaDB secondary containers                                    | `""`                |
-| `secondary.persistence.enabled`                   | Enable persistence on MariaDB secondary replicas using a `PersistentVolumeClaim`                                      | `true`              |
-| `secondary.persistence.subPath`                   | Subdirectory of the volume to mount at                                                                                | `""`                |
-| `secondary.persistence.storageClass`              | MariaDB secondary persistent volume storage Class                                                                     | `""`                |
-| `secondary.persistence.annotations`               | MariaDB secondary persistent volume claim annotations                                                                 | `{}`                |
-| `secondary.persistence.accessModes`               | MariaDB secondary persistent volume access Modes                                                                      | `["ReadWriteOnce"]` |
-| `secondary.persistence.size`                      | MariaDB secondary persistent volume size                                                                              | `8Gi`               |
-| `secondary.persistence.selector`                  | Selector to match an existing Persistent Volume                                                                       | `{}`                |
-| `secondary.extraVolumes`                          | Optionally specify extra list of additional volumes to the MariaDB secondary pod(s)                                   | `[]`                |
-| `secondary.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the MariaDB secondary container(s)                       | `[]`                |
-| `secondary.initContainers`                        | Add additional init containers for the MariaDB secondary pod(s)                                                       | `[]`                |
-| `secondary.sidecars`                              | Add additional sidecar containers for the MariaDB secondary pod(s)                                                    | `[]`                |
-| `secondary.service.type`                          | MariaDB secondary Kubernetes service type                                                                             | `ClusterIP`         |
-| `secondary.service.ports.mysql`                   | MariaDB secondary Kubernetes service port for MariaDB                                                                 | `3306`              |
-| `secondary.service.ports.metrics`                 | MariaDB secondary Kubernetes service port for metrics                                                                 | `9104`              |
-| `secondary.service.nodePorts.mysql`               | MariaDB secondary Kubernetes service node port                                                                        | `""`                |
-| `secondary.service.clusterIP`                     | MariaDB secondary Kubernetes service clusterIP IP                                                                     | `""`                |
-| `secondary.service.loadBalancerIP`                | MariaDB secondary loadBalancerIP if service type is `LoadBalancer`                                                    | `""`                |
-| `secondary.service.externalTrafficPolicy`         | Enable client source IP preservation                                                                                  | `Cluster`           |
-| `secondary.service.loadBalancerSourceRanges`      | Address that are allowed when MariaDB secondary service is LoadBalancer                                               | `[]`                |
-| `secondary.service.extraPorts`                    | Extra ports to expose (normally used with the `sidecar` value)                                                        | `[]`                |
-| `secondary.service.annotations`                   | Provide any additional annotations which may be required                                                              | `{}`                |
-| `secondary.service.sessionAffinity`               | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                  | `None`              |
-| `secondary.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                           | `{}`                |
-| `secondary.pdb.create`                            | Enable/disable a Pod Disruption Budget creation for MariaDB secondary pods                                            | `false`             |
-| `secondary.pdb.minAvailable`                      | Minimum number/percentage of MariaDB secondary pods that should remain scheduled                                      | `1`                 |
-| `secondary.pdb.maxUnavailable`                    | Maximum number/percentage of MariaDB secondary pods that may be made unavailable                                      | `""`                |
-| `secondary.revisionHistoryLimit`                  | Maximum number of revisions that will be maintained in the StatefulSet                                                | `10`                |
+| Name                                                          | Description                                                                                                           | Value               |
+| ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `secondary.name`                                              | Name of the secondary database (eg secondary, slave, ...)                                                             | `secondary`         |
+| `secondary.replicaCount`                                      | Number of MariaDB secondary replicas                                                                                  | `1`                 |
+| `secondary.command`                                           | Override default container command on MariaDB Secondary container(s) (useful when using custom images)                | `[]`                |
+| `secondary.args`                                              | Override default container args on MariaDB Secondary container(s) (useful when using custom images)                   | `[]`                |
+| `secondary.lifecycleHooks`                                    | for the MariaDB Secondary container(s) to automate configuration before or after startup                              | `{}`                |
+| `secondary.hostAliases`                                       | Add deployment host aliases                                                                                           | `[]`                |
+| `secondary.configuration`                                     | MariaDB Secondary configuration to be injected as ConfigMap                                                           | `""`                |
+| `secondary.existingConfigmap`                                 | Name of existing ConfigMap with MariaDB Secondary configuration.                                                      | `""`                |
+| `secondary.updateStrategy.type`                               | MariaDB secondary statefulset strategy type                                                                           | `RollingUpdate`     |
+| `secondary.rollingUpdatePartition`                            | Partition update strategy for Mariadb Secondary statefulset                                                           | `""`                |
+| `secondary.podAnnotations`                                    | Additional pod annotations for MariaDB secondary pods                                                                 | `{}`                |
+| `secondary.podLabels`                                         | Extra labels for MariaDB secondary pods                                                                               | `{}`                |
+| `secondary.podAffinityPreset`                                 | MariaDB secondary pod affinity preset. Ignored if `secondary.affinity` is set. Allowed values: `soft` or `hard`       | `""`                |
+| `secondary.podAntiAffinityPreset`                             | MariaDB secondary pod anti-affinity preset. Ignored if `secondary.affinity` is set. Allowed values: `soft` or `hard`  | `soft`              |
+| `secondary.nodeAffinityPreset.type`                           | MariaDB secondary node affinity preset type. Ignored if `secondary.affinity` is set. Allowed values: `soft` or `hard` | `""`                |
+| `secondary.nodeAffinityPreset.key`                            | MariaDB secondary node label key to match Ignored if `secondary.affinity` is set.                                     | `""`                |
+| `secondary.nodeAffinityPreset.values`                         | MariaDB secondary node label values to match. Ignored if `secondary.affinity` is set.                                 | `[]`                |
+| `secondary.affinity`                                          | Affinity for MariaDB secondary pods assignment                                                                        | `{}`                |
+| `secondary.nodeSelector`                                      | Node labels for MariaDB secondary pods assignment                                                                     | `{}`                |
+| `secondary.tolerations`                                       | Tolerations for MariaDB secondary pods assignment                                                                     | `[]`                |
+| `secondary.topologySpreadConstraints`                         | Topology Spread Constraints for MariaDB secondary pods assignment                                                     | `[]`                |
+| `secondary.priorityClassName`                                 | Priority class for MariaDB secondary pods assignment                                                                  | `""`                |
+| `secondary.runtimeClassName`                                  | Runtime Class for MariaDB secondary pods                                                                              | `""`                |
+| `secondary.schedulerName`                                     | Name of the k8s scheduler (other than default)                                                                        | `""`                |
+| `secondary.podManagementPolicy`                               | podManagementPolicy to manage scaling operation of MariaDB secondary pods                                             | `""`                |
+| `secondary.podSecurityContext.enabled`                        | Enable security context for MariaDB secondary pods                                                                    | `true`              |
+| `secondary.podSecurityContext.fsGroup`                        | Group ID for the mounted volumes' filesystem                                                                          | `1001`              |
+| `secondary.containerSecurityContext.enabled`                  | MariaDB secondary container securityContext                                                                           | `true`              |
+| `secondary.containerSecurityContext.runAsUser`                | User ID for the MariaDB secondary container                                                                           | `1001`              |
+| `secondary.containerSecurityContext.runAsNonRoot`             | Set secondary container's Security Context runAsNonRoot                                                               | `true`              |
+| `secondary.containerSecurityContext.privileged`               | Set secondary container's Security Context privileged                                                                 | `false`             |
+| `secondary.containerSecurityContext.allowPrivilegeEscalation` | Set secondary container's Security Context allowPrivilegeEscalation                                                   | `false`             |
+| `secondary.resources.limits`                                  | The resources limits for MariaDB secondary containers                                                                 | `{}`                |
+| `secondary.resources.requests`                                | The requested resources for MariaDB secondary containers                                                              | `{}`                |
+| `secondary.startupProbe.enabled`                              | Enable startupProbe                                                                                                   | `false`             |
+| `secondary.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                | `120`               |
+| `secondary.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                       | `15`                |
+| `secondary.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                      | `5`                 |
+| `secondary.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                    | `10`                |
+| `secondary.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                    | `1`                 |
+| `secondary.livenessProbe.enabled`                             | Enable livenessProbe                                                                                                  | `true`              |
+| `secondary.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                               | `120`               |
+| `secondary.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                      | `10`                |
+| `secondary.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                     | `1`                 |
+| `secondary.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                   | `3`                 |
+| `secondary.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                   | `1`                 |
+| `secondary.readinessProbe.enabled`                            | Enable readinessProbe                                                                                                 | `true`              |
+| `secondary.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                              | `30`                |
+| `secondary.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                     | `10`                |
+| `secondary.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                    | `1`                 |
+| `secondary.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                  | `3`                 |
+| `secondary.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                  | `1`                 |
+| `secondary.customStartupProbe`                                | Override default startup probe for MariaDB secondary containers                                                       | `{}`                |
+| `secondary.customLivenessProbe`                               | Override default liveness probe for MariaDB secondary containers                                                      | `{}`                |
+| `secondary.customReadinessProbe`                              | Override default readiness probe for MariaDB secondary containers                                                     | `{}`                |
+| `secondary.startupWaitOptions`                                | Override default builtin startup wait check options for MariaDB secondary containers                                  | `{}`                |
+| `secondary.extraFlags`                                        | MariaDB secondary additional command line flags                                                                       | `""`                |
+| `secondary.extraEnvVars`                                      | Extra environment variables to be set on MariaDB secondary containers                                                 | `[]`                |
+| `secondary.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for MariaDB secondary containers                                 | `""`                |
+| `secondary.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for MariaDB secondary containers                                    | `""`                |
+| `secondary.persistence.enabled`                               | Enable persistence on MariaDB secondary replicas using a `PersistentVolumeClaim`                                      | `true`              |
+| `secondary.persistence.subPath`                               | Subdirectory of the volume to mount at                                                                                | `""`                |
+| `secondary.persistence.storageClass`                          | MariaDB secondary persistent volume storage Class                                                                     | `""`                |
+| `secondary.persistence.annotations`                           | MariaDB secondary persistent volume claim annotations                                                                 | `{}`                |
+| `secondary.persistence.accessModes`                           | MariaDB secondary persistent volume access Modes                                                                      | `["ReadWriteOnce"]` |
+| `secondary.persistence.size`                                  | MariaDB secondary persistent volume size                                                                              | `8Gi`               |
+| `secondary.persistence.selector`                              | Selector to match an existing Persistent Volume                                                                       | `{}`                |
+| `secondary.extraVolumes`                                      | Optionally specify extra list of additional volumes to the MariaDB secondary pod(s)                                   | `[]`                |
+| `secondary.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the MariaDB secondary container(s)                       | `[]`                |
+| `secondary.initContainers`                                    | Add additional init containers for the MariaDB secondary pod(s)                                                       | `[]`                |
+| `secondary.sidecars`                                          | Add additional sidecar containers for the MariaDB secondary pod(s)                                                    | `[]`                |
+| `secondary.service.type`                                      | MariaDB secondary Kubernetes service type                                                                             | `ClusterIP`         |
+| `secondary.service.ports.mysql`                               | MariaDB secondary Kubernetes service port for MariaDB                                                                 | `3306`              |
+| `secondary.service.ports.metrics`                             | MariaDB secondary Kubernetes service port for metrics                                                                 | `9104`              |
+| `secondary.service.nodePorts.mysql`                           | MariaDB secondary Kubernetes service node port                                                                        | `""`                |
+| `secondary.service.clusterIP`                                 | MariaDB secondary Kubernetes service clusterIP IP                                                                     | `""`                |
+| `secondary.service.loadBalancerIP`                            | MariaDB secondary loadBalancerIP if service type is `LoadBalancer`                                                    | `""`                |
+| `secondary.service.externalTrafficPolicy`                     | Enable client source IP preservation                                                                                  | `Cluster`           |
+| `secondary.service.loadBalancerSourceRanges`                  | Address that are allowed when MariaDB secondary service is LoadBalancer                                               | `[]`                |
+| `secondary.service.extraPorts`                                | Extra ports to expose (normally used with the `sidecar` value)                                                        | `[]`                |
+| `secondary.service.annotations`                               | Provide any additional annotations which may be required                                                              | `{}`                |
+| `secondary.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                  | `None`              |
+| `secondary.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                                           | `{}`                |
+| `secondary.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation for MariaDB secondary pods                                            | `false`             |
+| `secondary.pdb.minAvailable`                                  | Minimum number/percentage of MariaDB secondary pods that should remain scheduled                                      | `1`                 |
+| `secondary.pdb.maxUnavailable`                                | Maximum number/percentage of MariaDB secondary pods that may be made unavailable                                      | `""`                |
+| `secondary.revisionHistoryLimit`                              | Maximum number of revisions that will be maintained in the StatefulSet                                                | `10`                |
 
 
 ### RBAC parameters
@@ -306,7 +311,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r59`      |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r71`      |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
@@ -316,47 +321,49 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                                         | Description                                                                                                                               | Value                     |
-| -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| `metrics.enabled`                            | Start a side-car prometheus exporter                                                                                                      | `false`                   |
-| `metrics.image.registry`                     | Exporter image registry                                                                                                                   | `docker.io`               |
-| `metrics.image.repository`                   | Exporter image repository                                                                                                                 | `bitnami/mysqld-exporter` |
-| `metrics.image.tag`                          | Exporter image tag (immutable tags are recommended)                                                                                       | `0.14.0-debian-11-r64`    |
-| `metrics.image.digest`                       | Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                  | `""`                      |
-| `metrics.image.pullPolicy`                   | Exporter image pull policy                                                                                                                | `IfNotPresent`            |
-| `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                          | `[]`                      |
-| `metrics.annotations`                        | Annotations for the Exporter pod                                                                                                          | `{}`                      |
-| `metrics.extraArgs`                          | Extra args to be passed to mysqld_exporter                                                                                                | `{}`                      |
-| `metrics.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the MariaDB metrics container(s)                                             | `{}`                      |
-| `metrics.containerSecurityContext.enabled`   | Enable security context for MariaDB metrics container                                                                                     | `false`                   |
-| `metrics.resources.limits`                   | The resources limits for MariaDB prometheus exporter containers                                                                           | `{}`                      |
-| `metrics.resources.requests`                 | The requested resources for MariaDB prometheus exporter containers                                                                        | `{}`                      |
-| `metrics.livenessProbe.enabled`              | Enable livenessProbe                                                                                                                      | `true`                    |
-| `metrics.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                                   | `120`                     |
-| `metrics.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                                          | `10`                      |
-| `metrics.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                                         | `1`                       |
-| `metrics.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                                       | `3`                       |
-| `metrics.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                                       | `1`                       |
-| `metrics.readinessProbe.enabled`             | Enable readinessProbe                                                                                                                     | `true`                    |
-| `metrics.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                                                  | `30`                      |
-| `metrics.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                                         | `10`                      |
-| `metrics.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                                        | `1`                       |
-| `metrics.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                                      | `3`                       |
-| `metrics.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                                      | `1`                       |
-| `metrics.serviceMonitor.enabled`             | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                                              | `false`                   |
-| `metrics.serviceMonitor.namespace`           | Namespace which Prometheus is running in                                                                                                  | `""`                      |
-| `metrics.serviceMonitor.jobLabel`            | The name of the label on the target service to use as the job name in prometheus.                                                         | `""`                      |
-| `metrics.serviceMonitor.interval`            | Interval at which metrics should be scraped                                                                                               | `30s`                     |
-| `metrics.serviceMonitor.scrapeTimeout`       | Specify the timeout after which the scrape is ended                                                                                       | `""`                      |
-| `metrics.serviceMonitor.relabelings`         | RelabelConfigs to apply to samples before scraping                                                                                        | `[]`                      |
-| `metrics.serviceMonitor.metricRelabelings`   | MetricRelabelConfigs to apply to samples before ingestion                                                                                 | `[]`                      |
-| `metrics.serviceMonitor.honorLabels`         | honorLabels chooses the metric's labels on collisions with target labels                                                                  | `false`                   |
-| `metrics.serviceMonitor.selector`            | ServiceMonitor selector labels                                                                                                            | `{}`                      |
-| `metrics.serviceMonitor.labels`              | Extra labels for the ServiceMonitor                                                                                                       | `{}`                      |
-| `metrics.prometheusRule.enabled`             | if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`                   |
-| `metrics.prometheusRule.namespace`           | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                             | `""`                      |
-| `metrics.prometheusRule.additionalLabels`    | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                                     | `{}`                      |
-| `metrics.prometheusRule.rules`               | Prometheus Rule definitions                                                                                                               | `[]`                      |
+| Name                                                        | Description                                                                                                                               | Value                     |
+| ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `metrics.enabled`                                           | Start a side-car prometheus exporter                                                                                                      | `false`                   |
+| `metrics.image.registry`                                    | Exporter image registry                                                                                                                   | `docker.io`               |
+| `metrics.image.repository`                                  | Exporter image repository                                                                                                                 | `bitnami/mysqld-exporter` |
+| `metrics.image.tag`                                         | Exporter image tag (immutable tags are recommended)                                                                                       | `0.14.0-debian-11-r77`    |
+| `metrics.image.digest`                                      | Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                  | `""`                      |
+| `metrics.image.pullPolicy`                                  | Exporter image pull policy                                                                                                                | `IfNotPresent`            |
+| `metrics.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                          | `[]`                      |
+| `metrics.annotations`                                       | Annotations for the Exporter pod                                                                                                          | `{}`                      |
+| `metrics.extraArgs`                                         | Extra args to be passed to mysqld_exporter                                                                                                | `{}`                      |
+| `metrics.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the MariaDB metrics container(s)                                             | `{}`                      |
+| `metrics.containerSecurityContext.enabled`                  | Enable security context for MariaDB metrics container                                                                                     | `false`                   |
+| `metrics.containerSecurityContext.privileged`               | Set metrics container's Security Context privileged                                                                                       | `false`                   |
+| `metrics.containerSecurityContext.allowPrivilegeEscalation` | Set metrics container's Security Context allowPrivilegeEscalation                                                                         | `false`                   |
+| `metrics.resources.limits`                                  | The resources limits for MariaDB prometheus exporter containers                                                                           | `{}`                      |
+| `metrics.resources.requests`                                | The requested resources for MariaDB prometheus exporter containers                                                                        | `{}`                      |
+| `metrics.livenessProbe.enabled`                             | Enable livenessProbe                                                                                                                      | `true`                    |
+| `metrics.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                   | `120`                     |
+| `metrics.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                          | `10`                      |
+| `metrics.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                         | `1`                       |
+| `metrics.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                                       | `3`                       |
+| `metrics.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                                       | `1`                       |
+| `metrics.readinessProbe.enabled`                            | Enable readinessProbe                                                                                                                     | `true`                    |
+| `metrics.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                                  | `30`                      |
+| `metrics.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                                         | `10`                      |
+| `metrics.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                                        | `1`                       |
+| `metrics.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                                      | `3`                       |
+| `metrics.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                                      | `1`                       |
+| `metrics.serviceMonitor.enabled`                            | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                                              | `false`                   |
+| `metrics.serviceMonitor.namespace`                          | Namespace which Prometheus is running in                                                                                                  | `""`                      |
+| `metrics.serviceMonitor.jobLabel`                           | The name of the label on the target service to use as the job name in prometheus.                                                         | `""`                      |
+| `metrics.serviceMonitor.interval`                           | Interval at which metrics should be scraped                                                                                               | `30s`                     |
+| `metrics.serviceMonitor.scrapeTimeout`                      | Specify the timeout after which the scrape is ended                                                                                       | `""`                      |
+| `metrics.serviceMonitor.relabelings`                        | RelabelConfigs to apply to samples before scraping                                                                                        | `[]`                      |
+| `metrics.serviceMonitor.metricRelabelings`                  | MetricRelabelConfigs to apply to samples before ingestion                                                                                 | `[]`                      |
+| `metrics.serviceMonitor.honorLabels`                        | honorLabels chooses the metric's labels on collisions with target labels                                                                  | `false`                   |
+| `metrics.serviceMonitor.selector`                           | ServiceMonitor selector labels                                                                                                            | `{}`                      |
+| `metrics.serviceMonitor.labels`                             | Extra labels for the ServiceMonitor                                                                                                       | `{}`                      |
+| `metrics.prometheusRule.enabled`                            | if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`                   |
+| `metrics.prometheusRule.namespace`                          | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                             | `""`                      |
+| `metrics.prometheusRule.additionalLabels`                   | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                                     | `{}`                      |
+| `metrics.prometheusRule.rules`                              | Prometheus Rule definitions                                                                                                               | `[]`                      |
 
 
 ### NetworkPolicy parameters
@@ -383,7 +390,7 @@ The above parameters map to the env variables defined in [bitnami/mariadb](https
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
-```bash
+```console
 $ helm install my-release \
   --set auth.rootPassword=secretpassword,auth.database=app_database \
     my-repo/mariadb
@@ -395,7 +402,7 @@ The above command sets the MariaDB `root` account password to `secretpassword`. 
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
-```bash
+```console
 $ helm install my-release -f values.yaml my-repo/mariadb
 ```
 
@@ -455,7 +462,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 It's necessary to set the `auth.rootPassword` parameter when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, some notes will be displayed providing the credentials you must use under the 'Administrator credentials' section. Please note down the password and run the command below to upgrade your chart:
 
-```bash
+```console
 $ helm upgrade my-release my-repo/mariadb --set auth.rootPassword=[ROOT_PASSWORD]
 ```
 
@@ -512,7 +519,7 @@ Backwards compatibility is not guaranteed. To upgrade to `8.0.0`, install a new 
 - Create a backup of the database, and restore it on the new release using tools such as [mysqldump](https://mariadb.com/kb/en/mysqldump/).
 - Reuse the PVC used to hold the master data on your previous release. To do so, use the `primary.persistence.existingClaim` parameter. The following example assumes that the release name is `mariadb`:
 
-```bash
+```console
 $ helm install mariadb my-repo/mariadb --set auth.rootPassword=[ROOT_PASSWORD] --set primary.persistence.existingClaim=[EXISTING_PVC]
 ```
 
@@ -544,7 +551,7 @@ $ kubectl delete statefulset opencart-mariadb --cascade=false
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -10,7 +10,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
                            
 ## TL;DR
 
-```bash
+```console
 $ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/nats
 ```
@@ -30,7 +30,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 To install the chart with the release name `my-release`:
 
-```bash
+```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/nats
 ```
 
@@ -42,7 +43,7 @@ The command deploys NATS on the Kubernetes cluster in the default configuration.
 
 To uninstall/delete the `my-release` deployment:
 
-```bash
+```console
 $ helm delete my-release
 ```
 
@@ -76,44 +77,44 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### NATS parameters
 
-| Name                     | Description                                                                                           | Value                |
-| ------------------------ | ----------------------------------------------------------------------------------------------------- | -------------------- |
-| `image.registry`         | NATS image registry                                                                                   | `docker.io`          |
-| `image.repository`       | NATS image repository                                                                                 | `bitnami/nats`       |
-| `image.tag`              | NATS image tag (immutable tags are recommended)                                                       | `2.9.9-debian-11-r0` |
-| `image.digest`           | NATS image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag  | `""`                 |
-| `image.pullPolicy`       | NATS image pull policy                                                                                | `IfNotPresent`       |
-| `image.pullSecrets`      | NATS image pull secrets                                                                               | `[]`                 |
-| `image.debug`            | Enable NATS image debug mode                                                                          | `false`              |
-| `auth.enabled`           | Switch to enable/disable client authentication                                                        | `true`               |
-| `auth.user`              | Client authentication user                                                                            | `nats_client`        |
-| `auth.password`          | Client authentication password                                                                        | `""`                 |
-| `auth.token`             | Client authentication token                                                                           | `""`                 |
-| `auth.timeout`           | Client authentication timeout (seconds)                                                               | `1`                  |
-| `auth.usersCredentials`  | Client authentication users credentials collection                                                    | `[]`                 |
-| `auth.noAuthUser`        | Client authentication username from auth.usersCredentials map to be used when no credentials provided | `""`                 |
-| `cluster.name`           | Cluster name                                                                                          | `nats`               |
-| `cluster.connectRetries` | Configure number of connect retries for implicit routes, otherwise leave blank                        | `""`                 |
-| `cluster.auth.enabled`   | Switch to enable/disable cluster authentication                                                       | `true`               |
-| `cluster.auth.user`      | Cluster authentication user                                                                           | `nats_cluster`       |
-| `cluster.auth.password`  | Cluster authentication password                                                                       | `""`                 |
-| `jetstream.enabled`      | Switch to enable/disable JetStream                                                                    | `false`              |
-| `jetstream.maxMemory`    | Max memory usage for JetStream                                                                        | `1G`                 |
-| `debug.enabled`          | Switch to enable/disable debug on logging                                                             | `false`              |
-| `debug.trace`            | Switch to enable/disable trace debug level on logging                                                 | `false`              |
-| `debug.logtime`          | Switch to enable/disable logtime on logging                                                           | `false`              |
-| `maxConnections`         | Max. number of client connections                                                                     | `""`                 |
-| `maxControlLine`         | Max. protocol control line                                                                            | `""`                 |
-| `maxPayload`             | Max. payload                                                                                          | `""`                 |
-| `writeDeadline`          | Duration the server can block on a socket write to a client                                           | `""`                 |
-| `natsFilename`           | Filename used by several NATS files (binary, configuration file, and pid file)                        | `nats-server`        |
-| `configuration`          | Specify content for NATS configuration file (generated based on other parameters otherwise)           | `""`                 |
-| `existingSecret`         | The name of an existing Secret with your custom configuration for NATS                                | `""`                 |
-| `command`                | Override default container command (useful when using custom images)                                  | `[]`                 |
-| `args`                   | Override default container args (useful when using custom images)                                     | `[]`                 |
-| `extraEnvVars`           | Extra environment variables to be set on NATS container                                               | `[]`                 |
-| `extraEnvVarsCM`         | ConfigMap with extra environment variables                                                            | `""`                 |
-| `extraEnvVarsSecret`     | Secret with extra environment variables                                                               | `""`                 |
+| Name                     | Description                                                                                           | Value                 |
+| ------------------------ | ----------------------------------------------------------------------------------------------------- | --------------------- |
+| `image.registry`         | NATS image registry                                                                                   | `docker.io`           |
+| `image.repository`       | NATS image repository                                                                                 | `bitnami/nats`        |
+| `image.tag`              | NATS image tag (immutable tags are recommended)                                                       | `2.9.12-debian-11-r0` |
+| `image.digest`           | NATS image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag  | `""`                  |
+| `image.pullPolicy`       | NATS image pull policy                                                                                | `IfNotPresent`        |
+| `image.pullSecrets`      | NATS image pull secrets                                                                               | `[]`                  |
+| `image.debug`            | Enable NATS image debug mode                                                                          | `false`               |
+| `auth.enabled`           | Switch to enable/disable client authentication                                                        | `true`                |
+| `auth.user`              | Client authentication user                                                                            | `nats_client`         |
+| `auth.password`          | Client authentication password                                                                        | `""`                  |
+| `auth.token`             | Client authentication token                                                                           | `""`                  |
+| `auth.timeout`           | Client authentication timeout (seconds)                                                               | `1`                   |
+| `auth.usersCredentials`  | Client authentication users credentials collection                                                    | `[]`                  |
+| `auth.noAuthUser`        | Client authentication username from auth.usersCredentials map to be used when no credentials provided | `""`                  |
+| `cluster.name`           | Cluster name                                                                                          | `nats`                |
+| `cluster.connectRetries` | Configure number of connect retries for implicit routes, otherwise leave blank                        | `""`                  |
+| `cluster.auth.enabled`   | Switch to enable/disable cluster authentication                                                       | `true`                |
+| `cluster.auth.user`      | Cluster authentication user                                                                           | `nats_cluster`        |
+| `cluster.auth.password`  | Cluster authentication password                                                                       | `""`                  |
+| `jetstream.enabled`      | Switch to enable/disable JetStream                                                                    | `false`               |
+| `jetstream.maxMemory`    | Max memory usage for JetStream                                                                        | `1G`                  |
+| `debug.enabled`          | Switch to enable/disable debug on logging                                                             | `false`               |
+| `debug.trace`            | Switch to enable/disable trace debug level on logging                                                 | `false`               |
+| `debug.logtime`          | Switch to enable/disable logtime on logging                                                           | `false`               |
+| `maxConnections`         | Max. number of client connections                                                                     | `""`                  |
+| `maxControlLine`         | Max. protocol control line                                                                            | `""`                  |
+| `maxPayload`             | Max. payload                                                                                          | `""`                  |
+| `writeDeadline`          | Duration the server can block on a socket write to a client                                           | `""`                  |
+| `natsFilename`           | Filename used by several NATS files (binary, configuration file, and pid file)                        | `nats-server`         |
+| `configuration`          | Specify content for NATS configuration file (generated based on other parameters otherwise)           | `""`                  |
+| `existingSecret`         | The name of an existing Secret with your custom configuration for NATS                                | `""`                  |
+| `command`                | Override default container command (useful when using custom images)                                  | `[]`                  |
+| `args`                   | Override default container args (useful when using custom images)                                     | `[]`                  |
+| `extraEnvVars`           | Extra environment variables to be set on NATS container                                               | `[]`                  |
+| `extraEnvVarsCM`         | ConfigMap with extra environment variables                                                            | `""`                  |
+| `extraEnvVarsSecret`     | Secret with extra environment variables                                                               | `""`                  |
 
 
 ### NATS deployment/statefulset parameters
@@ -220,7 +221,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Enable Prometheus metrics via exporter side-car                                                        | `false`                 |
 | `metrics.image.registry`                   | Prometheus metrics exporter image registry                                                             | `docker.io`             |
 | `metrics.image.repository`                 | Prometheus metrics exporter image repository                                                           | `bitnami/nats-exporter` |
-| `metrics.image.tag`                        | Prometheus metrics exporter image tag (immutable tags are recommended)                                 | `0.10.1-debian-11-r12`  |
+| `metrics.image.tag`                        | Prometheus metrics exporter image tag (immutable tags are recommended)                                 | `0.10.1-debian-11-r30`  |
 | `metrics.image.digest`                     | Petete image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `metrics.image.pullPolicy`                 | Prometheus metrics image pull policy                                                                   | `IfNotPresent`          |
 | `metrics.image.pullSecrets`                | Prometheus metrics image pull secrets                                                                  | `[]`                    |
@@ -266,7 +267,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
-```bash
+```console
 $ helm install my-release \
   --set auth.enabled=true,auth.user=my-user,auth.password=T0pS3cr3t \
     my-repo/nats
@@ -278,7 +279,7 @@ The above command enables NATS client authentication with `my-user` as user and 
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
-```bash
+```console
 $ helm install my-release -f values.yaml my-repo/nats
 ```
 
@@ -331,8 +332,8 @@ Find more information about how to deal with common errors related to Bitnami's 
 NATS version 2.0.0 has renamed the server binary filename from `gnatsd` to `nats-server`. Therefore, the default values has been changed in the chart,
 however, it is still possible to use the chart to deploy NATS version 1.x.x using the `natsFilename` property.
 
-```bash
-helm install nats-v1 --set natsFilename=gnatsd --set image.tag=1.4.1 my-repo/nats
+```console
+$ helm install nats-v1 --set natsFilename=gnatsd --set image.tag=1.4.1 my-repo/nats
 ```
 
 ### To 7.0.0
@@ -381,7 +382,7 @@ $ kubectl delete statefulset nats-nats --cascade=false
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

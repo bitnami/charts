@@ -7,7 +7,7 @@ phpMyAdmin is a free software tool written in PHP, intended to handle the admini
 [Overview of phpMyAdmin](https://www.phpmyadmin.net/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -33,6 +33,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/phpmyadmin
 ```
 
@@ -79,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`     | phpMyAdmin image registry                                                                                  | `docker.io`           |
 | `image.repository`   | phpMyAdmin image repository                                                                                | `bitnami/phpmyadmin`  |
-| `image.tag`          | phpMyAdmin image tag (immutable tags are recommended)                                                      | `5.2.0-debian-11-r67` |
+| `image.tag`          | phpMyAdmin image tag (immutable tags are recommended)                                                      | `5.2.0-debian-11-r77` |
 | `image.digest`       | phpMyAdmin image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`   | Image pull policy                                                                                          | `IfNotPresent`        |
 | `image.pullSecrets`  | Specify docker-registry secret names as an array                                                           | `[]`                  |
@@ -204,6 +205,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mariadb`                  | MariaDB chart configuration                                       | `{}`    |
 
 
+### Other Parameters
+
+| Name                                          | Description                                                            | Value   |
+| --------------------------------------------- | ---------------------------------------------------------------------- | ------- |
+| `serviceAccount.create`                       | Enable creation of ServiceAccount for PhpMyAdmin pod                   | `false` |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true`  |
+| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
+
+
 ### Metrics parameters
 
 | Name                                       | Description                                                                                                     | Value                     |
@@ -211,7 +222,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                                                            | `false`                   |
 | `metrics.image.registry`                   | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`                 | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                                                      | `0.11.0-debian-11-r70`    |
+| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                                                      | `0.11.0-debian-11-r80`    |
 | `metrics.image.digest`                     | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`                 | Image pull policy                                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                | `[]`                      |
@@ -464,9 +475,9 @@ To upgrade to `7.0.0`, it should be done reusing the PVCs used to hold both the 
 Obtain the credentials and the names of the PVCs used to hold both the MariaDB and phpMyAdmin data on your current release:
 
 ```console
-export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default phpmyadmin-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
-export MARIADB_PASSWORD=$(kubectl get secret --namespace default phpmyadmin-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
-export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=phpmyadmin -o jsonpath="{.items[0].metadata.name}")
+$ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default phpmyadmin-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
+$ export MARIADB_PASSWORD=$(kubectl get secret --namespace default phpmyadmin-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
+$ export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=phpmyadmin -o jsonpath="{.items[0].metadata.name}")
 ```
 
 Delete the phpMyAdmin deployment and delete the MariaDB statefulsets:
@@ -530,7 +541,7 @@ New versions are not going to be affected. Once a new version is released in the
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

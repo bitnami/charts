@@ -73,7 +73,9 @@ data:
   {{- else if eq .Values.persistence.imageChartStorage.type "gcs" }}
   STORAGE: "google"
   STORAGE_GOOGLE_BUCKET: {{ .Values.persistence.imageChartStorage.gcs.bucket }}
+  {{- if .Values.persistence.imageChartStorage.gcs.encodedkey }}
   GOOGLE_APPLICATION_CREDENTIALS: /etc/chartmuseum/gcs-key.json
+  {{- end }}
   {{- if .Values.persistence.imageChartStorage.gcs.rootdirectory }}
   STORAGE_GOOGLE_PREFIX: {{ .Values.persistence.imageChartStorage.gcs.rootdirectory | quote }}
   {{- end }}

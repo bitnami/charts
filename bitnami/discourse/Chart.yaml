@@ -1,7 +1,8 @@
 annotations:
   category: Forum
+  licenses: Apache-2.0
 apiVersion: v2
-appVersion: 2.8.11
+appVersion: 2.8.13
 dependencies:
   - condition: redis.enabled
     name: redis
@@ -17,7 +18,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Discourse is an open source discussion platform with built-in moderation and governance systems that let discussion communities protect themselves from bad actors even without official moderators.
-engine: gotpl
 home: https://github.com/bitnami/charts/tree/main/bitnami/discourse
 icon: https://bitnami.com/assets/stacks/discourse/img/discourse-stack-220x234.png
 keywords:
@@ -35,4 +35,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/discourse
   - https://github.com/spinnaker
   - https://www.discourse.org/
-version: 9.0.4
+version: 9.0.9

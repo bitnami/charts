@@ -101,7 +101,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql-repmgr
-    tag: 15.1.0-debian-11-r0
+    tag: 15.1.0-debian-11-r29
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -124,6 +124,9 @@ postgresql:
   ## @param postgresql.podLabels Labels to add to the StatefulSet pods. Evaluated as template
   ##
   podLabels: {}
+  ## @param postgresql.serviceAnnotations Provide any additional annotations for PostgreSQL service
+  ##
+  serviceAnnotations: {}
   ## @param postgresql.replicaCount Number of replicas to deploy. Use an odd number. Having 3 replicas is the minimum to get quorum when promoting a new primary.
   ##
   replicaCount: 3
@@ -578,6 +581,404 @@ postgresql:
     ##
     certKeyFilename: ""
 
+witness:
+  ## ref: https://hub.docker.com/r/bitnami/postgresql/tags/
+  ## @param witness.create Create PostgreSQL witness nodes
+  ##
+  create: false
+  ## @param witness.labels Labels to add to the StatefulSet. Evaluated as template
+  ##
+  labels: {}
+  ## @param witness.podLabels Labels to add to the StatefulSet pods. Evaluated as template
+  ##
+  podLabels: {}
+  ## @param witness.replicaCount Number of replicas to deploy.
+  ##
+  replicaCount: 1
+  ## @param witness.updateStrategy.type Postgresql statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ## e.g:
+  ## updateStrategy:
+  ##  type: RollingUpdate
+  ##  rollingUpdate:
+  ##    maxSurge: 25%
+  ##    maxUnavailable: 25%
+  ##
+  updateStrategy:
+    type: RollingUpdate
+  ## @param witness.containerPorts.postgresql PostgreSQL witness port
+  ##
+  containerPorts:
+    postgresql: 5432
+  ## @param witness.hostAliases Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param witness.hostNetwork Specify if host network should be enabled for PostgreSQL witness pod
+  ##
+  hostNetwork: false
+  ## @param witness.hostIPC Specify if host IPC should be enabled for PostgreSQL witness pod
+  ##
+  hostIPC: false
+  ## @param witness.podAnnotations Additional pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param witness.podAffinityPreset PostgreSQL witness pod affinity preset. Ignored if `witness.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param witness.podAntiAffinityPreset PostgreSQL witness pod anti-affinity preset. Ignored if `witness.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## PostgreSQL witness node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param witness.nodeAffinityPreset.type PostgreSQL witness node affinity preset type. Ignored if `witness.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param witness.nodeAffinityPreset.key PostgreSQL witness node label key to match Ignored if `witness.affinity` is set.
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## @param witness.nodeAffinityPreset.values PostgreSQL witness node label values to match. Ignored if `witness.affinity` is set.
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param witness.affinity Affinity for PostgreSQL witness pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: witness.podAffinityPreset, witness.podAntiAffinityPreset, and witness.nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param witness.nodeSelector Node labels for PostgreSQL witness pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param witness.tolerations Tolerations for PostgreSQL witness pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param witness.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param witness.priorityClassName Pod priority class
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ##
+  priorityClassName: ""
+  ## @param witness.schedulerName Use an alternate scheduler, e.g. "stork".
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param witness.terminationGracePeriodSeconds Seconds PostgreSQL witness pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## K8s Security Context
+  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param witness.podSecurityContext.enabled Enable security context for PostgreSQL witness with Repmgr
+  ## @param witness.podSecurityContext.fsGroup Group ID for the PostgreSQL witness with Repmgr filesystem
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Container Security Context
+  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param witness.containerSecurityContext.enabled Enable container security context
+  ## @param witness.containerSecurityContext.runAsUser User ID for the PostgreSQL witness with Repmgr container
+  ## @param witness.containerSecurityContext.runAsNonRoot Set PostgreSQL witness with Repmgr containers' Security Context runAsNonRoot
+  ## @param witness.containerSecurityContext.readOnlyRootFilesystem Set PostgreSQL witness with Repmgr containers' Security Context runAsNonRoot
+  ## e.g:
+  ##   containerSecurityContext:
+  ##     enabled: true
+  ##     capabilities:
+  ##       drop: ["NET_RAW"]
+  ##     readOnlyRootFilesystem: true
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
+  ## @param witness.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param witness.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param witness.lifecycleHooks LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template
+  ##
+  lifecycleHooks: {}
+  ## @param witness.extraEnvVars Array containing extra environment variables
+  ## For example:
+  ##  - name: PG_EXPORTER_DISABLE_DEFAULT_METRICS
+  ##    value: "true"
+  ##
+  extraEnvVars: []
+  ## @param witness.extraEnvVarsCM ConfigMap with extra environment variables
+  ##
+  extraEnvVarsCM: ""
+  ## @param witness.extraEnvVarsSecret Secret with extra environment variables
+  ##
+  extraEnvVarsSecret: ""
+  ## @param witness.extraVolumes Extra volumes to add to the deployment
+  ##
+  extraVolumes: []
+  ## @param witness.extraVolumeMounts Extra volume mounts to add to the container. Normally used with `extraVolumes`.
+  ##
+  extraVolumeMounts: []
+  ## @param witness.initContainers Extra init containers to add to the deployment
+  ##
+  initContainers: []
+  ## @param witness.sidecars Extra sidecar containers to add to the deployment
+  ##
+  sidecars: []
+  ## PostgreSQL containers' resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param witness.resources.limits The resources limits for the container
+  ## @param witness.resources.requests The requested resources for the container
+  ##
+  resources:
+    ## Example:
+    ## limits:
+    ##    cpu: 250m
+    ##    memory: 256Mi
+    ##
+    limits: {}
+    ## Examples:
+    ## requests:
+    ##    cpu: 250m
+    ##    memory: 256Mi
+    ##
+    requests: {}
+  ## PostgreSQL container's liveness probe
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param witness.livenessProbe.enabled Enable livenessProbe
+  ## @param witness.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param witness.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param witness.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param witness.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param witness.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 6
+  ## PostgreSQL container's readiness probe
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param witness.readinessProbe.enabled Enable readinessProbe
+  ## @param witness.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param witness.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param witness.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param witness.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param witness.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 6
+  ## PostgreSQL container's startup probe
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param witness.startupProbe.enabled Enable startupProbe
+  ## @param witness.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param witness.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param witness.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param witness.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param witness.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 10
+  ## @param witness.customLivenessProbe Override default liveness probe
+  ##
+  customLivenessProbe: {}
+  ## @param witness.customReadinessProbe Override default readiness probe
+  ##
+  customReadinessProbe: {}
+  ## @param witness.customStartupProbe Override default startup probe
+  ##
+  customStartupProbe: {}
+  ## Pod disruption budget configuration
+  ## @param witness.pdb.create Specifies whether to create a Pod disruption budget for PostgreSQL witness with Repmgr
+  ## @param witness.pdb.minAvailable Minimum number / percentage of pods that should remain scheduled
+  ## @param witness.pdb.maxUnavailable Maximum number / percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+
+  ## @param witness.upgradeRepmgrExtension Upgrade repmgr extension in the database
+  ##
+  upgradeRepmgrExtension: false
+  ## @param witness.pgHbaTrustAll Configures PostgreSQL HBA to trust every user
+  ##
+  pgHbaTrustAll: false
+  ## Repmgr configuration parameters
+  ## @param witness.repmgrLogLevel Repmgr log level (DEBUG, INFO, NOTICE, WARNING, ERROR, ALERT, CRIT or EMERG)
+  ## @param witness.repmgrConnectTimeout Repmgr backend connection timeout (in seconds)
+  ## @param witness.repmgrReconnectAttempts Repmgr backend reconnection attempts
+  ## @param witness.repmgrReconnectInterval Repmgr backend reconnection interval (in seconds)
+  ##
+  repmgrLogLevel: NOTICE
+  repmgrConnectTimeout: 5
+  repmgrReconnectAttempts: 2
+  repmgrReconnectInterval: 3
+
+  ## Audit settings
+  ## https://github.com/bitnami/containers/tree/main/bitnami/postgresql#auditing
+  ##
+  audit:
+    ## @param witness.audit.logHostname Add client hostnames to the log file
+    ##
+    logHostname: true
+    ## @param witness.audit.logConnections Add client log-in operations to the log file
+    ##
+    logConnections: false
+    ## @param witness.audit.logDisconnections Add client log-outs operations to the log file
+    ##
+    logDisconnections: false
+    ## @param witness.audit.pgAuditLog Add operations to log using the pgAudit extension
+    ##
+    pgAuditLog: ""
+    ## @param witness.audit.pgAuditLogCatalog Log catalog using pgAudit
+    ##
+    pgAuditLogCatalog: "off"
+    ## @param witness.audit.clientMinMessages Message log level to share with the user
+    ##
+    clientMinMessages: error
+    ## @param witness.audit.logLinePrefix Template string for the log line prefix
+    ##
+    logLinePrefix: ""
+    ## @param witness.audit.logTimezone Timezone for the log timestamps
+    ##
+    logTimezone: ""
+  ## @param witness.maxConnections Maximum total connections
+  ##
+  maxConnections: ""
+  ## @param witness.postgresConnectionLimit Maximum connections for the postgres user
+  ##
+  postgresConnectionLimit: ""
+  ## @param witness.dbUserConnectionLimit Maximum connections for the created user
+  ##
+  dbUserConnectionLimit: ""
+  ## @param witness.tcpKeepalivesInterval TCP keepalives interval
+  ##
+  tcpKeepalivesInterval: ""
+  ## @param witness.tcpKeepalivesIdle TCP keepalives idle
+  ##
+  tcpKeepalivesIdle: ""
+  ## @param witness.tcpKeepalivesCount TCP keepalives count
+  ##
+  tcpKeepalivesCount: ""
+  ## @param witness.statementTimeout Statement timeout
+  ##
+  statementTimeout: ""
+  ## @param witness.pghbaRemoveFilters Comma-separated list of patterns to remove from the pg_hba.conf file
+  ## (cannot be used with custom pg_hba.conf)
+  ##
+  pghbaRemoveFilters: ""
+  ## @param witness.extraInitContainers Extra init containers
+  ## Example:
+  ## extraInitContainers:
+  ##   - name: do-something
+  ##     image: busybox
+  ##     command: ['do', 'something']
+  ##
+  extraInitContainers: []
+  ## @param witness.repmgrConfiguration Repmgr configuration
+  ## You can use this parameter to specify the content for repmgr.conf
+  ## Otherwise, a repmgr.conf will be generated based on the environment variables
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql-repmgr#configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql-repmgr#configuration-file
+  ## Example:
+  ## repmgrConfiguration: |-
+  ##   ssh_options='-o "StrictHostKeyChecking no" -v'
+  ##   use_replication_slots='1'
+  ##   ...
+  ##
+  repmgrConfiguration: ""
+  ## @param witness.configuration PostgreSQL configuration
+  ## You can use this parameter to specify the content for witness.conf
+  ## Otherwise, a repmgr.conf will be generated based on the environment variables
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql-repmgr#configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql-repmgr#configuration-file
+  ## Example:
+  ## configuration: |-
+  ##   listen_addresses = '*'
+  ##   port = '5432'
+  ##   ...
+  ##
+  configuration: ""
+  ## @param witness.pgHbaConfiguration PostgreSQL client authentication configuration
+  ## You can use this parameter to specify the content for pg_hba.conf
+  ## Otherwise, a repmgr.conf will be generated based on the environment variables
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql-repmgr#configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql-repmgr#configuration-file
+  ## Example:
+  ## pgHbaConfiguration: |-
+  ##   host     all            repmgr    0.0.0.0/0    md5
+  ##   host     repmgr         repmgr    0.0.0.0/0    md
+  ##   ...
+  ##
+  pgHbaConfiguration: ""
+  ## @param witness.configurationCM Name of existing ConfigMap with configuration files
+  ## NOTE: This will override witness.repmgrConfiguration, witness.configuration and witness.pgHbaConfiguration
+  ##
+  configurationCM: ""
+  ## @param witness.extendedConf Extended PostgreSQL configuration (appended to main or default configuration). Implies `volumePermissions.enabled`.
+  ## Similar to witness.configuration, but _appended_ to the main configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql-repmgr#allow-settings-to-be-loaded-from-files-other-than-the-default-postgresqlconf
+  ## Example:
+  ## extendedConf: |-
+  ##   deadlock_timeout = 1s
+  ##   max_locks_per_transaction = 64
+  ##   ...
+  ##
+  extendedConf: ""
+  ## @param witness.extendedConfCM ConfigMap with PostgreSQL extended configuration
+  ## NOTE: This will override witness.extendedConf and implies `volumePermissions.enabled`
+  ##
+  extendedConfCM: ""
+  ## @param witness.initdbScripts Dictionary of initdb scripts
+  ## Specify dictionary of scripts to be run at first boot
+  ## The allowed extensions are `.sh`, `.sql` and `.sql.gz`
+  ## ref: https://github.com/bitnami/charts/tree/main/bitnami/postgresql-ha#initialize-a-fresh-instance
+  ## e.g:
+  ## initdbScripts:
+  ##   my_init_script.sh: |
+  ##      #!/bin/sh
+  ##      echo "Do something."
+  ##
+  initdbScripts: {}
+  ## @param witness.initdbScriptsCM ConfigMap with scripts to be run at first boot
+  ## NOTE: This will override initdbScripts
+  ##
+  initdbScriptsCM: ""
+  ## @param witness.initdbScriptsSecret Secret with scripts to be run at first boot
+  ## Note: can be used with initdbScriptsCM or initdbScripts
+  ##
+  initdbScriptsSecret: ""
 ## @section Pgpool parameters
 
 ## Pgpool parameters
@@ -596,7 +997,7 @@ pgpool:
   image:
     registry: docker.io
     repository: bitnami/pgpool
-    tag: 4.3.3-debian-11-r28
+    tag: 4.4.2-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -651,6 +1052,9 @@ pgpool:
   ## @param pgpool.serviceLabels Labels to add to the service. Evaluated as template
   ##
   serviceLabels: {}
+  ## @param pgpool.serviceAnnotations Provide any additional annotations for Pgpool service
+  ##
+  serviceAnnotations: {}
   ## @param pgpool.customLivenessProbe Override default liveness probe
   ##
   customLivenessProbe: {}
@@ -1106,7 +1510,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.11.1-debian-11-r27
+    tag: 0.11.1-debian-11-r53
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1348,7 +1752,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r50
+    tag: 11-debian-11-r76
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1493,7 +1897,7 @@ service:
   ##   clientIP:
   ##     timeoutSeconds: 300
   sessionAffinityConfig: {}
-  ## @param service.annotations Provide any additional annotations for PostgreSQL service
+  ## @param service.annotations Provide any additional annotations both for PostgreSQL and Pgpool services
   ##
   annotations: {}
   ## @param service.serviceLabels Labels for PostgreSQL service

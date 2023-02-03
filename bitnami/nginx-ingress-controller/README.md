@@ -7,10 +7,10 @@ NGINX Ingress Controller is an Ingress controller that manages external access t
 [Overview of NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
-```bash
+```console
 $ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/nginx-ingress-controller
 ```
@@ -32,7 +32,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 To install the chart with the release name `my-release`:
 
-```bash
+```console
 $ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/nginx-ingress-controller
 ```
@@ -45,7 +45,7 @@ These commands deploy nginx-ingress-controller on the Kubernetes cluster in the 
 
 To uninstall/delete the `my-release` deployment:
 
-```bash
+```console
 $ helm delete my-release
 ```
 
@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `image.registry`                       | Nginx Ingress Controller image registry                                                                                                            | `docker.io`                        |
 | `image.repository`                     | Nginx Ingress Controller image repository                                                                                                          | `bitnami/nginx-ingress-controller` |
-| `image.tag`                            | Nginx Ingress Controller image tag (immutable tags are recommended)                                                                                | `1.6.0-debian-11-r1`               |
+| `image.tag`                            | Nginx Ingress Controller image tag (immutable tags are recommended)                                                                                | `1.6.0-debian-11-r11`              |
 | `image.digest`                         | Nginx Ingress Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                           | `""`                               |
 | `image.pullPolicy`                     | Nginx Ingress Controller image pull policy                                                                                                         | `IfNotPresent`                     |
 | `image.pullSecrets`                    | Specify docker-registry secret names as an array                                                                                                   | `[]`                               |
@@ -194,7 +194,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `defaultBackend.hostAliases`                           | Add deployment host aliases                                                                                     | `[]`                   |
 | `defaultBackend.image.registry`                        | Default backend image registry                                                                                  | `docker.io`            |
 | `defaultBackend.image.repository`                      | Default backend image repository                                                                                | `bitnami/nginx`        |
-| `defaultBackend.image.tag`                             | Default backend image tag (immutable tags are recommended)                                                      | `1.22.1-debian-11-r16` |
+| `defaultBackend.image.tag`                             | Default backend image tag (immutable tags are recommended)                                                      | `1.22.1-debian-11-r26` |
 | `defaultBackend.image.digest`                          | Default backend image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `defaultBackend.image.pullPolicy`                      | Image pull policy                                                                                               | `IfNotPresent`         |
 | `defaultBackend.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                | `[]`                   |
@@ -337,7 +337,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
-```bash
+```console
 $ helm install my-release \
     --set image.pullPolicy=Always \
     my-repo/nginx-ingress-controller
@@ -347,7 +347,7 @@ The above command sets the `image.pullPolicy` to `Always`.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
-```bash
+```console
 $ helm install my-release -f values.yaml my-repo/nginx-ingress-controller
 ```
 
@@ -469,7 +469,7 @@ $ kubectl patch daemonset nginx-ingress-controller --type=json -p='[{"op": "remo
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

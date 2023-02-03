@@ -1,5 +1,6 @@
 annotations:
   category: Infrastructure
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: 2.6.2
 dependencies:
@@ -31,4 +32,4 @@ maintainers:
 name: kubeapps
 sources:
   - https://github.com/vmware-tanzu/kubeapps
-version: 12.1.2
+version: 12.2.0

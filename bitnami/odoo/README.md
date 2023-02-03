@@ -35,6 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 $ helm install my-release my-repo/odoo
 ```
 
@@ -68,25 +69,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                     | Description                                                                                          | Value                        |
-| ------------------------ | ---------------------------------------------------------------------------------------------------- | ---------------------------- |
-| `kubeVersion`            | Override Kubernetes version                                                                          | `""`                         |
-| `nameOverride`           | String to partially override common.names.fullname                                                   | `""`                         |
-| `fullnameOverride`       | String to fully override common.names.fullname                                                       | `""`                         |
-| `commonLabels`           | Labels to add to all deployed objects                                                                | `{}`                         |
-| `commonAnnotations`      | Annotations to add to all deployed objects                                                           | `{}`                         |
-| `clusterDomain`          | Default Kubernetes cluster domain                                                                    | `cluster.local`              |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                                    | `[]`                         |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)              | `false`                      |
-| `diagnosticMode.command` | Command to override all containers in the the statefulset                                            | `["sleep"]`                  |
-| `diagnosticMode.args`    | Args to override all containers in the the statefulset                                               | `["infinity"]`               |
-| `image.registry`         | Odoo image registry                                                                                  | `docker.io`                  |
-| `image.repository`       | Odoo image repository                                                                                | `bitnami/odoo`               |
-| `image.tag`              | Odoo image tag (immutable tags are recommended)                                                      | `16.0.20221115-debian-11-r4` |
-| `image.digest`           | Odoo image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
-| `image.pullPolicy`       | Odoo image pull policy                                                                               | `IfNotPresent`               |
-| `image.pullSecrets`      | Odoo image pull secrets                                                                              | `[]`                         |
-| `image.debug`            | Enable image debug mode                                                                              | `false`                      |
+| Name                     | Description                                                                                          | Value                         |
+| ------------------------ | ---------------------------------------------------------------------------------------------------- | ----------------------------- |
+| `kubeVersion`            | Override Kubernetes version                                                                          | `""`                          |
+| `nameOverride`           | String to partially override common.names.fullname                                                   | `""`                          |
+| `fullnameOverride`       | String to fully override common.names.fullname                                                       | `""`                          |
+| `commonLabels`           | Labels to add to all deployed objects                                                                | `{}`                          |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                                           | `{}`                          |
+| `clusterDomain`          | Default Kubernetes cluster domain                                                                    | `cluster.local`               |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                                    | `[]`                          |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)              | `false`                       |
+| `diagnosticMode.command` | Command to override all containers in the the statefulset                                            | `["sleep"]`                   |
+| `diagnosticMode.args`    | Args to override all containers in the the statefulset                                               | `["infinity"]`                |
+| `image.registry`         | Odoo image registry                                                                                  | `docker.io`                   |
+| `image.repository`       | Odoo image repository                                                                                | `bitnami/odoo`                |
+| `image.tag`              | Odoo image tag (immutable tags are recommended)                                                      | `16.0.20221115-debian-11-r24` |
+| `image.digest`           | Odoo image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                          |
+| `image.pullPolicy`       | Odoo image pull policy                                                                               | `IfNotPresent`                |
+| `image.pullSecrets`      | Odoo image pull secrets                                                                              | `[]`                          |
+| `image.debug`            | Enable image debug mode                                                                              | `false`                       |
 
 
 ### Odoo Configuration parameters
@@ -126,21 +127,21 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.enabled`   | Enabled Odoo containers' Security Context                                                                                | `false`         |
 | `containerSecurityContext.runAsUser` | Set Odoo container's Security Context runAsUser                                                                          | `1001`          |
 | `livenessProbe.enabled`              | Enable livenessProbe                                                                                                     | `true`          |
-| `livenessProbe.path`                 | Path for to check for livenessProbe                                                                                      | `/`             |
+| `livenessProbe.path`                 | Path for to check for livenessProbe                                                                                      | `/web/health`   |
 | `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                  | `600`           |
 | `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                         | `30`            |
 | `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                        | `5`             |
 | `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                      | `6`             |
 | `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                      | `1`             |
 | `readinessProbe.enabled`             | Enable readinessProbe                                                                                                    | `true`          |
-| `readinessProbe.path`                | Path to check for readinessProbe                                                                                         | `/`             |
+| `readinessProbe.path`                | Path to check for readinessProbe                                                                                         | `/web/health`   |
 | `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                                 | `30`            |
 | `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                        | `10`            |
 | `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                       | `5`             |
 | `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                     | `6`             |
 | `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                     | `1`             |
 | `startupProbe.enabled`               | Enable startupProbe                                                                                                      | `false`         |
-| `startupProbe.path`                  | Path to check for startupProbe                                                                                           | `/`             |
+| `startupProbe.path`                  | Path to check for startupProbe                                                                                           | `/web/health`   |
 | `startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                                   | `300`           |
 | `startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                          | `10`            |
 | `startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                         | `5`             |
@@ -392,7 +393,7 @@ New versions are not going to be affected. Once a new version is released in the
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

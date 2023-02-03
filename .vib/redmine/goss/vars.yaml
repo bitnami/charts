@@ -1,0 +1,4 @@
+mariadb:
+  auth:
+    username: bn_test_redmine
+    password: bitnami_test_password

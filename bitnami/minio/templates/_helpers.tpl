@@ -47,36 +47,12 @@ otherwise it generates a random value.
 Get the user to use to access MinIO&reg;
 */}}
 {{- define "minio.secret.userValue" -}}
-{{- if .Values.gateway.enabled }}
-    {{- if eq .Values.gateway.type "azure" }}
-        {{- if .Values.gateway.auth.azure.accessKey }}
-            {{- .Values.gateway.auth.azure.accessKey -}}
-        {{- else -}}
-            {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "root-user")  -}}
-        {{- end -}}
-    {{- else if eq .Values.gateway.type "gcs" }}
-        {{- if .Values.gateway.auth.gcs.accessKey }}
-            {{- .Values.gateway.auth.gcs.accessKey -}}
-        {{- else -}}
-            {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "root-user")  -}}
-        {{- end -}}
-    {{- else if eq .Values.gateway.type "nas" }}
-        {{- if .Values.gateway.auth.nas.accessKey }}
-            {{- .Values.gateway.auth.nas.accessKey -}}
-        {{- else -}}
-            {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "root-user")  -}}
-        {{- end -}}
-    {{- else if and (eq .Values.gateway.type "s3") (not .Values.gateway.auth.s3.useIRSA ) }}
-        {{- .Values.gateway.auth.s3.accessKey -}}
-    {{- end -}}
-{{- else }}
-    {{- if .Values.auth.rootUser }}
-        {{- .Values.auth.rootUser -}}
-    {{- else if (not .Values.auth.forcePassword) }}
-        {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "root-user")  -}}
-    {{- else -}}
-        {{ required "A root username is required!" .Values.auth.rootUser }}
-    {{- end -}}
+{{- if .Values.auth.rootUser }}
+    {{- .Values.auth.rootUser -}}
+{{- else if (not .Values.auth.forcePassword) }}
+    {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "root-user")  -}}
+{{- else -}}
+    {{ required "A root username is required!" .Values.auth.rootUser }}
 {{- end -}}
 {{- end -}}
 
@@ -84,36 +60,24 @@ Get the user to use to access MinIO&reg;
 Get the password to use to access MinIO&reg;
 */}}
 {{- define "minio.secret.passwordValue" -}}
-{{- if .Values.gateway.enabled }}
-    {{- if eq .Values.gateway.type "azure" }}
-        {{- if .Values.gateway.auth.azure.secretKey }}
-            {{- .Values.gateway.auth.azure.secretKey -}}
-        {{- else -}}
-            {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "root-password")  -}}
-        {{- end -}}
-    {{- else if eq .Values.gateway.type "gcs" }}
-        {{- if .Values.gateway.auth.gcs.secretKey }}
-            {{- .Values.gateway.auth.gcs.secretKey -}}
-        {{- else -}}
-            {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "root-password")  -}}
-        {{- end -}}
-    {{- else if eq .Values.gateway.type "nas" }}
-        {{- if .Values.gateway.auth.nas.secretKey }}
-            {{- .Values.gateway.auth.nas.secretKey -}}
-        {{- else -}}
-            {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "root-password")  -}}
-        {{- end -}}
-    {{- else if and (eq .Values.gateway.type "s3") (not .Values.gateway.auth.s3.useIRSA ) }}
-        {{- .Values.gateway.auth.s3.secretKey -}}
-    {{- end -}}
-{{- else }}
-    {{- if .Values.auth.rootPassword }}
-        {{- .Values.auth.rootPassword -}}
-    {{- else if (not .Values.auth.forcePassword) }}
-        {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "root-password")  -}}
-    {{- else -}}
-        {{ required "A root password is required!" .Values.auth.rootPassword }}
-    {{- end -}}
+{{- if .Values.auth.rootPassword }}
+    {{- .Values.auth.rootPassword -}}
+{{- else if (not .Values.auth.forcePassword) }}
+    {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "root-password")  -}}
+{{- else -}}
+    {{ required "A root password is required!" .Values.auth.rootPassword }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Get existing password to access MinIO&reg without generating a new password;
+*/}}
+{{- define "minio.secret.existingPassword" -}}
+{{- $obj := (lookup "v1" "Secret" .Release.Namespace (include "minio.secretName" .)).data -}}
+{{- if $obj }}
+{{- index $obj "root-password" | b64dec -}}
+{{- else -}}
+{{- "" -}}
 {{- end -}}
 {{- end -}}
 
@@ -142,7 +106,7 @@ Return true if a secret object should be created
 Return true if a PVC object should be created (only in standalone mode)
 */}}
 {{- define "minio.createPVC" -}}
-{{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) (or (and (eq .Values.mode "standalone") (not .Values.gateway.enabled)) (and .Values.gateway.enabled (eq .Values.gateway.type "nas"))) }}
+{{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) (eq .Values.mode "standalone") }}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -179,11 +143,6 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "minio.validateValues.mode" .) -}}
 {{- $messages := append $messages (include "minio.validateValues.totalDrives" .) -}}
 {{- $messages := append $messages (include "minio.validateValues.tls" .) -}}
-{{- $messages := append $messages (include "minio.validateValues.gateway.type" .) -}}
-{{- $messages := append $messages (include "minio.validateValues.gateway.azure.credentials" .) -}}
-{{- $messages := append $messages (include "minio.validateValues.gateway.gcs.projectID" .) -}}
-{{- $messages := append $messages (include "minio.validateValues.gateway.nas.persistence" .) -}}
-{{- $messages := append $messages (include "minio.validateValues.gateway.s3.credentials" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -232,70 +191,6 @@ minio: tls.existingSecret, tls.autoGenerated
 {{- end -}}
 
 {{/*
-Validate values of MinIO&reg; - must provide a valid gateway type ("azure", "gcs", "nas" or "s3")
-*/}}
-{{- define "minio.validateValues.gateway.type" -}}
-{{- $allowedValues := list "azure" "gcs" "nas" "s3" }}
-{{- if and .Values.gateway.enabled (not (has .Values.gateway.type $allowedValues)) -}}
-minio: gateway.type
-    Invalid Gateway type. Valid values are "azure", "gcs", "nas" and "s3".
-    Please set a valid mode (--set gateway.type="xxxx")
-{{- end -}}
-{{- end -}}
-
-{{/*
-Validate values of MinIO&reg; - when using MinIO&reg; as an Azure Gateway, the StorageAccount Name/Key are required
-*/}}
-{{- define "minio.validateValues.gateway.azure.credentials" -}}
-{{- if and .Values.gateway.enabled (eq .Values.gateway.type "azure") (or (empty .Values.gateway.auth.azure.storageAccountName) (empty .Values.gateway.auth.azure.storageAccountKey)) (or (empty .Values.gateway.auth.azure.storageAccountNameExistingSecret) (empty .Values.gateway.auth.azure.storageAccountNameExistingSecretKey) (empty .Values.gateway.auth.azure.storageAccountKeyExistingSecret) (empty .Values.gateway.auth.azure.storageAccountKeyExistingSecretKey)) }}
-minio: gateway.auth.azure
-    The StorageAccount name and key are required to use MinIO&reg; as a Azure Gateway.
-    Please set a valid StorageAccount information (--set gateway.auth.azure.storageAccountName="xxxx",gateway.auth.azure.storageAccountKey="yyyy")
-    Alternatively, specify secrets info to extract StorageAccount name and key:
-    --set gateway.auth.azure.storageAccountNameExistingSecret="xxxx", --set gateway.auth.azure.storageAccountNameExistingSecretKey="yyyy",
-    --set gateway.auth.azure.storageAccountKeyExistingSecret="aaaa", --set gateway.auth.azure.storageAccountKeyExistingSecretKey="bbbb"
-{{- end -}}
-{{- end -}}
-
-{{/*
-Validate values of MinIO&reg; - when using MinIO&reg; as a GCS Gateway, the GCP project ID is required
-*/}}
-{{- define "minio.validateValues.gateway.gcs.projectID" -}}
-{{- if and .Values.gateway.enabled (eq .Values.gateway.type "gcs") (empty .Values.gateway.auth.gcs.projectID) }}
-minio: gateway.auth.gcs.projectID
-    A GCP project ID is required to use MinIO&reg; as a GCS Gateway.
-    Please set a valid project ID (--set gateway.auth.gcs.projectID="xxxx")
-{{- end -}}
-{{- end -}}
-
-{{/*
-Validate values of MinIO&reg; - when using MinIO&reg; as a NAS Gateway, ReadWriteMany volumes are required
-*/}}
-{{- define "minio.validateValues.gateway.nas.persistence" -}}
-{{- $replicaCount := int .Values.gateway.replicaCount }}
-{{- if and .Values.gateway.enabled (eq .Values.gateway.type "nas") (gt $replicaCount 1) (not .Values.persistence.enabled) }}
-minio: persistence.enabled
-    ReadWriteMany volumes are required to use MinIO&reg; as a NAS Gateway with N replicas.
-    Please enable persistence (--set persistence.enabled=true)
-{{- else if and .Values.gateway.enabled (eq .Values.gateway.type "nas") (gt $replicaCount 1) (include "minio.createPVC" .) (not (has "ReadWriteMany" .Values.persistence.accessModes)) }}
-minio: persistence.accessModes
-    ReadWriteMany volumes are required to use MinIO&reg; as a NAS Gateway with N replicas.
-    Please set a valid mode (--set persistence.accessModes[0]="ReadWriteMany")
-{{- end -}}
-{{- end -}}
-
-{{/*
-Validate values of MinIO&reg; - when using MinIO&reg; as a S3 Gateway, the Access & Secret keys are required
-*/}}
-{{- define "minio.validateValues.gateway.s3.credentials" -}}
-{{- if and .Values.gateway.enabled (eq .Values.gateway.type "s3") (not .Values.gateway.auth.s3.useIRSA ) (or (empty .Values.gateway.auth.s3.accessKey) (empty .Values.gateway.auth.s3.secretKey)) }}
-minio: gateway.auth.s3
-    The Access & Secret keys are required to use MinIO&reg; as a S3 Gateway.
-    Please set valid keys (--set gateway.auth.s3.accessKey="xxxx",gateway.auth.s3.secretKey="yyyy")
-{{- end -}}
-{{- end -}}
-
-{{/*
 Return the secret containing MinIO TLS certificates
 */}}
 {{- define "minio.tlsSecretName" -}}
@@ -313,4 +208,43 @@ Return true if a TLS secret object should be created
 {{- if and .Values.tls.enabled .Values.tls.autoGenerated (not .Values.tls.existingSecret) }}
     {{- true -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Provisioning job labels (exclude matchLabels from standard labels)
+*/}}
+{{- define "minio.labels.provisioning" -}}
+{{- $provisioningLabels := (include "common.labels.standard" . | fromYaml ) -}}
+{{- range (include "common.labels.matchLabels" . | fromYaml | keys ) -}}
+{{- $_ := unset $provisioningLabels . -}}
+{{- end -}}
+{{- print ($provisioningLabels | toYaml) -}}
+{{- end -}}
+
+{{/*
+Return the ingress anotation
+*/}}
+{{- define "minio.ingress.annotations" -}}
+{{ .Values.ingress.annotations | toYaml }}
+{{- end -}}
+
+{{/*
+Return the api ingress anotation
+*/}}
+{{- define "minio.apiIngress.annotations" -}}
+{{ .Values.apiIngress.annotations | toYaml }}
+{{- end -}}
+
+{{/*
+Return the ingress hostname
+*/}}
+{{- define "minio.ingress.hostname" -}}
+{{- .Values.ingress.hostname -}}
+{{- end -}}
+
+{{/*
+Return the api ingress hostname
+*/}}
+{{- define "minio.apiIngress.hostname" -}}
+{{- .Values.apiIngress.hostname -}}
 {{- end -}}

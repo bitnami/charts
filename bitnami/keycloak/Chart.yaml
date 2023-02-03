@@ -1,7 +1,8 @@
 annotations:
   category: DeveloperTools
+  licenses: Apache-2.0
 apiVersion: v2
-appVersion: 19.0.3
+appVersion: 20.0.3
 dependencies:
   - condition: postgresql.enabled
     name: postgresql
@@ -13,7 +14,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Keycloak is a high performance Java-based identity and access management solution. It lets developers add an authentication layer to their applications with minimum effort.
-engine: gotpl
 home: https://www.keycloak.org
 icon: https://bitnami.com/assets/stacks/keycloak/img/keycloak-stack-220x234.png
 keywords:
@@ -26,4 +26,4 @@ name: keycloak
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/keycloak
   - https://github.com/keycloak/keycloak
-version: 12.2.0
+version: 13.0.3

@@ -83,7 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`              | Cassandra image registry                                                                                               | `docker.io`           |
 | `image.repository`            | Cassandra image repository                                                                                             | `bitnami/cassandra`   |
-| `image.tag`                   | Cassandra image tag (immutable tags are recommended)                                                                   | `4.0.7-debian-11-r15` |
+| `image.tag`                   | Cassandra image tag (immutable tags are recommended)                                                                   | `4.1.0-debian-11-r11` |
 | `image.digest`                | Cassandra image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                  |
 | `image.pullPolicy`            | image pull policy                                                                                                      | `IfNotPresent`        |
 | `image.pullSecrets`           | Cassandra image pull secrets                                                                                           | `[]`                  |
@@ -237,7 +237,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume                                       | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume image tag (immutable tags are recommended)                                                      | `11-debian-11-r59`      |
+| `volumePermissions.image.tag`                 | Init container volume image tag (immutable tags are recommended)                                                      | `11-debian-11-r74`      |
 | `volumePermissions.image.digest`              | Init container volume image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`          | Init container volume pull policy                                                                                     | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                      | `[]`                    |
@@ -253,7 +253,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a side-car prometheus exporter                                                                               | `false`                      |
 | `metrics.image.registry`                     | Cassandra exporter image registry                                                                                  | `docker.io`                  |
 | `metrics.image.repository`                   | Cassandra exporter image name                                                                                      | `bitnami/cassandra-exporter` |
-| `metrics.image.tag`                          | Cassandra exporter image tag                                                                                       | `2.3.8-debian-11-r66`        |
+| `metrics.image.tag`                          | Cassandra exporter image tag                                                                                       | `2.3.8-debian-11-r81`        |
 | `metrics.image.digest`                       | Cassandra exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
 | `metrics.image.pullPolicy`                   | image pull policy                                                                                                  | `IfNotPresent`               |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                   | `[]`                         |
@@ -305,7 +305,7 @@ The above parameters map to the env variables defined in [bitnami/cassandra](htt
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-helm install my-release \
+$ helm install my-release \
     --set dbUser.user=admin,dbUser.password=password \
     my-repo/cassandra
 ```
@@ -313,7 +313,7 @@ helm install my-release \
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/cassandra
+$ helm install my-release -f values.yaml my-repo/cassandra
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -385,7 +385,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 It's necessary to set the `dbUser.password` parameter when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, some notes will be displayed providing the credentials you must use. Please note down the password and run the command below to upgrade your chart:
 
-```bash
+```console
 $ helm upgrade my-release my-repo/cassandra --set dbUser.password=[PASSWORD]
 ```
 
@@ -442,9 +442,9 @@ The `minimumAvailable` option has been renamed to `minAvailable` for consistency
 
 An issue in StatefulSet manifest of the 4.x chart series rendered chart upgrades to be broken. The 5.0.0 series fixes this issue. To upgrade to the 5.x series you need to manually delete the Cassandra StatefulSet before executing the `helm upgrade` command.
 
-```bash
-kubectl delete sts -l release=<RELEASE_NAME>
-helm upgrade <RELEASE_NAME> ...
+```console
+$ kubectl delete sts -l release=<RELEASE_NAME>
+$ helm upgrade <RELEASE_NAME> ...
 ```
 
 ### To 4.0.0
@@ -461,7 +461,7 @@ This release make it possible to specify custom initialization scripts in both c
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

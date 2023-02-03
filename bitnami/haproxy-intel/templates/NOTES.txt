@@ -1,7 +1,0 @@
-CHART NAME: {{ .Chart.Name }}
-CHART VERSION: {{ .Chart.Version }}
-APP VERSION: {{ .Chart.AppVersion }}
-
-** Please be patient while the chart is being deployed **
-
-This chart deploys HA Proxy as a subchart. To display the notes for the subcharts, please add the '--render-subchart-notes' to your install command.

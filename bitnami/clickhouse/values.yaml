@@ -76,7 +76,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/clickhouse
-  tag: 22.11.2-debian-11-r0
+  tag: 22.12.3-debian-11-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -103,6 +103,7 @@ shards: 2
 ##
 replicaCount: 3
 ## @param containerPorts.http ClickHouse HTTP container port
+## @param containerPorts.https ClickHouse HTTPS container port
 ## @param containerPorts.tcp ClickHouse TCP container port
 ## @param containerPorts.tcpSecure ClickHouse TCP (secure) container port
 ## @param containerPorts.keeper ClickHouse keeper TCP container port
@@ -115,6 +116,7 @@ replicaCount: 3
 ##
 containerPorts:
   http: 8123
+  https: 8443
   tcp: 9000
   tcpSecure: 9440
   keeper: 2181
@@ -190,6 +192,7 @@ resources:
 ## @param podSecurityContext.enabled Enabled ClickHouse pods' Security Context
 ## @param podSecurityContext.fsGroup Set ClickHouse pod's Security Context fsGroup
 ## @param podSecurityContext.seccompProfile.type Set ClickHouse container's Security Context seccomp profile
+## If you are using Kubernetes 1.18, the following code needs to be commented out.
 ##
 podSecurityContext:
   enabled: true
@@ -331,6 +334,7 @@ defaultConfigurationOverrides: |
     {{- if .Values.tls.enabled }}
     <!-- TLS configuration -->
     <tcp_port_secure from_env="CLICKHOUSE_TCP_SECURE_PORT"></tcp_port_secure>
+    <https_port from_env="CLICKHOUSE_HTTPS_PORT"></https_port>
     <openSSL>
         <server>
             {{- $certFileName := default "tls.crt" .Values.tls.certFilename }}
@@ -578,6 +582,7 @@ service:
   ##
   type: ClusterIP
   ## @param service.ports.http ClickHouse service HTTP port
+  ## @param service.ports.https ClickHouse service HTTPS port
   ## @param service.ports.tcp ClickHouse service TCP port
   ## @param service.ports.tcpSecure ClickHouse service TCP (secure) port
   ## @param service.ports.keeper ClickHouse keeper TCP container port
@@ -590,6 +595,7 @@ service:
   ##
   ports:
     http: 8123
+    https: 443
     tcp: 9000
     tcpSecure: 9440
     keeper: 2181
@@ -601,6 +607,7 @@ service:
     metrics: 8001
   ## Node ports to expose
   ## @param service.nodePorts.http Node port for HTTP
+  ## @param service.nodePorts.https Node port for HTTPS
   ## @param service.nodePorts.tcp Node port for TCP
   ## @param service.nodePorts.tcpSecure Node port for TCP (with TLS)
   ## @param service.nodePorts.keeper ClickHouse keeper TCP container port
@@ -614,6 +621,7 @@ service:
   ##
   nodePorts:
     http: ""
+    https: ""
     tcp: ""
     tcpSecure: ""
     keeper: ""
@@ -675,6 +683,7 @@ externalAccess:
     ##
     type: LoadBalancer
     ## @param externalAccess.service.ports.http ClickHouse service HTTP port
+    ## @param externalAccess.service.ports.https ClickHouse service HTTPS port
     ## @param externalAccess.service.ports.tcp ClickHouse service TCP port
     ## @param externalAccess.service.ports.tcpSecure ClickHouse service TCP (secure) port
     ## @param externalAccess.service.ports.keeper ClickHouse keeper TCP container port
@@ -687,6 +696,7 @@ externalAccess:
     ##
     ports:
       http: 80
+      https: 443
       tcp: 9000
       tcpSecure: 9440
       keeper: 2181
@@ -718,6 +728,7 @@ externalAccess:
     ##
     loadBalancerSourceRanges: []
     ## @param externalAccess.service.nodePorts.http Node port for HTTP
+    ## @param externalAccess.service.nodePorts.https Node port for HTTPS
     ## @param externalAccess.service.nodePorts.tcp Node port for TCP
     ## @param externalAccess.service.nodePorts.tcpSecure Node port for TCP (with TLS)
     ## @param externalAccess.service.nodePorts.keeper ClickHouse keeper TCP container port
@@ -736,6 +747,7 @@ externalAccess:
     ##
     nodePorts:
       http: []
+      https: []
       tcp: []
       tcpSecure: []
       keeper: []
@@ -921,7 +933,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r57
+    tag: 11-debian-11-r72
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1043,7 +1055,7 @@ externalZookeeper:
 ##
 zookeeper:
   enabled: true
-  replicaCount: 2
+  replicaCount: 3
   service:
     ports:
       client: 2181

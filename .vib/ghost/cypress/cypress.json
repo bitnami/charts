@@ -1,10 +1,11 @@
 {
     "env": {
-      "email": "user@example.com",
+      "email": "vim-tests@example.com",
+      "username": "bitnamiTest",
       "password": "Complicated123!4"
     },
     "hosts": {
-      "bitnami-ghost.my": "{{ TARGET_IP }}"
+      "vmware-ghost.my": "{{ TARGET_IP }}"
     },
     "defaultCommandTimeout": 60000
 }

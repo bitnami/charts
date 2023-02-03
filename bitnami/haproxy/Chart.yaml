@@ -1,7 +1,8 @@
 annotations:
   category: Infrastructure
+  licenses: Apache-2.0
 apiVersion: v2
-appVersion: 2.7.0
+appVersion: 2.7.2
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -9,7 +10,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: HAProxy is a TCP proxy and a HTTP reverse proxy. It supports SSL termination and offloading, TCP and HTTP normalization, traffic regulation, caching and protection against DDoS attacks.
-engine: gotpl
 home: https://www.haproxy.org/
 icon: https://bitnami.com/assets/stacks/haproxy/img/haproxy-stack-220x234.png
 keywords:
@@ -23,4 +23,4 @@ name: haproxy
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/haproxy
   - https://github.com/haproxytech/haproxy
-version: 0.6.4
+version: 0.6.7
