@@ -354,6 +354,7 @@ tcpListenOptions:
   ##
   nodelay: true
   ## tcpListenOptions.linger
+  ##
   linger:
     ## @param tcpListenOptions.linger.on Enable Server socket lingering
     ##
