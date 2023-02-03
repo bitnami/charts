@@ -345,6 +345,7 @@ extraContainerPorts: []
 
 ## RabbitMQ tcp_listen_options parameters
 ## See : https://www.rabbitmq.com/networking.html for additional information
+##
 tcpListenOptions:
   ## @param tcpListenOptions.backlog Maximum size of the unaccepted TCP connections queue
   ##
