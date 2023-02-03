@@ -102,7 +102,7 @@ spec:
               mountPath: {{ .Values.mimir.dataDir }}
         {{- end }}
       containers:
-        - name: grafana-mimir-ruler
+        - name: ruler
           image: {{ template "grafana-mimir.image" . }}
           imagePullPolicy: {{ .Values.mimir.image.pullPolicy }}
           {{- if .Values.ruler.containerSecurityContext.enabled }}
@@ -120,11 +120,25 @@ spec:
           {{- else }}
           args:
             - -target=ruler
+            - -config.expand-env=true
             - -config.file={{ .Values.mimir.dataDir }}/conf/mimir.yaml
           {{- end }}
-          {{- if .Values.ruler.extraEnvVars }}
-          env: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.extraEnvVars "context" $) | nindent 12 }}
-          {{- end }}
+          env:
+          {{- if .Values.minio.enabled }}
+            - name: MIMIR_MINIO_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "grafana-mimir.minio.secretName" . }}
+                  key: {{ include "grafana-mimir.minio.accessKeyIDKey" . }}
+            - name: MIMIR_MINIO_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "grafana-mimir.minio.secretName" . }}
+                  key: {{ include "grafana-mimir.minio.secretAccessKeyKey" . }}
+            {{- end}}
+            {{- if .Values.ruler.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.ruler.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
           envFrom:
             {{- if .Values.ruler.extraEnvVarsCM }}
             - configMapRef:

@@ -73,7 +73,7 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.querier.initContainers "context" $) | nindent 8 }}
       {{- end }}
       containers:
-        - name: grafana-mimir-querier
+        - name: querier
           image: {{ template "grafana-mimir.image" . }}
           imagePullPolicy: {{ .Values.mimir.image.pullPolicy }}
           {{- if .Values.querier.containerSecurityContext.enabled }}
@@ -98,16 +98,18 @@ spec:
             {{- end }}
           {{- end }}
           env:
-            - name: MIMIR_S3_ACCESS_KEY_ID
+            {{- if .Values.minio.enabled }}
+            - name: MIMIR_MINIO_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "grafana-mimir.s3.secretName" . }}
-                  key: {{ include "grafana-mimir.s3.accessKeyIDKey" . }}
-            - name: MIMIR_S3_SECRET_ACCESS_KEY
+                  name: {{ include "grafana-mimir.minio.secretName" . }}
+                  key: {{ include "grafana-mimir.minio.accessKeyIDKey" . }}
+            - name: MIMIR_MINIO_SECRET_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "grafana-mimir.s3.secretName" . }}
-                  key: {{ include "grafana-mimir.s3.secretAccessKeyKey" . }}
+                  name: {{ include "grafana-mimir.minio.secretName" . }}
+                  key: {{ include "grafana-mimir.minio.secretAccessKeyKey" . }}
+            {{- end }}
             {{- if .Values.compactor.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.compactor.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

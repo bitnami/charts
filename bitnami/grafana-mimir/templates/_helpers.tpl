@@ -83,6 +83,20 @@ Return the proper Grafana Mimir alertmanager fullname
 {{- end -}}
 
 {{/*
+Return the proper Grafana Mimir overrides-exporter fullname
+*/}}
+{{- define "grafana-mimir.overrides-exporter.fullname" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "overrides-exporter" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Return the proper Grafana Mimir query-scheduler fullname
+*/}}
+{{- define "grafana-mimir.query-scheduler.fullname" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "query-scheduler" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Alertmanager http prefix
 */}}
 {{- define "grafana-mimir.alertmanager.httpPrefix" -}}
@@ -174,123 +188,30 @@ Return MinIO(TM) fullname
 {{- include "common.names.dependency.fullname" (dict "chartName" "minio" "chartValues" .Values.minio "context" $) -}}
 {{- end -}}
 
-{{/*
-Return the S3 backend host
-*/}}
-{{- define "grafana-mimir.s3.host" -}}
-    {{- if .Values.minio.enabled -}}
-        {{- include "grafana-mimir.minio.fullname" . -}}
-    {{- else -}}
-        {{- print .Values.externalS3.host -}}
-    {{- end -}}
-{{- end -}}
-
-{{/*
-Return the S3 alias host
-*/}}
-{{- define "grafana-mimir.s3.aliasHost" -}}
-    {{- if .Values.s3AliasHost -}}
-        {{- print .Values.s3AliasHost -}}
-    {{- else if .Values.minio.enabled -}}
-        {{- if .Values.minio.service.loadBalancerIP }}
-            {{- print .Values.minio.service.loadBalancerIP -}}
-        {{- else -}}
-            {{- printf "%s/%s" (include "grafana-mimir.web.domain" .)  (include "grafana-mimir.s3.bucket" . ) -}}
-        {{- end -}}
-    {{- else if .Values.externalS3.host -}}
-        {{- print .Values.externalS3.host -}}
-    {{- end -}}
-{{- end -}}
-
-{{/*
-Return the S3 bucket
-*/}}
-{{- define "grafana-mimir.s3.bucket" -}}
-    {{- if .Values.minio.enabled -}}
-        {{- print .Values.minio.defaultBuckets -}}
-    {{- else -}}
-        {{- print .Values.externalS3.bucket -}}
-    {{- end -}}
-{{- end -}}
-
-{{/*
-Return the S3 protocol
-*/}}
-{{- define "grafana-mimir.s3.protocol" -}}
-    {{- if .Values.minio.enabled -}}
-        {{- ternary "https" "http" .Values.minio.tls.enabled  -}}
-    {{- else -}}
-        {{- print .Values.externalS3.protocol -}}
-    {{- end -}}
-{{- end -}}
-
-{{/*
-Return the S3 region
-*/}}
-{{- define "grafana-mimir.s3.region" -}}
-    {{- if .Values.minio.enabled -}}
-        {{- print "us-east-1"  -}}
-    {{- else -}}
-        {{- print .Values.externalS3.region -}}
-    {{- end -}}
-{{- end -}}
-
-{{/*
-Return the S3 port
-*/}}
-{{- define "grafana-mimir.s3.port" -}}
-{{- ternary .Values.minio.service.ports.api .Values.externalS3.port .Values.minio.enabled -}}
-{{- end -}}
-
-{{/*
-Return the S3 endpoint
-*/}}
-{{- define "grafana-mimir.s3.endpoint" -}}
-{{- $port := include "grafana-mimir.s3.port" . | int -}}
-{{- $printedPort := "" -}}
-{{- if and (ne $port 80) (ne $port 443) -}}
-    {{- $printedPort = printf ":%d" $port -}}
-{{- end -}}
-{{- printf "%s://%s%s" (include "grafana-mimir.s3.protocol" .) (include "grafana-mimir.s3.host" .) $printedPort -}}
-{{- end -}}
 
 {{/*
 Return the S3 credentials secret name
 */}}
-{{- define "grafana-mimir.s3.secretName" -}}
-{{- if .Values.minio.enabled -}}
+{{- define "grafana-mimir.minio.secretName" -}}
     {{- if .Values.minio.auth.existingSecret -}}
     {{- print .Values.minio.auth.existingSecret -}}
     {{- else -}}
     {{- print (include "grafana-mimir.minio.fullname" .) -}}
     {{- end -}}
-{{- else if .Values.externalS3.existingSecret -}}
-    {{- print .Values.externalS3.existingSecret -}}
-{{- else -}}
-    {{- printf "%s-%s" (include "common.names.fullname" .) "externals3" -}}
-{{- end -}}
 {{- end -}}
 
 {{/*
 Return the S3 access key id inside the secret
 */}}
-{{- define "grafana-mimir.s3.accessKeyIDKey" -}}
-    {{- if .Values.minio.enabled -}}
-        {{- print "root-user"  -}}
-    {{- else -}}
-        {{- print .Values.externalS3.existingSecretAccessKeyIDKey -}}
-    {{- end -}}
+{{- define "grafana-mimir.minio.accessKeyIDKey" -}}
+    {{- print "root-user"  -}}
 {{- end -}}
 
 {{/*
 Return the S3 secret access key inside the secret
 */}}
-{{- define "grafana-mimir.s3.secretAccessKeyKey" -}}
-    {{- if .Values.minio.enabled -}}
-        {{- print "root-password"  -}}
-    {{- else -}}
-        {{- print .Values.externalS3.existingSecretKeySecretKey -}}
-    {{- end -}}
+{{- define "grafana-mimir.minio.secretAccessKeyKey" -}}
+    {{- print "root-password"  -}}
 {{- end -}}
 
 

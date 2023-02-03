@@ -32,6 +32,18 @@ Installed components:
   * querier
   * query-frontend
   * store-gateway
+{{- if .Values.alertmanager.enabled }}
+  * alertmanager
+{{- end }}
+{{- if .Values.alertmanager.ruler }}
+  * ruler
+{{- end }}
+{{- if .Values.queryScheduler.enabled }}
+  * query-scheduler
+{{- end }}
+{{- if .Values.overridesExporter.enabled }}
+  * overrides-exporter
+{{- end }}
 
 {{- if .Values.gateway.enabled }}
 {{- if .Values.gateway.ingress.enabled }}

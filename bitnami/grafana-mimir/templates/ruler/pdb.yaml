@@ -1,13 +1,13 @@
-{{- $replicaCount := int .Values.ingester.replicaCount }}
-{{- if and .Values.ingester.pdb.create (gt $replicaCount 1) }}
+{{- $replicaCount := int .Values.ruler.replicaCount }}
+{{- if and .Values.ruler.pdb.create (gt $replicaCount 1) }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
-  name: {{ template "grafana-mimir.ingester.fullname" . }}
+  name: {{ template "grafana-mimir.ruler.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: grafana-mimir
-    app.kubernetes.io/component: ingester
+    app.kubernetes.io/component: ruler
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -15,14 +15,14 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if .Values.ingester.pdb.minAvailable }}
-  minAvailable: {{ .Values.ingester.pdb.minAvailable }}
+  {{- if .Values.ruler.pdb.minAvailable }}
+  minAvailable: {{ .Values.ruler.pdb.minAvailable }}
   {{- end  }}
-  {{- if .Values.ingester.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.ingester.pdb.maxUnavailable }}
+  {{- if .Values.ruler.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.ruler.pdb.maxUnavailable }}
   {{- end  }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/part-of: grafana-mimir
-      app.kubernetes.io/component: ingester
+      app.kubernetes.io/component: ruler
 {{- end }}

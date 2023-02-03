@@ -9,10 +9,6 @@ dependencies:
     name: minio
     repository: https://charts.bitnami.com/bitnami
     version: 12.x.x
-  - condition: memcached.enabled
-    name: memcached
-    repository: https://charts.bitnami.com/bitnami
-    version: 6.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
