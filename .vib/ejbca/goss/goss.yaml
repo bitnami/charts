@@ -7,7 +7,7 @@ file:
     exists: true
     filetype: directory
     mode: "0775"
-    owner: root
+    owner: wildfly
   /opt/bitnami/wildfly/standalone/configuration/standalone.xml:
     exists: true
     filetype: file
