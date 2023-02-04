@@ -132,6 +132,23 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraVolumes`                                    | Array to add extra volumes                                                                                          | `[]`                                |
 | `initContainers`                                  | Attach additional init containers to pods                                                                           | `[]`                                |
 | `sidecars`                                        | Add additional sidecar containers to pods                                                                           | `[]`                                |
+| `containerPorts.metrics`                          | metrics container port                                                                                              | `2112`                              |
+
+
+### Metrics parameters
+
+| Name                                  | Description                                                                        | Value        |
+| ------------------------------------- | ---------------------------------------------------------------------------------- | ------------ |
+| `metrics.enabled`                     | Expose etcd metrics                                                                | `false`      |
+| `metrics.podAnnotations`              | Annotations for the Prometheus metrics on etcd pods                                | `{}`         |
+| `metrics.podMonitor.enabled`          | Create PodMonitor Resource for scraping metrics using PrometheusOperator           | `false`      |
+| `metrics.podMonitor.namespace`        | Namespace in which Prometheus is running                                           | `monitoring` |
+| `metrics.podMonitor.interval`         | Specify the interval at which metrics should be scraped                            | `30s`        |
+| `metrics.podMonitor.scrapeTimeout`    | Specify the timeout after which the scrape is ended                                | `30s`        |
+| `metrics.podMonitor.additionalLabels` | Additional labels that can be used so PodMonitors will be discovered by Prometheus | `{}`         |
+| `metrics.podMonitor.scheme`           | Scheme to use for scraping                                                         | `http`       |
+| `metrics.podMonitor.tlsConfig`        | TLS configuration used for scrape endpoints used by Prometheus                     | `{}`         |
+| `metrics.podMonitor.relabelings`      | Prometheus relabeling rules                                                        | `[]`         |
 
 
 ## Configuration and installation details
