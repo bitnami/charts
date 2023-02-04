@@ -250,14 +250,3 @@ Get the extraConfigurationExistingSecret secret.
     {{- tpl .Values.extraConfiguration . -}} 
 {{- end -}}
 {{- end -}}
-
-{{/*
-Get the TLS.sslOptions.Password secret.
-*/}}
-{{- define "rabbitmq.tlsSslOptionsPassword" -}}
-{{- if not (empty .Values.auth.tls.sslOptionsPassword.password) -}}
-    {{- .Values.auth.tls.sslOptionsPassword.password -}}
-{{- else -}}
-    {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" .Values.auth.tls.sslOptionsPassword.existingSecret "Length" 10 "Key" .Values.auth.tls.sslOptionsPassword.key)  -}}
-{{- end -}}
-{{- end -}}
