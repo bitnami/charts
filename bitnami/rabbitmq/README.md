@@ -149,6 +149,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraConfiguration`                  | Configuration file content: extra configuration to be appended to RabbitMQ configuration                                                                                | `""`                                              |
 | `advancedConfiguration`               | Configuration file content: advanced configuration                                                                                                                      | `""`                                              |
 | `advancedConfigurationExistingSecret` | Existing secret with the advanced configuration file (must contain a key `advanced.config`).                                                                            | `""`                                              |
+| `featureFlags`                        | that controls what features are considered to be enabled or available on all cluster nodes.                                                                             | `""`                                              |
 | `ldap.enabled`                        | Enable LDAP support                                                                                                                                                     | `false`                                           |
 | `ldap.uri`                            | LDAP connection string.                                                                                                                                                 | `""`                                              |
 | `ldap.servers`                        | List of LDAP servers hostnames. This is valid only if ldap.uri is not set                                                                                               | `[]`                                              |
@@ -173,6 +174,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraVolumes`                        | Optionally specify extra list of additional volumes .                                                                                                                   | `[]`                                              |
 | `extraSecrets`                        | Optionally specify extra secrets to be created by the chart.                                                                                                            | `{}`                                              |
 | `extraSecretsPrependReleaseName`      | Set this flag to true if extraSecrets should be created with <release-name> prepended.                                                                                  | `false`                                           |
+
 
 ### Statefulset parameters
 
