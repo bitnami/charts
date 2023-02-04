@@ -175,9 +175,9 @@ auth:
       existingSecret: ""
       key: ""
       password: ""
-    caCertificate: ""
-    serverCertificate: ""
-    serverKey: ""
+    caCertificate: |-
+    serverCertificate: |-
+    serverKey: |-
     existingSecret: ""
     existingSecretFullChain: false
     overrideCaCertificate: ""
