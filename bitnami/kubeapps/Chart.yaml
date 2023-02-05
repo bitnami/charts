@@ -32,4 +32,4 @@ maintainers:
 name: kubeapps
 sources:
   - https://github.com/vmware-tanzu/kubeapps
-version: 12.2.1
+version: 12.2.2
