@@ -96,13 +96,14 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `postgresql.image.registry`                                  | PostgreSQL with Repmgr image registry                                                                                                                                                                         | `docker.io`                 |
 | `postgresql.image.repository`                                | PostgreSQL with Repmgr image repository                                                                                                                                                                       | `bitnami/postgresql-repmgr` |
-| `postgresql.image.tag`                                       | PostgreSQL with Repmgr image tag                                                                                                                                                                              | `15.1.0-debian-11-r25`      |
+| `postgresql.image.tag`                                       | PostgreSQL with Repmgr image tag                                                                                                                                                                              | `15.1.0-debian-11-r29`      |
 | `postgresql.image.digest`                                    | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                    | `""`                        |
 | `postgresql.image.pullPolicy`                                | PostgreSQL with Repmgr image pull policy                                                                                                                                                                      | `IfNotPresent`              |
 | `postgresql.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                                                                                                              | `[]`                        |
 | `postgresql.image.debug`                                     | Specify if debug logs should be enabled                                                                                                                                                                       | `false`                     |
 | `postgresql.labels`                                          | Labels to add to the StatefulSet. Evaluated as template                                                                                                                                                       | `{}`                        |
 | `postgresql.podLabels`                                       | Labels to add to the StatefulSet pods. Evaluated as template                                                                                                                                                  | `{}`                        |
+| `postgresql.serviceAnnotations`                              | Provide any additional annotations for PostgreSQL service                                                                                                                                                     | `{}`                        |
 | `postgresql.replicaCount`                                    | Number of replicas to deploy. Use an odd number. Having 3 replicas is the minimum to get quorum when promoting a new primary.                                                                                 | `3`                         |
 | `postgresql.updateStrategy.type`                             | Postgresql statefulset strategy type                                                                                                                                                                          | `RollingUpdate`             |
 | `postgresql.containerPorts.postgresql`                       | PostgreSQL port                                                                                                                                                                                               | `5432`                      |
@@ -323,7 +324,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
 | `pgpool.image.registry`                                  | Pgpool image registry                                                                                                                    | `docker.io`          |
 | `pgpool.image.repository`                                | Pgpool image repository                                                                                                                  | `bitnami/pgpool`     |
-| `pgpool.image.tag`                                       | Pgpool image tag                                                                                                                         | `4.4.1-debian-11-r7` |
+| `pgpool.image.tag`                                       | Pgpool image tag                                                                                                                         | `4.4.2-debian-11-r0` |
 | `pgpool.image.digest`                                    | Pgpool image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                   | `""`                 |
 | `pgpool.image.pullPolicy`                                | Pgpool image pull policy                                                                                                                 | `IfNotPresent`       |
 | `pgpool.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                                         | `[]`                 |
@@ -338,6 +339,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `pgpool.labels`                                          | Labels to add to the Deployment. Evaluated as template                                                                                   | `{}`                 |
 | `pgpool.podLabels`                                       | Labels to add to the pods. Evaluated as template                                                                                         | `{}`                 |
 | `pgpool.serviceLabels`                                   | Labels to add to the service. Evaluated as template                                                                                      | `{}`                 |
+| `pgpool.serviceAnnotations`                              | Provide any additional annotations for Pgpool service                                                                                    | `{}`                 |
 | `pgpool.customLivenessProbe`                             | Override default liveness probe                                                                                                          | `{}`                 |
 | `pgpool.customReadinessProbe`                            | Override default readiness probe                                                                                                         | `{}`                 |
 | `pgpool.customStartupProbe`                              | Override default startup probe                                                                                                           | `{}`                 |
@@ -465,7 +467,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `metrics.enabled`                            | Enable PostgreSQL Prometheus exporter                                                                                                                   | `false`                     |
 | `metrics.image.registry`                     | PostgreSQL Prometheus exporter image registry                                                                                                           | `docker.io`                 |
 | `metrics.image.repository`                   | PostgreSQL Prometheus exporter image repository                                                                                                         | `bitnami/postgres-exporter` |
-| `metrics.image.tag`                          | PostgreSQL Prometheus exporter image tag                                                                                                                | `0.11.1-debian-11-r47`      |
+| `metrics.image.tag`                          | PostgreSQL Prometheus exporter image tag                                                                                                                | `0.11.1-debian-11-r53`      |
 | `metrics.image.digest`                       | PostgreSQL Prometheus exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                          | `""`                        |
 | `metrics.image.pullPolicy`                   | PostgreSQL Prometheus exporter image pull policy                                                                                                        | `IfNotPresent`              |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                                        | `[]`                        |
@@ -528,7 +530,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `volumePermissions.enabled`                      | Enable init container to adapt volume permissions                                                                                 | `false`                 |
 | `volumePermissions.image.registry`               | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`             | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                    | Init container volume-permissions image tag                                                                                       | `11-debian-11-r70`      |
+| `volumePermissions.image.tag`                    | Init container volume-permissions image tag                                                                                       | `11-debian-11-r76`      |
 | `volumePermissions.image.digest`                 | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`             | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`            | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
@@ -567,7 +569,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `service.extraPorts`                                  | Extra ports to expose (normally used with the `sidecar` value)                                | `[]`         |
 | `service.sessionAffinity`                             | Control where client requests go, to the same pod or round-robin                              | `None`       |
 | `service.sessionAffinityConfig`                       | Additional settings for the sessionAffinity                                                   | `{}`         |
-| `service.annotations`                                 | Provide any additional annotations for PostgreSQL service                                     | `{}`         |
+| `service.annotations`                                 | Provide any additional annotations both for PostgreSQL and Pgpool services                    | `{}`         |
 | `service.serviceLabels`                               | Labels for PostgreSQL service                                                                 | `{}`         |
 | `networkPolicy.enabled`                               | Enable NetworkPolicy                                                                          | `false`      |
 | `networkPolicy.allowExternal`                         | Don't require client label for connections                                                    | `true`       |
@@ -986,7 +988,7 @@ Bitnami Kubernetes documentation is available at [https://docs.bitnami.com/](htt
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

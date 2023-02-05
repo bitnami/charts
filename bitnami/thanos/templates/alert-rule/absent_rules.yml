@@ -36,7 +36,7 @@ spec:
       labels:
         severity: critical
         {{- if .Values.metrics.prometheusRule.additionalLabels }}
-        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
         {{- end }}
     {{- end }}
     {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosQueryIsDown | default false) }}
@@ -54,7 +54,7 @@ spec:
       labels:
         severity: critical
         {{- if .Values.metrics.prometheusRule.additionalLabels }}
-        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
         {{- end }}
     {{- end }}
     {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosReceiveIsDown | default false) }}
@@ -72,7 +72,7 @@ spec:
       labels:
         severity: critical
         {{- if .Values.metrics.prometheusRule.additionalLabels }}
-        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
         {{- end }}
     {{- end }}
     {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosRuleIsDown | default false) }}
@@ -90,7 +90,7 @@ spec:
       labels:
         severity: critical
         {{- if .Values.metrics.prometheusRule.additionalLabels }}
-        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
         {{- end }}
     {{- end }}
     {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosSidecarIsDown | default false) }}
@@ -108,7 +108,7 @@ spec:
       labels:
         severity: critical
         {{- if .Values.metrics.prometheusRule.additionalLabels }}
-        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
         {{- end }}
     {{- end }}
     {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosStoreIsDown | default false) }}
@@ -126,7 +126,7 @@ spec:
       labels:
         severity: critical
         {{- if .Values.metrics.prometheusRule.additionalLabels }}
-        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
         {{- end }}
     {{- end }}
 {{- end }}

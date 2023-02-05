@@ -91,9 +91,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `concierge.enabled`                                         | Deploy Concierge                                                                                                         | `true`          |
 | `concierge.replicaCount`                                    | Number of Concierge replicas to deploy                                                                                   | `1`             |
 | `concierge.containerPorts.api`                              | Concierge API container port                                                                                             | `10250`         |
-| `concierge.containerPorts.proxy`                            | Concierge Proxy container port                                                                                           | `8443`          |
-| `concierge.configurationPorts.aggregatedAPIServerPort`      | Concierge API configuration port                                                                                         | `""`            |
-| `concierge.configurationPorts.impersonationProxyServerPort` | Concierge Proxy configuration port                                                                                       | `""`            |
+| `concierge.containerPorts.proxy`                            | Concierge Proxy container port                                                                                           | `8444`          |
+| `concierge.configurationPorts.aggregatedAPIServerPort`      | Concierge API configuration port                                                                                         | `10250`         |
+| `concierge.configurationPorts.impersonationProxyServerPort` | Concierge Proxy configuration port                                                                                       | `8444`          |
 | `concierge.hostNetwork`                                     | Concierge API and Proxy container hostNetwork                                                                            | `false`         |
 | `concierge.dnsPolicy`                                       | Concierge API and Proxy container dnsPolicy                                                                              | `""`            |
 | `concierge.configuration`                                   | Concierge pinniped.yaml configuration file                                                                               | `""`            |
@@ -392,7 +392,7 @@ This version updates Pinniped to its newest version, 0.20.x. For more informatio
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

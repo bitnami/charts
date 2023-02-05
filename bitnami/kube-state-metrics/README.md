@@ -7,7 +7,7 @@ kube-state-metrics is a simple service that listens to the Kubernetes API server
 [Overview of Kube State Metrics](https://github.com/kubernetes/kube-state-metrics)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -87,7 +87,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.annotations`                    | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                                         | `{}`                         |
 | `image.registry`                                | kube-state-metrics image registry                                                                                                                                  | `docker.io`                  |
 | `image.repository`                              | kube-state-metrics image repository                                                                                                                                | `bitnami/kube-state-metrics` |
-| `image.tag`                                     | kube-state-metrics image tag (immutable tags are recommended)                                                                                                      | `2.7.0-debian-11-r9`         |
+| `image.tag`                                     | kube-state-metrics image tag (immutable tags are recommended)                                                                                                      | `2.7.0-debian-11-r21`        |
 | `image.digest`                                  | kube-state-metrics image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                 | `""`                         |
 | `image.pullPolicy`                              | kube-state-metrics image pull policy                                                                                                                               | `IfNotPresent`               |
 | `image.pullSecrets`                             | Specify docker-registry secret names as an array                                                                                                                   | `[]`                         |
@@ -276,7 +276,7 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

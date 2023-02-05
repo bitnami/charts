@@ -101,7 +101,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql-repmgr
-    tag: 15.1.0-debian-11-r25
+    tag: 15.1.0-debian-11-r29
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -124,6 +124,9 @@ postgresql:
   ## @param postgresql.podLabels Labels to add to the StatefulSet pods. Evaluated as template
   ##
   podLabels: {}
+  ## @param postgresql.serviceAnnotations Provide any additional annotations for PostgreSQL service
+  ##
+  serviceAnnotations: {}
   ## @param postgresql.replicaCount Number of replicas to deploy. Use an odd number. Having 3 replicas is the minimum to get quorum when promoting a new primary.
   ##
   replicaCount: 3
@@ -994,7 +997,7 @@ pgpool:
   image:
     registry: docker.io
     repository: bitnami/pgpool
-    tag: 4.4.1-debian-11-r7
+    tag: 4.4.2-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1049,6 +1052,9 @@ pgpool:
   ## @param pgpool.serviceLabels Labels to add to the service. Evaluated as template
   ##
   serviceLabels: {}
+  ## @param pgpool.serviceAnnotations Provide any additional annotations for Pgpool service
+  ##
+  serviceAnnotations: {}
   ## @param pgpool.customLivenessProbe Override default liveness probe
   ##
   customLivenessProbe: {}
@@ -1504,7 +1510,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.11.1-debian-11-r47
+    tag: 0.11.1-debian-11-r53
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1746,7 +1752,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r70
+    tag: 11-debian-11-r76
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1891,7 +1897,7 @@ service:
   ##   clientIP:
   ##     timeoutSeconds: 300
   sessionAffinityConfig: {}
-  ## @param service.annotations Provide any additional annotations for PostgreSQL service
+  ## @param service.annotations Provide any additional annotations both for PostgreSQL and Pgpool services
   ##
   annotations: {}
   ## @param service.serviceLabels Labels for PostgreSQL service

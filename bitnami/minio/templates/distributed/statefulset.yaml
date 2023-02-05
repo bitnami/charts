@@ -1,4 +1,4 @@
-{{- if and (eq .Values.mode "distributed") (not .Values.gateway.enabled) }}
+{{- if (eq .Values.mode "distributed") }}
 {{- $fullname := include "common.names.fullname" . }}
 {{- $headlessService := printf "%s-headless" (include "common.names.fullname" .) | trunc 63 }}
 {{- $releaseNamespace := .Release.Namespace }}

@@ -7,7 +7,7 @@ Wavefront Storage Adapter is a Prometheus integration to transfer metrics from P
 [Overview of Wavefront Prometheus Adapter](https://github.com/wavefrontHQ/prometheus-storage-adapter)
 
 
-
+                           
 ## TL;DR
 
 ```console
@@ -86,7 +86,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------- |
 | `image.registry`                        | Adapter image registry                                                                                                   | `docker.io`                                    |
 | `image.repository`                      | Adapter image repository                                                                                                 | `bitnami/wavefront-prometheus-storage-adapter` |
-| `image.tag`                             | Adapter image tag (immutable tags are recommended)                                                                       | `1.0.5-debian-11-r77`                          |
+| `image.tag`                             | Adapter image tag (immutable tags are recommended)                                                                       | `1.0.5-debian-11-r88`                          |
 | `image.digest`                          | Adapter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                  | `""`                                           |
 | `image.pullPolicy`                      | Adapter image pull policy                                                                                                | `IfNotPresent`                                 |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                         | `[]`                                           |
@@ -245,7 +245,7 @@ This major updates the Wavefront subchart to its newest major release, 3.0.0, wh
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
