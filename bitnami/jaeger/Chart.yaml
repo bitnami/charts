@@ -2,7 +2,7 @@ annotations:
   category: Infrastructure
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 1.41.0
+appVersion: 1.42.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -27,4 +27,4 @@ name: jaeger
 sources:
   - https://github.com/jaegertracing/jaeger
   - https://www.jaegertracing.io/
-version: 1.0.1
+version: 1.0.2
