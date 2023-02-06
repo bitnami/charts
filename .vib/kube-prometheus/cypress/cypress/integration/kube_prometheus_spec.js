@@ -7,8 +7,8 @@ it('allows executing a query and displaying response data for each deployment', 
   Object.keys(deployments).forEach((podName, i) => {
     const query = Object.values(deployments)[i].query;
 
-    cy.get('[role="textbox"]').clear().type(query);
-    cy.contains('Execute').click({force: true});
+    cy.get('[role="textbox"]').clear({force: true}).type(`${query}{enter}`);
+    cy.contains('Execute').click();
     cy.contains('.data-table', `container="${podName}"`)
   })
 });
@@ -20,7 +20,7 @@ it('allows executing a query and displaying response data for each service monit
   Object.keys(monitors).forEach((jobName, i) => {
     const query = Object.values(monitors)[i].query;
 
-    cy.get('[role="textbox"]').clear().type(query);
+    cy.get('[role="textbox"]').clear({force: true}).type(`${query}{enter}`;
     cy.contains('Execute').click();
     cy.contains('.data-table', `job="${jobName}"`)
   })
