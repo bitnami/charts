@@ -20,9 +20,11 @@ import './commands';
 // require('./commands')
 
 Cypress.on('uncaught:exception', (err, runnable) => {
-  // Discourse header returns an internal resizeObserver
+  // Discourse header returns an internal ResizeObserver
   // max loop error (from javascript), but the application
   // works just fine. Returning false here prevents Cypress
   // from failing the test.
-  return false
+  if (err.message.includes('ResizeObserver loop limit')) {
+    return false
+  }
 })
