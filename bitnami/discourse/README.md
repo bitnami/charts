@@ -149,8 +149,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `discourse.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                          | `6`             |
 | `discourse.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                          | `1`             |
 | `discourse.readinessProbe.enabled`                | Enable readinessProbe on Discourse containers                                                | `true`          |
-| `discourse.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                     | `30`            |
-| `discourse.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                            | `10`            |
+| `discourse.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                     | `60`            |
+| `discourse.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                            | `20`            |
 | `discourse.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                           | `5`             |
 | `discourse.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                         | `6`             |
 | `discourse.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                         | `1`             |
