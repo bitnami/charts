@@ -159,25 +159,106 @@ Ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
 {{- end -}}
 
 {{/*
-Check if there are rolling tags in the images
+Create a default fully qualified memcached (chunks) name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
-{{- define "grafana-mimir.checkRollingTags" -}}
-{{- include "common.warnings.rollingTag" .Values.mimir.image }}
-{{- include "common.warnings.rollingTag" .Values.gateway.image }}
-{{- end }}
+{{- define "grafana-mimir.memcached-chunks.fullname" -}}
+{{- $name := default "memcachedchunks" .Values.memcachedchunks.nameOverride -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
 
 {{/*
-Compile all warnings into a single message.
+Create a default fully qualified memcached (chunks) name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
-{{- define "grafana-mimir.validateValues" -}}
-{{- $messages := list -}}
-{{/* $messages := append $messages (include "grafana-mimir.validateValues.foo" .) -}}
-{{- $messages := append $messages (include "grafana-mimir.validateValues.bar" .) */}}
-{{- $messages := without $messages "" -}}
-{{- $message := join "\n" $messages -}}
+{{- define "grafana-mimir.memcached-chunks.host" -}}
+{{- $port := "" -}}
+{{- if .Values.externalMemcachedChunks.host -}}
+  {{- $servicePortString := printf "%v" .Values.externalMemcachedChunks.port -}}
+  {{- $port = printf ":%s" $servicePortString -}}
+  {{- printf "%s%s" .Values.externalMemcachedChunks.host $port }}
+{{- else -}}
+  {{- $servicePortString := printf "%v" .Values.memcachedchunks.service.ports.memcached -}}
+  {{- $port = printf ":%s" $servicePortString -}}
+  {{- printf "%s%s" (include "grafana-mimir.memcached-chunks.fullname" .) $port }}
+{{- end -}}
+{{- end -}}
 
-{{- if $message -}}
-{{-   printf "\nVALUES VALIDATION:\n%s" $message -}}
+{{/*
+Create a default fully qualified memcached (index) name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "grafana-mimir.memcached-index.fullname" -}}
+{{- $name := default "memcachedindex" .Values.memcachedindex.nameOverride -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified memcached (index) name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "grafana-mimir.memcached-index.host" -}}
+{{- $port := "" -}}
+{{- if .Values.externalMemcachedIndex.host -}}
+  {{- $servicePortString := printf "%v" .Values.externalMemcachedIndex.port -}}
+    {{- $port = printf ":%s" $servicePortString -}}
+  {{- printf "%s%s" .Values.externalMemcachedIndex.host $port }}
+{{- else -}}
+  {{- $servicePortString := printf "%v" .Values.memcachedindex.service.ports.memcached -}}
+    {{- $port = printf ":%s" $servicePortString -}}
+  {{- printf "%s%s" (include "grafana-mimir.memcached-index.fullname" .) $port }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified memcached (frontend) name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "grafana-mimir.memcached-frontend.fullname" -}}
+{{- $name := default "memcachedfrontend" .Values.memcachedfrontend.nameOverride -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified memcached (frontend) name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "grafana-mimir.memcached-frontend.host" -}}
+{{- $port := "" -}}
+{{- if .Values.externalMemcachedFrontend.host -}}
+  {{- $servicePortString := printf "%v" .Values.externalMemcachedFrontend.port -}}
+  {{- $port = printf ":%s" $servicePortString -}}
+  {{- printf "%s%s" .Values.externalMemcachedFrontend.host $port }}
+{{- else -}}
+  {{- $servicePortString := printf "%v" .Values.memcachedfrontend.service.ports.memcached -}}
+  {{- $port = printf ":%s" $servicePortString -}}
+  {{- printf "%s%s" (include "grafana-mimir.memcached-frontend.fullname" .) $port }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified memcached (metadata) name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "grafana-mimir.memcached-metadata.fullname" -}}
+{{- $name := default "memcachedmetadata" .Values.memcachedmetadata.nameOverride -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified memcached (metadata) name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "grafana-mimir.memcached-metadata.host" -}}
+{{- $port := "" -}}
+{{- if .Values.externalMemcachedMetadata.host -}}
+  {{- $servicePortString := printf "%v" .Values.externalMemcachedMetadata.port -}}
+  {{- $port = printf ":%s" $servicePortString -}}
+  {{- printf "%s%s" .Values.externalMemcachedMetadata.host $port }}
+{{- else -}}
+  {{- $servicePortString := printf "%v" .Values.memcachedmetadata.service.ports.memcached -}}
+  {{- $port = printf ":%s" $servicePortString -}}
+  {{- printf "%s%s" (include "grafana-mimir.memcached-metadata.fullname" .) $port }}
 {{- end -}}
 {{- end -}}
 
@@ -215,3 +296,68 @@ Return the S3 secret access key inside the secret
 {{- end -}}
 
 
+{{/*
+Check if there are rolling tags in the images
+*/}}
+{{- define "grafana-mimir.checkRollingTags" -}}
+{{- include "common.warnings.rollingTag" .Values.mimir.image }}
+{{- include "common.warnings.rollingTag" .Values.gateway.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
+{{- end }}
+
+{{/*
+Compile all warnings into a single message.
+*/}}
+{{- define "grafana-mimir.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "grafana-mimir.validateValues.memcachedchunks" .) -}}
+{{- $messages := append $messages (include "grafana-mimir.validateValues.memcachedindex" .) -}}
+{{- $messages := append $messages (include "grafana-mimir.validateValues.memcachedmetadata" .) -}}
+{{- $messages := append $messages (include "grafana-mimir.validateValues.memcachedfrontend" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Grafana Mimir - Memcached (Chunks) */}}
+{{- define "grafana-mimir.validateValues.memcachedchunks" -}}
+{{- if and .Values.memcachedchunks.enabled .Values.externalMemcachedChunks.host -}}
+grafana-mimir: Memcached Chunks
+    You can only use one chunk cache.
+    Please choose installing a Memcached chart (--set memcachedchunks.enabled=true) or
+    using an external database (--set externalMemcachedChunks.host)
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Grafana Mimir - Memcached (Index) */}}
+{{- define "grafana-mimir.validateValues.memcachedindex" -}}
+{{- if and .Values.memcachedindex.enabled .Values.externalMemcachedIndex.host -}}
+grafana-mimir: Memcached Index
+    You can only use one index-write cache.
+    Please choose installing a Memcached chart (--set memcachedIndexWrites.enabled=true) or
+    using an external database (--set externalMemcachedIndex.host)
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Grafana Mimir - Memcached (Metadata) */}}
+{{- define "grafana-mimir.validateValues.memcachedmetadata" -}}
+{{- if and .Values.memcachedindex.enabled .Values.externalMemcachedMetadata.host -}}
+grafana-mimir: Memcached Metadata
+    You can only use one chunk cache.
+    Please choose installing a Memcached chart (--set memcachedmetadata.enabled=true) or
+    using an external database (--set externalMemcachedMetadata.host)
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Grafana Mimir - Memcached (Frontend) */}}
+{{- define "grafana-mimir.validateValues.memcachedfrontend" -}}
+{{- if and .Values.memcachedfrontend.enabled .Values.externalMemcachedFrontend.host -}}
+grafana-mimir: Memcached Frontend
+    You can only use one frontend cache.
+    Please choose installing a Memcached chart (--set memcachedfrontend.enabled=true) or
+    using an external database (--set externalMemcachedFrontend.host)
+{{- end -}}
+{{- end -}}

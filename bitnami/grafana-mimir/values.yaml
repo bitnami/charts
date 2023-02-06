@@ -124,6 +124,27 @@ mimir:
       bucket_store:
         max_chunk_pool_bytes: 12884901888 # 12GiB
         sync_dir: {{ .Values.mimir.dataDir }}/tsdb-sync
+        {{- if .Values.memcachedchunks.enabled }}
+        chunks_cache:
+          backend: memcached
+          memcached:
+            addresses: {{ include "grafana-mimir.memcached-chunks.host" . }}
+            timeout: 450ms
+        {{- end }}
+        {{- if .Values.memcachedindex.enabled }}
+        index_cache:
+          backend: memcached
+          memcached:
+            addresses: {{ include "grafana-mimir.memcached-index.host" . }}
+            timeout: 450ms
+        {{- end }}
+        {{- if .Values.memcachedmetadata.enabled }}
+        metadata_cache:
+          backend: memcached
+          memcached:
+            addresses: {{ include "grafana-mimir.memcached-metadata.host" . }}
+            timeout: 450ms
+        {{- end }}
       {{- if .Values.minio.enabled }}
       backend: s3
       s3:
@@ -152,6 +173,14 @@ mimir:
       data_dir: {{ .Values.mimir.dataDir }}/data-compactor
     frontend:
       parallelize_shardable_queries: true
+      {{- if .Values.memcachedfrontend.enabled }}
+      results_cache:
+        backend: memcached
+        memcached:
+          timeout: 500ms
+          addresses: {{ include "grafana-mimir.memcached-frontend.host" . }}
+      cache_results: true
+      {{- end }}
       {{- if .Values.queryScheduler.enabled }}
       scheduler_address: {{ template "grafana-mimir.query-scheduler.fullname" . }}-headless.{{ .Release.Namespace }}.svc:{{ .Values.queryScheduler.service.ports.grpc }}
       {{- end }}
@@ -818,7 +847,7 @@ compactor:
     ## @param compactor.persistence.existingClaim Name of an existing PVC to use
     ##
     existingClaim: ""
-    ## @param compactor.persistence.storageClass PVC Storage Class for Memcached data volume
+    ## @param compactor.persistence.storageClass PVC Storage Class for Compactor data volume
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
     ## If undefined (the default) or set to null, no storageClassName spec is
@@ -830,7 +859,7 @@ compactor:
     ##
     accessModes:
       - ReadWriteOnce
-    ## @param compactor.persistence.size PVC Storage Request for Memcached data volume
+    ## @param compactor.persistence.size PVC Storage Request for Compactor data volume
     ##
     size: 8Gi
     ## @param compactor.persistence.annotations Additional PVC annotations
@@ -1845,7 +1874,7 @@ ingester:
     ## @param ingester.persistence.existingClaim Name of an existing PVC to use
     ##
     existingClaim: ""
-    ## @param ingester.persistence.storageClass PVC Storage Class for Memcached data volume
+    ## @param ingester.persistence.storageClass PVC Storage Class for Ingester data volume
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
     ## If undefined (the default) or set to null, no storageClassName spec is
@@ -1857,7 +1886,7 @@ ingester:
     ##
     accessModes:
       - ReadWriteOnce
-    ## @param ingester.persistence.size PVC Storage Request for Memcached data volume
+    ## @param ingester.persistence.size PVC Storage Request for Ingester data volume
     ##
     size: 8Gi
     ## @param ingester.persistence.annotations Additional PVC annotations
@@ -3311,7 +3340,7 @@ storeGateway:
     ## @param storeGateway.persistence.existingClaim Name of an existing PVC to use
     ##
     existingClaim: ""
-    ## @param storeGateway.persistence.storageClass PVC Storage Class for Memcached data volume
+    ## @param storeGateway.persistence.storageClass PVC Storage Class for Store Gateway data volume
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
     ## If undefined (the default) or set to null, no storageClassName spec is
@@ -3323,7 +3352,7 @@ storeGateway:
     ##
     accessModes:
       - ReadWriteOnce
-    ## @param storeGateway.persistence.size PVC Storage Request for Memcached data volume
+    ## @param storeGateway.persistence.size PVC Storage Request for Store Gateway data volume
     ##
     size: 8Gi
     ## @param storeGateway.persistence.annotations Additional PVC annotations
@@ -3633,7 +3662,7 @@ ruler:
     ## @param ruler.persistence.enabled Enable persistence in Ruler instances
     ##
     enabled: true
-    ## @param ruler.persistence.storageClass PVC Storage Class for Memcached data volume
+    ## @param ruler.persistence.storageClass PVC Storage Class for Ruler data volume
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
     ## If undefined (the default) or set to null, no storageClassName spec is
@@ -3648,7 +3677,7 @@ ruler:
     ##
     accessModes:
       - ReadWriteOnce
-    ## @param ruler.persistence.size PVC Storage Request for Memcached data volume
+    ## @param ruler.persistence.size PVC Storage Request for Ruler data volume
     ##
     size: 8Gi
     ## @param ruler.persistence.annotations Additional PVC annotations
@@ -3821,7 +3850,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r%%IMAGE_REVISION%%
+    tag: 11-debian-11-r69
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -3988,3 +4017,168 @@ minio:
     loadBalancerIP: ""
     ports:
       api: 80
+
+## @section External Memcached (Chunks) Parameters
+##
+externalMemcachedChunks:
+  ## @param externalMemcachedChunks.host Host of a running external memcached instance
+  ##
+  host: ""
+  ## @param externalMemcachedChunks.port Port of a running external memcached instance
+  ##
+  port: 11211
+
+## @section Memcached Sub-chart Parameters (Chunks)
+## Memcached sub-chart (Chunks)
+##
+memcachedchunks:
+  ## @param memcachedchunks.enabled Deploy memcached sub-chart
+  ##
+  enabled: true
+  ## Bitnami Memcached image version
+  ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
+  ## @param memcachedchunks.image.registry Memcached image registry
+  ## @param memcachedchunks.image.repository Memcached image repository
+  ## @param memcachedchunks.image.tag Memcached image tag (immutable tags are recommended)
+  ## @param memcachedchunks.image.digest Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/memcached
+    tag: 1.6.17-debian-11-r44
+    digest: ""
+  ## @param memcachedchunks.nameOverride override the subchart name
+  ##
+  nameOverride: ""
+  ## @param memcachedchunks.architecture Memcached architecture
+  ##
+  architecture: high-availability
+  ## @param memcachedchunks.service.ports.memcached Memcached service port
+  ##
+  service:
+    ports:
+      memcached: 11211
+
+## @section External Memcached (Frontend) Parameters
+##
+externalMemcachedFrontend:
+  ## @param externalMemcachedFrontend.host Host of a running external memcached instance
+  ##
+  host: ""
+  ## @param externalMemcachedFrontend.port Port of a running external memcached instance
+  ##
+  port: 11211
+
+## @section Memcached Sub-chart Parameters (Frontend)
+## Memcached sub-chart (Frontend)
+##
+memcachedfrontend:
+  ## @param memcachedfrontend.enabled Deploy memcached sub-chart
+  ##
+  enabled: true
+  ## Bitnami Memcached image version
+  ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
+  ## @param memcachedfrontend.image.registry Memcached image registry
+  ## @param memcachedfrontend.image.repository Memcached image repository
+  ## @param memcachedfrontend.image.tag Memcached image tag (immutable tags are recommended)
+  ## @param memcachedfrontend.image.digest Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/memcached
+    tag: 1.6.17-debian-11-r44
+    digest: ""
+  ## @param memcachedfrontend.architecture Memcached architecture
+  ##
+  architecture: high-availability
+  ## @param memcachedfrontend.nameOverride override the subchart name
+  ##
+  nameOverride: ""
+  ## @param memcachedfrontend.service.ports.memcached Memcached service port
+  ##
+  service:
+    ports:
+      memcached: 11211
+
+## @section External Memcached (Index) Parameters
+##
+externalMemcachedIndex:
+  ## @param externalMemcachedIndex.host Host of a running external memcached instance
+  ##
+  host: ""
+  ## @param externalMemcachedIndex.port Port of a running external memcached instance
+  ##
+  port: 11211
+
+## @section Memcached Sub-chart Parameters (Index)
+## Memcached sub-chart (Index)
+##
+memcachedindex:
+  ## @param memcachedindex.enabled Deploy memcached sub-chart
+  ##
+  enabled: true
+
+  ## Bitnami Memcached image version
+  ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
+  ## @param memcachedindex.image.registry Memcached image registry
+  ## @param memcachedindex.image.repository Memcached image repository
+  ## @param memcachedindex.image.tag Memcached image tag (immutable tags are recommended)
+  ## @param memcachedindex.image.digest Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/memcached
+    tag: 1.6.17-debian-11-r44
+    digest: ""
+  ## @param memcachedindex.architecture Memcached architecture
+  ##
+  architecture: high-availability
+  ## @param memcachedindex.nameOverride override the subchart name
+  ##
+  nameOverride: ""
+  ## @param memcachedindex.service.ports.memcached Memcached service port
+  ##
+  service:
+    ports:
+      memcached: 11211
+
+## @section External Memcached (Metadata) Parameters
+##
+externalMemcachedMetadata:
+  ## @param externalMemcachedMetadata.host Host of a running external memcached instance
+  ##
+  host: ""
+  ## @param externalMemcachedMetadata.port Port of a running external memcached instance
+  ##
+  port: 11211
+
+## @section Memcached Sub-chart Parameters (Metadata)
+## Memcached sub-chart (Metadata)
+##
+memcachedmetadata:
+  ## @param memcachedmetadata.enabled Deploy memcached sub-chart
+  ##
+  enabled: true
+  ## Bitnami Memcached image version
+  ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
+  ## @param memcachedmetadata.image.registry Memcached image registry
+  ## @param memcachedmetadata.image.repository Memcached image repository
+  ## @param memcachedmetadata.image.tag Memcached image tag (immutable tags are recommended)
+  ## @param memcachedmetadata.image.digest Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/memcached
+    tag: 1.6.17-debian-11-r44
+    digest: ""
+  ## @param memcachedmetadata.architecture Memcached architecture
+  ##
+  architecture: high-availability
+  ## @param memcachedmetadata.nameOverride override the subchart name
+  ##
+  nameOverride: ""
+  ## @param memcachedmetadata.service.ports.memcached Memcached service port
+  ##
+  service:
+    ports:
+      memcached: 11211

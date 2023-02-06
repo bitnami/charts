@@ -5,6 +5,26 @@ annotations:
 apiVersion: v2
 appVersion: 2.5.0
 dependencies:
+  - alias: memcachedchunks
+    condition: memcachedchunks.enabled
+    name: memcached
+    repository: https://charts.bitnami.com/bitnami
+    version: 6.x.x
+  - alias: memcachedfrontend
+    condition: memcachedfrontend.enabled
+    name: memcached
+    repository: https://charts.bitnami.com/bitnami
+    version: 6.x.x
+  - alias: memcachedindex
+    condition: memcachedindex.enabled
+    name: memcached
+    repository: https://charts.bitnami.com/bitnami
+    version: 6.x.x
+  - alias: memcachedmetadata
+    condition: memcachedmetadata.enabled
+    name: memcached
+    repository: https://charts.bitnami.com/bitnami
+    version: 6.x.x
   - condition: minio.enabled
     name: minio
     repository: https://charts.bitnami.com/bitnami
