@@ -428,6 +428,18 @@ serviceMonitor:
   ## scrapeTimeout: 10s
   ##
   scrapeTimeout: ""
+  ## @param serviceMonitor.basicAuth Use basic auth for scraping
+  ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#BasicAuth
+  ## e.g:
+  ## basicAuth:
+  ##   username:
+  ##     name: secret-name
+  ##     key: username
+  ##   password:
+  ##     name: secret-name
+  ##     key: password
+  ##
+  basicAuth: {}
   ## @param serviceMonitor.selector ServiceMonitor selector labels
   ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
   ##
