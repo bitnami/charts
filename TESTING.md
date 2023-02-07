@@ -148,7 +148,7 @@ It is easily noticeable though that Charts are usually highly configurable artif
 
 #### Runtime parameters
 
-Helm allows to customize how a Chart is deployed [during its installation](https://helm.sh/docs/intro/using_helm/#customizing-the-chart-before-installing). The subset of parameters from `values.yaml` (and their values) that are passed in [during a Helm Chart installation](https://helm.sh/docs/intro/using_helm/#customizing-the-chart-before-installing) are referred to as runtime/installation/deployment parameters in this guide. They are of **uttermost** importance as they have a great impact on the instance under test.
+Helm allows to customize how a Chart is deployed [during its installation](https://helm.sh/docs/intro/using_helm/#customizing-the-chart-before-installing). The subset of parameters from `values.yaml` (and their values) that are passed in during a Helm Chart installation are referred to as runtime/installation/deployment parameters in this guide. They are of **uttermost** importance as they have a great impact on the instance under test.
 
 When designing a new test suite for an asset, the runtime parameters used for its installation should be inferred. This is not a straightforward task, as only the relevant parameters should be included. In order to determine which parameters from `values.yaml` should form part of the `runtime_parameters`, use the following idea:
 
@@ -289,6 +289,31 @@ Sometimes it is of interest to run the tests locally, for example during develop
       "baseUrl": "http://1.1.1.1:80"
     }
     ```
+
+    > NOTE: There are assets that require to have a host configured instead of a plain IP address to properly work. In this cases, you may find a `hosts` entry in the `cypress.json` file instead of the `baseUrl`. Proceed as follows:
+
+    ```bash
+    $ cd .vib/prestashop/cypress
+    $ cat cypress.json
+    {
+      ...
+      "hosts": {
+        "vmware-prestashop.my": "{{ TARGET_IP }}"
+      },
+      ...
+    }
+    # Replace the {{ TARGET_IP }} placeholder by the IP and port of the Service
+    $ nano cypress.json
+    $ cat cypress.json
+    {
+      ...
+      "hosts": {
+        "vmware-prestashop.my": "1.1.1.1:80"
+      },
+      ...
+    }
+    ```
+
 1. Launch Cypress indicating the folder where tests are located
 
     ```bash
@@ -325,11 +350,11 @@ Sometimes it is of interest to run the tests locally, for example during develop
 * [ ] Aim to have an assertion after every command to avoid flakiness, taking advantage of Cypress retry-ability
 * [ ] Test description is a sentence with the following format: Expected result summary, starting with a verb, in third person, no dots at the end of the sentence (ex: `it('checks if admin can edit a site', ()`)
 * [ ] Respect the folder structure recommended by Cypress:
-  * [fixtures](https://docs.cypress.io/api/commands/fixture) - for test data
-  * [Integration](https://docs.cypress.io/api/commands/fixture) - test scenario
+  * [fixtures](https://docs.cypress.io/guides/core-concepts/writing-and-organizing-tests#Fixture-Files) - for test data
+  * integration - test scenario
   * [plugins](https://docs.cypress.io/guides/tooling/plugins-guide) - plugin configuration, if applicable
-  * [support](https://docs.cypress.io/api/commands/fixture) - reusable behaviours and overrides
-  * [cypress.json](https://docs.cypress.io/guides/tooling/plugins-guide) - configuration values you wish to store
+  * support - reusable behaviours and overrides
+  * [cypress.json](https://docs.cypress.io/guides/references/legacy-configuration#cypressjson) - configuration values you wish to store
 * [ ] DOM selectors should be resilient. See best practices [here](https://docs.cypress.io/guides/references/best-practices#Selecting-Elements)
 * [ ] Unnecessary waiting should be avoided
 * [ ] Apply the following code style:
@@ -395,6 +420,14 @@ Sometimes it is of interest to run the tests locally, for example during develop
       Test Suite Passed
     ```
 
+### Useful information
+
+Ginkgo provides extreme flexibility when it comes to tests. Nonetheless, here are the most frequent use cases we have used it for so far:
+
+* Checking logs produced by a scratch or a k8s-native pod
+* Deploying, managing and interacting with K8s resources: CRDs, Ingresses, Secrets... Really useful for **K8s operators**
+* Directly interacting (instead of managing) resources deployed at installation time using the `extraDeploy` param, available in bitnami charts
+
 ### Specific acceptance criteria
 
 * [ ] Test file name has the following format: Helm chart name + `test` (ex: `metallb_test.go`)
@@ -403,7 +436,7 @@ Sometimes it is of interest to run the tests locally, for example during develop
 
 ## GOSS
 
-[GOSS](https://github.com/aelsabbahy/goss/blob/master/docs/manual.md) is one of the frameworks used to implement integration tests. Related files should be located under `/.vib/ASSET/goss`. It is the reference tool to use when tests require interaction with a specific pod.
+[GOSS](https://github.com/aelsabbahy/goss/blob/master/docs/manual.md) is one of the frameworks used to implement integration tests. Related files should be located under `/.vib/ASSET/goss`. It is the reference tool to use when tests require interaction with a specific pod. Unlike Cypress or Ginkgo, GOSS tests are executed from within the pod.
 
 In order for VIB to execute GOSS tests, the following block of code needs to be defined in the corresponding [VIB pipeline files](#vib-pipeline-files) (`/.vib/ASSET/vib-{verify,publish}.json`).
 
@@ -479,5 +512,4 @@ Sometimes it is of interest to run the tests locally, for example during develop
 * [ ] Deployment-related parameters should be specified in a file named `vars.yaml`. This is a subset of the `runtime_parameters`
 * [ ] Use templating to parametrize tests with the help of the `vars.yaml` file
 * [ ] Tests should not rely on system packages (e.g. `curl`). Favor built-in GOSS primitives instead
-* [ ] Only check paths and configuration files that are injected/used by the Helm Chart (configmap, PVC, ...). Do not check the ones already present in the container
 * [ ] Prefer checking the exit status of a command rather than looking for a specific output. This will avoid most of the potential flakiness
