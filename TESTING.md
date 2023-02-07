@@ -43,7 +43,7 @@ For more information about VIB, you can refer to [its official page](https://tan
 
 ## VIB pipeline files
 
-The CI/CD pipeline in the repository is configured to trigger VIB when an asset needs to be verified. But as every application is different, VIB needs to be supplied with a definition of the set of actions and configurations that precisely describe the verification process to perform. This is the role of the aforementioned `vib-verify.json` and `vib-publish.json` files, which every asset defines and can be found alongside its tests inside the `/.vib` folder.
+The CI/CD pipelines in the repository are configured to trigger VIB when an asset needs to be verified. But as every application is different, VIB needs to be supplied with a definition of the set of actions and configurations that precisely describe the verification process to perform in each case. This is the role of the aforementioned `vib-verify.json` and `vib-publish.json` files, which every asset defines and can be found alongside its tests inside the `/.vib` folder.
 
 Let's take a look at an example and try to understand it!
 
@@ -102,11 +102,11 @@ Let's take a look at an example and try to understand it!
 
 This guide will focus in the `verify` phase section, in which there are some things to remark:
 
-* There is a list of the actions to execute as part of the testing plan (see `actions`). Namely, this example includes a `health-check`, an instance of `goss` tests and another instance of `cypress` tests.
+* There is a list of the actions to execute as part of the testing plan. Namely, this example includes a `health-check`, an instance of `goss` tests and another instance of `cypress` tests.
 
-* For each of the `actions`, VIB will deploy **a brand new release** of the chart under test. Consequently, the state between actions is not shared.
+* For each of the `actions`, VIB will deploy **a brand new release** of the chart provided by `verify.context.resources.path`. Consequently, the state between actions is not shared.
 
-* The installation of the chart can be customized via `runtime_parameters`, which should be encoded using base64. See the [Runtime parameters](#runtime-parameters) sections for further information.
+* The installation of the chart can be customized via `runtime_parameters`, which should be encoded using base64. See the [Runtime parameters](#runtime-parameters) section for further information.
 
 * The `runtime_parameters` are shared accross all `actions`, which guarantees that each release of the chart is based on the exact same configuration.
 
@@ -132,7 +132,7 @@ The tests may be regarded as _deployment_ tests since their goal is to verify th
 
 ### The strategy
 
-Before writing any test scenario, understand the primary purpose of the chart and its components. Take a look at [the documentation about the chart under test](https://github.com/bitnami/charts/tree/main/bitnami), explore the different templates and configurations in `values.yaml` and glance over the [docker image documentation](https://github.com/bitnami?q=docker&type=all&language=&sort=). This will give you a solid base for creating valuable test scenarios.
+Before writing any test scenario, understand the primary purpose of the chart and its components. Take a look at [the documentation about the chart under test](https://github.com/bitnami/charts/tree/main/bitnami), explore the different templates and configurations in `values.yaml` and glance over the [docker image documentation](https://github.com/bitnami/containers). This will give you a solid base for creating valuable test scenarios.
 
 As Charts are usually composed of a number of different components, it is also essential to test their integrations and the Chart as a whole. As a general guideline, testing a `bitnami/chart` can be reduced to:
 
@@ -143,7 +143,7 @@ As Charts are usually composed of a number of different components, it is also e
 It is easily noticeable though that Charts are usually highly configurable artifacts. Through parameters exposed in `values.yaml`, it is fairly common to perform customizations that range from enabling simple features (e.g. exporting metrics to Prometheus) to complete changes in the architecture of the application that will be deployed (e.g. standalone vs. main-secondary replication in DBs). In order to cope with this high variability, we should:
 
 * Stick to the KISS (Keep It Short and Simple) principle: only test/consider the features that are enabled by default.
-* When params allow to customize the deployment architecture, give preference to: (1) the more representative blueprint and (2) the one provides more code-covering.
+* When params allow to customize the deployment architecture, give preference to: (1) the more representative blueprint and (2) the one that provides more code-covering.
 * Change the values for parameters of features enabled by default. This allows to ensure they are correctly picked up by the Chart.
 
 #### Runtime parameters
