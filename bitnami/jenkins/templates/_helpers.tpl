@@ -80,7 +80,6 @@ Return the Jenkins JKS password secret name
 {{- end -}}
 {{- end -}}
 
-
 {{/*
 Check if there are rolling tags in the images
 */}}
