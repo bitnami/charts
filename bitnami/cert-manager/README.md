@@ -211,6 +211,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `webhook.serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                  | `""`                           |
 | `webhook.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                    | `{}`                           |
 | `webhook.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                          | `true`                         |
+| `webhook.hostNetwork`                                 | Specifies hostNetwork value                                                                             | `false`                        |
 
 
 ### CAInjector deployment parameters
