@@ -68898,6 +68898,39 @@ entries:
       category: Infrastructure
       licenses: Apache-2.0
     apiVersion: v2
+    appVersion: 2.9.14
+    created: "2023-02-07T05:14:13.237718555Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: NATS is an open source, lightweight and high-performance messaging
+      system. It is ideal for distributed systems and supports modern cloud architectures
+      and pub-sub, request-reply and queuing models.
+    digest: f2d1f687118197c948a098e861b6d63a5e79b36de332ac7bc529ca242a3b97cc
+    home: https://github.com/bitnami/charts/tree/main/bitnami/nats
+    icon: https://bitnami.com/assets/stacks/nats/img/nats-stack-220x234.png
+    keywords:
+    - nats
+    - messaging
+    - addressing
+    - discovery
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: nats
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/nats
+    - https://nats.io/
+    urls:
+    - https://charts.bitnami.com/bitnami/nats-7.5.9.tgz
+    version: 7.5.9
+  - annotations:
+      category: Infrastructure
+      licenses: Apache-2.0
+    apiVersion: v2
     appVersion: 2.9.12
     created: "2023-02-02T23:15:34.388571495Z"
     dependencies:
@@ -113838,4 +113871,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-02-07T04:45:00.780090029Z"
+generated: "2023-02-07T05:14:13.233881955Z"
