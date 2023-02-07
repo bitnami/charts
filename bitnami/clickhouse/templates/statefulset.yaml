@@ -25,8 +25,14 @@ spec:
   {{- end }}
   template:
     metadata:
-      {{- if or $.Values.podAnnotations (and $.Values.metrics.enabled $.Values.metrics.podAnnotations) }}
       annotations:
+        {{- if not .Values.existingOverridesConfigmap }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if and .Values.extraOverrides (not .Values.extraOverridesConfigmap) }}
+        checksum/config-extra: {{ include (print $.Template.BasePath "/configmap-extra.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if or $.Values.podAnnotations (and $.Values.metrics.enabled $.Values.metrics.podAnnotations) }}
         {{- if $.Values.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" $.Values.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
