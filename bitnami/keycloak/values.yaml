@@ -249,6 +249,7 @@ replicaCount: 1
 containerPorts:
   http: 8080
   https: 8443
+  infinispan: 7800
 ## @param extraContainerPorts Optionally specify extra list of additional port-mappings for Keycloak container
 ##
 extraContainerPorts: []
