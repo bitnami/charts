@@ -2,7 +2,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "argo-cd.applicationSet" . }}
+  name: {{ include "argocd.applicationSet" . }}
   {{- if .Values.applicationSet.metrics.serviceMonitor.namespace }}
   namespace: {{ .Values.applicationSet.metrics.serviceMonitor.namespace | quote }}
   {{- else }}
