@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/discourse"
         },
-        "runtime_parameters": "YXV0aDoKICBlbWFpbDogdXNlckBleGFtcGxlLmNvbQogIHVzZXI6IHVzZXIKICBwYXNzd29yZDogQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0CnBvc3RncmVzcWw6CiAgYXV0aDoKICAgIHVzZXJuYW1lOiBibl9kaXNjb3Vyc2UKaG9zdDogYml0bmFtaS1kaXNjb3Vyc2UubXkKc2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGh0dHA6IDgwCmRpc2NvdXJzZToKICByZWFkaW5lc3NQcm9iZToKICAgIGluaXRpYWxEZWxheVNlY29uZHM6IDYwMAo=",
+        "runtime_parameters": "YXV0aDoKICBlbWFpbDogdXNlckBleGFtcGxlLmNvbQogIHVzZXI6IHVzZXIKICBwYXNzd29yZDogQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0CnBvc3RncmVzcWw6CiAgYXV0aDoKICAgIHVzZXJuYW1lOiBibl9kaXNjb3Vyc2UKaG9zdDogYml0bmFtaS1kaXNjb3Vyc2UubXkKc2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGh0dHA6IDgwCmRpc2NvdXJzZToKICByZWFkaW5lc3NQcm9iZToKICAgIGluaXRpYWxEZWxheVNlY29uZHM6IDYwMAogIGxpdmVuZXNzUHJvYmU6CiAgICBpbml0aWFsRGVsYXlTZWNvbmRzOiA3MjAK",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
