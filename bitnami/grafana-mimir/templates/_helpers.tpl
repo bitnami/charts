@@ -310,6 +310,7 @@ Compile all warnings into a single message.
 */}}
 {{- define "grafana-mimir.validateValues" -}}
 {{- $messages := list -}}
+{{- $messages := append $messages (include "grafana-mimir.validateValues.ingester.replicaCount" .) -}}
 {{- $messages := append $messages (include "grafana-mimir.validateValues.memcachedchunks" .) -}}
 {{- $messages := append $messages (include "grafana-mimir.validateValues.memcachedindex" .) -}}
 {{- $messages := append $messages (include "grafana-mimir.validateValues.memcachedmetadata" .) -}}
@@ -319,6 +320,14 @@ Compile all warnings into a single message.
 
 {{- if $message -}}
 {{-   printf "\nVALUES VALIDATION:\n%s" $message -}}
+{{- end -}}
+{{- end -}}
+
+{/* Validate values of Grafana Mimir - Number of ingester nodes */}}
+{{- define "grafana-mimir.validateValues.ingester.replicaCount" -}}
+{{- if lt (int .Values.ingester.replicaCount) 2 -}}
+grafana-mimir: Ingester replicaCount
+    Please set ingester.replicaCount greater than 1 (--set ingester.replicaCount=2)
 {{- end -}}
 {{- end -}}
 

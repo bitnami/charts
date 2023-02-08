@@ -348,12 +348,12 @@ alertmanager:
   ## extraArgs:
   ##   - "-log.level=debug"
   extraArgs: []
-  ## @param alertmanager.replicaCount Number of Compactor replicas to deploy
+  ## @param alertmanager.replicaCount Number of Alertmanager replicas to deploy
   ##
   replicaCount: 1
-  ## Configure extra options for Compactor containers' liveness, readiness and startup probes
+  ## Configure extra options for Alertmanager containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
-  ## @param alertmanager.livenessProbe.enabled Enable livenessProbe on Compactor nodes
+  ## @param alertmanager.livenessProbe.enabled Enable livenessProbe on Alertmanager nodes
   ## @param alertmanager.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param alertmanager.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param alertmanager.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -367,7 +367,7 @@ alertmanager:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
-  ## @param alertmanager.readinessProbe.enabled Enable readinessProbe on Compactor nodes
+  ## @param alertmanager.readinessProbe.enabled Enable readinessProbe on Alertmanager nodes
   ## @param alertmanager.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
   ## @param alertmanager.readinessProbe.periodSeconds Period seconds for readinessProbe
   ## @param alertmanager.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -381,7 +381,7 @@ alertmanager:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
-  ## @param alertmanager.startupProbe.enabled Enable startupProbe on Compactor containers
+  ## @param alertmanager.startupProbe.enabled Enable startupProbe on Alertmanager containers
   ## @param alertmanager.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
   ## @param alertmanager.startupProbe.periodSeconds Period seconds for startupProbe
   ## @param alertmanager.startupProbe.timeoutSeconds Timeout seconds for startupProbe
@@ -414,17 +414,17 @@ alertmanager:
     requests: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param alertmanager.podSecurityContext.enabled Enabled Compactor pods' Security Context
-  ## @param alertmanager.podSecurityContext.fsGroup Set Compactor pod's Security Context fsGroup
+  ## @param alertmanager.podSecurityContext.enabled Enabled Alertmanager pods' Security Context
+  ## @param alertmanager.podSecurityContext.fsGroup Set Alertmanager pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param alertmanager.containerSecurityContext.enabled Enabled Compactor containers' Security Context
-  ## @param alertmanager.containerSecurityContext.runAsUser Set Compactor containers' Security Context runAsUser
-  ## @param alertmanager.containerSecurityContext.runAsNonRoot Set Compactor containers' Security Context runAsNonRoot
+  ## @param alertmanager.containerSecurityContext.enabled Enabled Alertmanager containers' Security Context
+  ## @param alertmanager.containerSecurityContext.runAsUser Set Alertmanager containers' Security Context runAsUser
+  ## @param alertmanager.containerSecurityContext.runAsNonRoot Set Alertmanager containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
@@ -470,16 +470,16 @@ alertmanager:
     ##   - e2e-az2
     ##
     values: []
-  ## @param alertmanager.affinity Affinity for Compactor pods assignment
+  ## @param alertmanager.affinity Affinity for Alertmanager pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## NOTE: `alertmanager.podAffinityPreset`, `alertmanager.podAntiAffinityPreset`, and `alertmanager.nodeAffinityPreset` will be ignored when it's set
   ##
   affinity: {}
-  ## @param alertmanager.nodeSelector Node labels for Compactor pods assignment
+  ## @param alertmanager.nodeSelector Node labels for Alertmanager pods assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-  ## @param alertmanager.tolerations Tolerations for Compactor pods assignment
+  ## @param alertmanager.tolerations Tolerations for Alertmanager pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
@@ -487,7 +487,7 @@ alertmanager:
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
   topologySpreadConstraints: []
-  ## @param alertmanager.priorityClassName Compactor pods' priorityClassName
+  ## @param alertmanager.priorityClassName Alertmanager pods' priorityClassName
   ##
   priorityClassName: ""
   ## @param alertmanager.schedulerName Kubernetes pod scheduler registry
@@ -498,20 +498,20 @@ alertmanager:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
   terminationGracePeriodSeconds: ""
-  ## @param alertmanager.updateStrategy.type Compactor statefulset strategy type
-  ## @param alertmanager.updateStrategy.rollingUpdate Compactor statefulset rolling update configuration parameters
+  ## @param alertmanager.updateStrategy.type Alertmanager statefulset strategy type
+  ## @param alertmanager.updateStrategy.rollingUpdate Alertmanager statefulset rolling update configuration parameters
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
     rollingUpdate: {}
-  ## @param alertmanager.extraVolumes Optionally specify extra list of additional volumes for the Compactor pod(s)
+  ## @param alertmanager.extraVolumes Optionally specify extra list of additional volumes for the Alertmanager pod(s)
   ##
   extraVolumes: []
-  ## @param alertmanager.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Compactor container(s)
+  ## @param alertmanager.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Alertmanager container(s)
   ##
   extraVolumeMounts: []
-  ## @param alertmanager.sidecars Add additional sidecar containers to the Compactor pod(s)
+  ## @param alertmanager.sidecars Add additional sidecar containers to the Alertmanager pod(s)
   ## e.g:
   ## sidecars:
   ##   - name: your-image-name
@@ -522,7 +522,7 @@ alertmanager:
   ##         containerPort: 1234
   ##
   sidecars: []
-  ## @param alertmanager.initContainers Add additional init containers to the Compactor pod(s)
+  ## @param alertmanager.initContainers Add additional init containers to the Alertmanager pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
   ## initContainers:
@@ -533,17 +533,17 @@ alertmanager:
   ##
   initContainers: []
 
-  ## @section Compactor Traffic Exposure Parameters
+  ## @section Alertmanager Traffic Exposure Parameters
   ##
 
   ## ingester service parameters
   ##
   service:
-    ## @param alertmanager.service.type Compactor service type
+    ## @param alertmanager.service.type Alertmanager service type
     ##
     type: ClusterIP
-    ## @param alertmanager.service.ports.http Compactor HTTP service port
-    ## @param alertmanager.service.ports.grpc Compactor GRPC service port
+    ## @param alertmanager.service.ports.http Alertmanager HTTP service port
+    ## @param alertmanager.service.ports.grpc Alertmanager GRPC service port
     ##
     ports:
       http: 8080
@@ -568,30 +568,30 @@ alertmanager:
     ## ref: https://kubernetes.io/docs/user-guide/services/
     ##
     sessionAffinity: None
-    ## @param alertmanager.service.clusterIP Compactor service Cluster IP
+    ## @param alertmanager.service.clusterIP Alertmanager service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
     clusterIP: ""
-    ## @param alertmanager.service.loadBalancerIP Compactor service Load Balancer IP
+    ## @param alertmanager.service.loadBalancerIP Alertmanager service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
-    ## @param alertmanager.service.loadBalancerSourceRanges Compactor service Load Balancer sources
+    ## @param alertmanager.service.loadBalancerSourceRanges Alertmanager service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
     ## loadBalancerSourceRanges:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param alertmanager.service.externalTrafficPolicy Compactor service external traffic policy
+    ## @param alertmanager.service.externalTrafficPolicy Alertmanager service external traffic policy
     ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
-    ## @param alertmanager.service.annotations Additional custom annotations for Compactor service
+    ## @param alertmanager.service.annotations Additional custom annotations for Alertmanager service
     ##
     annotations: {}
-    ## @param alertmanager.service.extraPorts Extra ports to expose in the Compactor service
+    ## @param alertmanager.service.extraPorts Extra ports to expose in the Alertmanager service
     ##
     extraPorts: []
   ## Pod Disruption Budget configuration
@@ -976,12 +976,12 @@ distributor:
   ## extraArgs:
   ##   - "-log.level=debug"
   extraArgs: []
-  ## @param distributor.replicaCount Number of Compactor replicas to deploy
+  ## @param distributor.replicaCount Number of Distributor replicas to deploy
   ##
   replicaCount: 1
-  ## Configure extra options for Compactor containers' liveness, readiness and startup probes
+  ## Configure extra options for Distributor containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
-  ## @param distributor.livenessProbe.enabled Enable livenessProbe on Compactor nodes
+  ## @param distributor.livenessProbe.enabled Enable livenessProbe on Distributor nodes
   ## @param distributor.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param distributor.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param distributor.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -995,7 +995,7 @@ distributor:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
-  ## @param distributor.readinessProbe.enabled Enable readinessProbe on Compactor nodes
+  ## @param distributor.readinessProbe.enabled Enable readinessProbe on Distributor nodes
   ## @param distributor.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
   ## @param distributor.readinessProbe.periodSeconds Period seconds for readinessProbe
   ## @param distributor.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -1009,7 +1009,7 @@ distributor:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
-  ## @param distributor.startupProbe.enabled Enable startupProbe on Compactor containers
+  ## @param distributor.startupProbe.enabled Enable startupProbe on Distributor containers
   ## @param distributor.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
   ## @param distributor.startupProbe.periodSeconds Period seconds for startupProbe
   ## @param distributor.startupProbe.timeoutSeconds Timeout seconds for startupProbe
@@ -1042,17 +1042,17 @@ distributor:
     requests: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param distributor.podSecurityContext.enabled Enabled Compactor pods' Security Context
-  ## @param distributor.podSecurityContext.fsGroup Set Compactor pod's Security Context fsGroup
+  ## @param distributor.podSecurityContext.enabled Enabled Distributor pods' Security Context
+  ## @param distributor.podSecurityContext.fsGroup Set Distributor pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param distributor.containerSecurityContext.enabled Enabled Compactor containers' Security Context
-  ## @param distributor.containerSecurityContext.runAsUser Set Compactor containers' Security Context runAsUser
-  ## @param distributor.containerSecurityContext.runAsNonRoot Set Compactor containers' Security Context runAsNonRoot
+  ## @param distributor.containerSecurityContext.enabled Enabled Distributor containers' Security Context
+  ## @param distributor.containerSecurityContext.runAsUser Set Distributor containers' Security Context runAsUser
+  ## @param distributor.containerSecurityContext.runAsNonRoot Set Distributor containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
@@ -1098,16 +1098,16 @@ distributor:
     ##   - e2e-az2
     ##
     values: []
-  ## @param distributor.affinity Affinity for Compactor pods assignment
+  ## @param distributor.affinity Affinity for Distributor pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## NOTE: `distributor.podAffinityPreset`, `distributor.podAntiAffinityPreset`, and `distributor.nodeAffinityPreset` will be ignored when it's set
   ##
   affinity: {}
-  ## @param distributor.nodeSelector Node labels for Compactor pods assignment
+  ## @param distributor.nodeSelector Node labels for Distributor pods assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-  ## @param distributor.tolerations Tolerations for Compactor pods assignment
+  ## @param distributor.tolerations Tolerations for Distributor pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
@@ -1115,7 +1115,7 @@ distributor:
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
   topologySpreadConstraints: []
-  ## @param distributor.priorityClassName Compactor pods' priorityClassName
+  ## @param distributor.priorityClassName Distributor pods' priorityClassName
   ##
   priorityClassName: ""
   ## @param distributor.schedulerName Kubernetes pod scheduler registry
@@ -1126,20 +1126,20 @@ distributor:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
   terminationGracePeriodSeconds: ""
-  ## @param distributor.updateStrategy.type Compactor statefulset strategy type
-  ## @param distributor.updateStrategy.rollingUpdate Compactor statefulset rolling update configuration parameters
+  ## @param distributor.updateStrategy.type Distributor statefulset strategy type
+  ## @param distributor.updateStrategy.rollingUpdate Distributor statefulset rolling update configuration parameters
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
     rollingUpdate: {}
-  ## @param distributor.extraVolumes Optionally specify extra list of additional volumes for the Compactor pod(s)
+  ## @param distributor.extraVolumes Optionally specify extra list of additional volumes for the Distributor pod(s)
   ##
   extraVolumes: []
-  ## @param distributor.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Compactor container(s)
+  ## @param distributor.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Distributor container(s)
   ##
   extraVolumeMounts: []
-  ## @param distributor.sidecars Add additional sidecar containers to the Compactor pod(s)
+  ## @param distributor.sidecars Add additional sidecar containers to the Distributor pod(s)
   ## e.g:
   ## sidecars:
   ##   - name: your-image-name
@@ -1150,7 +1150,7 @@ distributor:
   ##         containerPort: 1234
   ##
   sidecars: []
-  ## @param distributor.initContainers Add additional init containers to the Compactor pod(s)
+  ## @param distributor.initContainers Add additional init containers to the Distributor pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
   ## initContainers:
@@ -1161,17 +1161,17 @@ distributor:
   ##
   initContainers: []
 
-  ## @section Compactor Traffic Exposure Parameters
+  ## @section Distributor Traffic Exposure Parameters
   ##
 
   ## distributor service parameters
   ##
   service:
-    ## @param distributor.service.type Compactor service type
+    ## @param distributor.service.type Distributor service type
     ##
     type: ClusterIP
-    ## @param distributor.service.ports.http Compactor HTTP service port
-    ## @param distributor.service.ports.grpc Compactor GRPC service port
+    ## @param distributor.service.ports.http Distributor HTTP service port
+    ## @param distributor.service.ports.grpc Distributor GRPC service port
     ##
     ports:
       http: 8080
@@ -1196,30 +1196,30 @@ distributor:
     ## ref: https://kubernetes.io/docs/user-guide/services/
     ##
     sessionAffinity: None
-    ## @param distributor.service.clusterIP Compactor service Cluster IP
+    ## @param distributor.service.clusterIP Distributor service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
     clusterIP: ""
-    ## @param distributor.service.loadBalancerIP Compactor service Load Balancer IP
+    ## @param distributor.service.loadBalancerIP Distributor service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
-    ## @param distributor.service.loadBalancerSourceRanges Compactor service Load Balancer sources
+    ## @param distributor.service.loadBalancerSourceRanges Distributor service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
     ## loadBalancerSourceRanges:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param distributor.service.externalTrafficPolicy Compactor service external traffic policy
+    ## @param distributor.service.externalTrafficPolicy Distributor service external traffic policy
     ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
-    ## @param distributor.service.annotations Additional custom annotations for Compactor service
+    ## @param distributor.service.annotations Additional custom annotations for Distributor service
     ##
     annotations: {}
-    ## @param distributor.service.extraPorts Extra ports to expose in the Compactor service
+    ## @param distributor.service.extraPorts Extra ports to expose in the Distributor service
     ##
     extraPorts: []
   ## Pod Disruption Budget configuration
@@ -1675,16 +1675,16 @@ ingester:
   ## extraArgs:
   ##   - "-log.level=debug"
   extraArgs: []
-  ## @param ingester.replicaCount Number of Compactor replicas to deploy
-  ##
-  replicaCount: 1
+  ## @param ingester.replicaCount Number of Ingester replicas to deploy
+  ## at
+  replicaCount: 2
   ## @param ingester.podManagementPolicy Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join
   ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: OrderedReady
-  ## Configure extra options for Compactor containers' liveness, readiness and startup probes
+  ## Configure extra options for Ingester containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
-  ## @param ingester.livenessProbe.enabled Enable livenessProbe on Compactor nodes
+  ## @param ingester.livenessProbe.enabled Enable livenessProbe on Ingester nodes
   ## @param ingester.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param ingester.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param ingester.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -1698,7 +1698,7 @@ ingester:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
-  ## @param ingester.readinessProbe.enabled Enable readinessProbe on Compactor nodes
+  ## @param ingester.readinessProbe.enabled Enable readinessProbe on Ingester nodes
   ## @param ingester.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
   ## @param ingester.readinessProbe.periodSeconds Period seconds for readinessProbe
   ## @param ingester.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -1712,7 +1712,7 @@ ingester:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
-  ## @param ingester.startupProbe.enabled Enable startupProbe on Compactor containers
+  ## @param ingester.startupProbe.enabled Enable startupProbe on Ingester containers
   ## @param ingester.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
   ## @param ingester.startupProbe.periodSeconds Period seconds for startupProbe
   ## @param ingester.startupProbe.timeoutSeconds Timeout seconds for startupProbe
@@ -1745,17 +1745,17 @@ ingester:
     requests: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param ingester.podSecurityContext.enabled Enabled Compactor pods' Security Context
-  ## @param ingester.podSecurityContext.fsGroup Set Compactor pod's Security Context fsGroup
+  ## @param ingester.podSecurityContext.enabled Enabled Ingester pods' Security Context
+  ## @param ingester.podSecurityContext.fsGroup Set Ingester pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param ingester.containerSecurityContext.enabled Enabled Compactor containers' Security Context
-  ## @param ingester.containerSecurityContext.runAsUser Set Compactor containers' Security Context runAsUser
-  ## @param ingester.containerSecurityContext.runAsNonRoot Set Compactor containers' Security Context runAsNonRoot
+  ## @param ingester.containerSecurityContext.enabled Enabled Ingester containers' Security Context
+  ## @param ingester.containerSecurityContext.runAsUser Set Ingester containers' Security Context runAsUser
+  ## @param ingester.containerSecurityContext.runAsNonRoot Set Ingester containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
@@ -1801,16 +1801,16 @@ ingester:
     ##   - e2e-az2
     ##
     values: []
-  ## @param ingester.affinity Affinity for Compactor pods assignment
+  ## @param ingester.affinity Affinity for Ingester pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## NOTE: `ingester.podAffinityPreset`, `ingester.podAntiAffinityPreset`, and `ingester.nodeAffinityPreset` will be ignored when it's set
   ##
   affinity: {}
-  ## @param ingester.nodeSelector Node labels for Compactor pods assignment
+  ## @param ingester.nodeSelector Node labels for Ingester pods assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-  ## @param ingester.tolerations Tolerations for Compactor pods assignment
+  ## @param ingester.tolerations Tolerations for Ingester pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
@@ -1818,7 +1818,7 @@ ingester:
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
   topologySpreadConstraints: []
-  ## @param ingester.priorityClassName Compactor pods' priorityClassName
+  ## @param ingester.priorityClassName Ingester pods' priorityClassName
   ##
   priorityClassName: ""
   ## @param ingester.schedulerName Kubernetes pod scheduler registry
@@ -1829,20 +1829,20 @@ ingester:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
   terminationGracePeriodSeconds: ""
-  ## @param ingester.updateStrategy.type Compactor statefulset strategy type
-  ## @param ingester.updateStrategy.rollingUpdate Compactor statefulset rolling update configuration parameters
+  ## @param ingester.updateStrategy.type Ingester statefulset strategy type
+  ## @param ingester.updateStrategy.rollingUpdate Ingester statefulset rolling update configuration parameters
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
     rollingUpdate: {}
-  ## @param ingester.extraVolumes Optionally specify extra list of additional volumes for the Compactor pod(s)
+  ## @param ingester.extraVolumes Optionally specify extra list of additional volumes for the Ingester pod(s)
   ##
   extraVolumes: []
-  ## @param ingester.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Compactor container(s)
+  ## @param ingester.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Ingester container(s)
   ##
   extraVolumeMounts: []
-  ## @param ingester.sidecars Add additional sidecar containers to the Compactor pod(s)
+  ## @param ingester.sidecars Add additional sidecar containers to the Ingester pod(s)
   ## e.g:
   ## sidecars:
   ##   - name: your-image-name
@@ -1853,7 +1853,7 @@ ingester:
   ##         containerPort: 1234
   ##
   sidecars: []
-  ## @param ingester.initContainers Add additional init containers to the Compactor pod(s)
+  ## @param ingester.initContainers Add additional init containers to the Ingester pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
   ## initContainers:
@@ -1868,7 +1868,7 @@ ingester:
   ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
-    ## @param ingester.persistence.enabled Enable persistence in Compactor instances
+    ## @param ingester.persistence.enabled Enable persistence in Ingester instances
     ##
     enabled: true
     ## @param ingester.persistence.existingClaim Name of an existing PVC to use
@@ -1892,7 +1892,7 @@ ingester:
     ## @param ingester.persistence.annotations Additional PVC annotations
     ##
     annotations: {}
-    ## @param ingester.persistence.selector Selector to match an existing Persistent Volume for Compactor's data PVC
+    ## @param ingester.persistence.selector Selector to match an existing Persistent Volume for Ingester's data PVC
     ## If set, the PVC can't have a PV dynamically provisioned for it
     ## E.g.
     ## selector:
@@ -1904,17 +1904,17 @@ ingester:
     ##
     dataSource: {}
 
-  ## @section Compactor Traffic Exposure Parameters
+  ## @section Ingester Traffic Exposure Parameters
   ##
 
   ## ingester service parameters
   ##
   service:
-    ## @param ingester.service.type Compactor service type
+    ## @param ingester.service.type Ingester service type
     ##
     type: ClusterIP
-    ## @param ingester.service.ports.http Compactor HTTP service port
-    ## @param ingester.service.ports.grpc Compactor GRPC service port
+    ## @param ingester.service.ports.http Ingester HTTP service port
+    ## @param ingester.service.ports.grpc Ingester GRPC service port
     ##
     ports:
       http: 8080
@@ -1939,30 +1939,30 @@ ingester:
     ## ref: https://kubernetes.io/docs/user-guide/services/
     ##
     sessionAffinity: None
-    ## @param ingester.service.clusterIP Compactor service Cluster IP
+    ## @param ingester.service.clusterIP Ingester service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
     clusterIP: ""
-    ## @param ingester.service.loadBalancerIP Compactor service Load Balancer IP
+    ## @param ingester.service.loadBalancerIP Ingester service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
-    ## @param ingester.service.loadBalancerSourceRanges Compactor service Load Balancer sources
+    ## @param ingester.service.loadBalancerSourceRanges Ingester service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
     ## loadBalancerSourceRanges:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param ingester.service.externalTrafficPolicy Compactor service external traffic policy
+    ## @param ingester.service.externalTrafficPolicy Ingester service external traffic policy
     ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
-    ## @param ingester.service.annotations Additional custom annotations for Compactor service
+    ## @param ingester.service.annotations Additional custom annotations for Ingester service
     ##
     annotations: {}
-    ## @param ingester.service.extraPorts Extra ports to expose in the Compactor service
+    ## @param ingester.service.extraPorts Extra ports to expose in the Ingester service
     ##
     extraPorts: []
   ## Pod Disruption Budget configuration
@@ -2004,12 +2004,12 @@ overridesExporter:
   ## extraArgs:
   ##   - "-log.level=debug"
   extraArgs: []
-  ## @param overridesExporter.replicaCount Number of Compactor replicas to deploy
+  ## @param overridesExporter.replicaCount Number of Overrides Exporter replicas to deploy
   ##
   replicaCount: 1
-  ## Configure extra options for Compactor containers' liveness, readiness and startup probes
+  ## Configure extra options for Overrides Exporter containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
-  ## @param overridesExporter.livenessProbe.enabled Enable livenessProbe on Compactor nodes
+  ## @param overridesExporter.livenessProbe.enabled Enable livenessProbe on Overrides Exporter nodes
   ## @param overridesExporter.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param overridesExporter.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param overridesExporter.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -2023,7 +2023,7 @@ overridesExporter:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
-  ## @param overridesExporter.readinessProbe.enabled Enable readinessProbe on Compactor nodes
+  ## @param overridesExporter.readinessProbe.enabled Enable readinessProbe on Overrides Exporter nodes
   ## @param overridesExporter.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
   ## @param overridesExporter.readinessProbe.periodSeconds Period seconds for readinessProbe
   ## @param overridesExporter.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -2037,7 +2037,7 @@ overridesExporter:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
-  ## @param overridesExporter.startupProbe.enabled Enable startupProbe on Compactor containers
+  ## @param overridesExporter.startupProbe.enabled Enable startupProbe on Overrides Exporter containers
   ## @param overridesExporter.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
   ## @param overridesExporter.startupProbe.periodSeconds Period seconds for startupProbe
   ## @param overridesExporter.startupProbe.timeoutSeconds Timeout seconds for startupProbe
@@ -2070,17 +2070,17 @@ overridesExporter:
     requests: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param overridesExporter.podSecurityContext.enabled Enabled Compactor pods' Security Context
-  ## @param overridesExporter.podSecurityContext.fsGroup Set Compactor pod's Security Context fsGroup
+  ## @param overridesExporter.podSecurityContext.enabled Enabled Overrides Exporter pods' Security Context
+  ## @param overridesExporter.podSecurityContext.fsGroup Set Overrides Exporter pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param overridesExporter.containerSecurityContext.enabled Enabled Compactor containers' Security Context
-  ## @param overridesExporter.containerSecurityContext.runAsUser Set Compactor containers' Security Context runAsUser
-  ## @param overridesExporter.containerSecurityContext.runAsNonRoot Set Compactor containers' Security Context runAsNonRoot
+  ## @param overridesExporter.containerSecurityContext.enabled Enabled Overrides Exporter containers' Security Context
+  ## @param overridesExporter.containerSecurityContext.runAsUser Set Overrides Exporter containers' Security Context runAsUser
+  ## @param overridesExporter.containerSecurityContext.runAsNonRoot Set Overrides Exporter containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
@@ -2126,16 +2126,16 @@ overridesExporter:
     ##   - e2e-az2
     ##
     values: []
-  ## @param overridesExporter.affinity Affinity for Compactor pods assignment
+  ## @param overridesExporter.affinity Affinity for Overrides Exporter pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## NOTE: `overridesExporter.podAffinityPreset`, `overridesExporter.podAntiAffinityPreset`, and `overridesExporter.nodeAffinityPreset` will be ignored when it's set
   ##
   affinity: {}
-  ## @param overridesExporter.nodeSelector Node labels for Compactor pods assignment
+  ## @param overridesExporter.nodeSelector Node labels for Overrides Exporter pods assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-  ## @param overridesExporter.tolerations Tolerations for Compactor pods assignment
+  ## @param overridesExporter.tolerations Tolerations for Overrides Exporter pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
@@ -2143,7 +2143,7 @@ overridesExporter:
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
   topologySpreadConstraints: []
-  ## @param overridesExporter.priorityClassName Compactor pods' priorityClassName
+  ## @param overridesExporter.priorityClassName Overrides Exporter pods' priorityClassName
   ##
   priorityClassName: ""
   ## @param overridesExporter.schedulerName Kubernetes pod scheduler registry
@@ -2154,20 +2154,20 @@ overridesExporter:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
   terminationGracePeriodSeconds: ""
-  ## @param overridesExporter.updateStrategy.type Compactor statefulset strategy type
-  ## @param overridesExporter.updateStrategy.rollingUpdate Compactor statefulset rolling update configuration parameters
+  ## @param overridesExporter.updateStrategy.type Overrides Exporter statefulset strategy type
+  ## @param overridesExporter.updateStrategy.rollingUpdate Overrides Exporter statefulset rolling update configuration parameters
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
     rollingUpdate: {}
-  ## @param overridesExporter.extraVolumes Optionally specify extra list of additional volumes for the Compactor pod(s)
+  ## @param overridesExporter.extraVolumes Optionally specify extra list of additional volumes for the Overrides Exporter pod(s)
   ##
   extraVolumes: []
-  ## @param overridesExporter.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Compactor container(s)
+  ## @param overridesExporter.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Overrides Exporter container(s)
   ##
   extraVolumeMounts: []
-  ## @param overridesExporter.sidecars Add additional sidecar containers to the Compactor pod(s)
+  ## @param overridesExporter.sidecars Add additional sidecar containers to the Overrides Exporter pod(s)
   ## e.g:
   ## sidecars:
   ##   - name: your-image-name
@@ -2178,7 +2178,7 @@ overridesExporter:
   ##         containerPort: 1234
   ##
   sidecars: []
-  ## @param overridesExporter.initContainers Add additional init containers to the Compactor pod(s)
+  ## @param overridesExporter.initContainers Add additional init containers to the Overrides Exporter pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
   ## initContainers:
@@ -2189,17 +2189,17 @@ overridesExporter:
   ##
   initContainers: []
 
-  ## @section Compactor Traffic Exposure Parameters
+  ## @section Overrides Exporter Traffic Exposure Parameters
   ##
 
   ## ingester service parameters
   ##
   service:
-    ## @param overridesExporter.service.type Compactor service type
+    ## @param overridesExporter.service.type Overrides Exporter service type
     ##
     type: ClusterIP
-    ## @param overridesExporter.service.ports.http Compactor HTTP service port
-    ## @param overridesExporter.service.ports.grpc Compactor GRPC service port
+    ## @param overridesExporter.service.ports.http Overrides Exporter HTTP service port
+    ## @param overridesExporter.service.ports.grpc Overrides Exporter GRPC service port
     ##
     ports:
       http: 8080
@@ -2224,30 +2224,30 @@ overridesExporter:
     ## ref: https://kubernetes.io/docs/user-guide/services/
     ##
     sessionAffinity: None
-    ## @param overridesExporter.service.clusterIP Compactor service Cluster IP
+    ## @param overridesExporter.service.clusterIP Overrides Exporter service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
     clusterIP: ""
-    ## @param overridesExporter.service.loadBalancerIP Compactor service Load Balancer IP
+    ## @param overridesExporter.service.loadBalancerIP Overrides Exporter service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
-    ## @param overridesExporter.service.loadBalancerSourceRanges Compactor service Load Balancer sources
+    ## @param overridesExporter.service.loadBalancerSourceRanges Overrides Exporter service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
     ## loadBalancerSourceRanges:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param overridesExporter.service.externalTrafficPolicy Compactor service external traffic policy
+    ## @param overridesExporter.service.externalTrafficPolicy Overrides Exporter service external traffic policy
     ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
-    ## @param overridesExporter.service.annotations Additional custom annotations for Compactor service
+    ## @param overridesExporter.service.annotations Additional custom annotations for Overrides Exporter service
     ##
     annotations: {}
-    ## @param overridesExporter.service.extraPorts Extra ports to expose in the Compactor service
+    ## @param overridesExporter.service.extraPorts Extra ports to expose in the Overrides Export service
     ##
     extraPorts: []
   ## Pod Disruption Budget configuration
@@ -2288,12 +2288,12 @@ querier:
   ## extraArgs:
   ##   - "-log.level=debug"
   extraArgs: []
-  ## @param querier.replicaCount Number of Compactor replicas to deploy
+  ## @param querier.replicaCount Number of Querier replicas to deploy
   ##
   replicaCount: 1
-  ## Configure extra options for Compactor containers' liveness, readiness and startup probes
+  ## Configure extra options for Querier containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
-  ## @param querier.livenessProbe.enabled Enable livenessProbe on Compactor nodes
+  ## @param querier.livenessProbe.enabled Enable livenessProbe on Querier nodes
   ## @param querier.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param querier.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param querier.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -2307,7 +2307,7 @@ querier:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
-  ## @param querier.readinessProbe.enabled Enable readinessProbe on Compactor nodes
+  ## @param querier.readinessProbe.enabled Enable readinessProbe on Querier nodes
   ## @param querier.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
   ## @param querier.readinessProbe.periodSeconds Period seconds for readinessProbe
   ## @param querier.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -2321,7 +2321,7 @@ querier:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
-  ## @param querier.startupProbe.enabled Enable startupProbe on Compactor containers
+  ## @param querier.startupProbe.enabled Enable startupProbe on Querier containers
   ## @param querier.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
   ## @param querier.startupProbe.periodSeconds Period seconds for startupProbe
   ## @param querier.startupProbe.timeoutSeconds Timeout seconds for startupProbe
@@ -2354,17 +2354,17 @@ querier:
     requests: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param querier.podSecurityContext.enabled Enabled Compactor pods' Security Context
-  ## @param querier.podSecurityContext.fsGroup Set Compactor pod's Security Context fsGroup
+  ## @param querier.podSecurityContext.enabled Enabled Querier pods' Security Context
+  ## @param querier.podSecurityContext.fsGroup Set Querier pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param querier.containerSecurityContext.enabled Enabled Compactor containers' Security Context
-  ## @param querier.containerSecurityContext.runAsUser Set Compactor containers' Security Context runAsUser
-  ## @param querier.containerSecurityContext.runAsNonRoot Set Compactor containers' Security Context runAsNonRoot
+  ## @param querier.containerSecurityContext.enabled Enabled Querier containers' Security Context
+  ## @param querier.containerSecurityContext.runAsUser Set Querier containers' Security Context runAsUser
+  ## @param querier.containerSecurityContext.runAsNonRoot Set Querier containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
@@ -2410,16 +2410,16 @@ querier:
     ##   - e2e-az2
     ##
     values: []
-  ## @param querier.affinity Affinity for Compactor pods assignment
+  ## @param querier.affinity Affinity for Querier pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## NOTE: `querier.podAffinityPreset`, `querier.podAntiAffinityPreset`, and `querier.nodeAffinityPreset` will be ignored when it's set
   ##
   affinity: {}
-  ## @param querier.nodeSelector Node labels for Compactor pods assignment
+  ## @param querier.nodeSelector Node labels for Querier pods assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-  ## @param querier.tolerations Tolerations for Compactor pods assignment
+  ## @param querier.tolerations Tolerations for Querier pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
@@ -2427,7 +2427,7 @@ querier:
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
   topologySpreadConstraints: []
-  ## @param querier.priorityClassName Compactor pods' priorityClassName
+  ## @param querier.priorityClassName Querier pods' priorityClassName
   ##
   priorityClassName: ""
   ## @param querier.schedulerName Kubernetes pod scheduler registry
@@ -2438,20 +2438,20 @@ querier:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
   terminationGracePeriodSeconds: ""
-  ## @param querier.updateStrategy.type Compactor statefulset strategy type
-  ## @param querier.updateStrategy.rollingUpdate Compactor statefulset rolling update configuration parameters
+  ## @param querier.updateStrategy.type Querier statefulset strategy type
+  ## @param querier.updateStrategy.rollingUpdate Querier statefulset rolling update configuration parameters
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
     rollingUpdate: {}
-  ## @param querier.extraVolumes Optionally specify extra list of additional volumes for the Compactor pod(s)
+  ## @param querier.extraVolumes Optionally specify extra list of additional volumes for the Querier pod(s)
   ##
   extraVolumes: []
-  ## @param querier.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Compactor container(s)
+  ## @param querier.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Querier container(s)
   ##
   extraVolumeMounts: []
-  ## @param querier.sidecars Add additional sidecar containers to the Compactor pod(s)
+  ## @param querier.sidecars Add additional sidecar containers to the Querier pod(s)
   ## e.g:
   ## sidecars:
   ##   - name: your-image-name
@@ -2462,7 +2462,7 @@ querier:
   ##         containerPort: 1234
   ##
   sidecars: []
-  ## @param querier.initContainers Add additional init containers to the Compactor pod(s)
+  ## @param querier.initContainers Add additional init containers to the Querier pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
   ## initContainers:
@@ -2473,17 +2473,17 @@ querier:
   ##
   initContainers: []
 
-  ## @section Compactor Traffic Exposure Parameters
+  ## @section Querier Traffic Exposure Parameters
   ##
 
   ## ingester service parameters
   ##
   service:
-    ## @param querier.service.type Compactor service type
+    ## @param querier.service.type Querier service type
     ##
     type: ClusterIP
-    ## @param querier.service.ports.http Compactor HTTP service port
-    ## @param querier.service.ports.grpc Compactor GRPC service port
+    ## @param querier.service.ports.http Querier HTTP service port
+    ## @param querier.service.ports.grpc Querier GRPC service port
     ##
     ports:
       http: 8080
@@ -2508,30 +2508,30 @@ querier:
     ## ref: https://kubernetes.io/docs/user-guide/services/
     ##
     sessionAffinity: None
-    ## @param querier.service.clusterIP Compactor service Cluster IP
+    ## @param querier.service.clusterIP Querier service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
     clusterIP: ""
-    ## @param querier.service.loadBalancerIP Compactor service Load Balancer IP
+    ## @param querier.service.loadBalancerIP Querier service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
-    ## @param querier.service.loadBalancerSourceRanges Compactor service Load Balancer sources
+    ## @param querier.service.loadBalancerSourceRanges Querier service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
     ## loadBalancerSourceRanges:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param querier.service.externalTrafficPolicy Compactor service external traffic policy
+    ## @param querier.service.externalTrafficPolicy Querier service external traffic policy
     ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
-    ## @param querier.service.annotations Additional custom annotations for Compactor service
+    ## @param querier.service.annotations Additional custom annotations for Querier service
     ##
     annotations: {}
-    ## @param querier.service.extraPorts Extra ports to expose in the Compactor service
+    ## @param querier.service.extraPorts Extra ports to expose in the Querier service
     ##
     extraPorts: []
   ## Pod Disruption Budget configuration
@@ -2572,12 +2572,12 @@ queryFrontend:
   ## extraArgs:
   ##   - "-log.level=debug"
   extraArgs: []
-  ## @param queryFrontend.replicaCount Number of Compactor replicas to deploy
+  ## @param queryFrontend.replicaCount Number of Query Frontend replicas to deploy
   ##
   replicaCount: 1
-  ## Configure extra options for Compactor containers' liveness, readiness and startup probes
+  ## Configure extra options for Query Frontend containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
-  ## @param queryFrontend.livenessProbe.enabled Enable livenessProbe on Compactor nodes
+  ## @param queryFrontend.livenessProbe.enabled Enable livenessProbe on Query Frontend nodes
   ## @param queryFrontend.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param queryFrontend.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param queryFrontend.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -2591,7 +2591,7 @@ queryFrontend:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
-  ## @param queryFrontend.readinessProbe.enabled Enable readinessProbe on Compactor nodes
+  ## @param queryFrontend.readinessProbe.enabled Enable readinessProbe on Query Frontend nodes
   ## @param queryFrontend.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
   ## @param queryFrontend.readinessProbe.periodSeconds Period seconds for readinessProbe
   ## @param queryFrontend.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -2605,7 +2605,7 @@ queryFrontend:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
-  ## @param queryFrontend.startupProbe.enabled Enable startupProbe on Compactor containers
+  ## @param queryFrontend.startupProbe.enabled Enable startupProbe on Query Frontend containers
   ## @param queryFrontend.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
   ## @param queryFrontend.startupProbe.periodSeconds Period seconds for startupProbe
   ## @param queryFrontend.startupProbe.timeoutSeconds Timeout seconds for startupProbe
@@ -2638,17 +2638,17 @@ queryFrontend:
     requests: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param queryFrontend.podSecurityContext.enabled Enabled Compactor pods' Security Context
-  ## @param queryFrontend.podSecurityContext.fsGroup Set Compactor pod's Security Context fsGroup
+  ## @param queryFrontend.podSecurityContext.enabled Enabled Query Frontend pods' Security Context
+  ## @param queryFrontend.podSecurityContext.fsGroup Set Query Frontend pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param queryFrontend.containerSecurityContext.enabled Enabled Compactor containers' Security Context
-  ## @param queryFrontend.containerSecurityContext.runAsUser Set Compactor containers' Security Context runAsUser
-  ## @param queryFrontend.containerSecurityContext.runAsNonRoot Set Compactor containers' Security Context runAsNonRoot
+  ## @param queryFrontend.containerSecurityContext.enabled Enabled Query Frontend containers' Security Context
+  ## @param queryFrontend.containerSecurityContext.runAsUser Set Query Frontend containers' Security Context runAsUser
+  ## @param queryFrontend.containerSecurityContext.runAsNonRoot Set Query Frontend containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
@@ -2694,16 +2694,16 @@ queryFrontend:
     ##   - e2e-az2
     ##
     values: []
-  ## @param queryFrontend.affinity Affinity for Compactor pods assignment
+  ## @param queryFrontend.affinity Affinity for Query Frontend pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## NOTE: `queryFrontend.podAffinityPreset`, `queryFrontend.podAntiAffinityPreset`, and `queryFrontend.nodeAffinityPreset` will be ignored when it's set
   ##
   affinity: {}
-  ## @param queryFrontend.nodeSelector Node labels for Compactor pods assignment
+  ## @param queryFrontend.nodeSelector Node labels for Query Frontend pods assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-  ## @param queryFrontend.tolerations Tolerations for Compactor pods assignment
+  ## @param queryFrontend.tolerations Tolerations for Query Frontend pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
@@ -2711,7 +2711,7 @@ queryFrontend:
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
   topologySpreadConstraints: []
-  ## @param queryFrontend.priorityClassName Compactor pods' priorityClassName
+  ## @param queryFrontend.priorityClassName Query Frontend pods' priorityClassName
   ##
   priorityClassName: ""
   ## @param queryFrontend.schedulerName Kubernetes pod scheduler registry
@@ -2722,20 +2722,20 @@ queryFrontend:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
   terminationGracePeriodSeconds: ""
-  ## @param queryFrontend.updateStrategy.type Compactor statefulset strategy type
-  ## @param queryFrontend.updateStrategy.rollingUpdate Compactor statefulset rolling update configuration parameters
+  ## @param queryFrontend.updateStrategy.type Query Frontend statefulset strategy type
+  ## @param queryFrontend.updateStrategy.rollingUpdate Query Frontend statefulset rolling update configuration parameters
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
     rollingUpdate: {}
-  ## @param queryFrontend.extraVolumes Optionally specify extra list of additional volumes for the Compactor pod(s)
+  ## @param queryFrontend.extraVolumes Optionally specify extra list of additional volumes for the Query Frontend pod(s)
   ##
   extraVolumes: []
-  ## @param queryFrontend.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Compactor container(s)
+  ## @param queryFrontend.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Query Frontend container(s)
   ##
   extraVolumeMounts: []
-  ## @param queryFrontend.sidecars Add additional sidecar containers to the Compactor pod(s)
+  ## @param queryFrontend.sidecars Add additional sidecar containers to the Query Frontend pod(s)
   ## e.g:
   ## sidecars:
   ##   - name: your-image-name
@@ -2746,7 +2746,7 @@ queryFrontend:
   ##         containerPort: 1234
   ##
   sidecars: []
-  ## @param queryFrontend.initContainers Add additional init containers to the Compactor pod(s)
+  ## @param queryFrontend.initContainers Add additional init containers to the Query Frontend pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
   ## initContainers:
@@ -2757,17 +2757,17 @@ queryFrontend:
   ##
   initContainers: []
 
-  ## @section Compactor Traffic Exposure Parameters
+  ## @section Query Frontend Traffic Exposure Parameters
   ##
 
   ## ingester service parameters
   ##
   service:
-    ## @param queryFrontend.service.type Compactor service type
+    ## @param queryFrontend.service.type Query Frontend service type
     ##
     type: ClusterIP
-    ## @param queryFrontend.service.ports.http Compactor HTTP service port
-    ## @param queryFrontend.service.ports.grpc Compactor GRPC service port
+    ## @param queryFrontend.service.ports.http Query Frontend HTTP service port
+    ## @param queryFrontend.service.ports.grpc Query Frontend GRPC service port
     ##
     ports:
       http: 8080
@@ -2792,30 +2792,30 @@ queryFrontend:
     ## ref: https://kubernetes.io/docs/user-guide/services/
     ##
     sessionAffinity: None
-    ## @param queryFrontend.service.clusterIP Compactor service Cluster IP
+    ## @param queryFrontend.service.clusterIP Query Frontend service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
     clusterIP: ""
-    ## @param queryFrontend.service.loadBalancerIP Compactor service Load Balancer IP
+    ## @param queryFrontend.service.loadBalancerIP Query Frontend service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
-    ## @param queryFrontend.service.loadBalancerSourceRanges Compactor service Load Balancer sources
+    ## @param queryFrontend.service.loadBalancerSourceRanges Query Frontend service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
     ## loadBalancerSourceRanges:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param queryFrontend.service.externalTrafficPolicy Compactor service external traffic policy
+    ## @param queryFrontend.service.externalTrafficPolicy Query Frontend service external traffic policy
     ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
-    ## @param queryFrontend.service.annotations Additional custom annotations for Compactor service
+    ## @param queryFrontend.service.annotations Additional custom annotations for Query Frontend service
     ##
     annotations: {}
-    ## @param queryFrontend.service.extraPorts Extra ports to expose in the Compactor service
+    ## @param queryFrontend.service.extraPorts Extra ports to expose in the Query Frontend service
     ##
     extraPorts: []
   ## Pod Disruption Budget configuration
@@ -2857,12 +2857,12 @@ queryScheduler:
   ## extraArgs:
   ##   - "-log.level=debug"
   extraArgs: []
-  ## @param queryScheduler.replicaCount Number of Compactor replicas to deploy
+  ## @param queryScheduler.replicaCount Number of Query Scheduler replicas to deploy
   ##
   replicaCount: 1
-  ## Configure extra options for Compactor containers' liveness, readiness and startup probes
+  ## Configure extra options for Query Scheduler containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
-  ## @param queryScheduler.livenessProbe.enabled Enable livenessProbe on Compactor nodes
+  ## @param queryScheduler.livenessProbe.enabled Enable livenessProbe on Query Scheduler nodes
   ## @param queryScheduler.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param queryScheduler.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param queryScheduler.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -2876,7 +2876,7 @@ queryScheduler:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
-  ## @param queryScheduler.readinessProbe.enabled Enable readinessProbe on Compactor nodes
+  ## @param queryScheduler.readinessProbe.enabled Enable readinessProbe on Query Scheduler nodes
   ## @param queryScheduler.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
   ## @param queryScheduler.readinessProbe.periodSeconds Period seconds for readinessProbe
   ## @param queryScheduler.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -2890,7 +2890,7 @@ queryScheduler:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
-  ## @param queryScheduler.startupProbe.enabled Enable startupProbe on Compactor containers
+  ## @param queryScheduler.startupProbe.enabled Enable startupProbe on Query Scheduler containers
   ## @param queryScheduler.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
   ## @param queryScheduler.startupProbe.periodSeconds Period seconds for startupProbe
   ## @param queryScheduler.startupProbe.timeoutSeconds Timeout seconds for startupProbe
@@ -2923,17 +2923,17 @@ queryScheduler:
     requests: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param queryScheduler.podSecurityContext.enabled Enabled Compactor pods' Security Context
-  ## @param queryScheduler.podSecurityContext.fsGroup Set Compactor pod's Security Context fsGroup
+  ## @param queryScheduler.podSecurityContext.enabled Enabled Query Scheduler pods' Security Context
+  ## @param queryScheduler.podSecurityContext.fsGroup Set Query Scheduler pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param queryScheduler.containerSecurityContext.enabled Enabled Compactor containers' Security Context
-  ## @param queryScheduler.containerSecurityContext.runAsUser Set Compactor containers' Security Context runAsUser
-  ## @param queryScheduler.containerSecurityContext.runAsNonRoot Set Compactor containers' Security Context runAsNonRoot
+  ## @param queryScheduler.containerSecurityContext.enabled Enabled Query Scheduler containers' Security Context
+  ## @param queryScheduler.containerSecurityContext.runAsUser Set Query Scheduler containers' Security Context runAsUser
+  ## @param queryScheduler.containerSecurityContext.runAsNonRoot Set Query Scheduler containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
@@ -2979,16 +2979,16 @@ queryScheduler:
     ##   - e2e-az2
     ##
     values: []
-  ## @param queryScheduler.affinity Affinity for Compactor pods assignment
+  ## @param queryScheduler.affinity Affinity for Query Scheduler pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## NOTE: `queryScheduler.podAffinityPreset`, `queryScheduler.podAntiAffinityPreset`, and `queryScheduler.nodeAffinityPreset` will be ignored when it's set
   ##
   affinity: {}
-  ## @param queryScheduler.nodeSelector Node labels for Compactor pods assignment
+  ## @param queryScheduler.nodeSelector Node labels for Query Scheduler pods assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-  ## @param queryScheduler.tolerations Tolerations for Compactor pods assignment
+  ## @param queryScheduler.tolerations Tolerations for Query Scheduler pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
@@ -2996,7 +2996,7 @@ queryScheduler:
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
   topologySpreadConstraints: []
-  ## @param queryScheduler.priorityClassName Compactor pods' priorityClassName
+  ## @param queryScheduler.priorityClassName Query Scheduler pods' priorityClassName
   ##
   priorityClassName: ""
   ## @param queryScheduler.schedulerName Kubernetes pod scheduler registry
@@ -3007,20 +3007,20 @@ queryScheduler:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
   terminationGracePeriodSeconds: ""
-  ## @param queryScheduler.updateStrategy.type Compactor statefulset strategy type
-  ## @param queryScheduler.updateStrategy.rollingUpdate Compactor statefulset rolling update configuration parameters
+  ## @param queryScheduler.updateStrategy.type Query Scheduler statefulset strategy type
+  ## @param queryScheduler.updateStrategy.rollingUpdate Query Scheduler statefulset rolling update configuration parameters
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
     rollingUpdate: {}
-  ## @param queryScheduler.extraVolumes Optionally specify extra list of additional volumes for the Compactor pod(s)
+  ## @param queryScheduler.extraVolumes Optionally specify extra list of additional volumes for the Query Scheduler pod(s)
   ##
   extraVolumes: []
-  ## @param queryScheduler.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Compactor container(s)
+  ## @param queryScheduler.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Query Scheduler container(s)
   ##
   extraVolumeMounts: []
-  ## @param queryScheduler.sidecars Add additional sidecar containers to the Compactor pod(s)
+  ## @param queryScheduler.sidecars Add additional sidecar containers to the Query Scheduler pod(s)
   ## e.g:
   ## sidecars:
   ##   - name: your-image-name
@@ -3031,7 +3031,7 @@ queryScheduler:
   ##         containerPort: 1234
   ##
   sidecars: []
-  ## @param queryScheduler.initContainers Add additional init containers to the Compactor pod(s)
+  ## @param queryScheduler.initContainers Add additional init containers to the Query Scheduler pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
   ## initContainers:
@@ -3042,17 +3042,17 @@ queryScheduler:
   ##
   initContainers: []
 
-  ## @section Compactor Traffic Exposure Parameters
+  ## @section Query Scheduler Traffic Exposure Parameters
   ##
 
   ## ingester service parameters
   ##
   service:
-    ## @param queryScheduler.service.type Compactor service type
+    ## @param queryScheduler.service.type Query Scheduler service type
     ##
     type: ClusterIP
-    ## @param queryScheduler.service.ports.http Compactor HTTP service port
-    ## @param queryScheduler.service.ports.grpc Compactor GRPC service port
+    ## @param queryScheduler.service.ports.http Query Scheduler HTTP service port
+    ## @param queryScheduler.service.ports.grpc Query Scheduler GRPC service port
     ##
     ports:
       http: 8080
@@ -3077,30 +3077,30 @@ queryScheduler:
     ## ref: https://kubernetes.io/docs/user-guide/services/
     ##
     sessionAffinity: None
-    ## @param queryScheduler.service.clusterIP Compactor service Cluster IP
+    ## @param queryScheduler.service.clusterIP Query Scheduler service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
     clusterIP: ""
-    ## @param queryScheduler.service.loadBalancerIP Compactor service Load Balancer IP
+    ## @param queryScheduler.service.loadBalancerIP Query Scheduler service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
-    ## @param queryScheduler.service.loadBalancerSourceRanges Compactor service Load Balancer sources
+    ## @param queryScheduler.service.loadBalancerSourceRanges Query Scheduler service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
     ## loadBalancerSourceRanges:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param queryScheduler.service.externalTrafficPolicy Compactor service external traffic policy
+    ## @param queryScheduler.service.externalTrafficPolicy Query Scheduler service external traffic policy
     ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
-    ## @param queryScheduler.service.annotations Additional custom annotations for Compactor service
+    ## @param queryScheduler.service.annotations Additional custom annotations for Query Scheduler service
     ##
     annotations: {}
-    ## @param queryScheduler.service.extraPorts Extra ports to expose in the Compactor service
+    ## @param queryScheduler.service.extraPorts Extra ports to expose in the Query Scheduler service
     ##
     extraPorts: []
   ## Pod Disruption Budget configuration
@@ -3141,16 +3141,16 @@ storeGateway:
   ## extraArgs:
   ##   - "-log.level=debug"
   extraArgs: []
-  ## @param storeGateway.replicaCount Number of Compactor replicas to deploy
+  ## @param storeGateway.replicaCount Number of Store Gateway replicas to deploy
   ##
   replicaCount: 1
   ## @param storeGateway.podManagementPolicy Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join
   ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: OrderedReady
-  ## Configure extra options for Compactor containers' liveness, readiness and startup probes
+  ## Configure extra options for Store Gateway containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
-  ## @param storeGateway.livenessProbe.enabled Enable livenessProbe on Compactor nodes
+  ## @param storeGateway.livenessProbe.enabled Enable livenessProbe on Store Gateway nodes
   ## @param storeGateway.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param storeGateway.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param storeGateway.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -3164,7 +3164,7 @@ storeGateway:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
-  ## @param storeGateway.readinessProbe.enabled Enable readinessProbe on Compactor nodes
+  ## @param storeGateway.readinessProbe.enabled Enable readinessProbe on Store Gateway nodes
   ## @param storeGateway.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
   ## @param storeGateway.readinessProbe.periodSeconds Period seconds for readinessProbe
   ## @param storeGateway.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -3178,7 +3178,7 @@ storeGateway:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
-  ## @param storeGateway.startupProbe.enabled Enable startupProbe on Compactor containers
+  ## @param storeGateway.startupProbe.enabled Enable startupProbe on Store Gateway containers
   ## @param storeGateway.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
   ## @param storeGateway.startupProbe.periodSeconds Period seconds for startupProbe
   ## @param storeGateway.startupProbe.timeoutSeconds Timeout seconds for startupProbe
@@ -3211,17 +3211,17 @@ storeGateway:
     requests: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param storeGateway.podSecurityContext.enabled Enabled Compactor pods' Security Context
-  ## @param storeGateway.podSecurityContext.fsGroup Set Compactor pod's Security Context fsGroup
+  ## @param storeGateway.podSecurityContext.enabled Enabled Store Gateway pods' Security Context
+  ## @param storeGateway.podSecurityContext.fsGroup Set Store Gateway pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param storeGateway.containerSecurityContext.enabled Enabled Compactor containers' Security Context
-  ## @param storeGateway.containerSecurityContext.runAsUser Set Compactor containers' Security Context runAsUser
-  ## @param storeGateway.containerSecurityContext.runAsNonRoot Set Compactor containers' Security Context runAsNonRoot
+  ## @param storeGateway.containerSecurityContext.enabled Enabled Store Gateway containers' Security Context
+  ## @param storeGateway.containerSecurityContext.runAsUser Set Store Gateway containers' Security Context runAsUser
+  ## @param storeGateway.containerSecurityContext.runAsNonRoot Set Store Gateway containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
@@ -3267,16 +3267,16 @@ storeGateway:
     ##   - e2e-az2
     ##
     values: []
-  ## @param storeGateway.affinity Affinity for Compactor pods assignment
+  ## @param storeGateway.affinity Affinity for Store Gateway pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## NOTE: `storeGateway.podAffinityPreset`, `storeGateway.podAntiAffinityPreset`, and `storeGateway.nodeAffinityPreset` will be ignored when it's set
   ##
   affinity: {}
-  ## @param storeGateway.nodeSelector Node labels for Compactor pods assignment
+  ## @param storeGateway.nodeSelector Node labels for Store Gateway pods assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-  ## @param storeGateway.tolerations Tolerations for Compactor pods assignment
+  ## @param storeGateway.tolerations Tolerations for Store Gateway pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
@@ -3284,7 +3284,7 @@ storeGateway:
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
   topologySpreadConstraints: []
-  ## @param storeGateway.priorityClassName Compactor pods' priorityClassName
+  ## @param storeGateway.priorityClassName Store Gateway pods' priorityClassName
   ##
   priorityClassName: ""
   ## @param storeGateway.schedulerName Kubernetes pod scheduler registry
@@ -3295,20 +3295,20 @@ storeGateway:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
   terminationGracePeriodSeconds: ""
-  ## @param storeGateway.updateStrategy.type Compactor statefulset strategy type
-  ## @param storeGateway.updateStrategy.rollingUpdate Compactor statefulset rolling update configuration parameters
+  ## @param storeGateway.updateStrategy.type Store Gateway statefulset strategy type
+  ## @param storeGateway.updateStrategy.rollingUpdate Store Gateway statefulset rolling update configuration parameters
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
     rollingUpdate: {}
-  ## @param storeGateway.extraVolumes Optionally specify extra list of additional volumes for the Compactor pod(s)
+  ## @param storeGateway.extraVolumes Optionally specify extra list of additional volumes for the Store Gateway pod(s)
   ##
   extraVolumes: []
-  ## @param storeGateway.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Compactor container(s)
+  ## @param storeGateway.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Store Gateway container(s)
   ##
   extraVolumeMounts: []
-  ## @param storeGateway.sidecars Add additional sidecar containers to the Compactor pod(s)
+  ## @param storeGateway.sidecars Add additional sidecar containers to the Store Gateway pod(s)
   ## e.g:
   ## sidecars:
   ##   - name: your-image-name
@@ -3319,7 +3319,7 @@ storeGateway:
   ##         containerPort: 1234
   ##
   sidecars: []
-  ## @param storeGateway.initContainers Add additional init containers to the Compactor pod(s)
+  ## @param storeGateway.initContainers Add additional init containers to the Store Gateway pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
   ## initContainers:
@@ -3334,7 +3334,7 @@ storeGateway:
   ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
-    ## @param storeGateway.persistence.enabled Enable persistence in Compactor instances
+    ## @param storeGateway.persistence.enabled Enable persistence in Store Gateway instances
     ##
     enabled: true
     ## @param storeGateway.persistence.existingClaim Name of an existing PVC to use
@@ -3358,7 +3358,7 @@ storeGateway:
     ## @param storeGateway.persistence.annotations Additional PVC annotations
     ##
     annotations: {}
-    ## @param storeGateway.persistence.selector Selector to match an existing Persistent Volume for Compactor's data PVC
+    ## @param storeGateway.persistence.selector Selector to match an existing Persistent Volume for Store Gateway's data PVC
     ## If set, the PVC can't have a PV dynamically provisioned for it
     ## E.g.
     ## selector:
@@ -3370,17 +3370,17 @@ storeGateway:
     ##
     dataSource: {}
 
-  ## @section Compactor Traffic Exposure Parameters
+  ## @section Store Gateway Traffic Exposure Parameters
   ##
 
   ## ingester service parameters
   ##
   service:
-    ## @param storeGateway.service.type Compactor service type
+    ## @param storeGateway.service.type Store Gateway service type
     ##
     type: ClusterIP
-    ## @param storeGateway.service.ports.http Compactor HTTP service port
-    ## @param storeGateway.service.ports.grpc Compactor GRPC service port
+    ## @param storeGateway.service.ports.http Store Gateway HTTP service port
+    ## @param storeGateway.service.ports.grpc Store Gateway GRPC service port
     ##
     ports:
       http: 8080
@@ -3405,30 +3405,30 @@ storeGateway:
     ## ref: https://kubernetes.io/docs/user-guide/services/
     ##
     sessionAffinity: None
-    ## @param storeGateway.service.clusterIP Compactor service Cluster IP
+    ## @param storeGateway.service.clusterIP Store Gateway service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
     clusterIP: ""
-    ## @param storeGateway.service.loadBalancerIP Compactor service Load Balancer IP
+    ## @param storeGateway.service.loadBalancerIP Store Gateway service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
-    ## @param storeGateway.service.loadBalancerSourceRanges Compactor service Load Balancer sources
+    ## @param storeGateway.service.loadBalancerSourceRanges Store Gateway service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
     ## loadBalancerSourceRanges:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param storeGateway.service.externalTrafficPolicy Compactor service external traffic policy
+    ## @param storeGateway.service.externalTrafficPolicy Store Gateway service external traffic policy
     ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
-    ## @param storeGateway.service.annotations Additional custom annotations for Compactor service
+    ## @param storeGateway.service.annotations Additional custom annotations for Store Gateway service
     ##
     annotations: {}
-    ## @param storeGateway.service.extraPorts Extra ports to expose in the Compactor service
+    ## @param storeGateway.service.extraPorts Extra ports to expose in the Store Gateway service
     ##
     extraPorts: []
   ## Pod Disruption Budget configuration
