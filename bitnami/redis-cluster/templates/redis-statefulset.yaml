@@ -412,7 +412,8 @@ spec:
             path: /sys
         {{- end }}
         - name: redis-tmp-conf
-          emptyDir: {}
+          emptyDir: 
+            sizeLimit: {{ .Values.emptyDir.sizeLimit }}
         {{- if .Values.redis.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.redis.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
@@ -424,7 +425,8 @@ spec:
         {{- end }}
         {{- if not .Values.persistence.enabled }}
         - name: redis-data
-          emptyDir: {}
+          emptyDir: 
+            sizeLimit: {{ .Values.emptyDir.sizeLimit }}
         {{- end }}
   {{- if .Values.persistence.enabled }}
   volumeClaimTemplates:
