@@ -97317,6 +97317,43 @@ entries:
       category: DeveloperTools
       licenses: Apache-2.0
     apiVersion: v2
+    appVersion: 9.9.0
+    created: "2023-02-08T11:06:14.299643722Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: SonarQube(TM) is an open source quality management platform that
+      analyzes and measures code's technical quality. It enables developers to detect
+      code issues, vulnerabilities, and bugs in early stages.
+    digest: 317b8abb29d4db14c950ad652ccd13872da5e81fcf4de5f92852ffcf6d92cad7
+    home: https://github.com/bitnami/charts/tree/main/bitnami/sonarqube
+    icon: https://bitnami.com/assets/stacks/sonarqube/img/sonarqube-stack-220x234.png
+    keywords:
+    - sonarqube
+    - code-quality
+    - code-review
+    - static-analysis
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: sonarqube
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/sonarqube
+    - https://github.com/SonarSource/sonarqube
+    urls:
+    - https://charts.bitnami.com/bitnami/sonarqube-2.0.10.tgz
+    version: 2.0.10
+  - annotations:
+      category: DeveloperTools
+      licenses: Apache-2.0
+    apiVersion: v2
     appVersion: 9.8.0
     created: "2023-02-02T08:27:06.886916664Z"
     dependencies:
@@ -114171,4 +114208,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-02-08T05:55:30.192390164Z"
+generated: "2023-02-08T11:06:14.286562275Z"
