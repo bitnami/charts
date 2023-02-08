@@ -72,12 +72,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-| `global.redis.password`   | Redis&reg; password (overrides `password`)      | `""`  |
+| Name                      | Description                                     | Value   |
+| ------------------------- | ----------------------------------------------- | ------- |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`    |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`    |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`    |
+| `global.redis.password`   | Redis&reg; password (overrides `password`)      | `""`    |
+| `emptyDir.sizeLimit`      | Size limits on emptyDir                         | `512Mi` |
 
 
 ### Redis&reg; Cluster Common parameters
