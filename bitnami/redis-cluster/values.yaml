@@ -20,6 +20,11 @@ global:
   redis:
     password: ""
 
+## @param emptyDir.sizeLimit Size limits on emptyDir
+
+emptyDir:
+  sizeLimit: 512Mi
+
 ## @section Redis&reg; Cluster Common parameters
 ##
 
