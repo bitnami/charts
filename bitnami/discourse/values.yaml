@@ -69,7 +69,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/discourse
-  tag: 2.8.13-debian-11-r11
+  tag: 3.0.1-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -298,7 +298,7 @@ discourse:
   ##
   readinessProbe:
     enabled: true
-    initialDelaySeconds: 30
+    initialDelaySeconds: 180
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 6
@@ -666,7 +666,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r71
+    tag: 11-debian-11-r79
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
