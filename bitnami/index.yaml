@@ -5862,6 +5862,37 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 7.0.2
+    created: "2023-02-09T20:23:40.875605965Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: ASP.NET Core is an open-source framework for web application development
+      created by Microsoft. It runs on both the full .NET Framework, on Windows, and
+      the cross-platform .NET Core.
+    digest: 0a8c04203a724a4025cb48138bb71c9249edeb3792328a050e87953d805d53fa
+    home: https://github.com/bitnami/charts/tree/main/bitnami/aspnet-core
+    icon: https://bitnami.com/assets/stacks/aspnet-core/img/aspnet-core-stack-220x234.png
+    keywords:
+    - asp.net
+    - dotnet
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: aspnet-core
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/aspnet-core
+    - https://dotnet.microsoft.com/apps/aspnet
+    urls:
+    - https://charts.bitnami.com/bitnami/aspnet-core-4.0.4.tgz
+    version: 4.0.4
+  - annotations:
+      category: DeveloperTools
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 7.0.2
     created: "2023-01-31T08:39:18.392953163Z"
     dependencies:
     - name: common
@@ -115074,4 +115105,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-02-09T19:48:56.370807599Z"
+generated: "2023-02-09T20:23:40.868166896Z"
