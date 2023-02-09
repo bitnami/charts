@@ -57,6 +57,7 @@ diagnosticMode:
     - infinity
 
 ## @section Kong common parameters
+##
 
 ## Bitnami kong image version
 ## ref: https://hub.docker.com/r/bitnami/kong/tags/
@@ -89,11 +90,12 @@ image:
   ## Enable debug mode
   ##
   debug: false
-## @param database Select which database backend Kong will use. Can be 'postgresql' or 'cassandra'
+## @param database Select which database backend Kong will use. Can be 'postgresql', 'cassandra' or 'off'
 ##
 database: postgresql
 
 ## @section Kong deployment / daemonset parameters
+##
 
 ## @param useDaemonset Use a daemonset instead of a deployment. `replicaCount` will not take effect.
 ##
@@ -252,6 +254,7 @@ pdb:
   maxUnavailable: "50%"
 
 ## @section Kong Container Parameters
+##
 
 kong:
   ## @param kong.command Override default container command (useful when using custom images)
@@ -268,6 +271,17 @@ kong:
   ## Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time (that contain sensitive data). Evaluated as a template.
   ##
   initScriptsSecret: ""
+
+  ## @param kong.declarativeConfig Declarative configuration to be loaded by Kong (evaluated as a template)
+  ## https://docs.konghq.com/gateway/latest/production/deployment-topologies/db-less-and-declarative-config/
+  ##
+  declarativeConfig: ""
+
+  ## @param kong.declarativeConfigCM Configmap with declarative configuration to be loaded by Kong (evaluated as a template)
+  ## https://docs.konghq.com/gateway/latest/production/deployment-topologies/db-less-and-declarative-config/
+  ##
+  declarativeConfigCM: ""
+
   ## @param kong.extraEnvVars Array containing extra env vars to configure Kong
   ## For example:
   ## extraEnvVars:
@@ -541,6 +555,7 @@ ingress:
   extraRules: []
 
 ## @section Kong Ingress Controller Container Parameters
+##
 
 ingressController:
   ## @param ingressController.enabled Enable/disable the Kong Ingress Controller
@@ -696,6 +711,7 @@ ingressController:
     rules: []
 
 ## @section Kong Migration job Parameters
+##
 
 migration:
   ## In case you want to use a custom image for Kong migration, set this value

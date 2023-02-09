@@ -88,7 +88,7 @@ $ helm delete my-release
 | `image.pullPolicy`  | kong image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                                                     | `[]`                  |
 | `image.debug`       | Enable image debug mode                                                                              | `false`               |
-| `database`          | Select which database backend Kong will use. Can be 'postgresql' or 'cassandra'                      | `postgresql`          |
+| `database`          | Select which database backend Kong will use. Can be 'postgresql', 'cassandra' or 'off'               | `postgresql`          |
 
 
 ### Kong deployment / daemonset parameters
@@ -139,6 +139,8 @@ $ helm delete my-release
 | `kong.args`                               | Override default container args (useful when using custom images)                                                          | `[]`    |
 | `kong.initScriptsCM`                      | Configmap with init scripts to execute                                                                                     | `""`    |
 | `kong.initScriptsSecret`                  | Configmap with init scripts to execute                                                                                     | `""`    |
+| `kong.declarativeConfig`                  | Declarative configuration to be loaded by Kong (evaluated as a template)                                                   | `""`    |
+| `kong.declarativeConfigCM`                | Configmap with declarative configuration to be loaded by Kong (evaluated as a template)                                    | `""`    |
 | `kong.extraEnvVars`                       | Array containing extra env vars to configure Kong                                                                          | `[]`    |
 | `kong.extraEnvVarsCM`                     | ConfigMap containing extra env vars to configure Kong                                                                      | `""`    |
 | `kong.extraEnvVarsSecret`                 | Secret containing extra env vars to configure Kong (in case of sensitive data)                                             | `""`    |

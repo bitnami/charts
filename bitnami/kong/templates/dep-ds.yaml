@@ -112,7 +112,7 @@ spec:
               value: "0.0.0.0"
             {{- end }}
             - name: KONG_DATABASE
-              value: {{ ternary "postgres" "cassandra" (eq .Values.database "postgresql") | quote }}
+              value: {{ include "kong.database" . | quote }}
             {{- if (eq .Values.database "postgresql") }}
             {{- if .Values.postgresql.auth.usePasswordFiles }}
             - name: KONG_POSTGRESQL_PASSWORD_FILE
@@ -152,6 +152,10 @@ spec:
             {{- if .Values.metrics.enabled }}
             - name: KONG_NGINX_HTTP_INCLUDE
               value: "/bitnami/kong/metrics-exporter/exporter.conf"
+            {{- end }}
+            {{- if (include "kong.declarativeConfigMap" .) }}
+            - name: KONG_DECLARATIVE_CONFIG
+              value: "/bitnami/kong/declarative-conf/kong.yml"
             {{- end }}
             {{- if .Values.kong.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.kong.extraEnvVars "context" $) | nindent 12 }}
@@ -244,6 +248,10 @@ spec:
             {{- if .Values.kong.initScriptsSecret }}
             - name: custom-init-scripts-secret
               mountPath: /docker-entrypoint-initdb.d/secret
+            {{- end }}
+            {{- if (include "kong.declarativeConfigMap" .) }}
+            - name: kong-declarative-conf
+              mountPath: /bitnami/kong/declarative-conf/
             {{- end }}
             {{- if .Values.kong.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.kong.extraVolumeMounts "context" $) | nindent 12 }}
@@ -373,6 +381,11 @@ spec:
           secret:
             secretName: {{ .Values.kong.initScriptsSecret }}
             defaultMode: 0755
+        {{- end }}
+        {{- if (include "kong.declarativeConfigMap" .) }}
+        - name: kong-declarative-conf
+          configMap:
+            name: {{ include "kong.declarativeConfigMap" . | quote }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
