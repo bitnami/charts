@@ -373,13 +373,13 @@ spec:
         {{- if .Values.kong.initScriptsCM }}
         - name: custom-init-scripts-cm
           configMap:
-            name: {{ .Values.kong.initScriptsCM }}
+            name: {{ tpl .Values.kong.initScriptsCM $ }}
             defaultMode: 0755
         {{- end }}
         {{- if .Values.kong.initScriptsSecret }}
         - name: custom-init-scripts-secret
           secret:
-            secretName: {{ .Values.kong.initScriptsSecret }}
+            secretName: {{ tpl .Values.kong.initScriptsSecret $ }}
             defaultMode: 0755
         {{- end }}
         {{- if (include "kong.declarativeConfigMap" .) }}
