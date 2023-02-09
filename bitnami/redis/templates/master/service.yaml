@@ -30,7 +30,7 @@ spec:
   loadBalancerIP: {{ .Values.master.service.loadBalancerIP }}
   {{- end }}
   {{- if and (eq .Values.master.service.type "LoadBalancer") (not (empty .Values.master.service.loadBalancerSourceRanges)) }}
-  loadBalancerSourceRanges: {{ .Values.master.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{ toYaml .Values.master.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   {{- if and .Values.master.service.clusterIP (eq .Values.master.service.type "ClusterIP") }}
   clusterIP: {{ .Values.master.service.clusterIP }}

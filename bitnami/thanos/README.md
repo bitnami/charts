@@ -1334,7 +1334,7 @@ ruler:
   enabled: true
   alertmanagers:
     - http://kube-prometheus-alertmanager.monitoring.svc.cluster.local:9093
-  config: |-
+config: |-
     groups:
       - name: "metamonitoring"
         rules:
@@ -1347,9 +1347,13 @@ metrics:
 minio:
   enabled: true
   auth:
-    rootUser: "minio"
-    rootPassword: "minio123"
-  defaultBuckets: "thanos"
+    rootPassword: minio123
+    rootUser: minio
+  monitoringBuckets: thanos
+  accessKey:
+    password: minio
+  secretKey:
+    password: minio123
 ```
 
 - Install Prometheus Operator and Thanos charts:

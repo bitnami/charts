@@ -2,7 +2,7 @@ annotations:
   category: Forum
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 3.3.9
+appVersion: 3.3.10
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
@@ -28,4 +28,4 @@ name: phpbb
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/phpbb
   - https://www.phpbb.com/
-version: 12.3.10
+version: 12.3.11
