@@ -1286,8 +1286,6 @@ Thanos store supports partion based on time.
 
 Setting time partitions will create N number of store statefulsets based on the number of items in the `timePartitioning` list. Each item must contain the min and max time for querying in the supported format (find more details at [Thanos documentation](https://thanos.io/tip/components/store.md/#time-based-partitioning)).
 
-You can speficiy different resources and limits configurations to each storegateway statefulset. This is done by adding a `resources.requests` and `resources.limits` to each item. 
-
 > Note: leaving the `timePartitioning` list empty (`[]`) will create a single store for all data.
 
 For instance, to use 3 stores you can use a **values.yaml** like the one below:
@@ -1300,6 +1298,28 @@ timePartitioning:
   # One store for data newer than 6 weeks and older than 2 weeks
   - min: -6w
     max: -2w
+  # One store for data newer than 2 weeks
+  - min: -2w
+    max: ""
+```
+
+You can also specify different resources and limits configurations for each storegateway statefulset. This is done by adding a `resources.requests` and `resources.limits` to each item you wish to change , as shown below:
+
+```yaml
+timePartitioning:
+  # One store for data older than 6 weeks
+  - min: ""
+    max: -6w
+  # One store for data newer than 6 weeks and older than 2 weeks
+  - min: -6w
+    max: -2w
+    resources: #optional resources declaration for partition
+      requests:
+        cpu: 10m
+        memory: 100Mi
+      limits:
+        cpu: 20m
+        memory: 100Mi
   # One store for data newer than 2 weeks
   - min: -2w
     max: ""
