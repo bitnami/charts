@@ -102193,6 +102193,43 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 0.30.2
+    created: "2023-02-09T08:12:28.38936738Z"
+    dependencies:
+    - condition: minio.enabled
+      name: minio
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Thanos is a highly available metrics system that can be added on
+      top of existing Prometheus deployments, providing a global query view across
+      all Prometheus installations.
+    digest: cef542b57faf9338af5431bdfb2dfee9d3e6dbb6c8c481c7901bd91bec2dc09c
+    home: https://github.com/bitnami/charts/tree/main/bitnami/thanos
+    icon: https://bitnami.com/assets/stacks/thanos/img/thanos-stack-220x234.png
+    keywords:
+    - analytics
+    - monitoring
+    - prometheus
+    - thanos
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: thanos
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/thanos
+    - https://thanos.io
+    urls:
+    - https://charts.bitnami.com/bitnami/thanos-12.0.4.tgz
+    version: 12.0.4
+  - annotations:
+      category: Analytics
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 0.30.2
     created: "2023-02-01T08:34:27.985585751Z"
     dependencies:
     - condition: minio.enabled
@@ -114524,4 +114561,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-02-09T08:10:43.73374116Z"
+generated: "2023-02-09T08:12:28.370393416Z"
