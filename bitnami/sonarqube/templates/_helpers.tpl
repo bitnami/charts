@@ -212,27 +212,6 @@ sonarqube: database
 {{- end -}}
 
 {{/*
-Create the name of the deployment's install_plugins initContainer
-*/}}
-{{- define "sonarqube.installPlugins.initContainer" -}}
-    {{ printf "%s-install-plugins-initcontainer" (include "common.names.fullname" .) }}
-{{- end -}}
-
-{{/*
-Create the name of the deployment's caCerts initContainer
-*/}}
-{{- define "sonarqube.caCerts.initContainer" -}}
-    {{ printf "%s-ca-certs-initcontainer" (include "common.names.fullname" .) }}
-{{- end -}}
-
-{{/*
-Create the name of the install_plugins configMap
-*/}}
-{{- define "sonarqube.installPlugins.configMap" -}}
-    {{ printf "%s-install-plugins-configmap" (include "common.names.fullname" .) }}
-{{- end -}}
-
-{{/*
 Set sonarqube.jvmOpts
 */}}
 {{- define "sonarqube.jvmOpts" -}}

@@ -65,7 +65,7 @@ spec:
       {{- if or .Values.initContainers .Values.sysctl.enabled (and .Values.volumePermissions.enabled .Values.persistence.enabled) }}
       initContainers:
         {{- if .Values.plugins.install }}
-        - name: {{ include "sonarqube.installPlugins.initContainer" . }}
+        - name: {{ printf "%s-install-plugins-initcontainer" (include "common.names.fullname" .) }}
           image: {{ include "sonarqube.plugins.image" . }}
           imagePullPolicy: {{ .Values.plugins.image.pullPolicy  }}
           command: [ "sh",
@@ -81,7 +81,7 @@ spec:
           securityContext: {{- .Values.plugins.containerSecurityContext | toYaml | nindent 12 }}
         {{- end }}
         {{- if .Values.caCerts.enabled }}
-        - name: {{ include "sonarqube.caCerts.initContainer" . }}
+        - name:  {{ printf "%s-ca-certs-initcontainer" (include "common.names.fullname" .) }}
           image: {{ include "sonarqube.image" . }}
           imagePullPolicy: {{ .Values.caCerts.image.pullPolicy  }}
           command: [ "sh" ]
@@ -415,7 +415,7 @@ spec:
         {{- if .Values.plugins.install }}
         - name: install-plugins
           configMap:
-            name: {{ include "sonarqube.installPlugins.configMap" . }}
+            name: {{ printf "%s-install-plugins-configmap" (include "common.names.fullname" .) }}
             items:
               - key: install_plugins.sh
                 path: install_plugins.sh
