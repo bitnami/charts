@@ -33,6 +33,9 @@ spec:
         {{- if .Values.%%MAIN_OBJECT_BLOCK%%.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.podLabels "context" $) | nindent 8 }}
         {{- end }}
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+        {{- end }}
     spec:
       serviceAccountName: {{ template "%%TEMPLATE_NAME%%.serviceAccountName" . }}
       {{- include "%%TEMPLATE_NAME%%.imagePullSecrets" . | nindent 6 }}
