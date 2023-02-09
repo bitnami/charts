@@ -586,6 +586,34 @@ Affected values:
 - `extraInitContainers` renamed as `initContainers`.
 - `prometheusRule.selector` renamed as `prometheusRule.additionalLabels`
 
+:warning: This major release also break the Helm upgrade and therefore cause a service disruption. Next procedure is required in order to allow a rolling upgrade. 
+> Note
+>
+> - It only consider Chart upgrade, not mariadb galera upgrade. Use the same version or validate mariadb galera upgrade path
+> - Pods dns name are updated. If you use a query router like proxysql or maxscale, configuration have to be updated
+
+```console
+# Export current mariadb-galera statefulset resource
+kubectl get sts mariadb-galera -o yaml   > mariadb-galera-patch.yaml
+
+# Patch the statefulset spec.serviceName from 'mariadb-galera' to 'mariadb-galera-headless'
+yq -i '.spec.serviceName = "mariadb-galera-headless"' mariadb-galera-patch.yaml
+
+# Delete the statefulset keeping the pods
+kubectl delete statefulsets.apps mariadb-galera --cascade=orphan
+statefulset.apps "mariadb-galera" deleted
+
+# Apply the patched statefulset
+kubectl apply -f mariadb-galera-patch.yaml
+
+# Rollout restart statefulset (pod restart is required to take in account new configuration)
+kubect rollout restart statefulset mariadb-galera
+satefulset.apps/mariadb-galera restarted
+
+# Wait for the pods to restart. Confirm the cluster heath state before run the helm upgrade
+kubectl rollout status statefulset mariadb-galera -w
+```
+
 ### To 5.2.0
 
 This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
