@@ -1303,7 +1303,7 @@ timePartitioning:
     max: ""
 ```
 
-You can also specify different resources and limits configurations for each storegateway statefulset. This is done by adding a `resources.requests` and `resources.limits` to each item you wish to change , as shown below:
+You can also specify different resources and limits configurations for each storegateway statefulset. This is done by adding a `resources.requests` and `resources.limits` to each item you wish to change, as shown below:
 
 ```yaml
 timePartitioning:
