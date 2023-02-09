@@ -211,7 +211,7 @@ Return true if a secret for a external database should be created
 Return database type
 */}}
 {{- define "kong.database" -}}
-{{- if eq .Values.database "postgres" -}}
+{{- if eq .Values.database "postgresql" -}}
   {{- print "postgres" -}}
 {{- else -}}
   {{- print .Values.database -}}
