@@ -605,6 +605,10 @@ worker:
   ## @param worker.enabled Enable Concourse worker nodes
   ##
   enabled: true
+  ## @param worker.runtime Set CONCURSE_RUNTIME in worker nodes. Please note the default runtime (guardian) only supports cgroupsv1.
+  ## ref: https://concourse-ci.org/concourse-worker.html#configuring-runtimes
+  ## ref: https://github.com/concourse/docs/pull/444
+  runtime: containerd
   ## @param worker.logLevel Minimum level of logs to see. Possible options: debug, info, error
   ##
   logLevel: debug
