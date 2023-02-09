@@ -2,7 +2,7 @@ annotations:
   category: DeveloperTools
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 9.8.0
+appVersion: 9.9.0
 dependencies:
   - condition: postgresql.enabled
     name: postgresql

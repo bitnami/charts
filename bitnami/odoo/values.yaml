@@ -217,7 +217,7 @@ containerSecurityContext:
 ##
 livenessProbe:
   enabled: true
-  path: /
+  path: /web/health
   initialDelaySeconds: 600
   periodSeconds: 30
   timeoutSeconds: 5
@@ -233,7 +233,7 @@ livenessProbe:
 ##
 readinessProbe:
   enabled: true
-  path: /
+  path: /web/health
   initialDelaySeconds: 30
   periodSeconds: 10
   timeoutSeconds: 5
@@ -249,7 +249,7 @@ readinessProbe:
 ##
 startupProbe:
   enabled: false
-  path: /
+  path: /web/health
   initialDelaySeconds: 300
   periodSeconds: 10
   timeoutSeconds: 5

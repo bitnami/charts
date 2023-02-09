@@ -175,9 +175,9 @@ auth:
       existingSecret: ""
       key: ""
       password: ""
-    caCertificate: |-
-    serverCertificate: |-
-    serverKey: |-
+    caCertificate: ""
+    serverCertificate: ""
+    serverKey: ""
     existingSecret: ""
     existingSecretFullChain: false
     overrideCaCertificate: ""
@@ -342,6 +342,30 @@ extraContainerPorts: []
 ## Do not override unless you know what you are doing.
 ## To add more configuration, use `extraConfiguration` of `advancedConfiguration` instead
 ##
+
+## RabbitMQ tcp_listen_options parameters
+## See : https://www.rabbitmq.com/networking.html for additional information
+##
+tcpListenOptions:
+  ## @param tcpListenOptions.backlog Maximum size of the unaccepted TCP connections queue
+  ##
+  backlog: 128
+  ## @param tcpListenOptions.nodelay When set to true, deactivates Nagle's algorithm. Default is true. Highly recommended for most users.
+  ##
+  nodelay: true
+  ## tcpListenOptions.linger
+  ##
+  linger:
+    ## @param tcpListenOptions.linger.on Enable Server socket lingering
+    ##
+    on: true
+    ## @param tcpListenOptions.linger.timeout Server Socket lingering timeout
+    ##
+    timeout: 0
+  ## @param tcpListenOptions.keepalive When set to true, enables TCP keepalives
+  ##  
+  keepalive: false  
+
 configuration: |-
   ## Username and password
   ##
@@ -439,6 +463,13 @@ configuration: |-
   ##
   total_memory_available_override_value = {{ include "rabbitmq.toBytes" .Values.resources.limits.memory }}
   vm_memory_high_watermark.{{ .Values.memoryHighWatermark.type }} = {{ .Values.memoryHighWatermark.value }}
+  ## TCP Listen Options
+  ##
+  tcp_listen_options.backlog = {{ .Values.tcpListenOptions.backlog }}
+  tcp_listen_options.nodelay = {{ .Values.tcpListenOptions.nodelay }}
+  tcp_listen_options.linger.on      = {{ .Values.tcpListenOptions.linger.on }}
+  tcp_listen_options.linger.timeout = {{ .Values.tcpListenOptions.linger.timeout }}
+  tcp_listen_options.keepalive = {{ .Values.tcpListenOptions.keepalive }}
   {{- end }}
 
 ## @param configurationExistingSecret Existing secret with the configuration to use as rabbitmq.conf.
@@ -482,6 +513,12 @@ advancedConfiguration: |-
 ## Do not use in combination with advancedConfiguration, will be ignored
 ##
 advancedConfigurationExistingSecret: ""
+
+## This subsystem was introduced in RabbitMQ 3.8.0 to allow rolling upgrades of cluster members without shutting down the entire cluster.
+## Feature flags are a mechanism that controls what features are considered to be enabled or available on all cluster nodes. If a feature flag is enabled, so is its associated feature (or behavior). If not then all nodes in the cluster will disable the feature (behavior).
+## e.g, drop_unroutable_metric,empty_basic_get_metric,implicit_default_bindings,maintenance_mode_status,quorum_queue,virtual_host_metadata
+## @param featureFlags that controls what features are considered to be enabled or available on all cluster nodes.
+featureFlags: ""
 
 ## LDAP configuration
 ##
