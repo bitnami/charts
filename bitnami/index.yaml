@@ -85649,6 +85649,44 @@ entries:
       category: Database
       licenses: Apache-2.0
     apiVersion: v2
+    appVersion: 15.2.0
+    created: "2023-02-09T19:04:23.151610322Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: This PostgreSQL cluster solution includes the PostgreSQL replication
+      manager, an open-source tool for managing replication and failover on PostgreSQL
+      clusters.
+    digest: 88b0ce61cede9d6b1195242b643e30891c9e4bddff6dcda10efb35fa41b54bad
+    home: https://github.com/bitnami/charts/tree/main/bitnami/postgresql-ha
+    icon: https://bitnami.com/assets/stacks/postgresql/img/postgresql-stack-220x234.png
+    keywords:
+    - postgresql
+    - repmgr
+    - pgpool
+    - postgres
+    - database
+    - sql
+    - replication
+    - cluster
+    - high availability
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: postgresql-ha
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/postgresql
+    - https://www.postgresql.org/
+    urls:
+    - https://charts.bitnami.com/bitnami/postgresql-ha-11.1.2.tgz
+    version: 11.1.2
+  - annotations:
+      category: Database
+      licenses: Apache-2.0
+    apiVersion: v2
     appVersion: 15.1.0
     created: "2023-02-02T12:07:16.5829029Z"
     dependencies:
@@ -115001,4 +115039,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-02-09T18:00:40.0767994Z"
+generated: "2023-02-09T19:04:23.144426932Z"
