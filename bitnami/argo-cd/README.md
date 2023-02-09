@@ -7,7 +7,7 @@ Argo CD is a continuous delivery tool for Kubernetes based on GitOps.
 [Overview of Argo CD](https://argoproj.github.io/cd)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`    | Argo CD image registry                                                                                  | `docker.io`          |
 | `image.repository`  | Argo CD image repository                                                                                | `bitnami/argo-cd`    |
-| `image.tag`         | Argo CD image tag (immutable tags are recommended)                                                      | `2.5.7-debian-11-r0` |
+| `image.tag`         | Argo CD image tag (immutable tags are recommended)                                                      | `2.6.1-debian-11-r0` |
 | `image.digest`      | Argo CD image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
 | `image.pullPolicy`  | Argo CD image pull policy                                                                               | `IfNotPresent`       |
 | `image.pullSecrets` | Argo CD image pull secrets                                                                              | `[]`                 |
@@ -701,7 +701,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | ---------------------- |
 | `dex.image.registry`                                    | Dex image registry                                                                                  | `docker.io`            |
 | `dex.image.repository`                                  | Dex image repository                                                                                | `bitnami/dex`          |
-| `dex.image.tag`                                         | Dex image tag (immutable tags are recommended)                                                      | `2.35.3-debian-11-r32` |
+| `dex.image.tag`                                         | Dex image tag (immutable tags are recommended)                                                      | `2.35.3-debian-11-r40` |
 | `dex.image.digest`                                      | Dex image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `dex.image.pullPolicy`                                  | Dex image pull policy                                                                               | `IfNotPresent`         |
 | `dex.image.pullSecrets`                                 | Dex image pull secrets                                                                              | `[]`                   |
@@ -842,7 +842,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r73`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r81`      |
 | `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -858,7 +858,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rbac.create`                             | Specifies whether RBAC resources should be created                                                    | `true`               |
 | `redis.image.registry`                    | Redis image registry                                                                                  | `docker.io`          |
 | `redis.image.repository`                  | Redis image repository                                                                                | `bitnami/redis`      |
-| `redis.image.tag`                         | Redis image tag (immutable tags are recommended)                                                      | `7.0.8-debian-11-r1` |
+| `redis.image.tag`                         | Redis image tag (immutable tags are recommended)                                                      | `7.0.8-debian-11-r9` |
 | `redis.image.digest`                      | Redis image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
 | `redis.image.pullPolicy`                  | Redis image pull policy                                                                               | `IfNotPresent`       |
 | `redis.image.pullSecrets`                 | Redis image pull secrets                                                                              | `[]`                 |
@@ -968,7 +968,7 @@ Refer to the [chart documentation for more information about how to upgrade from
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

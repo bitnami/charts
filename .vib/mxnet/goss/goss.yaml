@@ -8,9 +8,10 @@ command:
   run-git-example:
     exec: python {{ .Vars.entrypoint.workDir }}/example/memcost/inception_memcost.py
     exit-status: 0
+  {{- $uid := .Vars.standalone.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.standalone.podSecurityContext.fsGroup }}
   check-user-info:
-    exec: id
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
     exit-status: 0
-    stdout:
-      - uid={{ .Vars.standalone.containerSecurityContext.runAsUser }}
-      - /groups=.*{{ .Vars.standalone.podSecurityContext.fsGroup }}/

@@ -7,7 +7,7 @@ JasperReports Server is a stand-alone and embeddable reporting server. It is a c
 [Overview of JasperReports](http://community.jaspersoft.com/project/jasperreports-server)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -83,7 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`        | JasperReports image registry                                                                                  | `docker.io`             |
 | `image.repository`      | JasperReports image repository                                                                                | `bitnami/jasperreports` |
-| `image.tag`             | JasperReports image tag (immutable tags are recommended)                                                      | `8.1.0-debian-11-r39`   |
+| `image.tag`             | JasperReports image tag (immutable tags are recommended)                                                      | `8.1.0-debian-11-r50`   |
 | `image.digest`          | JasperReports image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `image.pullPolicy`      | JasperReports image pull policy                                                                               | `IfNotPresent`          |
 | `image.pullSecrets`     | Specify docker-registry secret names as an array                                                              | `[]`                    |
@@ -487,7 +487,7 @@ New versions are not going to be affected. Once a new version is released in the
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

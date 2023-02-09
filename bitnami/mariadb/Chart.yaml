@@ -2,7 +2,7 @@ annotations:
   category: Database
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 10.6.11
+appVersion: 10.6.12
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -26,4 +26,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/mariadb
   - https://github.com/prometheus/mysqld_exporter
   - https://mariadb.org
-version: 11.4.4
+version: 11.4.6

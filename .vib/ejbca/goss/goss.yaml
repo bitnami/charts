@@ -7,7 +7,7 @@ file:
     exists: true
     filetype: directory
     mode: "0775"
-    owner: root
+    owner: wildfly
   /opt/bitnami/wildfly/standalone/configuration/standalone.xml:
     exists: true
     filetype: file
@@ -30,9 +30,10 @@ command:
     exec: cd /opt/bitnami/ejbca && ejbca.sh ra addendentity --username '{{ $user }}' --caname '{{ $caName}}' --dn '{{ $dn }}' --type {{ $identityType }} --token P12 --password '{{ $pass }}' && ejbca.sh ra setclearpwd '{{ $user }}' '{{ $pass }}' && ejbca.sh batch && ls ./p12/{{ $user }}.p12
     exit-status: 0
     timeout: 20000
+  {{- $uid := .Vars.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.podSecurityContext.fsGroup }}
   check-user-info:
-    exec: id
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
     exit-status: 0
-    stdout:
-    - uid={{ .Vars.containerSecurityContext.runAsUser }}
-    - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/

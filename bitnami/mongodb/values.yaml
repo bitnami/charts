@@ -1960,7 +1960,7 @@ metrics:
     enabled: true
     initialDelaySeconds: 15
     periodSeconds: 5
-    timeoutSeconds: 5
+    timeoutSeconds: 10
     failureThreshold: 3
     successThreshold: 1
   ## Metrics exporter readiness probe
@@ -1976,7 +1976,7 @@ metrics:
     enabled: true
     initialDelaySeconds: 5
     periodSeconds: 5
-    timeoutSeconds: 1
+    timeoutSeconds: 10
     failureThreshold: 3
     successThreshold: 1
   ## Slow starting containers can be protected through startup probes

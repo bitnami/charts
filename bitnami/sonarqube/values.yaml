@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/sonarqube
-  tag: 9.8.0-debian-11-r11
+  tag: 9.9.0-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -630,7 +630,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r73
+    tag: 11-debian-11-r81
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -680,7 +680,7 @@ sysctl:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r73
+    tag: 11-debian-11-r81
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -760,7 +760,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.17.2-debian-11-r39
+      tag: 0.17.2-debian-11-r46
       digest: ""
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
@@ -900,38 +900,39 @@ postgresql:
     ## @param postgresql.auth.database Database to create when deploying the PostgreSQL chart
     ##
     database: bitnami_sonarqube
-  ## PostgreSQL service
+  ## PostgreSQL Primary parameters
   ##
-  service:
-    ## @param postgresql.service.ports.postgresql PostgreSQL service port
+  primary:
+    ## PostgreSQL Primary service configuration
     ##
-    ports:
-      postgresql: 5432
-  ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
-  ##
-  persistence:
-    ## @param postgresql.persistence.enabled Use PVCs when deploying the PostgreSQL chart
+    service:
+      ## @param postgresql.primary.service.ports.postgresql PostgreSQL service port
+      ##
+      ports:
+        postgresql: 5432
+    ## PostgreSQL Primary persistence configuration
     ##
-    enabled: true
-    ## @param postgresql.persistence.existingClaim Use an existing PVC when deploying the PostgreSQL chart
-    ##
-    existingClaim: ""
-    ## @param postgresql.persistence.storageClass storageClass of the created PVCs
-    ## postgresql data Persistent Volume Storage Class
-    ## If defined, storageClassName: <storageClass>
-    ## If set to "-", storageClassName: "", which disables dynamic provisioning
-    ## If undefined (the default) or set to null, no storageClassName spec is
-    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-    ##   GKE, AWS & OpenStack)
-    ##
-    storageClass: ""
-    ## @param postgresql.persistence.accessMode Access mode of the created PVCs
-    ##
-    accessMode: ReadWriteOnce
-    ## @param postgresql.persistence.size Size of the created PVCs
-    ##
-    size: 8Gi
+    persistence:
+      ## @param postgresql.primary.persistence.enabled Enable PostgreSQL Primary data persistence using PVC
+      ##
+      enabled: true
+      ## @param postgresql.primary.persistence.existingClaim Name of an existing PVC to use
+      ##
+      existingClaim: ""
+      ## @param postgresql.primary.persistence.storageClass PVC Storage Class for PostgreSQL Primary data volume
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If undefined (the default) or set to null, no storageClassName spec is
+      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+      ##   GKE, AWS & OpenStack)
+      ##
+      storageClass: ""
+      ## @param postgresql.primary.persistence.accessMode PVC Access Mode for PostgreSQL volume
+      ##
+      accessMode: ReadWriteOnce
+      ## @param postgresql.primary.persistence.size PVC Storage Request for PostgreSQL volume
+      ##
+      size: 8Gi
 
 ## @section External Database settings
 ##
