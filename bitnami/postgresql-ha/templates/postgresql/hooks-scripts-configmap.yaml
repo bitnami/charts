@@ -84,3 +84,52 @@ data:
         info "PG stopped including primary switchover in $PG_STOP_DURATION. Waiting additional $WAIT_TO_PG_POOL_TIME seconds for PG pool"
         sleep $WAIT_TO_PG_POOL_TIME
     fi
+
+  readiness-probe.sh: |-
+    #!/bin/bash
+    set -o errexit
+    set -o pipefail
+    set -o nounset
+
+    # Debug section
+    exec 3>&1
+    exec 4>&2
+
+    # Load Libraries
+    . /opt/bitnami/scripts/liblog.sh
+    . /opt/bitnami/scripts/libpostgresql.sh
+
+    # Load PostgreSQL & repmgr environment variables
+    . /opt/bitnami/scripts/postgresql-env.sh
+
+    # Process input parameters
+    MIN_DELAY_AFTER_POD_READY_FIRST_TIME=$1
+    TMP_FIRST_READY_FILE_TS="/tmp/ts-first-ready.mark"
+    TMP_DELAY_APPLIED_FILE="/tmp/delay-applied.mark"
+
+
+    DB_CHECK_RESULT=$(echo "SELECT 1" | postgresql_execute "$POSTGRESQL_DATABASE" "$POSTGRESQL_USERNAME" "$POSTGRESQL_PASSWORD" "-h 127.0.0.1 -tA" || "command failed")
+    if [[ "$DB_CHECK_RESULT" == "1" ]]; then
+      if [[ ! -f "$TMP_DELAY_APPLIED_FILE" ]]; then
+        # DB up, but initial readiness delay not applied
+        if [[ -f "$TMP_FIRST_READY_FILE_TS" ]]; then
+          # calculate delay from the first readiness success
+          FIRST_READY_TS=$(cat $TMP_FIRST_READY_FILE_TS)
+          CURRENT_DELAY_SECONDS=$(($EPOCHSECONDS - $FIRST_READY_TS))
+          if (( $CURRENT_DELAY_SECONDS > $MIN_DELAY_AFTER_POD_READY_FIRST_TIME )); then
+            # minimal delay of the first readiness state passed - report success and mark delay as applied
+            touch "$TMP_DELAY_APPLIED_FILE"      
+          else
+            # minimal delay of the first readiness state not reached yet - report failure
+            return 1
+          fi
+        else
+          # first ever readiness test success - store timestamp and report failure
+          echo $EPOCHSECONDS > $TMP_FIRST_READY_FILE_TS
+          return 1
+        fi
+      fi
+    else
+      # DB test failed - report failure
+      return 1
+    fi
