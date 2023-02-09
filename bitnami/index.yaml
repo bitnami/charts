@@ -78512,6 +78512,46 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 8.0.2
+    created: "2023-02-09T14:07:02.396329617Z"
+    dependencies:
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - osclass-database
+      version: 11.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Osclass allows you to easily create a classifieds site without any
+      technical knowledge. It provides support for presenting general ads or specialized
+      ads, is customizable, extensible and multilingual.
+    digest: d8f97c83808ea021c5046f8efeee97207c2191658c6f4548d15e829ccf78fb4c
+    home: https://github.com/bitnami/charts/tree/main/bitnami/osclass
+    icon: https://bitnami.com/assets/stacks/osclass/img/osclass-stack-220x234.png
+    keywords:
+    - osclass
+    - classifieds
+    - http
+    - web
+    - php
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: osclass
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/osclass
+    - https://osclass.org/
+    urls:
+    - https://charts.bitnami.com/bitnami/osclass-14.2.11.tgz
+    version: 14.2.11
+  - annotations:
+      category: CMS
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 8.0.2
     created: "2023-01-31T10:33:33.698568136Z"
     dependencies:
     - condition: mariadb.enabled
@@ -114845,4 +114885,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-02-09T14:01:52.414975783Z"
+generated: "2023-02-09T14:07:02.386421207Z"
