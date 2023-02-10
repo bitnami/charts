@@ -1,3 +1,4 @@
+{{- if or (eq .Values.database "postgresql") (eq .Values.database "cassandra") }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -53,7 +54,7 @@ spec:
             - name: KONG_EXIT_AFTER_MIGRATE
               value: "yes"
             - name: KONG_DATABASE
-              value: {{ ternary "postgres" "cassandra" (eq .Values.database "postgresql") | quote }}
+              value: {{ include "kong.database" . | quote }}
             {{- if (eq .Values.database "postgresql") }}
             {{- if .Values.postgresql.auth.usePasswordFiles }}
             - name: KONG_POSTGRESQL_PASSWORD_FILE
@@ -115,3 +116,4 @@ spec:
       volumes:
       {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 6 }}
       {{- end }}
+{{- end }}

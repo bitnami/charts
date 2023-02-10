@@ -1,10 +1,9 @@
 {
-  "baseUrl": "http://localhost",
+  "baseUrl": "http://{{ TARGET_IP }}",
   "env": {
     "apikey": "ComplicatedPassword123!4",
     "ingressHost": "www.example.com",
     "ingressPath": "/nginx",
-    "externalIp": "{{ TARGET_IP }}",
     "adminHttpPort": "443"
   }
 }
