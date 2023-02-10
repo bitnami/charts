@@ -95,10 +95,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
 | `sonarqubeUsername`           | SonarQube&trade; username                                                                                                                                                 | `user`                                                   |
 | `sonarqubePassword`           | SonarQube&trade; user password                                                                                                                                            | `""`                                                     |
+| `provisioningFolder`          | Directory to use for provisioning content to Sonarqube                                                                                                                    | `/bitnami/sonarqube-provisioning`                        |
 | `existingSecret`              | Name of existing secret containing SonarQube&trade; credentials                                                                                                           | `""`                                                     |
 | `sonarqubeEmail`              | SonarQube&trade; user email                                                                                                                                               | `user@example.com`                                       |
 | `minHeapSize`                 | Minimum heap size for SonarQube&trade;                                                                                                                                    | `1024m`                                                  |
 | `maxHeapSize`                 | Maximum heap size for SonarQube&trade;                                                                                                                                    | `2048m`                                                  |
+| `jvmOpts`                     | Values to add to SONARQUBE_WEB_JVM_OPTS                                                                                                                                   | `""`                                                     |
+| `jvmCeOpts`                   | Values to add to SONAR_CE_JAVAOPTS                                                                                                                                        | `""`                                                     |
 | `startTimeout`                | Timeout for the application to start in seconds                                                                                                                           | `150`                                                    |
 | `extraProperties`             | List of extra properties to be set in the sonar.properties file (key=value format)                                                                                        | `[]`                                                     |
 | `sonarqubeSkipInstall`        | Skip wizard installation                                                                                                                                                  | `false`                                                  |
@@ -219,6 +222,41 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+
+
+### SonarQube caCerts provisioning parameters
+
+| Name                                         | Description                                                                                                   | Value                   |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `caCerts.enabled`                            | Enable the use of caCerts                                                                                     | `false`                 |
+| `caCerts.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
+| `caCerts.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
+| `caCerts.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r63`      |
+| `caCerts.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `caCerts.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
+| `caCerts.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
+| `caCerts.secret`                             | Name of the secret containing the certificates                                                                | `ca-certs-secret`       |
+| `caCerts.resources.limits`                   | The resources limits for the init container                                                                   | `{}`                    |
+| `caCerts.resources.requests`                 | The requested resources for the init container                                                                | `{}`                    |
+| `caCerts.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                               | `0`                     |
+
+
+### SonarQube plugin provisioning parameters
+
+| Name                                         | Description                                                                                                   | Value                   |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `plugins.install`                            | List of plugin URLS to download and install                                                                   | `[]`                    |
+| `plugins.netrcCreds`                         | .netrc secret file with a key "netrc" to use basic auth while downloading plugins                             | `""`                    |
+| `plugins.noCheckCertificate`                 | Set to true to not validate the server's certificate to download plugin                                       | `true`                  |
+| `plugins.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
+| `plugins.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
+| `plugins.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r63`      |
+| `plugins.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `plugins.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
+| `plugins.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
+| `plugins.resources.limits`                   | The resources limits for the init container                                                                   | `{}`                    |
+| `plugins.resources.requests`                 | The requested resources for the init container                                                                | `{}`                    |
+| `plugins.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                               | `0`                     |
 
 
 ### Persistence Parameters
