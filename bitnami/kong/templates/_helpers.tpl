@@ -223,7 +223,7 @@ Return the name of the configmap to be used for declarative configuration
 */}}
 {{- define "kong.declarativeConfigMap" -}}
 {{- if .Values.kong.declarativeConfigCM -}}
-  {{- tpl .Values.kong.declarativeConfigCM $ -}}
+  {{- include "common.tplvalues.render" (dict "value" .Values.kong.declarativeConfigCM "context" $) -}}
 {{- else if .Values.kong.declarativeConfig -}}
   {{- printf "%s-declarative-config" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-"  -}}
 {{- end -}}

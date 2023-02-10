@@ -1,4 +1,4 @@
-{{- if .Values.kong.declarativeConfig }}
+{{- if and .Values.kong.declarativeConfig (not .Values.kong.declarativeConfigCM) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
