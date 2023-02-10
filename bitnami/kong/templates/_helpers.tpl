@@ -219,7 +219,7 @@ Return database type
 {{- end -}}
 
 {{/*
-Return true if a secret for a external database should be created
+Return the name of the configmap to be used for declarative configuration
 */}}
 {{- define "kong.declarativeConfigMap" -}}
 {{- if .Values.kong.declarativeConfigCM -}}
