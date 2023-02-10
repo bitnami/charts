@@ -77913,6 +77913,44 @@ entries:
   opencart:
   - annotations:
       category: E-Commerce
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 4.0.1-1
+    created: "2023-02-10T08:39:14.329132531Z"
+    dependencies:
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: OpenCart is free open source ecommerce platform for online merchants.
+      OpenCart provides a professional and reliable foundation from which to build
+      a successful online store.
+    digest: 5c4f3b78e397e9b419c3e9600e0c6dbad9b3d75928962018eed668842a68c628
+    home: https://github.com/bitnami/charts/tree/main/bitnami/opencart
+    icon: https://bitnami.com/assets/stacks/opencart/img/opencart-stack-220x234.png
+    keywords:
+    - opencart
+    - e-commerce
+    - http
+    - web
+    - php
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: opencart
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/opencart
+    - https://opencart.com/
+    urls:
+    - https://charts.bitnami.com/bitnami/opencart-13.0.8.tgz
+    version: 13.0.8
+  - annotations:
+      category: E-Commerce
     apiVersion: v2
     appVersion: 4.0.1-1
     created: "2023-01-11T08:38:56.195445079Z"
@@ -115140,4 +115178,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-02-09T20:41:36.459096189Z"
+generated: "2023-02-10T08:39:14.318481703Z"
