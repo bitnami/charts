@@ -4,6 +4,7 @@
 {{- $clusterDomain := .Values.clusterDomain }}
 {{- $interBrokerProtocol := include "kafka.listenerType" (dict "protocol" .Values.auth.interBrokerProtocol) -}}
 {{- $clientProtocol := include "kafka.listenerType" (dict "protocol" .Values.auth.clientProtocol) -}}
+{{- $controllerProtocol := include "kafka.listenerType" (dict "protocol" .Values.auth.controllerProtocol) -}}
 {{- $externalClientProtocol := include "kafka.listenerType" (dict "protocol" (include "kafka.externalClientProtocol" . )) -}}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
@@ -188,6 +189,12 @@ spec:
               value: {{ .Values.listenerSecurityProtocolMap | quote }}
               {{- else if .Values.externalAccess.enabled }}
               value: "INTERNAL:{{ $interBrokerProtocol }},CLIENT:{{ $clientProtocol }},EXTERNAL:{{ $externalClientProtocol }}"
+              {{- else if .Values.kraft.enabled }}
+                {{- if .Values.externalAccess.enabled }}
+              value: "INTERNAL:{{ $interBrokerProtocol }},CLIENT:{{ $clientProtocol }},CONTROLLER:{{ $controllerProtocol }},EXTERNAL:{{ $externalClientProtocol }}"
+                {{- else }}
+              value: "INTERNAL:{{ $interBrokerProtocol }},CLIENT:{{ $clientProtocol }},CONTROLLER:{{ $controllerProtocol }}"
+                {{- end }}
               {{- else }}
               value: "INTERNAL:{{ $interBrokerProtocol }},CLIENT:{{ $clientProtocol }}"
               {{- end }}
@@ -202,9 +209,15 @@ spec:
               value: {{ join "," .Values.listeners }}
               {{- else if .Values.externalAccess.enabled }}
               value: "INTERNAL://:{{ .Values.containerPorts.internal }},CLIENT://:{{ .Values.containerPorts.client }},EXTERNAL://:{{ .Values.containerPorts.external }}"
+              {{- else if .Values.kraft.enabled }}
+                {{- if .Values.externalAccess.enabled }}
+              value: "INTERNAL:{{ .Values.containerPorts.internal }},CLIENT://:{{ .Values.containerPorts.client }},CONTROLLER://:{{ .Values.kraft.controllerPort }},EXTERNAL://:{{ .Values.containerPorts.external }}"
+                {{- else }}
+              value: "INTERNAL://:{{ .Values.containerPorts.internal }},CLIENT://:{{ .Values.containerPorts.client }},CONTROLLER://:{{ .Values.kraft.controllerPort }}"
+                {{- end }}
               {{- else }}
               value: "INTERNAL://:{{ .Values.containerPorts.internal }},CLIENT://:{{ .Values.containerPorts.client }}"
-              {{- end }}
+              {{- end }}            
             {{- if .Values.externalAccess.enabled }}
             {{- if .Values.externalAccess.autoDiscovery.enabled }}
             - name: SHARED_FILE
@@ -354,6 +367,16 @@ spec:
               value: {{ .Values.allowEveryoneIfNoAclFound | quote }}
             - name: KAFKA_CFG_SUPER_USERS
               value: {{ .Values.superUsers | quote }}
+            {{- if .Values.kraft.enabled }}
+            - name: KAFKA_KRAFT_CLUSTER_ID
+              value: {{ .Values.kraft.clusterId | quote }}  
+            - name: KAFKA_CFG_PROCESS_ROLES
+              value: {{ .Values.kraft.processRoles | quote }}  
+            - name: KAFKA_CFG_CONTROLLER_LISTENER_NAMES
+              value: {{ .Values.kraft.controllerListenerNames | quote }}  
+            - name: KAFKA_ENABLE_KRAFT
+              value: "true"
+            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

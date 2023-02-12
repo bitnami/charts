@@ -383,6 +383,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "kafka.validateValues.tlsSecrets" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.tlsSecrets.length" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.tlsPasswords" .) -}}
+{{- $messages := append $messages (include "kafka.validateValues.kraftMode" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -505,5 +506,14 @@ kafka: auth.tls.keyPasswordSecretKey,auth.tls.keystorePasswordSecretKey,auth.tls
     auth.tls.keyPasswordSecretKey,auth.tls.keystorePasswordSecretKey,auth.tls.truststorePasswordSecretKey
     must not be used without passwordsSecret setted.
 {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Kafka Kraft mode. It cannot be used with zookeeper  */}}
+{{- define "kafka.validateValues.kraftMode" -}}
+{{- $externalZKlen := len .Values.externalZookeeper.servers}}
+{{- if and .Values.kraft.enabled (or .Values.zookeeper.enabled (gt $externalZKlen 0))  }}
+kafka: Kraft mode
+    You cannot use Kraft mode and Zookeeper at the same time. They are mutually exclusive. Disable zookeeper in '.Values.zookeeper.enabled'  and delete values from '.Values.externalZookeeper.servers' if you want to use Kraft mode
 {{- end -}}
 {{- end -}}

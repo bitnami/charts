@@ -121,6 +121,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.clientProtocol`                             | Authentication protocol for communications with clients. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls`                                                       | `plaintext`                         |
 | `auth.externalClientProtocol`                     | Authentication protocol for communications with external clients. Defaults to value of `auth.clientProtocol`. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls`  | `""`                                |
 | `auth.interBrokerProtocol`                        | Authentication protocol for inter-broker communications. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls`                                                       | `plaintext`                         |
+| `auth.controllerProtocol`                         | Controller protocol. It is used with Kraft mode only.                                                                                                                               | `plaintext`                         |
 | `auth.sasl.mechanisms`                            | SASL mechanisms when either `auth.interBrokerProtocol`, `auth.clientProtocol` or `auth.externalClientProtocol` are `sasl`. Allowed types: `plain`, `scram-sha-256`, `scram-sha-512` | `plain,scram-sha-256,scram-sha-512` |
 | `auth.sasl.interBrokerMechanism`                  | SASL mechanism for inter broker communication.                                                                                                                                      | `plain`                             |
 | `auth.sasl.jaas.clientUsers`                      | Kafka client user list                                                                                                                                                              | `["user"]`                          |
@@ -465,6 +466,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | `provisioning.sidecars`                                    | Add additional sidecar containers to the Kafka provisioning pod(s)                                                            | `[]`                  |
 | `provisioning.initContainers`                              | Add additional Add init containers to the Kafka provisioning pod(s)                                                           | `[]`                  |
 | `provisioning.waitForKafka`                                | If true use an init container to wait until kafka is ready before starting provisioning                                       | `true`                |
+
+
+### Kraft chart parameters
+
+| Name                            | Description                                                                             | Value               |
+| ------------------------------- | --------------------------------------------------------------------------------------- | ------------------- |
+| `kraft.enabled`                 | Switch to enable or disable the Kraft mode for Kafka                                    | `false`             |
+| `kraft.controllerPort`          | Kafka Controller listener port                                                          | `9095`              |
+| `kraft.processRoles`            | Roles of your Kafka nodes. Nodes can have 'broker', 'controller' roles or both of them. | `broker,controller` |
+| `kraft.controllerListenerNames` | Controller listener names                                                               | `CONTROLLER`        |
+| `kraft.clusterId`               | Kafka ClusterID. You must set it if your cluster contains more than one node.           | `""`                |
+
 
 ### ZooKeeper chart parameters
 
