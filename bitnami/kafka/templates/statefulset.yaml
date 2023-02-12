@@ -376,6 +376,8 @@ spec:
               value: {{ .Values.kraft.controllerListenerNames | quote }}  
             - name: KAFKA_ENABLE_KRAFT
               value: "true"
+            - name: KAFKA_CFG_CONTROLLER_QUORUM_VOTERS
+              value: {{ .Values.kraft.controllerQuorumVoters}}
             {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}

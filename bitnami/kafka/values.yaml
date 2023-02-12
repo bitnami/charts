@@ -1743,6 +1743,10 @@ kraft:
   ## Example: k2yipv1sRue7z2_Y3o976A
   ##
   clusterId: ""
+  ## @param kraft.controllerQuorumVoters Quorum voters of Kafka Kraft cluster. Use it for nodes with 'broker' role only.
+  ## Example: 1@controller1.example.com:9095,2@controller2.example.com:9095
+  ##
+  controllerQuorumVoters: ""
 
 
 

@@ -477,6 +477,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kraft.processRoles`            | Roles of your Kafka nodes. Nodes can have 'broker', 'controller' roles or both of them. | `broker,controller` |
 | `kraft.controllerListenerNames` | Controller listener names                                                               | `CONTROLLER`        |
 | `kraft.clusterId`               | Kafka ClusterID. You must set it if your cluster contains more than one node.           | `""`                |
+| `kraft.controllerQuorumVoters`  | Quorum voters of Kafka Kraft cluster. Use it for nodes with 'broker' role only.         | `""`                |
 
 
 ### ZooKeeper chart parameters
