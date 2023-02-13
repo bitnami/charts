@@ -164,7 +164,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 {{- define "grafana-mimir.memcached-chunks.fullname" -}}
 {{- $name := default "memcachedchunks" .Values.memcachedchunks.nameOverride -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -190,7 +190,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 {{- define "grafana-mimir.memcached-index.fullname" -}}
 {{- $name := default "memcachedindex" .Values.memcachedindex.nameOverride -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -216,7 +216,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 {{- define "grafana-mimir.memcached-frontend.fullname" -}}
 {{- $name := default "memcachedfrontend" .Values.memcachedfrontend.nameOverride -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -242,7 +242,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 {{- define "grafana-mimir.memcached-metadata.fullname" -}}
 {{- $name := default "memcachedmetadata" .Values.memcachedmetadata.nameOverride -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
