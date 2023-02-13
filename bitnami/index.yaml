@@ -32281,6 +32281,43 @@ entries:
   grafana-tempo:
   - annotations:
       category: Infrastructure
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 1.5.0
+    created: "2023-02-13T22:31:38.058921587Z"
+    dependencies:
+    - condition: memcached.enabled
+      name: memcached
+      repository: https://charts.bitnami.com/bitnami
+      version: 6.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Grafana Tempo is a distributed tracing system that has out-of-the-box
+      integration with Grafana. It is highly scalable and works with many popular
+      tracing protocols.
+    digest: 9e846068d7d0985cf0d870cfa6d8d18388f454378d48883c0ca9b0e87d9b56ac
+    home: https://github.com/grafana/tempo/
+    icon: https://bitnami.com/assets/stacks/grafana-tempo/img/grafana-tempo-stack-220x234.png
+    keywords:
+    - grafana
+    - tracing
+    - metrics
+    - infrastructure
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: grafana-tempo
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/grafana-tempo
+    - https://github.com/grafana/tempo/
+    urls:
+    - https://charts.bitnami.com/bitnami/grafana-tempo-1.4.8.tgz
+    version: 1.4.8
+  - annotations:
+      category: Infrastructure
       licenses: |
         - Apache-2.0
     apiVersion: v2
@@ -115888,4 +115925,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-02-13T20:27:08.271366453Z"
+generated: "2023-02-13T22:31:38.043554883Z"
