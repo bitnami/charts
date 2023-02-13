@@ -356,9 +356,9 @@ tcpListenOptions:
   ## tcpListenOptions.linger
   ##
   linger:
-    ## @param tcpListenOptions.linger.on Enable Server socket lingering
+    ## @param tcpListenOptions.linger.lingeron Enable Server socket lingering
     ##
-    on: true
+    lingeron: true
     ## @param tcpListenOptions.linger.timeout Server Socket lingering timeout
     ##
     timeout: 0
@@ -467,7 +467,7 @@ configuration: |-
   ##
   tcp_listen_options.backlog = {{ .Values.tcpListenOptions.backlog }}
   tcp_listen_options.nodelay = {{ .Values.tcpListenOptions.nodelay }}
-  tcp_listen_options.linger.on      = {{ .Values.tcpListenOptions.linger.on }}
+  tcp_listen_options.linger.on      = {{ .Values.tcpListenOptions.linger.lingeron }}
   tcp_listen_options.linger.timeout = {{ .Values.tcpListenOptions.linger.timeout }}
   tcp_listen_options.keepalive = {{ .Values.tcpListenOptions.keepalive }}
   {{- end }}
