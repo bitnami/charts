@@ -18,3 +18,13 @@ import './commands';
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+Cypress.on('uncaught:exception', (err, runnable) => {
+  // Discourse header returns an internal ResizeObserver
+  // max loop error (from javascript), but the application
+  // works just fine. Returning false here prevents Cypress
+  // from failing the test.
+  if (err.message.includes('ResizeObserver loop limit')) {
+    return false
+  }
+})

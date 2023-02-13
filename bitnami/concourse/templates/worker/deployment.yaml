@@ -105,6 +105,8 @@ spec:
               value: "/bitnami/concourse/workdir"
             - name: CONCOURSE_HEALTHCHECK_BIND_PORT
               value: {{ .Values.worker.containerPorts.health | quote }}
+            - name: CONCOURSE_RUNTIME
+              value: {{ .Values.worker.runtime }}
             {{- if .Values.worker.logLevel }}
             - name: CONCOURSE_LOG_LEVEL
               value: {{ .Values.worker.logLevel | quote }}

@@ -1303,6 +1303,28 @@ timePartitioning:
     max: ""
 ```
 
+You can also specify different resources and limits configurations for each storegateway statefulset. This is done by adding a `resources.requests` and `resources.limits` to each item you wish to change, as shown below:
+
+```yaml
+timePartitioning:
+  # One store for data older than 6 weeks
+  - min: ""
+    max: -6w
+  # One store for data newer than 6 weeks and older than 2 weeks
+  - min: -6w
+    max: -2w
+    resources: #optional resources declaration for partition
+      requests:
+        cpu: 10m
+        memory: 100Mi
+      limits:
+        cpu: 20m
+        memory: 100Mi
+  # One store for data newer than 2 weeks
+  - min: -2w
+    max: ""
+```
+
 ### Integrate Thanos with Prometheus and Alertmanager
 
 You can integrate Thanos with Prometheus & Alertmanager using this chart and the [Bitnami kube-prometheus chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) following the steps below:
@@ -1334,7 +1356,7 @@ ruler:
   enabled: true
   alertmanagers:
     - http://kube-prometheus-alertmanager.monitoring.svc.cluster.local:9093
-  config: |-
+config: |-
     groups:
       - name: "metamonitoring"
         rules:
@@ -1347,9 +1369,13 @@ metrics:
 minio:
   enabled: true
   auth:
-    rootUser: "minio"
-    rootPassword: "minio123"
-  defaultBuckets: "thanos"
+    rootPassword: minio123
+    rootUser: minio
+  monitoringBuckets: thanos
+  accessKey:
+    password: minio
+  secretKey:
+    password: minio123
 ```
 
 - Install Prometheus Operator and Thanos charts:

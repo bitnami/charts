@@ -7,7 +7,7 @@ This PostgreSQL cluster solution includes the PostgreSQL replication manager, an
 [Overview of PostgreSQL HA](https://www.postgresql.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -96,7 +96,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `postgresql.image.registry`                                  | PostgreSQL with Repmgr image registry                                                                                                                                                                         | `docker.io`                 |
 | `postgresql.image.repository`                                | PostgreSQL with Repmgr image repository                                                                                                                                                                       | `bitnami/postgresql-repmgr` |
-| `postgresql.image.tag`                                       | PostgreSQL with Repmgr image tag                                                                                                                                                                              | `15.1.0-debian-11-r29`      |
+| `postgresql.image.tag`                                       | PostgreSQL with Repmgr image tag                                                                                                                                                                              | `15.2.0-debian-11-r0`       |
 | `postgresql.image.digest`                                    | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                    | `""`                        |
 | `postgresql.image.pullPolicy`                                | PostgreSQL with Repmgr image pull policy                                                                                                                                                                      | `IfNotPresent`              |
 | `postgresql.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                                                                                                              | `[]`                        |
@@ -324,7 +324,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
 | `pgpool.image.registry`                                  | Pgpool image registry                                                                                                                    | `docker.io`          |
 | `pgpool.image.repository`                                | Pgpool image repository                                                                                                                  | `bitnami/pgpool`     |
-| `pgpool.image.tag`                                       | Pgpool image tag                                                                                                                         | `4.4.2-debian-11-r0` |
+| `pgpool.image.tag`                                       | Pgpool image tag                                                                                                                         | `4.4.2-debian-11-r5` |
 | `pgpool.image.digest`                                    | Pgpool image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                   | `""`                 |
 | `pgpool.image.pullPolicy`                                | Pgpool image pull policy                                                                                                                 | `IfNotPresent`       |
 | `pgpool.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                                         | `[]`                 |
@@ -467,7 +467,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `metrics.enabled`                            | Enable PostgreSQL Prometheus exporter                                                                                                                   | `false`                     |
 | `metrics.image.registry`                     | PostgreSQL Prometheus exporter image registry                                                                                                           | `docker.io`                 |
 | `metrics.image.repository`                   | PostgreSQL Prometheus exporter image repository                                                                                                         | `bitnami/postgres-exporter` |
-| `metrics.image.tag`                          | PostgreSQL Prometheus exporter image tag                                                                                                                | `0.11.1-debian-11-r53`      |
+| `metrics.image.tag`                          | PostgreSQL Prometheus exporter image tag                                                                                                                | `0.11.1-debian-11-r58`      |
 | `metrics.image.digest`                       | PostgreSQL Prometheus exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                          | `""`                        |
 | `metrics.image.pullPolicy`                   | PostgreSQL Prometheus exporter image pull policy                                                                                                        | `IfNotPresent`              |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                                        | `[]`                        |
@@ -530,7 +530,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `volumePermissions.enabled`                      | Enable init container to adapt volume permissions                                                                                 | `false`                 |
 | `volumePermissions.image.registry`               | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`             | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                    | Init container volume-permissions image tag                                                                                       | `11-debian-11-r76`      |
+| `volumePermissions.image.tag`                    | Init container volume-permissions image tag                                                                                       | `11-debian-11-r81`      |
 | `volumePermissions.image.digest`                 | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`             | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`            | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
