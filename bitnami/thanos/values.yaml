@@ -1677,6 +1677,32 @@ compactor:
   ## @param compactor.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## K8s CronJob configuration
+  ## ref: https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/
+  ## @param compactor.cronJob.enabled Run compactor as a CronJob rather than a Deployment
+  ## @param compactor.cronJob.schedule The schedule in Cron format, see https://en.wikipedia.org/wiki/Cron
+  ## @param compactor.cronJob.timeZone The time zone name for the given schedule, see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  ## @param compactor.cronJob.concurrencyPolicy Specifies how to treat concurrent executions of a Job
+  ## @param compactor.cronJob.startingDeadlineSeconds Optional deadline in seconds for starting the job if it misses scheduled time for any reason
+  ## @param compactor.cronJob.suspend This flag tells the controller to suspend subsequent executions
+  ## @param compactor.cronJob.successfulJobsHistoryLimit The number of successful finished jobs to retain
+  ## @param compactor.cronJob.failedJobsHistoryLimit The number of failed finished jobs to retain
+  ## @param compactor.cronJob.backoffLimit Specifies the number of retries before marking this job failed
+  ##
+  cronJob:
+    enabled: false
+    schedule: "0 */6 * * *"
+    timeZone: ""
+    startingDeadlineSeconds: ""
+    concurrencyPolicy: Forbid
+    suspend: ""
+    successfulJobsHistoryLimit: ""
+    failedJobsHistoryLimit: ""
+    backoffLimit: ""
+  ## @param compactor.restartPolicy Compactor container restart policy. This must be set when compactor.cronJob.enabled is true
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy
+  ##
+  restartPolicy: ""
   ## @param compactor.updateStrategy.type Update strategy type for Thanos Compactor replicas
   ##
   updateStrategy:
