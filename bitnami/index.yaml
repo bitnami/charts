@@ -21380,6 +21380,38 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 0.13.2
+    created: "2023-02-13T15:40:20.296514205Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: ExternalDNS is a Kubernetes addon that configures public DNS servers
+      with information about exposed Kubernetes services to make them discoverable.
+    digest: f52aeb6c4319f0411660637f2e91c47e01a3dc4ccac55d62bf3f6e1534b76733
+    home: https://github.com/bitnami/charts/tree/main/bitnami/external-dns
+    icon: https://bitnami.com/assets/stacks/external-dns/img/external-dns-stack-220x234.png
+    keywords:
+    - external-dns
+    - network
+    - dns
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: external-dns
+    sources:
+    - https://github.com/kubernetes-sigs/external-dns
+    - https://github.com/bitnami/containers/tree/main/bitnami/external-dns
+    - https://github.com/kubernetes-sigs/external-dns
+    urls:
+    - https://charts.bitnami.com/bitnami/external-dns-6.13.3.tgz
+    version: 6.13.3
+  - annotations:
+      category: DeveloperTools
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 0.13.2
     created: "2023-01-31T08:38:08.383632551Z"
     dependencies:
     - name: common
@@ -115743,4 +115775,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-02-13T10:45:44.37787361Z"
+generated: "2023-02-13T15:40:20.290891984Z"
