@@ -21,13 +21,14 @@ data:
       securityRealm: {{ include "common.tplvalues.render" ( dict "value" .Values.configAsCode.securityRealm "context" $ ) | nindent 8 }}
       {{- end }}
       {{- if .Values.agent.enabled }}
+      slaveAgentPort: {{ .Values.agentListenerService.ports.agentListener | int }}
       clouds:
         - kubernetes:
             name: "kubernetes"
             namespace: "{{ template "common.names.namespace" . }}"
             serverUrl: "https://kubernetes.default"
             jenkinsUrl: {{ printf "http://%s.%s.svc.%s:%d" (include "common.names.fullname" .) (include "common.names.namespace" .)  .Values.clusterDomain (.Values.service.ports.http | int) }}
-            jenkinsTunnel: {{ printf "%s-agent.%s.svc.%s:%d" (include "common.names.fullname" .) (include "common.names.namespace" .)  .Values.clusterDomain (.Values.agent.service.ports.http | int) }}
+            jenkinsTunnel: {{ printf "%s-agent-listener.%s.svc.%s:%d" (include "common.names.fullname" .) (include "common.names.namespace" .)  .Values.clusterDomain (.Values.agentListenerService.ports.agentListener | int) }}
             podLabels:
               - key: "app.kubernetes.io/component"
                 value: "jenkins-agent"
@@ -41,6 +42,7 @@ data:
               {{- end }}
             templates:
               - name: {{ printf "%s-agent" (include "common.names.fullname" .) }}
+                label: {{ .Values.agent.templateLabel | quote }}
                 namespace: {{ template "common.names.namespace" . }}
                 id: "agent-template"
                 {{- if or .Values.agent.annotations }}
@@ -55,19 +57,20 @@ data:
                   {{- end }}
                 {{- end }}
                 containers:
-                  - name: jenkins
+                  - name: jnlp
                     alwaysPullImage: {{ ternary "true" "false" (eq .Values.image.pullPolicy "Always") }}
                     {{- if .Values.agent.command }}
                     command: {{- include "common.tplvalues.render" (dict "value" .Values.agent.command "context" $) | nindent 20 }}
                     {{- end }}
                     {{- if .Values.agent.args }}
                     args: {{- include "common.tplvalues.render" (dict "value" .Values.agent.args "context" $) | nindent 20 }}
+                    {{- else }}
+                    args: "^${computer.jnlpmac} ^${computer.name}"
                     {{- end }}
-                    envVars:
-                      - envVar:
-                          key: JENKINS_SKIP_BOOTSTRAP
-                          value: "true"
-                    image: {{ include "jenkins.image" . }}
+                    {{- if .Values.agent.containerExtraEnvVars }}
+                    envVars: {{- include "common.tplvalues.render" (dict "value" .Values.agent.containerExtraEnvVars "context" $) | nindent 22 }}
+                    {{- end }}
+                    image: {{ include "jenkins.agent.image" . }}
                     {{- if .Values.agent.resources.limits.cpu }}
                     resourceLimitCpu: {{ .Values.agent.resources.limits.cpu }}
                     {{- end}}
@@ -88,8 +91,8 @@ data:
                   {{- if .Values.agent.sidecars }}
                   {{- include "common.tplvalues.render" ( dict "value" .Values.agent.sidecars "context" $) | nindent 18 }}
                   {{- end }}
-                {{- if .Values.agent.extraEnvVars }}
-                envVars: {{- include "common.tplvalues.render" (dict "value" .Values.agent.extraEnvVars "context" $) | nindent 18 }}
+                {{- if .Values.agent.podExtraEnvVars }}
+                envVars: {{- include "common.tplvalues.render" (dict "value" .Values.agent.podExtraEnvVars "context" $) | nindent 18 }}
                 {{- end }}
                 {{- include "jenkins.imagePullSecrets" . | nindent 16 }}
                 {{- if .Values.agent.extraAgentTemplate }}

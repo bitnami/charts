@@ -7,7 +7,7 @@ Jenkins is an open source Continuous Integration and Continuous Delivery (CI/CD)
 [Overview of Jenkins](http://jenkins-ci.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -178,20 +178,20 @@ The command removes all the Kubernetes components associated with the chart and 
 | `agent.containerSecurityContext.runAsUser`                                | User ID for the agent container                                          | `1001`         |
 | `agent.containerSecurityContext.runAsGroup`                               | User ID for the agent container                                          | `1001`         |
 | `agent.containerSecurityContext.privileged`                               | Decide if the container runs privileged.                                 | `false`        |
-| `agent.service.enabled`                                                   |                                                                          | `true`         |
-| `agent.service.type`                                                      | Jenkins service type                                                     | `LoadBalancer` |
-| `agent.service.ports.http`                                                | Jenkins service HTTP port                                                | `80`           |
-| `agent.service.ports.https`                                               | Jenkins service HTTPS port                                               | `443`          |
-| `agent.service.nodePorts.http`                                            | Node port for HTTP                                                       | `""`           |
-| `agent.service.nodePorts.https`                                           | Node port for HTTPS                                                      | `""`           |
-| `agent.service.clusterIP`                                                 | Jenkins service Cluster IP                                               | `""`           |
-| `agent.service.loadBalancerIP`                                            | Jenkins service Load Balancer IP                                         | `""`           |
-| `agent.service.loadBalancerSourceRanges`                                  | Jenkins service Load Balancer sources                                    | `[]`           |
-| `agent.service.externalTrafficPolicy`                                     | Jenkins service external traffic policy                                  | `Cluster`      |
-| `agent.service.annotations`                                               | Additional custom annotations for Jenkins service                        | `{}`           |
-| `agent.service.extraPorts`                                                | Extra ports to expose (normally used with the `sidecar` value)           | `[]`           |
-| `agent.service.sessionAffinity`                                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"     | `None`         |
-| `agent.service.sessionAffinityConfig`                                     | Additional settings for the sessionAffinity                              | `{}`           |
+| `agentListenerService.enabled`                                                   |                                                                          | `true`         |
+| `agentListenerService.type`                                                      | Jenkins service type                                                     | `LoadBalancer` |
+| `agentListenerService.ports.http`                                                | Jenkins service HTTP port                                                | `80`           |
+| `agentListenerService.ports.https`                                               | Jenkins service HTTPS port                                               | `443`          |
+| `agentListenerService.nodePorts.http`                                            | Node port for HTTP                                                       | `""`           |
+| `agentListenerService.nodePorts.https`                                           | Node port for HTTPS                                                      | `""`           |
+| `agentListenerService.clusterIP`                                                 | Jenkins service Cluster IP                                               | `""`           |
+| `agentListenerService.loadBalancerIP`                                            | Jenkins service Load Balancer IP                                         | `""`           |
+| `agentListenerService.loadBalancerSourceRanges`                                  | Jenkins service Load Balancer sources                                    | `[]`           |
+| `agentListenerService.externalTrafficPolicy`                                     | Jenkins service external traffic policy                                  | `Cluster`      |
+| `agentListenerService.annotations`                                               | Additional custom annotations for Jenkins service                        | `{}`           |
+| `agentListenerService.extraPorts`                                                | Extra ports to expose (normally used with the `sidecar` value)           | `[]`           |
+| `agentListenerService.sessionAffinity`                                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"     | `None`         |
+| `agentListenerService.sessionAffinityConfig`                                     | Additional settings for the sessionAffinity                              | `{}`           |
 
 
 ### Jenkins deployment parameters
