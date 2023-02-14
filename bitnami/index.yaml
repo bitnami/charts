@@ -81144,6 +81144,45 @@ entries:
       category: DeveloperTools
       licenses: Apache-2.0
     apiVersion: v2
+    appVersion: 6.0.0
+    created: "2023-02-14T18:53:57.2798738Z"
+    dependencies:
+    - name: mongodb
+      repository: https://charts.bitnami.com/bitnami
+      version: 13.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Parse is a platform that enables users to add a scalable and powerful
+      backend to launch a full-featured app for iOS, Android, JavaScript, Windows,
+      Unity, and more.
+    digest: b58856c994eb70b9f671428605ae87a625758ebb71e1ed649c03b4df387a6edb
+    home: https://github.com/bitnami/charts/tree/main/bitnami/parse
+    icon: https://bitnami.com/assets/stacks/parse/img/parse-stack-220x234.png
+    keywords:
+    - parse
+    - backend
+    - serverless
+    - platform
+    - mbaas
+    - mobile
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: parse
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/parse
+    - https://github.com/bitnami/containers/tree/main/bitnami/parse-dashboard
+    - https://parse.com/
+    urls:
+    - https://charts.bitnami.com/bitnami/parse-20.0.0.tgz
+    version: 20.0.0
+  - annotations:
+      category: DeveloperTools
+      licenses: Apache-2.0
+    apiVersion: v2
     appVersion: 5.4.1
     created: "2023-02-02T15:21:45.826942697Z"
     dependencies:
@@ -116334,4 +116373,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-02-14T16:14:48.767553188Z"
+generated: "2023-02-14T18:53:57.268748092Z"
