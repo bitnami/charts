@@ -7,7 +7,7 @@ MariaDB Galera is a multi-primary database cluster solution for synchronous repl
 [Overview of MariaDB Galera](https://mariadb.com/kb/en/library/galera-cluster/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -586,7 +586,7 @@ Affected values:
 - `extraInitContainers` renamed as `initContainers`.
 - `prometheusRule.selector` renamed as `prometheusRule.additionalLabels`
 
-:warning: This major release also break the Helm upgrade and therefore cause a service disruption. Next procedure is required in order to allow a rolling upgrade. 
+:warning: This major release also break the Helm upgrade and therefore cause a service disruption. Next procedure is required in order to allow a rolling upgrade.
 > Note
 >
 > - It only consider Chart upgrade, not mariadb galera upgrade. Use the same version or validate mariadb galera upgrade path

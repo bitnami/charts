@@ -7,7 +7,7 @@ Matomo, formerly known as Piwik, is a real time web analytics program. It provid
 [Overview of Matomo](https://matomo.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console

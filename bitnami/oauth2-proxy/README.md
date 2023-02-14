@@ -7,7 +7,7 @@ A reverse proxy and static file server that provides authentication using Provid
 [Overview of OAuth2 Proxy](https://github.com/oauth2-proxy/oauth2-proxy)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
