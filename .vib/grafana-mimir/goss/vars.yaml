@@ -1,0 +1,45 @@
+mimir:
+  dataDir: "/bitnami/grafana-mimir"
+  containerPorts:
+    http: 8080
+    gossipRing: 7946
+  gossipRing:
+    service:
+      ports:
+        http: 7946
+compactor:
+  service:
+    ports:
+      http: 8080
+distributor:
+  service:
+    ports:
+      http: 8080
+queryFrontend:
+  service:
+    ports:
+      http: 8080
+storeGateway:
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 1002
+  service:
+    ports:
+      http: 8080
+memcachedchunks:
+  service:
+    ports:
+      memcached: 11212
+memcachedfrontend:
+  service:
+    ports:
+      memcached: 11212
+memcachedindex:
+  service:
+    ports:
+      memcached: 11212
+memcachedmetadata:
+  service:
+    ports:
+      memcached: 11212

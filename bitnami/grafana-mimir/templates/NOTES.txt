@@ -44,6 +44,9 @@ Installed components:
 {{- if .Values.overridesExporter.enabled }}
   * overrides-exporter
 {{- end }}
+{{- if .Values.gateway.enabled }}
+  * gateway
+{{- end }}
 
 Access to Grafana Mimir services:
 {{- if .Values.gateway.enabled }}

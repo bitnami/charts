@@ -229,6 +229,8 @@ mimir:
       grpc_server_max_connection_age: 2m
       grpc_server_max_connection_age_grace: 5m
       grpc_server_max_connection_idle: 1m
+      http_listen_port: {{ .Values.mimir.containerPorts.http }}
+      grpc_listen_port: {{ .Values.mimir.containerPorts.grpc }}
     store_gateway:
       sharding_ring:
         wait_stability_min_duration: 1m
@@ -3705,7 +3707,7 @@ ruler:
     ## @param ruler.service.ports.grpc Ruler GRPC service port
     ##
     ports:
-      http: 3100
+      http: 8080
       grpc: 9095
     ## Node ports to expose
     ## NOTE: choose port between <30000-32767>
