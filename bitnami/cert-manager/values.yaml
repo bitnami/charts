@@ -568,6 +568,7 @@ webhook:
     ##
     automountServiceAccountToken: true
   ##  @param webhook.hostNetwork Specifies hostNetwork value
+  ##
   hostNetwork: false
 ## @section CAInjector deployment parameters
 
