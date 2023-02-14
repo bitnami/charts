@@ -99,7 +99,7 @@ spec:
             - name: data
               mountPath: {{ .Values.mimir.dataDir }}
               {{- if .Values.compactor.persistence.subPath }}
-              subPath: {{ .Values.persistence.subPath }}
+              subPath: {{ .Values.compactor.persistence.subPath }}
               {{- end }}
         {{- end }}
       containers:
@@ -195,7 +195,7 @@ spec:
               mountPath: {{ .Values.mimir.dataDir }}/conf/mimir.yaml
               subPath: mimir.yaml
             - name: data
-              mountPath: {{ .Values.mimir.dataDir }}/mimir/compactor
+              mountPath: {{ .Values.mimir.dataDir }}/compactor
           {{- if .Values.compactor.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.compactor.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}

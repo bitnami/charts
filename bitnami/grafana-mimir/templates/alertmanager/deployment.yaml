@@ -163,7 +163,7 @@ spec:
               mountPath: {{ .Values.mimir.dataDir }}/conf/mimir.yaml
               subPath: mimir.yaml
             - name: data
-              mountPath: {{ .Values.mimir.dataDir }}/mimir/alertmanager
+              mountPath: {{ .Values.mimir.dataDir }}/alert-manager
           {{- if .Values.alertmanager.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}

@@ -7,6 +7,12 @@ mimir:
     service:
       ports:
         http: 7946
+gateway:
+  enabled: true
+  service:
+    ports:
+      http: 80
+    type: LoadBalancer
 compactor:
   service:
     ports:
