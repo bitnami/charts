@@ -245,6 +245,7 @@ extraEnvVarsSecret: ""
 replicaCount: 1
 ## @param containerPorts.http Keycloak HTTP container port
 ## @param containerPorts.https Keycloak HTTPS container port
+## @param containerPorts.infinispan Keycloak infinispan container port
 ##
 containerPorts:
   http: 8080
