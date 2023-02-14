@@ -7,7 +7,7 @@ Matomo, formerly known as Piwik, is a real time web analytics program. It provid
 [Overview of Matomo](https://matomo.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -137,8 +137,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                                             | `[]`                  |
 | `affinity`                              | Affinity for pod assignment                                                                                           | `{}`                  |
 | `nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                                              | `{}`                  |
-| `resources.requests`                    | The requested resources for the init container                                                                        | `{}`                  |
-| `resources.limits`                      | The resources limits for the init container                                                                           | `{}`                  |
+| `resources.limits`                      | The resources limits for Matomo containers                                                                            | `{}`                  |
+| `resources.requests`                    | The requested resources for Matomo containers                                                                         | `{}`                  |
 | `podSecurityContext.enabled`            | Enable Matomo pods' Security Context                                                                                  | `true`                |
 | `podSecurityContext.fsGroup`            | Matomo pods' group ID                                                                                                 | `1001`                |
 | `containerSecurityContext.enabled`      | Enable Matomo containers' Security Context                                                                            | `true`                |

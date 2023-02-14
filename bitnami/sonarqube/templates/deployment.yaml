@@ -64,6 +64,37 @@ spec:
       {{- end }}
       {{- if or .Values.initContainers .Values.sysctl.enabled (and .Values.volumePermissions.enabled .Values.persistence.enabled) }}
       initContainers:
+        {{- if .Values.plugins.install }}
+        - name: {{ printf "%s-install-plugins-initcontainer" (include "common.names.fullname" .) }}
+          image: {{ include "sonarqube.plugins.image" . }}
+          imagePullPolicy: {{ .Values.plugins.image.pullPolicy  }}
+          command: [ "sh",
+                     "-e",
+                     "/tmp/scripts/install_plugins.sh" ]
+          volumeMounts:
+            - name: install-plugins
+              mountPath: /tmp/scripts/
+            - name: provisioning
+              mountPath: {{ .Values.provisioningFolder }}/extensions/plugins/
+              subPath: extensions/plugins
+          resources: {{- toYaml .Values.plugins.resources | nindent 12 }}
+          securityContext: {{- .Values.plugins.containerSecurityContext | toYaml | nindent 12 }}
+        {{- end }}
+        {{- if .Values.caCerts.enabled }}
+        - name:  {{ printf "%s-ca-certs-initcontainer" (include "common.names.fullname" .) }}
+          image: {{ include "sonarqube.image" . }}
+          imagePullPolicy: {{ .Values.caCerts.image.pullPolicy  }}
+          command: [ "sh" ]
+          args: [ "-c", "cp -f \"${JAVA_HOME}/lib/security/cacerts\" {{ .Values.provisioningFolder }}/certs/cacerts; if [ \"$(ls /tmp/secrets/ca-certs)\" ]; then for f in /tmp/secrets/ca-certs/*; do keytool -importcert -file \"${f}\" -alias \"$(basename \"${f}\")\" -keystore {{ .Values.provisioningFolder }}/certs/cacerts -storepass changeit -trustcacerts -noprompt; done; fi;" ]
+          volumeMounts:
+            - name: provisioning
+              mountPath: {{ .Values.provisioningFolder }}/certs
+              subPath: certs
+            - mountPath: /tmp/secrets/ca-certs
+              name: ca-certs
+          resources: {{- toYaml .Values.caCerts.resources | nindent 12 }}
+          securityContext: {{- .Values.caCerts.containerSecurityContext | toYaml | nindent 12 }}
+        {{- end }}
         {{- if .Values.sysctl.enabled }}
         ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
         - name: sysctl
@@ -91,8 +122,6 @@ spec:
           args:
             - -ec
             - |
-              mkdir -p /bitnami/sonarqube
-              chmod 700 /bitnami/sonarqube
               find /bitnami/sonarqube -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
           {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "enabled" | toYaml | nindent 12 }}
@@ -101,8 +130,9 @@ spec:
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: data
+            - name: sonarqube
               mountPath: /bitnami/sonarqube
+              subPath: data
         {{- end }}
         {{- if .Values.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
@@ -139,6 +169,10 @@ spec:
                   key: sonarqube-password
             - name: SONARQUBE_EMAIL
               value: {{ .Values.sonarqubeEmail | quote }}
+            {{- if or .Values.plugins.install .Values.caCerts.enabled}}
+            - name: SONARQUBE_MOUNTED_PROVISIONING_DIR
+              value: {{ .Values.provisioningFolder }}
+            {{- end }}
             {{- if .Values.minHeapSize }}
             - name: SONARQUBE_MIN_HEAP_SIZE
               value: {{ .Values.minHeapSize | quote }}
@@ -261,10 +295,10 @@ spec:
             - name: SONARQUBE_EXTRA_PROPERTIES
               value: {{ join "," .Values.extraProperties | quote }}
             {{- end }}
-            {{- if .Values.metrics.jmx.enabled }}
             - name: SONARQUBE_WEB_JAVA_ADD_OPTS
-              value: "-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=10443 -Dcom.sun.management.jmxremote.rmi.port=10444"
-            {{- end }}
+              value: {{ template "sonarqube.jvmOpts" . }}
+            - name: SONAR_CE_JAVAADDITIONALOPTS
+              value: {{ template "sonarqube.jvmCEOpts" . }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -315,7 +349,11 @@ spec:
           {{- end }}
           volumeMounts:
             - mountPath: /bitnami/sonarqube
-              name: data
+              name: sonarqube
+            {{- if or .Values.plugins.install .Values.caCerts.enabled }}
+            - name: provisioning
+              mountPath: {{ .Values.provisioningFolder }}
+            {{- end }}
           {{- if .Values.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -353,7 +391,16 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: data
+        {{- if or .Values.plugins.install .Values.caCerts.enabled }}
+        - name: provisioning
+          emptyDir: {}
+        {{- end }}
+        {{- if .Values.caCerts.enabled }}
+        - name: ca-certs
+          secret:
+            secretName: {{ .Values.caCerts.secret }}
+        {{- end }}
+        - name: sonarqube
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
             claimName: {{ (tpl .Values.persistence.existingClaim .) | default (include "common.names.fullname" .) }}
@@ -364,6 +411,14 @@ spec:
         - name: jmx-config
           configMap:
             name: {{ printf "%s-jmx-conf" (include "common.names.fullname" .) }}
+        {{- end }}
+        {{- if .Values.plugins.install }}
+        - name: install-plugins
+          configMap:
+            name: {{ printf "%s-install-plugins-configmap" (include "common.names.fullname" .) }}
+            items:
+              - key: install_plugins.sh
+                path: install_plugins.sh
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}

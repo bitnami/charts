@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/sonarqube
-  tag: 9.8.0-debian-11-r11
+  tag: 9.9.0-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -102,6 +102,9 @@ sonarqubeUsername: user
 ## Defaults to a random 10-character alphanumeric string if not set
 ##
 sonarqubePassword: ""
+## @param provisioningFolder Directory to use for provisioning content to Sonarqube
+##
+provisioningFolder: "/bitnami/sonarqube-provisioning"
 ## @param existingSecret Name of existing secret containing SonarQube&trade; credentials
 ## NOTE: Must contain key `sonarqube-password`
 ## NOTE: When it's set, the `sonarqubePassword` parameter is ignored
@@ -116,6 +119,12 @@ minHeapSize: 1024m
 ## @param maxHeapSize Maximum heap size for SonarQube&trade;
 ##
 maxHeapSize: 2048m
+## @param jvmOpts Values to add to SONARQUBE_WEB_JVM_OPTS
+##
+jvmOpts: ""
+## @param jvmCeOpts Values to add to SONAR_CE_JAVAOPTS
+##
+jvmCeOpts: ""
 ## @param startTimeout Timeout for the application to start in seconds
 ##
 startTimeout: 150
@@ -578,6 +587,116 @@ ingress:
   ##
   extraRules: []
 
+## @section SonarQube caCerts provisioning parameters
+##
+## Provide a secret containing one or more certificate files in the keys that will be added to cacerts
+## The cacerts file will be set via SONARQUBE_WEB_JVM_OPTS and SONAR_CE_JAVAOPTS
+caCerts:
+  ## @param caCerts.enabled Enable the use of caCerts
+  ##
+  enabled: false
+  ## Bitnami Shell image
+  ## ref: https://hub.docker.com/r/bitnami/bitnami-shell/tags/
+  ## @param caCerts.image.registry Bitnami Shell image registry
+  ## @param caCerts.image.repository Bitnami Shell image repository
+  ## @param caCerts.image.tag Bitnami Shell image tag (immutable tags are recommended)
+  ## @param caCerts.image.digest Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param caCerts.image.pullPolicy Bitnami Shell image pull policy
+  ## @param caCerts.image.pullSecrets Bitnami Shell image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/bitnami-shell
+    tag: 11-debian-11-r63
+    digest: ""
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## @param caCerts.secret Name of the secret containing the certificates
+  ##
+  secret: ca-certs-secret
+  ## Init container's resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param caCerts.resources.limits The resources limits for the init container
+  ## @param caCerts.resources.requests The requested resources for the init container
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Init container Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param caCerts.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
+  ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
+  ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
+  ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
+  ##
+  containerSecurityContext:
+    runAsUser: 0
+
+## @section SonarQube plugin provisioning parameters
+##
+plugins:
+  ## @param plugins.install List of plugin URLS to download and install
+  ## For example:
+  ## plugins:
+  ##  install:
+  ##    - "https://github.com/AmadeusITGroup/sonar-stash/releases/download/1.3.0/sonar-stash-plugin-1.3.0.jar"
+  ##    - "https://github.com/SonarSource/sonar-ldap/releases/download/2.2-RC3/sonar-ldap-plugin-2.2.0.601.jar"
+  ##
+  install: []
+  ## @param plugins.netrcCreds .netrc secret file with a key "netrc" to use basic auth while downloading plugins
+  ##
+  netrcCreds: ""
+  ## @param plugins.noCheckCertificate Set to true to not validate the server's certificate to download plugin
+  ##
+  noCheckCertificate: true
+  ## Bitnami Shell image
+  ## ref: https://hub.docker.com/r/bitnami/bitnami-shell/tags/
+  ## @param plugins.image.registry Bitnami Shell image registry
+  ## @param plugins.image.repository Bitnami Shell image repository
+  ## @param plugins.image.tag Bitnami Shell image tag (immutable tags are recommended)
+  ## @param plugins.image.digest Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param plugins.image.pullPolicy Bitnami Shell image pull policy
+  ## @param plugins.image.pullSecrets Bitnami Shell image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/bitnami-shell
+    tag: 11-debian-11-r63
+    digest: ""
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Init container's resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param plugins.resources.limits The resources limits for the init container
+  ## @param plugins.resources.requests The requested resources for the init container
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Init container Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param plugins.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
+  ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
+  ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
+  ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
+  ##
+  containerSecurityContext:
+    runAsUser: 0
+
 ## @section Persistence Parameters
 ##
 
@@ -630,7 +749,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r73
+    tag: 11-debian-11-r81
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -680,7 +799,7 @@ sysctl:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r73
+    tag: 11-debian-11-r81
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -760,7 +879,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.17.2-debian-11-r39
+      tag: 0.17.2-debian-11-r46
       digest: ""
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.

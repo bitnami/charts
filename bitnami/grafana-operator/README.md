@@ -7,7 +7,7 @@ Grafana Operator is a Kubernetes operator that enables the installation and mana
 [Overview of Grafana Operator](https://github.com/integr8ly/grafana-operator)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -111,7 +111,7 @@ For more information, refer to the [documentation on the differences between the
 | `operator.updateStrategy.type`                               | Set up update strategy for Grafana Operator installation.                                                                                 | `Recreate`                 |
 | `operator.image.registry`                                    | Grafana Operator image registry                                                                                                           | `docker.io`                |
 | `operator.image.repository`                                  | Grafana Operator image name                                                                                                               | `bitnami/grafana-operator` |
-| `operator.image.tag`                                         | Grafana Operator image tag                                                                                                                | `4.8.0-debian-11-r23`      |
+| `operator.image.tag`                                         | Grafana Operator image tag                                                                                                                | `4.9.0-debian-11-r0`       |
 | `operator.image.digest`                                      | Grafana Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                          | `""`                       |
 | `operator.image.pullPolicy`                                  | Grafana Operator image pull policy                                                                                                        | `IfNotPresent`             |
 | `operator.image.pullSecrets`                                 | Grafana Operator image pull secrets                                                                                                       | `[]`                       |
@@ -196,7 +196,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.enabled`                                           | Enabled the deployment of the Grafana CRD object into the cluster                                          | `true`                   |
 | `grafana.image.registry`                                    | Grafana image registry                                                                                     | `docker.io`              |
 | `grafana.image.repository`                                  | Grafana image name                                                                                         | `bitnami/grafana`        |
-| `grafana.image.tag`                                         | Grafana image tag                                                                                          | `9.3.6-debian-11-r1`     |
+| `grafana.image.tag`                                         | Grafana image tag                                                                                          | `9.3.6-debian-11-r4`     |
 | `grafana.image.digest`                                      | Grafana image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag    | `""`                     |
 | `grafana.image.pullSecrets`                                 | Grafana image pull secrets                                                                                 | `[]`                     |
 | `grafana.pluginsInitContainerImage.registry`                | Grafana Plugins image registry                                                                             | `""`                     |

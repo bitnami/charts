@@ -7,7 +7,7 @@ Prometheus exporter for hardware and OS metrics exposed by UNIX kernels, with pl
 [Overview of Node Exporter](https://prometheus.io/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -167,6 +167,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceMonitor.jobLabel`                     | The name of the label on the target service to use as the job name in prometheus.                                                                                  | `""`                    |
 | `serviceMonitor.interval`                     | Scrape interval (use by default, falling back to Prometheus' default)                                                                                              | `""`                    |
 | `serviceMonitor.scrapeTimeout`                | Timeout after which the scrape is ended                                                                                                                            | `""`                    |
+| `serviceMonitor.basicAuth`                    | Use basic auth for scraping                                                                                                                                        | `{}`                    |
 | `serviceMonitor.selector`                     | ServiceMonitor selector labels                                                                                                                                     | `{}`                    |
 | `serviceMonitor.relabelings`                  | RelabelConfigs to apply to samples before scraping                                                                                                                 | `[]`                    |
 | `serviceMonitor.metricRelabelings`            | MetricRelabelConfigs to apply to samples before ingestion                                                                                                          | `[]`                    |
