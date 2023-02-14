@@ -253,7 +253,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalAccess.autoDiscovery.image.registry`     | Init container auto-discovery image registry                                                                             | `docker.io`           |
 | `externalAccess.autoDiscovery.image.repository`   | Init container auto-discovery image repository                                                                           | `bitnami/kubectl`     |
 | `externalAccess.autoDiscovery.image.tag`          | Init container auto-discovery image tag (immutable tags are recommended)                                                 | `1.25.6-debian-11-r1` |
-| `externalAccess.autoDiscovery.image.digest`       | Petete image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                   | `""`                  |
+| `externalAccess.autoDiscovery.image.digest`       | Kubectl image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                  | `""`                  |
 | `externalAccess.autoDiscovery.image.pullPolicy`   | Init container auto-discovery image pull policy                                                                          | `IfNotPresent`        |
 | `externalAccess.autoDiscovery.image.pullSecrets`  | Init container auto-discovery image pull secrets                                                                         | `[]`                  |
 | `externalAccess.autoDiscovery.resources.limits`   | The resources limits for the auto-discovery init container                                                               | `{}`                  |
