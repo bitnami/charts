@@ -83,22 +83,114 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common Grafana Mimir Parameters
 
-| Name                                | Description                                                                                                                                              | Value                    |
-| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `mimir.image.registry`              | Grafana Mimir image registry                                                                                                                             | `docker.io`              |
-| `mimir.image.repository`            | Grafana Mimir image repository                                                                                                                           | `bitnami/grafana-mimir`  |
-| `mimir.image.tag`                   | Grafana Mimir image tag (immutable tags are recommended)                                                                                                 | `2.5.0-debian-11-r6`     |
-| `mimir.image.digest`                | Grafana Mimir image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                     |
-| `mimir.image.pullPolicy`            | Grafana Mimir image pull policy                                                                                                                          | `IfNotPresent`           |
-| `mimir.image.pullSecrets`           | Grafana Mimir image pull secrets                                                                                                                         | `[]`                     |
-| `mimir.image.debug`                 | Enable Grafana Mimir image debug mode                                                                                                                    | `false`                  |
-| `mimir.dataDir`                     | path to the Mimir data directory                                                                                                                         | `/bitnami/grafana-mimir` |
-| `mimir.configuration`               | Mimir components configuration                                                                                                                           | `""`                     |
-| `mimir.overrideConfiguration`       | Loki components configuration override. Values defined here takes precedence over mimir.configuration                                                    | `{}`                     |
-| `mimir.existingConfigmap`           | Name of a ConfigMap with the Loki configuration                                                                                                          | `""`                     |
-| `mimir.containerPorts.http-metrics` | Grafana Mimir HTTP metrics container port                                                                                                                | `8080`                   |
-| `mimir.containerPorts.grpc`         | Grafana Mimir GRPC container port                                                                                                                        | `9095`                   |
-| `mimir.containerPorts.memberlist`   | Grafana Mimir memberlist container port                                                                                                                  | `7946`                   |
+| Name                                   | Description                                                                                                                                              | Value                    |
+| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `mimir.image.registry`                 | Grafana Mimir image registry                                                                                                                             | `docker.io`              |
+| `mimir.image.repository`               | Grafana Mimir image repository                                                                                                                           | `bitnami/grafana-mimir`  |
+| `mimir.image.tag`                      | Grafana Mimir image tag (immutable tags are recommended)                                                                                                 | `2.5.0-debian-11-r6`     |
+| `mimir.image.digest`                   | Grafana Mimir image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                     |
+| `mimir.image.pullPolicy`               | Grafana Mimir image pull policy                                                                                                                          | `IfNotPresent`           |
+| `mimir.image.pullSecrets`              | Grafana Mimir image pull secrets                                                                                                                         | `[]`                     |
+| `mimir.image.debug`                    | Enable Grafana Mimir image debug mode                                                                                                                    | `false`                  |
+| `mimir.dataDir`                        | path to the Mimir data directory                                                                                                                         | `/bitnami/grafana-mimir` |
+| `mimir.configuration`                  | Mimir components configuration                                                                                                                           | `""`                     |
+| `mimir.overrideConfiguration`          | Loki components configuration override. Values defined here takes precedence over mimir.configuration                                                    | `{}`                     |
+| `mimir.existingConfigmap`              | Name of a ConfigMap with the Loki configuration                                                                                                          | `""`                     |
+| `mimir.containerPorts.http`            | Grafana Mimir HTTP metrics container port                                                                                                                | `8080`                   |
+| `mimir.containerPorts.grpc`            | Grafana Mimir GRPC container port                                                                                                                        | `9095`                   |
+| `mimir.containerPorts.gossipRing`      | Grafana Mimir memberlist container port                                                                                                                  | `7946`                   |
+| `mimir.gossipRing.service.ports.http`  | Gossip Ring HTTP headless service port                                                                                                                   | `7946`                   |
+| `mimir.gossipRing.service.annotations` | Additional custom annotations for Gossip Ring headless service                                                                                           | `{}`                     |
+| `mimir.blockStorage.backend`           | Backend storage to use                                                                                                                                   | `s3`                     |
+| `mimir.blockStorage.config`            | Configures connection to the backend store                                                                                                               | `{}`                     |
+
+
+### Alertmanager Deployment Parameters
+
+| Name                                                 | Description                                                                                            | Value           |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | --------------- |
+| `alertmanager.enabled`                               | Enable alertmanager deployment                                                                         | `false`         |
+| `alertmanager.extraEnvVars`                          | Array with extra environment variables to add to alertmanager nodes                                    | `[]`            |
+| `alertmanager.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for alertmanager nodes                            | `""`            |
+| `alertmanager.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for alertmanager nodes                               | `""`            |
+| `alertmanager.command`                               | Override default container command (useful when using custom images)                                   | `[]`            |
+| `alertmanager.args`                                  | Override default container args (useful when using custom images)                                      | `[]`            |
+| `alertmanager.extraArgs`                             | Add additional argsto the default container args (useful to override configuration)                    | `[]`            |
+| `alertmanager.replicaCount`                          | Number of Alertmanager replicas to deploy                                                              | `1`             |
+| `alertmanager.livenessProbe.enabled`                 | Enable livenessProbe on Alertmanager nodes                                                             | `true`          |
+| `alertmanager.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                | `60`            |
+| `alertmanager.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                       | `10`            |
+| `alertmanager.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                      | `1`             |
+| `alertmanager.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                    | `3`             |
+| `alertmanager.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                    | `1`             |
+| `alertmanager.readinessProbe.enabled`                | Enable readinessProbe on Alertmanager nodes                                                            | `true`          |
+| `alertmanager.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                               | `60`            |
+| `alertmanager.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                      | `10`            |
+| `alertmanager.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                     | `1`             |
+| `alertmanager.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                   | `3`             |
+| `alertmanager.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                   | `1`             |
+| `alertmanager.startupProbe.enabled`                  | Enable startupProbe on Alertmanager containers                                                         | `false`         |
+| `alertmanager.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                 | `30`            |
+| `alertmanager.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                        | `10`            |
+| `alertmanager.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                       | `1`             |
+| `alertmanager.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                     | `15`            |
+| `alertmanager.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                     | `1`             |
+| `alertmanager.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                    | `{}`            |
+| `alertmanager.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                   | `{}`            |
+| `alertmanager.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                     | `{}`            |
+| `alertmanager.resources.limits`                      | The resources limits for the alertmanager containers                                                   | `{}`            |
+| `alertmanager.resources.requests`                    | The requested resources for the alertmanager containers                                                | `{}`            |
+| `alertmanager.podSecurityContext.enabled`            | Enabled Alertmanager pods' Security Context                                                            | `true`          |
+| `alertmanager.podSecurityContext.fsGroup`            | Set Alertmanager pod's Security Context fsGroup                                                        | `1001`          |
+| `alertmanager.containerSecurityContext.enabled`      | Enabled Alertmanager containers' Security Context                                                      | `true`          |
+| `alertmanager.containerSecurityContext.runAsUser`    | Set Alertmanager containers' Security Context runAsUser                                                | `1001`          |
+| `alertmanager.containerSecurityContext.runAsNonRoot` | Set Alertmanager containers' Security Context runAsNonRoot                                             | `true`          |
+| `alertmanager.lifecycleHooks`                        | for the ingester container(s) to automate configuration before or after startup                        | `{}`            |
+| `alertmanager.hostAliases`                           | ingester pods host aliases                                                                             | `[]`            |
+| `alertmanager.podLabels`                             | Extra labels for ingester pods                                                                         | `{}`            |
+| `alertmanager.podAnnotations`                        | Annotations for ingester pods                                                                          | `{}`            |
+| `alertmanager.podAffinityPreset`                     | Pod affinity preset. Ignored if `alertmanager.affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
+| `alertmanager.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `alertmanager.affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
+| `alertmanager.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `alertmanager.affinity` is set. Allowed values: `soft` or `hard` | `""`            |
+| `alertmanager.nodeAffinityPreset.key`                | Node label key to match. Ignored if `alertmanager.affinity` is set                                     | `""`            |
+| `alertmanager.nodeAffinityPreset.values`             | Node label values to match. Ignored if `alertmanager.affinity` is set                                  | `[]`            |
+| `alertmanager.affinity`                              | Affinity for Alertmanager pods assignment                                                              | `{}`            |
+| `alertmanager.nodeSelector`                          | Node labels for Alertmanager pods assignment                                                           | `{}`            |
+| `alertmanager.tolerations`                           | Tolerations for Alertmanager pods assignment                                                           | `[]`            |
+| `alertmanager.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains        | `[]`            |
+| `alertmanager.priorityClassName`                     | Alertmanager pods' priorityClassName                                                                   | `""`            |
+| `alertmanager.schedulerName`                         | Kubernetes pod scheduler registry                                                                      | `""`            |
+| `alertmanager.terminationGracePeriodSeconds`         | Seconds pod needs to terminate gracefully                                                              | `""`            |
+| `alertmanager.updateStrategy.type`                   | Alertmanager statefulset strategy type                                                                 | `RollingUpdate` |
+| `alertmanager.updateStrategy.rollingUpdate`          | Alertmanager statefulset rolling update configuration parameters                                       | `{}`            |
+| `alertmanager.extraVolumes`                          | Optionally specify extra list of additional volumes for the Alertmanager pod(s)                        | `[]`            |
+| `alertmanager.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Alertmanager container(s)             | `[]`            |
+| `alertmanager.sidecars`                              | Add additional sidecar containers to the Alertmanager pod(s)                                           | `[]`            |
+| `alertmanager.initContainers`                        | Add additional init containers to the Alertmanager pod(s)                                              | `[]`            |
+
+
+### Alertmanager Traffic Exposure Parameters
+
+| Name                                            | Description                                                      | Value       |
+| ----------------------------------------------- | ---------------------------------------------------------------- | ----------- |
+| `alertmanager.service.type`                     | Alertmanager service type                                        | `ClusterIP` |
+| `alertmanager.service.ports.http`               | Alertmanager HTTP service port                                   | `8080`      |
+| `alertmanager.service.ports.grpc`               | Alertmanager GRPC service port                                   | `9095`      |
+| `alertmanager.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
+| `alertmanager.service.nodePorts.grpc`           | Node port for GRPC                                               | `9095`      |
+| `alertmanager.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
+| `alertmanager.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
+| `alertmanager.service.clusterIP`                | Alertmanager service Cluster IP                                  | `""`        |
+| `alertmanager.service.loadBalancerIP`           | Alertmanager service Load Balancer IP                            | `""`        |
+| `alertmanager.service.loadBalancerSourceRanges` | Alertmanager service Load Balancer sources                       | `[]`        |
+| `alertmanager.service.externalTrafficPolicy`    | Alertmanager service external traffic policy                     | `Cluster`   |
+| `alertmanager.service.annotations`              | Additional custom annotations for Alertmanager service           | `{}`        |
+| `alertmanager.service.extraPorts`               | Extra ports to expose in the Alertmanager service                | `[]`        |
+| `alertmanager.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                  | `false`     |
+| `alertmanager.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled   | `1`         |
+| `alertmanager.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable   | `""`        |
+| `alertmanager.blockStorage.backend`             | Backend storage to use                                           | `s3`        |
+| `alertmanager.blockStorage.config`              | Configures connection to the backend store                       | `{}`        |
 
 
 ### Compactor Deployment Parameters
@@ -165,9 +257,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.initContainers`                        | Add additional init containers to the Compactor pod(s)                                              | `[]`                |
 | `compactor.persistence.enabled`                   | Enable persistence in Compactor instances                                                           | `true`              |
 | `compactor.persistence.existingClaim`             | Name of an existing PVC to use                                                                      | `""`                |
-| `compactor.persistence.storageClass`              | PVC Storage Class for Memcached data volume                                                         | `""`                |
+| `compactor.persistence.storageClass`              | PVC Storage Class for Compactor data volume                                                         | `""`                |
 | `compactor.persistence.accessModes`               | PVC Access modes                                                                                    | `["ReadWriteOnce"]` |
-| `compactor.persistence.size`                      | PVC Storage Request for Memcached data volume                                                       | `8Gi`               |
+| `compactor.persistence.size`                      | PVC Storage Request for Compactor data volume                                                       | `8Gi`               |
 | `compactor.persistence.annotations`               | Additional PVC annotations                                                                          | `{}`                |
 | `compactor.persistence.selector`                  | Selector to match an existing Persistent Volume for Compactor's data PVC                            | `{}`                |
 | `compactor.persistence.dataSource`                | PVC data source                                                                                     | `{}`                |
@@ -178,9 +270,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                         | Description                                                      | Value       |
 | -------------------------------------------- | ---------------------------------------------------------------- | ----------- |
 | `compactor.service.type`                     | Compactor service type                                           | `ClusterIP` |
-| `compactor.service.ports.http-metrics`       | Compactor HTTP service port                                      | `8080`      |
+| `compactor.service.ports.http`               | Compactor HTTP service port                                      | `8080`      |
 | `compactor.service.ports.grpc`               | Compactor GRPC service port                                      | `9095`      |
-| `compactor.service.nodePorts.http-metrics`   | Node port for HTTP                                               | `""`        |
+| `compactor.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
 | `compactor.service.nodePorts.grpc`           | Node port for GRPC                                               | `9095`      |
 | `compactor.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
 | `compactor.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
@@ -205,20 +297,20 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.command`                               | Override default container command (useful when using custom images)                                  | `[]`            |
 | `distributor.args`                                  | Override default container args (useful when using custom images)                                     | `[]`            |
 | `distributor.extraArgs`                             | Add additional argsto the default container args (useful to override configuration)                   | `[]`            |
-| `distributor.replicaCount`                          | Number of Compactor replicas to deploy                                                                | `1`             |
-| `distributor.livenessProbe.enabled`                 | Enable livenessProbe on Compactor nodes                                                               | `true`          |
+| `distributor.replicaCount`                          | Number of Distributor replicas to deploy                                                              | `1`             |
+| `distributor.livenessProbe.enabled`                 | Enable livenessProbe on Distributor nodes                                                             | `true`          |
 | `distributor.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                               | `60`            |
 | `distributor.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                      | `10`            |
 | `distributor.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                     | `1`             |
 | `distributor.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                   | `3`             |
 | `distributor.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                   | `1`             |
-| `distributor.readinessProbe.enabled`                | Enable readinessProbe on Compactor nodes                                                              | `true`          |
+| `distributor.readinessProbe.enabled`                | Enable readinessProbe on Distributor nodes                                                            | `true`          |
 | `distributor.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                              | `60`            |
 | `distributor.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                     | `10`            |
 | `distributor.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                    | `1`             |
 | `distributor.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                  | `3`             |
 | `distributor.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                  | `1`             |
-| `distributor.startupProbe.enabled`                  | Enable startupProbe on Compactor containers                                                           | `false`         |
+| `distributor.startupProbe.enabled`                  | Enable startupProbe on Distributor containers                                                         | `false`         |
 | `distributor.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                | `30`            |
 | `distributor.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                       | `10`            |
 | `distributor.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                      | `1`             |
@@ -229,11 +321,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                    | `{}`            |
 | `distributor.resources.limits`                      | The resources limits for the distributor containers                                                   | `{}`            |
 | `distributor.resources.requests`                    | The requested resources for the distributor containers                                                | `{}`            |
-| `distributor.podSecurityContext.enabled`            | Enabled Compactor pods' Security Context                                                              | `true`          |
-| `distributor.podSecurityContext.fsGroup`            | Set Compactor pod's Security Context fsGroup                                                          | `1001`          |
-| `distributor.containerSecurityContext.enabled`      | Enabled Compactor containers' Security Context                                                        | `true`          |
-| `distributor.containerSecurityContext.runAsUser`    | Set Compactor containers' Security Context runAsUser                                                  | `1001`          |
-| `distributor.containerSecurityContext.runAsNonRoot` | Set Compactor containers' Security Context runAsNonRoot                                               | `true`          |
+| `distributor.podSecurityContext.enabled`            | Enabled Distributor pods' Security Context                                                            | `true`          |
+| `distributor.podSecurityContext.fsGroup`            | Set Distributor pod's Security Context fsGroup                                                        | `1001`          |
+| `distributor.containerSecurityContext.enabled`      | Enabled Distributor containers' Security Context                                                      | `true`          |
+| `distributor.containerSecurityContext.runAsUser`    | Set Distributor containers' Security Context runAsUser                                                | `1001`          |
+| `distributor.containerSecurityContext.runAsNonRoot` | Set Distributor containers' Security Context runAsNonRoot                                             | `true`          |
 | `distributor.lifecycleHooks`                        | for the distributor container(s) to automate configuration before or after startup                    | `{}`            |
 | `distributor.hostAliases`                           | distributor pods host aliases                                                                         | `[]`            |
 | `distributor.podLabels`                             | Extra labels for distributor pods                                                                     | `{}`            |
@@ -243,38 +335,38 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `distributor.affinity` is set. Allowed values: `soft` or `hard` | `""`            |
 | `distributor.nodeAffinityPreset.key`                | Node label key to match. Ignored if `distributor.affinity` is set                                     | `""`            |
 | `distributor.nodeAffinityPreset.values`             | Node label values to match. Ignored if `distributor.affinity` is set                                  | `[]`            |
-| `distributor.affinity`                              | Affinity for Compactor pods assignment                                                                | `{}`            |
-| `distributor.nodeSelector`                          | Node labels for Compactor pods assignment                                                             | `{}`            |
-| `distributor.tolerations`                           | Tolerations for Compactor pods assignment                                                             | `[]`            |
+| `distributor.affinity`                              | Affinity for Distributor pods assignment                                                              | `{}`            |
+| `distributor.nodeSelector`                          | Node labels for Distributor pods assignment                                                           | `{}`            |
+| `distributor.tolerations`                           | Tolerations for Distributor pods assignment                                                           | `[]`            |
 | `distributor.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains       | `[]`            |
-| `distributor.priorityClassName`                     | Compactor pods' priorityClassName                                                                     | `""`            |
+| `distributor.priorityClassName`                     | Distributor pods' priorityClassName                                                                   | `""`            |
 | `distributor.schedulerName`                         | Kubernetes pod scheduler registry                                                                     | `""`            |
 | `distributor.terminationGracePeriodSeconds`         | Seconds pod needs to terminate gracefully                                                             | `""`            |
-| `distributor.updateStrategy.type`                   | Compactor statefulset strategy type                                                                   | `RollingUpdate` |
-| `distributor.updateStrategy.rollingUpdate`          | Compactor statefulset rolling update configuration parameters                                         | `{}`            |
-| `distributor.extraVolumes`                          | Optionally specify extra list of additional volumes for the Compactor pod(s)                          | `[]`            |
-| `distributor.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Compactor container(s)               | `[]`            |
-| `distributor.sidecars`                              | Add additional sidecar containers to the Compactor pod(s)                                             | `[]`            |
-| `distributor.initContainers`                        | Add additional init containers to the Compactor pod(s)                                                | `[]`            |
+| `distributor.updateStrategy.type`                   | Distributor statefulset strategy type                                                                 | `RollingUpdate` |
+| `distributor.updateStrategy.rollingUpdate`          | Distributor statefulset rolling update configuration parameters                                       | `{}`            |
+| `distributor.extraVolumes`                          | Optionally specify extra list of additional volumes for the Distributor pod(s)                        | `[]`            |
+| `distributor.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Distributor container(s)             | `[]`            |
+| `distributor.sidecars`                              | Add additional sidecar containers to the Distributor pod(s)                                           | `[]`            |
+| `distributor.initContainers`                        | Add additional init containers to the Distributor pod(s)                                              | `[]`            |
 
 
-### Compactor Traffic Exposure Parameters
+### Distributor Traffic Exposure Parameters
 
 | Name                                           | Description                                                      | Value       |
 | ---------------------------------------------- | ---------------------------------------------------------------- | ----------- |
-| `distributor.service.type`                     | Compactor service type                                           | `ClusterIP` |
-| `distributor.service.ports.http-metrics`       | Compactor HTTP service port                                      | `8080`      |
-| `distributor.service.ports.grpc`               | Compactor GRPC service port                                      | `9095`      |
-| `distributor.service.nodePorts.http-metrics`   | Node port for HTTP                                               | `""`        |
+| `distributor.service.type`                     | Distributor service type                                         | `ClusterIP` |
+| `distributor.service.ports.http`               | Distributor HTTP service port                                    | `8080`      |
+| `distributor.service.ports.grpc`               | Distributor GRPC service port                                    | `9095`      |
+| `distributor.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
 | `distributor.service.nodePorts.grpc`           | Node port for GRPC                                               | `9095`      |
 | `distributor.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
 | `distributor.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
-| `distributor.service.clusterIP`                | Compactor service Cluster IP                                     | `""`        |
-| `distributor.service.loadBalancerIP`           | Compactor service Load Balancer IP                               | `""`        |
-| `distributor.service.loadBalancerSourceRanges` | Compactor service Load Balancer sources                          | `[]`        |
-| `distributor.service.externalTrafficPolicy`    | Compactor service external traffic policy                        | `Cluster`   |
-| `distributor.service.annotations`              | Additional custom annotations for Compactor service              | `{}`        |
-| `distributor.service.extraPorts`               | Extra ports to expose in the Compactor service                   | `[]`        |
+| `distributor.service.clusterIP`                | Distributor service Cluster IP                                   | `""`        |
+| `distributor.service.loadBalancerIP`           | Distributor service Load Balancer IP                             | `""`        |
+| `distributor.service.loadBalancerSourceRanges` | Distributor service Load Balancer sources                        | `[]`        |
+| `distributor.service.externalTrafficPolicy`    | Distributor service external traffic policy                      | `Cluster`   |
+| `distributor.service.annotations`              | Additional custom annotations for Distributor service            | `{}`        |
+| `distributor.service.extraPorts`               | Extra ports to expose in the Distributor service                 | `[]`        |
 | `distributor.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                  | `false`     |
 | `distributor.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled   | `1`         |
 | `distributor.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable   | `""`        |
@@ -383,6 +475,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
 | `gateway.ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `gateway.ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `gateway.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                                                                                  | `false`                  |
+| `gateway.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled                                                                   | `1`                      |
+| `gateway.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable                                                                   | `""`                     |
 
 
 ### Ingester Deployment Parameters
@@ -395,21 +490,21 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.command`                               | Override default container command (useful when using custom images)                               | `[]`                |
 | `ingester.args`                                  | Override default container args (useful when using custom images)                                  | `[]`                |
 | `ingester.extraArgs`                             | Add additional argsto the default container args (useful to override configuration)                | `[]`                |
-| `ingester.replicaCount`                          | Number of Compactor replicas to deploy                                                             | `1`                 |
+| `ingester.replicaCount`                          | Number of Ingester replicas to deploy                                                              | `2`                 |
 | `ingester.podManagementPolicy`                   | Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join | `OrderedReady`      |
-| `ingester.livenessProbe.enabled`                 | Enable livenessProbe on Compactor nodes                                                            | `true`              |
+| `ingester.livenessProbe.enabled`                 | Enable livenessProbe on Ingester nodes                                                             | `true`              |
 | `ingester.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                            | `60`                |
 | `ingester.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                   | `10`                |
 | `ingester.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                  | `1`                 |
 | `ingester.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                | `3`                 |
 | `ingester.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                | `1`                 |
-| `ingester.readinessProbe.enabled`                | Enable readinessProbe on Compactor nodes                                                           | `true`              |
+| `ingester.readinessProbe.enabled`                | Enable readinessProbe on Ingester nodes                                                            | `true`              |
 | `ingester.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                           | `60`                |
 | `ingester.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                  | `10`                |
 | `ingester.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                 | `1`                 |
 | `ingester.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                               | `3`                 |
 | `ingester.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                               | `1`                 |
-| `ingester.startupProbe.enabled`                  | Enable startupProbe on Compactor containers                                                        | `false`             |
+| `ingester.startupProbe.enabled`                  | Enable startupProbe on Ingester containers                                                         | `false`             |
 | `ingester.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                             | `30`                |
 | `ingester.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                    | `10`                |
 | `ingester.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                   | `1`                 |
@@ -420,11 +515,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                 | `{}`                |
 | `ingester.resources.limits`                      | The resources limits for the ingester containers                                                   | `{}`                |
 | `ingester.resources.requests`                    | The requested resources for the ingester containers                                                | `{}`                |
-| `ingester.podSecurityContext.enabled`            | Enabled Compactor pods' Security Context                                                           | `true`              |
-| `ingester.podSecurityContext.fsGroup`            | Set Compactor pod's Security Context fsGroup                                                       | `1001`              |
-| `ingester.containerSecurityContext.enabled`      | Enabled Compactor containers' Security Context                                                     | `true`              |
-| `ingester.containerSecurityContext.runAsUser`    | Set Compactor containers' Security Context runAsUser                                               | `1001`              |
-| `ingester.containerSecurityContext.runAsNonRoot` | Set Compactor containers' Security Context runAsNonRoot                                            | `true`              |
+| `ingester.podSecurityContext.enabled`            | Enabled Ingester pods' Security Context                                                            | `true`              |
+| `ingester.podSecurityContext.fsGroup`            | Set Ingester pod's Security Context fsGroup                                                        | `1001`              |
+| `ingester.containerSecurityContext.enabled`      | Enabled Ingester containers' Security Context                                                      | `true`              |
+| `ingester.containerSecurityContext.runAsUser`    | Set Ingester containers' Security Context runAsUser                                                | `1001`              |
+| `ingester.containerSecurityContext.runAsNonRoot` | Set Ingester containers' Security Context runAsNonRoot                                             | `true`              |
 | `ingester.lifecycleHooks`                        | for the ingester container(s) to automate configuration before or after startup                    | `{}`                |
 | `ingester.hostAliases`                           | ingester pods host aliases                                                                         | `[]`                |
 | `ingester.podLabels`                             | Extra labels for ingester pods                                                                     | `{}`                |
@@ -434,49 +529,129 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `ingester.affinity` is set. Allowed values: `soft` or `hard` | `""`                |
 | `ingester.nodeAffinityPreset.key`                | Node label key to match. Ignored if `ingester.affinity` is set                                     | `""`                |
 | `ingester.nodeAffinityPreset.values`             | Node label values to match. Ignored if `ingester.affinity` is set                                  | `[]`                |
-| `ingester.affinity`                              | Affinity for Compactor pods assignment                                                             | `{}`                |
-| `ingester.nodeSelector`                          | Node labels for Compactor pods assignment                                                          | `{}`                |
-| `ingester.tolerations`                           | Tolerations for Compactor pods assignment                                                          | `[]`                |
+| `ingester.affinity`                              | Affinity for Ingester pods assignment                                                              | `{}`                |
+| `ingester.nodeSelector`                          | Node labels for Ingester pods assignment                                                           | `{}`                |
+| `ingester.tolerations`                           | Tolerations for Ingester pods assignment                                                           | `[]`                |
 | `ingester.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains    | `[]`                |
-| `ingester.priorityClassName`                     | Compactor pods' priorityClassName                                                                  | `""`                |
+| `ingester.priorityClassName`                     | Ingester pods' priorityClassName                                                                   | `""`                |
 | `ingester.schedulerName`                         | Kubernetes pod scheduler registry                                                                  | `""`                |
 | `ingester.terminationGracePeriodSeconds`         | Seconds pod needs to terminate gracefully                                                          | `""`                |
-| `ingester.updateStrategy.type`                   | Compactor statefulset strategy type                                                                | `RollingUpdate`     |
-| `ingester.updateStrategy.rollingUpdate`          | Compactor statefulset rolling update configuration parameters                                      | `{}`                |
-| `ingester.extraVolumes`                          | Optionally specify extra list of additional volumes for the Compactor pod(s)                       | `[]`                |
-| `ingester.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Compactor container(s)            | `[]`                |
-| `ingester.sidecars`                              | Add additional sidecar containers to the Compactor pod(s)                                          | `[]`                |
-| `ingester.initContainers`                        | Add additional init containers to the Compactor pod(s)                                             | `[]`                |
-| `ingester.persistence.enabled`                   | Enable persistence in Compactor instances                                                          | `true`              |
+| `ingester.updateStrategy.type`                   | Ingester statefulset strategy type                                                                 | `RollingUpdate`     |
+| `ingester.updateStrategy.rollingUpdate`          | Ingester statefulset rolling update configuration parameters                                       | `{}`                |
+| `ingester.extraVolumes`                          | Optionally specify extra list of additional volumes for the Ingester pod(s)                        | `[]`                |
+| `ingester.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Ingester container(s)             | `[]`                |
+| `ingester.sidecars`                              | Add additional sidecar containers to the Ingester pod(s)                                           | `[]`                |
+| `ingester.initContainers`                        | Add additional init containers to the Ingester pod(s)                                              | `[]`                |
+| `ingester.persistence.enabled`                   | Enable persistence in Ingester instances                                                           | `true`              |
 | `ingester.persistence.existingClaim`             | Name of an existing PVC to use                                                                     | `""`                |
-| `ingester.persistence.storageClass`              | PVC Storage Class for Memcached data volume                                                        | `""`                |
+| `ingester.persistence.storageClass`              | PVC Storage Class for Ingester data volume                                                         | `""`                |
 | `ingester.persistence.accessModes`               | PVC Access modes                                                                                   | `["ReadWriteOnce"]` |
-| `ingester.persistence.size`                      | PVC Storage Request for Memcached data volume                                                      | `8Gi`               |
+| `ingester.persistence.size`                      | PVC Storage Request for Ingester data volume                                                       | `8Gi`               |
 | `ingester.persistence.annotations`               | Additional PVC annotations                                                                         | `{}`                |
-| `ingester.persistence.selector`                  | Selector to match an existing Persistent Volume for Compactor's data PVC                           | `{}`                |
+| `ingester.persistence.selector`                  | Selector to match an existing Persistent Volume for Ingester's data PVC                            | `{}`                |
 | `ingester.persistence.dataSource`                | PVC data source                                                                                    | `{}`                |
 
 
-### Compactor Traffic Exposure Parameters
+### Ingester Traffic Exposure Parameters
 
-| Name                                        | Description                                                      | Value       |
-| ------------------------------------------- | ---------------------------------------------------------------- | ----------- |
-| `ingester.service.type`                     | Compactor service type                                           | `ClusterIP` |
-| `ingester.service.ports.http-metrics`       | Compactor HTTP service port                                      | `8080`      |
-| `ingester.service.ports.grpc`               | Compactor GRPC service port                                      | `9095`      |
-| `ingester.service.nodePorts.http-metrics`   | Node port for HTTP                                               | `""`        |
-| `ingester.service.nodePorts.grpc`           | Node port for GRPC                                               | `9095`      |
-| `ingester.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
-| `ingester.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
-| `ingester.service.clusterIP`                | Compactor service Cluster IP                                     | `""`        |
-| `ingester.service.loadBalancerIP`           | Compactor service Load Balancer IP                               | `""`        |
-| `ingester.service.loadBalancerSourceRanges` | Compactor service Load Balancer sources                          | `[]`        |
-| `ingester.service.externalTrafficPolicy`    | Compactor service external traffic policy                        | `Cluster`   |
-| `ingester.service.annotations`              | Additional custom annotations for Compactor service              | `{}`        |
-| `ingester.service.extraPorts`               | Extra ports to expose in the Compactor service                   | `[]`        |
-| `ingester.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                  | `false`     |
-| `ingester.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled   | `1`         |
-| `ingester.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable   | `""`        |
+| Name                                                      | Description                                                                                                 | Value           |
+| --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | --------------- |
+| `ingester.service.type`                                   | Ingester service type                                                                                       | `ClusterIP`     |
+| `ingester.service.ports.http`                             | Ingester HTTP service port                                                                                  | `8080`          |
+| `ingester.service.ports.grpc`                             | Ingester GRPC service port                                                                                  | `9095`          |
+| `ingester.service.nodePorts.http`                         | Node port for HTTP                                                                                          | `""`            |
+| `ingester.service.nodePorts.grpc`                         | Node port for GRPC                                                                                          | `9095`          |
+| `ingester.service.sessionAffinityConfig`                  | Additional settings for the sessionAffinity                                                                 | `{}`            |
+| `ingester.service.sessionAffinity`                        | Control where client requests go, to the same pod or round-robin                                            | `None`          |
+| `ingester.service.clusterIP`                              | Ingester service Cluster IP                                                                                 | `""`            |
+| `ingester.service.loadBalancerIP`                         | Ingester service Load Balancer IP                                                                           | `""`            |
+| `ingester.service.loadBalancerSourceRanges`               | Ingester service Load Balancer sources                                                                      | `[]`            |
+| `ingester.service.externalTrafficPolicy`                  | Ingester service external traffic policy                                                                    | `Cluster`       |
+| `ingester.service.annotations`                            | Additional custom annotations for Ingester service                                                          | `{}`            |
+| `ingester.service.extraPorts`                             | Extra ports to expose in the Ingester service                                                               | `[]`            |
+| `ingester.pdb.create`                                     | Enable/disable a Pod Disruption Budget creation                                                             | `false`         |
+| `ingester.pdb.minAvailable`                               | Minimum number/percentage of pods that should remain scheduled                                              | `1`             |
+| `ingester.pdb.maxUnavailable`                             | Maximum number/percentage of pods that may be made unavailable                                              | `""`            |
+| `overridesExporter.enabled`                               | Enable overrides-exporter deployment                                                                        | `false`         |
+| `overridesExporter.extraEnvVars`                          | Array with extra environment variables to add to overrides-exporter nodes                                   | `[]`            |
+| `overridesExporter.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for overrides-exporter nodes                           | `""`            |
+| `overridesExporter.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for overrides-exporter nodes                              | `""`            |
+| `overridesExporter.command`                               | Override default container command (useful when using custom images)                                        | `[]`            |
+| `overridesExporter.args`                                  | Override default container args (useful when using custom images)                                           | `[]`            |
+| `overridesExporter.extraArgs`                             | Add additional argsto the default container args (useful to override configuration)                         | `[]`            |
+| `overridesExporter.replicaCount`                          | Number of Overrides Exporter replicas to deploy                                                             | `1`             |
+| `overridesExporter.livenessProbe.enabled`                 | Enable livenessProbe on Overrides Exporter nodes                                                            | `true`          |
+| `overridesExporter.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                     | `60`            |
+| `overridesExporter.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                            | `10`            |
+| `overridesExporter.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                           | `1`             |
+| `overridesExporter.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                         | `3`             |
+| `overridesExporter.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                         | `1`             |
+| `overridesExporter.readinessProbe.enabled`                | Enable readinessProbe on Overrides Exporter nodes                                                           | `true`          |
+| `overridesExporter.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                    | `60`            |
+| `overridesExporter.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                           | `10`            |
+| `overridesExporter.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                          | `1`             |
+| `overridesExporter.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                        | `3`             |
+| `overridesExporter.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                        | `1`             |
+| `overridesExporter.startupProbe.enabled`                  | Enable startupProbe on Overrides Exporter containers                                                        | `false`         |
+| `overridesExporter.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                      | `30`            |
+| `overridesExporter.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                             | `10`            |
+| `overridesExporter.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                            | `1`             |
+| `overridesExporter.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                          | `15`            |
+| `overridesExporter.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                          | `1`             |
+| `overridesExporter.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                         | `{}`            |
+| `overridesExporter.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                        | `{}`            |
+| `overridesExporter.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                          | `{}`            |
+| `overridesExporter.resources.limits`                      | The resources limits for the overrides-exporter containers                                                  | `{}`            |
+| `overridesExporter.resources.requests`                    | The requested resources for the overrides-exporter containers                                               | `{}`            |
+| `overridesExporter.podSecurityContext.enabled`            | Enabled Overrides Exporter pods' Security Context                                                           | `true`          |
+| `overridesExporter.podSecurityContext.fsGroup`            | Set Overrides Exporter pod's Security Context fsGroup                                                       | `1001`          |
+| `overridesExporter.containerSecurityContext.enabled`      | Enabled Overrides Exporter containers' Security Context                                                     | `true`          |
+| `overridesExporter.containerSecurityContext.runAsUser`    | Set Overrides Exporter containers' Security Context runAsUser                                               | `1001`          |
+| `overridesExporter.containerSecurityContext.runAsNonRoot` | Set Overrides Exporter containers' Security Context runAsNonRoot                                            | `true`          |
+| `overridesExporter.lifecycleHooks`                        | for the ingester container(s) to automate configuration before or after startup                             | `{}`            |
+| `overridesExporter.hostAliases`                           | ingester pods host aliases                                                                                  | `[]`            |
+| `overridesExporter.podLabels`                             | Extra labels for ingester pods                                                                              | `{}`            |
+| `overridesExporter.podAnnotations`                        | Annotations for ingester pods                                                                               | `{}`            |
+| `overridesExporter.podAffinityPreset`                     | Pod affinity preset. Ignored if `overridesExporter.affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
+| `overridesExporter.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `overridesExporter.affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
+| `overridesExporter.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `overridesExporter.affinity` is set. Allowed values: `soft` or `hard` | `""`            |
+| `overridesExporter.nodeAffinityPreset.key`                | Node label key to match. Ignored if `overridesExporter.affinity` is set                                     | `""`            |
+| `overridesExporter.nodeAffinityPreset.values`             | Node label values to match. Ignored if `overridesExporter.affinity` is set                                  | `[]`            |
+| `overridesExporter.affinity`                              | Affinity for Overrides Exporter pods assignment                                                             | `{}`            |
+| `overridesExporter.nodeSelector`                          | Node labels for Overrides Exporter pods assignment                                                          | `{}`            |
+| `overridesExporter.tolerations`                           | Tolerations for Overrides Exporter pods assignment                                                          | `[]`            |
+| `overridesExporter.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains             | `[]`            |
+| `overridesExporter.priorityClassName`                     | Overrides Exporter pods' priorityClassName                                                                  | `""`            |
+| `overridesExporter.schedulerName`                         | Kubernetes pod scheduler registry                                                                           | `""`            |
+| `overridesExporter.terminationGracePeriodSeconds`         | Seconds pod needs to terminate gracefully                                                                   | `""`            |
+| `overridesExporter.updateStrategy.type`                   | Overrides Exporter statefulset strategy type                                                                | `RollingUpdate` |
+| `overridesExporter.updateStrategy.rollingUpdate`          | Overrides Exporter statefulset rolling update configuration parameters                                      | `{}`            |
+| `overridesExporter.extraVolumes`                          | Optionally specify extra list of additional volumes for the Overrides Exporter pod(s)                       | `[]`            |
+| `overridesExporter.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Overrides Exporter container(s)            | `[]`            |
+| `overridesExporter.sidecars`                              | Add additional sidecar containers to the Overrides Exporter pod(s)                                          | `[]`            |
+| `overridesExporter.initContainers`                        | Add additional init containers to the Overrides Exporter pod(s)                                             | `[]`            |
+
+
+### Overrides Exporter Traffic Exposure Parameters
+
+| Name                                                 | Description                                                      | Value       |
+| ---------------------------------------------------- | ---------------------------------------------------------------- | ----------- |
+| `overridesExporter.service.type`                     | Overrides Exporter service type                                  | `ClusterIP` |
+| `overridesExporter.service.ports.http`               | Overrides Exporter HTTP service port                             | `8080`      |
+| `overridesExporter.service.ports.grpc`               | Overrides Exporter GRPC service port                             | `9095`      |
+| `overridesExporter.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
+| `overridesExporter.service.nodePorts.grpc`           | Node port for GRPC                                               | `9095`      |
+| `overridesExporter.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
+| `overridesExporter.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
+| `overridesExporter.service.clusterIP`                | Overrides Exporter service Cluster IP                            | `""`        |
+| `overridesExporter.service.loadBalancerIP`           | Overrides Exporter service Load Balancer IP                      | `""`        |
+| `overridesExporter.service.loadBalancerSourceRanges` | Overrides Exporter service Load Balancer sources                 | `[]`        |
+| `overridesExporter.service.externalTrafficPolicy`    | Overrides Exporter service external traffic policy               | `Cluster`   |
+| `overridesExporter.service.annotations`              | Additional custom annotations for Overrides Exporter service     | `{}`        |
+| `overridesExporter.service.extraPorts`               | Extra ports to expose in the Overrides Export service            | `[]`        |
+| `overridesExporter.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                  | `false`     |
+| `overridesExporter.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled   | `1`         |
+| `overridesExporter.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable   | `""`        |
 
 
 ### Querier Deployment Parameters
@@ -489,20 +664,20 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.command`                               | Override default container command (useful when using custom images)                              | `[]`            |
 | `querier.args`                                  | Override default container args (useful when using custom images)                                 | `[]`            |
 | `querier.extraArgs`                             | Add additional argsto the default container args (useful to override configuration)               | `[]`            |
-| `querier.replicaCount`                          | Number of Compactor replicas to deploy                                                            | `1`             |
-| `querier.livenessProbe.enabled`                 | Enable livenessProbe on Compactor nodes                                                           | `true`          |
+| `querier.replicaCount`                          | Number of Querier replicas to deploy                                                              | `1`             |
+| `querier.livenessProbe.enabled`                 | Enable livenessProbe on Querier nodes                                                             | `true`          |
 | `querier.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                           | `60`            |
 | `querier.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                  | `10`            |
 | `querier.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                 | `1`             |
 | `querier.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                               | `3`             |
 | `querier.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                               | `1`             |
-| `querier.readinessProbe.enabled`                | Enable readinessProbe on Compactor nodes                                                          | `true`          |
+| `querier.readinessProbe.enabled`                | Enable readinessProbe on Querier nodes                                                            | `true`          |
 | `querier.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                          | `60`            |
 | `querier.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                 | `10`            |
 | `querier.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                | `1`             |
 | `querier.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                              | `3`             |
 | `querier.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                              | `1`             |
-| `querier.startupProbe.enabled`                  | Enable startupProbe on Compactor containers                                                       | `false`         |
+| `querier.startupProbe.enabled`                  | Enable startupProbe on Querier containers                                                         | `false`         |
 | `querier.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                            | `30`            |
 | `querier.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                   | `10`            |
 | `querier.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                  | `1`             |
@@ -513,11 +688,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                | `{}`            |
 | `querier.resources.limits`                      | The resources limits for the querier containers                                                   | `{}`            |
 | `querier.resources.requests`                    | The requested resources for the querier containers                                                | `{}`            |
-| `querier.podSecurityContext.enabled`            | Enabled Compactor pods' Security Context                                                          | `true`          |
-| `querier.podSecurityContext.fsGroup`            | Set Compactor pod's Security Context fsGroup                                                      | `1001`          |
-| `querier.containerSecurityContext.enabled`      | Enabled Compactor containers' Security Context                                                    | `true`          |
-| `querier.containerSecurityContext.runAsUser`    | Set Compactor containers' Security Context runAsUser                                              | `1001`          |
-| `querier.containerSecurityContext.runAsNonRoot` | Set Compactor containers' Security Context runAsNonRoot                                           | `true`          |
+| `querier.podSecurityContext.enabled`            | Enabled Querier pods' Security Context                                                            | `true`          |
+| `querier.podSecurityContext.fsGroup`            | Set Querier pod's Security Context fsGroup                                                        | `1001`          |
+| `querier.containerSecurityContext.enabled`      | Enabled Querier containers' Security Context                                                      | `true`          |
+| `querier.containerSecurityContext.runAsUser`    | Set Querier containers' Security Context runAsUser                                                | `1001`          |
+| `querier.containerSecurityContext.runAsNonRoot` | Set Querier containers' Security Context runAsNonRoot                                             | `true`          |
 | `querier.lifecycleHooks`                        | for the ingester container(s) to automate configuration before or after startup                   | `{}`            |
 | `querier.hostAliases`                           | ingester pods host aliases                                                                        | `[]`            |
 | `querier.podLabels`                             | Extra labels for ingester pods                                                                    | `{}`            |
@@ -527,38 +702,38 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `querier.affinity` is set. Allowed values: `soft` or `hard` | `""`            |
 | `querier.nodeAffinityPreset.key`                | Node label key to match. Ignored if `querier.affinity` is set                                     | `""`            |
 | `querier.nodeAffinityPreset.values`             | Node label values to match. Ignored if `querier.affinity` is set                                  | `[]`            |
-| `querier.affinity`                              | Affinity for Compactor pods assignment                                                            | `{}`            |
-| `querier.nodeSelector`                          | Node labels for Compactor pods assignment                                                         | `{}`            |
-| `querier.tolerations`                           | Tolerations for Compactor pods assignment                                                         | `[]`            |
+| `querier.affinity`                              | Affinity for Querier pods assignment                                                              | `{}`            |
+| `querier.nodeSelector`                          | Node labels for Querier pods assignment                                                           | `{}`            |
+| `querier.tolerations`                           | Tolerations for Querier pods assignment                                                           | `[]`            |
 | `querier.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains   | `[]`            |
-| `querier.priorityClassName`                     | Compactor pods' priorityClassName                                                                 | `""`            |
+| `querier.priorityClassName`                     | Querier pods' priorityClassName                                                                   | `""`            |
 | `querier.schedulerName`                         | Kubernetes pod scheduler registry                                                                 | `""`            |
 | `querier.terminationGracePeriodSeconds`         | Seconds pod needs to terminate gracefully                                                         | `""`            |
-| `querier.updateStrategy.type`                   | Compactor statefulset strategy type                                                               | `RollingUpdate` |
-| `querier.updateStrategy.rollingUpdate`          | Compactor statefulset rolling update configuration parameters                                     | `{}`            |
-| `querier.extraVolumes`                          | Optionally specify extra list of additional volumes for the Compactor pod(s)                      | `[]`            |
-| `querier.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Compactor container(s)           | `[]`            |
-| `querier.sidecars`                              | Add additional sidecar containers to the Compactor pod(s)                                         | `[]`            |
-| `querier.initContainers`                        | Add additional init containers to the Compactor pod(s)                                            | `[]`            |
+| `querier.updateStrategy.type`                   | Querier statefulset strategy type                                                                 | `RollingUpdate` |
+| `querier.updateStrategy.rollingUpdate`          | Querier statefulset rolling update configuration parameters                                       | `{}`            |
+| `querier.extraVolumes`                          | Optionally specify extra list of additional volumes for the Querier pod(s)                        | `[]`            |
+| `querier.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Querier container(s)             | `[]`            |
+| `querier.sidecars`                              | Add additional sidecar containers to the Querier pod(s)                                           | `[]`            |
+| `querier.initContainers`                        | Add additional init containers to the Querier pod(s)                                              | `[]`            |
 
 
-### Compactor Traffic Exposure Parameters
+### Querier Traffic Exposure Parameters
 
 | Name                                       | Description                                                      | Value       |
 | ------------------------------------------ | ---------------------------------------------------------------- | ----------- |
-| `querier.service.type`                     | Compactor service type                                           | `ClusterIP` |
-| `querier.service.ports.http-metrics`       | Compactor HTTP service port                                      | `8080`      |
-| `querier.service.ports.grpc`               | Compactor GRPC service port                                      | `9095`      |
-| `querier.service.nodePorts.http-metrics`   | Node port for HTTP                                               | `""`        |
+| `querier.service.type`                     | Querier service type                                             | `ClusterIP` |
+| `querier.service.ports.http`               | Querier HTTP service port                                        | `8080`      |
+| `querier.service.ports.grpc`               | Querier GRPC service port                                        | `9095`      |
+| `querier.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
 | `querier.service.nodePorts.grpc`           | Node port for GRPC                                               | `9095`      |
 | `querier.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
 | `querier.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
-| `querier.service.clusterIP`                | Compactor service Cluster IP                                     | `""`        |
-| `querier.service.loadBalancerIP`           | Compactor service Load Balancer IP                               | `""`        |
-| `querier.service.loadBalancerSourceRanges` | Compactor service Load Balancer sources                          | `[]`        |
-| `querier.service.externalTrafficPolicy`    | Compactor service external traffic policy                        | `Cluster`   |
-| `querier.service.annotations`              | Additional custom annotations for Compactor service              | `{}`        |
-| `querier.service.extraPorts`               | Extra ports to expose in the Compactor service                   | `[]`        |
+| `querier.service.clusterIP`                | Querier service Cluster IP                                       | `""`        |
+| `querier.service.loadBalancerIP`           | Querier service Load Balancer IP                                 | `""`        |
+| `querier.service.loadBalancerSourceRanges` | Querier service Load Balancer sources                            | `[]`        |
+| `querier.service.externalTrafficPolicy`    | Querier service external traffic policy                          | `Cluster`   |
+| `querier.service.annotations`              | Additional custom annotations for Querier service                | `{}`        |
+| `querier.service.extraPorts`               | Extra ports to expose in the Querier service                     | `[]`        |
 | `querier.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                  | `false`     |
 | `querier.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled   | `1`         |
 | `querier.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable   | `""`        |
@@ -566,183 +741,361 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Query Frontend Deployment Parameters
 
+| Name                                                  | Description                                                                                             | Value           |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | --------------- |
+| `queryFrontend.extraEnvVars`                          | Array with extra environment variables to add to ingester nodes                                         | `[]`            |
+| `queryFrontend.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for ingester nodes                                 | `""`            |
+| `queryFrontend.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for ingester nodes                                    | `""`            |
+| `queryFrontend.command`                               | Override default container command (useful when using custom images)                                    | `[]`            |
+| `queryFrontend.args`                                  | Override default container args (useful when using custom images)                                       | `[]`            |
+| `queryFrontend.extraArgs`                             | Add additional argsto the default container args (useful to override configuration)                     | `[]`            |
+| `queryFrontend.replicaCount`                          | Number of Query Frontend replicas to deploy                                                             | `1`             |
+| `queryFrontend.livenessProbe.enabled`                 | Enable livenessProbe on Query Frontend nodes                                                            | `true`          |
+| `queryFrontend.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                 | `60`            |
+| `queryFrontend.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                        | `10`            |
+| `queryFrontend.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                       | `1`             |
+| `queryFrontend.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                     | `3`             |
+| `queryFrontend.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                     | `1`             |
+| `queryFrontend.readinessProbe.enabled`                | Enable readinessProbe on Query Frontend nodes                                                           | `true`          |
+| `queryFrontend.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                | `60`            |
+| `queryFrontend.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                       | `10`            |
+| `queryFrontend.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                      | `1`             |
+| `queryFrontend.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                    | `3`             |
+| `queryFrontend.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                    | `1`             |
+| `queryFrontend.startupProbe.enabled`                  | Enable startupProbe on Query Frontend containers                                                        | `false`         |
+| `queryFrontend.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                  | `30`            |
+| `queryFrontend.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                         | `10`            |
+| `queryFrontend.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                        | `1`             |
+| `queryFrontend.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                      | `15`            |
+| `queryFrontend.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                      | `1`             |
+| `queryFrontend.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                     | `{}`            |
+| `queryFrontend.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                    | `{}`            |
+| `queryFrontend.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                      | `{}`            |
+| `queryFrontend.resources.limits`                      | The resources limits for the ingester containers                                                        | `{}`            |
+| `queryFrontend.resources.requests`                    | The requested resources for the ingester containers                                                     | `{}`            |
+| `queryFrontend.podSecurityContext.enabled`            | Enabled Query Frontend pods' Security Context                                                           | `true`          |
+| `queryFrontend.podSecurityContext.fsGroup`            | Set Query Frontend pod's Security Context fsGroup                                                       | `1001`          |
+| `queryFrontend.containerSecurityContext.enabled`      | Enabled Query Frontend containers' Security Context                                                     | `true`          |
+| `queryFrontend.containerSecurityContext.runAsUser`    | Set Query Frontend containers' Security Context runAsUser                                               | `1001`          |
+| `queryFrontend.containerSecurityContext.runAsNonRoot` | Set Query Frontend containers' Security Context runAsNonRoot                                            | `true`          |
+| `queryFrontend.lifecycleHooks`                        | for the ingester container(s) to automate configuration before or after startup                         | `{}`            |
+| `queryFrontend.hostAliases`                           | ingester pods host aliases                                                                              | `[]`            |
+| `queryFrontend.podLabels`                             | Extra labels for ingester pods                                                                          | `{}`            |
+| `queryFrontend.podAnnotations`                        | Annotations for ingester pods                                                                           | `{}`            |
+| `queryFrontend.podAffinityPreset`                     | Pod affinity preset. Ignored if `queryFrontend.affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
+| `queryFrontend.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `queryFrontend.affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
+| `queryFrontend.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `queryFrontend.affinity` is set. Allowed values: `soft` or `hard` | `""`            |
+| `queryFrontend.nodeAffinityPreset.key`                | Node label key to match. Ignored if `queryFrontend.affinity` is set                                     | `""`            |
+| `queryFrontend.nodeAffinityPreset.values`             | Node label values to match. Ignored if `queryFrontend.affinity` is set                                  | `[]`            |
+| `queryFrontend.affinity`                              | Affinity for Query Frontend pods assignment                                                             | `{}`            |
+| `queryFrontend.nodeSelector`                          | Node labels for Query Frontend pods assignment                                                          | `{}`            |
+| `queryFrontend.tolerations`                           | Tolerations for Query Frontend pods assignment                                                          | `[]`            |
+| `queryFrontend.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains         | `[]`            |
+| `queryFrontend.priorityClassName`                     | Query Frontend pods' priorityClassName                                                                  | `""`            |
+| `queryFrontend.schedulerName`                         | Kubernetes pod scheduler registry                                                                       | `""`            |
+| `queryFrontend.terminationGracePeriodSeconds`         | Seconds pod needs to terminate gracefully                                                               | `""`            |
+| `queryFrontend.updateStrategy.type`                   | Query Frontend statefulset strategy type                                                                | `RollingUpdate` |
+| `queryFrontend.updateStrategy.rollingUpdate`          | Query Frontend statefulset rolling update configuration parameters                                      | `{}`            |
+| `queryFrontend.extraVolumes`                          | Optionally specify extra list of additional volumes for the Query Frontend pod(s)                       | `[]`            |
+| `queryFrontend.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Query Frontend container(s)            | `[]`            |
+| `queryFrontend.sidecars`                              | Add additional sidecar containers to the Query Frontend pod(s)                                          | `[]`            |
+| `queryFrontend.initContainers`                        | Add additional init containers to the Query Frontend pod(s)                                             | `[]`            |
+
+
+### Query Frontend Traffic Exposure Parameters
+
 | Name                                                   | Description                                                                                              | Value           |
 | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------- | --------------- |
-| `query-frontend.enabled`                               | Enable Distributor deployment                                                                            | `true`          |
-| `query-frontend.extraEnvVars`                          | Array with extra environment variables to add to ingester nodes                                          | `[]`            |
-| `query-frontend.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for ingester nodes                                  | `""`            |
-| `query-frontend.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for ingester nodes                                     | `""`            |
-| `query-frontend.command`                               | Override default container command (useful when using custom images)                                     | `[]`            |
-| `query-frontend.args`                                  | Override default container args (useful when using custom images)                                        | `[]`            |
-| `query-frontend.extraArgs`                             | Add additional argsto the default container args (useful to override configuration)                      | `[]`            |
-| `query-frontend.replicaCount`                          | Number of Compactor replicas to deploy                                                                   | `1`             |
-| `query-frontend.livenessProbe.enabled`                 | Enable livenessProbe on Compactor nodes                                                                  | `true`          |
-| `query-frontend.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                  | `60`            |
-| `query-frontend.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                         | `10`            |
-| `query-frontend.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                        | `1`             |
-| `query-frontend.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                      | `3`             |
-| `query-frontend.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                      | `1`             |
-| `query-frontend.readinessProbe.enabled`                | Enable readinessProbe on Compactor nodes                                                                 | `true`          |
-| `query-frontend.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                 | `60`            |
-| `query-frontend.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                        | `10`            |
-| `query-frontend.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                       | `1`             |
-| `query-frontend.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                     | `3`             |
-| `query-frontend.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                     | `1`             |
-| `query-frontend.startupProbe.enabled`                  | Enable startupProbe on Compactor containers                                                              | `false`         |
-| `query-frontend.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                   | `30`            |
-| `query-frontend.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                          | `10`            |
-| `query-frontend.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                         | `1`             |
-| `query-frontend.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                       | `15`            |
-| `query-frontend.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                       | `1`             |
-| `query-frontend.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                      | `{}`            |
-| `query-frontend.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                     | `{}`            |
-| `query-frontend.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                       | `{}`            |
-| `query-frontend.resources.limits`                      | The resources limits for the ingester containers                                                         | `{}`            |
-| `query-frontend.resources.requests`                    | The requested resources for the ingester containers                                                      | `{}`            |
-| `query-frontend.podSecurityContext.enabled`            | Enabled Compactor pods' Security Context                                                                 | `true`          |
-| `query-frontend.podSecurityContext.fsGroup`            | Set Compactor pod's Security Context fsGroup                                                             | `1001`          |
-| `query-frontend.containerSecurityContext.enabled`      | Enabled Compactor containers' Security Context                                                           | `true`          |
-| `query-frontend.containerSecurityContext.runAsUser`    | Set Compactor containers' Security Context runAsUser                                                     | `1001`          |
-| `query-frontend.containerSecurityContext.runAsNonRoot` | Set Compactor containers' Security Context runAsNonRoot                                                  | `true`          |
-| `query-frontend.lifecycleHooks`                        | for the ingester container(s) to automate configuration before or after startup                          | `{}`            |
-| `query-frontend.hostAliases`                           | ingester pods host aliases                                                                               | `[]`            |
-| `query-frontend.podLabels`                             | Extra labels for ingester pods                                                                           | `{}`            |
-| `query-frontend.podAnnotations`                        | Annotations for ingester pods                                                                            | `{}`            |
-| `query-frontend.podAffinityPreset`                     | Pod affinity preset. Ignored if `query-frontend.affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
-| `query-frontend.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `query-frontend.affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
-| `query-frontend.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `query-frontend.affinity` is set. Allowed values: `soft` or `hard` | `""`            |
-| `query-frontend.nodeAffinityPreset.key`                | Node label key to match. Ignored if `query-frontend.affinity` is set                                     | `""`            |
-| `query-frontend.nodeAffinityPreset.values`             | Node label values to match. Ignored if `query-frontend.affinity` is set                                  | `[]`            |
-| `query-frontend.affinity`                              | Affinity for Compactor pods assignment                                                                   | `{}`            |
-| `query-frontend.nodeSelector`                          | Node labels for Compactor pods assignment                                                                | `{}`            |
-| `query-frontend.tolerations`                           | Tolerations for Compactor pods assignment                                                                | `[]`            |
-| `query-frontend.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains          | `[]`            |
-| `query-frontend.priorityClassName`                     | Compactor pods' priorityClassName                                                                        | `""`            |
-| `query-frontend.schedulerName`                         | Kubernetes pod scheduler registry                                                                        | `""`            |
-| `query-frontend.terminationGracePeriodSeconds`         | Seconds pod needs to terminate gracefully                                                                | `""`            |
-| `query-frontend.updateStrategy.type`                   | Compactor statefulset strategy type                                                                      | `RollingUpdate` |
-| `query-frontend.updateStrategy.rollingUpdate`          | Compactor statefulset rolling update configuration parameters                                            | `{}`            |
-| `query-frontend.extraVolumes`                          | Optionally specify extra list of additional volumes for the Compactor pod(s)                             | `[]`            |
-| `query-frontend.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Compactor container(s)                  | `[]`            |
-| `query-frontend.sidecars`                              | Add additional sidecar containers to the Compactor pod(s)                                                | `[]`            |
-| `query-frontend.initContainers`                        | Add additional init containers to the Compactor pod(s)                                                   | `[]`            |
+| `queryFrontend.service.type`                           | Query Frontend service type                                                                              | `ClusterIP`     |
+| `queryFrontend.service.ports.http`                     | Query Frontend HTTP service port                                                                         | `8080`          |
+| `queryFrontend.service.ports.grpc`                     | Query Frontend GRPC service port                                                                         | `9095`          |
+| `queryFrontend.service.nodePorts.http`                 | Node port for HTTP                                                                                       | `""`            |
+| `queryFrontend.service.nodePorts.grpc`                 | Node port for GRPC                                                                                       | `9095`          |
+| `queryFrontend.service.sessionAffinityConfig`          | Additional settings for the sessionAffinity                                                              | `{}`            |
+| `queryFrontend.service.sessionAffinity`                | Control where client requests go, to the same pod or round-robin                                         | `None`          |
+| `queryFrontend.service.clusterIP`                      | Query Frontend service Cluster IP                                                                        | `""`            |
+| `queryFrontend.service.loadBalancerIP`                 | Query Frontend service Load Balancer IP                                                                  | `""`            |
+| `queryFrontend.service.loadBalancerSourceRanges`       | Query Frontend service Load Balancer sources                                                             | `[]`            |
+| `queryFrontend.service.externalTrafficPolicy`          | Query Frontend service external traffic policy                                                           | `Cluster`       |
+| `queryFrontend.service.annotations`                    | Additional custom annotations for Query Frontend service                                                 | `{}`            |
+| `queryFrontend.service.extraPorts`                     | Extra ports to expose in the Query Frontend service                                                      | `[]`            |
+| `queryFrontend.pdb.create`                             | Enable/disable a Pod Disruption Budget creation                                                          | `false`         |
+| `queryFrontend.pdb.minAvailable`                       | Minimum number/percentage of pods that should remain scheduled                                           | `1`             |
+| `queryFrontend.pdb.maxUnavailable`                     | Maximum number/percentage of pods that may be made unavailable                                           | `""`            |
+| `queryScheduler.enabled`                               | Enable query-scheduler deployment                                                                        | `false`         |
+| `queryScheduler.extraEnvVars`                          | Array with extra environment variables to add to query-scheduler nodes                                   | `[]`            |
+| `queryScheduler.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for query-scheduler nodes                           | `""`            |
+| `queryScheduler.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for query-scheduler nodes                              | `""`            |
+| `queryScheduler.command`                               | Override default container command (useful when using custom images)                                     | `[]`            |
+| `queryScheduler.args`                                  | Override default container args (useful when using custom images)                                        | `[]`            |
+| `queryScheduler.extraArgs`                             | Add additional argsto the default container args (useful to override configuration)                      | `[]`            |
+| `queryScheduler.replicaCount`                          | Number of Query Scheduler replicas to deploy                                                             | `1`             |
+| `queryScheduler.livenessProbe.enabled`                 | Enable livenessProbe on Query Scheduler nodes                                                            | `true`          |
+| `queryScheduler.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                  | `60`            |
+| `queryScheduler.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                         | `10`            |
+| `queryScheduler.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                        | `1`             |
+| `queryScheduler.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                      | `3`             |
+| `queryScheduler.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                      | `1`             |
+| `queryScheduler.readinessProbe.enabled`                | Enable readinessProbe on Query Scheduler nodes                                                           | `true`          |
+| `queryScheduler.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                 | `60`            |
+| `queryScheduler.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                        | `10`            |
+| `queryScheduler.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                       | `1`             |
+| `queryScheduler.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                     | `3`             |
+| `queryScheduler.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                     | `1`             |
+| `queryScheduler.startupProbe.enabled`                  | Enable startupProbe on Query Scheduler containers                                                        | `false`         |
+| `queryScheduler.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                   | `30`            |
+| `queryScheduler.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                          | `10`            |
+| `queryScheduler.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                         | `1`             |
+| `queryScheduler.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                       | `15`            |
+| `queryScheduler.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                       | `1`             |
+| `queryScheduler.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                      | `{}`            |
+| `queryScheduler.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                     | `{}`            |
+| `queryScheduler.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                       | `{}`            |
+| `queryScheduler.resources.limits`                      | The resources limits for the query-scheduler containers                                                  | `{}`            |
+| `queryScheduler.resources.requests`                    | The requested resources for the query-scheduler containers                                               | `{}`            |
+| `queryScheduler.podSecurityContext.enabled`            | Enabled Query Scheduler pods' Security Context                                                           | `true`          |
+| `queryScheduler.podSecurityContext.fsGroup`            | Set Query Scheduler pod's Security Context fsGroup                                                       | `1001`          |
+| `queryScheduler.containerSecurityContext.enabled`      | Enabled Query Scheduler containers' Security Context                                                     | `true`          |
+| `queryScheduler.containerSecurityContext.runAsUser`    | Set Query Scheduler containers' Security Context runAsUser                                               | `1001`          |
+| `queryScheduler.containerSecurityContext.runAsNonRoot` | Set Query Scheduler containers' Security Context runAsNonRoot                                            | `true`          |
+| `queryScheduler.lifecycleHooks`                        | for the ingester container(s) to automate configuration before or after startup                          | `{}`            |
+| `queryScheduler.hostAliases`                           | ingester pods host aliases                                                                               | `[]`            |
+| `queryScheduler.podLabels`                             | Extra labels for ingester pods                                                                           | `{}`            |
+| `queryScheduler.podAnnotations`                        | Annotations for ingester pods                                                                            | `{}`            |
+| `queryScheduler.podAffinityPreset`                     | Pod affinity preset. Ignored if `queryScheduler.affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
+| `queryScheduler.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `queryScheduler.affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
+| `queryScheduler.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `queryScheduler.affinity` is set. Allowed values: `soft` or `hard` | `""`            |
+| `queryScheduler.nodeAffinityPreset.key`                | Node label key to match. Ignored if `queryScheduler.affinity` is set                                     | `""`            |
+| `queryScheduler.nodeAffinityPreset.values`             | Node label values to match. Ignored if `queryScheduler.affinity` is set                                  | `[]`            |
+| `queryScheduler.affinity`                              | Affinity for Query Scheduler pods assignment                                                             | `{}`            |
+| `queryScheduler.nodeSelector`                          | Node labels for Query Scheduler pods assignment                                                          | `{}`            |
+| `queryScheduler.tolerations`                           | Tolerations for Query Scheduler pods assignment                                                          | `[]`            |
+| `queryScheduler.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains          | `[]`            |
+| `queryScheduler.priorityClassName`                     | Query Scheduler pods' priorityClassName                                                                  | `""`            |
+| `queryScheduler.schedulerName`                         | Kubernetes pod scheduler registry                                                                        | `""`            |
+| `queryScheduler.terminationGracePeriodSeconds`         | Seconds pod needs to terminate gracefully                                                                | `""`            |
+| `queryScheduler.updateStrategy.type`                   | Query Scheduler statefulset strategy type                                                                | `RollingUpdate` |
+| `queryScheduler.updateStrategy.rollingUpdate`          | Query Scheduler statefulset rolling update configuration parameters                                      | `{}`            |
+| `queryScheduler.extraVolumes`                          | Optionally specify extra list of additional volumes for the Query Scheduler pod(s)                       | `[]`            |
+| `queryScheduler.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Query Scheduler container(s)            | `[]`            |
+| `queryScheduler.sidecars`                              | Add additional sidecar containers to the Query Scheduler pod(s)                                          | `[]`            |
+| `queryScheduler.initContainers`                        | Add additional init containers to the Query Scheduler pod(s)                                             | `[]`            |
 
 
-### Compactor Traffic Exposure Parameters
+### Query Scheduler Traffic Exposure Parameters
 
 | Name                                              | Description                                                      | Value       |
 | ------------------------------------------------- | ---------------------------------------------------------------- | ----------- |
-| `query-frontend.service.type`                     | Compactor service type                                           | `ClusterIP` |
-| `query-frontend.service.ports.http-metrics`       | Compactor HTTP service port                                      | `8080`      |
-| `query-frontend.service.ports.grpc`               | Compactor GRPC service port                                      | `9095`      |
-| `query-frontend.service.nodePorts.http-metrics`   | Node port for HTTP                                               | `""`        |
-| `query-frontend.service.nodePorts.grpc`           | Node port for GRPC                                               | `9095`      |
-| `query-frontend.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
-| `query-frontend.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
-| `query-frontend.service.clusterIP`                | Compactor service Cluster IP                                     | `""`        |
-| `query-frontend.service.loadBalancerIP`           | Compactor service Load Balancer IP                               | `""`        |
-| `query-frontend.service.loadBalancerSourceRanges` | Compactor service Load Balancer sources                          | `[]`        |
-| `query-frontend.service.externalTrafficPolicy`    | Compactor service external traffic policy                        | `Cluster`   |
-| `query-frontend.service.annotations`              | Additional custom annotations for Compactor service              | `{}`        |
-| `query-frontend.service.extraPorts`               | Extra ports to expose in the Compactor service                   | `[]`        |
-| `query-frontend.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                  | `false`     |
-| `query-frontend.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled   | `1`         |
-| `query-frontend.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable   | `""`        |
+| `queryScheduler.service.type`                     | Query Scheduler service type                                     | `ClusterIP` |
+| `queryScheduler.service.ports.http`               | Query Scheduler HTTP service port                                | `8080`      |
+| `queryScheduler.service.ports.grpc`               | Query Scheduler GRPC service port                                | `9095`      |
+| `queryScheduler.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
+| `queryScheduler.service.nodePorts.grpc`           | Node port for GRPC                                               | `9095`      |
+| `queryScheduler.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
+| `queryScheduler.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
+| `queryScheduler.service.clusterIP`                | Query Scheduler service Cluster IP                               | `""`        |
+| `queryScheduler.service.loadBalancerIP`           | Query Scheduler service Load Balancer IP                         | `""`        |
+| `queryScheduler.service.loadBalancerSourceRanges` | Query Scheduler service Load Balancer sources                    | `[]`        |
+| `queryScheduler.service.externalTrafficPolicy`    | Query Scheduler service external traffic policy                  | `Cluster`   |
+| `queryScheduler.service.annotations`              | Additional custom annotations for Query Scheduler service        | `{}`        |
+| `queryScheduler.service.extraPorts`               | Extra ports to expose in the Query Scheduler service             | `[]`        |
+| `queryScheduler.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                  | `false`     |
+| `queryScheduler.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled   | `1`         |
+| `queryScheduler.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable   | `""`        |
 
 
 ### Store Gateway Deployment Parameters
 
-| Name                                                  | Description                                                                                             | Value               |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------- |
-| `store-gateway.enabled`                               | Enable Store Gateway deployment                                                                         | `true`              |
-| `store-gateway.extraEnvVars`                          | Array with extra environment variables to add to ingester nodes                                         | `[]`                |
-| `store-gateway.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for ingester nodes                                 | `""`                |
-| `store-gateway.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for ingester nodes                                    | `""`                |
-| `store-gateway.command`                               | Override default container command (useful when using custom images)                                    | `[]`                |
-| `store-gateway.args`                                  | Override default container args (useful when using custom images)                                       | `[]`                |
-| `store-gateway.extraArgs`                             | Add additional argsto the default container args (useful to override configuration)                     | `[]`                |
-| `store-gateway.replicaCount`                          | Number of Compactor replicas to deploy                                                                  | `1`                 |
-| `store-gateway.podManagementPolicy`                   | Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join      | `OrderedReady`      |
-| `store-gateway.livenessProbe.enabled`                 | Enable livenessProbe on Compactor nodes                                                                 | `true`              |
-| `store-gateway.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                 | `60`                |
-| `store-gateway.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                        | `10`                |
-| `store-gateway.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                       | `1`                 |
-| `store-gateway.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                     | `3`                 |
-| `store-gateway.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                     | `1`                 |
-| `store-gateway.readinessProbe.enabled`                | Enable readinessProbe on Compactor nodes                                                                | `true`              |
-| `store-gateway.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                | `60`                |
-| `store-gateway.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                       | `10`                |
-| `store-gateway.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                      | `1`                 |
-| `store-gateway.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                    | `3`                 |
-| `store-gateway.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                    | `1`                 |
-| `store-gateway.startupProbe.enabled`                  | Enable startupProbe on Compactor containers                                                             | `false`             |
-| `store-gateway.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                  | `30`                |
-| `store-gateway.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                         | `10`                |
-| `store-gateway.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                        | `1`                 |
-| `store-gateway.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                      | `15`                |
-| `store-gateway.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                      | `1`                 |
-| `store-gateway.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                     | `{}`                |
-| `store-gateway.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                    | `{}`                |
-| `store-gateway.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                      | `{}`                |
-| `store-gateway.resources.limits`                      | The resources limits for the ingester containers                                                        | `{}`                |
-| `store-gateway.resources.requests`                    | The requested resources for the ingester containers                                                     | `{}`                |
-| `store-gateway.podSecurityContext.enabled`            | Enabled Compactor pods' Security Context                                                                | `true`              |
-| `store-gateway.podSecurityContext.fsGroup`            | Set Compactor pod's Security Context fsGroup                                                            | `1001`              |
-| `store-gateway.containerSecurityContext.enabled`      | Enabled Compactor containers' Security Context                                                          | `true`              |
-| `store-gateway.containerSecurityContext.runAsUser`    | Set Compactor containers' Security Context runAsUser                                                    | `1001`              |
-| `store-gateway.containerSecurityContext.runAsNonRoot` | Set Compactor containers' Security Context runAsNonRoot                                                 | `true`              |
-| `store-gateway.lifecycleHooks`                        | for the ingester container(s) to automate configuration before or after startup                         | `{}`                |
-| `store-gateway.hostAliases`                           | ingester pods host aliases                                                                              | `[]`                |
-| `store-gateway.podLabels`                             | Extra labels for ingester pods                                                                          | `{}`                |
-| `store-gateway.podAnnotations`                        | Annotations for ingester pods                                                                           | `{}`                |
-| `store-gateway.podAffinityPreset`                     | Pod affinity preset. Ignored if `store-gateway.affinity` is set. Allowed values: `soft` or `hard`       | `""`                |
-| `store-gateway.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `store-gateway.affinity` is set. Allowed values: `soft` or `hard`  | `soft`              |
-| `store-gateway.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `store-gateway.affinity` is set. Allowed values: `soft` or `hard` | `""`                |
-| `store-gateway.nodeAffinityPreset.key`                | Node label key to match. Ignored if `store-gateway.affinity` is set                                     | `""`                |
-| `store-gateway.nodeAffinityPreset.values`             | Node label values to match. Ignored if `store-gateway.affinity` is set                                  | `[]`                |
-| `store-gateway.affinity`                              | Affinity for Compactor pods assignment                                                                  | `{}`                |
-| `store-gateway.nodeSelector`                          | Node labels for Compactor pods assignment                                                               | `{}`                |
-| `store-gateway.tolerations`                           | Tolerations for Compactor pods assignment                                                               | `[]`                |
-| `store-gateway.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains         | `[]`                |
-| `store-gateway.priorityClassName`                     | Compactor pods' priorityClassName                                                                       | `""`                |
-| `store-gateway.schedulerName`                         | Kubernetes pod scheduler registry                                                                       | `""`                |
-| `store-gateway.terminationGracePeriodSeconds`         | Seconds pod needs to terminate gracefully                                                               | `""`                |
-| `store-gateway.updateStrategy.type`                   | Compactor statefulset strategy type                                                                     | `RollingUpdate`     |
-| `store-gateway.updateStrategy.rollingUpdate`          | Compactor statefulset rolling update configuration parameters                                           | `{}`                |
-| `store-gateway.extraVolumes`                          | Optionally specify extra list of additional volumes for the Compactor pod(s)                            | `[]`                |
-| `store-gateway.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Compactor container(s)                 | `[]`                |
-| `store-gateway.sidecars`                              | Add additional sidecar containers to the Compactor pod(s)                                               | `[]`                |
-| `store-gateway.initContainers`                        | Add additional init containers to the Compactor pod(s)                                                  | `[]`                |
-| `store-gateway.persistence.enabled`                   | Enable persistence in Compactor instances                                                               | `true`              |
-| `store-gateway.persistence.existingClaim`             | Name of an existing PVC to use                                                                          | `""`                |
-| `store-gateway.persistence.storageClass`              | PVC Storage Class for Memcached data volume                                                             | `""`                |
-| `store-gateway.persistence.accessModes`               | PVC Access modes                                                                                        | `["ReadWriteOnce"]` |
-| `store-gateway.persistence.size`                      | PVC Storage Request for Memcached data volume                                                           | `8Gi`               |
-| `store-gateway.persistence.annotations`               | Additional PVC annotations                                                                              | `{}`                |
-| `store-gateway.persistence.selector`                  | Selector to match an existing Persistent Volume for Compactor's data PVC                                | `{}`                |
-| `store-gateway.persistence.dataSource`                | PVC data source                                                                                         | `{}`                |
+| Name                                                 | Description                                                                                            | Value               |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------- |
+| `storeGateway.extraEnvVars`                          | Array with extra environment variables to add to ingester nodes                                        | `[]`                |
+| `storeGateway.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for ingester nodes                                | `""`                |
+| `storeGateway.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for ingester nodes                                   | `""`                |
+| `storeGateway.command`                               | Override default container command (useful when using custom images)                                   | `[]`                |
+| `storeGateway.args`                                  | Override default container args (useful when using custom images)                                      | `[]`                |
+| `storeGateway.extraArgs`                             | Add additional argsto the default container args (useful to override configuration)                    | `[]`                |
+| `storeGateway.replicaCount`                          | Number of Store Gateway replicas to deploy                                                             | `1`                 |
+| `storeGateway.podManagementPolicy`                   | Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join     | `OrderedReady`      |
+| `storeGateway.livenessProbe.enabled`                 | Enable livenessProbe on Store Gateway nodes                                                            | `true`              |
+| `storeGateway.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                | `60`                |
+| `storeGateway.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                       | `10`                |
+| `storeGateway.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                      | `1`                 |
+| `storeGateway.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                    | `3`                 |
+| `storeGateway.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                    | `1`                 |
+| `storeGateway.readinessProbe.enabled`                | Enable readinessProbe on Store Gateway nodes                                                           | `true`              |
+| `storeGateway.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                               | `60`                |
+| `storeGateway.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                      | `10`                |
+| `storeGateway.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                     | `1`                 |
+| `storeGateway.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                   | `3`                 |
+| `storeGateway.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                   | `1`                 |
+| `storeGateway.startupProbe.enabled`                  | Enable startupProbe on Store Gateway containers                                                        | `false`             |
+| `storeGateway.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                 | `30`                |
+| `storeGateway.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                        | `10`                |
+| `storeGateway.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                       | `1`                 |
+| `storeGateway.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                     | `15`                |
+| `storeGateway.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                     | `1`                 |
+| `storeGateway.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                    | `{}`                |
+| `storeGateway.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                   | `{}`                |
+| `storeGateway.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                     | `{}`                |
+| `storeGateway.resources.limits`                      | The resources limits for the ingester containers                                                       | `{}`                |
+| `storeGateway.resources.requests`                    | The requested resources for the ingester containers                                                    | `{}`                |
+| `storeGateway.podSecurityContext.enabled`            | Enabled Store Gateway pods' Security Context                                                           | `true`              |
+| `storeGateway.podSecurityContext.fsGroup`            | Set Store Gateway pod's Security Context fsGroup                                                       | `1001`              |
+| `storeGateway.containerSecurityContext.enabled`      | Enabled Store Gateway containers' Security Context                                                     | `true`              |
+| `storeGateway.containerSecurityContext.runAsUser`    | Set Store Gateway containers' Security Context runAsUser                                               | `1001`              |
+| `storeGateway.containerSecurityContext.runAsNonRoot` | Set Store Gateway containers' Security Context runAsNonRoot                                            | `true`              |
+| `storeGateway.lifecycleHooks`                        | for the ingester container(s) to automate configuration before or after startup                        | `{}`                |
+| `storeGateway.hostAliases`                           | ingester pods host aliases                                                                             | `[]`                |
+| `storeGateway.podLabels`                             | Extra labels for ingester pods                                                                         | `{}`                |
+| `storeGateway.podAnnotations`                        | Annotations for ingester pods                                                                          | `{}`                |
+| `storeGateway.podAffinityPreset`                     | Pod affinity preset. Ignored if `storeGateway.affinity` is set. Allowed values: `soft` or `hard`       | `""`                |
+| `storeGateway.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `storeGateway.affinity` is set. Allowed values: `soft` or `hard`  | `soft`              |
+| `storeGateway.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `storeGateway.affinity` is set. Allowed values: `soft` or `hard` | `""`                |
+| `storeGateway.nodeAffinityPreset.key`                | Node label key to match. Ignored if `storeGateway.affinity` is set                                     | `""`                |
+| `storeGateway.nodeAffinityPreset.values`             | Node label values to match. Ignored if `storeGateway.affinity` is set                                  | `[]`                |
+| `storeGateway.affinity`                              | Affinity for Store Gateway pods assignment                                                             | `{}`                |
+| `storeGateway.nodeSelector`                          | Node labels for Store Gateway pods assignment                                                          | `{}`                |
+| `storeGateway.tolerations`                           | Tolerations for Store Gateway pods assignment                                                          | `[]`                |
+| `storeGateway.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains        | `[]`                |
+| `storeGateway.priorityClassName`                     | Store Gateway pods' priorityClassName                                                                  | `""`                |
+| `storeGateway.schedulerName`                         | Kubernetes pod scheduler registry                                                                      | `""`                |
+| `storeGateway.terminationGracePeriodSeconds`         | Seconds pod needs to terminate gracefully                                                              | `""`                |
+| `storeGateway.updateStrategy.type`                   | Store Gateway statefulset strategy type                                                                | `RollingUpdate`     |
+| `storeGateway.updateStrategy.rollingUpdate`          | Store Gateway statefulset rolling update configuration parameters                                      | `{}`                |
+| `storeGateway.extraVolumes`                          | Optionally specify extra list of additional volumes for the Store Gateway pod(s)                       | `[]`                |
+| `storeGateway.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Store Gateway container(s)            | `[]`                |
+| `storeGateway.sidecars`                              | Add additional sidecar containers to the Store Gateway pod(s)                                          | `[]`                |
+| `storeGateway.initContainers`                        | Add additional init containers to the Store Gateway pod(s)                                             | `[]`                |
+| `storeGateway.persistence.enabled`                   | Enable persistence in Store Gateway instances                                                          | `true`              |
+| `storeGateway.persistence.existingClaim`             | Name of an existing PVC to use                                                                         | `""`                |
+| `storeGateway.persistence.storageClass`              | PVC Storage Class for Store Gateway data volume                                                        | `""`                |
+| `storeGateway.persistence.accessModes`               | PVC Access modes                                                                                       | `["ReadWriteOnce"]` |
+| `storeGateway.persistence.size`                      | PVC Storage Request for Store Gateway data volume                                                      | `8Gi`               |
+| `storeGateway.persistence.annotations`               | Additional PVC annotations                                                                             | `{}`                |
+| `storeGateway.persistence.selector`                  | Selector to match an existing Persistent Volume for Store Gateway's data PVC                           | `{}`                |
+| `storeGateway.persistence.dataSource`                | PVC data source                                                                                        | `{}`                |
 
 
-### Compactor Traffic Exposure Parameters
+### Store Gateway Traffic Exposure Parameters
 
-| Name                                             | Description                                                      | Value       |
-| ------------------------------------------------ | ---------------------------------------------------------------- | ----------- |
-| `store-gateway.service.type`                     | Compactor service type                                           | `ClusterIP` |
-| `store-gateway.service.ports.http-metrics`       | Compactor HTTP service port                                      | `8080`      |
-| `store-gateway.service.ports.grpc`               | Compactor GRPC service port                                      | `9095`      |
-| `store-gateway.service.nodePorts.http-metrics`   | Node port for HTTP                                               | `""`        |
-| `store-gateway.service.nodePorts.grpc`           | Node port for GRPC                                               | `9095`      |
-| `store-gateway.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
-| `store-gateway.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
-| `store-gateway.service.clusterIP`                | Compactor service Cluster IP                                     | `""`        |
-| `store-gateway.service.loadBalancerIP`           | Compactor service Load Balancer IP                               | `""`        |
-| `store-gateway.service.loadBalancerSourceRanges` | Compactor service Load Balancer sources                          | `[]`        |
-| `store-gateway.service.externalTrafficPolicy`    | Compactor service external traffic policy                        | `Cluster`   |
-| `store-gateway.service.annotations`              | Additional custom annotations for Compactor service              | `{}`        |
-| `store-gateway.service.extraPorts`               | Extra ports to expose in the Compactor service                   | `[]`        |
-| `store-gateway.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                  | `false`     |
-| `store-gateway.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled   | `1`         |
-| `store-gateway.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable   | `""`        |
+| Name                                            | Description                                                      | Value       |
+| ----------------------------------------------- | ---------------------------------------------------------------- | ----------- |
+| `storeGateway.service.type`                     | Store Gateway service type                                       | `ClusterIP` |
+| `storeGateway.service.ports.http`               | Store Gateway HTTP service port                                  | `8080`      |
+| `storeGateway.service.ports.grpc`               | Store Gateway GRPC service port                                  | `9095`      |
+| `storeGateway.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
+| `storeGateway.service.nodePorts.grpc`           | Node port for GRPC                                               | `9095`      |
+| `storeGateway.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
+| `storeGateway.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
+| `storeGateway.service.clusterIP`                | Store Gateway service Cluster IP                                 | `""`        |
+| `storeGateway.service.loadBalancerIP`           | Store Gateway service Load Balancer IP                           | `""`        |
+| `storeGateway.service.loadBalancerSourceRanges` | Store Gateway service Load Balancer sources                      | `[]`        |
+| `storeGateway.service.externalTrafficPolicy`    | Store Gateway service external traffic policy                    | `Cluster`   |
+| `storeGateway.service.annotations`              | Additional custom annotations for Store Gateway service          | `{}`        |
+| `storeGateway.service.extraPorts`               | Extra ports to expose in the Store Gateway service               | `[]`        |
+| `storeGateway.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                  | `false`     |
+| `storeGateway.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled   | `1`         |
+| `storeGateway.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable   | `""`        |
+
+
+### Ruler Deployment Parameters
+
+| Name                                          | Description                                                                                     | Value           |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------- | --------------- |
+| `ruler.enabled`                               | Deploy ruler component                                                                          | `false`         |
+| `ruler.extraEnvVars`                          | Array with extra environment variables to add to ruler nodes                                    | `[]`            |
+| `ruler.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for ruler nodes                            | `""`            |
+| `ruler.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for ruler nodes                               | `""`            |
+| `ruler.command`                               | Override default container command (useful when using custom images)                            | `[]`            |
+| `ruler.args`                                  | Override default container args (useful when using custom images)                               | `[]`            |
+| `ruler.podManagementPolicy`                   | podManagementPolicy to manage scaling operation                                                 | `""`            |
+| `ruler.replicaCount`                          | Number of Ruler replicas to deploy                                                              | `1`             |
+| `ruler.livenessProbe.enabled`                 | Enable livenessProbe on Ruler nodes                                                             | `true`          |
+| `ruler.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                         | `10`            |
+| `ruler.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                | `10`            |
+| `ruler.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                               | `1`             |
+| `ruler.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                             | `3`             |
+| `ruler.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                             | `1`             |
+| `ruler.readinessProbe.enabled`                | Enable readinessProbe on Ruler nodes                                                            | `true`          |
+| `ruler.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                        | `10`            |
+| `ruler.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                               | `10`            |
+| `ruler.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                              | `1`             |
+| `ruler.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                            | `3`             |
+| `ruler.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                            | `1`             |
+| `ruler.startupProbe.enabled`                  | Enable startupProbe on Ruler containers                                                         | `false`         |
+| `ruler.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                          | `30`            |
+| `ruler.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                 | `10`            |
+| `ruler.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                | `1`             |
+| `ruler.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                              | `15`            |
+| `ruler.startupProbe.successThreshold`         | Success threshold for startupProbe                                                              | `1`             |
+| `ruler.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                             | `{}`            |
+| `ruler.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                            | `{}`            |
+| `ruler.customStartupProbe`                    | Custom startupProbe that overrides the default one                                              | `{}`            |
+| `ruler.lifecycleHooks`                        | for the ruler container(s) to automate configuration before or after startup                    | `{}`            |
+| `ruler.resources.limits`                      | The resources limits for the Ruler containers                                                   | `{}`            |
+| `ruler.resources.requests`                    | The requested resources for the Ruler containers                                                | `{}`            |
+| `ruler.podSecurityContext.enabled`            | Enabled Ruler pods' Security Context                                                            | `true`          |
+| `ruler.podSecurityContext.fsGroup`            | Set Ruler pod's Security Context fsGroup                                                        | `1001`          |
+| `ruler.containerSecurityContext.enabled`      | Enabled Ruler containers' Security Context                                                      | `true`          |
+| `ruler.containerSecurityContext.runAsUser`    | Set Ruler containers' Security Context runAsUser                                                | `1001`          |
+| `ruler.containerSecurityContext.runAsNonRoot` | Set Ruler containers' Security Context runAsNonRoot                                             | `true`          |
+| `ruler.hostAliases`                           | ruler pods host aliases                                                                         | `[]`            |
+| `ruler.podLabels`                             | Extra labels for ruler pods                                                                     | `{}`            |
+| `ruler.podAnnotations`                        | Annotations for ruler pods                                                                      | `{}`            |
+| `ruler.podAffinityPreset`                     | Pod affinity preset. Ignored if `ruler.affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
+| `ruler.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `ruler.affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
+| `ruler.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `ruler.affinity` is set. Allowed values: `soft` or `hard` | `""`            |
+| `ruler.nodeAffinityPreset.key`                | Node label key to match. Ignored if `ruler.affinity` is set                                     | `""`            |
+| `ruler.nodeAffinityPreset.values`             | Node label values to match. Ignored if `ruler.affinity` is set                                  | `[]`            |
+| `ruler.affinity`                              | Affinity for ruler pods assignment                                                              | `{}`            |
+| `ruler.nodeSelector`                          | Node labels for Ruler pods assignment                                                           | `{}`            |
+| `ruler.tolerations`                           | Tolerations for Ruler pods assignment                                                           | `[]`            |
+| `ruler.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains | `[]`            |
+| `ruler.priorityClassName`                     | Ruler pods' priorityClassName                                                                   | `""`            |
+| `ruler.schedulerName`                         | Kubernetes pod scheduler registry                                                               | `""`            |
+| `ruler.updateStrategy.type`                   | Ruler statefulset strategy type                                                                 | `RollingUpdate` |
+| `ruler.updateStrategy.rollingUpdate`          | Ruler statefulset rolling update configuration parameters                                       | `{}`            |
+| `ruler.extraVolumes`                          | Optionally specify extra list of additional volumes for the Ruler pod(s)                        | `[]`            |
+| `ruler.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the ruler container(s)             | `[]`            |
+| `ruler.sidecars`                              | Add additional sidecar containers to the Ruler pod(s)                                           | `[]`            |
+| `ruler.initContainers`                        | Add additional init containers to the Ruler pod(s)                                              | `[]`            |
+
+
+### Ruler Persistence Parameters
+
+| Name                             | Description                                                          | Value               |
+| -------------------------------- | -------------------------------------------------------------------- | ------------------- |
+| `ruler.persistence.enabled`      | Enable persistence in Ruler instances                                | `true`              |
+| `ruler.persistence.storageClass` | PVC Storage Class for Ruler data volume                              | `""`                |
+| `ruler.persistence.subPath`      | The subdirectory of the volume to mount to                           | `""`                |
+| `ruler.persistence.accessModes`  | PVC Access modes                                                     | `["ReadWriteOnce"]` |
+| `ruler.persistence.size`         | PVC Storage Request for Ruler data volume                            | `8Gi`               |
+| `ruler.persistence.annotations`  | Additional PVC annotations                                           | `{}`                |
+| `ruler.persistence.selector`     | Selector to match an existing Persistent Volume for Ruler's data PVC | `{}`                |
+
+
+### Ruler Traffic Exposure Parameters
+
+| Name                                     | Description                                                      | Value       |
+| ---------------------------------------- | ---------------------------------------------------------------- | ----------- |
+| `ruler.service.type`                     | Ruler service type                                               | `ClusterIP` |
+| `ruler.service.ports.http`               | Ruler HTTP service port                                          | `8080`      |
+| `ruler.service.ports.grpc`               | Ruler GRPC service port                                          | `9095`      |
+| `ruler.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
+| `ruler.service.nodePorts.grpc`           | Node port for GRPC                                               | `""`        |
+| `ruler.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
+| `ruler.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
+| `ruler.service.clusterIP`                | Ruler service Cluster IP                                         | `""`        |
+| `ruler.service.loadBalancerIP`           | Ruler service Load Balancer IP                                   | `""`        |
+| `ruler.service.loadBalancerSourceRanges` | Ruler service Load Balancer sources                              | `[]`        |
+| `ruler.service.externalTrafficPolicy`    | Ruler service external traffic policy                            | `Cluster`   |
+| `ruler.service.annotations`              | Additional custom annotations for Ruler service                  | `{}`        |
+| `ruler.service.extraPorts`               | Extra ports to expose in the Ruler service                       | `[]`        |
+| `ruler.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                  | `false`     |
+| `ruler.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled   | `1`         |
+| `ruler.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable   | `""`        |
+| `ruler.blockStorage.backend`             | Backend storage to use                                           | `s3`        |
+| `ruler.blockStorage.config`              | Configures connection to the backend store                       | `{}`        |
 
 
 ### Persistence Parameters
@@ -763,59 +1116,141 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Init Container Parameters
 
-| Name                                                   | Description                                                                                     | Value                              |
-| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | ---------------------------------- |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                            |
-| `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`                        |
-| `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell`            |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r%%IMAGE_REVISION%%` |
-| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`                     |
-| `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                               |
-| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                               |
-| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                               |
-| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                                |
+| Name                                                   | Description                                                                                     | Value                   |
+| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | ----------------------- |
+| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
+| `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
+| `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r69`      |
+| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
+| `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
+| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
+| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
+| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
 
 
 ### Other Parameters
 
-| Name                                          | Description                                                                                            | Value   |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------- |
-| `rbac.create`                                 | Specifies whether RBAC resources should be created                                                     | `false` |
-| `rbac.rules`                                  | Custom RBAC rules to set                                                                               | `[]`    |
-| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                   | `true`  |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                 | `""`    |
-| `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template)                                       | `{}`    |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                         | `true`  |
-| `metrics.enabled`                             | Enable the export of Prometheus metrics                                                                | `false` |
-| `metrics.serviceMonitor.enabled`              | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false` |
-| `metrics.serviceMonitor.namespace`            | Namespace in which Prometheus is running                                                               | `""`    |
-| `metrics.serviceMonitor.annotations`          | Additional custom annotations for the ServiceMonitor                                                   | `{}`    |
-| `metrics.serviceMonitor.labels`               | Extra labels for the ServiceMonitor                                                                    | `{}`    |
-| `metrics.serviceMonitor.jobLabel`             | The name of the label on the target service to use as the job name in Prometheus                       | `""`    |
-| `metrics.serviceMonitor.honorLabels`          | honorLabels chooses the metric's labels on collisions with target labels                               | `false` |
-| `metrics.serviceMonitor.interval`             | Interval at which metrics should be scraped.                                                           | `""`    |
-| `metrics.serviceMonitor.scrapeTimeout`        | Timeout after which the scrape is ended                                                                | `""`    |
-| `metrics.serviceMonitor.metricRelabelings`    | Specify additional relabeling of metrics                                                               | `[]`    |
-| `metrics.serviceMonitor.relabelings`          | Specify general relabeling                                                                             | `[]`    |
-| `metrics.serviceMonitor.selector`             | Prometheus instance selector labels                                                                    | `{}`    |
+| Name                                          | Description                                                                                                                       | Value                                                                                                                                                   |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `rbac.create`                                 | Specifies whether RBAC resources should be created                                                                                | `false`                                                                                                                                                 |
+| `rbac.rules`                                  | Custom RBAC rules to set                                                                                                          | `[]`                                                                                                                                                    |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                              | `true`                                                                                                                                                  |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                                            | `""`                                                                                                                                                    |
+| `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template)                                                                  | `{}`                                                                                                                                                    |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                    | `true`                                                                                                                                                  |
+| `metrics.enabled`                             | Enable the export of Prometheus metrics                                                                                           | `false`                                                                                                                                                 |
+| `metrics.serviceMonitor.enabled`              | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                            | `false`                                                                                                                                                 |
+| `metrics.serviceMonitor.namespace`            | Namespace in which Prometheus is running                                                                                          | `""`                                                                                                                                                    |
+| `metrics.serviceMonitor.annotations`          | Additional custom annotations for the ServiceMonitor                                                                              | `{}`                                                                                                                                                    |
+| `metrics.serviceMonitor.labels`               | Extra labels for the ServiceMonitor                                                                                               | `{}`                                                                                                                                                    |
+| `metrics.serviceMonitor.jobLabel`             | The name of the label on the target service to use as the job name in Prometheus                                                  | `""`                                                                                                                                                    |
+| `metrics.serviceMonitor.honorLabels`          | honorLabels chooses the metric's labels on collisions with target labels                                                          | `false`                                                                                                                                                 |
+| `metrics.serviceMonitor.interval`             | Interval at which metrics should be scraped.                                                                                      | `""`                                                                                                                                                    |
+| `metrics.serviceMonitor.scrapeTimeout`        | Timeout after which the scrape is ended                                                                                           | `""`                                                                                                                                                    |
+| `metrics.serviceMonitor.metricRelabelings`    | Specify additional relabeling of metrics                                                                                          | `[]`                                                                                                                                                    |
+| `metrics.serviceMonitor.relabelings`          | Specify general relabeling                                                                                                        | `[]`                                                                                                                                                    |
+| `metrics.serviceMonitor.selector`             | Prometheus instance selector labels                                                                                               | `{}`                                                                                                                                                    |
+| `minio`                                       | For full list of MinIO&reg; values configurations please refere [here](https://github.com/bitnami/charts/tree/main/bitnami/minio) |                                                                                                                                                         |
+| `minio.enabled`                               | Enable/disable MinIO&reg; chart installation                                                                                      | `true`                                                                                                                                                  |
+| `minio.auth.rootUser`                         | MinIO&reg; root username                                                                                                          | `admin`                                                                                                                                                 |
+| `minio.auth.rootPassword`                     | Password for MinIO&reg; root user                                                                                                 | `""`                                                                                                                                                    |
+| `minio.auth.existingSecret`                   | Name of an existing secret containing the MinIO&reg; credentials                                                                  | `""`                                                                                                                                                    |
+| `minio.defaultBuckets`                        | Comma, semi-colon or space separated list of MinIO&reg; buckets to create                                                         | `mimir, ruler, alertmanager`                                                                                                                            |
+| `minio.provisioning.enabled`                  | Enable/disable MinIO&reg; provisioning job                                                                                        | `true`                                                                                                                                                  |
+| `minio.provisioning.extraCommands`            | Extra commands to run on MinIO&reg; provisioning job                                                                              | `["mc anonymous set download provisioning/mimir","mc anonymous set download provisioning/ruler","mc anonymous set download provisioning/alertmanager"]` |
+| `minio.tls.enabled`                           | Enable/disable MinIO&reg; TLS support                                                                                             | `false`                                                                                                                                                 |
+| `minio.service.type`                          | MinIO&reg; service type                                                                                                           | `ClusterIP`                                                                                                                                             |
+| `minio.service.loadBalancerIP`                | MinIO&reg; service LoadBalancer IP                                                                                                | `""`                                                                                                                                                    |
+| `minio.service.ports.api`                     | MinIO&reg; service port                                                                                                           | `80`                                                                                                                                                    |
 
 
-### MinIO&reg; chart parameters
+### External Memcached (Chunks) Parameters
 
-| Name                               | Description                                                                                                                       | Value                                                  |
-| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| `minio`                            | For full list of MinIO&reg; values configurations please refere [here](https://github.com/bitnami/charts/tree/main/bitnami/minio) |                                                        |
-| `minio.enabled`                    | Enable/disable MinIO&reg; chart installation                                                                                      | `true`                                                 |
-| `minio.auth.rootUser`              | MinIO&reg; root username                                                                                                          | `admin`                                                |
-| `minio.auth.rootPassword`          | Password for MinIO&reg; root user                                                                                                 | `""`                                                   |
-| `minio.auth.existingSecret`        | Name of an existing secret containing the MinIO&reg; credentials                                                                  | `""`                                                   |
-| `minio.defaultBuckets`             | Comma, semi-colon or space separated list of MinIO&reg; buckets to create                                                         | `s3storage`                                            |
-| `minio.provisioning.enabled`       | Enable/disable MinIO&reg; provisioning job                                                                                        | `true`                                                 |
-| `minio.provisioning.extraCommands` | Extra commands to run on MinIO&reg; provisioning job                                                                              | `["mc anonymous set download provisioning/s3storage"]` |
-| `minio.tls.enabled`                | Enable/disable MinIO&reg; TLS support                                                                                             | `false`                                                |
-| `minio.service.type`               | MinIO&reg; service type                                                                                                           | `ClusterIP`                                            |
-| `minio.service.loadBalancerIP`     | MinIO&reg; service LoadBalancer IP                                                                                                | `""`                                                   |
-| `minio.service.ports.api`          | MinIO&reg; service port                                                                                                           | `80`                                                   |
+| Name                           | Description                                   | Value   |
+| ------------------------------ | --------------------------------------------- | ------- |
+| `externalMemcachedChunks.host` | Host of a running external memcached instance | `""`    |
+| `externalMemcachedChunks.port` | Port of a running external memcached instance | `11211` |
+
+
+### Memcached Sub-chart Parameters (Chunks)
+
+| Name                                      | Description                                                                                               | Value                  |
+| ----------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `memcachedchunks.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                 |
+| `memcachedchunks.image.registry`          | Memcached image registry                                                                                  | `docker.io`            |
+| `memcachedchunks.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`    |
+| `memcachedchunks.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.17-debian-11-r44` |
+| `memcachedchunks.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `memcachedchunks.nameOverride`            | override the subchart name                                                                                | `""`                   |
+| `memcachedchunks.architecture`            | Memcached architecture                                                                                    | `high-availability`    |
+| `memcachedchunks.service.ports.memcached` | Memcached service port                                                                                    | `11211`                |
+
+
+### External Memcached (Frontend) Parameters
+
+| Name                             | Description                                   | Value   |
+| -------------------------------- | --------------------------------------------- | ------- |
+| `externalMemcachedFrontend.host` | Host of a running external memcached instance | `""`    |
+| `externalMemcachedFrontend.port` | Port of a running external memcached instance | `11211` |
+
+
+### Memcached Sub-chart Parameters (Frontend)
+
+| Name                                        | Description                                                                                               | Value                  |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `memcachedfrontend.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                 |
+| `memcachedfrontend.image.registry`          | Memcached image registry                                                                                  | `docker.io`            |
+| `memcachedfrontend.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`    |
+| `memcachedfrontend.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.17-debian-11-r44` |
+| `memcachedfrontend.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `memcachedfrontend.architecture`            | Memcached architecture                                                                                    | `high-availability`    |
+| `memcachedfrontend.nameOverride`            | override the subchart name                                                                                | `""`                   |
+| `memcachedfrontend.service.ports.memcached` | Memcached service port                                                                                    | `11211`                |
+
+
+### External Memcached (Index) Parameters
+
+| Name                          | Description                                   | Value   |
+| ----------------------------- | --------------------------------------------- | ------- |
+| `externalMemcachedIndex.host` | Host of a running external memcached instance | `""`    |
+| `externalMemcachedIndex.port` | Port of a running external memcached instance | `11211` |
+
+
+### Memcached Sub-chart Parameters (Index)
+
+| Name                                     | Description                                                                                               | Value                  |
+| ---------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `memcachedindex.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                 |
+| `memcachedindex.image.registry`          | Memcached image registry                                                                                  | `docker.io`            |
+| `memcachedindex.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`    |
+| `memcachedindex.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.17-debian-11-r44` |
+| `memcachedindex.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `memcachedindex.architecture`            | Memcached architecture                                                                                    | `high-availability`    |
+| `memcachedindex.nameOverride`            | override the subchart name                                                                                | `""`                   |
+| `memcachedindex.service.ports.memcached` | Memcached service port                                                                                    | `11211`                |
+
+
+### External Memcached (Metadata) Parameters
+
+| Name                             | Description                                   | Value   |
+| -------------------------------- | --------------------------------------------- | ------- |
+| `externalMemcachedMetadata.host` | Host of a running external memcached instance | `""`    |
+| `externalMemcachedMetadata.port` | Port of a running external memcached instance | `11211` |
+
+
+### Memcached Sub-chart Parameters (Metadata)
+
+| Name                                        | Description                                                                                               | Value                  |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `memcachedmetadata.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                 |
+| `memcachedmetadata.image.registry`          | Memcached image registry                                                                                  | `docker.io`            |
+| `memcachedmetadata.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`    |
+| `memcachedmetadata.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.17-debian-11-r44` |
+| `memcachedmetadata.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `memcachedmetadata.architecture`            | Memcached architecture                                                                                    | `high-availability`    |
+| `memcachedmetadata.nameOverride`            | override the subchart name                                                                                | `""`                   |
+| `memcachedmetadata.service.ports.memcached` | Memcached service port                                                                                    | `11211`                |
 
 
 See https://github.com/bitnami-labs/readme-generator-for-helm to create the table

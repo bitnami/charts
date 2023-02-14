@@ -325,6 +325,8 @@ mimir:
 ## @section Alertmanager Deployment Parameters
 ##
 alertmanager:
+  ## @param alertmanager.enabled Enable alertmanager deployment
+  ##
   enabled: false
   ## @param alertmanager.extraEnvVars Array with extra environment variables to add to alertmanager nodes
   ## e.g:
@@ -1981,6 +1983,8 @@ ingester:
 # @section overrides-exporter Deployment Parameters
 ##
 overridesExporter:
+  ## @param overridesExporter.enabled Enable overrides-exporter deployment
+  ##
   enabled: false
   ## @param overridesExporter.extraEnvVars Array with extra environment variables to add to overrides-exporter nodes
   ## e.g:
@@ -2834,6 +2838,8 @@ queryFrontend:
 # @section query-scheduler Deployment Parameters
 ##
 queryScheduler:
+  ## @param queryScheduler.enabled Enable query-scheduler deployment
+  ##
   enabled: false
   ## @param queryScheduler.extraEnvVars Array with extra environment variables to add to query-scheduler nodes
   ## e.g:
