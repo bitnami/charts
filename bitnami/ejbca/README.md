@@ -131,8 +131,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `command`                               | Custom command to override image cmd                                                                        | `[]`                  |
 | `args`                                  | Custom args for the custom command                                                                          | `[]`                  |
 | `lifecycleHooks`                        | for the EJBCA container(s) to automate configuration before or after startup                                | `{}`                  |
-| `resources.limits`                      | The resources limits for the container                                                                      | `{}`                  |
-| `resources.requests`                    | The requested resources for the container                                                                   | `{}`                  |
+| `resources.requests`                    | The requested resources for the init container                                                              | `{}`                  |
+| `resources.limits`                      | The resources limits for the init container                                                                 | `{}`                  |
+| `resources.limits`                      | The resources limits for Ejbca containers                                                                   | `{}`                  |
+| `resources.requests`                    | The requested resources for Ejbca containers                                                                | `{}`                  |
 | `containerSecurityContext.enabled`      | Enabled EJBCA containers' Security Context                                                                  | `true`                |
 | `containerSecurityContext.runAsUser`    | Set EJBCA containers' Security Context runAsUser                                                            | `1001`                |
 | `containerSecurityContext.runAsNonRoot` | Set EJBCA container's Security Context runAsNonRoot                                                         | `true`                |
