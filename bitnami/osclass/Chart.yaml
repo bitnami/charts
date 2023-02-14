@@ -2,7 +2,7 @@ annotations:
   category: CMS
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 8.0.2
+appVersion: 8.1.1
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
@@ -31,4 +31,4 @@ name: osclass
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/osclass
   - https://osclass.org/
-version: 14.2.11
+version: 14.2.12
