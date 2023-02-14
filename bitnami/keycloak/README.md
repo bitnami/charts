@@ -130,6 +130,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replicaCount`                          | Number of Keycloak replicas to deploy                                                                                    | `1`             |
 | `containerPorts.http`                   | Keycloak HTTP container port                                                                                             | `8080`          |
 | `containerPorts.https`                  | Keycloak HTTPS container port                                                                                            | `8443`          |
+| `containerPorts.infinispan`             | Keycloak infinispan container port                                                                                       | `7800`          |
 | `extraContainerPorts`                   | Optionally specify extra list of additional port-mappings for Keycloak container                                         | `[]`            |
 | `podSecurityContext.enabled`            | Enabled Keycloak pods' Security Context                                                                                  | `true`          |
 | `podSecurityContext.fsGroup`            | Set Keycloak pod's Security Context fsGroup                                                                              | `1001`          |
