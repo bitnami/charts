@@ -31,14 +31,14 @@ it('allows to create a new project', () => {
   cy.contains('Edit App');
 });
 
-it('allows to change admin settings', () => {
+it('allows to change workspace settings', () => {
   cy.login();
-  cy.visit(`/settings/general`);
+  cy.get('span[class*="workspace-name"]').click();
+  cy.get('[data-cy*="workspace-setting"]').click();
   cy.fixture('user-settings').then(($us) => {
-    cy.get('[name*="INSTANCE_NAME"]')
+    cy.get('input[placeholder="Workspace Name"]')
       .clear()
       .type(`${$us.instanceName}-${random}`, { force: true });
-    cy.contains('button', 'Save').should('be.enabled').click();
-    cy.contains('Successfully');
+    cy.get('h2').contains(`${$us.instanceName}-${random}`);
   });
 });
