@@ -64,6 +64,7 @@ helm delete --purge my-release
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
@@ -78,6 +79,7 @@ helm delete --purge my-release
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
+
 
 ### HashiCorp Consul parameters
 
@@ -116,6 +118,7 @@ helm delete --purge my-release
 | `containerPorts.rpcServer`      | Port to open for RPC Server in Consul                                                                            | `8300`                |
 | `containerPorts.serfLAN`        | Port to open for Serf LAN in Consul                                                                              | `8301`                |
 | `lifecycleHooks`                | Add lifecycle hooks to the deployment                                                                            | `{}`                  |
+
 
 ### Statefulset parameters
 
@@ -170,6 +173,7 @@ helm delete --purge my-release
 | `pdb.minAvailable`                                  | Minimum number of pods that must still be available after the eviction                    | `1`             |
 | `pdb.maxUnavailable`                                | Max number of pods that can be unavailable after the eviction                             | `""`            |
 
+
 ### Exposure parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -202,6 +206,7 @@ helm delete --purge my-release
 | `ingress.existingSecret`           | It is you own the certificate as secret.                                                                                         | `""`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
+
 ### Persistence parameters
 
 | Name                       | Description                                                                                               | Value               |
@@ -211,6 +216,7 @@ helm delete --purge my-release
 | `persistence.annotations`  | Persistent Volume Claim annotations                                                                       | `{}`                |
 | `persistence.accessModes`  | Persistent Volume Access Mode                                                                             | `["ReadWriteOnce"]` |
 | `persistence.size`         | PVC Storage Request for HashiCorp Consul data volume                                                      | `8Gi`               |
+
 
 ### Volume Permissions parameters
 
@@ -225,6 +231,7 @@ helm delete --purge my-release
 | `volumePermissions.image.pullSecrets`  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                        | `{}`                    |
 | `volumePermissions.resources.requests` | The requested resources for the container                                                                     | `{}`                    |
+
 
 ### Metrics parameters
 
@@ -257,7 +264,7 @@ helm delete --purge my-release
 | `metrics.serviceMonitor.selector`               | ServiceMonitor selector labels                                                                                                       | `{}`                      |
 | `metrics.serviceMonitor.labels`                 | Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with                | `{}`                      |
 
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
+
 
 ```console
 helm install my-release --set domain=consul-domain,gossipKey=secretkey my-repo/consul

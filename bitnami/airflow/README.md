@@ -59,6 +59,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
 | Name                     | Description                                                                                  | Value           |
@@ -73,6 +74,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the the deployment(s)/statefulset(s)                   | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the the deployment(s)/statefulset(s)                      | `["infinity"]`  |
+
 
 ### Airflow common parameters
 
@@ -102,6 +104,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initContainers`         | Add additional init containers to all the Airflow pods                                                                                                                    | `[]`                    |
 | `extraVolumeMounts`      | Optionally specify extra list of additional volumeMounts for all the Airflow pods                                                                                         | `[]`                    |
 | `extraVolumes`           | Optionally specify extra list of additional volumes for the all the Airflow pods                                                                                          | `[]`                    |
+
 
 ### Airflow web parameters
 
@@ -178,6 +181,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.pdb.minAvailable`                      | Maximum number/percentage of unavailable Airflow web replicas                                                            | `1`                  |
 | `web.pdb.maxUnavailable`                    | Maximum number/percentage of unavailable Airflow web replicas                                                            | `""`                 |
 
+
 ### Airflow scheduler parameters
 
 | Name                                              | Description                                                                                                              | Value                       |
@@ -231,6 +235,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `scheduler.pdb.create`                            | Deploy a pdb object for the Airflow scheduler pods                                                                       | `false`                     |
 | `scheduler.pdb.minAvailable`                      | Maximum number/percentage of unavailable Airflow scheduler replicas                                                      | `1`                         |
 | `scheduler.pdb.maxUnavailable`                    | Maximum number/percentage of unavailable Airflow scheduler replicas                                                      | `""`                        |
+
 
 ### Airflow worker parameters
 
@@ -312,6 +317,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.autoscaling.targetCPU`                 | Define the CPU target to trigger the scaling actions (utilization percentage)                                            | `80`                     |
 | `worker.autoscaling.targetMemory`              | Define the memory target to trigger the scaling actions (utilization percentage)                                         | `80`                     |
 
+
 ### Airflow git sync parameters
 
 | Name                           | Description                                                                                         | Value                 |
@@ -342,6 +348,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `git.sync.extraEnvVarsSecret`  | Secret with extra environment variables                                                             | `""`                  |
 | `git.sync.resources`           | Sync sidecar container resource requests and limits                                                 | `{}`                  |
 
+
 ### Airflow ldap parameters
 
 | Name                             | Description                                                                                                                        | Value                                                                                                     |
@@ -361,6 +368,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ldap.tls.certificatesSecret`    | Name of the existing secret containing the certificate CA file that will be used by ldap client                                    | `""`                                                                                                      |
 | `ldap.tls.certificatesMountPath` | Where LDAP certifcates are mounted.                                                                                                | `/opt/bitnami/airflow/conf/certs`                                                                         |
 | `ldap.tls.CAFilename`            | LDAP CA cert filename                                                                                                              | `""`                                                                                                      |
+
 
 ### Traffic Exposure Parameters
 
@@ -392,6 +400,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
+
 ### Other Parameters
 
 | Name                                          | Description                                                            | Value   |
@@ -402,6 +411,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
 | `rbac.create`                                 | Create Role and RoleBinding                                            | `false` |
 | `rbac.rules`                                  | Custom RBAC rules to set                                               | `[]`    |
+
 
 ### Airflow metrics parameters
 
@@ -453,6 +463,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.honorLabels`            | Specify honorLabels parameter to add the scrape endpoint                                                         | `false`                      |
 | `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in prometheus.                                | `""`                         |
 
+
 ### Airflow database parameters
 
 | Name                                         | Description                                                                                            | Value             |
@@ -483,7 +494,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalRedis.existingSecret`               | Name of an existing secret resource containing the Redis&trade credentials                             | `""`              |
 | `externalRedis.existingSecretPasswordKey`    | Name of an existing secret key containing the Redis&trade credentials                                  | `""`              |
 
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
+
 
 ```console
 $ helm install my-release \

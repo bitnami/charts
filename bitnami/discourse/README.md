@@ -63,6 +63,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
 | Name                     | Description                                                                               | Value           |
@@ -77,6 +78,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)   | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the the deployment(s)/statefulset(s)                | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the the deployment(s)/statefulset(s)                   | `["infinity"]`  |
+
 
 ### Discourse Common parameters
 
@@ -128,6 +130,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraVolumeMounts`             | Optionally specify extra list of additional volumeMounts for the Discourse pods                                          | `[]`                 |
 | `extraVolumes`                  | Optionally specify extra list of additional volumes for the Discourse pods                                               | `[]`                 |
 
+
 ### Discourse container parameters
 
 | Name                                              | Description                                                                                  | Value           |
@@ -176,6 +179,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.selector`                            | Selector to match an existing Persistent Volume for Discourse data PVC                       | `{}`            |
 | `persistence.annotations`                         | Persistent Volume Claim annotations                                                          | `{}`            |
 
+
 ### Sidekiq container parameters
 
 | Name                                            | Description                                                                                | Value                                               |
@@ -214,6 +218,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidekiq.lifecycleHooks`                        | for the Sidekiq container(s) to automate configuration before or after startup             | `{}`                                                |
 | `sidekiq.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Sidekiq pods              | `[]`                                                |
 
+
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -244,6 +249,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
+
 ### Volume Permissions parameters
 
 | Name                                                   | Description                                                                                                                       | Value                   |
@@ -259,6 +265,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                                                                               | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                                    | `0`                     |
 
+
 ### Other Parameters
 
 | Name                                          | Description                                                            | Value   |
@@ -267,6 +274,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`    |
 | `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true`  |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
+
 
 ### NetworkPolicy parameters
 
@@ -284,6 +292,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                            | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                                | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                    | `{}`    |
+
 
 ### Discourse database parameters
 
@@ -309,6 +318,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.existingSecretPasswordKey`         | Name of an existing secret key containing the database credentials                                     | `password`            |
 | `externalDatabase.existingSecretPostgresPasswordKey` | Name of an existing secret key containing the database admin user credentials                          | `postgres-password`   |
 
+
 ### Redis&reg; parameters
 
 | Name                                      | Description                                                                | Value            |
@@ -324,7 +334,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalRedis.existingSecret`            | Name of an existing secret resource containing the Redis&trade credentials | `""`             |
 | `externalRedis.existingSecretPasswordKey` | Name of an existing secret key containing the Redis&trade credentials      | `redis-password` |
 
-The above parameters map to the env variables defined in [bitnami/discourse](https://github.com/bitnami/containers/tree/main/bitnami/discourse). For more information please refer to the [bitnami/discourse](https://github.com/bitnami/containers/tree/main/bitnami/discourse) image documentation.
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

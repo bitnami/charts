@@ -60,6 +60,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
 | Name                       | Description                                                                                                                                       | Value         |
@@ -75,6 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `leaderElection.namespace` | Namespace which leaderElection works.                                                                                                             | `kube-system` |
 | `installCRDs`              | Flag to install cert-manager CRDs                                                                                                                 | `false`       |
 | `replicaCount`             | Number of cert-manager replicas                                                                                                                   | `1`           |
+
 
 ### Controller deployment parameters
 
@@ -137,6 +139,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                     | `""`                   |
 | `controller.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                       | `{}`                   |
 | `controller.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                             | `true`                 |
+
 
 ### Webhook deployment parameters
 
@@ -209,6 +212,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `webhook.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                    | `{}`                           |
 | `webhook.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                          | `true`                         |
 
+
 ### CAInjector deployment parameters
 
 | Name                                                     | Description                                                                                                | Value                 |
@@ -261,6 +265,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cainjector.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                       | `{}`                  |
 | `cainjector.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                             | `true`                |
 
+
 ### Metrics Parameters
 
 | Name                                       | Description                                                                       | Value      |
@@ -281,13 +286,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.additionalLabels`  | DEPRECATED. Use metrics.serviceMonitor.labels instead.                            | `{}`       |
 | `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels          | `false`    |
 
+
 ### Other Parameters
 
 | Name          | Description                                        | Value  |
 | ------------- | -------------------------------------------------- | ------ |
 | `rbac.create` | Specifies whether RBAC resources should be created | `true` |
 
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
+
 
 ```console
 $ helm install my-release my-repo/cert-manager \

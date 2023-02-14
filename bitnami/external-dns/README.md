@@ -58,6 +58,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 
+
 ### Common parameters
 
 | Name                    | Description                                                                                  | Value           |
@@ -71,6 +72,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kubeVersion`           | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
 | `watchReleaseNamespace` | Watch only namepsace used for the release                                                    | `false`         |
 | `useDaemonset`          | Use ExternalDNS in Daemonset mode                                                            | `false`         |
+
 
 ### external-dns parameters
 
@@ -209,7 +211,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rfc2136.tsigSecretAlg`                       | When using the rfc2136 provider, specify the tsig secret to enable security (optional)                                                                                       | `hmac-sha256`             |
 | `rfc2136.tsigKeyname`                         | When using the rfc2136 provider, specify the tsig keyname to enable security (optional)                                                                                      | `externaldns-key`         |
 | `rfc2136.tsigAxfr`                            | When using the rfc2136 provider, enable AFXR to enable security (optional)                                                                                                   | `true`                    |
-| `rfc2136.minTTL`                              | When using the rfc2136 provider, specify minimal TTL (in duration format) for records[ns, us, ms, s, m, h], see more <https://golang.org/pkg/time/#ParseDuration>              | `0s`                      |
+| `rfc2136.minTTL`                              | When using the rfc2136 provider, specify minimal TTL (in duration format) for records[ns, us, ms, s, m, h], see more https://golang.org/pkg/time/#ParseDuration              | `0s`                      |
 | `rfc2136.rfc3645Enabled`                      | When using the rfc2136 provider, extend using RFC3645 to support secure updates over Kerberos with GSS-TSIG                                                                  | `false`                   |
 | `rfc2136.kerberosConfig`                      | When using the rfc2136 provider with rfc3645Enabled, the contents of a configuration file for krb5 (optional)                                                                | `""`                      |
 | `rfc2136.kerberosUsername`                    | When using the rfc2136 provider with rfc3645Enabled, specify the username to authenticate with (optional)                                                                    | `""`                      |
@@ -336,7 +338,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.googlePodMonitor.interval`           | Interval at which metrics should be scraped by Google Managed Prometheus                                                                                                     | `60s`                     |
 | `metrics.googlePodMonitor.endpoint`           | The endpoint for Google Managed Prometheus scraping the metrics                                                                                                              | `/metrics`                |
 
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
+
 
 ```console
 $ helm install my-release \

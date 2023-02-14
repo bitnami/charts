@@ -63,6 +63,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
 | Name                | Description                                                                                                | Value |
@@ -74,6 +75,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `commonAnnotations` | Common annotations to add to all Drupal resources (sub-charts are not considered). Evaluated as a template | `{}`  |
 | `commonLabels`      | Common labels to add to all Drupal resources (sub-charts are not considered). Evaluated as a template      | `{}`  |
 | `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template).                               | `[]`  |
+
 
 ### Drupal parameters
 
@@ -169,6 +171,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podAnnotations`                              | Pod annotations                                                                                                        | `{}`                  |
 | `podLabels`                                   | Add additional labels to the pod (evaluated as a template)                                                             | `{}`                  |
 
+
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -199,6 +202,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
+
 ### Database parameters
 
 | Name                                        | Description                                                                                                                                                            | Value               |
@@ -222,6 +226,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.database`                 | Name of the existing database                                                                                                                                          | `bitnami_drupal`    |
 | `externalDatabase.existingSecret`           | Name of a secret with the database password. (externalDatabase.password will be ignored and picked up from this secret). The secret has to contain the key db-password | `""`                |
 
+
 ### Volume Permissions parameters
 
 | Name                                   | Description                                                                                                                                               | Value                   |
@@ -235,6 +240,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
 | `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`                    |
+
 
 ### Metrics parameters
 
@@ -269,6 +275,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.additionalLabels`  | Additional labels for the prometheusRule                                                                        | `{}`                      |
 | `metrics.prometheusRule.rules`             | Custom Prometheus rules                                                                                         | `[]`                      |
 
+
 ### Certificate injection parameters
 
 | Name                                                 | Description                                                                                                       | Value                                    |
@@ -292,6 +299,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                              | `[]`                                     |
 
+
 ### NetworkPolicy parameters
 
 | Name                                                          | Description                                                                                                                | Value   |
@@ -312,7 +320,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                             | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                 | `{}`    |
 
-The above parameters map to the env variables defined in [bitnami/drupal](https://github.com/bitnami/containers/tree/main/bitnami/drupal). For more information please refer to the [bitnami/drupal](https://github.com/bitnami/containers/tree/main/bitnami/drupal) image documentation.
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

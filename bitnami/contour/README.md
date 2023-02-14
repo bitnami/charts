@@ -66,6 +66,7 @@ helm uninstall my-release
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
 | Name                     | Description                                                                             | Value   |
@@ -80,6 +81,7 @@ helm uninstall my-release
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false` |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `[]`    |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `[]`    |
+
 
 ### Contour parameters
 
@@ -186,6 +188,7 @@ helm uninstall my-release
 | `contour.debug`                                               | Enable Contour debug log level                                                                                                     | `false`               |
 | `contour.kubernetesDebug`                                     | Contour kubernetes debug log level, Default 0, minimum 0, maximum 9.                                                               | `0`                   |
 | `contour.rootNamespaces`                                      | Restrict Contour to searching these namespaces for root ingress routes.                                                            | `""`                  |
+
 
 ### Envoy parameters
 
@@ -302,6 +305,7 @@ helm uninstall my-release
 | `envoy.extraEnvVarsCM`                              | ConfigMap containing extra env vars to be added to all Envoy containers                                               | `""`                  |
 | `envoy.extraEnvVarsSecret`                          | Secret containing extra env vars to be added to all Envoy containers                                                  | `""`                  |
 
+
 ### Default backend parameters
 
 | Name                                                   | Description                                                                                                     | Value                    |
@@ -395,6 +399,7 @@ helm uninstall my-release
 | `ingress.secrets`                                      | If you're providing your own certificates, please use this to add the certificates as secrets                   | `[]`                     |
 | `ingress.extraRules`                                   | Additional rules to be covered with this ingress record                                                         | `[]`                     |
 
+
 ### Metrics parameters
 
 | Name                                       | Description                                                                                                                          | Value                    |
@@ -410,6 +415,7 @@ helm uninstall my-release
 | `metrics.serviceMonitor.selector`          | Specify honorLabels parameter to add the scrape endpoint                                                                             | `{}`                     |
 | `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                                                                  | `{}`                     |
 
+
 ### Other parameters
 
 | Name                | Description                                                                                                          | Value  |
@@ -418,7 +424,7 @@ helm uninstall my-release
 | `rbac.rules`        | Custom RBAC rules to set                                                                                             | `[]`   |
 | `tlsExistingSecret` | Name of the existingSecret to be use in both contour and envoy. If it is not nil `contour.certgen` will be disabled. | `""`   |
 
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
+
 
 ```console
 $ helm install my-release \

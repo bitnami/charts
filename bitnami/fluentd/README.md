@@ -62,6 +62,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
 | Name                     | Description                                                                                  | Value           |
@@ -76,6 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]`  |
+
 
 ### Fluentd parameters
 
@@ -328,7 +330,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tls.forwarder.existingSecret`                                 | Name of the existing secret containing the TLS certificates for the Fluentd forwarder                                                                              | `""`                                                       |
 | `tls.aggregator.existingSecret`                                | Name of the existing secret containing the TLS certificates for the Fluentd aggregator                                                                             | `""`                                                       |
 
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
+
 
 ```console
 $ helm install my-release \
