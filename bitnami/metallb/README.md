@@ -61,6 +61,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 
+
 ### Common parameters
 
 | Name                     | Description                                                                             | Value          |
@@ -75,6 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the the deployment(s)/statefulset(s)              | `["sleep"]`    |
 | `diagnosticMode.args`    | Args to override all containers in the the deployment(s)/statefulset(s)                 | `["infinity"]` |
 
+
 ### MetalLB parameters
 
 | Name                                    | Description                                                                                                                                 | Value   |
@@ -86,13 +88,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressNSPodMatchLabels` | For other namespaces match by pod labels and namespace labels                                                                               | `{}`    |
 | `prometheusRule.enabled`                | Prometheus Operator alertmanager alerts are created                                                                                         | `false` |
 
+
 ### Controller parameters
 
 | Name                                                           | Description                                                                                                                                 | Value                        |
 | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
 | `controller.image.registry`                                    | MetalLB Controller image registry                                                                                                           | `docker.io`                  |
 | `controller.image.repository`                                  | MetalLB Controller image repository                                                                                                         | `bitnami/metallb-controller` |
-| `controller.image.tag`                                         | MetalLB Controller  image tag (immutable tags are recommended)                                                                              | `0.13.7-debian-11-r29`       |
+| `controller.image.tag`                                         | MetalLB Controller  image tag (immutable tags are recommended)                                                                              | `0.13.7-debian-11-r40`       |
 | `controller.image.digest`                                      | MetalLB Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                          | `""`                         |
 | `controller.image.pullPolicy`                                  | MetalLB Controller image pull policy                                                                                                        | `IfNotPresent`               |
 | `controller.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                            | `[]`                         |
@@ -162,6 +165,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.customLivenessProbe`                               | Custom liveness probe for the Web component                                                                                                 | `{}`                         |
 | `controller.customReadinessProbe`                              | Custom readiness probe for the Web component                                                                                                | `{}`                         |
 
+
 ### Metallb controller Prometheus metrics export
 
 | Name                                                  | Description                                                                 | Value                    |
@@ -180,13 +184,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                         | `{}`                     |
 | `controller.metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels    | `false`                  |
 
+
 ### Speaker parameters
 
 | Name                                                        | Description                                                                                                                                 | Value                     |
 | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `speaker.image.registry`                                    | MetalLB Speaker image registry                                                                                                              | `docker.io`               |
 | `speaker.image.repository`                                  | MetalLB Speaker image repository                                                                                                            | `bitnami/metallb-speaker` |
-| `speaker.image.tag`                                         | MetalLB Speaker  image tag (immutable tags are recommended)                                                                                 | `0.13.7-debian-11-r28`    |
+| `speaker.image.tag`                                         | MetalLB Speaker  image tag (immutable tags are recommended)                                                                                 | `0.13.7-debian-11-r38`    |
 | `speaker.image.digest`                                      | MetalLB Speaker image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                             | `""`                      |
 | `speaker.image.pullPolicy`                                  | MetalLB Speaker image pull policy                                                                                                           | `IfNotPresent`            |
 | `speaker.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                            | `[]`                      |
@@ -256,6 +261,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `speaker.customLivenessProbe`                               | Custom liveness probe for the Web component                                                                                                 | `{}`                      |
 | `speaker.customReadinessProbe`                              | Custom readiness probe for the Web component                                                                                                | `{}`                      |
 
+
 ### Speaker Prometheus metrics export
 
 | Name                                               | Description                                                                 | Value                    |
@@ -274,7 +280,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `speaker.metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                         | `{}`                     |
 | `speaker.metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels    | `false`                  |
 
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
+
 
 ```console
 $ helm install my-release \
