@@ -7,7 +7,7 @@ Wavefront HPA Adapter for Kubernetes is a Kubernetes Horizontal Pod Autoscaler a
 [Overview of Wavefront HPA Adapter for Kubernetes](https://github.com/wavefrontHQ/wavefront-kubernetes-adapter)
 
 
-
+                           
 ## TL;DR
 
 ```console
@@ -76,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------ |
 | `image.registry`                                  | Adapter image registry                                                                                  | `docker.io`                          |
 | `image.repository`                                | Adapter image repository                                                                                | `bitnami/wavefront-hpa-adapter`      |
-| `image.tag`                                       | Adapter image tag (immutable tags are recommended)                                                      | `0.9.9-scratch-r13`                  |
+| `image.tag`                                       | Adapter image tag (immutable tags are recommended)                                                      | `0.9.9-scratch-r16`                  |
 | `image.digest`                                    | Adapter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                 |
 | `image.pullPolicy`                                | Adapter image pull policy                                                                               | `IfNotPresent`                       |
 | `image.pullSecrets`                               | Specify docker-registry secret names as an array                                                        | `[]`                                 |

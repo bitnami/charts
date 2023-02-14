@@ -243,7 +243,14 @@ spec:
           {{- if $.Values.storegateway.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
-          {{- if $.Values.storegateway.resources }}
+          {{- if $timePartitioning }}
+          {{- $partion := (slice $.Values.storegateway.sharded.timePartitioning  $index) | first }}
+          {{- if $partion.resources }}
+          resources: {{- toYaml $partion.resources | nindent 12 }}
+          {{- else }}
+          resources: {{- toYaml $.Values.storegateway.resources | nindent 12 }}
+          {{- end }}
+          {{- else }}
           resources: {{- toYaml $.Values.storegateway.resources | nindent 12 }}
           {{- end }}
           volumeMounts:

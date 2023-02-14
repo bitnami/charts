@@ -31,7 +31,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.11.8-debian-11-r0
+  tag: 3.11.9-debian-11-r0
   digest: ""
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
@@ -513,6 +513,12 @@ advancedConfiguration: |-
 ## Do not use in combination with advancedConfiguration, will be ignored
 ##
 advancedConfigurationExistingSecret: ""
+
+## This subsystem was introduced in RabbitMQ 3.8.0 to allow rolling upgrades of cluster members without shutting down the entire cluster.
+## Feature flags are a mechanism that controls what features are considered to be enabled or available on all cluster nodes. If a feature flag is enabled, so is its associated feature (or behavior). If not then all nodes in the cluster will disable the feature (behavior).
+## e.g, drop_unroutable_metric,empty_basic_get_metric,implicit_default_bindings,maintenance_mode_status,quorum_queue,virtual_host_metadata
+## @param featureFlags that controls what features are considered to be enabled or available on all cluster nodes.
+featureFlags: ""
 
 ## LDAP configuration
 ##
@@ -1348,7 +1354,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r78
+    tag: 11-debian-11-r82
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

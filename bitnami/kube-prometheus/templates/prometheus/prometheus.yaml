@@ -118,6 +118,7 @@ spec:
   {{- else }}
   probeNamespaceSelector: {}
   {{- end }}
+  enableRemoteWriteReceiver: {{ .Values.prometheus.enableRemoteWriteReceiver }}
   {{- if .Values.prometheus.remoteRead }}
   remoteRead: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.remoteRead "context" $) | nindent 4 }}
   {{- end }}
