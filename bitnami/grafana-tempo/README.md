@@ -106,7 +106,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tempo.existingConfigmap`              | Name of a ConfigMap with the Tempo configuration                                                              | `""`                          |
 | `tempo.overridesConfiguration`         | Tempo components overrides configuration settings                                                             | `""`                          |
 | `tempo.existingOverridesConfigmap`     | Name of a ConfigMap with the tempo overrides configuration                                                    | `""`                          |
-| `tempo.containerPorts.web`             | Tempo components web container port                                                                           | `3100`                        |
+| `tempo.containerPorts.web`             | Tempo components web container port                                                                           | `3200`                        |
 | `tempo.containerPorts.grpc`            | Tempo components GRPC container port                                                                          | `9095`                        |
 | `tempo.containerPorts.gossipRing`      | Tempo components Gossip Ring container port                                                                   | `7946`                        |
 | `tempo.gossipRing.service.ports.http`  | Gossip Ring HTTP headless service port                                                                        | `7946`                        |
@@ -180,7 +180,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                         | Description                                                      | Value       |
 | -------------------------------------------- | ---------------------------------------------------------------- | ----------- |
 | `compactor.service.type`                     | Compactor service type                                           | `ClusterIP` |
-| `compactor.service.ports.http`               | Compactor HTTP service port                                      | `3100`      |
+| `compactor.service.ports.http`               | Compactor HTTP service port                                      | `3200`      |
 | `compactor.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
 | `compactor.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
 | `compactor.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
@@ -258,7 +258,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                           | Description                                                      | Value       |
 | ---------------------------------------------- | ---------------------------------------------------------------- | ----------- |
 | `distributor.service.type`                     | Distributor service type                                         | `ClusterIP` |
-| `distributor.service.ports.http`               | Distributor HTTP service port                                    | `3100`      |
+| `distributor.service.ports.http`               | Distributor HTTP service port                                    | `3200`      |
 | `distributor.service.ports.grpc`               | Distributor GRPC service port                                    | `9095`      |
 | `distributor.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
 | `distributor.service.nodePorts.grpc`           | Node port for GRPC                                               | `""`        |
@@ -340,7 +340,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                                | Description                                                      | Value       |
 | --------------------------------------------------- | ---------------------------------------------------------------- | ----------- |
 | `metricsGenerator.service.type`                     | metricsGenerator service type                                    | `ClusterIP` |
-| `metricsGenerator.service.ports.http`               | metricsGenerator HTTP service port                               | `3100`      |
+| `metricsGenerator.service.ports.http`               | metricsGenerator HTTP service port                               | `3200`      |
 | `metricsGenerator.service.ports.grpc`               | metricsGenerator GRPC service port                               | `9095`      |
 | `metricsGenerator.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
 | `metricsGenerator.service.nodePorts.grpc`           | Node port for GRPC                                               | `""`        |
@@ -433,7 +433,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                        | Description                                                      | Value       |
 | ------------------------------------------- | ---------------------------------------------------------------- | ----------- |
 | `ingester.service.type`                     | Ingester service type                                            | `ClusterIP` |
-| `ingester.service.ports.http`               | Ingester HTTP service port                                       | `3100`      |
+| `ingester.service.ports.http`               | Ingester HTTP service port                                       | `3200`      |
 | `ingester.service.ports.grpc`               | Ingester GRPC service port                                       | `9095`      |
 | `ingester.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
 | `ingester.service.nodePorts.grpc`           | Node port for GRPC                                               | `""`        |
@@ -513,7 +513,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                       | Description                                                      | Value       |
 | ------------------------------------------ | ---------------------------------------------------------------- | ----------- |
 | `querier.service.type`                     | Querier service type                                             | `ClusterIP` |
-| `querier.service.ports.http`               | Querier HTTP service port                                        | `3100`      |
+| `querier.service.ports.http`               | Querier HTTP service port                                        | `3200`      |
 | `querier.service.ports.grpc`               | Querier GRPC service port                                        | `9095`      |
 | `querier.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
 | `querier.service.nodePorts.grpc`           | Node port for GRPC                                               | `""`        |
@@ -636,7 +636,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                             | Description                                                      | Value       |
 | ------------------------------------------------ | ---------------------------------------------------------------- | ----------- |
 | `queryFrontend.service.type`                     | queryFrontend service type                                       | `ClusterIP` |
-| `queryFrontend.service.ports.http`               | queryFrontend HTTP service port                                  | `3100`      |
+| `queryFrontend.service.ports.http`               | queryFrontend HTTP service port                                  | `3200`      |
 | `queryFrontend.service.ports.grpc`               | queryFrontend GRPC service port                                  | `9095`      |
 | `queryFrontend.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
 | `queryFrontend.service.nodePorts.grpc`           | Node port for GRPC                                               | `""`        |
@@ -724,7 +724,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                       | Description                                                      | Value       |
 | ------------------------------------------ | ---------------------------------------------------------------- | ----------- |
 | `vulture.service.type`                     | Vulture service type                                             | `ClusterIP` |
-| `vulture.service.ports.http`               | Vulture HTTP service port                                        | `3100`      |
+| `vulture.service.ports.http`               | Vulture HTTP service port                                        | `3200`      |
 | `vulture.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
 | `vulture.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
 | `vulture.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
