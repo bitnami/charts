@@ -2,7 +2,7 @@ annotations:
   category: Infrastructure
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 1.5.0
+appVersion: 2.0.0
 dependencies:
   - condition: memcached.enabled
     name: memcached
@@ -28,4 +28,4 @@ name: grafana-tempo
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/grafana-tempo
   - https://github.com/grafana/tempo/
-version: 1.4.8
+version: 2.0.0
