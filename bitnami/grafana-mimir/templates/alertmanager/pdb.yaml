@@ -1,5 +1,5 @@
 {{- $replicaCount := int .Values.alertmanager.replicaCount }}
-{{- if and .Values.alertmanager.pdb.create (gt $replicaCount 1) }}
+{{- if and .Values.alertmanager.enabled .Values.alertmanager.pdb.create (gt $replicaCount 1) }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:

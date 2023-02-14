@@ -98,6 +98,9 @@ spec:
           volumeMounts:
             - name: data
               mountPath: {{ .Values.mimir.dataDir }}
+              {{- if .Values.compactor.persistence.subPath }}
+              subPath: {{ .Values.persistence.subPath }}
+              {{- end }}
         {{- end }}
       containers:
         - name: compactor
