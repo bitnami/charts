@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/zookeeper
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/zookeeper
 ```
 
 ## Introduction
@@ -32,8 +32,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/zookeeper
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/zookeeper
 ```
 
 These commands deploy ZooKeeper on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -45,7 +45,7 @@ These commands deploy ZooKeeper on the Kubernetes cluster in the default configu
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -59,7 +59,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -76,7 +75,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the statefulset                                        | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the statefulset                                           | `["infinity"]`  |
-
 
 ### ZooKeeper chart parameters
 
@@ -124,7 +122,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVarsSecret`          | Name of existing Secret containing extra env vars for ZooKeeper nodes                                                      | `""`                    |
 | `command`                     | Override default container command (useful when using custom images)                                                       | `["/scripts/setup.sh"]` |
 | `args`                        | Override default container args (useful when using custom images)                                                          | `[]`                    |
-
 
 ### Statefulset parameters
 
@@ -193,7 +190,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `pdb.minAvailable`                                  | Minimum available ZooKeeper replicas                                                                                                                                                              | `""`            |
 | `pdb.maxUnavailable`                                | Maximum unavailable ZooKeeper replicas                                                                                                                                                            | `1`             |
 
-
 ### Traffic Exposure parameters
 
 | Name                                        | Description                                                                             | Value       |
@@ -220,7 +216,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.enabled`                     | Specifies whether a NetworkPolicy should be created                                     | `false`     |
 | `networkPolicy.allowExternal`               | Don't require client label for connections                                              | `true`      |
 
-
 ### Other Parameters
 
 | Name                                          | Description                                                            | Value   |
@@ -229,7 +224,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`    |
 | `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true`  |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
-
 
 ### Persistence parameters
 
@@ -247,7 +241,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.dataLogDir.existingClaim` | Provide an existing `PersistentVolumeClaim` for ZooKeeper's data log directory | `""`                |
 | `persistence.dataLogDir.selector`      | Selector to match an existing Persistent Volume for ZooKeeper's data log PVC   | `{}`                |
 
-
 ### Volume Permissions parameters
 
 | Name                                                   | Description                                                                                                                       | Value                   |
@@ -263,7 +256,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                                                                               | `{}`                    |
 | `volumePermissions.containerSecurityContext.enabled`   | Enabled init container Security Context                                                                                           | `true`                  |
 | `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                                    | `0`                     |
-
 
 ### Metrics parameters
 
@@ -288,7 +280,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.namespace`         | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)         | `""`        |
 | `metrics.prometheusRule.additionalLabels`  | Additional labels that can be used so PrometheusRule will be discovered by Prometheus | `{}`        |
 | `metrics.prometheusRule.rules`             | PrometheusRule definitions                                                            | `[]`        |
-
 
 ### TLS/SSL parameters
 
@@ -323,7 +314,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tls.resources.limits`                    | The resources limits for the TLS init container                                                    | `{}`                                                                  |
 | `tls.resources.requests`                  | The requested resources for the TLS init container                                                 | `{}`                                                                  |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
@@ -339,7 +329,7 @@ The above command sets the ZooKeeper user to `newUser`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/zookeeper
+helm install my-release -f values.yaml my-repo/zookeeper
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -390,6 +380,7 @@ You can also set the log4j logging level and what log appenders are turned on, b
 ```console
 zookeeper.root.logger=INFO, CONSOLE
 ```
+
 the available appender is
 
 - CONSOLE
@@ -504,7 +495,7 @@ Backwards compatibility is not guaranteed unless you modify the labels used on t
 Use the workaround below to upgrade from versions previous to 2.0.0. The following example assumes that the release name is `zookeeper`:
 
 ```console
-$ kubectl delete statefulset zookeeper-zookeeper --cascade=false
+kubectl delete statefulset zookeeper-zookeeper --cascade=false
 ```
 
 ### To 1.0.0
@@ -513,7 +504,7 @@ Backwards compatibility is not guaranteed unless you modify the labels used on t
 Use the workaround below to upgrade from versions previous to 1.0.0. The following example assumes that the release name is zookeeper:
 
 ```console
-$ kubectl delete statefulset zookeeper-zookeeper --cascade=false
+kubectl delete statefulset zookeeper-zookeeper --cascade=false
 ```
 
 ## License
@@ -524,7 +515,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

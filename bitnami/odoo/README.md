@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/odoo
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/odoo
 ```
 
 ## Introduction
@@ -35,8 +35,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/odoo
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/odoo
 ```
 
 The command deploys Odoo on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -48,13 +48,11 @@ The command deploys Odoo on the Kubernetes cluster in the default configuration.
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
 > If persistence.resourcePolicy is set to keep, you should manually delete the PVCs.
-
-
 
 ## Parameters
 
@@ -65,7 +63,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -89,7 +86,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullSecrets`      | Odoo image pull secrets                                                                              | `[]`                          |
 | `image.debug`            | Enable image debug mode                                                                              | `false`                       |
 
-
 ### Odoo Configuration parameters
 
 | Name                    | Description                                                          | Value              |
@@ -112,7 +108,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVars`          | Array with extra environment variables to add to the Odoo container  | `[]`               |
 | `extraEnvVarsCM`        | Name of existing ConfigMap containing extra env vars                 | `""`               |
 | `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                    | `""`               |
-
 
 ### Odoo deployment parameters
 
@@ -174,7 +169,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidecars`                           | Add additional sidecar containers to the Odoo pod                                                                        | `[]`            |
 | `initContainers`                     | Add additional init containers to the Odoo pods                                                                          | `[]`            |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -205,7 +199,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Persistence Parameters
 
 | Name                                                   | Description                                                                                                                           | Value           |
@@ -226,7 +219,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.containerSecurityContext.enabled`   | Enable init container's Security Context                                                                                              | `true`          |
 | `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                                                       | `0`             |
 
-
 ### RBAC Parameters
 
 | Name                                          | Description                                                                                              | Value   |
@@ -235,7 +227,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | The name of the ServiceAccount to create (name generated using common.names.fullname template otherwise) | `""`    |
 | `serviceAccount.automountServiceAccountToken` | Auto-mount the service account token in the pod                                                          | `false` |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                     | `{}`    |
-
 
 ### Other Parameters
 
@@ -249,7 +240,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.maxReplicas`  | Maximum number of Odoo replicas                                | `11`    |
 | `autoscaling.targetCPU`    | Target CPU utilization percentage                              | `50`    |
 | `autoscaling.targetMemory` | Target Memory utilization percentage                           | `50`    |
-
 
 ### Database Parameters
 
@@ -273,7 +263,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.existingSecretPasswordKey`         | Name of an existing secret key containing the non-root credentials       | `""`           |
 | `externalDatabase.existingSecretPostgresPasswordKey` | Name of an existing secret key containing the admin credentials          | `""`           |
 
-
 ### NetworkPolicy parameters
 
 | Name                                                          | Description                                                                                                              | Value   |
@@ -290,7 +279,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                       | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                           | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                               | `{}`    |
-
 
 The above parameters map to the env variables defined in [bitnami/odoo](https://github.com/bitnami/containers/tree/main/bitnami/odoo). For more information please refer to the [bitnami/odoo](https://github.com/bitnami/containers/tree/main/bitnami/odoo) image documentation.
 
@@ -309,7 +297,7 @@ The above command sets the Odoo administrator account password to `password` and
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/odoo
+helm install my-release -f values.yaml my-repo/odoo
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -399,7 +387,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

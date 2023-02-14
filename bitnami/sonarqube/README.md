@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/sonarqube
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/sonarqube
 ```
 
 ## Introduction
@@ -31,8 +31,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/sonarqube
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/sonarqube
 ```
 
 The command deploys SonarQube&trade; on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -44,7 +44,7 @@ The command deploys SonarQube&trade; on the Kubernetes cluster in the default co
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -58,7 +58,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -75,7 +74,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
-
 ### SonarQube&trade; Image parameters
 
 | Name                | Description                                                                                                      | Value                |
@@ -87,7 +85,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullPolicy`  | SonarQube&trade; image pull policy                                                                               | `IfNotPresent`       |
 | `image.pullSecrets` | SonarQube&trade; image pull secrets                                                                              | `[]`                 |
 | `image.debug`       | Enable SonarQube&trade; image debug mode                                                                         | `false`              |
-
 
 ### SonarQube&trade; Configuration parameters
 
@@ -110,8 +107,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ldap.url`                    | URL of the LDAP server. If you are using ldaps, you should install the server certificate into the Java truststore                                                        | `""`                                                     |
 | `ldap.bindDn`                 | The username of an LDAP user to connect (or bind) with. Leave this blank for anonymous access to the LDAP directory.                                                      | `""`                                                     |
 | `ldap.bindPassword`           | The password of the user to connect with. Leave this blank for anonymous access to the LDAP directory.                                                                    | `""`                                                     |
-| `ldap.authentication`         | Possible values: simple, CRAM-MD5, DIGEST-MD5, GSSAPI. See the tutorial on authentication mechanisms (http://java.sun.com/products/jndi/tutorial/ldap/security/auth.html) | `simple`                                                 |
-| `ldap.realm`                  | See Digest-MD5 Authentication, CRAM-MD5 Authentication (http://java.sun.com/products/jndi/tutorial/ldap/security/digest.html)                                             | `""`                                                     |
+| `ldap.authentication`         | Possible values: simple, CRAM-MD5, DIGEST-MD5, GSSAPI. See the tutorial on authentication mechanisms (<http://java.sun.com/products/jndi/tutorial/ldap/security/auth.html>) | `simple`                                                 |
+| `ldap.realm`                  | See Digest-MD5 Authentication, CRAM-MD5 Authentication (<http://java.sun.com/products/jndi/tutorial/ldap/security/digest.html>)                                             | `""`                                                     |
 | `ldap.contextFactoryClass`    | Context factory class.                                                                                                                                                    | `com.sun.jndi.ldap.LdapCtxFactory`                       |
 | `ldap.StartTLS`               | Enable use of StartTLS                                                                                                                                                    | `false`                                                  |
 | `ldap.followReferrals`        | Follow referrals or not                                                                                                                                                   | `true`                                                   |
@@ -133,7 +130,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVars`                | Array with extra environment variables to add to SonarQube&trade; nodes                                                                                                   | `[]`                                                     |
 | `extraEnvVarsCM`              | Name of existing ConfigMap containing extra env vars for SonarQube&trade; nodes                                                                                           | `""`                                                     |
 | `extraEnvVarsSecret`          | Name of existing Secret containing extra env vars for SonarQube&trade; nodes                                                                                              | `""`                                                     |
-
 
 ### SonarQube&trade; deployment parameters
 
@@ -190,7 +186,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidecars`                              | Add additional sidecar containers to the SonarQube&trade; pod(s)                               | `[]`            |
 | `initContainers`                        | Add additional init containers to the SonarQube&trade; pod(s)                                  | `[]`            |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -223,7 +218,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### SonarQube caCerts provisioning parameters
 
 | Name                                         | Description                                                                                                   | Value                   |
@@ -239,7 +233,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `caCerts.resources.limits`                   | The resources limits for the init container                                                                   | `{}`                    |
 | `caCerts.resources.requests`                 | The requested resources for the init container                                                                | `{}`                    |
 | `caCerts.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                               | `0`                     |
-
 
 ### SonarQube plugin provisioning parameters
 
@@ -257,7 +250,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `plugins.resources.limits`                   | The resources limits for the init container                                                                   | `{}`                    |
 | `plugins.resources.requests`                 | The requested resources for the init container                                                                | `{}`                    |
 | `plugins.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                               | `0`                     |
-
 
 ### Persistence Parameters
 
@@ -281,7 +273,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.requests`                 | The requested resources for the init container                                                                | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                               | `0`                     |
 
-
 ### Sysctl Image parameters
 
 | Name                        | Description                                                                                                   | Value                   |
@@ -295,7 +286,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctl.image.pullSecrets`  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
 | `sysctl.resources.limits`   | The resources limits for the init container                                                                   | `{}`                    |
 | `sysctl.resources.requests` | The requested resources for the init container                                                                | `{}`                    |
-
 
 ### Other Parameters
 
@@ -311,7 +301,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.maxReplicas`                     | Maximum number of SonarQube&trade; replicas                                                                         | `11`    |
 | `autoscaling.targetCPU`                       | Target CPU utilization percentage                                                                                   | `50`    |
 | `autoscaling.targetMemory`                    | Target Memory utilization percentage                                                                                | `50`    |
-
 
 ### Metrics parameters
 
@@ -344,7 +333,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.relabelings`                | Specify general relabeling                                                                                   | `[]`                   |
 | `metrics.serviceMonitor.selector`                   | Prometheus instance selector labels                                                                          | `{}`                   |
 
-
 ### PostgreSQL subchart settings
 
 | Name                                           | Description                                                                        | Value               |
@@ -362,7 +350,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `postgresql.primary.persistence.accessMode`    | PVC Access Mode for PostgreSQL volume                                              | `ReadWriteOnce`     |
 | `postgresql.primary.persistence.size`          | PVC Storage Request for PostgreSQL volume                                          | `8Gi`               |
 
-
 ### External Database settings
 
 | Name                              | Description                                                                                                     | Value       |
@@ -373,7 +360,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.existingSecret` | Secret containing the password of an external PostgreSQL instance to connect (only if postgresql.enabled=false) | `""`        |
 | `externalDatabase.database`       | Database inside an external PostgreSQL to connect (only if postgresql.enabled=false)                            | `sonarqube` |
 | `externalDatabase.port`           | Port of an external PostgreSQL to connect (only if postgresql.enabled=false)                                    | `5432`      |
-
 
 The above parameters map to the env variables defined in [bitnami/sonarqube](https://github.com/bitnami/containers/tree/main/bitnami/sonarqube). For more information please refer to the [bitnami/sonarqube](https://github.com/bitnami/containers/tree/main/bitnami/sonarqube) image documentation.
 
@@ -394,7 +380,7 @@ The above command sets the sonarqube administrator account username and password
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/sonarqube
+helm install my-release -f values.yaml my-repo/sonarqube
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -489,7 +475,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

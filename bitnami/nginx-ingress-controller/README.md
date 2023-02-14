@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/nginx-ingress-controller
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/nginx-ingress-controller
 ```
 
 ## Introduction
@@ -33,8 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/nginx-ingress-controller
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/nginx-ingress-controller
 ```
 
 These commands deploy nginx-ingress-controller on the Kubernetes cluster in the default configuration.
@@ -46,7 +46,7 @@ These commands deploy nginx-ingress-controller on the Kubernetes cluster in the 
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -60,7 +60,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 
-
 ### Common parameters
 
 | Name                | Description                                                          | Value           |
@@ -73,7 +72,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `commonAnnotations` | Add annotations to all the deployed resources                        | `{}`            |
 | `extraDeploy`       | Array of extra objects to deploy with the release                    | `[]`            |
 | `clusterDomain`     | Kubernetes cluster domain name                                       | `cluster.local` |
-
 
 ### Nginx Ingress Controller parameters
 
@@ -117,7 +115,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVars`                         | Extra environment variables to be set on Nginx Ingress container                                                                                   | `[]`                               |
 | `extraEnvVarsCM`                       | Name of a existing ConfigMap containing extra environment variables                                                                                | `""`                               |
 | `extraEnvVarsSecret`                   | Name of a existing Secret containing extra environment variables                                                                                   | `""`                               |
-
 
 ### Nginx Ingress deployment / daemonset parameters
 
@@ -184,7 +181,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customTemplate`                                    | Override NGINX template                                                                                                                     | `{}`           |
 | `topologySpreadConstraints`                         | Topology spread constraints rely on node labels to identify the topology domain(s) that each Node is in                                     | `[]`           |
 | `podSecurityPolicy.enabled`                         | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false`        |
-
 
 ### Default backend parameters
 
@@ -261,7 +257,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `defaultBackend.pdb.minAvailable`                      | Minimum number/percentage of Default backend pods that should remain scheduled                                  | `1`                    |
 | `defaultBackend.pdb.maxUnavailable`                    | Maximum number/percentage of Default backend pods that may be made unavailable                                  | `""`                   |
 
-
 ### Traffic exposure parameters
 
 | Name                               | Description                                                                                                                            | Value          |
@@ -282,7 +277,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                   | `None`         |
 | `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                            | `{}`           |
 
-
 ### RBAC parameters
 
 | Name                                          | Description                                                    | Value  |
@@ -293,7 +287,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account | `true` |
 | `rbac.create`                                 | Specifies whether RBAC rules should be created                 | `true` |
 | `rbac.rules`                                  | Custom RBAC rules                                              | `[]`   |
-
 
 ### Other parameters
 
@@ -307,7 +300,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.maxReplicas`  | Maximum number of Controller replicas                                     | `11`    |
 | `autoscaling.targetCPU`    | Target CPU utilization percentage                                         | `""`    |
 | `autoscaling.targetMemory` | Target Memory utilization percentage                                      | `""`    |
-
 
 ### Metrics parameters
 
@@ -334,7 +326,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.namespace`         | Namespace which Prometheus is running in                                          | `""`        |
 | `metrics.prometheusRule.rules`             | Rules to be prometheus in YAML format, check values for an example                | `[]`        |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
@@ -348,7 +339,7 @@ The above command sets the `image.pullPolicy` to `Always`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/nginx-ingress-controller
+helm install my-release -f values.yaml my-repo/nginx-ingress-controller
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -450,9 +441,9 @@ Consequences:
 
 #### Useful links**
 
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://helm.sh/docs/topics/v2_v3_migration/>
+- <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
 ### To 1.0.0
 
@@ -475,7 +466,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/argo-workflows
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/argo-workflows
 ```
 
 ## Introduction
@@ -33,8 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/argo-workflows
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/argo-workflows
 ```
 
 The command deploys Argo Workflows on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -46,7 +46,7 @@ The command deploys Argo Workflows on the Kubernetes cluster in the default conf
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -61,7 +61,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                   | Description                                                                                                                                                                                                           | Value           |
@@ -75,7 +74,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraDeploy`          | Array of extra objects to deploy with the release                                                                                                                                                                     | `[]`            |
 | `rbac.singleNamespace` | Restrict Argo to only deploy into a single namespace by apply Roles and RoleBindings instead of the Cluster equivalents, and start argo-cli with the --namespaced flag. Use it in clusters with strict access policy. | `false`         |
 | `createAggregateRoles` | Create Aggregated cluster roles                                                                                                                                                                                       | `true`          |
-
 
 ### Argo Workflows Server configuration parameters
 
@@ -179,7 +177,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.service.externalTrafficPolicy`                   | server service external traffic policy                                                                              | `Cluster`                   |
 | `server.service.annotations`                             | Additional custom annotations for server service                                                                    | `{}`                        |
 | `server.service.extraPorts`                              | Extra port to expose on the server service                                                                          | `[]`                        |
-
 
 ### Argo Workflows Controller configuration parameters
 
@@ -287,7 +284,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.service.annotations`                             | Additional custom annotations for controller service                                                                          | `{}`                               |
 | `controller.service.extraPorts`                              | Extra port to expose on the controller service                                                                                | `[]`                               |
 
-
 ### Executor configuration section
 
 | Name                                                       | Description                                                                                              | Value                        |
@@ -304,7 +300,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `executor.containerSecurityContext.enabled`                | Enabled executor pods' Security Context                                                                  | `true`                       |
 | `executor.containerSecurityContext.fsGroup`                | Set executor pod's Security Context fsGroup                                                              | `1001`                       |
 | `executor.containerSecurityContext.readOnlyRootFilesystem` | Set read only root file system pod's Security Context                                                    | `true`                       |
-
 
 ### Traffic Exposure Parameters
 
@@ -325,7 +320,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`          | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.extraRules`       | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Workflows configuration
 
 | Name                                                    | Description                                                                                | Value   |
@@ -335,7 +329,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `workflows.serviceAccount.automountServiceAccountToken` | Automount service account token for the workflows service account                          | `true`  |
 | `workflows.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`. | `{}`    |
 | `workflows.rbac.create`                                 | Whether to create RBAC resource to run workflows                                           | `true`  |
-
 
 ### PostgreSQL subchart
 
@@ -347,7 +340,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `postgresql.auth.database`            | PortgreSQL database name                                               | `bn_argo_workflows` |
 | `postgresql.auth.password`            | PortgreSQL database password                                           | `""`                |
 
-
 ### MySQL subchart
 
 | Name                        | Description                                                  | Value               |
@@ -357,7 +349,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mysql.auth.username`       | MySQL username                                               | `mysql`             |
 | `mysql.auth.database`       | MySQL database name                                          | `bn_argo_workflows` |
 | `mysql.auth.password`       | MySQL database password                                      | `""`                |
-
 
 ### External Database configuration
 
@@ -372,8 +363,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.existingSecret` | The name of an existing secret with database credentials                    | `""`                |
 | `externalDatabase.type`           | Either postgresql or mysql                                                  | `""`                |
 
-
-See https://github.com/bitnami-labs/readme-generator-for-helm to create the table
+See <https://github.com/bitnami-labs/readme-generator-for-helm> to create the table
 
 The above parameters map to the env variables defined in [bitnami/argo-workflow-cli](https://github.com/bitnami/containers/tree/main/bitnami/argo-workflow-cli). For more information please refer to the [bitnami/argo-workflow-cli](https://github.com/bitnami/containers/tree/main/bitnami/argo-workflow-cli) image documentation.
 
@@ -394,7 +384,7 @@ The above command sets the Argo Workflows administrator account username and pas
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/argo-workflows
+helm install my-release -f values.yaml my-repo/argo-workflows
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -415,7 +405,7 @@ You may want to have Argo Workflows controller connected to a database to store 
 postgresql.enabled=true
 ```
 
-If your installation does not require to to store controller evidences, you can disable the controller persistence by setting `postgresql.enabled=false`, `mysql.enabled=false` and ` externalDatabase.enabled=false`.
+If your installation does not require to to store controller evidences, you can disable the controller persistence by setting `postgresql.enabled=false`, `mysql.enabled=false` and `externalDatabase.enabled=false`.
 
 #### External database
 
@@ -490,7 +480,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

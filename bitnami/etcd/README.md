@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/etcd
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/etcd
 ```
 
 ## Introduction
@@ -32,8 +32,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/etcd
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/etcd
 ```
 
 These commands deploy etcd on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -45,7 +45,7 @@ These commands deploy etcd on the Kubernetes cluster in the default configuratio
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -59,7 +59,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -75,7 +74,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]`  |
-
 
 ### etcd parameters
 
@@ -126,7 +124,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVarsSecret`                   | Name of existing Secret containing extra env vars                                                           | `""`                 |
 | `command`                              | Default container command (useful when using custom images)                                                 | `[]`                 |
 | `args`                                 | Default container args (useful when using custom images)                                                    | `[]`                 |
-
 
 ### etcd statefulset parameters
 
@@ -192,7 +189,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistentVolumeClaimRetentionPolicy.whenScaled`   | Volume retention behavior when the replica count of the StatefulSet is reduced            | `Retain`        |
 | `persistentVolumeClaimRetentionPolicy.whenDeleted`  | Volume retention behavior that applies when the StatefulSet is deleted                    | `Retain`        |
 
-
 ### Traffic exposure parameters
 
 | Name                               | Description                                                                        | Value       |
@@ -215,7 +211,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"               | `None`      |
 | `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                        | `{}`        |
 
-
 ### Persistence parameters
 
 | Name                       | Description                                                     | Value               |
@@ -226,7 +221,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.accessModes`  | Persistent Volume Access Modes                                  | `["ReadWriteOnce"]` |
 | `persistence.size`         | PVC Storage Request for etcd data volume                        | `8Gi`               |
 | `persistence.selector`     | Selector to match an existing Persistent Volume                 | `{}`                |
-
 
 ### Volume Permissions parameters
 
@@ -242,7 +236,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.limits`   | Init container volume-permissions resource  limits                                                                                | `{}`                    |
 | `volumePermissions.resources.requests` | Init container volume-permissions resource  requests                                                                              | `{}`                    |
 
-
 ### Network Policy parameters
 
 | Name                                    | Description                                                | Value   |
@@ -253,7 +246,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy               | `[]`    |
 | `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces     | `{}`    |
 | `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces | `{}`    |
-
 
 ### Metrics parameters
 
@@ -273,7 +265,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.namespace`        | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                 | `""`         |
 | `metrics.prometheusRule.additionalLabels` | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                         | `{}`         |
 | `metrics.prometheusRule.rules`            | Prometheus Rule definitions                                                                                                   | `[]`         |
-
 
 ### Snapshotting parameters
 
@@ -295,7 +286,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `disasterRecovery.pvc.size`                     | PVC Storage Request                                                     | `2Gi`          |
 | `disasterRecovery.pvc.storageClassName`         | Storage Class for snapshots volume                                      | `nfs`          |
 
-
 ### Service account parameters
 
 | Name                                          | Description                                                  | Value   |
@@ -306,7 +296,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.annotations`                  | Additional annotations to be included on the service account | `{}`    |
 | `serviceAccount.labels`                       | Additional labels to be included on the service account      | `{}`    |
 
-
 ### Other parameters
 
 | Name                 | Description                                                    | Value  |
@@ -314,7 +303,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `pdb.create`         | Enable/disable a Pod Disruption Budget creation                | `true` |
 | `pdb.minAvailable`   | Minimum number/percentage of pods that should remain scheduled | `51%`  |
 | `pdb.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable | `""`   |
-
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -330,7 +318,7 @@ The above command sets the etcd `root` account password to `secretpassword`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/etcd
+helm install my-release -f values.yaml my-repo/etcd
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -396,6 +384,7 @@ extraEnvVars:
 Since etcd keeps an exact history of its keyspace, this history should be periodically compacted to avoid performance degradation and eventual storage space exhaustion. Compacting the keyspace history drops all information about keys superseded prior to a given keyspace revision. The space used by these keys then becomes available for additional writes to the keyspace.
 
 `autoCompactionMode`, by default periodic. Valid values: "periodic", "revision".
+
 - 'periodic' for duration based retention, defaulting to hours if no time unit is provided (e.g. "5m").
 - 'revision' for revision number based retention.
 `autoCompactionRetention` for mvcc key value store in hour, by default 0, means disabled.
@@ -526,7 +515,7 @@ Backwards compatibility is not guaranteed unless you modify the labels used on t
 Use the workaround below to upgrade from versions previous to 1.0.0. The following example assumes that the release name is etcd:
 
 ```console
-$ kubectl delete statefulset etcd --cascade=false
+kubectl delete statefulset etcd --cascade=false
 ```
 
 ## License
@@ -537,7 +526,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

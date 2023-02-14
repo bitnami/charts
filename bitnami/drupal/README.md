@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/drupal
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/drupal
 ```
 
 ## Introduction
@@ -35,8 +35,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/drupal
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/drupal
 ```
 
 The command deploys Drupal on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -48,7 +48,7 @@ The command deploys Drupal on the Kubernetes cluster in the default configuratio
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -63,7 +63,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                                                                                | Value |
@@ -75,7 +74,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `commonAnnotations` | Common annotations to add to all Drupal resources (sub-charts are not considered). Evaluated as a template | `{}`  |
 | `commonLabels`      | Common labels to add to all Drupal resources (sub-charts are not considered). Evaluated as a template      | `{}`  |
 | `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template).                               | `[]`  |
-
 
 ### Drupal parameters
 
@@ -171,7 +169,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podAnnotations`                              | Pod annotations                                                                                                        | `{}`                  |
 | `podLabels`                                   | Add additional labels to the pod (evaluated as a template)                                                             | `{}`                  |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -202,7 +199,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Database parameters
 
 | Name                                        | Description                                                                                                                                                            | Value               |
@@ -226,7 +222,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.database`                 | Name of the existing database                                                                                                                                          | `bitnami_drupal`    |
 | `externalDatabase.existingSecret`           | Name of a secret with the database password. (externalDatabase.password will be ignored and picked up from this secret). The secret has to contain the key db-password | `""`                |
 
-
 ### Volume Permissions parameters
 
 | Name                                   | Description                                                                                                                                               | Value                   |
@@ -240,7 +235,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
 | `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`                    |
-
 
 ### Metrics parameters
 
@@ -275,7 +269,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.additionalLabels`  | Additional labels for the prometheusRule                                                                        | `{}`                      |
 | `metrics.prometheusRule.rules`             | Custom Prometheus rules                                                                                         | `[]`                      |
 
-
 ### Certificate injection parameters
 
 | Name                                                 | Description                                                                                                       | Value                                    |
@@ -299,7 +292,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                              | `[]`                                     |
 
-
 ### NetworkPolicy parameters
 
 | Name                                                          | Description                                                                                                                | Value   |
@@ -320,7 +312,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                             | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                 | `{}`    |
 
-
 The above parameters map to the env variables defined in [bitnami/drupal](https://github.com/bitnami/containers/tree/main/bitnami/drupal). For more information please refer to the [bitnami/drupal](https://github.com/bitnami/containers/tree/main/bitnami/drupal) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -338,7 +329,7 @@ The above command sets the Drupal administrator account username and password to
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/drupal
+helm install my-release -f values.yaml my-repo/drupal
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -389,7 +380,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 1. Install the chart
 
 ```console
-$ helm install my-release --set persistence.existingClaim=PVC_NAME my-repo/drupal
+helm install my-release --set persistence.existingClaim=PVC_NAME my-repo/drupal
 ```
 
 ### Host path
@@ -405,7 +396,7 @@ $ helm install my-release --set persistence.existingClaim=PVC_NAME my-repo/drupa
 1. Install the chart
 
     ```console
-    $ helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT my-repo/drupal
+    helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT my-repo/drupal
     ```
 
     This will mount the `drupal-data` volume into the `hostPath` directory. The site data will be persisted if the mount path contains valid data, else the site data will be initialized at first launch.
@@ -420,6 +411,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 ### To 12.0.0
 
 This major release bumps the MariaDB version to 10.6. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-105-to-mariadb-106/) for upgrading from MariaDB 10.5 to 10.6. No major issues are expected during the upgrade.
+
 ### To 11.0.0
 
 This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
@@ -436,24 +428,24 @@ Additionally also updates the MariaDB subchart to it newest major, 10.0.0, which
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
+#### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - Move dependency information from the *requirements.yaml* to the *Chart.yaml*
 - After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
-**Considerations when upgrading to this version**
+#### Considerations when upgrading to this version
 
 - If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
 - If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
 
-**Useful links**
+#### Useful links
 
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://helm.sh/docs/topics/v2_v3_migration/>
+- <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
 ### To 9.0.0
 
@@ -469,22 +461,22 @@ To upgrade to `9.0.0`, you have two alternatives:
 Obtain the credentials and the name of the PVC used to hold the MariaDB data on your current release:
 
 ```console
-$ export DRUPAL_PASSWORD=$(kubectl get secret --namespace default drupal -o jsonpath="{.data.drupal-password}" | base64 -d)
-$ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default drupal-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
-$ export MARIADB_PASSWORD=$(kubectl get secret --namespace default drupal-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
-$ export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=drupal -o jsonpath="{.items[0].metadata.name}")
+export DRUPAL_PASSWORD=$(kubectl get secret --namespace default drupal -o jsonpath="{.data.drupal-password}" | base64 -d)
+export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default drupal-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
+export MARIADB_PASSWORD=$(kubectl get secret --namespace default drupal-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
+export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=drupal -o jsonpath="{.items[0].metadata.name}")
 ```
 
 Upgrade your release (maintaining the version) disabling MariaDB and scaling Drupal replicas to 0:
 
 ```console
-$ helm upgrade drupal my-repo/drupal --set drupalPassword=$DRUPAL_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.2.1
+helm upgrade drupal my-repo/drupal --set drupalPassword=$DRUPAL_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.2.1
 ```
 
 Finally, upgrade you release to 9.0.0 reusing the existing PVC, and enabling back MariaDB:
 
 ```console
-$ helm upgrade drupal my-repo/drupal --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set drupalPassword=$DRUPAL_PASSWORD
+helm upgrade drupal my-repo/drupal --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set drupalPassword=$DRUPAL_PASSWORD
 ```
 
 You should see the lines below in MariaDB container logs:
@@ -514,7 +506,7 @@ This upgrade also adapts the chart to the latest Bitnami good practices. Check t
 
 Helm performs a lookup for the object based on its group (apps), version (v1), and kind (Deployment). Also known as its GroupVersionKind, or GVK. Changing the GVK is considered a compatibility breaker from Kubernetes' point of view, so you cannot "upgrade" those objects to the new GVK in-place. Earlier versions of Helm 3 did not perform the lookup correctly which has since been fixed to match the spec.
 
-In https://github.com/helm/charts/pull/17295 the `apiVersion` of the deployment resources was updated to `apps/v1` in tune with the api's deprecated, resulting in compatibility breakage.
+In <https://github.com/helm/charts/pull/17295> the `apiVersion` of the deployment resources was updated to `apps/v1` in tune with the api's deprecated, resulting in compatibility breakage.
 
 This major version signifies this change.
 
@@ -524,8 +516,8 @@ Backwards compatibility is not guaranteed unless you modify the labels used on t
 Use the workaround below to upgrade from versions previous to 2.0.0. The following example assumes that the release name is drupal:
 
 ```console
-$ kubectl patch deployment drupal-drupal --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
-$ kubectl delete statefulset drupal-mariadb --cascade=false
+kubectl patch deployment drupal-drupal --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+kubectl delete statefulset drupal-mariadb --cascade=false
 ```
 
 ## Community supported solution
@@ -544,7 +536,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

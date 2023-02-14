@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/appsmith
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/appsmith
 ```
 
 ## Introduction
@@ -37,8 +37,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/appsmith
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/appsmith
 ```
 
 The command deploys Appsmith on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -50,7 +50,7 @@ The command deploys Appsmith on the Kubernetes cluster in the default configurat
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -64,7 +64,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -89,11 +88,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullSecrets`      | Appsmith image pull secrets                                                                                                                         | `[]`                 |
 | `image.debug`            | Enable Appsmith image debug mode                                                                                                                    | `false`              |
 
-
 ### Appsmith common paramters
-
-
-
 
 ### Appsmith Client Parameters
 
@@ -157,7 +152,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.sidecars`                                        | Add additional sidecar containers to the Appsmith client pod(s)                                                          | `[]`            |
 | `client.initContainers`                                  | Add additional init containers to the Appsmith client pod(s)                                                             | `[]`            |
 
-
 ### Appsmith Client Traffic Exposure Parameters
 
 | Name                                      | Description                                                                                                                      | Value                    |
@@ -187,7 +181,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `client.ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `client.ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
-
 
 ### Appsmith Backend Parameters
 
@@ -260,7 +253,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backend.sidecars`                                        | Add additional sidecar containers to the Appsmith backend pod(s)                                                         | `[]`                  |
 | `backend.initContainers`                                  | Add additional init containers to the Appsmith backend pod(s)                                                            | `[]`                  |
 
-
 ### Appsmith Backend Traffic Exposure Parameters
 
 | Name                                       | Description                                                                                 | Value       |
@@ -277,7 +269,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backend.service.sessionAffinity`          | Control where backend requests go, to the same pod or round-robin                           | `None`      |
 | `backend.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                 | `{}`        |
 
-
 ### Backend Persistence Parameters
 
 | Name                                | Description                                                                                             | Value               |
@@ -292,7 +283,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backend.persistence.existingClaim` | The name of an existing PVC to use for persistence                                                      | `""`                |
 | `backend.persistence.selector`      | Selector to match an existing Persistent Volume for WordPress data PVC                                  | `{}`                |
 | `backend.persistence.dataSource`    | Custom PVC data source                                                                                  | `{}`                |
-
 
 ### Appsmith RTS Parameters
 
@@ -356,7 +346,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rts.sidecars`                                        | Add additional sidecar containers to the Appsmith rts pod(s)                                                             | `[]`            |
 | `rts.initContainers`                                  | Add additional init containers to the Appsmith rts pod(s)                                                                | `[]`            |
 
-
 ### Appsmith RTS Traffic Exposure Parameters
 
 | Name                                   | Description                                                                             | Value       |
@@ -373,7 +362,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rts.service.sessionAffinity`          | Control where rts requests go, to the same pod or round-robin                           | `None`      |
 | `rts.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                             | `{}`        |
 
-
 ### Init Container Parameters
 
 | Name                                                   | Description                                                                                     | Value                   |
@@ -388,7 +376,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
 
-
 ### Other Parameters
 
 | Name                                          | Description                                                      | Value  |
@@ -397,7 +384,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`   |
 | `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`   |
 | `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true` |
-
 
 ### External MongoDB parameters
 
@@ -411,7 +397,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials | `""`       |
 | `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials      | `""`       |
 
-
 ### External Redis parameters
 
 | Name                                      | Description                                                          | Value  |
@@ -421,7 +406,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalRedis.password`                  | Password for the Redis                                               | `""`   |
 | `externalRedis.existingSecret`            | Name of an existing secret resource containing the Redis credentials | `""`   |
 | `externalRedis.existingSecretPasswordKey` | Name of an existing secret key containing the Redis credentials      | `""`   |
-
 
 ### Redis sub-chart parameters
 
@@ -435,7 +419,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `redis.auth.password`              | Redis password                                 | `""`         |
 | `redis.auth.existingSecret`        | Name of a secret containing the Redis password | `""`         |
 
-
 ### MongoDB sub-chart parameters
 
 | Name                             | Description                                            | Value        |
@@ -447,8 +430,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mongodb.auth.databases`         | MongoDB database creation                              | `[]`         |
 | `mongodb.containerPorts.mongodb` | MongoDB container port (used by the headless service)  | `27017`      |
 | `mongodb.arbiter.enabled`        | Enable Arbiter nodes in the ReplicaSet                 | `false`      |
-
-
 
 The above parameters map to the env variables defined in [bitnami/appsmith](https://github.com/bitnami/containers/tree/main/bitnami/appsmith). For more information please refer to the [bitnami/appsmith](https://github.com/bitnami/containers/tree/main/bitnami/appsmith) image documentation.
 
@@ -469,7 +450,7 @@ The above command sets the appsmith administrator account username and password 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/appsmith
+helm install my-release -f values.yaml my-repo/appsmith
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -558,7 +539,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

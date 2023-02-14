@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/ghost
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/ghost
 ```
 
 ## Introduction
@@ -35,8 +35,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/ghost
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/ghost
 ```
 
 The command deploys Ghost on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -48,7 +48,7 @@ The command deploys Ghost on the Kubernetes cluster in the default configuration
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -63,7 +63,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                        | Value           |
@@ -76,7 +75,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`     | Kubernetes cluster domain name                     | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`            |
 
-
 ### Ghost Image parameters
 
 | Name                | Description                                                                                           | Value                 |
@@ -88,7 +86,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullPolicy`  | Ghost image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets` | Ghost image pull secrets                                                                              | `[]`                  |
 | `image.debug`       | Enable image debug mode                                                                               | `false`               |
-
 
 ### Ghost Configuration parameters
 
@@ -116,7 +113,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVars`       | Array with extra environment variables to add to the Ghost container | `[]`               |
 | `extraEnvVarsCM`     | Name of existing ConfigMap containing extra env vars                 | `""`               |
 | `extraEnvVarsSecret` | Name of existing Secret containing extra env vars                    | `""`               |
-
 
 ### Ghost deployment parameters
 
@@ -173,7 +169,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                       | `{}`            |
 | `customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                      | `{}`            |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -206,7 +201,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Persistence Parameters
 
 | Name                                          | Description                                                                                                   | Value                   |
@@ -228,7 +222,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                                   | `{}`                    |
 | `volumePermissions.resources.requests`        | The requested resources for the init container                                                                | `{}`                    |
 | `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                               | `0`                     |
-
 
 ### Database Parameters
 
@@ -254,7 +247,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.ssl`                   | External Database ssl                                                   | `false`         |
 | `externalDatabase.sslCaFile`             | External Database ssl CA filepath                                       | `""`            |
 
-
 ### NetworkPolicy parameters
 
 | Name                                                          | Description                                                                                                               | Value   |
@@ -275,7 +267,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.       | `""`    |
 | `serviceAccount.automountServiceAccountToken`                 | Automount service account token for the server service account                                                            | `true`  |
 | `serviceAccount.annotations`                                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                | `{}`    |
-
 
 The above parameters map to the env variables defined in [bitnami/ghost](https://github.com/bitnami/containers/tree/main/bitnami/ghost). For more information please refer to the [bitnami/ghost](https://github.com/bitnami/containers/tree/main/bitnami/ghost) image documentation.
 
@@ -308,7 +299,7 @@ The above command sets the Ghost administrator account username and password to 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/ghost
+helm install my-release -f values.yaml my-repo/ghost
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -387,7 +378,6 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
-
 ### To 19.0.0
 
 This major release changes database management system from MariaDB to MySQL. Since a new DB will be used, you need to create a back up beforehand and restore it in order to keep your data. See [the official migration docs](https://ghost.org/docs/migration/ghost/).
@@ -428,30 +418,30 @@ In this major there were two main changes introduced:
 
 Please read the update notes carefully.
 
-**1. Adaptation to Helm v2 EOL**
+#### 1. Adaptation to Helm v2 EOL
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
+##### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - Move dependency information from the *requirements.yaml* to the *Chart.yaml*
 - After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
-**Considerations when upgrading to this version**
+##### Considerations when upgrading to this version
 
 - If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
 - If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
 
-**Useful links**
+##### Useful links
 
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://helm.sh/docs/topics/v2_v3_migration/>
+- <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
-**2. Updated MariaDB dependency version**
+#### 2. Updated MariaDB dependency version**
 
 In this major the MariaDB dependency version was also bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/mariadb#to-800) for more information.
 
@@ -462,31 +452,31 @@ To upgrade to `11.0.0`, it should be done reusing the PVCs used to hold both the
 Obtain the credentials and the name of the PVC used to hold the MariaDB data on your current release:
 
 ```console
-$ export GHOST_HOST=$(kubectl get svc --namespace default ghost --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
-$ export GHOST_PASSWORD=$(kubectl get secret --namespace default ghost -o jsonpath="{.data.ghost-password}" | base64 -d)
-$ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default ghost-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
-$ export MARIADB_PASSWORD=$(kubectl get secret --namespace default ghost-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
-$ export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=ghost -o jsonpath="{.items[0].metadata.name}")
+export GHOST_HOST=$(kubectl get svc --namespace default ghost --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
+export GHOST_PASSWORD=$(kubectl get secret --namespace default ghost -o jsonpath="{.data.ghost-password}" | base64 -d)
+export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default ghost-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
+export MARIADB_PASSWORD=$(kubectl get secret --namespace default ghost-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
+export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=ghost -o jsonpath="{.items[0].metadata.name}")
 ```
 
 Delete the Ghost deployment and delete the MariaDB statefulset. Notice the option `--cascade=false` in the latter.
 
   ```console
-  $ kubectl delete deployments.apps ghost
+  kubectl delete deployments.apps ghost
 
-  $ kubectl delete statefulsets.apps ghost-mariadb --cascade=false
+  kubectl delete statefulsets.apps ghost-mariadb --cascade=false
   ```
 
 Upgrade you release to 11.0.0 reusing the existing PVC, and enabling back MariaDB:
 
 ```console
-$ helm upgrade ghost my-repo/ghost --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set ghostPassword=$GHOST_PASSWORD --set ghostHost=$GHOST_HOST
+helm upgrade ghost my-repo/ghost --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set ghostPassword=$GHOST_PASSWORD --set ghostHost=$GHOST_HOST
 ```
 
 You will need to kill the existing MariaDB pod now as the new statefulset is going to create a new one:
 
 ```console
-$ kubectl delete pod ghost-mariadb-0
+kubectl delete pod ghost-mariadb-0
 ```
 
 You should see the lines below in MariaDB container logs:
@@ -516,7 +506,7 @@ Also, `allowEmptyPassword` has changed its value type from string to boolean, if
 
 Helm performs a lookup for the object based on its group (apps), version (v1), and kind (Deployment). Also known as its GroupVersionKind, or GVK. Changing the GVK is considered a compatibility breaker from Kubernetes' point of view, so you cannot "upgrade" those objects to the new GVK in-place. Earlier versions of Helm 3 did not perform the lookup correctly which has since been fixed to match the spec.
 
-In https://github.com/helm/charts/pulls/17297 the `apiVersion` of the deployment resources was updated to `apps/v1` in tune with the api's deprecated, resulting in compatibility breakage.
+In <https://github.com/helm/charts/pulls/17297> the `apiVersion` of the deployment resources was updated to `apps/v1` in tune with the api's deprecated, resulting in compatibility breakage.
 
 This major version signifies this change.
 
@@ -526,8 +516,8 @@ Backwards compatibility is not guaranteed unless you modify the labels used on t
 Use the workaround below to upgrade from versions previous to 5.0.0. The following example assumes that the release name is ghost:
 
 ```console
-$ kubectl patch deployment ghost-ghost --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
-$ kubectl delete statefulset ghost-mariadb --cascade=false
+kubectl patch deployment ghost-ghost --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+kubectl delete statefulset ghost-mariadb --cascade=false
 ```
 
 ## Community supported solution
@@ -546,7 +536,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/haproxy
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/haproxy
 ```
 
 ## Introduction
@@ -35,8 +35,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/haproxy
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/haproxy
 ```
 
 The command deploys haproxy on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -48,7 +48,7 @@ The command deploys haproxy on the Kubernetes cluster in the default configurati
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -62,7 +62,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -78,7 +77,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
-
 
 ### Traffic Exposure Parameters
 
@@ -108,7 +106,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
-
 
 ### HAProxy Parameters
 
@@ -186,7 +183,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidecars`                              | Add additional sidecar containers to the haproxy pod(s)                                                 | `[]`                 |
 | `initContainers`                        | Add additional init containers to the haproxy pod(s)                                                    | `[]`                 |
 
-
 ### Other Parameters
 
 | Name                                          | Description                                                                                                         | Value  |
@@ -197,7 +193,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`   |
 | `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `true` |
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                              | `""`   |
-
 
 The above parameters map to the env variables defined in [bitnami/haproxy](https://github.com/bitnami/containers/tree/main/bitnami/haproxy). For more information please refer to the [bitnami/haproxy](https://github.com/bitnami/containers/tree/main/bitnami/haproxy) image documentation.
 
@@ -216,7 +211,7 @@ The above command sets the HAProxy service type as LoadBalancer.
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/haproxy
+helm install my-release -f values.yaml my-repo/haproxy
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -233,8 +228,8 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 By default, HAProxy is deployed with a sample, non-functional, configuration. You will need to edit the following values to adapt it to your use case:
 
-* Set the configuration to be injected in the `haproxy.cfg` file by changing the `configuration` parameter. Alternatively, you can provide an existing ConfigMap with `haproxy.cfg` by using the `existingConfigmap` parameter.
-* Based on your HAProxy configuration, edit the `containerPorts` and `service.ports` parameters. In the `containerPorts` parameter, set all the ports that the HAProxy configuration uses, and in the `service.ports` parameter, set the ports to be externally exposed.
+- Set the configuration to be injected in the `haproxy.cfg` file by changing the `configuration` parameter. Alternatively, you can provide an existing ConfigMap with `haproxy.cfg` by using the `existingConfigmap` parameter.
+- Based on your HAProxy configuration, edit the `containerPorts` and `service.ports` parameters. In the `containerPorts` parameter, set all the ports that the HAProxy configuration uses, and in the `service.ports` parameter, set the ports to be externally exposed.
 
 Refer to the [chart documentation for a more detailed configuration example](https://docs.bitnami.com/kubernetes/infrastructure/haproxy/get-started/configure-proxy).
 
@@ -274,7 +269,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

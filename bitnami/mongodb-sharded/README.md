@@ -11,8 +11,8 @@ Disclaimer: The respective trademarks mentioned in the offering are owned by the
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/mongodb-sharded
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/mongodb-sharded
 ```
 
 ## Introduction
@@ -37,8 +37,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/mongodb-sharded
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/mongodb-sharded
 ```
 
 The command deploys MongoDB&reg; on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -50,7 +50,7 @@ The command deploys MongoDB&reg; on the Kubernetes cluster in the default config
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -64,7 +64,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global storage class for dynamic provisioning   | `""`  |
-
 
 ### Common parameters
 
@@ -82,7 +81,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
-
 ### MongoDB(&reg;) Sharded parameters
 
 | Name                                                 | Description                                                                                                                                               | Value                     |
@@ -98,7 +96,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.rootUser`                                      | MongoDB(&reg;) root user                                                                                                                                  | `root`                    |
 | `auth.rootPassword`                                  | MongoDB(&reg;) root password                                                                                                                              | `""`                      |
 | `auth.replicaSetKey`                                 | Key used for authentication in the replicaset (only when `architecture=replicaset`)                                                                       | `""`                      |
-| `auth.existingSecret`                                | Existing secret with MongoDB(&reg;) credentials (keys: `mongodb-password`, `mongodb-root-password`, ` mongodb-replica-set-key`)                           | `""`                      |
+| `auth.existingSecret`                                | Existing secret with MongoDB(&reg;) credentials (keys: `mongodb-password`, `mongodb-root-password`, `mongodb-replica-set-key`)                           | `""`                      |
 | `auth.usePasswordFile`                               | Mount credentials as files instead of using environment variables                                                                                         | `false`                   |
 | `shards`                                             | Number of shards to be created                                                                                                                            | `2`                       |
 | `common.mongodbEnableNumactl`                        | Enable launch MongoDB instance prefixed with "numactl --interleave=all"                                                                                   | `false`                   |
@@ -145,7 +143,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.extraPorts`                                 | Extra ports to expose (normally used with the `sidecar` value)                                                                                            | `[]`                      |
 | `service.sessionAffinity`                            | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                      | `None`                    |
 | `service.sessionAffinityConfig`                      | Additional settings for the sessionAffinity                                                                                                               | `{}`                      |
-
 
 ### Config Server parameters
 
@@ -229,7 +226,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `configsvr.customLivenessProbe`                             | Custom livenessProbe that overrides the default one                                                                                   | `{}`                                                   |
 | `configsvr.customReadinessProbe`                            | Custom readinessProbe that overrides the default one                                                                                  | `{}`                                                   |
 | `configsvr.customStartupProbe`                              | Custom startupProbe that overrides the default one                                                                                    | `{}`                                                   |
-
 
 ### Mongos parameters
 
@@ -316,7 +312,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mongos.customReadinessProbe`                            | Custom readinessProbe that overrides the default one                                                                         | `{}`            |
 | `mongos.customStartupProbe`                              | Custom startupProbe that overrides the default one                                                                           | `{}`            |
 
-
 ### Shard configuration: Data node parameters
 
 | Name                                                                | Description                                                                                                              | Value                                                  |
@@ -388,7 +383,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `shardsvr.dataNode.customReadinessProbe`                            | Custom readinessProbe that overrides the default one                                                                     | `{}`                                                   |
 | `shardsvr.dataNode.customStartupProbe`                              | Custom startupProbe that overrides the default one                                                                       | `{}`                                                   |
 
-
 ### Shard configuration: Persistence parameters
 
 | Name                                  | Description                                                                                                                           | Value               |
@@ -401,7 +395,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `shardsvr.persistence.size`           | PersistentVolumeClaim size                                                                                                            | `8Gi`               |
 | `shardsvr.persistence.annotations`    | Additional volume annotations                                                                                                         | `{}`                |
 | `shardsvr.persistence.resourcePolicy` | Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted | `""`                |
-
 
 ### Shard configuration: Arbiter parameters
 
@@ -471,7 +464,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `shardsvr.arbiter.customReadinessProbe`                            | Custom readinessProbe that overrides the default one                                                                     | `{}`            |
 | `shardsvr.arbiter.customStartupProbe`                              | Custom startupProbe that overrides the default one                                                                       | `{}`            |
 
-
 ### Metrics parameters
 
 | Name                                                      | Description                                                                                                           | Value                      |
@@ -519,7 +511,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.podMonitor.scrapeTimeout`                        | Specify the timeout after which the scrape is ended                                                                   | `""`                       |
 | `metrics.podMonitor.additionalLabels`                     | Additional labels that can be used so PodMonitors will be discovered by Prometheus                                    | `{}`                       |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
@@ -533,7 +524,7 @@ The above command sets the number of shards to 4, the number of replicas for the
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/mongodb-sharded
+helm install my-release -f values.yaml my-repo/mongodb-sharded
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -639,7 +630,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 If authentication is enabled, it's necessary to set the `auth.rootPassword` and `auth.replicaSetKey` when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, some notes will be displayed providing the credentials you must use. Please note down the password, and run the command below to upgrade your chart:
 
 ```console
-$ helm upgrade my-release my-repo/mongodb-sharded --set auth.rootPassword=[PASSWORD] (--set auth.replicaSetKey=[auth.replicaSetKey])
+helm upgrade my-release my-repo/mongodb-sharded --set auth.rootPassword=[PASSWORD] (--set auth.replicaSetKey=[auth.replicaSetKey])
 ```
 
 > Note: you need to substitute the placeholders [PASSWORD] and [auth.replicaSetKey] with the values obtained in the installation notes.
@@ -668,7 +659,7 @@ Affected values:
 ### To 4.0.0
 
 In this version, the mongodb-exporter bundled as part of this Helm chart was updated to a new version which, even it is not a major change, can contain breaking changes (from `0.11.X` to `0.30.X`).
-Please visit the release notes from the upstream project at https://github.com/percona/mongodb_exporter/releases
+Please visit the release notes from the upstream project at <https://github.com/percona/mongodb_exporter/releases>
 
 ### To 3.1.0
 
@@ -678,22 +669,22 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
+#### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
-**Considerations when upgrading to this version**
+#### Considerations when upgrading to this version
 
 - If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
 - If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
 
-**Useful links**
+#### Useful links
 
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://helm.sh/docs/topics/v2_v3_migration/>
+- <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
 ### To 2.0.0
 
@@ -709,7 +700,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

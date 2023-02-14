@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/wildfly
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/wildfly
 ```
 
 ## Introduction
@@ -35,8 +35,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/wildfly
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/wildfly
 ```
 
 These commands deploy WildFly on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -48,7 +48,7 @@ These commands deploy WildFly on the Kubernetes cluster in the default configura
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -62,7 +62,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -79,7 +78,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the the deployment(s)/statefulset(s)              | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the the deployment(s)/statefulset(s)                 | `["infinity"]`  |
 
-
 ### WildFly Image parameters
 
 | Name                | Description                                                                                             | Value                  |
@@ -91,7 +89,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullPolicy`  | WildFly image pull policy                                                                               | `IfNotPresent`         |
 | `image.pullSecrets` | WildFly image pull secrets                                                                              | `[]`                   |
 | `image.debug`       | Enable image debug mode                                                                                 | `false`                |
-
 
 ### WildFly Configuration parameters
 
@@ -106,7 +103,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVars`            | Array with extra environment variables to add to the WildFly container | `[]`    |
 | `extraEnvVarsCM`          | Name of existing ConfigMap containing extra env vars                   | `""`    |
 | `extraEnvVarsSecret`      | Name of existing Secret containing extra env vars                      | `""`    |
-
 
 ### WildFly deployment parameters
 
@@ -165,7 +161,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                       | `{}`            |
 | `customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                      | `{}`            |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                                 | Value                    |
@@ -207,7 +202,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mgmtIngress.secrets`              | TLS Secret configuration                                                                                                                    | `[]`                     |
 | `mgmtIngress.ingressClassName`     | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                               | `""`                     |
 
-
 ### Persistence Parameters
 
 | Name                                          | Description                                                                                                   | Value                   |
@@ -229,7 +223,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.requests`        | The requested resources for the init container                                                                | `{}`                    |
 | `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                               | `0`                     |
 
-
 The above parameters map to the env variables defined in [bitnami/wildfly](https://github.com/bitnami/containers/tree/main/bitnami/wildfly). For more information please refer to the [bitnami/wildfly](https://github.com/bitnami/containers/tree/main/bitnami/wildfly) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -247,7 +240,7 @@ The above command sets the WildFly management username and password to `manager`
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/wildfly
+helm install my-release -f values.yaml my-repo/wildfly
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -323,9 +316,9 @@ Consequences:
 - Backwards compatibility is not guaranteed. However, you can easily workaround this issue by removing Wildfly deployment before upgrading (the following example assumes that the release name is `wildfly`):
 
 ```console
-$ export WILDFLY_PASSWORD=$(kubectl get secret --namespace default wildfly -o jsonpath="{.data.wildfly-password}" | base64 -d)
-$ kubectl delete deployments.apps wildfly
-$ helm upgrade wildfly my-repo/wildfly --set wildflyPassword=$WILDFLY_PASSWORD
+export WILDFLY_PASSWORD=$(kubectl get secret --namespace default wildfly -o jsonpath="{.data.wildfly-password}" | base64 -d)
+kubectl delete deployments.apps wildfly
+helm upgrade wildfly my-repo/wildfly --set wildflyPassword=$WILDFLY_PASSWORD
 ```
 
 ### To 6.0.0
@@ -338,14 +331,14 @@ $ helm upgrade wildfly my-repo/wildfly --set wildflyPassword=$WILDFLY_PASSWORD
 
 WildFly container was moved to a non-root approach. There shouldn't be any issue when upgrading since the corresponding `securityContext` is enabled by default. Both the container image and the chart can be upgraded by running the command below:
 
-```
-$ helm upgrade my-release my-repo/wildfly
+```console
+helm upgrade my-release my-repo/wildfly
 ```
 
 If you use a previous container image (previous to **14.0.1-r75**) disable the `securityContext` by running the command below:
 
-```
-$ helm upgrade my-release my-repo/wildfly --set securityContext.enabled=false,image.tag=XXX
+```console
+helm upgrade my-release my-repo/wildfly --set securityContext.enabled=false,image.tag=XXX
 ```
 
 ### To 1.0.0
@@ -354,7 +347,7 @@ Backwards compatibility is not guaranteed unless you modify the labels used on t
 Use the workaround below to upgrade from versions previous to 1.0.0. The following example assumes that the release name is wildfly:
 
 ```console
-$ kubectl patch deployment wildfly --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+kubectl patch deployment wildfly --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
 ```
 
 ## License
@@ -365,7 +358,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

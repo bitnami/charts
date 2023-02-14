@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/pinniped
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/pinniped
 ```
 
 ## Introduction
@@ -35,8 +35,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/pinniped
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/pinniped
 ```
 
 The command deploys pinniped on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -48,7 +48,7 @@ The command deploys pinniped on the Kubernetes cluster in the default configurat
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -62,7 +62,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -82,7 +81,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.digest`      | Pinniped image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                |
 | `image.pullPolicy`  | Pinniped image pull policy                                                                               | `IfNotPresent`      |
 | `image.pullSecrets` | Pinniped image pull secrets                                                                              | `[]`                |
-
 
 ### Concierge Parameters
 
@@ -156,7 +154,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `concierge.sidecars`                                        | Add additional sidecar containers to the Concierge pod(s)                                                                | `[]`            |
 | `concierge.initContainers`                                  | Add additional init containers to the Concierge pod(s)                                                                   | `[]`            |
 
-
 ### Concierge RBAC settings
 
 | Name                                                                         | Description                                                                   | Value  |
@@ -175,7 +172,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `concierge.serviceAccount.kubeCertAgentService.automountServiceAccountToken` | Auto mount token for the Concierge kube-cert-agent-service Service Account    | `true` |
 | `concierge.serviceAccount.kubeCertAgentService.annotations`                  | Annotations for the Concierge Service Account                                 | `{}`   |
 
-
 ### Concierge Traffic Exposure Parameters
 
 | Name                                         | Description                                                                          | Value       |
@@ -192,7 +188,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `concierge.service.extraPorts`               | Extra ports to expose in Concierge service (normally used with the `sidecars` value) | `[]`        |
 | `concierge.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                     | `None`      |
 | `concierge.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                          | `{}`        |
-
 
 ### Supervisor Parameters
 
@@ -260,7 +255,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `supervisor.sidecars`                                        | Add additional sidecar containers to the Supervisor pod(s)                                                               | `[]`            |
 | `supervisor.initContainers`                                  | Add additional init containers to the Supervisor pod(s)                                                                  | `[]`            |
 
-
 ### Supervisor RBAC settings
 
 | Name                                                     | Description                                                       | Value  |
@@ -270,7 +264,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `supervisor.serviceAccount.create`                       | Create a Service Account for the Supervisor Deployment            | `true` |
 | `supervisor.serviceAccount.automountServiceAccountToken` | Auto mount token for the Supervisor Deployment Service Account    | `true` |
 | `supervisor.serviceAccount.annotations`                  | Annotations for the Supervisor Service Account                    | `{}`   |
-
 
 ### Supervisor Traffic Exposure Parameters
 
@@ -316,8 +309,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `supervisor.ingress.secrets`                         | Custom TLS certificates as secrets                                                                                               | `[]`                        |
 | `supervisor.ingress.extraRules`                      | Additional rules to be covered with this ingress record                                                                          | `[]`                        |
 
-
-See https://github.com/bitnami-labs/readme-generator-for-helm to create the table
+See <https://github.com/bitnami-labs/readme-generator-for-helm> to create the table
 
 The above parameters map to the env variables defined in [bitnami/pinniped](https://github.com/bitnami/containers/tree/main/bitnami/pinniped). For more information please refer to the [bitnami/pinniped](https://github.com/bitnami/containers/tree/main/bitnami/pinniped) image documentation.
 
@@ -334,7 +326,7 @@ The above command sets disables the supervisor compoment deployment.
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/pinniped
+helm install my-release -f values.yaml my-repo/pinniped
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -398,7 +390,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

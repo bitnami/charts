@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/postgresql-ha
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/postgresql-ha
 ```
 
 ## Introduction
@@ -36,8 +36,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/postgresql-ha
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/postgresql-ha
 ```
 
 ## Uninstalling the Chart
@@ -45,7 +45,7 @@ $ helm install my-release my-repo/postgresql-ha
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete --purge my-release
+helm delete --purge my-release
 ```
 
 Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manually delete the PVCs.
@@ -72,7 +72,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `global.pgpool.adminPassword`      | Pgpool Admin password (overrides `pgpool.adminPassword`)                                        | `""`  |
 | `global.pgpool.existingSecret`     | Pgpool existing secret                                                                          | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                                         | Value           |
@@ -88,7 +87,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)             | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                                | `[]`            |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                                   | `[]`            |
-
 
 ### PostgreSQL with Repmgr parameters
 
@@ -317,7 +315,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `witness.initdbScriptsCM`                                    | ConfigMap with scripts to be run at first boot                                                                                                                                                                | `""`                        |
 | `witness.initdbScriptsSecret`                                | Secret with scripts to be run at first boot                                                                                                                                                                   | `""`                        |
 
-
 ### Pgpool parameters
 
 | Name                                                     | Description                                                                                                                              | Value                |
@@ -430,7 +427,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `pgpool.tls.certKeyFilename`                             | Certificate key filename                                                                                                                 | `""`                 |
 | `pgpool.tls.certCAFilename`                              | CA Certificate filename                                                                                                                  | `""`                 |
 
-
 ### LDAP parameters
 
 | Name                            | Description                                                  | Value        |
@@ -446,7 +442,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `ldap.tlsReqcert`               | LDAP TLS check on server certificates                        | `""`         |
 | `ldap.nssInitgroupsIgnoreusers` | LDAP ignored users                                           | `root,nslcd` |
 
-
 ### Other Parameters
 
 | Name                                          | Description                                                                                                                                 | Value   |
@@ -458,7 +453,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                                        | `{}`    |
 | `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `true`  |
 | `psp.create`                                  | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false` |
-
 
 ### Metrics parameters
 
@@ -516,12 +510,11 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `metrics.serviceMonitor.scrapeTimeout`       | Service monitor scrape timeout                                                                                                                          | `""`                        |
 | `metrics.serviceMonitor.annotations`         | Additional annotations for the ServiceMonitor                                                                                                           | `{}`                        |
 | `metrics.serviceMonitor.labels`              | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                                                                   | `{}`                        |
-| `metrics.serviceMonitor.selector`            | Defaults to what's used if you follow CoreOS Prometheus Install Instructions (https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus#tldr) | `{}`                        |
+| `metrics.serviceMonitor.selector`            | Defaults to what's used if you follow CoreOS Prometheus Install Instructions (<https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus#tldr>) | `{}`                        |
 | `metrics.serviceMonitor.relabelings`         | ServiceMonitor relabelings. Value is evaluated as a template                                                                                            | `[]`                        |
 | `metrics.serviceMonitor.metricRelabelings`   | ServiceMonitor metricRelabelings. Value is evaluated as a template                                                                                      | `[]`                        |
 | `metrics.serviceMonitor.honorLabels`         | Specify honorLabels parameter to add the scrape endpoint                                                                                                | `false`                     |
 | `metrics.serviceMonitor.jobLabel`            | The name of the label on the target service to use as the job name in prometheus.                                                                       | `""`                        |
-
 
 ### Volume permissions parameters
 
@@ -538,7 +531,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `volumePermissions.resources.limits`             | The resources limits for the container                                                                                            | `{}`                    |
 | `volumePermissions.resources.requests`           | The requested resources for the container                                                                                         | `{}`                    |
 
-
 ### Persistence parameters
 
 | Name                        | Description                                                                             | Value                 |
@@ -552,7 +544,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `persistence.annotations`   | Persistent Volume Claim annotations                                                     | `{}`                  |
 | `persistence.labels`        | Persistent Volume Claim labels                                                          | `{}`                  |
 | `persistence.selector`      | Selector to match an existing Persistent Volume (this value is evaluated as a template) | `{}`                  |
-
 
 ### Traffic Exposure parameters
 
@@ -575,7 +566,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `networkPolicy.allowExternal`                         | Don't require client label for connections                                                    | `true`       |
 | `networkPolicy.egressRules.denyConnectionsToExternal` | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53) | `false`      |
 | `networkPolicy.egressRules.customRules`               | Custom network policy rule                                                                    | `{}`         |
-
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -660,7 +650,7 @@ LDAP support can be enabled in the chart by specifying the `ldap.` parameters wh
 
 For example:
 
-```
+```text
 ldap.enabled="true"
 ldap.uri="ldap://my_ldap_server"
 ldap.base="dc=example\,dc=org"
@@ -700,13 +690,13 @@ The above parameters (`initdbScripts`, `initdbScriptsCM`, and `initdbScriptsSecr
 
 The allowed extensions are `.sh`, `.sql` and `.sql.gz` in the **postgresql** container while only `.sh` in the case of the **pgpool** one.
 
-+info: https://github.com/bitnami/containers/tree/main/bitnami/postgresql#initializing-a-new-instance and https://github.com/bitnami/containers/tree/main/bitnami/pgpool#initializing-with-custom-scripts
++info: <https://github.com/bitnami/containers/tree/main/bitnami/postgresql#initializing-a-new-instance> and <https://github.com/bitnami/containers/tree/main/bitnami/pgpool#initializing-with-custom-scripts>
 
 ### Use of global variables
 
 In more complex scenarios, we may have the following tree of dependencies
 
-```
+```text
                      +--------------+
                      |              |
         +------------+   Chart 1    +-----------+
@@ -726,7 +716,7 @@ In more complex scenarios, we may have the following tree of dependencies
 
 The three charts below depend on the parent chart Chart 1. However, subcharts 1 and 2 may need to connect to PostgreSQL HA as well. In order to do so, subcharts 1 and 2 need to know the PostgreSQL HA credentials, so one option for deploying could be deploy Chart 1 with the following parameters:
 
-```
+```text
 postgresql.postgresqlPassword=testtest
 subchart1.postgresql.postgresqlPassword=testtest
 subchart2.postgresql.postgresqlPassword=testtest
@@ -737,7 +727,7 @@ subchart2.postgresql.postgresqlDatabase=db1
 
 If the number of dependent sub-charts increases, installing the chart with parameters can become increasingly difficult. An alternative would be to set the credentials using global variables as follows:
 
-```
+```text
 global.postgresql.postgresqlPassword=testtest
 global.postgresql.postgresqlDatabase=db1
 ```
@@ -769,8 +759,7 @@ $ helm upgrade my-release my-repo/postgresql-ha \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD]
 ```
 
-> Note: you need to substitute the placeholders _[POSTGRES_PASSWORD]_, and _[REPMGR_PASSWORD]_ with the values obtained from instructions in the installation notes.
-
+> Note: you need to substitute the placeholders *[POSTGRES_PASSWORD]*, and *[REPMGR_PASSWORD]* with the values obtained from instructions in the installation notes.
 > Note: As general rule, it is always wise to do a backup before the upgrading procedures.
 
 ### To 10.0.0
@@ -791,7 +780,7 @@ This chart major version updates the PostgreSQL image's version to the latest ma
 
 > Note: Keep in mind you will find an error such as the one below when upgrading since the new chart major version also bumps the application version. To workaround this issue you need to upgrade the database, please refer to the [official PostgreSQL documentation](https://www.postgresql.org/docs/current/upgrading.html) for more information about this.
 
-```
+```log
 postgresql-repmgr 14:41:21.00 INFO  ==> Setting up streaming replication slave...
 postgresql-repmgr 14:41:21.04 INFO  ==> Starting PostgreSQL in background...
 waiting for server to start....2022-04-12 14:41:21.069 GMT [220] FATAL:  database files are incompatible with server
@@ -822,7 +811,7 @@ $ helm upgrade my-release --version 8.0.0 my-repo/postgresql-ha \
     --set postgresql.replicaCount=[NUMBER_OF_REPLICAS]
 ```
 
-> Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_, and _[REPMGR_PASSWORD]_ with the values obtained from instructions in the installation notes.
+> Note: you need to substitute the placeholders *[POSTGRESQL_PASSWORD]*, and *[REPMGR_PASSWORD]* with the values obtained from instructions in the installation notes.
 
 ### To 6.4.0
 
@@ -833,24 +822,24 @@ As an alternative to this feature, users can still use the equivalent parameters
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
+#### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - Move dependency information from the *requirements.yaml* to the *Chart.yaml*
 - After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
-**Considerations when upgrading to this version**
+#### Considerations when upgrading to this version
 
 - If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
 - If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
 
-**Useful links**
+#### Useful links
 
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://helm.sh/docs/topics/v2_v3_migration/>
+- <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
 ### To 5.2.0
 
@@ -875,7 +864,7 @@ $ helm upgrade my-release --version 5.2.0 my-repo/postgresql-ha \
     --set postgresql.replicaCount=[NUMBER_OF_REPLICAS]
 ```
 
-> Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_, and _[REPMGR_PASSWORD]_ with the values obtained from instructions in the installation notes (`helm get notes RELEASE_NAME`).
+> Note: you need to substitute the placeholders *[POSTGRESQL_PASSWORD]*, and *[REPMGR_PASSWORD]* with the values obtained from instructions in the installation notes (`helm get notes RELEASE_NAME`).
 
 ### To 5.0.0
 
@@ -929,7 +918,7 @@ $ helm upgrade my-release --version 3.0.0 my-repo/postgresql-ha \
     --set postgresql.replicaCount=[NUMBER_OF_REPLICAS]
 ```
 
-> Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_, and _[REPMGR_PASSWORD]_ with the values obtained from instructions in the installation notes.
+> Note: you need to substitute the placeholders *[POSTGRESQL_PASSWORD]*, and *[REPMGR_PASSWORD]* with the values obtained from instructions in the installation notes.
 
 ### To 2.0.0
 
@@ -963,7 +952,7 @@ $ helm upgrade my-release --version 1.0.0 my-repo/postgresql-ha \
     --set postgresql.replicaCount=[NUMBER_OF_REPLICAS]
 ```
 
-> Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_, and _[REPMGR_PASSWORD]_ with the values obtained from instructions in the installation notes.
+> Note: you need to substitute the placeholders *[POSTGRESQL_PASSWORD]*, and *[REPMGR_PASSWORD]* with the values obtained from instructions in the installation notes.
 
 ### To 0.4.0
 
@@ -994,7 +983,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

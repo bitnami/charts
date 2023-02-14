@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/kube-prometheus
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/kube-prometheus
 ```
 
 ## Introduction
@@ -41,8 +41,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/kube-prometheus
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/kube-prometheus
 ```
 
 The command deploys kube-prometheus on the Kubernetes cluster in the default configuration. The [configuration](#configuration-and-installation-details) section lists the parameters that can be configured during installation.
@@ -54,7 +54,7 @@ The command deploys kube-prometheus on the Kubernetes cluster in the default con
 To uninstall/delete the `my-release` release:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release. Use the flag `--purge` to delete all history too.
@@ -69,7 +69,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                                                                                | Value           |
@@ -82,7 +81,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `commonLabels`      | Labels to add to all deployed objects                                                                      | `{}`            |
 | `extraDeploy`       | Array of extra objects to deploy with the release                                                          | `[]`            |
 | `clusterDomain`     | Kubernetes cluster domain name                                                                             | `cluster.local` |
-
 
 ### Prometheus Operator Parameters
 
@@ -198,7 +196,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `operator.prometheusConfigReloader.readinessProbe.failureThreshold`                   | Minimum consecutive failures for the probe                                                                             | `6`                           |
 | `operator.prometheusConfigReloader.readinessProbe.successThreshold`                   | Minimum consecutive successes for the probe                                                                            | `1`                           |
 | `operator.namespaces`                                                                 | Optional comma-separated list of namespaces to watch (default=all).                                                    | `""`                          |
-
 
 ### Prometheus Parameters
 
@@ -403,7 +400,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.thanos.ingress.extraRules`                                | The list of additional rules to be added to this ingress record. Evaluated as a template                                         | `[]`                      |
 | `prometheus.portName`                                                 | Port name used for the pods and governing service. This defaults to web                                                          | `web`                     |
 
-
 ### Alertmanager Parameters
 
 | Name                                                             | Description                                                                                                                                                                                                                                                                                                | Value                    |
@@ -518,7 +514,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `alertmanager.configSelector`                                    | Namespaces to be selected for AlertmanagerConfig discovery. If nil, only check own namespace. This defaults to {}                                                                                                                                                                                          | `{}`                     |
 | `alertmanager.configuration`                                     | EXPERIMENTAL: alertmanagerConfiguration specifies the global Alertmanager configuration. If defined, it takes precedence over the `configSecret` field. This field may change in future releases. The specified global alertmanager config will not force add a namespace label in routes and inhibitRules | `{}`                     |
 
-
 ### Exporters
 
 | Name                                               | Description                                                                                            | Value                        |
@@ -542,7 +537,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kubelet.serviceMonitor.cAdvisorRelabelings`       | Relabel configs for scraping cAdvisor                                                                  | `[]`                         |
 | `kubelet.serviceMonitor.labels`                    | Extra labels for the ServiceMonitor                                                                    | `{}`                         |
 | `kubelet.serviceMonitor.annotations`               | Extra annotations for the ServiceMonitor                                                               | `{}`                         |
-
 
 ### Blackbox Exporter Deployment Parameters
 
@@ -618,7 +612,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `blackboxExporter.sidecars`                                    | Add additional sidecar containers to the Blackbox Exporter pod(s)                                                 | `[]`                        |
 | `blackboxExporter.initContainers`                              | Add additional init containers to the Blackbox Exporter pod(s)                                                    | `[]`                        |
 
-
 ### Blackbox Exporter Traffic Exposure Parameters
 
 | Name                                                      | Description                                                                                                                     | Value         |
@@ -689,14 +682,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kubeProxy.serviceMonitor.labels`                         | Extra labels for the ServiceMonitor                                                                                             | `{}`          |
 | `kubeProxy.serviceMonitor.annotations`                    | Extra annotations for the ServiceMonitor                                                                                        | `{}`          |
 
-
 ### RBAC parameters
 
 | Name              | Description                                                                                                                                                        | Value  |
 | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
 | `rbac.create`     | Whether to create and use RBAC resources or not                                                                                                                    | `true` |
 | `rbac.pspEnabled` | Whether to create a PodSecurityPolicy and bound it with RBAC. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `true` |
-
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -712,7 +703,7 @@ The above command sets the Prometheus Operator `logLevel` to `debug`. Additional
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/kube-prometheus
+helm install my-release -f values.yaml my-repo/kube-prometheus
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -760,7 +751,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 ## Upgrading
 
 ```console
-$ helm upgrade my-release my-repo/kube-prometheus
+helm upgrade my-release my-repo/kube-prometheus
 ```
 
 ### To 8.0.0
@@ -882,8 +873,8 @@ The Thanos sidecar svc is transformed into a headless service by default so Than
 To upgrade from version 2.0.0, previously remove the Thanos sidecar svc to avoid issues with immutable fields:
 
 ```console
-$ kubectl delete svc my-relase-kube-prometheus-prometheus-thanos
-$ helm upgrade my-release --set prometheus.thanos.create=true my-repo/kube-prometheus
+kubectl delete svc my-relase-kube-prometheus-prometheus-thanos
+helm upgrade my-release --set prometheus.thanos.create=true my-repo/kube-prometheus
 ```
 
 ### To 2.0.0
@@ -908,7 +899,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

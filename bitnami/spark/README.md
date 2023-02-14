@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/spark
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/spark
 ```
 
 ## Introduction
@@ -33,8 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/spark
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/spark
 ```
 
 These commands deploy Apache Spark on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -46,7 +46,7 @@ These commands deploy Apache Spark on the Kubernetes cluster in the default conf
 To uninstall/delete the `my-release` statefulset:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release. Use the option `--purge` to delete all persistent volumes too.
@@ -60,7 +60,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -81,7 +80,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the deployment                                                                                                | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                   | `["infinity"]`  |
 
-
 ### Spark parameters
 
 | Name                | Description                                                                                           | Value                 |
@@ -94,7 +92,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullSecrets` | Specify docker-registry secret names as an array                                                      | `[]`                  |
 | `image.debug`       | Enable image debug mode                                                                               | `false`               |
 | `hostNetwork`       | Enable HOST Network                                                                                   | `false`               |
-
 
 ### Spark master parameters
 
@@ -165,7 +162,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.customStartupProbe`                              | Custom startupProbe that overrides the default one                                                                       | `{}`            |
 | `master.sidecars`                                        | Add additional sidecar containers to the master pod(s)                                                                   | `[]`            |
 | `master.initContainers`                                  | Add initContainers to the master pods.                                                                                   | `[]`            |
-
 
 ### Spark worker parameters
 
@@ -248,7 +244,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.autoscaling.targetCPU`                           | Target CPU utilization percentage                                                                                        | `50`            |
 | `worker.autoscaling.targetMemory`                        | Target Memory utilization percentage                                                                                     | `""`            |
 
-
 ### Security parameters
 
 | Name                                 | Description                                                                   | Value     |
@@ -267,7 +262,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `security.ssl.truststorePassword`    | Truststore password.                                                          | `""`      |
 | `security.ssl.resources.limits`      | The resources limits for the container                                        | `{}`      |
 | `security.ssl.resources.requests`    | The requested resources for the container                                     | `{}`      |
-
 
 ### Traffic Exposure parameters
 
@@ -303,7 +297,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Other parameters
 
 | Name                                          | Description                                            | Value  |
@@ -312,7 +305,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                 | `""`   |
 | `serviceAccount.annotations`                  | Annotations for Spark Service Account                  | `{}`   |
 | `serviceAccount.automountServiceAccountToken` | Automount API credentials for a service account.       | `true` |
-
 
 ### Metrics parameters
 
@@ -332,7 +324,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.additionalLabels`  | Additional labels that can be used so prometheusRules will be discovered by Prometheus                                                  | `{}`    |
 | `metrics.prometheusRule.rules`             | Custom Prometheus [rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/)                                   | `[]`    |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
@@ -345,7 +336,7 @@ The above command sets the spark master web port to `8081`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/spark
+helm install my-release -f values.yaml my-repo/spark
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -480,7 +471,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

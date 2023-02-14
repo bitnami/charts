@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/apache
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/apache
 ```
 
 ## Introduction
@@ -35,8 +35,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/apache
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/apache
 ```
 
 These commands deploy Apache on the Kubernetes cluster in the default configuration.
@@ -48,7 +48,7 @@ These commands deploy Apache on the Kubernetes cluster in the default configurat
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -63,7 +63,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                        | Value |
@@ -74,7 +73,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `commonLabels`      | Labels to add to all deployed objects              | `{}`  |
 | `commonAnnotations` | Annotations to add to all deployed objects         | `{}`  |
 | `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`  |
-
 
 ### Apache parameters
 
@@ -168,7 +166,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidecars`                              | Add additional sidecar containers to the Apache pods                                                                     | `[]`                  |
 | `updateStrategy.type`                   | Apache Server deployment strategy type.                                                                                  | `RollingUpdate`       |
 
-
 ### Other Parameters
 
 | Name                       | Description                                                    | Value   |
@@ -181,7 +178,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.maxReplicas`  | Maximum number of Apache replicas                              | `11`    |
 | `autoscaling.targetCPU`    | Target CPU utilization percentage                              | `50`    |
 | `autoscaling.targetMemory` | Target Memory utilization percentage                           | `50`    |
-
 
 ### Traffic Exposure Parameters
 
@@ -216,7 +212,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Metrics Parameters
 
 | Name                                       | Description                                                                                                                               | Value                     |
@@ -246,7 +241,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.labels`            | Labels that can be used so PrometheusRule will be discovered by Prometheus                                                                | `{}`                      |
 | `metrics.prometheusRule.rules`             | Prometheus Rule definitions                                                                                                               | `[]`                      |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
@@ -260,7 +254,7 @@ The above command sets the `imagePullPolicy` to `Always`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/apache
+helm install my-release -f values.yaml my-repo/apache
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -331,7 +325,7 @@ Backwards compatibility is not guaranteed unless you modify the labels used on t
 Use the workaround below to upgrade from versions previous to 2.0.0. The following example assumes that the release name is apache:
 
 ```console
-$ kubectl patch deployment apache --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+kubectl patch deployment apache --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
 ```
 
 ## License
@@ -342,7 +336,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

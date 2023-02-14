@@ -6,13 +6,11 @@ Concourse is an automation system written in Go. It is most commonly used for CI
 
 [Overview of Concourse](https://concourse-ci.org/)
 
-
-
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/concourse
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/concourse
 ```
 
 ## Introduction
@@ -35,8 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/concourse
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/concourse
 ```
 
 The command deploys concourse on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -48,7 +46,7 @@ The command deploys concourse on the Kubernetes cluster in the default configura
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -62,7 +60,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -78,7 +75,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment(s)/statefulset(s)                  | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment(s)/statefulset(s)                     | `["infinity"]`  |
-
 
 ### Common Concourse Parameters
 
@@ -104,7 +100,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secrets.workerKey`             | Concourse Worker Keys.                                                                                                                 | `""`                  |
 | `secrets.workerKeyPub`          | Concourse Worker Keys.                                                                                                                 | `""`                  |
 | `secrets.workerAdditionalCerts` | Additional certificates to add to the worker nodes                                                                                     | `""`                  |
-
 
 ### Concourse Web parameters
 
@@ -206,7 +201,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.serviceAccount.name`                         | Override Web service account name                                                                                                           | `""`                                            |
 | `web.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `true`                                          |
 | `web.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                                        | `{}`                                            |
-
 
 ### Concourse Worker parameters
 
@@ -312,7 +306,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `true`              |
 | `worker.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                                        | `{}`                |
 
-
 ### Traffic exposure parameters
 
 | Name                                             | Description                                                                                                                      | Value                    |
@@ -356,7 +349,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                                | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.extraRules`                             | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Init Container Parameters
 
 | Name                                                   | Description                                                                                                                       | Value                   |
@@ -373,7 +365,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.containerSecurityContext.enabled`   | Enabled init container Security Context                                                                                           | `true`                  |
 | `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                                    | `0`                     |
 
-
 ### Concourse database parameters
 
 | Name                                 | Description                                                                                            | Value               |
@@ -385,7 +376,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `postgresql.auth.database`           | Name for a custom database to create                                                                   | `bitnami_concourse` |
 | `postgresql.auth.existingSecret`     | Name of existing secret to use for PostgreSQL credentials                                              | `""`                |
 | `postgresql.architecture`            | PostgreSQL architecture (`standalone` or `replication`)                                                | `standalone`        |
-
 
 ### External PostgreSQL configuration
 
@@ -399,8 +389,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials | `""`                |
 | `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials      | `""`                |
 
-
-See https://github.com/bitnami-labs/readme-generator-for-helm to create the table
+See <https://github.com/bitnami-labs/readme-generator-for-helm> to create the table
 
 The above parameters map to the env variables defined in [bitnami/concourse](https://github.com/bitnami/containers/tree/main/bitnami/concourse). For more information please refer to the [bitnami/concourse](https://github.com/bitnami/containers/tree/main/bitnami/concourse) image documentation.
 
@@ -419,7 +408,7 @@ The above command sets the Concourse account username and password to `admin` an
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/concourse
+helm install my-release -f values.yaml my-repo/concourse
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -498,7 +487,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

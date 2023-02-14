@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/external-dns
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/external-dns
 ```
 
 ## Introduction
@@ -31,8 +31,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/external-dns
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/external-dns
 ```
 
 The command deploys ExternalDNS on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -44,7 +44,7 @@ The command deploys ExternalDNS on the Kubernetes cluster in the default configu
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -57,7 +57,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------- | ----------------------------------------------- | ----- |
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-
 
 ### Common parameters
 
@@ -72,7 +71,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kubeVersion`           | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
 | `watchReleaseNamespace` | Watch only namepsace used for the release                                                    | `false`         |
 | `useDaemonset`          | Use ExternalDNS in Daemonset mode                                                            | `false`         |
-
 
 ### external-dns parameters
 
@@ -211,7 +209,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rfc2136.tsigSecretAlg`                       | When using the rfc2136 provider, specify the tsig secret to enable security (optional)                                                                                       | `hmac-sha256`             |
 | `rfc2136.tsigKeyname`                         | When using the rfc2136 provider, specify the tsig keyname to enable security (optional)                                                                                      | `externaldns-key`         |
 | `rfc2136.tsigAxfr`                            | When using the rfc2136 provider, enable AFXR to enable security (optional)                                                                                                   | `true`                    |
-| `rfc2136.minTTL`                              | When using the rfc2136 provider, specify minimal TTL (in duration format) for records[ns, us, ms, s, m, h], see more https://golang.org/pkg/time/#ParseDuration              | `0s`                      |
+| `rfc2136.minTTL`                              | When using the rfc2136 provider, specify minimal TTL (in duration format) for records[ns, us, ms, s, m, h], see more <https://golang.org/pkg/time/#ParseDuration>              | `0s`                      |
 | `rfc2136.rfc3645Enabled`                      | When using the rfc2136 provider, extend using RFC3645 to support secure updates over Kerberos with GSS-TSIG                                                                  | `false`                   |
 | `rfc2136.kerberosConfig`                      | When using the rfc2136 provider with rfc3645Enabled, the contents of a configuration file for krb5 (optional)                                                                | `""`                      |
 | `rfc2136.kerberosUsername`                    | When using the rfc2136 provider with rfc3645Enabled, specify the username to authenticate with (optional)                                                                    | `""`                      |
@@ -338,7 +336,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.googlePodMonitor.interval`           | Interval at which metrics should be scraped by Google Managed Prometheus                                                                                                     | `60s`                     |
 | `metrics.googlePodMonitor.endpoint`           | The endpoint for Google Managed Prometheus scraping the metrics                                                                                                              | `/metrics`                |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
@@ -349,7 +346,7 @@ $ helm install my-release \
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/external-dns
+helm install my-release -f values.yaml my-repo/external-dns
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -369,11 +366,14 @@ This chart allows you to set your custom affinity using the `affinity` parameter
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ### Using IRSA
+
 If you are deploying to AWS EKS and you want to leverage [IRSA](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html). You will need to override `fsGroup` and `runAsUser` with `65534`(nfsnobody) and `0` respectively. Otherwise service account token will not be properly mounted.
 You can use the following arguments:
-```
+
+```console
 --set podSecurityContext.fsGroup=65534 --set podSecurityContext.runAsUser=0
 ```
+
 ## Tutorials
 
 Find information about the requirements for each DNS provider on the link below:
@@ -387,6 +387,7 @@ For instance, to install ExternalDNS on AWS, you need to:
 - Install ExternalDNS chart using the command below:
 
 > Note: replace the placeholder HOSTED_ZONE_IDENTIFIER and HOSTED_ZONE_NAME, with your hosted zoned identifier and name, respectively.
+
 ```console
 $ helm install my-release \
   --set provider=aws \
@@ -399,6 +400,7 @@ $ helm install my-release \
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
 ## Upgrading
 
 ### To 6.0.0
@@ -415,8 +417,8 @@ No issues should be expected when upgrading.
 The CRD was updated according to the latest changes in the upstream project. As a consequence, the CRD API version was moved from `apiextensions.k8s.io/v1beta1` to `apiextensions.k8s.io/v1`. If you deployed the Helm Chart using `crd.create=true` you need to manually delete the old CRD before upgrading the release.
 
 ```console
-$ kubectl delete crd dnsendpoints.externaldns.k8s.io
-$ helm upgrade my-release -f my-values.yaml
+kubectl delete crd dnsendpoints.externaldns.k8s.io
+helm upgrade my-release -f my-values.yaml
 ```
 
 ### To 4.3.0
@@ -427,22 +429,22 @@ This version also introduces `bitnami/common`, a [library chart](https://helm.sh
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
+#### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
-**Considerations when upgrading to this version**
+#### Considerations when upgrading to this version
 
 - If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
 - If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
 
-**Useful links**
+#### Useful links
 
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://helm.sh/docs/topics/v2_v3_migration/>
+- <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
 ### To 3.0.0
 
@@ -458,8 +460,8 @@ Backwards compatibility is not guaranteed unless you modify the labels used on t
 Use the workaround below to upgrade from versions previous to 1.0.0. The following example assumes that the release name is `my-release`:
 
 ```console
-$ kubectl delete deployment my-release-external-dns
-$ helm upgrade my-release my-repo/external-dns
+kubectl delete deployment my-release-external-dns
+helm upgrade my-release my-repo/external-dns
 ```
 
 Other mayor changes included in this major version are:
@@ -480,7 +482,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

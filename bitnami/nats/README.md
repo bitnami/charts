@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/nats
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/nats
 ```
 
 ## Introduction
@@ -31,8 +31,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/nats
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/nats
 ```
 
 The command deploys NATS on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -44,7 +44,7 @@ The command deploys NATS on the Kubernetes cluster in the default configuration.
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -57,7 +57,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------- | ----------------------------------------------- | ----- |
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-
 
 ### Common parameters
 
@@ -73,7 +72,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]`  |
-
 
 ### NATS parameters
 
@@ -115,7 +113,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVars`           | Extra environment variables to be set on NATS container                                               | `[]`                  |
 | `extraEnvVarsCM`         | ConfigMap with extra environment variables                                                            | `""`                  |
 | `extraEnvVarsSecret`     | Secret with extra environment variables                                                               | `""`                  |
-
 
 ### NATS deployment/statefulset parameters
 
@@ -175,7 +172,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initContainers`                        | Add additional init containers to the NATS pods                                                       | `[]`            |
 | `sidecars`                              | Add additional sidecar containers to the NATS pods                                                    | `[]`            |
 
-
 ### Traffic Exposure parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -213,7 +209,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.allowExternal`      | The Policy model to apply                                                                                                        | `true`                   |
 | `networkPolicy.additionalRules`    | Additional NetworkPolicy Ingress "from" rules to set. Note that all rules are OR-ed.                                             | `{}`                     |
 
-
 ### Metrics parameters
 
 | Name                                       | Description                                                                                            | Value                   |
@@ -243,7 +238,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                                             | `[]`                    |
 | `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                    | `{}`                    |
 
-
 ### Persistence parameters
 
 | Name                       | Description                                                         | Value               |
@@ -255,7 +249,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.annotations`  | Annotations for the PVC                                             | `{}`                |
 | `persistence.selector`     | Selector to match an existing Persistent Volume for NATS's data PVC | `{}`                |
 
-
 ### Other parameters
 
 | Name                 | Description                                                    | Value   |
@@ -263,7 +256,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `pdb.create`         | Enable/disable a Pod Disruption Budget creation                | `false` |
 | `pdb.minAvailable`   | Minimum number/percentage of pods that should remain scheduled | `1`     |
 | `pdb.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable | `""`    |
-
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -280,7 +272,7 @@ The above command enables NATS client authentication with `my-user` as user and 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/nats
+helm install my-release -f values.yaml my-repo/nats
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -333,7 +325,7 @@ NATS version 2.0.0 has renamed the server binary filename from `gnatsd` to `nats
 however, it is still possible to use the chart to deploy NATS version 1.x.x using the `natsFilename` property.
 
 ```console
-$ helm install nats-v1 --set natsFilename=gnatsd --set image.tag=1.4.1 my-repo/nats
+helm install nats-v1 --set natsFilename=gnatsd --set image.tag=1.4.1 my-repo/nats
 ```
 
 ### To 7.0.0
@@ -377,7 +369,7 @@ Backwards compatibility is not guaranteed unless you modify the labels used on t
 Use the workaround below to upgrade from versions previous to 1.0.0. The following example assumes that the release name is nats:
 
 ```console
-$ kubectl delete statefulset nats-nats --cascade=false
+kubectl delete statefulset nats-nats --cascade=false
 ```
 
 ## License
@@ -388,7 +380,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

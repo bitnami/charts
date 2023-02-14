@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/cassandra
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/cassandra
 ```
 
 ## Introduction
@@ -32,8 +32,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/cassandra
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/cassandra
 ```
 
 These commands deploy one node with Apache Cassandra on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -45,7 +45,7 @@ These commands deploy one node with Apache Cassandra on the Kubernetes cluster i
 To uninstall/delete the `my-release` release:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -59,7 +59,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -75,7 +74,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
-
 
 ### Cassandra parameters
 
@@ -113,7 +111,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVars`                | Extra environment variables to be set on cassandra container                                                           | `[]`                  |
 | `extraEnvVarsCM`              | Name of existing ConfigMap containing extra env vars                                                                   | `""`                  |
 | `extraEnvVarsSecret`          | Name of existing Secret containing extra env vars                                                                      | `""`                  |
-
 
 ### Statefulset parameters
 
@@ -183,7 +180,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hostPorts.jmx`                         | JMX Port on the Host                                                                      | `""`            |
 | `hostPorts.cql`                         | CQL Port on the Host                                                                      | `""`            |
 
-
 ### RBAC parameters
 
 | Name                                          | Description                                                | Value  |
@@ -192,7 +188,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                     | `""`   |
 | `serviceAccount.annotations`                  | Annotations for Cassandra Service Account                  | `{}`   |
 | `serviceAccount.automountServiceAccountToken` | Automount API credentials for a service account.           | `true` |
-
 
 ### Traffic Exposure Parameters
 
@@ -214,7 +209,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.enabled`            | Specifies whether a NetworkPolicy should be created                           | `false`     |
 | `networkPolicy.allowExternal`      | Don't require client label for connections                                    | `true`      |
 
-
 ### Persistence parameters
 
 | Name                             | Description                                                                                                                                          | Value                |
@@ -228,7 +222,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.commitLogsize`      | PVC Storage Request for Cassandra commit log volume. Unset by default                                                                                | `2Gi`                |
 | `persistence.mountPath`          | The path the data volume will be mounted at                                                                                                          | `/bitnami/cassandra` |
 | `persistence.commitLogMountPath` | The path the commit log volume will be mounted at. Unset by default. Set it to '/bitnami/cassandra/commitlog' to enable a separate commit log volume | `""`                 |
-
 
 ### Volume Permissions parameters
 
@@ -244,7 +237,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.limits`          | The resources limits for the container                                                                                | `{}`                    |
 | `volumePermissions.resources.requests`        | The requested resources for the container                                                                             | `{}`                    |
 | `volumePermissions.securityContext.runAsUser` | User ID for the init container                                                                                        | `0`                     |
-
 
 ### Metrics parameters
 
@@ -282,7 +274,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.hostPorts.jmx`                      | JMX Port on the Host                                                                                               | `""`                         |
 | `metrics.configuration`                      | Configure Cassandra-exporter with a custom config.yml file                                                         | `""`                         |
 
-
 ### TLS/SSL parameters
 
 | Name                          | Description                                                                                   | Value   |
@@ -299,7 +290,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tls.certificatesSecret`      | Secret with the TLS certificates.                                                             | `""`    |
 | `tls.tlsEncryptionSecretName` | Secret with the encryption of the TLS certificates                                            | `""`    |
 
-
 The above parameters map to the env variables defined in [bitnami/cassandra](https://github.com/bitnami/containers/tree/main/bitnami/cassandra). For more information please refer to the [bitnami/cassandra](https://github.com/bitnami/containers/tree/main/bitnami/cassandra) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -313,7 +303,7 @@ $ helm install my-release \
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/cassandra
+helm install my-release -f values.yaml my-repo/cassandra
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -330,8 +320,8 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 This chart supports TLS between client and server and between nodes, as explained below:
 
-* For internode cluster encryption, set the `tls.internodeEncryption` chart parameter to a value different from `none`. Available values are `all`, `dc` or `rack`.
-* For client-server encryption, set the `tls.clientEncryption` chart parameter to `true`.
+- For internode cluster encryption, set the `tls.internodeEncryption` chart parameter to a value different from `none`. Available values are `all`, `dc` or `rack`.
+- For client-server encryption, set the `tls.clientEncryption` chart parameter to `true`.
 
 In both cases, it is also necessary to create a secret containing the keystore and truststore certificates and their corresponding protection passwords. This secret is to be passed to the chart via the `tls.existingSecret` parameter at deployment-time.
 
@@ -370,8 +360,8 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 
 As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it. There are two approaches to achieve this:
 
-* Use Kubernetes SecurityContexts by setting the `podSecurityContext.enabled` and `containerSecurityContext.enabled` to `true`. This option is enabled by default in the chart. However, this feature does not work in all Kubernetes distributions.
-* Use an init container to change the ownership of the volume before mounting it in the final destination. Enable this container by setting the `volumePermissions.enabled` parameter to `true`.
+- Use Kubernetes SecurityContexts by setting the `podSecurityContext.enabled` and `containerSecurityContext.enabled` to `true`. This option is enabled by default in the chart. However, this feature does not work in all Kubernetes distributions.
+- Use an init container to change the ownership of the volume before mounting it in the final destination. Enable this container by setting the `volumePermissions.enabled` parameter to `true`.
 
 ## Backup and restore
 
@@ -386,12 +376,13 @@ Find more information about how to deal with common errors related to Bitnami's 
 It's necessary to set the `dbUser.password` parameter when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, some notes will be displayed providing the credentials you must use. Please note down the password and run the command below to upgrade your chart:
 
 ```console
-$ helm upgrade my-release my-repo/cassandra --set dbUser.password=[PASSWORD]
+helm upgrade my-release my-repo/cassandra --set dbUser.password=[PASSWORD]
 ```
 
-| Note: you need to substitute the placeholder _[PASSWORD]_ with the value obtained in the installation notes.
+| Note: you need to substitute the placeholder *[PASSWORD]* with the value obtained in the installation notes.
 
 ### To 9.0.0
+
 This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
 
 Affected values:
@@ -407,10 +398,10 @@ Affected values:
 
 Cassandra's version was bumped to `4.0`, [the new major](https://cassandra.apache.org/_/blog/Apache-Cassandra-4.0-is-Here.html) considered LTS. Among other features, this release removes support for [Thrift](https://issues.apache.org/jira/browse/CASSANDRA-11115), which means that the following properties of the chart will no longer be available:
 
-  - `cluster.enableRPC`
-  - `service.thriftPort`
-  - `service.nodePorts.thrift`
-  - `containerPorts.thrift`
+- `cluster.enableRPC`
+- `service.thriftPort`
+- `service.nodePorts.thrift`
+- `containerPorts.thrift`
 
 For this version, there have been [intensive efforts](https://cwiki.apache.org/confluence/display/CASSANDRA/4.0+Quality%3A+Components+and+Test+Plans) from Apache to ensure that a safe cluster upgrade can be performed. Nevertheless, a backup creation prior to undergoing the upgrade process is recommended. Please, refer to the [official guide](https://cassandra.apache.org/doc/latest/operating/backups.html#snapshots) for further information.
 
@@ -443,8 +434,8 @@ The `minimumAvailable` option has been renamed to `minAvailable` for consistency
 An issue in StatefulSet manifest of the 4.x chart series rendered chart upgrades to be broken. The 5.0.0 series fixes this issue. To upgrade to the 5.x series you need to manually delete the Cassandra StatefulSet before executing the `helm upgrade` command.
 
 ```console
-$ kubectl delete sts -l release=<RELEASE_NAME>
-$ helm upgrade <RELEASE_NAME> ...
+kubectl delete sts -l release=<RELEASE_NAME>
+helm upgrade <RELEASE_NAME> ...
 ```
 
 ### To 4.0.0
@@ -467,7 +458,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

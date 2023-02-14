@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/mysql
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/mysql
 ```
 
 ## Introduction
@@ -32,8 +32,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/mysql
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/mysql
 ```
 
 These commands deploy MySQL on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -45,7 +45,7 @@ These commands deploy MySQL on the Kubernetes cluster in the default configurati
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -59,7 +59,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -76,7 +75,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                                      | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                                         | `["infinity"]`  |
-
 
 ### MySQL common parameters
 
@@ -102,7 +100,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.customPasswordFiles` | Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication` | `{}`                  |
 | `initdbScripts`            | Dictionary of initdb scripts                                                                                                                                                        | `{}`                  |
 | `initdbScriptsConfigMap`   | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                                                 | `""`                  |
-
 
 ### MySQL Primary parameters
 
@@ -191,7 +188,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.pdb.minAvailable`                      | Minimum number/percentage of MySQL primary pods that should remain scheduled                                    | `1`                 |
 | `primary.pdb.maxUnavailable`                    | Maximum number/percentage of MySQL primary pods that may be made unavailable                                    | `""`                |
 | `primary.podLabels`                             | MySQL Primary pod label. If labels are same as commonLabels , this will take precedence                         | `{}`                |
-
 
 ### MySQL Secondary parameters
 
@@ -282,7 +278,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.pdb.maxUnavailable`                    | Maximum number/percentage of MySQL secondary pods that may be made unavailable                                      | `""`                |
 | `secondary.podLabels`                             | Additional pod labels for MySQL secondary pods                                                                      | `{}`                |
 
-
 ### RBAC parameters
 
 | Name                                          | Description                                                    | Value   |
@@ -294,7 +289,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rbac.create`                                 | Whether to create & use RBAC resources or not                  | `false` |
 | `rbac.rules`                                  | Custom RBAC rules to set                                       | `[]`    |
 
-
 ### Network Policy
 
 | Name                                       | Description                                                                                                     | Value   |
@@ -302,7 +296,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.enabled`                    | Enable creation of NetworkPolicy resources                                                                      | `false` |
 | `networkPolicy.allowExternal`              | The Policy model to apply.                                                                                      | `true`  |
 | `networkPolicy.explicitNamespacesSelector` | A Kubernetes LabelSelector to explicitly select namespaces from which ingress traffic could be allowed to MySQL | `{}`    |
-
 
 ### Volume Permissions parameters
 
@@ -316,7 +309,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
 | `volumePermissions.resources`         | Init container volume-permissions resources                                                                                       | `{}`                    |
-
 
 ### Metrics parameters
 
@@ -364,7 +356,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.additionalLabels`    | Additional labels that can be used so prometheusRule will be discovered by Prometheus                                          | `{}`                      |
 | `metrics.prometheusRule.rules`               | Prometheus Rule definitions                                                                                                    | `[]`                      |
 
-
 The above parameters map to the env variables defined in [bitnami/mysql](https://github.com/bitnami/containers/tree/main/bitnami/mysql). For more information please refer to the [bitnami/mysql](https://github.com/bitnami/containers/tree/main/bitnami/mysql) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -382,7 +373,7 @@ The above command sets the MySQL `root` account password to `secretpassword`. Ad
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/mysql
+helm install my-release -f values.yaml my-repo/mysql
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -450,7 +441,7 @@ To enable network policy for MySQL, install [a networking plugin that implements
 For Kubernetes v1.5 & v1.6, you must also turn on NetworkPolicy by setting the DefaultDeny namespace annotation. Note: this will enforce policy for _all_ pods in the namespace:
 
 ```console
-$ kubectl annotate namespace default "net.beta.kubernetes.io/network-policy={\"ingress\":{\"isolation\":\"DefaultDeny\"}}"
+kubectl annotate namespace default "net.beta.kubernetes.io/network-policy={\"ingress\":{\"isolation\":\"DefaultDeny\"}}"
 ```
 
 With NetworkPolicy enabled, traffic will be limited to just port 3306.
@@ -473,7 +464,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 It's necessary to set the `auth.rootPassword` parameter when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, some notes will be displayed providing the credentials you must use under the 'Administrator credentials' section. Please note down the password and run the command below to upgrade your chart:
 
 ```console
-$ helm upgrade my-release my-repo/mysql --set auth.rootPassword=[ROOT_PASSWORD]
+helm upgrade my-release my-repo/mysql --set auth.rootPassword=[ROOT_PASSWORD]
 ```
 
 | Note: you need to substitute the placeholder _[ROOT_PASSWORD]_ with the value obtained in the installation notes.
@@ -503,7 +494,7 @@ Affected values:
 ### To 8.0.0
 
 - Several parameters were renamed or disappeared in favor of new ones on this major version:
-  - The terms *master* and *slave* have been replaced by the terms *primary* and *secondary*. Therefore, parameters prefixed with `master` or `slave` are now prefixed with `primary` or `secondary`, respectively.
+  - The terms _master_ and _slave_ have been replaced by the terms _primary_ and _secondary_. Therefore, parameters prefixed with `master` or `slave` are now prefixed with `primary` or `secondary`, respectively.
   - Credentials parameters are reorganized under the `auth` parameter.
   - `replication.enabled` parameter is deprecated in favor of `architecture` parameter that accepts two values: `standalone` and `replication`.
 - Chart labels were adapted to follow the [Helm charts standard labels](https://helm.sh/docs/chart_best_practices/labels/#standard-labels).
@@ -516,7 +507,7 @@ Consequences:
   - Reuse the PVC used to hold the master data on your previous release. To do so, use the `primary.persistence.existingClaim` parameter. The following example assumes that the release name is `mysql`:
 
 ```console
-$ helm install mysql my-repo/mysql --set auth.rootPassword=[ROOT_PASSWORD] --set primary.persistence.existingClaim=[EXISTING_PVC]
+helm install mysql my-repo/mysql --set auth.rootPassword=[ROOT_PASSWORD] --set primary.persistence.existingClaim=[EXISTING_PVC]
 ```
 
 | Note: you need to substitute the placeholder _[EXISTING_PVC]_ with the name of the PVC used on your previous release, and _[ROOT_PASSWORD]_ with the root password used in your previous release.
@@ -533,8 +524,8 @@ Backwards compatibility is not guaranteed unless you modify the labels used on t
 Use the workaround below to upgrade from versions previous to 3.0.0. The following example assumes that the release name is mysql:
 
 ```console
-$ kubectl delete statefulset mysql-master --cascade=false
-$ kubectl delete statefulset mysql-slave --cascade=false
+kubectl delete statefulset mysql-master --cascade=false
+kubectl delete statefulset mysql-slave --cascade=false
 ```
 
 ## License
@@ -545,7 +536,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

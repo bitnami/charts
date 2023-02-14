@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/redmine
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/redmine
 ```
 
 ## Introduction
@@ -35,8 +35,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/redmine
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/redmine
 ```
 
 The command deploys Redmine on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -48,7 +48,7 @@ The command deploys Redmine on the Kubernetes cluster in the default configurati
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -57,8 +57,8 @@ The command removes all the Kubernetes components associated with the chart and 
 
 This chart includes the option to use a PostgreSQL database for Redmine instead of MariaDB. To use this, set the `databaseType` parameter to `postgresql`:
 
-```
-$ helm install my-release my-repo/redmine --set databaseType=postgresql
+```console
+helm install my-release my-repo/redmine --set databaseType=postgresql
 ```
 
 ## Parameters
@@ -70,7 +70,6 @@ $ helm install my-release my-repo/redmine --set databaseType=postgresql
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -86,7 +85,6 @@ $ helm install my-release my-repo/redmine --set databaseType=postgresql
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the the deployment                                | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the the deployment                                   | `["infinity"]`  |
-
 
 ### Redmine Configuration parameters
 
@@ -117,7 +115,6 @@ $ helm install my-release my-repo/redmine --set databaseType=postgresql
 | `extraEnvVars`          | Array with extra environment variables to add to the Redmine container                                  | `[]`                  |
 | `extraEnvVarsCM`        | Name of existing ConfigMap containing extra env vars                                                    | `""`                  |
 | `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                                                       | `""`                  |
-
 
 ### Redmine deployment parameters
 
@@ -178,7 +175,6 @@ $ helm install my-release my-repo/redmine --set databaseType=postgresql
 | `initContainers`                     | Add additional init containers to the Redmine pods                                                                       | `[]`            |
 | `sidecars`                           | Add additional sidecar containers to the Redmine pod                                                                     | `[]`            |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -209,7 +205,6 @@ $ helm install my-release my-repo/redmine --set databaseType=postgresql
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Persistence Parameters
 
 | Name                                                   | Description                                                                                     | Value   |
@@ -228,7 +223,6 @@ $ helm install my-release my-repo/redmine --set databaseType=postgresql
 | `volumePermissions.containerSecurityContext.enabled`   | Enable init container's Security Context                                                        | `true`  |
 | `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`     |
 
-
 ### RBAC Parameters
 
 | Name                                          | Description                                                                                              | Value   |
@@ -237,7 +231,6 @@ $ helm install my-release my-repo/redmine --set databaseType=postgresql
 | `serviceAccount.name`                         | The name of the ServiceAccount to create (name generated using common.names.fullname template otherwise) | `""`    |
 | `serviceAccount.automountServiceAccountToken` | Auto-mount the service account token in the pod                                                          | `false` |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                     | `{}`    |
-
 
 ### Other Parameters
 
@@ -251,7 +244,6 @@ $ helm install my-release my-repo/redmine --set databaseType=postgresql
 | `autoscaling.maxReplicas`  | Maximum number of Redmine replicas                             | `11`    |
 | `autoscaling.targetCPU`    | Target CPU utilization percentage                              | `50`    |
 | `autoscaling.targetMemory` | Target Memory utilization percentage                           | `50`    |
-
 
 ### Database Parameters
 
@@ -277,7 +269,6 @@ $ helm install my-release my-repo/redmine --set databaseType=postgresql
 | `externalDatabase.database`                  | Redmine database name                                                   | `bitnami_redmine` |
 | `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials | `""`              |
 | `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials      | `""`              |
-
 
 ### Mail Receiver/Cron Job Parameters
 
@@ -334,7 +325,6 @@ $ helm install my-release my-repo/redmine --set databaseType=postgresql
 | `mailReceiver.extraVolumes`                          | Optionally specify extra list of additional volumes for mailReceiver container                                                                | `[]`          |
 | `mailReceiver.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for mailReceiver container                                                           | `[]`          |
 
-
 ### Custom Certificates parameters
 
 | Name                                                 | Description                                                                                             | Value                                    |
@@ -354,7 +344,6 @@ $ helm install my-release my-repo/redmine --set databaseType=postgresql
 | `certificates.image.pullSecrets`                     | Redmine image pull secrets                                                                              | `[]`                                     |
 | `certificates.extraEnvVars`                          | Container sidecar extra environment variables (e.g. proxy)                                              | `[]`                                     |
 
-
 ### NetworkPolicy parameters
 
 | Name                                                          | Description                                                                                                                 | Value   |
@@ -371,7 +360,6 @@ $ helm install my-release my-repo/redmine --set databaseType=postgresql
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                          | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                              | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                  | `{}`    |
-
 
 The above parameters map to the env variables defined in [bitnami/redmine](https://github.com/bitnami/containers/tree/main/bitnami/redmine). For more information please refer to the [bitnami/redmine](https://github.com/bitnami/containers/tree/main/bitnami/redmine) image documentation.
 
@@ -390,7 +378,7 @@ The above command sets the Redmine administrator account username and password t
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/redmine
+helm install my-release -f values.yaml my-repo/redmine
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -410,7 +398,7 @@ Redmine writes uploaded files to a persistent volume. By default that volume can
 > **Important**: When running more than one instance of Redmine they must share the same `secret_key_base` to have sessions working acreoss all instances.
 > This can be achieved by setting
 >
-> ```
+> ```yaml
 >   extraEnvVars:
 >    - name: SECRET_KEY_BASE
 >      value: someredminesecretkeybase
@@ -418,7 +406,7 @@ Redmine writes uploaded files to a persistent volume. By default that volume can
 
 ### Deploying to a sub-URI
 
-(adapted from https://github.com/bitnami/containers/tree/main/bitnami/redmine)
+(adapted from <https://github.com/bitnami/containers/tree/main/bitnami/redmine>)
 
 On certain occasions, you may need that Redmine is available under a specific sub-URI path rather than the root. A common scenario to this problem may arise if you plan to set up your Redmine container behind a reverse proxy. To deploy your Redmine container using a certain sub-URI you just need to follow these steps:
 
@@ -505,7 +493,7 @@ The following example includes two PVCs, one for Redmine and another for MariaDB
 1. Install the chart
 
 ```console
-$ helm install test --set persistence.existingClaim=PVC_REDMINE,mariadb.persistence.existingClaim=PVC_MARIADB my-repo/redmine
+helm install test --set persistence.existingClaim=PVC_REDMINE,mariadb.persistence.existingClaim=PVC_MARIADB my-repo/redmine
 ```
 
 ## Certificates
@@ -523,12 +511,12 @@ certificates:
     - secret: my-ca-2
 ```
 
-#### Secret
+#### CA Certificates Secret
 
 Secret can be created with:
 
 ```console
-$ kubectl create secret generic my-ca-1 --from-file my-ca-1.crt
+kubectl create secret generic my-ca-1 --from-file my-ca-1.crt
 ```
 
 ### TLS Certificate
@@ -548,18 +536,18 @@ certificates:
       key: chain.pem
 ```
 
-#### Secret
+#### TLS Certificate Secret
 
 The certificate tls secret can be created with:
 
 ```console
-$ kubectl create secret tls my-secret --cert tls.crt --key tls.key
+kubectl create secret tls my-secret --cert tls.crt --key tls.key
 ```
 
 The certificate chain is created with:
 
 ```console
-$ kubectl create secret generic my-cert-chain --from-file chain.pem
+kubectl create secret generic my-cert-chain --from-file chain.pem
 ```
 
 ## Troubleshooting
@@ -592,7 +580,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

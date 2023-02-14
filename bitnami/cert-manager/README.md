@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/cert-manager
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/cert-manager
 ```
 
 ## Introduction
@@ -34,8 +34,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/cert-manager
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/cert-manager
 ```
 
 > **Tip**: List all releases using `helm list`
@@ -45,7 +45,7 @@ $ helm install my-release my-repo/cert-manager
 To uninstall/delete the `my-release` helm release:
 
 ```console
-$ helm uninstall my-release
+helm uninstall my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -59,7 +59,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -76,7 +75,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `leaderElection.namespace` | Namespace which leaderElection works.                                                                                                             | `kube-system` |
 | `installCRDs`              | Flag to install cert-manager CRDs                                                                                                                 | `false`       |
 | `replicaCount`             | Number of cert-manager replicas                                                                                                                   | `1`           |
-
 
 ### Controller deployment parameters
 
@@ -139,7 +137,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                     | `""`                   |
 | `controller.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                       | `{}`                   |
 | `controller.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                             | `true`                 |
-
 
 ### Webhook deployment parameters
 
@@ -212,7 +209,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `webhook.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                    | `{}`                           |
 | `webhook.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                          | `true`                         |
 
-
 ### CAInjector deployment parameters
 
 | Name                                                     | Description                                                                                                | Value                 |
@@ -265,7 +261,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cainjector.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                       | `{}`                  |
 | `cainjector.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                             | `true`                |
 
-
 ### Metrics Parameters
 
 | Name                                       | Description                                                                       | Value      |
@@ -286,13 +281,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.additionalLabels`  | DEPRECATED. Use metrics.serviceMonitor.labels instead.                            | `{}`       |
 | `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels          | `false`    |
 
-
 ### Other Parameters
 
 | Name          | Description                                        | Value  |
 | ------------- | -------------------------------------------------- | ------ |
 | `rbac.create` | Specifies whether RBAC resources should be created | `true` |
-
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -304,7 +297,7 @@ $ helm install my-release my-repo/cert-manager \
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/cert-manager
+helm install my-release -f values.yaml my-repo/cert-manager
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -383,7 +376,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

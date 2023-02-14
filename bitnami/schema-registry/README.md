@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/schema-registry
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/schema-registry
 ```
 
 ## Introduction
@@ -33,8 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/schema-registry
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/schema-registry
 ```
 
 These commands deploy Schema Registry on the Kubernetes cluster with the default configuration. The [parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -46,7 +46,7 @@ These commands deploy Schema Registry on the Kubernetes cluster with the default
 To uninstall/delete the `my-release` chart:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -62,7 +62,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 | `kubeVersion`             | Override Kubernetes version                     | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                                          | Value           |
@@ -77,7 +76,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)              | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                                 | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                                    | `["infinity"]`  |
-
 
 ### Schema Registry parameters
 
@@ -113,7 +111,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVars`                                  | Extra environment variables to be set on Schema Registry container                                              | `[]`                      |
 | `extraEnvVarsCM`                                | Name of existing ConfigMap containing extra env vars                                                            | `""`                      |
 | `extraEnvVarsSecret`                            | Name of existing Secret containing extra env vars                                                               | `""`                      |
-
 
 ### Schema Registry statefulset parameters
 
@@ -177,7 +174,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.targetCPU`              | Target CPU utilization percentage                                                                                        | `""`            |
 | `autoscaling.targetMemory`           | Target Memory utilization percentage                                                                                     | `""`            |
 
-
 ### Exposure Parameters
 
 | Name                               | Description                                                                                           | Value                    |
@@ -214,7 +210,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                    | `[]`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                               | `[]`                     |
 
-
 ### RBAC parameters
 
 | Name                                          | Description                                                      | Value  |
@@ -223,7 +218,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | Name of the created ServiceAccount to use                        | `""`   |
 | `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`   |
 | `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true` |
-
 
 ### Kafka chart parameters
 
@@ -252,7 +246,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalKafka.auth.jaas.user`                   | User for SASL authentication                                                                                        | `user`                           |
 | `externalKafka.auth.jaas.password`               | Password for SASL authentication                                                                                    | `""`                             |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
@@ -266,7 +259,7 @@ The above command installs Schema Registry chart with 2 replicas.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/schema-registry
+helm install my-release -f values.yaml my-repo/schema-registry
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -314,9 +307,9 @@ In order to configure TLS authentication/encryption, you **can** create a secret
 For instance, to configure TLS authentication on a cluster with 2 Kafka brokers, and 1 Schema Registry replica use the commands below to create the secrets:
 
 ```console
-$ kubectl create secret generic schema-registry-jks --from-file=/schema-registry.truststore.jks --from-file=./schema-registry-0.keystore.jks
-$ kubectl create secret generic kafka-jks-0 --from-file=kafka.truststore.jks=./kafka.truststore.jks --from-file=kafka.keystore.jks=./kafka-0.keystore.jks
-$ kubectl create secret generic kafka-jks-1 --from-file=kafka.truststore.jks=./kafka.truststore.jks --from-file=kafka.keystore.jks=./kafka-1.keystore.jks
+kubectl create secret generic schema-registry-jks --from-file=/schema-registry.truststore.jks --from-file=./schema-registry-0.keystore.jks
+kubectl create secret generic kafka-jks-0 --from-file=kafka.truststore.jks=./kafka.truststore.jks --from-file=kafka.keystore.jks=./kafka-0.keystore.jks
+kubectl create secret generic kafka-jks-1 --from-file=kafka.truststore.jks=./kafka.truststore.jks --from-file=kafka.keystore.jks=./kafka-1.keystore.jks
 ```
 
 > **Note**: the command above assumes you already created the truststore and keystores files. This [script](https://raw.githubusercontent.com/confluentinc/confluent-platform-security-tools/master/kafka-generate-ssl.sh) can help you with the JKS files generation.
@@ -337,8 +330,8 @@ kafka.auth.tls.password=jksPassword
 In case you want to ignore hostname verification on Kafka certificates, set the parameter `auth.kafka.tls.endpointIdentificationAlgorithm` with an empty string `""`. In this case, you can reuse the same truststore and keystore for every Kafka broker and Schema Registry replica. For instance, to configure TLS authentication on a cluster with 2 Kafka brokers, and 1 Schema Registry replica use the commands below to create the secrets:
 
 ```console
-$ kubectl create secret generic schema-registry-jks --from-file=schema-registry.truststore.jks=common.truststore.jks --from-file=schema-registry-0.keystore.jks=common.keystore.jks
-$ kubectl create secret generic kafka-jks --from-file=kafka.truststore.jks=common.truststore.jks --from-file=kafka.keystore.jks=common.keystore.jks
+kubectl create secret generic schema-registry-jks --from-file=schema-registry.truststore.jks=common.truststore.jks --from-file=schema-registry-0.keystore.jks=common.keystore.jks
+kubectl create secret generic kafka-jks --from-file=kafka.truststore.jks=common.truststore.jks --from-file=kafka.keystore.jks=common.keystore.jks
 ```
 
 ### Adding extra flags
@@ -444,24 +437,24 @@ This version bump the version of charts used as dependency in a major. Kafka fro
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
+#### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - Move dependency information from the *requirements.yaml* to the *Chart.yaml*
 - After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
-**Considerations when upgrading to this version**
+#### Considerations when upgrading to this version
 
 - If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
 - If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
 
-**Useful links**
+#### Useful links
 
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://helm.sh/docs/topics/v2_v3_migration/>
+- <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
 ## Troubleshooting
 
@@ -475,7 +468,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

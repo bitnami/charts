@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/airflow
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/airflow
 ```
 
 ## Introduction
@@ -31,8 +31,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/airflow
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/airflow
 ```
 
 These commands deploy Airflow on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -44,7 +44,7 @@ These commands deploy Airflow on the Kubernetes cluster in the default configura
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -58,7 +58,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -103,7 +102,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initContainers`         | Add additional init containers to all the Airflow pods                                                                                                                    | `[]`                    |
 | `extraVolumeMounts`      | Optionally specify extra list of additional volumeMounts for all the Airflow pods                                                                                         | `[]`                    |
 | `extraVolumes`           | Optionally specify extra list of additional volumes for the all the Airflow pods                                                                                          | `[]`                    |
-
 
 ### Airflow web parameters
 
@@ -234,7 +232,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `scheduler.pdb.minAvailable`                      | Maximum number/percentage of unavailable Airflow scheduler replicas                                                      | `1`                         |
 | `scheduler.pdb.maxUnavailable`                    | Maximum number/percentage of unavailable Airflow scheduler replicas                                                      | `""`                        |
 
-
 ### Airflow worker parameters
 
 | Name                                           | Description                                                                                                              | Value                    |
@@ -315,7 +312,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.autoscaling.targetCPU`                 | Define the CPU target to trigger the scaling actions (utilization percentage)                                            | `80`                     |
 | `worker.autoscaling.targetMemory`              | Define the memory target to trigger the scaling actions (utilization percentage)                                         | `80`                     |
 
-
 ### Airflow git sync parameters
 
 | Name                           | Description                                                                                         | Value                 |
@@ -346,7 +342,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `git.sync.extraEnvVarsSecret`  | Secret with extra environment variables                                                             | `""`                  |
 | `git.sync.resources`           | Sync sidecar container resource requests and limits                                                 | `{}`                  |
 
-
 ### Airflow ldap parameters
 
 | Name                             | Description                                                                                                                        | Value                                                                                                     |
@@ -366,7 +361,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ldap.tls.certificatesSecret`    | Name of the existing secret containing the certificate CA file that will be used by ldap client                                    | `""`                                                                                                      |
 | `ldap.tls.certificatesMountPath` | Where LDAP certifcates are mounted.                                                                                                | `/opt/bitnami/airflow/conf/certs`                                                                         |
 | `ldap.tls.CAFilename`            | LDAP CA cert filename                                                                                                              | `""`                                                                                                      |
-
 
 ### Traffic Exposure Parameters
 
@@ -398,7 +392,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Other Parameters
 
 | Name                                          | Description                                                            | Value   |
@@ -409,7 +402,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
 | `rbac.create`                                 | Create Role and RoleBinding                                            | `false` |
 | `rbac.rules`                                  | Custom RBAC rules to set                                               | `[]`    |
-
 
 ### Airflow metrics parameters
 
@@ -461,7 +453,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.honorLabels`            | Specify honorLabels parameter to add the scrape endpoint                                                         | `false`                      |
 | `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in prometheus.                                | `""`                         |
 
-
 ### Airflow database parameters
 
 | Name                                         | Description                                                                                            | Value             |
@@ -492,7 +483,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalRedis.existingSecret`               | Name of an existing secret resource containing the Redis&trade credentials                             | `""`              |
 | `externalRedis.existingSecretPasswordKey`    | Name of an existing secret key containing the Redis&trade credentials                                  | `""`              |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
@@ -511,7 +501,7 @@ The above command sets the credentials to access the Airflow web UI.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/airflow
+helm install my-release -f values.yaml my-repo/airflow
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -655,6 +645,7 @@ Local executor runs tasks by spawning processes in the Scheduler pods. To enable
 executor=LocalExecutor
 redis.enabled=false
 ```
+
 ### LocalKubernetesExecutor
 
 The LocalKubernetesExecutor is introduced in Airflow 2.3 and is a combination of both the Local and the Kubernetes executors. Tasks will be executed in the scheduler by default, but those tasks that require it can be executed in a Kubernetes pod using the 'kubernetes' queue.
@@ -707,7 +698,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
