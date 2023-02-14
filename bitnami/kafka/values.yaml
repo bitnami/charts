@@ -1757,8 +1757,7 @@ kraft:
 ## https://github.com/bitnami/charts/blob/main/bitnami/zookeeper/values.yaml
 ##
 zookeeper:
-  ## @param zookeeper.enabled Switch to enable or disable the ZooKeeper helm chart
-  ## Must be false if you use Kraft mode.
+  ## @param zookeeper.enabled Switch to enable or disable the ZooKeeper helm chart. Must be false if you use Kraft mode.
   ##
   enabled: true
   ## @param zookeeper.replicaCount Number of ZooKeeper nodes
@@ -1801,6 +1800,6 @@ zookeeper:
 ## All of these values are only used if `zookeeper.enabled=false`
 ##
 externalZookeeper:
-  ## @param externalZookeeper.servers List of external zookeeper servers to use. Typically used in combination with 'zookeeperChrootPath'.
-  ## Must be empty if you use Kraft mode.
+  ## @param externalZookeeper.servers List of external zookeeper servers to use. Typically used in combination with 'zookeeperChrootPath'. Must be false if you use Kraft mode.
+  ##
   servers: []

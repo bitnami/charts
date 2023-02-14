@@ -484,7 +484,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                    | Description                                                                                                                                                             | Value               |
 | --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `zookeeper.enabled`                     | Switch to enable or disable the ZooKeeper helm chart                                                                                                                    | `true`              |
+| `zookeeper.enabled`                     | Switch to enable or disable the ZooKeeper helm chart. Must be false if you use Kraft mode.                                                                              | `true`              |
 | `zookeeper.replicaCount`                | Number of ZooKeeper nodes                                                                                                                                               | `1`                 |
 | `zookeeper.auth.client.enabled`         | Enable ZooKeeper auth                                                                                                                                                   | `false`             |
 | `zookeeper.auth.client.clientUser`      | User that will use ZooKeeper clients to auth                                                                                                                            | `""`                |
@@ -495,7 +495,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `zookeeper.persistence.storageClass`    | Persistent Volume storage class                                                                                                                                         | `""`                |
 | `zookeeper.persistence.accessModes`     | Persistent Volume access modes                                                                                                                                          | `["ReadWriteOnce"]` |
 | `zookeeper.persistence.size`            | Persistent Volume size                                                                                                                                                  | `8Gi`               |
-| `externalZookeeper.servers`             | List of external zookeeper servers to use. Typically used in combination with 'zookeeperChrootPath'.                                                                    | `[]`                |
+| `externalZookeeper.servers`             | List of external zookeeper servers to use. Typically used in combination with 'zookeeperChrootPath'. Must be false if you use Kraft mode.                               | `[]`                |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
