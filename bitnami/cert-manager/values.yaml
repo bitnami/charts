@@ -567,7 +567,9 @@ webhook:
     ## @param webhook.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
     automountServiceAccountToken: true
-
+  ##  @param webhook.hostNetwork Specifies hostNetwork value
+  ##
+  hostNetwork: false
 ## @section CAInjector deployment parameters
 
 ## CAInjector deployment parameters
