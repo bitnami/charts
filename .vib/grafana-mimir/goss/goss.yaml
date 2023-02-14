@@ -7,7 +7,7 @@ file:
     contains:
     - "memcachedchunks:{{ .Vars.memcachedchunks.service.ports.memcached }}"
     - "memcachedfrontend:{{ .Vars.memcachedfrontend.service.ports.memcached }}"
-    - "memcachedindex:{{ .Vars.memcachedindexqueries.service.ports.memcached }}"
+    - "memcachedindex:{{ .Vars.memcachedindex.service.ports.memcached }}"
     - "http_listen_port: {{ .Vars.mimir.containerPorts.http }}"
 http:
   # As we need to make several API requests, we'll use different services (and pods)
@@ -38,6 +38,7 @@ addr:
     reachable: true
 command:
   check-mimirtool:
+    timeout: 30000
     exec: cd /tmp && mimirtool bucket-validation
     exit-status: 0
   {{- $uid := .Vars.storeGateway.containerSecurityContext.runAsUser }}
