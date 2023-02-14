@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/node-exporter
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/node-exporter
 ```
 
 ## Introduction
@@ -31,8 +31,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/node-exporter
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/node-exporter
 ```
 
 The command deploys Node Exporter on the Kubernetes cluster in the default configuration. The [configuration](#configuration-and-installation-details) section lists the parameters that can be configured during installation.
@@ -42,7 +42,7 @@ The command deploys Node Exporter on the Kubernetes cluster in the default confi
 To uninstall/delete the `my-release` release:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -56,7 +56,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -73,7 +72,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the the deployment(s)/statefulset(s)                   | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the the deployment(s)/statefulset(s)                      | `["infinity"]`  |
-
 
 ### Node Exporter parameters
 
@@ -174,17 +172,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceMonitor.labels`                       | Extra labels for the ServiceMonitor                                                                                                                                | `{}`                    |
 | `serviceMonitor.honorLabels`                  | honorLabels chooses the metric's labels on collisions with target labels                                                                                           | `false`                 |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example the following command sets the `minReadySeconds` of the Node Exporter Pods to `120` seconds.
 
 ```console
-$ helm install my-release --set minReadySeconds=120 my-repo/node-exporter
+helm install my-release --set minReadySeconds=120 my-repo/node-exporter
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/node-exporter
+helm install my-release -f values.yaml my-repo/node-exporter
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -210,7 +207,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 ## Upgrading
 
 ```console
-$ helm upgrade my-release my-repo/node-exporter
+helm upgrade my-release my-repo/node-exporter
 ```
 
 ### To 3.0.0
@@ -218,6 +215,7 @@ $ helm upgrade my-release my-repo/node-exporter
 This major release renames several values in this chart and adds missing features, in order to be aligned with the rest of the assets in the Bitnami charts repository.
 
 Affected values:
+
 - `service.port` was renamed as `service.ports.metrics`.
 - `service.targetPort` was renamed as `containerPorts.metrics`.
 - `service.nodePort` was renamed as `service.nodePorts.metrics`.
@@ -242,7 +240,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/discourse
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/discourse
 ```
 
 ## Introduction
@@ -35,8 +35,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/discourse
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/discourse
 ```
 
 The command deploys Discourse on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -48,7 +48,7 @@ The command deploys Discourse on the Kubernetes cluster in the default configura
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -335,7 +335,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalRedis.existingSecretPasswordKey` | Name of an existing secret key containing the Redis&trade credentials      | `redis-password` |
 
 
-The above parameters map to the env variables defined in [bitnami/discourse](https://github.com/bitnami/containers/tree/main/bitnami/discourse). For more information please refer to the [bitnami/discourse](https://github.com/bitnami/containers/tree/main/bitnami/discourse) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -352,7 +351,7 @@ The above command sets the Discourse administrator account username and password
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/discourse
+helm install my-release -f values.yaml my-repo/discourse
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -378,7 +377,7 @@ $ helm install my-release my-repo/discourse
 ...
 ```
 
-2. Wait for the release to complete and Discourse to be running successfully.
+1. Wait for the release to complete and Discourse to be running successfully.
 
 ```console
 $ kubectl get pods
@@ -388,10 +387,10 @@ my-release-postgresql-0                 1/1     Running   0          5m10s
 my-release-redis-master-0               1/1     Running   0          5m11s
 ```
 
-3. Perform an upgrade specifying the number of replicas and the credentials used.
+1. Perform an upgrade specifying the number of replicas and the credentials used.
 
 ```console
-$ helm upgrade my-release --set replicaCount=2,discourse.skipInstall=true my-repo/discourse
+helm upgrade my-release --set replicaCount=2,discourse.skipInstall=true my-repo/discourse
 ```
 
 Note that for this to work properly, you need to provide ReadWriteMany PVCs. If you don't have a provisioner for this type of storage, we recommend that you install the NFS provisioner chart (with the correct parameters, such as `persistence.enabled=true` and `persistence.size=10Gi`) and map it to a RWO volume.
@@ -509,7 +508,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

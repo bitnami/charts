@@ -14,6 +14,7 @@ Any type of contribution is welcome; from new features, bug fixes, [tests](#test
 ### Technical Requirements
 
 When submitting a PR make sure that it:
+
 - Must pass CI jobs for linting and test the changes on top of different k8s platforms. (Automatically done by the Bitnami CI/CD pipeline).
 - Must follow [Helm best practices](https://helm.sh/docs/chart_best_practices/).
 - Any change to a chart requires a version bump following [semver](https://semver.org/) principles. This is the version that is going to be merged in the GitHub repository, then our CI/CD system is going to publish in the Helm registry a new patch version including your changes and the latest images and dependencies.
@@ -32,14 +33,14 @@ If you set your `user.name` and `user.email` git configs, you can sign your comm
 
 Note: If your git config information is set properly then viewing the `git log` information for your commit will look something like this:
 
-```
-Author: Joe Smith <joe.smith@example.com>
-Date:   Thu Feb 2 11:41:15 2018 -0800
+    ```text
+    Author: Joe Smith <joe.smith@example.com>
+    Date:   Thu Feb 2 11:41:15 2018 -0800
 
-    Update README
+        Update README
 
-    Signed-off-by: Joe Smith <joe.smith@example.com>
-```
+        Signed-off-by: Joe Smith <joe.smith@example.com>
+    ```
 
 Notice the `Author` and `Signed-off-by` lines match. If they don't your PR will be rejected by the automated DCO check.
 
@@ -68,6 +69,7 @@ Notice the `Author` and `Signed-off-by` lines match. If they don't your PR will 
 ### Adding a new chart to the repository
 
 There are three major technical requirements to add a new Helm chart to our catalog:
+
 - The chart should use Bitnami based container images. If they don't exist, you can [open a GitHub issue](https://github.com/bitnami/charts/issues/new/choose) and we will work together to create them.
 - Follow the same structure/patterns that the rest of the Bitnami charts (you can find a basic scaffolding in the [`template` directory](https://github.com/bitnami/charts/tree/main/template)) and the [Best Practices for Creating Production-Ready Helm charts](https://docs.bitnami.com/tutorials/production-ready-charts/) guide.
 - Use an [OSI approved license](https://opensource.org/licenses) for all the software.

@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/grafana-operator
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/grafana-operator
 ```
 
 ## Introduction
@@ -33,8 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/grafana-operator
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/grafana-operator
 ```
 
 These commands deploy grafana-operator on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -46,7 +46,7 @@ These commands deploy grafana-operator on the Kubernetes cluster in the default 
 To uninstall/delete the `my-release` helm release:
 
 ```console
-$ helm uninstall my-release
+helm uninstall my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -72,7 +72,6 @@ For more information, refer to the [documentation on the differences between the
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 
-
 ### Common parameters
 
 | Name                | Description                                                                                               | Value           |
@@ -85,7 +84,6 @@ For more information, refer to the [documentation on the differences between the
 | `commonLabels`      | Common Labels which are applied to every resource deployed                                                | `{}`            |
 | `commonAnnotations` | Common Annotations which are applied to every ressource deployed                                          | `{}`            |
 | `clusterDomain`     | Kubernetes cluster domain name                                                                            | `cluster.local` |
-
 
 ### Grafana Operator parameters
 
@@ -188,7 +186,6 @@ For more information, refer to the [documentation on the differences between the
 | `operator.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                                        | `3`                        |
 | `operator.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                                        | `1`                        |
 
-
 ### Grafana parameters
 
 | Name                                                        | Description                                                                                                | Value                    |
@@ -272,7 +269,6 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the grafana container(s)                      | `[]`                     |
 | `grafana.sidecars`                                          | Add additional sidecar containers to the grafana pod(s)                                                    | `[]`                     |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
@@ -286,7 +282,7 @@ The above command sets the `livenessProbe.successThreshold` to `5`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/grafana-operator
+helm install my-release -f values.yaml my-repo/grafana-operator
 ```
 
 ## Configuration and installation details
@@ -316,7 +312,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 ## Upgrading
 
 ```console
-$ helm upgrade my-release my-repo/grafana-operator
+helm upgrade my-release my-repo/grafana-operator
 ```
 
 ### To 2.0.0
@@ -372,7 +368,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

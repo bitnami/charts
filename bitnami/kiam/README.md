@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/kiam
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/kiam
 ```
 
 > NOTE: KIAM has been designed to work on a Kubernetes cluster deployed on top of AWS, although it is possible to deploy it in other environments.
@@ -35,8 +35,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/kiam
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/kiam
 ```
 
 These commands deploy a kiam application on the Kubernetes cluster in the default configuration.
@@ -48,7 +48,7 @@ These commands deploy a kiam application on the Kubernetes cluster in the defaul
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -62,7 +62,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -78,7 +77,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the the deployment(s)/statefulset(s)              | `["sleep"]`    |
 | `diagnosticMode.args`    | Args to override all containers in the the deployment(s)/statefulset(s)                 | `["infinity"]` |
 
-
 ### kiam image parameters
 
 | Name                | Description                                                                                          | Value                 |
@@ -89,7 +87,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.digest`      | kiam image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`  | kiam image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                                                     | `[]`                  |
-
 
 ### kiam server parameters
 
@@ -170,7 +167,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.initContainers`                          | Add additional init containers to the kiam pods                                                                                             | `[]`             |
 | `server.sidecars`                                | Add additional sidecar containers to the kiam pods                                                                                          | `[]`             |
 
-
 ### kiam server exposure parameters
 
 | Name                                      | Description                                                                  | Value       |
@@ -187,7 +183,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"         | `None`      |
 | `server.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                  | `{}`        |
 
-
 ### kiam server Service Account parameters
 
 | Name                                                 | Description                                                                                                         | Value  |
@@ -196,7 +191,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`   |
 | `server.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `true` |
 | `server.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`   |
-
 
 ### kiam server metrics parameters
 
@@ -216,7 +210,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.metrics.serviceMonitor.selector`          | metrics service selector                                                          | `{}`    |
 | `server.metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                               | `{}`    |
 | `server.metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels          | `false` |
-
 
 ### kiam agent parameters
 
@@ -300,7 +293,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `agent.initContainers`                            | Add additional init containers to the kiam pods                                                                                             | `[]`                      |
 | `agent.sidecars`                                  | Add additional sidecar containers to the kiam pods                                                                                          | `[]`                      |
 
-
 ### kiam agent exposure parameters
 
 | Name                                     | Description                                                                  | Value       |
@@ -316,7 +308,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `agent.service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"         | `None`      |
 | `agent.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                  | `{}`        |
 
-
 ### kiam agent Service Account parameters
 
 | Name                                                | Description                                                                                                         | Value  |
@@ -325,7 +316,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `agent.serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`   |
 | `agent.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `true` |
 | `agent.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`   |
-
 
 ### kiam agent metrics parameters
 
@@ -346,18 +336,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `agent.metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                               | `{}`    |
 | `agent.metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels          | `false` |
 
-
 ### RBAC parameters
 
 | Name          | Description                                     | Value  |
 | ------------- | ----------------------------------------------- | ------ |
 | `rbac.create` | Whether to create and use RBAC resources or not | `true` |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release --set server.resourceType=deployment my-repo/kiam
+helm install my-release --set server.resourceType=deployment my-repo/kiam
 ```
 
 The above command sets the server nodes to be deployed as Deployment objects.
@@ -365,7 +353,7 @@ The above command sets the server nodes to be deployed as Deployment objects.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/kiam
+helm install my-release -f values.yaml my-repo/kiam
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -465,7 +453,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/cassandra
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/cassandra
 ```
 
 ## Introduction
@@ -32,8 +32,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/cassandra
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/cassandra
 ```
 
 These commands deploy one node with Apache Cassandra on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -45,7 +45,7 @@ These commands deploy one node with Apache Cassandra on the Kubernetes cluster i
 To uninstall/delete the `my-release` release:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -300,7 +300,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tls.tlsEncryptionSecretName` | Secret with the encryption of the TLS certificates                                            | `""`    |
 
 
-The above parameters map to the env variables defined in [bitnami/cassandra](https://github.com/bitnami/containers/tree/main/bitnami/cassandra). For more information please refer to the [bitnami/cassandra](https://github.com/bitnami/containers/tree/main/bitnami/cassandra) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -313,7 +312,7 @@ $ helm install my-release \
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/cassandra
+helm install my-release -f values.yaml my-repo/cassandra
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -330,8 +329,8 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 This chart supports TLS between client and server and between nodes, as explained below:
 
-* For internode cluster encryption, set the `tls.internodeEncryption` chart parameter to a value different from `none`. Available values are `all`, `dc` or `rack`.
-* For client-server encryption, set the `tls.clientEncryption` chart parameter to `true`.
+- For internode cluster encryption, set the `tls.internodeEncryption` chart parameter to a value different from `none`. Available values are `all`, `dc` or `rack`.
+- For client-server encryption, set the `tls.clientEncryption` chart parameter to `true`.
 
 In both cases, it is also necessary to create a secret containing the keystore and truststore certificates and their corresponding protection passwords. This secret is to be passed to the chart via the `tls.existingSecret` parameter at deployment-time.
 
@@ -370,8 +369,8 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 
 As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it. There are two approaches to achieve this:
 
-* Use Kubernetes SecurityContexts by setting the `podSecurityContext.enabled` and `containerSecurityContext.enabled` to `true`. This option is enabled by default in the chart. However, this feature does not work in all Kubernetes distributions.
-* Use an init container to change the ownership of the volume before mounting it in the final destination. Enable this container by setting the `volumePermissions.enabled` parameter to `true`.
+- Use Kubernetes SecurityContexts by setting the `podSecurityContext.enabled` and `containerSecurityContext.enabled` to `true`. This option is enabled by default in the chart. However, this feature does not work in all Kubernetes distributions.
+- Use an init container to change the ownership of the volume before mounting it in the final destination. Enable this container by setting the `volumePermissions.enabled` parameter to `true`.
 
 ## Backup and restore
 
@@ -386,12 +385,13 @@ Find more information about how to deal with common errors related to Bitnami's 
 It's necessary to set the `dbUser.password` parameter when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, some notes will be displayed providing the credentials you must use. Please note down the password and run the command below to upgrade your chart:
 
 ```console
-$ helm upgrade my-release my-repo/cassandra --set dbUser.password=[PASSWORD]
+helm upgrade my-release my-repo/cassandra --set dbUser.password=[PASSWORD]
 ```
 
-| Note: you need to substitute the placeholder _[PASSWORD]_ with the value obtained in the installation notes.
+| Note: you need to substitute the placeholder *[PASSWORD]* with the value obtained in the installation notes.
 
 ### To 9.0.0
+
 This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
 
 Affected values:
@@ -407,10 +407,10 @@ Affected values:
 
 Cassandra's version was bumped to `4.0`, [the new major](https://cassandra.apache.org/_/blog/Apache-Cassandra-4.0-is-Here.html) considered LTS. Among other features, this release removes support for [Thrift](https://issues.apache.org/jira/browse/CASSANDRA-11115), which means that the following properties of the chart will no longer be available:
 
-  - `cluster.enableRPC`
-  - `service.thriftPort`
-  - `service.nodePorts.thrift`
-  - `containerPorts.thrift`
+- `cluster.enableRPC`
+- `service.thriftPort`
+- `service.nodePorts.thrift`
+- `containerPorts.thrift`
 
 For this version, there have been [intensive efforts](https://cwiki.apache.org/confluence/display/CASSANDRA/4.0+Quality%3A+Components+and+Test+Plans) from Apache to ensure that a safe cluster upgrade can be performed. Nevertheless, a backup creation prior to undergoing the upgrade process is recommended. Please, refer to the [official guide](https://cassandra.apache.org/doc/latest/operating/backups.html#snapshots) for further information.
 
@@ -443,8 +443,8 @@ The `minimumAvailable` option has been renamed to `minAvailable` for consistency
 An issue in StatefulSet manifest of the 4.x chart series rendered chart upgrades to be broken. The 5.0.0 series fixes this issue. To upgrade to the 5.x series you need to manually delete the Cassandra StatefulSet before executing the `helm upgrade` command.
 
 ```console
-$ kubectl delete sts -l release=<RELEASE_NAME>
-$ helm upgrade <RELEASE_NAME> ...
+kubectl delete sts -l release=<RELEASE_NAME>
+helm upgrade <RELEASE_NAME> ...
 ```
 
 ### To 4.0.0
@@ -467,7 +467,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

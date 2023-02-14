@@ -2596,7 +2596,7 @@ queryScheduler:
   ##
   initContainers: []
 
-  ## @section Query Frontend Traffic Exposure Parameters
+  ## @section Query Scheduler Traffic Exposure Parameters
   ##
 
   ## queryScheduler service parameters

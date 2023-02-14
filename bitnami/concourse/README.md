@@ -6,13 +6,11 @@ Concourse is an automation system written in Go. It is most commonly used for CI
 
 [Overview of Concourse](https://concourse-ci.org/)
 
-
-
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/concourse
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/concourse
 ```
 
 ## Introduction
@@ -35,8 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/concourse
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/concourse
 ```
 
 The command deploys concourse on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -48,7 +46,7 @@ The command deploys concourse on the Kubernetes cluster in the default configura
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -400,7 +398,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials      | `""`                |
 
 
-See https://github.com/bitnami-labs/readme-generator-for-helm to create the table
 
 The above parameters map to the env variables defined in [bitnami/concourse](https://github.com/bitnami/containers/tree/main/bitnami/concourse). For more information please refer to the [bitnami/concourse](https://github.com/bitnami/containers/tree/main/bitnami/concourse) image documentation.
 
@@ -419,7 +416,7 @@ The above command sets the Concourse account username and password to `admin` an
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/concourse
+helm install my-release -f values.yaml my-repo/concourse
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -498,7 +495,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

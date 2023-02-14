@@ -6,13 +6,11 @@ Sealed Secrets are "one-way" encrypted K8s Secrets that can be created by anyone
 
 [Overview of Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets)
 
-
-
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/sealed-secrets
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/sealed-secrets
 ```
 
 ## Introduction
@@ -33,8 +31,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/sealed-secrets
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/sealed-secrets
 ```
 
 The command deploys the Sealed Secrets controller on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -46,7 +44,7 @@ The command deploys the Sealed Secrets controller on the Kubernetes cluster in t
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -61,7 +59,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                        | Value           |
@@ -74,7 +71,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `commonAnnotations` | Annotations to add to all deployed objects         | `{}`            |
 | `clusterDomain`     | Kubernetes cluster domain name                     | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`            |
-
 
 ### Sealed Secrets Parameters
 
@@ -149,7 +145,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidecars`                                          | Add additional sidecar containers to the Sealed Secret pod(s)                                                            | `{}`                     |
 | `initContainers`                                    | Add additional init containers to the Sealed Secret pod(s)                                                               | `{}`                     |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                           | Value                    |
@@ -181,7 +176,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                    | `[]`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                               | `[]`                     |
 
-
 ### Other Parameters
 
 | Name                                          | Description                                                      | Value   |
@@ -197,7 +191,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true`  |
 | `networkPolicy.enabled`                       | Specifies whether a NetworkPolicy should be created              | `false` |
 | `networkPolicy.allowExternal`                 | Don't require client label for connections                       | `true`  |
-
 
 ### Metrics parameters
 
@@ -215,7 +208,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                       | `[]`    |
 | `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                              | `{}`    |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
@@ -229,7 +221,7 @@ The above command sets the `livenessProbe.successThreshold` to `5`.
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/sealed-secrets
+helm install my-release -f values.yaml my-repo/sealed-secrets
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -300,7 +292,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

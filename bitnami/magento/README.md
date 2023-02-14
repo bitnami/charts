@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/magento
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/magento
 ```
 
 ## Introduction
@@ -35,8 +35,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/magento
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/magento
 ```
 
 The command deploys Magento on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -48,7 +48,7 @@ The command deploys Magento on the Kubernetes cluster in the default configurati
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -62,7 +62,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -78,7 +77,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`        |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`    |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]` |
-
 
 ### Magento parameters
 
@@ -165,7 +163,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podAnnotations`                        | Pod annotations                                                                                                      | `{}`                     |
 | `podLabels`                             | Add additional labels to the pod (evaluated as a template)                                                           | `{}`                     |
 
-
 ### NetworkPolicy parameters
 
 | Name                                                          | Description                                                                                                                         | Value   |
@@ -185,7 +182,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.customRules`                      | magento Custom network policy ingress rule                                                                                          | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                                      | `false` |
 | `networkPolicy.egressRules.customRules`                       | magento Custom network policy rule                                                                                                  | `{}`    |
-
 
 ### Database parameters
 
@@ -214,7 +210,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.database`                 | Name of the existing database                                                                           | `bitnami_magento`       |
 | `externalDatabase.existingSecret`           | Name of an existing secret resource containing the DB password                                          | `""`                    |
 
-
 ### Elasticsearch parameters
 
 | Name                                      | Description                                                                                                   | Value                   |
@@ -232,7 +227,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalElasticsearch.host`              | Host of the external elasticsearch server                                                                     | `""`                    |
 | `externalElasticsearch.port`              | Port of the external elasticsearch server                                                                     | `""`                    |
 
-
 ### Persistence parameters
 
 | Name                        | Description                                                                                             | Value               |
@@ -248,7 +242,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.selector`      | Selector to match an existing Persistent Volume for WordPress data PVC                                  | `{}`                |
 | `persistence.dataSource`    | Custom PVC data source                                                                                  | `{}`                |
 
-
 ### Volume Permissions parameters
 
 | Name                                   | Description                                                                                                                                               | Value                   |
@@ -262,7 +255,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the init container                                                                                                               | `{}`                    |
 | `volumePermissions.resources.requests` | The requested resourcesc for the init container                                                                                                           | `{}`                    |
-
 
 ### Traffic Exposure Parameters
 
@@ -296,7 +288,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 
-
 ### Metrics parameters
 
 | Name                          | Description                                                                                                     | Value                     |
@@ -313,7 +304,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.service.type`        | Prometheus metrics service type                                                                                 | `ClusterIP`               |
 | `metrics.service.port`        | Service Metrics port                                                                                            | `9117`                    |
 | `metrics.service.annotations` | Annotations for the Prometheus exporter service                                                                 | `{}`                      |
-
 
 ### Certificate injection parameters
 
@@ -338,7 +328,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                              | `[]`                                     |
 
-
 ### Other Parameters
 
 | Name                       | Description                          | Value   |
@@ -348,7 +337,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.maxReplicas`  | Maximum number of replicas           | `11`    |
 | `autoscaling.targetCPU`    | Target CPU utilization percentage    | `""`    |
 | `autoscaling.targetMemory` | Target Memory utilization percentage | `""`    |
-
 
 The above parameters map to the env variables defined in [bitnami/magento](https://github.com/bitnami/containers/tree/main/bitnami/magento). For more information please refer to the [bitnami/magento](https://github.com/bitnami/containers/tree/main/bitnami/magento) image documentation.
 
@@ -381,7 +369,7 @@ The above command sets the Magento administrator account username and password t
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/magento
+helm install my-release -f values.yaml my-repo/magento
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -464,7 +452,9 @@ If you are going to manage TLS secrets outside of Helm, please know that you can
 
 The [Bitnami Magento](https://github.com/bitnami/containers/tree/main/bitnami/magento) image stores the Magento data and configurations at the `/bitnami/magento` and `/bitnami/apache` paths of the container.
 
- Persistent Volume Claims are used to keep the data across deployments. There is a [known issue](https://github.com/kubernetes/kubernetes/issues/39178) in Kubernetes Clusters with EBS in different availability zones. Ensure your cluster is configured properly to create Volumes in the same availability zone where the nodes are running. Kuberentes 1.12 solved this issue with the [Volume Binding Mode](https://kubernetes.io/docs/concepts/storage/storage-classes/#volume-binding-mode).
+Persistent Volume Claims are used to keep the data across deployments. There is a [known issue](https://github.com/kubernetes/kubernetes/issues/39178) in Kubernetes Clusters with EBS in different availability zones. Ensure your cluster is configured properly to create Volumes in the same availability zone where the nodes are running. Kuberentes 1.12 solved this issue with the [Volume Binding Mode](https://kubernetes.io/docs/concepts/storage/storage-classes/#volume-binding-mode).
+
+See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 
 ### Adding extra environment variables
 
@@ -542,13 +532,6 @@ This chart allows you to set your custom affinity using the `affinity` parameter
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
-## Persistence
-
-The [Bitnami Magento](https://github.com/bitnami/containers/tree/main/bitnami/magento) image stores the Magento data and configurations at the `/bitnami/magento` path of the container.
-
-Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
-See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
-
 ### Existing PersistentVolumeClaim
 
 1. Create the PersistentVolume
@@ -556,7 +539,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 1. Install the chart
 
     ```console
-    $ helm install my-release --set persistence.existingClaim=PVC_NAME my-repo/magento
+    helm install my-release --set persistence.existingClaim=PVC_NAME my-repo/magento
     ```
 
 ### Host path
@@ -572,7 +555,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 1. Install the chart
 
     ```console
-    $ helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT my-repo/magento
+    helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT my-repo/magento
     ```
 
     This will mount the `magento-data` volume into the `hostPath` directory. The site data will be persisted if the mount path contains valid data, else the site data will be initialized at first launch.
@@ -590,8 +573,9 @@ certificates:
 ```
 
 > Tip! You can create a secret containing your CA certificates using the following command:
+
 ```console
-$ kubectl create secret generic my-ca-1 --from-file my-ca-1.crt
+kubectl create secret generic my-ca-1 --from-file my-ca-1.crt
 ```
 
 ## Troubleshooting
@@ -622,7 +606,7 @@ In this major there were three main changes introduced:
 - Migration to non-root
 - Elasticsearch sub-chart 14.0.0 update
 
-**1. Chart standarizations**
+#### 1. Chart standarizations
 
 This upgrade adapts the chart to the latest Bitnami good practices. Check the Parameters section for more information. In summary:
 
@@ -630,14 +614,14 @@ This upgrade adapts the chart to the latest Bitnami good practices. Check the Pa
 - Some parameters were renamed or disappeared in favor of new ones in this major version. For example, `persistence.magento.*` parameters were deprecated in favor of `persistence.*`.
 - This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
-**2. Migration of the Magento image to non-root**
+#### 2. Migration of the Magento image to non-root
 
 The [Bitnami Magento](https://github.com/bitnami/containers/tree/main/bitnami/magento) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. Consequences:
 
 - The HTTP/HTTPS ports exposed by the container are now `8080/8443` instead of `80/443`.
 - Backwards compatibility is not guaranteed. Uninstall & install the chart again to obtain the latest version.
 
-**3. Elasticsearch sub-chart 14.0.0 update**
+#### 3. Elasticsearch sub-chart 14.0.0 update
 
 This version of the Elasticsearch sub-chart standardizes the way of defining Ingress rules in the Kibana sub-chart.
 
@@ -697,12 +681,12 @@ Consequences:
 - Backwards compatibility is not guaranteed. However, you can easily workaround this issue by removing Magento deployment before upgrading (the following example assumes that the release name is `magento`):
 
 ```console
-$ export APP_HOST=$(kubectl get svc --namespace default magento --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
-$ export APP_PASSWORD=$(kubectl get secret --namespace default magento -o jsonpath="{.data.magento-password}" | base64 -d)
-$ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default magento-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
-$ export MARIADB_PASSWORD=$(kubectl get secret --namespace default magento-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
-$ kubectl delete deployments.apps magento
-$ helm upgrade magento my-repo/magento --set magentoHost=$APP_HOST,magentoPassword=$APP_PASSWORD,mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD
+export APP_HOST=$(kubectl get svc --namespace default magento --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
+export APP_PASSWORD=$(kubectl get secret --namespace default magento -o jsonpath="{.data.magento-password}" | base64 -d)
+export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default magento-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
+export MARIADB_PASSWORD=$(kubectl get secret --namespace default magento-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
+kubectl delete deployments.apps magento
+helm upgrade magento my-repo/magento --set magentoHost=$APP_HOST,magentoPassword=$APP_PASSWORD,mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD
 ```
 
 ### To 15.0.0
@@ -714,30 +698,30 @@ In this major there were two main changes introduced:
 
 Please read the update notes carefully.
 
-**1. Adaptation to Helm v2 EOL**
+#### 1. Adaptation to Helm v2 EOL
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
+##### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
-- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
-- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+- Move dependency information from the _requirements.yaml_ to the _Chart.yaml_
+- After running `helm dependency update`, a _Chart.lock_ file is generated containing the same structure used in the previous _requirements.lock_
+- The different fields present in the _Chart.yaml_ file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
-**Considerations when upgrading to this version**
+##### Considerations when upgrading to this version
 
 - If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
 - If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
 
-**Useful links**
+##### Useful links
 
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://helm.sh/docs/topics/v2_v3_migration/>
+- <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
-**2. Updated MariaDB dependency version**
+#### 2. Updated MariaDB dependency version
 
 In this major the MariaDB and Elasticsearch dependency versions were also bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/mariadb#to-800) for more information. Although it is using the latest `bitnami/mariadb` chart, given Magento `2.4` [current limitations](https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements.html#database), the container image of MariaDB has been bumped to `10.4.x` instead of using the latest `10.5.x`.
 
@@ -748,30 +732,30 @@ To upgrade to `15.0.0`, it should be done reusing the PVCs used to hold data fro
 Obtain the credentials and the names of the PVCs used to hold the MariaDB data on your current release:
 
 ```console
-$ export MAGENTO_HOST=$(kubectl get svc --namespace default magento --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
-$ export MAGENTO_PASSWORD=$(kubectl get secret --namespace default magento -o jsonpath="{.data.magento-password}" | base64 -d)
-$ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default magento-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
-$ export MARIADB_PASSWORD=$(kubectl get secret --namespace default magento-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
-$ export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=magento -o jsonpath="{.items[0].metadata.name}")
+export MAGENTO_HOST=$(kubectl get svc --namespace default magento --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
+export MAGENTO_PASSWORD=$(kubectl get secret --namespace default magento -o jsonpath="{.data.magento-password}" | base64 -d)
+export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default magento-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
+export MARIADB_PASSWORD=$(kubectl get secret --namespace default magento-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
+export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=magento -o jsonpath="{.items[0].metadata.name}")
 ```
 
 Delete the Magento deployment and delete the MariaDB statefulset. Notice the option `--cascade=false` in the latter.
 
 ```console
-$ kubectl delete deployments.apps magento
-$ kubectl delete statefulsets.apps magento-mariadb --cascade=false
+kubectl delete deployments.apps magento
+kubectl delete statefulsets.apps magento-mariadb --cascade=false
 ```
 
 Now the upgrade works:
 
 ```console
-$ helm upgrade magento my-repo/magento --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set magentoPassword=$MAGENTO_PASSWORD --set magentoHost=$MAGENTO_HOST
+helm upgrade magento my-repo/magento --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set magentoPassword=$MAGENTO_PASSWORD --set magentoHost=$MAGENTO_HOST
 ```
 
 You will have to delete the existing MariaDB pod and the new statefulset is going to create a new one
 
 ```console
-$ kubectl delete pod magento-mariadb-0z
+kubectl delete pod magento-mariadb-0z
 ```
 
 Finally, you should see the lines below in MariaDB container logs:
@@ -798,9 +782,9 @@ Manual intervention is needed if configuring Elasticsearch 6 as Magento search e
 
 [Follow the Magento documentation](https://devdocs.magento.com/guides/v2.3/config-guide/elasticsearch/configure-magento.html) in order to configure Elasticsearch, setting **Search Engine** to **Elasticsearch 6.0+**. If using the Elasticsearch server included in this chart, `hostname` and `port` can be obtained with the following commands:
 
-```
-$ kubectl get svc -l app=elasticsearch,component=client,release=RELEASE_NAME -o jsonpath="{.items[0].metadata.name}"
-$ kubectl get svc -l app=elasticsearch,component=client,release=RELEASE_NAME -o jsonpath="{.items[0].spec.ports[0].port}"
+```console
+kubectl get svc -l app=elasticsearch,component=client,release=RELEASE_NAME -o jsonpath="{.items[0].metadata.name}"
+kubectl get svc -l app=elasticsearch,component=client,release=RELEASE_NAME -o jsonpath="{.items[0].spec.ports[0].port}"
 ```
 
 Where `RELEASE_NAME` is the name of the release. Use `helm list` to find it.
@@ -811,8 +795,8 @@ Backwards compatibility is not guaranteed unless you modify the labels used on t
 Use the workaround below to upgrade from versions previous to 3.0.0. The following example assumes that the release name is magento:
 
 ```console
-$ kubectl patch deployment magento-magento --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
-$ kubectl delete statefulset magento-mariadb --cascade=false
+kubectl patch deployment magento-magento --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+kubectl delete statefulset magento-mariadb --cascade=false
 ```
 
 ## Community supported solution
@@ -831,7 +815,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

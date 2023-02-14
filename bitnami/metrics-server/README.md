@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/metrics-server
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/metrics-server
 ```
 
 ## Introduction
@@ -31,8 +31,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/metrics-server
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/metrics-server
 ```
 
 These commands deploy Metrics Server on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -44,7 +44,7 @@ These commands deploy Metrics Server on the Kubernetes cluster in the default co
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -57,7 +57,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------- | ----------------------------------------------- | ----- |
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-
 
 ### Common parameters
 
@@ -73,7 +72,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`        |
 | `diagnosticMode.command` | Command to override all containers in the the deployment(s)/statefulset(s)                   | `["sleep"]`    |
 | `diagnosticMode.args`    | Args to override all containers in the the deployment(s)/statefulset(s)                      | `["infinity"]` |
-
 
 ### Metrics Server parameters
 
@@ -169,7 +167,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraVolumes`                                    | Extra volumes                                                                                                                                                            | `[]`                     |
 | `extraVolumeMounts`                               | Mount extra volume(s)                                                                                                                                                    | `[]`                     |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
@@ -182,7 +179,7 @@ The above command enables RBAC authentication.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/metrics-server
+helm install my-release -f values.yaml my-repo/metrics-server
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -241,8 +238,8 @@ Backwards compatibility is not guaranteed unless you modify the labels used on t
 Use the workaround below to upgrade from versions previous to 4.0.0. The following example assumes that the release name is metrics-server:
 
 ```console
-$ kubectl delete deployment metrics-server --cascade=false
-$ helm upgrade metrics-server my-repo/metrics-server
+kubectl delete deployment metrics-server --cascade=false
+helm upgrade metrics-server my-repo/metrics-server
 ```
 
 ### To 2.0.0
@@ -251,7 +248,7 @@ Backwards compatibility is not guaranteed unless you modify the labels used on t
 Use the workaround below to upgrade from versions previous to 2.0.0. The following example assumes that the release name is metrics-server:
 
 ```console
-$ kubectl patch deployment metrics-server --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+kubectl patch deployment metrics-server --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
 ```
 
 ## License
@@ -262,7 +259,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

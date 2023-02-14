@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/etcd
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/etcd
 ```
 
 ## Introduction
@@ -32,8 +32,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/etcd
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/etcd
 ```
 
 These commands deploy etcd on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -45,7 +45,7 @@ These commands deploy etcd on the Kubernetes cluster in the default configuratio
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -316,7 +316,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `pdb.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable | `""`   |
 
 
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
 $ helm install my-release \
@@ -330,7 +329,7 @@ The above command sets the etcd `root` account password to `secretpassword`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/etcd
+helm install my-release -f values.yaml my-repo/etcd
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -396,6 +395,7 @@ extraEnvVars:
 Since etcd keeps an exact history of its keyspace, this history should be periodically compacted to avoid performance degradation and eventual storage space exhaustion. Compacting the keyspace history drops all information about keys superseded prior to a given keyspace revision. The space used by these keys then becomes available for additional writes to the keyspace.
 
 `autoCompactionMode`, by default periodic. Valid values: "periodic", "revision".
+
 - 'periodic' for duration based retention, defaulting to hours if no time unit is provided (e.g. "5m").
 - 'revision' for revision number based retention.
 `autoCompactionRetention` for mvcc key value store in hour, by default 0, means disabled.
@@ -526,7 +526,7 @@ Backwards compatibility is not guaranteed unless you modify the labels used on t
 Use the workaround below to upgrade from versions previous to 1.0.0. The following example assumes that the release name is etcd:
 
 ```console
-$ kubectl delete statefulset etcd --cascade=false
+kubectl delete statefulset etcd --cascade=false
 ```
 
 ## License
@@ -537,7 +537,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

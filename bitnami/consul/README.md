@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/consul
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/consul
 ```
 
 ## Introduction
@@ -32,8 +32,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/consul
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/consul
 ```
 
 These commands deploy HashiCorp Consul on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -45,12 +45,13 @@ These commands deploy HashiCorp Consul on the Kubernetes cluster in the default 
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
+
 The command removes all the Kubernetes components associated with the chart and deletes the release. Remove also the chart using `--purge` option:
 
 ```console
-$ helm delete --purge my-release
+helm delete --purge my-release
 ```
 
 ## Parameters
@@ -264,10 +265,9 @@ $ helm delete --purge my-release
 | `metrics.serviceMonitor.labels`                 | Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with                | `{}`                      |
 
 
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release --set domain=consul-domain,gossipKey=secretkey my-repo/consul
+helm install my-release --set domain=consul-domain,gossipKey=secretkey my-repo/consul
 ```
 
 The above command sets the HashiCorp Consul domain to `consul-domain` and sets the gossip key to `secretkey`.
@@ -277,7 +277,7 @@ The above command sets the HashiCorp Consul domain to `consul-domain` and sets t
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/consul
+helm install my-release -f values.yaml my-repo/consul
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -356,7 +356,7 @@ You must manually create a secret containing your PEM-encoded certificate author
 
 If the secret is specified, the chart will locate those files at `/opt/bitnami/consul/certs/`, so you will want to use the below snippet to configure HashiCorp Consul TLS encryption in your config map:
 
-```
+```json
   "ca_file": "/opt/bitnami/consul/certs/ca.pem",
   "cert_file": "/opt/bitnami/consul/certs/consul.pem",
   "key_file": "/opt/bitnami/consul/certs/consul-key.pem",
@@ -446,28 +446,29 @@ Affected values:
 - `service.port` renamed as `service.port.http`.
 - `service.nodePort` renamed as `service.nodePorts.http`.
 - `updateStrategy` changed from String type (previously default to 'rollingUpdate') to Object type, allowing users to configure other updateStrategy parameters, similar to other charts.
+
 ### To 9.0.0
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
+#### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - Move dependency information from the *requirements.yaml* to the *Chart.yaml*
 - After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
-**Considerations when upgrading to this version**
+#### Considerations when upgrading to this version
 
 - If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
 - If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
 
-**Useful links**
+#### Useful links
 
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://helm.sh/docs/topics/v2_v3_migration/>
+- <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
 ### To 8.0.0
 
@@ -486,8 +487,8 @@ Consul pods are now deployed in parallel in order to bootstrap the cluster and b
 The field `podManagementPolicy` can't be updated in a StatefulSet, so you need to destroy it before you upgrade the chart to this version.
 
 ```console
-$ kubectl delete statefulset consul
-$ helm upgrade <DEPLOYMENT_NAME> my-repo/consul
+kubectl delete statefulset consul
+helm upgrade <DEPLOYMENT_NAME> my-repo/consul
 ```
 
 ### To 6.0.0
@@ -498,14 +499,14 @@ This release updates the Bitnami Consul container to `1.6.1-debian-9-r6`, which 
 
 Consul container was moved to a non-root approach. There shouldn't be any issue when upgrading since the corresponding `securityContext` is enabled by default. Both the container image and the chart can be upgraded by running the command below:
 
-```
-$ helm upgrade my-release my-repo/consul
+```console
+helm upgrade my-release my-repo/consul
 ```
 
 If you use a previous container image (previous to **1.4.0-r16**) disable the `securityContext` by running the command below:
 
-```
-$ helm upgrade my-release my-repo/consul --set securityContext.enabled=false,image.tag=XXX
+```console
+helm upgrade my-release my-repo/consul --set securityContext.enabled=false,image.tag=XXX
 ```
 
 ### To 2.0.0
@@ -514,7 +515,7 @@ Backwards compatibility is not guaranteed unless you modify the labels used on t
 Use the workaround below to upgrade from versions previous to 2.0.0. The following example assumes that the release name is consul:
 
 ```console
-$ kubectl delete statefulset consul --cascade=false
+kubectl delete statefulset consul --cascade=false
 ```
 
 ## License
@@ -525,7 +526,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

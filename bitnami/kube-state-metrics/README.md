@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/kube-state-metrics
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/kube-state-metrics
 ```
 
 ## Introduction
@@ -31,8 +31,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/kube-state-metrics
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/kube-state-metrics
 ```
 
 The command deploys kube-state-metrics on the Kubernetes cluster in the default configuration. The [configuration](#configuration-and-installation-details) section lists the parameters that can be configured during installation.
@@ -42,7 +42,7 @@ The command deploys kube-state-metrics on the Kubernetes cluster in the default 
 To uninstall/delete the `my-release` release:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -56,7 +56,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -72,7 +71,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                       | `false`        |
 | `diagnosticMode.command` | Command to override all containers in the the deployment(s)/statefulset(s)                                    | `["sleep"]`    |
 | `diagnosticMode.args`    | Args to override all containers in the the deployment(s)/statefulset(s)                                       | `["infinity"]` |
-
 
 ### kube-state-metrics parameters
 
@@ -200,17 +198,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceMonitor.metricRelabelings`              | ServiceMonitor metricRelabelings                                                                                                                                   | `[]`                         |
 | `serviceMonitor.labels`                         | Extra labels for the ServiceMonitor                                                                                                                                | `{}`                         |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example the following command sets the `replicas` of the kube-state-metrics Pods to `2`.
 
 ```console
-$ helm install my-release --set replicas=2 my-repo/kube-state-metrics
+helm install my-release --set replicas=2 my-repo/kube-state-metrics
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/kube-state-metrics
+helm install my-release -f values.yaml my-repo/kube-state-metrics
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -242,7 +239,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 ## Upgrading
 
 ```console
-$ helm upgrade my-release my-repo/kube-state-metrics
+helm upgrade my-release my-repo/kube-state-metrics
 ```
 
 ### To 3.0.0
@@ -250,6 +247,7 @@ $ helm upgrade my-release my-repo/kube-state-metrics
 This major release renames several values in this chart and adds missing features, in order to be aligned with the rest of the assets in the Bitnami charts repository.
 
 Affected values:
+
 - `service.port` was renamed as `service.ports.metrics`.
 - `service.nodePort` was renamed as `service.nodePorts.metrics`.
 - `securityContext` was split in `podSecurityContext` and `containerSecurityContext`.
@@ -259,8 +257,8 @@ Affected values:
 
 This version updates kube-state-metrics to its new major, 2.0.0. There have been some value's name changes to acommodate to the naming used in 2.0.0:
 
-  - `.Values.namespace` -> `.Values.namespaces`
-  - `.Values.collectors` -> `.Values.kubeResources`
+- `.Values.namespace` -> `.Values.namespaces`
+- `.Values.collectors` -> `.Values.kubeResources`
 
 For more information, please refer to [kube-state-metrics 2 release notes](https://kubernetes.io/blog/2021/04/13/kube-state-metrics-v-2-0/).
 
@@ -282,7 +280,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

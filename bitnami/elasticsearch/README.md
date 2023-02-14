@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/elasticsearch
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/elasticsearch
 ```
 
 ## Introduction
@@ -32,8 +32,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/elasticsearch
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/elasticsearch
 ```
 
 These commands deploy Elasticsearch on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -45,13 +45,13 @@ These commands deploy Elasticsearch on the Kubernetes cluster in the default con
 To uninstall/delete the `my-release` release:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release. Remove also the chart using `--purge` option:
 
 ```console
-$ helm delete --purge my-release
+helm delete --purge my-release
 ```
 
 ## Parameters
@@ -640,7 +640,6 @@ $ helm delete --purge my-release
 | `kibana.elasticsearch.port`  | Port to connect Kibana and ES instance. Used to generate the URL          | `{{ include "elasticsearch.service.ports.restAPI" . }}` |
 
 
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
 $ helm install my-release \
@@ -653,7 +652,7 @@ The above command sets the Elasticsearch cluster name to `my-elastic` and REST p
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/elasticsearch
+helm install my-release -f values.yaml my-repo/elasticsearch
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml).
@@ -775,7 +774,6 @@ snapshotRepoPath: "/snapshots"
 
 If you have a need for additional containers to run within the same pod as Elasticsearch components (e.g. an additional metrics or logging exporter), you can do so via the `XXX.sidecars` parameter(s), where XXX is placeholder you need to replace with the actual component(s). Simply define your container according to the Kubernetes container spec.
 
-
 ```yaml
 sidecars:
   - name: your-image-name
@@ -838,9 +836,9 @@ This major release refactors the bitnami/elasticsearch chart, adding some organi
 - Renamed several values to be in line with the rest of the catalog.
 
 This major release also upgrades Elasticsearch to its version 8.x.x and the updates Kibana subchart.
+
 - Upgrade to Elasticsearch 8
 - Upgrade Kibana subchart.
-
 
 In addition, several modifications have been performed adding missing features and renaming values, in order to get aligned with the rest of the assets in the Bitnami charts repository.
 
@@ -888,30 +886,30 @@ This version standardizes the way of defining Ingress rules in the Kibana subcha
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
+#### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - Move dependency information from the *requirements.yaml* to the *Chart.yaml*
 - After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
-**Considerations when upgrading to this version**
+#### Considerations when upgrading to this version
 
 - If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
 - If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
 
-**Useful links**
+#### Useful links
 
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://helm.sh/docs/topics/v2_v3_migration/>
+- <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
 ### To 12.0.0
 
 Several changes were introduced that breaks backwards compatibility:
 
-- Ports names were prefixed with the protocol to comply with Istio (see https://istio.io/docs/ops/deployment/requirements/).
+- Ports names were prefixed with the protocol to comply with Istio (see <https://istio.io/docs/ops/deployment/requirements/>).
 - Labels are adapted to follow the Helm charts best practices.
 - Elasticsearch data pods are now deployed in parallel in order to bootstrap the cluster and be discovered.
 
@@ -922,8 +920,8 @@ Elasticsearch master pods are now deployed in parallel in order to bootstrap the
 The field `podManagementPolicy` can't be updated in a StatefulSet, so you need to destroy it before you upgrade the chart to this version.
 
 ```console
-$ kubectl delete statefulset elasticsearch-master
-$ helm upgrade <DEPLOYMENT_NAME> my-repo/elasticsearch
+kubectl delete statefulset elasticsearch-master
+helm upgrade <DEPLOYMENT_NAME> my-repo/elasticsearch
 ```
 
 ### TO 10.0.0
@@ -957,11 +955,11 @@ Backwards compatibility is not guaranteed unless you modify the labels used on t
 Use the workaround below to upgrade from versions previous to 3.0.0. The following example assumes that the release name is elasticsearch:
 
 ```console
-$ kubectl patch deployment elasticsearch-coordinating --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
-$ kubectl patch deployment elasticsearch-ingest --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
-$ kubectl patch deployment elasticsearch-master --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
-$ kubectl patch deployment elasticsearch-metrics --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
-$ kubectl delete statefulset elasticsearch-data --cascade=false
+kubectl patch deployment elasticsearch-coordinating --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+kubectl patch deployment elasticsearch-ingest --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+kubectl patch deployment elasticsearch-master --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+kubectl patch deployment elasticsearch-metrics --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+kubectl delete statefulset elasticsearch-data --cascade=false
 ```
 
 ## License
@@ -972,7 +970,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
