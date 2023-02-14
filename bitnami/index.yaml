@@ -88899,6 +88899,39 @@ entries:
   pytorch:
   - annotations:
       category: MachineLearning
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 1.13.1
+    created: "2023-02-14T06:12:07.502085715Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: PyTorch is a deep learning platform that accelerates the transition
+      from research prototyping to production deployment. Bitnami image includes Torchvision
+      for specific computer vision support.
+    digest: 6c8f75202395ccab725466bce9cf2f3cc5e4b3e8d7cff080718e2d37bb8116bc
+    home: https://github.com/bitnami/charts/tree/main/bitnami/pytorch
+    icon: https://bitnami.com/assets/stacks/pytorch/img/pytorch-stack-220x234.png
+    keywords:
+    - pytorch
+    - python
+    - machine
+    - learning
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: pytorch
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/pytorch
+    - https://pytorch.org/
+    urls:
+    - https://charts.bitnami.com/bitnami/pytorch-2.5.13.tgz
+    version: 2.5.13
+  - annotations:
+      category: MachineLearning
       licenses: |
         - Apache-2.0
     apiVersion: v2
@@ -116048,4 +116081,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-02-14T04:10:52.824907513Z"
+generated: "2023-02-14T06:12:07.498813496Z"
