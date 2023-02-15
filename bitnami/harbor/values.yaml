@@ -1051,7 +1051,7 @@ portal:
   image:
     registry: docker.io
     repository: bitnami/harbor-portal
-    tag: 2.7.0-debian-11-r22
+    tag: 2.7.0-debian-11-r23
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
