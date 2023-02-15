@@ -371,7 +371,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
 | `portal.image.registry`                        | Harbor Portal image registry                                                                                             | `docker.io`             |
 | `portal.image.repository`                      | Harbor Portal image repository                                                                                           | `bitnami/harbor-portal` |
-| `portal.image.tag`                             | Harbor Portal image tag (immutable tags are recommended)                                                                 | `2.7.0-debian-11-r22`   |
+| `portal.image.tag`                             | Harbor Portal image tag (immutable tags are recommended)                                                                 | `2.7.0-debian-11-r23`   |
 | `portal.image.digest`                          | Harbor Portal image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag            | `""`                    |
 | `portal.image.pullPolicy`                      | Harbor Portal image pull policy                                                                                          | `IfNotPresent`          |
 | `portal.image.pullSecrets`                     | Harbor Portal image pull secrets                                                                                         | `[]`                    |
