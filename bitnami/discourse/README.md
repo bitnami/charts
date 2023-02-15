@@ -339,7 +339,7 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set auth.username=admin,auth.password=password \
     my-repo/discourse
 ```
@@ -373,7 +373,7 @@ By default, this Chart only deploys a single pod running Discourse. Should you w
 1. Create a conventional release, that will be scaled later:
 
 ```console
-$ helm install my-release my-repo/discourse
+helm install my-release my-repo/discourse
 ...
 ```
 

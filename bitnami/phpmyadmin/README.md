@@ -265,7 +265,7 @@ For more information please refer to the [bitnami/phpmyadmin](https://github.com
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set db.host=mymariadb,db.port=3306 my-repo/phpmyadmin
 ```
 
@@ -428,7 +428,7 @@ helm upgrade phpmyadmin my-repo/phpmyadmin --set mariadb.auth.rootPassword=$MARI
 In this major there were two main changes introduced:
 
 1. Adaptation to Helm v2 EOL
-2. Updated MariaDB dependency version
+1. Updated MariaDB dependency version
 
 Please read the update notes carefully.
 

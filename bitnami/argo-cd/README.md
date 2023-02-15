@@ -753,7 +753,7 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set controller.replicaCount=2 \
   --set server.metrics.enabled=true \
     my-repo/argo-cd

@@ -270,7 +270,7 @@ This solution allows to easily deploy multiple Contour instances compared to the
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set livenessProbe.enabled=false \
     my-repo/contour-operator
 ```

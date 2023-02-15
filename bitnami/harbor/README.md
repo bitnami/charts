@@ -1171,7 +1171,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set adminPassword=password \
     my-repo/harbor
 ```
@@ -1211,7 +1211,7 @@ You can expose Harbor core using two methods:
 The external URL for Harbor core service is used to:
 
 1. populate the docker/helm commands showed on portal
-2. populate the token service URL returned to docker/notary client
+1. populate the token service URL returned to docker/notary client
 
 Format: `protocol://domain[:port]`. Usually:
 

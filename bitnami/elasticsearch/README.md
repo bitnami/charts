@@ -642,7 +642,7 @@ helm delete --purge my-release
 
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set name=my-elastic,client.service.port=8080 \
   my-repo/elasticsearch
 ```

@@ -295,7 +295,7 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set ghostUsername=admin,ghostPassword=password,mysql.auth.rootPassword=secretpassword \
     my-repo/ghost
 ```
@@ -422,7 +422,7 @@ This version standardizes the way of defining Ingress rules. When configuring a 
 In this major there were two main changes introduced:
 
 1. Adaptation to Helm v2 EOL
-2. Updated MariaDB dependency version
+1. Updated MariaDB dependency version
 
 Please read the update notes carefully.
 

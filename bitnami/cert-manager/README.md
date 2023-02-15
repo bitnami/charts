@@ -297,7 +297,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 
 ```console
-$ helm install my-release my-repo/cert-manager \
+helm install my-release my-repo/cert-manager \
   --set installCRDs=true
 ```
 

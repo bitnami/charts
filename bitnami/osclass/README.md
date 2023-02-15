@@ -320,7 +320,7 @@ The above parameters map to the env variables defined in [bitnami/osclass](https
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set osclassUsername=admin,osclassPassword=password,mariadb.auth.rootPassword=secretpassword \
     my-repo/osclass
 ```
@@ -465,7 +465,7 @@ helm upgrade osclass my-repo/osclass --set osclassHost=$APP_HOST,osclassPassword
 In this major there were two main changes introduced:
 
 1. Adaptation to Helm v2 EOL
-2. Updated MariaDB dependency version
+1. Updated MariaDB dependency version
 
 Please read the update notes carefully.
 

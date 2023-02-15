@@ -253,7 +253,7 @@ The above parameters map to the env variables defined in [bitnami/joomla](https:
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set joomlaUsername=admin,joomlaPassword=password,mariadb.mariadbRootPassword=secretpassword \
     my-repo/joomla
 ```
@@ -375,7 +375,7 @@ This version standardizes the way of defining Ingress rules. When configuring a 
 In this major there were two main changes introduced:
 
 1. Adaptation to Helm v2 EOL
-2. Updated MariaDB dependency version
+1. Updated MariaDB dependency version
 
 Please read the update notes carefully.
 

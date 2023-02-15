@@ -279,7 +279,7 @@ The above parameters map to the env variables defined in [bitnami/mediawiki](htt
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set mediawikiUser=admin,mediawikiPassword=password,mariadb.mariadbRootPassword=secretpassword \
     my-repo/mediawiki
 ```
@@ -405,7 +405,7 @@ helm upgrade mediawiki my-repo/mediawiki --set mediawikiHost=$APP_HOST,mediawiki
 In this major there were two main changes introduced:
 
 1. Adaptation to Helm v2 EOL
-2. Updated MariaDB dependency version
+1. Updated MariaDB dependency version
 
 Please read the update notes carefully.
 

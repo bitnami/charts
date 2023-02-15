@@ -1211,7 +1211,7 @@ The above parameters map to the env variables defined in [bitnami/grafana-loki](
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set loki.traces.jaeger.grpc=true \
   my-repo/grafana-loki
 ```

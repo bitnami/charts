@@ -353,7 +353,7 @@ The above parameters map to the env variables defined in [bitnami/clickhouse](ht
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set auth.username=admin \
   --set auth.password=password \
     my-repo/clickhouse

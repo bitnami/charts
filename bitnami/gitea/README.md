@@ -250,7 +250,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set adminUsername=user,giteaPassword=password,postgresql.auth.rootPassword=secretpassword \
     my-repo/gitea
 ```

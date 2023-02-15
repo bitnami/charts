@@ -485,7 +485,7 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set replicaCount=3 \
   my-repo/kafka
 ```
@@ -565,7 +565,6 @@ If, for some reason (like using Cert-Manager) you can not use the default JKS se
 - `auth.tls.jksKeystoreSAN` if you want to use a SAN certificate for your brokers. Setting this parameter would mean that the chart expects a existing key in the `auth.tls.jksTruststoreSecret` with the `auth.tls.jksKeystoreSAN` value and use this as a keystore for **all** brokers
 
 > **Note**: If you are using cert-manager, particularly when an ACME issuer is used, the `ca.crt` field is not put in the `Secret` that cert-manager creates. To handle this, the `auth.tls.pemChainIncluded` property can be set to `true` and the initContainer created by this Chart will attempt to extract the intermediate certs from the `tls.crt` field of the secret (which is a PEM chain)
-
 > **Note**: The truststore/keystore from above **must** be protected with the same password as in `auth.tls.password`
 
 You can deploy the chart with authentication using the following parameters:

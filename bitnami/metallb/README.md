@@ -61,7 +61,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                             | Value          |
@@ -76,7 +75,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the the deployment(s)/statefulset(s)              | `["sleep"]`    |
 | `diagnosticMode.args`    | Args to override all containers in the the deployment(s)/statefulset(s)                 | `["infinity"]` |
 
-
 ### MetalLB parameters
 
 | Name                                    | Description                                                                                                                                 | Value   |
@@ -87,7 +85,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressNSMatchLabels`    | Allow connections from other namespaces                                                                                                     | `{}`    |
 | `networkPolicy.ingressNSPodMatchLabels` | For other namespaces match by pod labels and namespace labels                                                                               | `{}`    |
 | `prometheusRule.enabled`                | Prometheus Operator alertmanager alerts are created                                                                                         | `false` |
-
 
 ### Controller parameters
 
@@ -165,7 +162,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.customLivenessProbe`                               | Custom liveness probe for the Web component                                                                                                 | `{}`                         |
 | `controller.customReadinessProbe`                              | Custom readiness probe for the Web component                                                                                                | `{}`                         |
 
-
 ### Metallb controller Prometheus metrics export
 
 | Name                                                  | Description                                                                 | Value                    |
@@ -183,7 +179,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.metrics.serviceMonitor.selector`          | ServiceMonitor selector labels                                              | `{}`                     |
 | `controller.metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                         | `{}`                     |
 | `controller.metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels    | `false`                  |
-
 
 ### Speaker parameters
 
@@ -261,7 +256,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `speaker.customLivenessProbe`                               | Custom liveness probe for the Web component                                                                                                 | `{}`                      |
 | `speaker.customReadinessProbe`                              | Custom readiness probe for the Web component                                                                                                | `{}`                      |
 
-
 ### Speaker Prometheus metrics export
 
 | Name                                               | Description                                                                 | Value                    |
@@ -280,10 +274,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `speaker.metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                         | `{}`                     |
 | `speaker.metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels    | `false`                  |
 
-
-
 ```console
-$ helm install my-release \
+helm install my-release \
   --set readinessProbe.successThreshold=5 \
     my-repo/metallb
 ```
@@ -350,7 +342,7 @@ Affected values:
 
 ### To 2.0.0
 
-#### What changes were introduced in this major version?
+#### What changes were introduced in 2.0.0?
 
 - The `.Values.prometheus` section was moved into the components `.Values.controller.prometheus` and `.Values.speaker.prometheus`
 - The `prometheus.prometheusRule` which is used to toggle the deployment of the metallb alerts is moved under the root of the `.Values.prometheusRule`
@@ -358,7 +350,7 @@ Affected values:
   - `Values.controller.rbac.create` and `Values.controller.psp.create`
   - `Values.speaker.rbac.create` and `Values.speaker.psp.create`
 
-#### Considerations when upgrading to this version
+#### Considerations when upgrading to 2.0.0
 
 - Check if you used the `prometheus` section in you deployment.
 - If you do so, place the configuration you made into the sections `controller.prometheus` and `speaker.prometheus`.
@@ -368,12 +360,12 @@ Affected values:
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-#### What changes were introduced in this major version?
+#### What changes were introduced in 1.0.0?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
-#### Considerations when upgrading to this version
+#### Considerations when upgrading to 1.0.0
 
 - If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore

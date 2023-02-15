@@ -326,7 +326,7 @@ The above parameters map to the env variables defined in [bitnami/suitecrm](http
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set suitecrmUsername=admin,suitecrmPassword=password,mariadb.auth.rootPassword=secretpassword \
     my-repo/suitecrm
 ```

@@ -333,7 +333,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set aggregator.port=24444 my-repo/fluentd
 ```
 

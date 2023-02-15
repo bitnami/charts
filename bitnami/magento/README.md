@@ -357,7 +357,7 @@ The above parameters map to the env variables defined in [bitnami/magento](https
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set magentoUsername=admin,magentoPassword=password,mariadb.auth.rootPassword=secretpassword \
     my-repo/magento
 ```
@@ -694,7 +694,7 @@ helm upgrade magento my-repo/magento --set magentoHost=$APP_HOST,magentoPassword
 In this major there were two main changes introduced:
 
 1. Adaptation to Helm v2 EOL
-2. Updated MariaDB and Elasticsearch dependency versions
+1. Updated MariaDB and Elasticsearch dependency versions
 
 Please read the update notes carefully.
 

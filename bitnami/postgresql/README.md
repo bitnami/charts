@@ -459,7 +459,7 @@ kubectl delete pvc -l release=my-release
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
     --set auth.postgresPassword=secretpassword
     my-repo/postgresql
 ```

@@ -343,7 +343,7 @@ helm delete my-release
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set service.exposeAdmin=true my-repo/kong
 ```
 
@@ -378,7 +378,7 @@ helm install my-release my-repo/kong
 - Use an external PostgreSQL database
 
 ```console
-$ helm install my-release my-repo/kong \
+helm install my-release my-repo/kong \
     --set postgresql.enabled=false \
     --set postgresql.external.host=_HOST_OF_YOUR_POSTGRESQL_INSTALLATION_ \
     --set postgresql.external.password=_PASSWORD_OF_YOUR_POSTGRESQL_INSTALLATION_ \
@@ -388,7 +388,7 @@ $ helm install my-release my-repo/kong \
 - Deploy the Cassandra sub-chart
 
 ```console
-$ helm install my-release my-repo/kong \
+helm install my-release my-repo/kong \
     --set database=cassandra \
     --set postgresql.enabled=false \
     --set cassandra.enabled=true
@@ -397,7 +397,7 @@ $ helm install my-release my-repo/kong \
 - Use an existing Cassandra installation
 
 ```console
-$ helm install my-release my-repo/kong \
+helm install my-release my-repo/kong \
     --set database=cassandra \
     --set postgresql.enabled=false \
     --set cassandra.enabled=false \
@@ -416,7 +416,7 @@ As is said in step 4 of [kong official docker installation](https://docs.konghq.
 #### How to enable it
 
 1. Set `database` value with any value other than "postgresql" or "cassandra". For example `database: "off"`
-2. Use `kong.extraEnvVars` value to set the `KONG_DATABASE` environment variable:
+1. Use `kong.extraEnvVars` value to set the `KONG_DATABASE` environment variable:
 
 ```yaml
 kong.extraEnvVars:
@@ -511,7 +511,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 It's necessary to specify the existing passwords while performing a upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `postgresql.postgresqlPassword` or `cassandra.password` parameters when upgrading the chart:
 
 ```console
-$ helm upgrade my-release my-repo/kong \
+helm upgrade my-release my-repo/kong \
     --set database=postgresql
     --set postgresql.enabled=true
     --set
@@ -575,14 +575,14 @@ export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=kong,app.k
 
 Delete PostgreSQL statefulset. Notice the option `--cascade=false`:
 
-```
+```console
 kubectl delete statefulsets.apps kong-postgresql --cascade=false
 ```
 
 ##### Upgrade the chart release
 
 ```console
-$ helm upgrade kong my-repo/kong \
+helm upgrade kong my-repo/kong \
     --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
     --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
 ```

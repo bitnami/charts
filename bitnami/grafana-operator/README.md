@@ -272,7 +272,7 @@ For more information, refer to the [documentation on the differences between the
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set livenessProbe.successThreshold=5 \
     my-repo/grafana-operator
 ```
