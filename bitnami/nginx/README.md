@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/nginx
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/nginx
 ```
 
 ## Introduction
@@ -33,8 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/nginx
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/nginx
 ```
 
 These commands deploy NGINX Open Source on the Kubernetes cluster in the default configuration.
@@ -46,7 +46,7 @@ These commands deploy NGINX Open Source on the Kubernetes cluster in the default
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -59,7 +59,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------- | ----------------------------------------------- | ----- |
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-
 
 ### Common parameters
 
@@ -76,7 +75,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the the deployment(s)/statefulset(s)              | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the the deployment(s)/statefulset(s)                 | `["infinity"]`  |
-
 
 ### NGINX parameters
 
@@ -95,7 +93,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVars`       | Extra environment variables to be set on NGINX containers                                             | `[]`                   |
 | `extraEnvVarsCM`     | ConfigMap with extra environment variables                                                            | `""`                   |
 | `extraEnvVarsSecret` | Secret with extra environment variables                                                               | `""`                   |
-
 
 ### NGINX deployment parameters
 
@@ -171,7 +168,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `pdb.minAvailable`                            | Min number of pods that must still be available after the eviction                        | `1`             |
 | `pdb.maxUnavailable`                          | Max number of pods that can be unavailable after the eviction                             | `0`             |
 
-
 ### Custom NGINX application parameters
 
 | Name                                       | Description                                                                                         | Value                 |
@@ -196,7 +192,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `existingServerBlockConfigmap`             | ConfigMap with custom server block to be added to NGINX configuration                               | `""`                  |
 | `staticSiteConfigmap`                      | Name of existing ConfigMap with the server static site content                                      | `""`                  |
 | `staticSitePVC`                            | Name of existing PVC with the server static site content                                            | `""`                  |
-
 
 ### Traffic Exposure parameters
 
@@ -243,7 +238,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `healthIngress.ingressClassName`   | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `healthIngress.extraRules`         | The list of additional rules to be added to this ingress record. Evaluated as a template                                         | `[]`                     |
 
-
 ### Metrics parameters
 
 | Name                                       | Description                                                                                                                               | Value                    |
@@ -278,7 +272,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.additionalLabels`  | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                                     | `{}`                     |
 | `metrics.prometheusRule.rules`             | Prometheus Rule definitions                                                                                                               | `[]`                     |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
@@ -292,7 +285,7 @@ The above command sets the `imagePullPolicy` to `Always`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/nginx
+helm install my-release -f values.yaml my-repo/nginx
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -412,24 +405,24 @@ On 9 April 2022, security vulnerabilities in the [NGINX LDAP reference implement
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
+#### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - Move dependency information from the *requirements.yaml* to the *Chart.yaml*
 - After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
-**Considerations when upgrading to this version**
+#### Considerations when upgrading to this version
 
 - If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
 - If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
 
-**Useful links**
+#### Useful links
 
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://helm.sh/docs/topics/v2_v3_migration/>
+- <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
 ### To 7.0.0
 
@@ -448,8 +441,8 @@ Backwards compatibility is not guaranteed unless you modify the labels used on t
 Use the workaround below to upgrade from versions previous to 5.0.0. The following example assumes that the release name is nginx:
 
 ```console
-$ kubectl delete deployment nginx --cascade=false
-$ helm upgrade nginx my-repo/nginx
+kubectl delete deployment nginx --cascade=false
+helm upgrade nginx my-repo/nginx
 ```
 
 ### To 1.0.0
@@ -458,7 +451,7 @@ Backwards compatibility is not guaranteed unless you modify the labels used on t
 Use the workaround below to upgrade from versions previous to 1.0.0. The following example assumes that the release name is nginx:
 
 ```console
-$ kubectl patch deployment nginx --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+kubectl patch deployment nginx --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
 ```
 
 ## Bitnami Kubernetes Documentation
@@ -479,7 +472,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

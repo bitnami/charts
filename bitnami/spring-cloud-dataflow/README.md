@@ -6,13 +6,11 @@ Spring Cloud Data Flow is a microservices-based toolkit for building streaming a
 
 [Overview of Spring Cloud Data Flow](https://github.com/spring-cloud/spring-cloud-dataflow)
 
-
-
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/spring-cloud-dataflow
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/spring-cloud-dataflow
 ```
 
 ## Introduction
@@ -32,8 +30,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/spring-cloud-dataflow
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/spring-cloud-dataflow
 ```
 
 These commands deploy Spring Cloud Data Flow on the Kubernetes cluster with the default configuration. The [parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -45,7 +43,7 @@ These commands deploy Spring Cloud Data Flow on the Kubernetes cluster with the 
 To uninstall/delete the `my-release` chart:
 
 ```console
-$ helm uninstall my-release
+helm uninstall my-release
 ```
 
 ## Parameters
@@ -58,7 +56,6 @@ $ helm uninstall my-release
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                                                           | Value           |
@@ -70,7 +67,6 @@ $ helm uninstall my-release
 | `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                  | `""`            |
 | `clusterDomain`     | Default Kubernetes cluster domain                                                     | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release                                     | `[]`            |
-
 
 ### Dataflow Server parameters
 
@@ -188,7 +184,6 @@ $ helm uninstall my-release
 | `server.proxy`                                      | Add proxy configuration for SCDF server                                                                                                    | `{}`                                                 |
 | `server.applicationProperties`                      | Specify common application properties added by SCDF server to streams and/or tasks                                                         | `{}`                                                 |
 
-
 ### Dataflow Skipper parameters
 
 | Name                                         | Description                                                                                                          | Value                          |
@@ -281,7 +276,6 @@ $ helm uninstall my-release
 | `externalSkipper.host`                       | Host of a external Skipper Server                                                                                    | `localhost`                    |
 | `externalSkipper.port`                       | External Skipper Server port number                                                                                  | `7577`                         |
 
-
 ### Deployer parameters
 
 | Name                                          | Description                                                                                                                                     | Value          |
@@ -302,7 +296,6 @@ $ helm uninstall my-release
 | `deployer.entryPointStyle`                    | An entry point style affects how application properties are passed to the container to be deployed. Allowed values: exec (default), shell, boot | `exec`         |
 | `deployer.imagePullPolicy`                    | An image pull policy defines when a Docker image should be pulled to the local registry. Allowed values: IfNotPresent (default), Always, Never  | `IfNotPresent` |
 
-
 ### RBAC parameters
 
 | Name                                          | Description                                                                                                             | Value  |
@@ -312,7 +305,6 @@ $ helm uninstall my-release
 | `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                          | `true` |
 | `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                              | `{}`   |
 | `rbac.create`                                 | Whether to create and use RBAC resources or not                                                                         | `true` |
-
 
 ### Metrics parameters
 
@@ -391,7 +383,6 @@ $ helm uninstall my-release
 | `metrics.autoscaling.targetCPU`              | Target CPU utilization percentage                                                                                          | `""`                               |
 | `metrics.autoscaling.targetMemory`           | Target Memory utilization percentage                                                                                       | `""`                               |
 
-
 ### Init Container parameters
 
 | Name                                 | Description                                                                                                                     | Value                 |
@@ -405,7 +396,6 @@ $ helm uninstall my-release
 | `waitForBackends.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                | `[]`                  |
 | `waitForBackends.resources.limits`   | Init container wait-for-backend resource limits                                                                                 | `{}`                  |
 | `waitForBackends.resources.requests` | Init container wait-for-backend resource requests                                                                               | `{}`                  |
-
 
 ### Database parameters
 
@@ -436,7 +426,6 @@ $ helm uninstall my-release
 | `externalDatabase.skipper.username`       | Existing username in the external db to be used by Skipper server                                   | `skipper`    |
 | `externalDatabase.hibernateDialect`       | Hibernate Dialect used by Dataflow/Skipper servers                                                  | `""`         |
 
-
 ### RabbitMQ chart parameters
 
 | Name                                      | Description                                                                     | Value       |
@@ -451,7 +440,6 @@ $ helm uninstall my-release
 | `externalRabbitmq.vhost`                  | External RabbitMQ virtual host. It will be saved in a kubernetes secret         | `""`        |
 | `externalRabbitmq.existingPasswordSecret` | Existing secret with RabbitMQ password. It will be saved in a kubernetes secret | `""`        |
 
-
 ### Kafka chart parameters
 
 | Name                                  | Description                             | Value            |
@@ -464,11 +452,10 @@ $ helm uninstall my-release
 | `externalKafka.brokers`               | External Kafka brokers                  | `localhost:9092` |
 | `externalKafka.zkNodes`               | External Zookeeper nodes                | `localhost:2181` |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release --set server.replicaCount=2 my-repo/spring-cloud-dataflow
+helm install my-release --set server.replicaCount=2 my-repo/spring-cloud-dataflow
 ```
 
 The above command installs Spring Cloud Data Flow chart with 2 Dataflow server replicas.
@@ -476,7 +463,7 @@ The above command installs Spring Cloud Data Flow chart with 2 Dataflow server r
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/spring-cloud-dataflow
+helm install my-release -f values.yaml my-repo/spring-cloud-dataflow
 ```
 
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/blob/main/bitnami/spring-cloud-dataflow/values.yaml)
@@ -634,6 +621,7 @@ This chart will facilitate the creation of TLS secrets for use with the ingress 
 - An additional tool (like [cert-manager](https://github.com/jetstack/cert-manager/)) manages the secrets for the application.
 In the first two cases, it's needed a certificate and a key. We would expect them to look like this:
 - certificate files should look like (and there can be more than one certificate if there is a certificate chain)
+
   ```console
   -----BEGIN CERTIFICATE-----
   MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
@@ -641,7 +629,9 @@ In the first two cases, it's needed a certificate and a key. We would expect the
   jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
   -----END CERTIFICATE-----
   ```
+
 - keys should look like:
+
   ```console
   -----BEGIN RSA PRIVATE KEY-----
   MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
@@ -649,6 +639,7 @@ In the first two cases, it's needed a certificate and a key. We would expect the
   wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
   -----END RSA PRIVATE KEY-----
   ```
+
 - If you are going to use Helm to manage the certificates based on the parameters, please copy these values into the `certificate` and `key` values for a given `server.ingress.secrets` entry.
 - In case you are going to manage TLS secrets separately, please know that you must create a TLS secret with name *INGRESS_HOSTNAME-tls* (where *INGRESS_HOSTNAME* is a placeholder to be replaced with the hostname you set using the `server.ingress.hostname` parameter).
 - To use self-signed certificates created by Helm, set `server.ingress.tls` to `true` and `server.ingress.certManager` to `false`.
@@ -713,11 +704,11 @@ To upgrade to *6.0.0* from *5.x* using Kafka as messaging solution, it should be
 1. Obtain the credentials on your current release:
 
 ```console
-$ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default scdf-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
-$ export MARIADB_PASSWORD=$(kubectl get secret --namespace default scdf-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
+export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default scdf-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
+export MARIADB_PASSWORD=$(kubectl get secret --namespace default scdf-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
 ```
 
-2. Upgrade your release using the same Kafka version:
+1. Upgrade your release using the same Kafka version:
 
 ```console
 $ export CURRENT_KAFKA_VERSION=$(kubectl exec scdf-kafka-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
@@ -753,35 +744,35 @@ This major updates the Kafka subchart to its newest major 13.0.0. For more infor
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
+#### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - Move dependency information from the *requirements.yaml* to the *Chart.yaml*
 - After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
-**Considerations when upgrading to this version**
+#### Considerations when upgrading to this version
 
 - If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
 - If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
 
-**Useful links**
+#### Useful links
 
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://helm.sh/docs/topics/v2_v3_migration/>
+- <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
 ### v0.x.x
 
 ```console
-$ helm upgrade my-release my-repo/spring-cloud-dataflow --set mariadb.rootUser.password=[MARIADB_ROOT_PASSWORD] --set rabbitmq.auth.password=[RABBITMQ_PASSWORD] --set rabbitmq.auth.erlangCookie=[RABBITMQ_ERLANG_COOKIE]
+helm upgrade my-release my-repo/spring-cloud-dataflow --set mariadb.rootUser.password=[MARIADB_ROOT_PASSWORD] --set rabbitmq.auth.password=[RABBITMQ_PASSWORD] --set rabbitmq.auth.erlangCookie=[RABBITMQ_ERLANG_COOKIE]
 ```
 
 ### v1.x.x
 
 ```console
-$ helm upgrade my-release my-repo/spring-cloud-dataflow --set mariadb.auth.rootPassword=[MARIADB_ROOT_PASSWORD] --set rabbitmq.auth.password=[RABBITMQ_PASSWORD] --set rabbitmq.auth.erlangCookie=[RABBITMQ_ERLANG_COOKIE]
+helm upgrade my-release my-repo/spring-cloud-dataflow --set mariadb.auth.rootPassword=[MARIADB_ROOT_PASSWORD] --set rabbitmq.auth.password=[RABBITMQ_PASSWORD] --set rabbitmq.auth.erlangCookie=[RABBITMQ_ERLANG_COOKIE]
 ```
 
 ### To 1.0.0
@@ -795,11 +786,11 @@ To upgrade to `1.0.0`, you will need to reuse the PVC used to hold the MariaDB d
 Obtain the credentials and the name of the PVC used to hold the MariaDB data on your current release:
 
 ```console
-$ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default dataflow-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
-$ export MARIADB_PASSWORD=$(kubectl get secret --namespace default dataflow-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
-$ export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=dataflow -o jsonpath="{.items[0].metadata.name}")
-$ export RABBITMQ_PASSWORD=$(kubectl get secret --namespace default dataflow-rabbitmq -o jsonpath="{.data.rabbitmq-password}" | base64 -d)
-$ export RABBITMQ_ERLANG_COOKIE=$(kubectl get secret --namespace default dataflow-rabbitmq -o jsonpath="{.data.rabbitmq-erlang-cookie}" | base64 -d)
+export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default dataflow-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
+export MARIADB_PASSWORD=$(kubectl get secret --namespace default dataflow-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
+export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=dataflow -o jsonpath="{.items[0].metadata.name}")
+export RABBITMQ_PASSWORD=$(kubectl get secret --namespace default dataflow-rabbitmq -o jsonpath="{.data.rabbitmq-password}" | base64 -d)
+export RABBITMQ_ERLANG_COOKIE=$(kubectl get secret --namespace default dataflow-rabbitmq -o jsonpath="{.data.rabbitmq-erlang-cookie}" | base64 -d)
 ```
 
 Upgrade your release (maintaining the version) disabling MariaDB and scaling Data Flow replicas to 0:
@@ -842,7 +833,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

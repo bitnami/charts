@@ -20,16 +20,17 @@ In this section, we will discuss:
 * [Test types and tools](#test-types-and-tools)
 * [Generic acceptance criteria](#generic-acceptance-criteria)
 * [Cypress](#cypress)
-  * [Run it locally](#run-it-locally)
-  * [Useful information](#useful-information)
-  * [Specific acceptance criteria](#specific-acceptance-criteria)
+  * [Run Cypress locally](#run-cypress-locally)
+  * [Useful Cypress information](#useful-cypress-information)
+  * [Specific Cypress acceptance criteria](#specific-cypress-acceptance-criteria)
 * [Ginkgo](#ginkgo)
-  * [Run it locally](#run-it-locally-1)
-  * [Specific acceptance criteria](#specific-acceptance-criteria-1)
+  * [Run Ginkgo locally](#run-ginkgo-locally)
+  * [Useful Ginkgo information](#useful-ginkgo-information)
+  * [Specific Ginkgo acceptance criteria](#specific-ginkgo-acceptance-criteria)
 * [GOSS](#goss)
-  * [Run it locally](#run-it-locally-2)
-  * [Useful information](#useful-information-1)
-  * [Specific acceptance criteria](#specific-acceptance-criteria-2)
+  * [Run GOSS locally](#run-goss-locally)
+  * [Useful GOSS information](#useful-goss-information)
+  * [Specific GOSS acceptance criteria](#specific-goss-acceptance-criteria)
 
 ## Where to find the tests
 
@@ -123,10 +124,11 @@ Hence, tweaking the files allows to define different action policies depending o
 The general aim of the tests should be to verify the Chart package works as expected. As such, the focus IS NOT on the application OR the container images, which should be regarded as trustful components (i.e. they should have been respectively tested at a previous stage), but in the Chart itself and the different features it provides. It is expected though to assert the CORE functionality (or functionalities) of the application works, but checks defined in this repository should never aim to replace the official test suite.
 
 Some examples on the suitability of tests for the `bitnami/wordpress` chart:
- * ✅ Creating a blog post (represents the CORE functionality of the asset)
- * ❌ Creating a comment in a post (far too specific, not useful)
- * ❌ Installing a plugin through the admin panel (far too specific, not useful)
- * ✅ Specifying a different UID using the `containerSecurityContext.runAsUser` in `values.yaml` and checking it (checks a feature intrinsic to the Chart)
+
+* ✅ Creating a blog post (represents the CORE functionality of the asset)
+* ❌ Creating a comment in a post (far too specific, not useful)
+* ❌ Installing a plugin through the admin panel (far too specific, not useful)
+* ✅ Specifying a different UID using the `containerSecurityContext.runAsUser` in `values.yaml` and checking it (checks a feature intrinsic to the Chart)
 
 The tests may be regarded as _deployment_ tests since their goal is to verify that the software is correctly deployed with all the inherent features. Both functional and non-functional characteristics are evaluated in these tests, focusing on the installation aspect.
 
@@ -136,9 +138,9 @@ Before writing any test scenario, understand the primary purpose of the chart an
 
 As Charts are usually composed of a number of different components, it is also essential to test their integrations and the Chart as a whole. As a general guideline, testing a `bitnami/chart` can be reduced to:
 
-1. Identifying the components of the Chart and verifying their integration. *e.g. WordPress + MariaDB + PHP + Data Volume*
-1. Summarizing the main area features the asset offers and asserting the Chart delivers them. *e.g. Creating a post in a blog*
-1. Focusing on the unique features the Chart offers. *e.g. ConfigMaps, PVCs, Services, secrets, etc.*
+1. Identifying the components of the Chart and verifying their integration. _e.g. WordPress + MariaDB + PHP + Data Volume_
+1. Summarizing the main area features the asset offers and asserting the Chart delivers them. _e.g. Creating a post in a blog_
+1. Focusing on the unique features the Chart offers. _e.g. ConfigMaps, PVCs, Services, secrets, etc._
 
 It is easily noticeable though that Charts are usually highly configurable artifacts. Through parameters exposed in `values.yaml`, it is fairly common to perform customizations that range from enabling simple features (e.g. exporting metrics to Prometheus) to complete changes in the architecture of the application that will be deployed (e.g. standalone vs. main-secondary replication in DBs). In order to cope with this high variability, we should:
 
@@ -256,7 +258,7 @@ In order for VIB to execute Cypress tests, the following block of code needs to 
 
 > ℹ️❗️ Cypress tests needs the UI to be accessible from outside the K8s testing cluster. This means (in most cases) that the service of the chart which exposes such UI should be set to use a `LoadBalancer` type and port `80` or `443`.
 
-### Run it locally
+### Run Cypress locally
 
 Sometimes it is of interest to run the tests locally, for example during development. Though there may be different approaches, you may follow the steps below to execute the tests locally:
 
@@ -333,7 +335,7 @@ Sometimes it is of interest to run the tests locally, for example during develop
     ✔  All specs passed!                        371ms        1        1
     ```
 
-### Useful information
+### Useful Cypress information
 
 * In most cases, a single test which covers the following topics is enough:
   * Login/Logout: Checks the UI, app, and DB are working together
@@ -343,7 +345,7 @@ Sometimes it is of interest to run the tests locally, for example during develop
 
 * If the asset exposes an API, Cypress is an excellent option to test this feature!
 
-### Specific acceptance criteria
+### Specific Cypress acceptance criteria
 
 * [ ] Test file name has the following format: Helm chart name + spec (ex: `wordpress_spec.js`)
 * [ ] No `describe()` blocks should be present
@@ -389,7 +391,7 @@ In order for VIB to execute Ginkgo tests, the following block of code needs to b
         }
 ```
 
-### Run it locally
+### Run Ginkgo locally
 
 Sometimes it is of interest to run the tests locally, for example during development. Though there may be different approaches, you may follow the steps below to execute the tests locally:
 
@@ -420,7 +422,7 @@ Sometimes it is of interest to run the tests locally, for example during develop
       Test Suite Passed
     ```
 
-### Useful information
+### Useful Ginkgo information
 
 Ginkgo provides extreme flexibility when it comes to tests. Nonetheless, here are the most frequent use cases we have used it for so far:
 
@@ -428,7 +430,7 @@ Ginkgo provides extreme flexibility when it comes to tests. Nonetheless, here ar
 * Deploying, managing and interacting with K8s resources: CRDs, Ingresses, Secrets... Really useful for **K8s operators**
 * Directly interacting (instead of managing) resources deployed at installation time using the `extraDeploy` param, available in bitnami charts
 
-### Specific acceptance criteria
+### Specific Ginkgo acceptance criteria
 
 * [ ] Test file name has the following format: Helm chart name + `test` (ex: `metallb_test.go`)
 * [ ] Helper functions should be placed in an additional file named `integration_suite_test.go`
@@ -457,21 +459,7 @@ In order for VIB to execute GOSS tests, the following block of code needs to be 
         }
 ```
 
-### Useful information
-
-As our Charts implement some standardized properties, there are a number of test cases that have been found recurrently throughout the catalog:
-
-* Correct user ID and Group of the running container
-* Reachability of the different ports exposed through services
-* Existence of mounted volumes
-* Correct configuration was applied to a config file or enviroment variable
-* Existence of a created Service Account
-* Restricted capabilities are applied to a running container
-* Valuable CLI checks (when available)
-
-[Kong](https://github.com/bitnami/charts/blob/main/.vib/kong/goss/goss.yaml) or [MetalLB](https://github.com/bitnami/charts/blob/main/.vib/metallb/goss/goss.yaml) are two good examples of tests implementing some of the above.
-
-### Run it locally
+### Run GOSS locally
 
 Sometimes it is of interest to run the tests locally, for example during development. Though there may be different approaches, you may follow the steps below to execute the tests locally:
 
@@ -495,6 +483,7 @@ Sometimes it is of interest to run the tests locally, for example during develop
     $ kubectl cp .vib/nginx/goss/goss.yaml nginx-5fbc8786f-95rpl:/tmp/
     $ kubectl cp .vib/nginx/goss/vars.yaml nginx-5fbc8786f-95rpl:/tmp/
     ```
+
 1. Grant execution permissions to the binary and launch the tests
 
     ```bash
@@ -506,7 +495,21 @@ Sometimes it is of interest to run the tests locally, for example during develop
     Count: 9, Failed: 0, Skipped: 0
     ```
 
-### Specific acceptance criteria
+### Useful GOSS information
+
+As our Charts implement some standardized properties, there are a number of test cases that have been found recurrently throughout the catalog:
+
+* Correct user ID and Group of the running container
+* Reachability of the different ports exposed through services
+* Existence of mounted volumes
+* Correct configuration was applied to a config file or enviroment variable
+* Existence of a created Service Account
+* Restricted capabilities are applied to a running container
+* Valuable CLI checks (when available)
+
+[Kong](https://github.com/bitnami/charts/blob/main/.vib/kong/goss/goss.yaml) or [MetalLB](https://github.com/bitnami/charts/blob/main/.vib/metallb/goss/goss.yaml) are two good examples of tests implementing some of the above.
+
+### Specific GOSS acceptance criteria
 
 * [ ] Main test file name should be `goss.yaml`
 * [ ] Deployment-related parameters should be specified in a file named `vars.yaml`. This is a subset of the `runtime_parameters`

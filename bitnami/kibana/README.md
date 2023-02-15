@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/kibana --set elasticsearch.hosts[0]=<Hostname of your ES instance> --set elasticsearch.port=<port of your ES instance>
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/kibana --set elasticsearch.hosts[0]=<Hostname of your ES instance> --set elasticsearch.port=<port of your ES instance>
 ```
 
 ## Introduction
@@ -48,7 +48,7 @@ This chart requires an Elasticsearch instance to work. You can use an already ex
 To uninstall/delete the `my-release` statefulset:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release. Use the option `--purge` to delete all history too.
@@ -62,7 +62,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -78,7 +77,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the the deployment(s)/statefulset(s)                                | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the the deployment(s)/statefulset(s)                                   | `["infinity"]`  |
-
 
 ### Kibana parameters
 
@@ -216,7 +214,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.labels`               | Extra labels for the ServiceMonitor                                                                                                                       | `{}`                     |
 | `metrics.serviceMonitor.honorLabels`          | honorLabels chooses the metric's labels on collisions with target labels                                                                                  | `false`                  |
 
-
 ### Kibana server TLS configuration
 
 | Name                   | Description                                                                    | Value   |
@@ -228,7 +225,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tls.keyPassword`      | Password to access the PEM key when it is password-protected.                  | `""`    |
 | `tls.keystorePassword` | Password to access the PKCS12 keystore when it is password-protected.          | `""`    |
 | `tls.passwordsSecret`  | Name of a existing secret containing the Keystore or PEM key password          | `""`    |
-
 
 ### Elasticsearch parameters
 
@@ -248,7 +244,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `elasticsearch.security.tls.truststorePassword`           | Password to access the PKCS12 trustore in case it is password-protected.                                                 | `""`    |
 | `elasticsearch.security.tls.passwordsSecret`              | Name of a existing secret containing the Truststore password                                                             | `""`    |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
@@ -263,7 +258,7 @@ The above command sets the Kibana admin user to `admin-user`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/kibana
+helm install my-release -f values.yaml my-repo/kibana
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -348,7 +343,7 @@ This chart requires an Elasticsearch instance to work. For production, the optio
 
 For testing purposes, use a sidecar Elasticsearch container setting the following parameters during the Kibana chart installation:
 
-```
+```text
 elasticsearch.hosts[0]=localhost
 elasticsearch.port=9200
 sidecars[0].name=elasticsearch
@@ -466,7 +461,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

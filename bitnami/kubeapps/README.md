@@ -6,13 +6,11 @@ Kubeapps is a web-based UI for launching and managing applications on Kubernetes
 
 [Overview of Kubeapps](https://github.com/vmware-tanzu/kubeapps)
 
-
-
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/kubeapps --namespace kubeapps --create-namespace
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/kubeapps --namespace kubeapps --create-namespace
 ```
 
 > Check out the [getting started](https://github.com/vmware-tanzu/kubeapps/blob/main/site/content/docs/latest/tutorials/getting-started.md) to start deploying apps with Kubeapps.
@@ -46,8 +44,8 @@ It also packages the [Bitnami PostgreSQL chart](https://github.com/bitnami/chart
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/kubeapps --namespace kubeapps --create-namespace
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/kubeapps --namespace kubeapps --create-namespace
 ```
 
 The command deploys Kubeapps on the Kubernetes cluster in the `kubeapps` namespace. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -66,7 +64,6 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                             | Value          |
@@ -81,7 +78,6 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`        |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`    |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]` |
-
 
 ### Traffic Exposure Parameters
 
@@ -102,7 +98,6 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `ingress.ingressClassName` | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `ingress.extraRules`       | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Kubeapps packaging options
 
 | Name                       | Description                                                | Value   |
@@ -110,7 +105,6 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `packaging.helm.enabled`   | Enable the standard Helm packaging.                        | `true`  |
 | `packaging.carvel.enabled` | Enable support for the Carvel (kapp-controller) packaging. | `false` |
 | `packaging.flux.enabled`   | Enable support for Flux (v2) packaging.                    | `false` |
-
 
 ### Frontend parameters
 
@@ -195,7 +189,6 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `frontend.service.sessionAffinity`               | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                  | `None`                 |
 | `frontend.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                           | `{}`                   |
 
-
 ### Dashboard parameters
 
 | Name                                              | Description                                                                                               | Value                        |
@@ -276,7 +269,6 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `dashboard.service.ports.http`                    | Dashboard service HTTP port                                                                               | `8080`                       |
 | `dashboard.service.annotations`                   | Additional custom annotations for Dashboard service                                                       | `{}`                         |
 
-
 ### AppRepository Controller parameters
 
 | Name                                                        | Description                                                                                                                                                                                              | Value                                       |
@@ -344,7 +336,6 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `apprepository.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                                                                                           | `true`                                      |
 | `apprepository.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                                                                               | `{}`                                        |
 
-
 ### Auth Proxy parameters
 
 | Name                                              | Description                                                                                                                         | Value                  |
@@ -385,7 +376,6 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `authProxy.resources.requests.cpu`                | The requested CPU for the OAuth2 Proxy container                                                                                    | `25m`                  |
 | `authProxy.resources.requests.memory`             | The requested memory for the OAuth2 Proxy container                                                                                 | `32Mi`                 |
 
-
 ### Pinniped Proxy parameters
 
 | Name                                                  | Description                                                                                                    | Value                             |
@@ -421,14 +411,12 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `pinnipedProxy.service.ports.pinnipedProxy`           | Pinniped Proxy service port                                                                                    | `3333`                            |
 | `pinnipedProxy.service.annotations`                   | Additional custom annotations for Pinniped Proxy service                                                       | `{}`                              |
 
-
 ### Other Parameters
 
 | Name          | Description                                               | Value  |
 | ------------- | --------------------------------------------------------- | ------ |
 | `clusters`    | List of clusters that Kubeapps can target for deployments | `[]`   |
 | `rbac.create` | Specifies whether RBAC resources should be created        | `true` |
-
 
 ### Feature flags
 
@@ -438,7 +426,6 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `featureFlags.apiOnly.grpc.annotations` | Specific annotations for the GRPC ingress in API-only mode                                                 | `{}`    |
 | `featureFlags.operators`                | Enable support for Operators in Kubeapps                                                                   | `false` |
 | `featureFlags.schemaEditor.enabled`     | Enable a visual editor for customizing the package schemas                                                 | `false` |
-
 
 ### Database Parameters
 
@@ -455,7 +442,6 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `postgresql.resources.limits`            | The resources limits for the PostgreSQL container                            | `{}`         |
 | `postgresql.resources.requests.cpu`      | The requested CPU for the PostgreSQL container                               | `250m`       |
 | `postgresql.resources.requests.memory`   | The requested memory for the PostgreSQL container                            | `256Mi`      |
-
 
 ### kubeappsapis parameters
 
@@ -549,7 +535,6 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `kubeappsapis.serviceAccount.automountServiceAccountToken`                                      | Automount service account token for the server service account                                                                                                             | `true`                             |
 | `kubeappsapis.serviceAccount.annotations`                                                       | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                                                 | `{}`                               |
 
-
 ### Redis&reg; chart configuration
 
 | Name                                | Description                                                      | Value                                                    |
@@ -566,7 +551,6 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `redis.replica.disableCommands`     | Array with commands to deactivate on Redis&reg;                  | `[]`                                                     |
 | `redis.replica.persistence.enabled` | Enable Redis&reg; replica data persistence using PVC             | `false`                                                  |
 
-
 ```console
 $ helm install kubeapps --namespace kubeapps \
   --set ingress.enabled=true \
@@ -578,7 +562,7 @@ The above command enables an Ingress Rule to expose Kubeapps.
 Alternatively, a YAML file that specifies the values for parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install kubeapps --namespace kubeapps -f custom-values.yaml my-repo/kubeapps
+helm install kubeapps --namespace kubeapps -f custom-values.yaml my-repo/kubeapps
 ```
 
 ## Configuration and installation details
@@ -602,7 +586,7 @@ The simplest way to expose the Kubeapps Dashboard is to assign a LoadBalancer ty
 Wait for your cluster to assign a LoadBalancer IP or Hostname to the `kubeapps` Service and access it on that address:
 
 ```console
-$ kubectl get services --namespace kubeapps --watch
+kubectl get services --namespace kubeapps --watch
 ```
 
 #### Ingress
@@ -662,14 +646,14 @@ You can upgrade Kubeapps from the Kubeapps web interface. Select the namespace i
 You can also use the Helm CLI to upgrade Kubeapps, first ensure you have updated your local chart repository cache:
 
 ```console
-$ helm repo update
+helm repo update
 ```
 
 Now upgrade Kubeapps:
 
 ```console
-$ export RELEASE_NAME=kubeapps
-$ helm upgrade $RELEASE_NAME my-repo/kubeapps
+export RELEASE_NAME=kubeapps
+helm upgrade $RELEASE_NAME my-repo/kubeapps
 ```
 
 If you find issues upgrading Kubeapps, check the [troubleshooting](#error-while-upgrading-the-chart) section.
@@ -696,7 +680,7 @@ The first command removes most of the Kubernetes components associated with the 
 If you have dedicated a namespace only for Kubeapps you can completely clean the remaining completed/failed jobs or any stale resources by deleting the namespace
 
 ```console
-$ kubectl delete namespace kubeapps
+kubectl delete namespace kubeapps
 ```
 
 ## FAQ
@@ -877,13 +861,13 @@ Error: namespaces "kubeapps" is forbidden: User "system:serviceaccount:kube-syst
 It is possible, though uncommon, that your cluster does not have Role-Based Access Control (RBAC) enabled. To check if your cluster has RBAC you can run the following command:
 
 ```console
-$ kubectl api-versions
+kubectl api-versions
 ```
 
 If the above command does not include entries for `rbac.authorization.k8s.io` you should perform the chart installation by setting `rbac.create=false`:
 
 ```console
-$ helm install --name kubeapps --namespace kubeapps my-repo/kubeapps --set rbac.create=false
+helm install --name kubeapps --namespace kubeapps my-repo/kubeapps --set rbac.create=false
 ```
 
 ### Error while upgrading the Chart
@@ -898,13 +882,13 @@ It is possible that when upgrading Kubeapps an error appears. That can be caused
 1. (Optional) Backup your personal repositories (if you have any):
 
 ```console
-$ kubectl get apprepository -A -o yaml > <repo name>.yaml
+kubectl get apprepository -A -o yaml > <repo name>.yaml
 ```
 
 2. Delete Kubeapps:
 
 ```console
-$ helm del --purge kubeapps
+helm del --purge kubeapps
 ```
 
 3. (Optional) Delete the App Repositories CRD:
@@ -912,7 +896,7 @@ $ helm del --purge kubeapps
 > **Warning**: Do not run this step if you have more than one Kubeapps installation in your cluster.
 
 ```console
-$ kubectl delete crd apprepositories.kubeapps.com
+kubectl delete crd apprepositories.kubeapps.com
 ```
 
 4. (Optional) Clean the Kubeapps namespace:
@@ -920,20 +904,20 @@ $ kubectl delete crd apprepositories.kubeapps.com
 > **Warning**: Do not run this step if you have workloads other than Kubeapps in the `kubeapps` namespace.
 
 ```console
-$ kubectl delete namespace kubeapps
+kubectl delete namespace kubeapps
 ```
 
 5. Install the latest version of Kubeapps (using any custom modifications you need):
 
 ```console
-$ helm repo update
-$ helm install --name kubeapps --namespace kubeapps my-repo/kubeapps
+helm repo update
+helm install --name kubeapps --namespace kubeapps my-repo/kubeapps
 ```
 
 6. (Optional) Restore any repositories you backed up in the first step:
 
 ```console
-$ kubectl apply -f <repo name>.yaml
+kubectl apply -f <repo name>.yaml
 ```
 
 After that you should be able to access the new version of Kubeapps. If the above doesn't work for you or you run into any other issues please open an [issue](https://github.com/vmware-tanzu/kubeapps/issues/new).
@@ -962,7 +946,7 @@ PASSWORDS ERROR: you must provide your current passwords when upgrade the releas
 The error gives you generic instructions for retrieving the PostgreSQL password, but if you have installed a Kubeapps version prior to 2.3.1, the name of the secret will differ. Run the following command:
 
 ```console
-$ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace "kubeapps" kubeapps-db -o jsonpath="{.data.postgresql-password}" | base64 -d)
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace "kubeapps" kubeapps-db -o jsonpath="{.data.postgresql-password}" | base64 -d)
 ```
 
 > NOTE: Replace the namespace in the command with the namespace in which you have deployed Kubeapps.
@@ -978,7 +962,7 @@ Error: UPGRADE FAILED: rendered manifests contain a resource that already exists
 To bypass this issue, you will need to before delete all the initialRepos from the chart values (only the `bitnami` repo by default):
 
 ```console
-$ kubectl delete apprepositories.kubeapps.com -n kubeapps bitnami
+kubectl delete apprepositories.kubeapps.com -n kubeapps bitnami
 ```
 
 > NOTE: Replace the namespace in the command with the namespace in which you have deployed Kubeapps.
@@ -988,14 +972,14 @@ After that, you will be able to upgrade Kubeapps to 2.3.1 using the existing dat
 > **WARNING**: Make sure that the variable `$POSTGRESQL_PASSWORD` is properly populated. Setting a wrong (or empty) password will corrupt the release.
 
 ```console
-$ helm upgrade kubeapps my-repo/kubeapps -n kubeapps --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD
+helm upgrade kubeapps my-repo/kubeapps -n kubeapps --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD
 ```
 
 ### Upgrading to 2.0.1 (Chart 5.0.0)
 
 [On November 13, 2020, Helm 2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm 3 and to be consistent with the Helm project itself regarding the Helm 2 EOL.
 
-**What changes were introduced in this major version?**
+#### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - Move dependency information from the _requirements.yaml_ to the _Chart.yaml_
@@ -1003,7 +987,7 @@ $ helm upgrade kubeapps my-repo/kubeapps -n kubeapps --set postgresql.postgresql
 - The different fields present in the _Chart.yaml_ file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 - In the case of PostgreSQL subchart, apart from the same changes that are described in this section, there are also other major changes due to the _master/slave_ nomenclature was replaced by _primary/readReplica_. [Here](https://github.com/bitnami/charts/pull/4385) you can find more information about the changes introduced.
 
-**Considerations when upgrading to this version**
+#### Considerations when upgrading to this version
 
 - If you want to upgrade to this version using Helm 2, this scenario is not supported as this version does not support Helm 2 anymore
 - If you installed the previous version with Helm 2 and wants to upgrade to this version with Helm 3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm 2 to 3
@@ -1012,10 +996,10 @@ $ helm upgrade kubeapps my-repo/kubeapps -n kubeapps --set postgresql.postgresql
 > Note: The command below assumes that Kubeapps has been deployed in the kubeapps namespace using "kubeapps" as release name, if that is not the case, adapt the command accordingly.
 
 ```console
-$ kubectl delete statefulset -n kubeapps kubeapps-postgresql-master kubeapps-postgresql-slave
+kubectl delete statefulset -n kubeapps kubeapps-postgresql-master kubeapps-postgresql-slave
 ```
 
-**Useful links**
+#### Useful links
 
 - <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
 - <https://helm.sh/docs/topics/v2_v3_migration/>
@@ -1034,7 +1018,7 @@ Due to the last point, it is necessary to run a command before upgrading to Kube
 > Note: The command below assumes that Kubeapps has been deployed in the kubeapps namespace using "kubeapps" as release name, if that is not the case, adapt the command accordingly.
 
 ```console
-$ kubectl delete statefulset -n kubeapps kubeapps-postgresql-master kubeapps-postgresql-slave
+kubectl delete statefulset -n kubeapps kubeapps-postgresql-master kubeapps-postgresql-slave
 ```
 
 After that, you should be able to upgrade Kubeapps as always and the database will be repopulated.
@@ -1047,7 +1031,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

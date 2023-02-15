@@ -684,7 +684,7 @@ metrics:
   ## @param metrics.image.registry Prometheus metrics exporter image registry
   ## @param metrics.image.repository Prometheus metrics exporter image repository
   ## @param metrics.image.tag Prometheus metrics exporter image tag (immutable tags are recommended)
-  ## @param metrics.image.digest Petete image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param metrics.image.digest NATS Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy Prometheus metrics image pull policy
   ## @param metrics.image.pullSecrets Prometheus metrics image pull secrets
   ##

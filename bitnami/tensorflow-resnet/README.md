@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/tensorflow-resnet
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/tensorflow-resnet
 ```
 
 ## Introduction
@@ -31,8 +31,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/tensorflow-resnet
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/tensorflow-resnet
 ```
 
 These commands deploy Tensorflow Serving ResNet model on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -44,12 +44,13 @@ These commands deploy Tensorflow Serving ResNet model on the Kubernetes cluster 
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
+
 You can check your releases with:
 
 ```console
-$ helm list
+helm list
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -62,7 +63,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------- | ----------------------------------------------- | ----- |
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-
 
 ### Common parameters
 
@@ -77,7 +77,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`        |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`    |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]` |
-
 
 ### TensorFlow parameters
 
@@ -167,17 +166,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                       | Enable Prometheus exporter to expose Tensorflow server metrics                                                     | `false`                      |
 | `metrics.podAnnotations`                | Prometheus exporter pod annotations                                                                                | `{}`                         |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release my-repo/tensorflow-resnet --set imagePullPolicy=Always
+helm install my-release my-repo/tensorflow-resnet --set imagePullPolicy=Always
 ```
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/tensorflow-resnet
+helm install my-release -f values.yaml my-repo/tensorflow-resnet
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -218,16 +216,15 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 
 [Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/infrastructure/tensorflow-resnet/administration/upgrade-helm3/).
 
-
 ### To 2.0.0
 
 Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
 Use the workaround below to upgrade from versions previous to 2.0.0. The following example assumes that the release name is tensorflow-resnet:
 
 ```console
-$ kubectl delete deployment  tensorflow-resnet --cascade=false
-$ helm upgrade tensorflow-resnet my-repo/tensorflow-resnet
-$ kubectl delete rs "$(kubectl get rs -l app=tensorflow-resnet -o jsonpath='{.items[0].metadata.name}')"
+kubectl delete deployment  tensorflow-resnet --cascade=false
+helm upgrade tensorflow-resnet my-repo/tensorflow-resnet
+kubectl delete rs "$(kubectl get rs -l app=tensorflow-resnet -o jsonpath='{.items[0].metadata.name}')"
 ```
 
 ## License
@@ -238,7 +235,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

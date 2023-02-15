@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/rabbitmq-cluster-operator
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/rabbitmq-cluster-operator
 ```
 
 ## Introduction
@@ -34,8 +34,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/rabbitmq-cluster-operators
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/rabbitmq-cluster-operators
 ```
 
 The command deploy the RabbitMQ Cluster Kubernetes Operator on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -47,7 +47,7 @@ The command deploy the RabbitMQ Cluster Kubernetes Operator on the Kubernetes cl
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -58,7 +58,7 @@ In the Bitnami catalog we offer both the *bitnami/rabbitmq* and *bitnami/rabbitm
 
 The *bitnami/rabbitmq* chart deploys a single RabbitMQ installation using a Kubernetes StatefulSet object (together with Services, PVCs, ConfigMaps, etc.). The figure below shows the deployed objects in the cluster after executing *helm install*:
 
-```
+```text
                     +--------------+             +-----+
                     |              |             |     |
  Service            |   RabbitMQ   +<------------+ PVC |
@@ -78,7 +78,7 @@ Its lifecycle is managed using Helm and, at the RabbitMQ container level, the fo
 
 The *bitnami/rabbitmq-operator* chart deploys a RabbitMQ Operator installation using a Kubernetes Deployment.  The figure below shows the RabbitMQ operator deployment after executing *helm install*:
 
-```
+```text
 +--------------------+
 |                    |      +---------------+
 |  RabbitMQ Operator |      |               |
@@ -93,7 +93,7 @@ The *bitnami/rabbitmq-operator* chart deploys a RabbitMQ Operator installation u
 
 The operator will extend the Kubernetes API with the following object: *RabbitmqCluster*. From that moment, the user will be able to deploy objects of these kinds and the previously deployed Operator will take care of deploying all the required StatefulSets, ConfigMaps and Services for running a RabbitMQ instance. Its lifecycle is managed using *kubectl* on the RabbitmqCluster objects. The following figure shows the deployed objects after deploying a *RabbitmqCluster* object using *kubectl*:
 
-```
+```text
   +--------------------+
   |                    |      +---------------+
   |  RabbitMQ Operator |      |               |
@@ -140,7 +140,6 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                          | Value           |
@@ -153,7 +152,6 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `clusterDomain`          | Kubernetes cluster domain name                       | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release    | `[]`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled) | `false`         |
-
 
 ### RabbitMQ Cluster Operator Parameters
 
@@ -238,7 +236,6 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `clusterOperator.serviceAccount.annotations`                      | Add annotations                                                                                                                          | `{}`                                     |
 | `clusterOperator.serviceAccount.automountServiceAccountToken`     | Automount API credentials for a service account.                                                                                         | `true`                                   |
 
-
 ### RabbitMQ Cluster Operator Metrics parameters
 
 | Name                                                       | Description                                                                 | Value                    |
@@ -265,7 +262,6 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `clusterOperator.metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                    | `[]`                     |
 | `clusterOperator.metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                  | `[]`                     |
 | `clusterOperator.metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                         | `{}`                     |
-
 
 ### RabbitMQ Messaging Topology Operator Parameters
 
@@ -356,7 +352,6 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `msgTopologyOperator.serviceAccount.annotations`                      | Add annotations                                                                                                                      | `{}`                                      |
 | `msgTopologyOperator.serviceAccount.automountServiceAccountToken`     | Automount API credentials for a service account.                                                                                     | `true`                                    |
 
-
 ### RabbitMQ Messaging Topology Operator parameters
 
 | Name                                                           | Description                                                                 | Value                    |
@@ -384,14 +379,11 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `msgTopologyOperator.metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                  | `[]`                     |
 | `msgTopologyOperator.metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                         | `{}`                     |
 
-
 ### cert-manager parameters
 
 | Name             | Description                                                       | Value   |
 | ---------------- | ----------------------------------------------------------------- | ------- |
 | `useCertManager` | Deploy cert-manager objects (Issuer and Certificate) for webhooks | `false` |
-
-
 
 The above parameters map to the env variables defined in [bitnami/rabbitmq-cluster-operator](https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq-cluster-operator). For more information please refer to the [bitnami/rabbitmq-cluster-operator](https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq-cluster-operator) image documentation.
 
@@ -408,7 +400,7 @@ The above command disables the Operator liveness probes.
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/rabbitmq-cluster-operator
+helm install my-release -f values.yaml my-repo/rabbitmq-cluster-operator
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -443,6 +435,7 @@ If additional containers are needed in the same pod as rabbitmq-cluster-operator
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
 ### Deploying extra resources
 
 There are cases where you may want to deploy extra objects, such your custom *RabbitmqCluster* objects. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
@@ -479,18 +472,18 @@ In order to upgrade the CRD objects, perform the following steps:
 - Execute the following commands (replace the VERSION placeholder):
 
 ```console
-$ helm fetch bitnami/rabbitmq-cluster-operator --version VERSION
-$ tar xf rabbitmq-cluster-operator-VERSION.tar.gz
-$ kubectl apply -f rabbitmq-cluster-operator/crds
+helm fetch bitnami/rabbitmq-cluster-operator --version VERSION
+tar xf rabbitmq-cluster-operator-VERSION.tar.gz
+kubectl apply -f rabbitmq-cluster-operator/crds
 ```
 
 ### To 2.0.0
 
 This new version adds the following components:
 
-  - RabbitMQ Messaging Topology Operator: all the settings are inside the `msgTopologyOperator` section.
-  - RabbitMQ Default User Credential Updater sidecar: this enables Hashicorp Vault integration for all `RabbitMQCluster` instances.
-  - `cert-manager` subchart: this is necessary for the RabbitMQ Messaging Topology Webhooks to work.
+- RabbitMQ Messaging Topology Operator: all the settings are inside the `msgTopologyOperator` section.
+- RabbitMQ Default User Credential Updater sidecar: this enables Hashicorp Vault integration for all `RabbitMQCluster` instances.
+- `cert-manager` subchart: this is necessary for the RabbitMQ Messaging Topology Webhooks to work.
 
 As a breaking change, all `rabbitmq-cluster-operator` deployment values were moved to the `clusterOperator` section.
 
@@ -503,8 +496,8 @@ The CRD was updated according to the latest changes in the upstream project. Tha
 You need to manually delete the old CRD before upgrading the release.
 
 ```console
-$ kubectl delete crd rabbitmqclusters.rabbitmq.com
-$ helm upgrade my-release my-repo/rabbitmq-cluster-operator
+kubectl delete crd rabbitmqclusters.rabbitmq.com
+helm upgrade my-release my-repo/rabbitmq-cluster-operator
 ```
 
 ## License
@@ -515,7 +508,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

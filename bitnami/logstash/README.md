@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/logstash
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/logstash
 ```
 
 ## Introduction
@@ -31,8 +31,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/logstash
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/logstash
 ```
 
 These commands deploy logstash on the Kubernetes cluster in the default configuration. The [configuration](#configuration-and-installation-details) section lists the parameters that can be configured during installation.
@@ -44,7 +44,7 @@ These commands deploy logstash on the Kubernetes cluster in the default configur
 To uninstall/delete the `my-release` statefulset:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release. Use the option `--purge` to delete all history too.
@@ -58,7 +58,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -74,7 +73,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)  | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                     | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                        | `["infinity"]`  |
-
 
 ### Logstash parameters
 
@@ -201,7 +199,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `pdb.minAvailable`                            | Minimum number / percentage of pods that should remain scheduled                                                                  | `1`                      |
 | `pdb.maxUnavailable`                          | Maximum number / percentage of pods that may be made unavailable                                                                  | `""`                     |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
@@ -214,7 +211,7 @@ The above command disables the Logstash Monitoring API.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/logstash
+helm install my-release -f values.yaml my-repo/logstash
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -334,7 +331,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

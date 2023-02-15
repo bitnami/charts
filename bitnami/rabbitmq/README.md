@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/rabbitmq
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/rabbitmq
 ```
 
 ## Introduction
@@ -32,8 +32,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/rabbitmq
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/rabbitmq
 ```
 
 The command deploys RabbitMQ on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -45,7 +45,7 @@ The command deploys RabbitMQ on the Kubernetes cluster in the default configurat
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -60,7 +60,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### RabbitMQ Image parameters
 
 | Name                | Description                                                                                              | Value                 |
@@ -72,7 +71,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullPolicy`  | RabbitMQ image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                                                         | `[]`                  |
 | `image.debug`       | Set to true if you would like to see extra information on logs                                           | `false`               |
-
 
 ### Common parameters
 
@@ -186,7 +184,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraSecrets`                               | Optionally specify extra secrets to be created by the chart.                                                                                                            | `{}`                                              |
 | `extraSecretsPrependReleaseName`             | Set this flag to true if extraSecrets should be created with <release-name> prepended.                                                                                  | `false`                                           |
 
-
 ### Statefulset parameters
 
 | Name                                    | Description                                                                                                              | Value           |
@@ -242,7 +239,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled                                                           | `1`             |
 | `pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable                                                           | `""`            |
 
-
 ### RBAC parameters
 
 | Name                                          | Description                                                                                | Value  |
@@ -252,7 +248,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.automountServiceAccountToken` | Auto-mount the service account token in the pod                                            | `true` |
 | `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`. | `{}`   |
 | `rbac.create`                                 | Whether RBAC rules should be created                                                       | `true` |
-
 
 ### Persistence parameters
 
@@ -267,7 +262,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.subPath`       | The subdirectory of the volume to mount to       | `""`                       |
 | `persistence.size`          | PVC Storage Request for RabbitMQ data volume     | `8Gi`                      |
 | `persistence.annotations`   | Persistence annotations. Evaluated as a template | `{}`                       |
-
 
 ### Exposure parameters
 
@@ -325,7 +319,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.allowExternal`      | Don't require client label for connections                                                                                       | `true`                   |
 | `networkPolicy.additionalRules`    | Additional NetworkPolicy Ingress "from" rules to set. Note that all rules are OR-ed.                                             | `[]`                     |
 
-
 ### Metrics Parameters
 
 | Name                                       | Description                                                                            | Value                 |
@@ -352,7 +345,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.namespace`         | namespace where prometheusRules resource should be created                             | `""`                  |
 | `metrics.prometheusRule.rules`             | List of rules, used as template by Helm.                                               | `[]`                  |
 
-
 ### Init Container Parameters
 
 | Name                                                   | Description                                                                                                                       | Value                   |
@@ -367,7 +359,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                                                                                 | `{}`                    |
 | `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                                                                               | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                                    | `0`                     |
-
 
 The above parameters map to the env variables defined in [bitnami/rabbitmq](https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq). For more information please refer to the [bitnami/rabbitmq](https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq) image documentation.
 
@@ -386,7 +377,7 @@ The above command sets the RabbitMQ admin username and password to `admin` and `
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/rabbitmq
+helm install my-release -f values.yaml my-repo/rabbitmq
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -424,8 +415,8 @@ To enable TLS support, first generate the certificates as described in the [Rabb
 
 Once the certificates are generated, you have two alternatives:
 
-* Create a secret with the certificates and associate the secret when deploying the chart
-* Include the certificates in the *values.yaml* file when deploying the chart
+- Create a secret with the certificates and associate the secret when deploying the chart
+- Include the certificates in the *values.yaml* file when deploying the chart
 
 Set the *auth.tls.failIfNoPeerCert* parameter to *false* to allow a TLS connection if the client fails to provide a certificate.
 
@@ -455,17 +446,17 @@ LDAP support can be enabled in the chart by specifying the `ldap.*` parameters w
 
 It is possible to configure a memory high watermark on RabbitMQ to define [memory thresholds](https://www.rabbitmq.com/memory.html#threshold) using the `memoryHighWatermark.*` parameters. To do so, you have two alternatives:
 
-* Set an absolute limit of RAM to be used on each RabbitMQ node, as shown in the configuration example below:
+- Set an absolute limit of RAM to be used on each RabbitMQ node, as shown in the configuration example below:
 
-```
+```text
 memoryHighWatermark.enabled="true"
 memoryHighWatermark.type="absolute"
 memoryHighWatermark.value="512MB"
 ```
 
-* Set a relative limit of RAM to be used on each RabbitMQ node. To enable this feature,  define the memory limits at pod level too. An example configuration is shown below:
+- Set a relative limit of RAM to be used on each RabbitMQ node. To enable this feature,  define the memory limits at pod level too. An example configuration is shown below:
 
-```
+```text
 memoryHighWatermark.enabled="true"
 memoryHighWatermark.type="relative"
 memoryHighWatermark.value="0.4"
@@ -557,7 +548,7 @@ The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/stora
 1. Install the chart
 
 ```console
-$ helm install my-release --set persistence.existingClaim=PVC_NAME my-repo/rabbitmq
+helm install my-release --set persistence.existingClaim=PVC_NAME my-repo/rabbitmq
 ```
 
 ### Adjust permissions of the persistence volume mountpoint
@@ -592,7 +583,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 It's necessary to set the `auth.password` and `auth.erlangCookie` parameters when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, some notes will be displayed providing the credentials you must use under the 'Credentials' section. Please note down the password and the cookie, and run the command below to upgrade your chart:
 
 ```console
-$ helm upgrade my-release my-repo/rabbitmq --set auth.password=[PASSWORD] --set auth.erlangCookie=[RABBITMQ_ERLANG_COOKIE]
+helm upgrade my-release my-repo/rabbitmq --set auth.password=[PASSWORD] --set auth.erlangCookie=[RABBITMQ_ERLANG_COOKIE]
 ```
 
 | Note: you need to substitute the placeholders [PASSWORD] and [RABBITMQ_ERLANG_COOKIE] with the values obtained in the installation notes.
@@ -704,7 +695,7 @@ Backwards compatibility is not guaranteed unless you modify the labels used on t
 Use the workaround below to upgrade from versions previous to 3.0.0. The following example assumes that the release name is rabbitmq:
 
 ```console
-$ kubectl delete statefulset rabbitmq --cascade=false
+kubectl delete statefulset rabbitmq --cascade=false
 ```
 
 ## Bitnami Kubernetes Documentation
@@ -725,7 +716,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

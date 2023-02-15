@@ -6,13 +6,11 @@ Harbor is an open source trusted cloud-native registry to store, sign, and scan 
 
 [Overview of Harbor](https://goharbor.io/)
 
-
-
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/harbor
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/harbor
 ```
 
 ## Introduction
@@ -45,8 +43,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/harbor
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/harbor
 ```
 
 ## Uninstalling the Chart
@@ -54,7 +52,7 @@ $ helm install my-release my-repo/harbor
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete --purge my-release
+helm delete --purge my-release
 ```
 
 Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manually delete the PVCs.
@@ -68,7 +66,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common Parameters
 
@@ -85,7 +82,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `diagnosticMode.command` | Command to override all containers in the the deployment(s)/statefulset(s)                   | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the the deployment(s)/statefulset(s)                      | `["infinity"]`  |
 
-
 ### Harbor common parameters
 
 | Name                         | Description                                                                                                                                          | Value                                  |
@@ -101,7 +97,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `internalTLS.caBundleSecret` | Name of an existing secret with a custom CA that will be injected into the trust store for chartmuseum, core, jobservice, registry, trivy components | `""`                                   |
 | `ipFamily.ipv6.enabled`      | Enable listening on IPv6 ([::]) for NGINX-based components (NGINX,portal)                                                                            | `true`                                 |
 | `ipFamily.ipv4.enabled`      | Enable listening on IPv4 for NGINX-based components (NGINX,portal)                                                                                   | `true`                                 |
-
 
 ### Traffic Exposure Parameters
 
@@ -149,7 +144,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `ingress.notary.extraTls`          | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `ingress.notary.secrets`           | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.notary.extraRules`        | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
-
 
 ### Persistence Parameters
 
@@ -249,7 +243,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `persistence.imageChartStorage.oss.rootdirectory`                     | OSS storage type setting: Directory                                                                                                                                                                                                                                                                                                                  | `""`                                     |
 | `persistence.imageChartStorage.oss.secretkey`                         | OSS storage type setting: Secret key                                                                                                                                                                                                                                                                                                                 | `""`                                     |
 
-
 ### Tracing parameters
 
 | Name                       | Description                                                                                                                                                              | Value           |
@@ -273,7 +266,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `tracing.otel.timeout`     | The timeout for data transfer                                                                                                                                            | `10s`           |
 | `tracing.otel.insecure`    | Ignore cert verification for otel backend                                                                                                                                | `true`          |
 
-
 ### Volume Permissions parameters
 
 | Name                                                   | Description                                                                                                                       | Value                   |
@@ -289,7 +281,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                                                                               | `{}`                    |
 | `volumePermissions.containerSecurityContext.enabled`   | Enable init container Security Context                                                                                            | `true`                  |
 | `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                                    | `0`                     |
-
 
 ### NGINX Parameters
 
@@ -364,7 +355,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `nginx.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the NGINX pods                                              | `[]`                   |
 | `nginx.extraVolumes`                          | Optionally specify extra list of additional volumes for the NGINX pods                                                   | `[]`                   |
 
-
 ### Harbor Portal Parameters
 
 | Name                                           | Description                                                                                                              | Value                   |
@@ -436,7 +426,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `portal.automountServiceAccountToken`          | Automount service account token                                                                                          | `false`                 |
 | `portal.service.ports.http`                    | Harbor Portal HTTP service port                                                                                          | `80`                    |
 | `portal.service.ports.https`                   | Harbor Portal HTTPS service port                                                                                         | `443`                   |
-
 
 ### Harbor Core Parameters
 
@@ -522,7 +511,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `core.service.ports.https`                   | Harbor Core HTTPS service port                                                                                                                                                                                                                                                           | `443`                 |
 | `core.service.ports.metrics`                 | Harbor Core metrics service port                                                                                                                                                                                                                                                         | `8001`                |
 
-
 ### Harbor Jobservice Parameters
 
 | Name                                               | Description                                                                                                                                                  | Value                          |
@@ -602,12 +590,11 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `jobservice.service.ports.https`                   | Harbor Jobservice HTTPS service port                                                                                                                         | `443`                          |
 | `jobservice.service.ports.metrics`                 | Harbor Jobservice HTTPS service port                                                                                                                         | `8001`                         |
 
-
 ### Harbor Registry Parameters
 
 | Name                                                        | Description                                                                                                                                                                                                                                                               | Value                                                                               |
 | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `registry.secret`                                           | Secret is used to secure the upload state from client and registry storage backend. See: https://github.com/docker/distribution/blob/master/docs/configuration.md                                                                                                         | `""`                                                                                |
+| `registry.secret`                                           | Secret is used to secure the upload state from client and registry storage backend. See: <https://github.com/docker/distribution/blob/master/docs/configuration.md>                                                                                                         | `""`                                                                                |
 | `registry.existingSecret`                                   | Existing secret for registry                                                                                                                                                                                                                                              | `""`                                                                                |
 | `registry.relativeurls`                                     | Make the registry return relative URLs in Location headers. The client is responsible for resolving the correct URL.                                                                                                                                                      | `false`                                                                             |
 | `registry.credentials.username`                             | The username for accessing the registry instance, which is hosted by htpasswd auth mode.  More details see [official docs](https://github.com/docker/distribution/blob/master/docs/configuration.md#htpasswd)                                                             | `harbor_registry_user`                                                              |
@@ -735,7 +722,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `registry.controller.service.ports.http`                    | Harbor Registryctl HTTP service port                                                                                                                                                                                                                                      | `8080`                                                                              |
 | `registry.controller.service.ports.https`                   | Harbor Registryctl HTTPS service port                                                                                                                                                                                                                                     | `8443`                                                                              |
 
-
 ### ChartMuseum Parameters
 
 | Name                                                | Description                                                                                                              | Value                  |
@@ -825,7 +811,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `chartmuseum.automountServiceAccountToken`          | Automount service account token                                                                                          | `false`                |
 | `chartmuseum.service.ports.http`                    | Chartmuseum HTTP service port                                                                                            | `80`                   |
 | `chartmuseum.service.ports.https`                   | Chartmuseum HTTPS service port                                                                                           | `443`                  |
-
 
 ### Notary Parameters
 
@@ -962,7 +947,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `notary.service.ports.server`                         | Harbor Notary server service port                                                                                                                                                                                                                                                                                                              | `4443`                         |
 | `notary.service.ports.signer`                         | Harbor Notary signer service port                                                                                                                                                                                                                                                                                                              | `7899`                         |
 
-
 ### Harbor Adapter Trivy Parameters
 
 | Name                                          | Description                                                                                                              | Value                                  |
@@ -1044,7 +1028,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `trivy.service.ports.http`                    | Trivy HTTP service port                                                                                                  | `8080`                                 |
 | `trivy.service.ports.https`                   | Trivy HTTPS service port                                                                                                 | `8443`                                 |
 
-
 ### Harbor Exporter Parameters
 
 | Name                                             | Description                                                                                                                                     | Value                     |
@@ -1115,7 +1098,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `exporter.automountServiceAccountToken`          | Automount service account token                                                                                                                 | `false`                   |
 | `exporter.service.ports.metrics`                 | Exporter HTTP service port                                                                                                                      | `8001`                    |
 
-
 ### PostgreSQL Parameters
 
 | Name                                       | Description                                                                                                | Value                          |
@@ -1145,7 +1127,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `externalDatabase.notarySignerUsername`    | External database username for notary signer                                                               | `""`                           |
 | `externalDatabase.notarySignerPassword`    | External database password for notary signer                                                               | `""`                           |
 
-
 ### Redis&reg; parameters
 
 | Name                                      | Description                                                            | Value        |
@@ -1170,7 +1151,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `externalRedis.sentinel.masterSet`        | Name of sentinel masterSet if sentinel is used                         | `mymaster`   |
 | `externalRedis.sentinel.hosts`            | Sentinel hosts and ports in the format                                 | `""`         |
 
-
 ### Harbor metrics parameters
 
 | Name                                       | Description                                                                                       | Value      |
@@ -1188,7 +1168,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                                          | `false`    |
 | `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.                 | `""`       |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
@@ -1204,7 +1183,7 @@ The above command sets the Harbor administrator account password to `password`.
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/harbor
+helm install my-release -f values.yaml my-repo/harbor
 ```
 
 ## Configuration and installation details
@@ -1339,7 +1318,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

@@ -1,6 +1,7 @@
 This directory contains a basic scaffolding to serve as the basis for creating a new chart.
 
 Some of the items that need to be implemented are:
+
 - commonAnnotations
 - commonLabels
 - imagePullSecret

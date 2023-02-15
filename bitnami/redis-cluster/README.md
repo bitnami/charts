@@ -11,8 +11,8 @@ Disclaimer: Redis is a registered trademark of Redis Ltd. Any rights therein are
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/redis-cluster
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/redis-cluster
 ```
 
 ## Introduction
@@ -44,16 +44,16 @@ The main features of each chart are the following:
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/redis-cluster
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/redis-cluster
 ```
 
 The command deploys Redis&reg; on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 NOTE: if you get a timeout error waiting for the hook to complete increase the default timeout (300s) to a higher one, for example:
 
-```
-$ helm install --timeout 600s myrelease my-repo/redis-cluster
+```console
+helm install --timeout 600s myrelease my-repo/redis-cluster
 ```
 
 > **Tip**: List all releases using `helm list`
@@ -63,7 +63,7 @@ $ helm install --timeout 600s myrelease my-repo/redis-cluster
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -78,7 +78,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 | `global.redis.password`   | Redis&reg; password (overrides `password`)      | `""`  |
-
 
 ### Redis&reg; Cluster Common parameters
 
@@ -169,7 +168,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.requests`                  | The requested resources for the container                                                                                                           | `{}`                    |
 | `podSecurityPolicy.create`                              | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later         | `false`                 |
 
-
 ### Redis&reg; statefulset parameters
 
 | Name                                           | Description                                                                                                | Value           |
@@ -233,7 +231,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `redis.tolerations`                            | Tolerations for Redis&reg; pods assignment                                                                 | `[]`            |
 | `redis.topologySpreadConstraints`              | Pod topology spread constraints for Redis&reg; pod                                                         | `[]`            |
 
-
 ### Cluster update job parameters
 
 | Name                                  | Description                                                                                                    | Value  |
@@ -263,7 +260,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `updateJob.resources.limits`          | The resources limits for the container                                                                         | `{}`   |
 | `updateJob.resources.requests`        | The requested resources for the container                                                                      | `{}`   |
 
-
 ### Cluster management parameters
 
 | Name                                                      | Description                                                                                   | Value          |
@@ -281,7 +277,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cluster.update.currentNumberOfNodes`                     | Number of currently deployed Redis&reg; nodes                                                 | `6`            |
 | `cluster.update.currentNumberOfReplicas`                  | Number of currently deployed Redis&reg; replicas                                              | `1`            |
 | `cluster.update.newExternalIPs`                           | External IPs obtained from the services for the new nodes to add to the cluster               | `[]`           |
-
 
 ### Metrics sidecar parameters
 
@@ -321,7 +316,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.service.labels`                                    | Additional labels for the metrics service                                                                                          | `{}`                     |
 | `metrics.service.clusterIP`                                 | Service Cluster IP                                                                                                                 | `""`                     |
 
-
 ### Sysctl Image parameters
 
 | Name                                              | Description                                                                                                          | Value                   |
@@ -341,7 +335,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctlImage.resources.limits`                    | The resources limits for the container                                                                               | `{}`                    |
 | `sysctlImage.resources.requests`                  | The requested resources for the container                                                                            | `{}`                    |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
@@ -357,11 +350,10 @@ The above command sets the Redis&reg; server password to `secretpassword`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/redis-cluster
+helm install my-release -f values.yaml my-repo/redis-cluster
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
-
 > **Note for minikube users**: Current versions of minikube (v0.24.1 at the time of writing) provision `hostPath` persistent volumes that are only writable by root. Using chart defaults cause pod failure for the Redis&reg; pod as it attempts to write to the `/bitnami` directory. See minikube issue [1990](https://github.com/kubernetes/minikube/issues/1990) for more information.
 
 ## Configuration and installation details
@@ -406,8 +398,8 @@ There is a job that will be executed using a `post-upgrade` hook that will allow
 
 The following will be an example to add one more node:
 
-```
-$ helm upgrade --timeout 600s <release> --set "password=${REDIS_PASSWORD},cluster.nodes=7,cluster.update.addNodes=true,cluster.update.currentNumberOfNodes=6" my-repo/redis-cluster
+```console
+helm upgrade --timeout 600s <release> --set "password=${REDIS_PASSWORD},cluster.nodes=7,cluster.update.addNodes=true,cluster.update.currentNumberOfNodes=6" my-repo/redis-cluster
 ```
 
 Where `REDIS_PASSWORD` is the password obtained with the command that appears after the first installation of the Helm Chart.
@@ -417,8 +409,8 @@ The cluster will continue up while restarting pods one by one as the quorum is n
 
 If you are using external access, to add a new node you will need to perform two upgrades. First upgrade the release to add a new Redis&reg; node and to get a LoadBalancerIP service. For example:
 
-```
-$ helm upgrade <release> --set "password=${REDIS_PASSWORD},cluster.externalAccess.enabled=true,cluster.externalAccess.service.type=LoadBalancer,cluster.externalAccess.service.loadBalancerIP[0]=<loadBalancerip-0>,cluster.externalAccess.service.loadBalancerIP[1]=<loadbalanacerip-1>,cluster.externalAccess.service.loadBalancerIP[2]=<loadbalancerip-2>,cluster.externalAccess.service.loadBalancerIP[3]=<loadbalancerip-3>,cluster.externalAccess.service.loadBalancerIP[4]=<loadbalancerip-4>,cluster.externalAccess.service.loadBalancerIP[5]=<loadbalancerip-5>,cluster.externalAccess.service.loadBalancerIP[6]=,cluster.nodes=7,cluster.init=false my-repo/redis-cluster
+```console
+helm upgrade <release> --set "password=${REDIS_PASSWORD},cluster.externalAccess.enabled=true,cluster.externalAccess.service.type=LoadBalancer,cluster.externalAccess.service.loadBalancerIP[0]=<loadBalancerip-0>,cluster.externalAccess.service.loadBalancerIP[1]=<loadbalanacerip-1>,cluster.externalAccess.service.loadBalancerIP[2]=<loadbalancerip-2>,cluster.externalAccess.service.loadBalancerIP[3]=<loadbalancerip-3>,cluster.externalAccess.service.loadBalancerIP[4]=<loadbalancerip-4>,cluster.externalAccess.service.loadBalancerIP[5]=<loadbalancerip-5>,cluster.externalAccess.service.loadBalancerIP[6]=,cluster.nodes=7,cluster.init=false my-repo/redis-cluster
 ```
 
 > Important here to provide the loadBalancerIP parameters for the new nodes empty to not get an index error.
@@ -428,8 +420,8 @@ As we want to add a new node, we are setting `cluster.nodes=7` and we leave empt
 At this point, you will have a new Redis&reg; Pod that will remain in `crashLoopBackOff` state until we provide the LoadBalancerIP for the new service.
 Now, wait until the cluster provides the new LoadBalancerIP for the new service and perform the second upgrade:
 
-```
-$ helm upgrade <release> --set "password=${REDIS_PASSWORD},cluster.externalAccess.enabled=true,cluster.externalAccess.service.type=LoadBalancer,cluster.externalAccess.service.loadBalancerIP[0]=<loadbalancerip-0>,cluster.externalAccess.service.loadBalancerIP[1]=<loadbalancerip-1>,cluster.externalAccess.service.loadBalancerIP[2]=<loadbalancerip-2>,cluster.externalAccess.service.loadBalancerIP[3]=<loadbalancerip-3>,cluster.externalAccess.service.loadBalancerIP[4]=<loadbalancerip-4>,cluster.externalAccess.service.loadBalancerIP[5]=<loadbalancerip-5>,cluster.externalAccess.service.loadBalancerIP[6]=<loadbalancerip-6>,cluster.nodes=7,cluster.init=false,cluster.update.addNodes=true,cluster.update.newExternalIPs[0]=<load-balancerip-6>" my-repo/redis-cluster
+```console
+helm upgrade <release> --set "password=${REDIS_PASSWORD},cluster.externalAccess.enabled=true,cluster.externalAccess.service.type=LoadBalancer,cluster.externalAccess.service.loadBalancerIP[0]=<loadbalancerip-0>,cluster.externalAccess.service.loadBalancerIP[1]=<loadbalancerip-1>,cluster.externalAccess.service.loadBalancerIP[2]=<loadbalancerip-2>,cluster.externalAccess.service.loadBalancerIP[3]=<loadbalancerip-3>,cluster.externalAccess.service.loadBalancerIP[4]=<loadbalancerip-4>,cluster.externalAccess.service.loadBalancerIP[5]=<loadbalancerip-5>,cluster.externalAccess.service.loadBalancerIP[6]=<loadbalancerip-6>,cluster.nodes=7,cluster.init=false,cluster.update.addNodes=true,cluster.update.newExternalIPs[0]=<load-balancerip-6>" my-repo/redis-cluster
 ```
 
 Note we are providing the new IPs at `cluster.update.newExternalIPs`, the flag `cluster.update.addNodes=true` to enable the creation of the Job that adds a new node and now we are setting the LoadBalancerIP of the new service instead of leave it empty.
@@ -442,8 +434,8 @@ To scale down the Redis&reg; Cluster, follow these steps:
 
 First perform a normal upgrade setting the `cluster.nodes` value to the desired number of nodes. It should not be less than `6` and the difference between current number of nodes and the desired should be less or equal to `cluster.replicas` to avoid removing master node an its slaves at the same time. Also it is needed to provide the password using the `password`. For example, having more than 6 nodes, to scale down the cluster to 6 nodes:
 
-```
-$ helm upgrade --timeout 600s <release> --set "password=${REDIS_PASSWORD},cluster.nodes=6" .
+```console
+helm upgrade --timeout 600s <release> --set "password=${REDIS_PASSWORD},cluster.nodes=6" .
 ```
 
 The cluster will continue working during the update as long as the quorum is not lost.
@@ -452,7 +444,7 @@ The cluster will continue working during the update as long as the quorum is not
 
 Once all the nodes are ready, get the list of nodes in the cluster using the `CLUSTER NODES` command. You will see references to the ones that were removed. Write down the node IDs of the nodes that show `fail`. In the following example the cluster scaled down from 7 to 6 nodes.
 
-```
+```console
 redis-cli -a $REDIS_PASSWORD CLUSTER NODES
 
 ...
@@ -462,24 +454,25 @@ b23bcffa1fd64368d445c1d9bd9aeb92641105f7 10.0.0.70:6379@16379 slave,fail - 16456
 
 In each cluster node, execute the following command. Replace the NODE_ID placeholder.
 
-```
+```console
 redis-cli -a $REDIS_PASSWORD CLUSTER FORGET NODE_ID
 ```
 
 In the previous example the commands would look like this in each cluster node:
 
-```
+```console
 redis-cli -a $REDIS_PASSWORD CLUSTER FORGET b23bcffa1fd64368d445c1d9bd9aeb92641105f7
 ```
 
 ### Using password file
+
 To use a password file for Redis&reg; you need to create a secret containing the password.
 
 > *NOTE*: It is important that the file with the password must be called `redis-password`
 
 And then deploy the Helm Chart using the secret name as parameter:
 
-```console
+```text
 usePassword=true
 usePasswordFile=true
 existingSecret=redis-password-secret
@@ -501,7 +494,7 @@ For example:
 First, create the secret with the certificates files:
 
 ```console
-$ kubectl create secret generic certificates-tls-secret --from-file=./cert.pem --from-file=./cert.key --from-file=./ca.pem
+kubectl create secret generic certificates-tls-secret --from-file=./cert.pem --from-file=./cert.key --from-file=./ca.pem
 ```
 
 Then, use the following parameters:
@@ -557,9 +550,11 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 The chart optionally can start a metrics exporter for [prometheus](https://prometheus.io). The metrics endpoint (port 9121) is exposed in the service. Metrics can be scraped from within the cluster using something similar as the described in the [example Prometheus scrape configuration](https://github.com/prometheus/prometheus/blob/master/documentation/examples/prometheus-kubernetes.yml). If metrics are to be scraped from outside the cluster, the Kubernetes API proxy can be utilized to access the endpoint.
 
 ### Host Kernel Settings
+
 Redis&reg; may require some changes in the kernel of the host machine to work as expected, in particular increasing the `somaxconn` value and disabling transparent huge pages.
 To do so, you can set up a privileged initContainer with the `sysctlImage` config values, for example:
-```
+
+```yaml
 sysctlImage:
   enabled: true
   mountHostSys: true
@@ -597,9 +592,11 @@ To enable network policy for Redis&reg;, install
 and set `networkPolicy.enabled` to `true`.
 
 For Kubernetes v1.5 & v1.6, you must also turn on NetworkPolicy by setting
-the DefaultDeny namespace annotation. Note: this will enforce policy for _all_ pods in the namespace:
+the DefaultDeny namespace annotation. Note: this will enforce policy for *all* pods in the namespace:
 
-    kubectl annotate namespace default "net.beta.kubernetes.io/network-policy={\"ingress\":{\"isolation\":\"DefaultDeny\"}}"
+```console
+kubectl annotate namespace default "net.beta.kubernetes.io/network-policy={\"ingress\":{\"isolation\":\"DefaultDeny\"}}"
+```
 
 With NetworkPolicy enabled, only pods with the generated client label will be
 able to connect to Redis&reg;. This label will be displayed in the output
@@ -635,8 +632,8 @@ This major release renames several values in this chart and adds missing feature
 Since this version performs changes in the statefulset, in order to upgrade from previous versions you need to delete the statefulset object before the upgrade.
 
 ```console
-$ kubectl delete statefulset <statefulsetName>
-$ helm upgrade <release-name>  my-repo/redis-cluster --set redis.password=<REDIS_PASSWORD>
+kubectl delete statefulset <statefulsetName>
+helm upgrade <release-name>  my-repo/redis-cluster --set redis.password=<REDIS_PASSWORD>
 ```
 
 ### To 6.0.0
@@ -653,24 +650,24 @@ This major version updates the Redis&reg; docker image version used from `6.0` t
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
+#### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - Move dependency information from the *requirements.yaml* to the *Chart.yaml*
 - After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
-**Considerations when upgrading to this version**
+#### Considerations when upgrading to this version
 
 - If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
 - If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
 
-**Useful links**
+#### Useful links
 
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://helm.sh/docs/topics/v2_v3_migration/>
+- <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
 ### To 3.0.0
 
@@ -688,7 +685,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

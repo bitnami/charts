@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/thanos
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/thanos
 ```
 
 ## Introduction
@@ -32,8 +32,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/thanos
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/thanos
 ```
 
 These commands deploy Thanos on the Kubernetes cluster with the default configuration. The [configuration](#configuration-and-installation-details) section lists the parameters that can be configured during installation.
@@ -45,14 +45,14 @@ These commands deploy Thanos on the Kubernetes cluster with the default configur
 To uninstall/delete the `my-release` chart:
 
 ```console
-$ helm uninstall my-release
+helm uninstall my-release
 ```
 
 ## Architecture
 
 This charts allows you install several Thanos components, so you deploy an architecture as the one below:
 
-```
+```text
                        +--------------+                  +--------------+      +--------------+
                        | Thanos       |----------------> | Thanos Store |      | Thanos       |
                        | Query        |           |      | Gateway      |      | Compactor    |
@@ -91,7 +91,6 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                                                                  | Value           |
@@ -103,7 +102,6 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `commonAnnotations` | Add annotations to all the deployed resources                                                | `{}`            |
 | `clusterDomain`     | Kubernetes Cluster Domain                                                                    | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release                                            | `[]`            |
-
 
 ### Thanos common parameters
 
@@ -137,7 +135,6 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`                |
 | `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `true`              |
 | `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`                |
-
 
 ### Thanos Query parameters
 
@@ -289,7 +286,6 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `query.ingress.grpc.path`                                 | Ingress Path                                                                                                                            | `/`                      |
 | `query.ingress.grpc.pathType`                             | Ingress Path type                                                                                                                       | `ImplementationSpecific` |
 
-
 ### Thanos Query Frontend parameters
 
 | Name                                                              | Description                                                                                                                      | Value                    |
@@ -397,7 +393,6 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `queryFrontend.ingress.path`                                      | Ingress path                                                                                                                     | `/`                      |
 | `queryFrontend.ingress.pathType`                                  | Ingress path type                                                                                                                | `ImplementationSpecific` |
 
-
 ### Thanos Bucket Web parameters
 
 | Name                                                          | Description                                                                                                                      | Value                    |
@@ -501,7 +496,6 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `bucketweb.ingress.path`                                      | Ingress path                                                                                                                     | `/`                      |
 | `bucketweb.ingress.pathType`                                  | Ingress path type                                                                                                                | `ImplementationSpecific` |
 
-
 ### Thanos Compactor parameters
 
 | Name                                                          | Description                                                                                                                      | Value                    |
@@ -603,7 +597,6 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `compactor.persistence.size`                                  | PVC Storage Request for data volume                                                                                              | `8Gi`                    |
 | `compactor.persistence.annotations`                           | Annotations for the PVC                                                                                                          | `{}`                     |
 | `compactor.persistence.existingClaim`                         | Name of an existing PVC to use                                                                                                   | `""`                     |
-
 
 ### Thanos Store Gateway parameters
 
@@ -745,7 +738,6 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `storegateway.sharded.service.http.nodePorts`                    | Array of http node ports used for Store Gateway service. Length must be the same as the number of shards                                 | `[]`                        |
 | `storegateway.sharded.service.grpc.nodePorts`                    | Array of grpc node ports used for Store Gateway service. Length must be the same as the number of shards                                 | `[]`                        |
 
-
 ### Thanos Ruler parameters
 
 | Name                                                      | Description                                                                                                                      | Value                    |
@@ -862,7 +854,6 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `ruler.ingress.apiVersion`                                | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
 | `ruler.ingress.path`                                      | Ingress path                                                                                                                     | `/`                      |
 | `ruler.ingress.pathType`                                  | Ingress path type                                                                                                                | `ImplementationSpecific` |
-
 
 ### Thanos Receive parameters
 
@@ -990,7 +981,6 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `receive.ingress.path`                                      | Ingress Path                                                                                                                     | `/`                      |
 | `receive.ingress.pathType`                                  | Ingress Path type                                                                                                                | `ImplementationSpecific` |
 
-
 ### Thanos Receive Distributor parameters
 
 | Name                                                                   | Description                                                                                                                 | Value           |
@@ -1071,7 +1061,6 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `receiveDistributor.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                              | `1`             |
 | `receiveDistributor.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                              | `""`            |
 
-
 ### Metrics parameters
 
 | Name                                                                                    | Description                                                                                                                                                   | Value   |
@@ -1147,7 +1136,6 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `metrics.prometheusRule.additionalLabels`                                               | Additional labels for the prometheusRule                                                                                                                      | `{}`    |
 | `metrics.prometheusRule.groups`                                                         | Prometheus Rule Groups for Thanos components                                                                                                                  | `[]`    |
 
-
 ### Volume Permissions parameters
 
 | Name                                  | Description                                                                                                                       | Value                   |
@@ -1160,7 +1148,6 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
 
-
 ### MinIO&reg; chart parameters
 
 | Name                      | Description                                                                                                                       | Value    |
@@ -1171,7 +1158,6 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `minio.auth.rootPassword` | Password for MinIO&reg; root user                                                                                                 | `""`     |
 | `minio.defaultBuckets`    | Comma, semi-colon or space separated list of MinIO&reg; buckets to create                                                         | `thanos` |
 
-
 ### NetWorkPolicy parameters
 
 | Name                                       | Description                                                                                    | Value   |
@@ -1180,11 +1166,10 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `networkPolicy.allowExternal`              | Don't require client label for connections                                                     | `true`  |
 | `networkPolicy.explicitNamespacesSelector` | A Kubernetes LabelSelector to explicitly select namespaces from which traffic could be allowed | `{}`    |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release --set query.replicaCount=2 my-repo/thanos
+helm install my-release --set query.replicaCount=2 my-repo/thanos
 ```
 
 The above command install Thanos chart with 2 Thanos Query replicas.
@@ -1192,7 +1177,7 @@ The above command install Thanos chart with 2 Thanos Query replicas.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/thanos
+helm install my-release -f values.yaml my-repo/thanos
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -1511,7 +1496,7 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 
 The querier component and its settings have been renamed to query. Configuration of the query component by using keys under `querier` in your `values.yaml` will continue to work. Support for keys under `querier` will be dropped in a future release.
 
-```
+```text
 querier.enabled                               -> query.enabled
 querier.logLevel                              -> query.logLevel
 querier.replicaLabel                          -> query.replicaLabel
@@ -1628,7 +1613,7 @@ To specify the values via CLI::
 
 If you are upgrading from a `<1.0.0` release you need to move your Querier Ingress information to the new values settings:
 
-```
+```text
 ingress.enabled -> querier.ingress.enabled
 ingress.certManager -> querier.ingress.certManager
 ingress.hostname -> querier.ingress.hostname
@@ -1650,7 +1635,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/memcached
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/memcached
 ```
 
 ## Introduction
@@ -31,8 +31,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/memcached
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/memcached
 ```
 
 These commands deploy Memcached on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -44,7 +44,7 @@ These commands deploy Memcached on the Kubernetes cluster in the default configu
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -58,7 +58,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -74,7 +73,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment/statefulset                             | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment/statefulset                                | `["infinity"]`  |
-
 
 ### Memcached parameters
 
@@ -97,7 +95,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVars`                | Array with extra environment variables to add to Memcached nodes                                          | `[]`                   |
 | `extraEnvVarsCM`              | Name of existing ConfigMap containing extra env vars for Memcached nodes                                  | `""`                   |
 | `extraEnvVarsSecret`          | Name of existing Secret containing extra env vars for Memcached nodes                                     | `""`                   |
-
 
 ### Deployment/Statefulset parameters
 
@@ -166,7 +163,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `pdb.minAvailable`                      | Minimum available Memcached replicas                                                                                                                                                              | `""`            |
 | `pdb.maxUnavailable`                    | Maximum unavailable Memcached replicas                                                                                                                                                            | `1`             |
 
-
 ### Traffic Exposure parameters
 
 | Name                               | Description                                                                             | Value       |
@@ -183,7 +179,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.annotations`              | Additional custom annotations for Memcached service                                     | `{}`        |
 | `service.extraPorts`               | Extra ports to expose in the Memcached service (normally used with the `sidecar` value) | `[]`        |
 
-
 ### Other Parameters
 
 | Name                                          | Description                                                            | Value   |
@@ -192,7 +187,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`    |
 | `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true`  |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
-
 
 ### Persistence parameters
 
@@ -204,7 +198,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.size`         | PVC Storage Request for Memcached data volume                            | `8Gi`               |
 | `persistence.annotations`  | Annotations for the PVC                                                  | `{}`                |
 | `persistence.selector`     | Selector to match an existing Persistent Volume for Memcached's data PVC | `{}`                |
-
 
 ### Volume Permissions parameters
 
@@ -270,13 +263,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.honorLabels`                   | Specify honorLabels parameter to add the scrape endpoint                                                                          | `false`                      |
 | `metrics.serviceMonitor.jobLabel`                      | The name of the label on the target service to use as the job name in prometheus.                                                 | `""`                         |
 
-
 The above parameters map to the environment variables defined in the [bitnami/memcached](https://github.com/bitnami/containers/tree/main/bitnami/memcached) container image. For more information please refer to the [bitnami/memcached](https://github.com/bitnami/containers/tree/main/bitnami/memcached) container image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release --set auth.username=user,auth.password=password my-repo/memcached
+helm install my-release --set auth.username=user,auth.password=password my-repo/memcached
 ```
 
 The above command sets the Memcached admin account username and password to `user` and `password` respectively.
@@ -286,7 +278,7 @@ The above command sets the Memcached admin account username and password to `use
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/memcached
+helm install my-release -f values.yaml my-repo/memcached
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -357,8 +349,8 @@ Backwards compatibility is not guaranteed unless you modify the labels used on t
 Use the workaround below to upgrade from versions previous to 4.0.0. The following example assumes that the release name is memcached:
 
 ```console
-$ kubectl delete deployment  memcached --cascade=false
-$ helm upgrade memcached my-repo/memcached
+kubectl delete deployment  memcached --cascade=false
+helm upgrade memcached my-repo/memcached
 ```
 
 ### To 3.0.0
@@ -371,7 +363,7 @@ Backwards compatibility is not guaranteed unless you modify the labels used on t
 Use the workaround below to upgrade from versions previous to 1.0.0. The following example assumes that the release name is memcached:
 
 ```console
-$ kubectl patch deployment memcached --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+kubectl patch deployment memcached --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
 ```
 
 ## License
@@ -382,7 +374,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

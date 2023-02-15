@@ -11,8 +11,8 @@ Disclaimer: All software products, projects and company names are trademark(TM) 
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/minio
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/minio
 ```
 
 ## Introduction
@@ -32,8 +32,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/minio
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/minio
 ```
 
 These commands deploy MinIO&reg; on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -45,7 +45,7 @@ These commands deploy MinIO&reg; on the Kubernetes cluster in the default config
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -60,7 +60,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                                                                  | Value           |
@@ -72,7 +71,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
 | `clusterDomain`     | Default Kubernetes cluster domain                                                            | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release                                            | `[]`            |
-
 
 ### MinIO&reg; parameters
 
@@ -107,7 +105,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVarsSecret`       | Secret with extra environment variables                                                                                                                                                                   | `""`                     |
 | `command`                  | Default container command (useful when using custom images). Use array form                                                                                                                               | `[]`                     |
 | `args`                     | Default container args (useful when using custom images). Use array form                                                                                                                                  | `[]`                     |
-
 
 ### MinIO&reg; deployment/statefulset parameters
 
@@ -191,7 +188,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initContainers`                                     | Add additional init containers to the MinIO&reg; pods                                                                                                                                         | `[]`            |
 | `sidecars`                                           | Add additional sidecar containers to the MinIO&reg; pods                                                                                                                                      | `[]`            |
 
-
 ### Traffic exposure parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -241,7 +237,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.allowExternal`      | Don't require client label for connections                                                                                       | `true`                   |
 | `networkPolicy.extraFromClauses`   | Allows to add extra 'from' clauses to the NetworkPolicy                                                                          | `{}`                     |
 
-
 ### Persistence parameters
 
 | Name                        | Description                                                          | Value               |
@@ -253,7 +248,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.size`          | PVC Storage Request for MinIO&reg; data volume                       | `8Gi`               |
 | `persistence.annotations`   | Annotations for the PVC                                              | `{}`                |
 | `persistence.existingClaim` | Name of an existing PVC to use (only in `standalone` mode)           | `""`                |
-
 
 ### Volume Permissions parameters
 
@@ -270,7 +264,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                                                                               | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                                    | `0`                     |
 
-
 ### RBAC parameters
 
 | Name                                          | Description                                                 | Value  |
@@ -280,7 +273,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.automountServiceAccountToken` | Enable/disable auto mounting of the service account token   | `true` |
 | `serviceAccount.annotations`                  | Custom annotations for MinIO&reg; ServiceAccount            | `{}`   |
 
-
 ### Other parameters
 
 | Name                 | Description                                                                       | Value   |
@@ -288,7 +280,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `pdb.create`         | Enable/disable a Pod Disruption Budget creation                                   | `false` |
 | `pdb.minAvailable`   | Minimum number/percentage of pods that must still be available after the eviction | `1`     |
 | `pdb.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable after the eviction | `""`    |
-
 
 ### Metrics parameters
 
@@ -312,7 +303,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.additionalLabels`  | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                         | `{}`                        |
 | `metrics.prometheusRule.rules`             | Prometheus Rule definitions                                                                                                   | `[]`                        |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
@@ -327,7 +317,7 @@ The above command sets the MinIO&reg; Server root user and password to `minio-ad
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/minio
+helm install my-release -f values.yaml my-repo/minio
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -374,7 +364,7 @@ MinIO&reg; exports Prometheus metrics at `/minio/v2/metrics/cluster`. To allow P
 +   prometheus.io/port: "9000"
 ```
 
-> Find more information about MinIO&reg; metrics at https://docs.min.io/docs/how-to-monitor-minio-using-prometheus.html
+> Find more information about MinIO&reg; metrics at <https://docs.min.io/docs/how-to-monitor-minio-using-prometheus.html>
 
 ## Persistence
 
@@ -477,6 +467,7 @@ This version updates MinIO&reg; authentication parameters so they're aligned wit
 ### To 8.0.0
 
 This version updates MinIO&reg; after some major changes, affecting its Web UI. MinIO&reg; has replaced its MinIO&reg; Browser with the MinIO&reg; Console, and Web UI has been moved to a separated port. As a result the following variables have been affected:
+
 - `service.port` has been slit into `service.ports.api` (default: 9000) and `service.ports.console` (default: 9001).
 - `containerPort` has been slit into `containerPorts.api` (default: 9000) and `containerPort.console` (default: 9001).
 - `service.nodePort`has been slit into `service.nodePorts.api` and `service.nodePorts.console`.
@@ -501,22 +492,22 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
+#### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
-**Considerations when upgrading to this version**
+#### Considerations when upgrading to this version
 
 - If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
 - If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
 
-**Useful links**
+#### Useful links
 
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://helm.sh/docs/topics/v2_v3_migration/>
+- <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
 ## License
 
@@ -526,7 +517,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

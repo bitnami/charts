@@ -241,7 +241,7 @@ tempo:
   ## @param tempo.containerPorts.gossipRing Tempo components Gossip Ring container port
   ##
   containerPorts:
-    web: 3100
+    web: 3200
     grpc: 9095
     gossipRing: 7946
   ## Gossip Ring parameters
@@ -475,7 +475,7 @@ compactor:
     ## @param compactor.service.ports.http Compactor HTTP service port
     ##
     ports:
-      http: 3100
+      http: 3200
     ## Node ports to expose
     ## NOTE: choose port between <30000-32767>
     ## @param compactor.service.nodePorts.http Node port for HTTP
@@ -735,7 +735,7 @@ distributor:
     ## @param distributor.service.ports.grpc Distributor GRPC service port
     ##
     ports:
-      http: 3100
+      http: 3200
       grpc: 9095
     ## Node ports to expose
     ## NOTE: choose port between <30000-32767>
@@ -1002,7 +1002,7 @@ metricsGenerator:
     ## @param metricsGenerator.service.ports.grpc metricsGenerator GRPC service port
     ##
     ports:
-      http: 3100
+      http: 3200
       grpc: 9095
     ## Node ports to expose
     ## NOTE: choose port between <30000-32767>
@@ -1302,7 +1302,7 @@ ingester:
     ## @param ingester.service.ports.grpc Ingester GRPC service port
     ##
     ports:
-      http: 3100
+      http: 3200
       grpc: 9095
     ## Node ports to expose
     ## NOTE: choose port between <30000-32767>
@@ -1565,7 +1565,7 @@ querier:
     ## @param querier.service.ports.grpc Querier GRPC service port
     ##
     ports:
-      http: 3100
+      http: 3200
       grpc: 9095
     ## Node ports to expose
     ## NOTE: choose port between <30000-32767>
@@ -1970,7 +1970,7 @@ queryFrontend:
     ## @param queryFrontend.service.ports.grpc queryFrontend GRPC service port
     ##
     ports:
-      http: 3100
+      http: 3200
       grpc: 9095
     ## Node ports to expose
     ## NOTE: choose port between <30000-32767>
@@ -2266,7 +2266,7 @@ vulture:
     ## @param vulture.service.ports.http Vulture HTTP service port
     ##
     ports:
-      http: 3100
+      http: 3200
     ## Node ports to expose
     ## NOTE: choose port between <30000-32767>
     ## @param vulture.service.nodePorts.http Node port for HTTP

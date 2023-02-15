@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/kong
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/kong
 ```
 
 ## Introduction
@@ -34,8 +34,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/kong
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/kong
 ```
 
 These commands deploy kong on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -47,7 +47,7 @@ These commands deploy kong on the Kubernetes cluster in the default configuratio
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 ## Parameters
@@ -59,7 +59,6 @@ $ helm delete my-release
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -76,7 +75,6 @@ $ helm delete my-release
 | `diagnosticMode.command` | Command to override all containers in the daemonset/deployment                                            | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the daemonset/deployment                                               | `["infinity"]`  |
 
-
 ### Kong common parameters
 
 | Name                | Description                                                                                          | Value                 |
@@ -89,7 +87,6 @@ $ helm delete my-release
 | `image.pullSecrets` | Specify docker-registry secret names as an array                                                     | `[]`                  |
 | `image.debug`       | Enable image debug mode                                                                              | `false`               |
 | `database`          | Select which database backend Kong will use. Can be 'postgresql', 'cassandra' or 'off'               | `postgresql`          |
-
 
 ### Kong deployment / daemonset parameters
 
@@ -129,7 +126,6 @@ $ helm delete my-release
 | `pdb.create`                            | Deploy a PodDisruptionBudget object for Kong deployment                                                                            | `false`         |
 | `pdb.minAvailable`                      | Minimum available Kong replicas (expressed in percentage)                                                                          | `""`            |
 | `pdb.maxUnavailable`                    | Maximum unavailable Kong replicas (expressed in percentage)                                                                        | `50%`           |
-
 
 ### Kong Container Parameters
 
@@ -174,7 +170,6 @@ $ helm delete my-release
 | `kong.customStartupProbe`                 | Override default startup probe (kong container)                                                                            | `{}`    |
 | `kong.lifecycleHooks`                     | Lifecycle hooks (kong container)                                                                                           | `{}`    |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -212,7 +207,6 @@ $ helm delete my-release
 | `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
-
 
 ### Kong Ingress Controller Container Parameters
 
@@ -265,7 +259,6 @@ $ helm delete my-release
 | `ingressController.rbac.create`                                 | Create the necessary RBAC resources for the Ingress Controller to work                                                                        | `true`                            |
 | `ingressController.rbac.rules`                                  | Custom RBAC rules                                                                                                                             | `[]`                              |
 
-
 ### Kong Migration job Parameters
 
 | Name                           | Description                                                                                                                | Value |
@@ -282,7 +275,6 @@ $ helm delete my-release
 | `migration.annotations`        | Add annotations to the job                                                                                                 | `{}`  |
 | `migration.podLabels`          | Additional pod labels                                                                                                      | `{}`  |
 | `migration.podAnnotations`     | Additional pod annotations                                                                                                 | `{}`  |
-
 
 ### PostgreSQL Parameters
 
@@ -308,7 +300,6 @@ $ helm delete my-release
 | `postgresql.external.existingSecret`            | Name of an existing secret resource containing the database credentials                                    | `""`                  |
 | `postgresql.external.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials                                         | `""`                  |
 
-
 ### Cassandra Parameters
 
 | Name                                           | Description                                                              | Value   |
@@ -325,7 +316,6 @@ $ helm delete my-release
 | `cassandra.external.password`                  | Password of the external cassandra installation                          | `""`    |
 | `cassandra.external.existingSecret`            | Name of an existing secret resource containing the Cassandra credentials | `""`    |
 | `cassandra.external.existingSecretPasswordKey` | Name of an existing secret key containing the Cassandra credentials      | `""`    |
-
 
 ### Metrics Parameters
 
@@ -350,7 +340,6 @@ $ helm delete my-release
 | `metrics.serviceMonitor.serviceAccount`    | Service account used by Prometheus Operator                                           | `""`    |
 | `metrics.serviceMonitor.rbac.create`       | Create the necessary RBAC resources so Prometheus Operator can reach Kong's namespace | `true`  |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
@@ -363,7 +352,7 @@ The above command exposes the Kong admin ports inside the Kong service.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/kong
+helm install my-release -f values.yaml my-repo/kong
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -383,7 +372,7 @@ The Bitnami Kong chart allows setting two database backends: PostgreSQL or Cassa
 - Deploy the PostgreSQL sub-chart (default)
 
 ```console
-$ helm install my-release my-repo/kong
+helm install my-release my-repo/kong
 ```
 
 - Use an external PostgreSQL database
@@ -428,6 +417,7 @@ As is said in step 4 of [kong official docker installation](https://docs.konghq.
 
 1. Set `database` value with any value other than "postgresql" or "cassandra". For example `database: "off"`
 2. Use `kong.extraEnvVars` value to set the `KONG_DATABASE` environment variable:
+
 ```yaml
 kong.extraEnvVars:
 - name: KONG_DATABASE
@@ -558,15 +548,15 @@ Kong Ingress Controller version was bumped to new major version, `1.x.x`. The as
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
+#### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
-- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
-- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+- Move dependency information from the _requirements.yaml_ to the _Chart.yaml_
+- After running `helm dependency update`, a _Chart.lock_ file is generated containing the same structure used in the previous _requirements.lock_
+- The different fields present in the _Chart.yaml_ file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 - This chart depends on the **PostgreSQL 10** instead of **PostgreSQL 9**. Apart from the same changes that are described in this section, there are also other major changes due to the master/slave nomenclature was replaced by primary/readReplica. [Here](https://github.com/bitnami/charts/pull/4385) you can find more information about the changes introduced.
 
-**Considerations when upgrading to this version**
+#### Considerations when upgrading to this version
 
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
 - If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
@@ -577,8 +567,8 @@ Kong Ingress Controller version was bumped to new major version, `1.x.x`. The as
 ##### Export secrets and required values to update
 
 ```console
-$ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default kong-postgresql -o jsonpath="{.data.password}" | base64 -d)
-$ export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=kong,app.kubernetes.io/name=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default kong-postgresql -o jsonpath="{.data.password}" | base64 -d)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=kong,app.kubernetes.io/name=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
 ```
 
 ##### Delete statefulsets
@@ -586,7 +576,7 @@ $ export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=kong,app
 Delete PostgreSQL statefulset. Notice the option `--cascade=false`:
 
 ```
-$ kubectl delete statefulsets.apps kong-postgresql --cascade=false
+kubectl delete statefulsets.apps kong-postgresql --cascade=false
 ```
 
 ##### Upgrade the chart release
@@ -600,8 +590,9 @@ $ helm upgrade kong my-repo/kong \
 ##### Force new statefulset to create a new pod for postgresql
 
 ```console
-$ kubectl delete pod kong-postgresql-0
+kubectl delete pod kong-postgresql-0
 ```
+
 Finally, you should see the lines below in MariaDB container logs:
 
 ```console
@@ -611,11 +602,11 @@ postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
 ...
 ```
 
-**Useful links**
+#### Useful links
 
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://helm.sh/docs/topics/v2_v3_migration/>
+- <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
 ### To 4.0.0
 
@@ -627,9 +618,9 @@ PostgreSQL and Cassandra dependencies versions were bumped to new major versions
 
 In order to properly migrate your data to this new version:
 
-* If you were using PostgreSQL as your database, please refer to the [PostgreSQL Upgrade Notes](https://github.com/bitnami/charts/tree/main/bitnami/postgresql#900).
+- If you were using PostgreSQL as your database, please refer to the [PostgreSQL Upgrade Notes](https://github.com/bitnami/charts/tree/main/bitnami/postgresql#900).
 
-* If you were using Cassandra as your database, please refer to the [Cassandra Upgrade Notes](https://github.com/bitnami/charts/tree/main/bitnami/cassandra#to-600).
+- If you were using Cassandra as your database, please refer to the [Cassandra Upgrade Notes](https://github.com/bitnami/charts/tree/main/bitnami/cassandra#to-600).
 
 ## License
 
@@ -639,7 +630,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

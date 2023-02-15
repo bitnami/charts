@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/parse
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/parse
 ```
 
 ## Introduction
@@ -33,8 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/parse
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/parse
 ```
 
 The command deploys Parse on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -46,7 +46,7 @@ The command deploys Parse on the Kubernetes cluster in the default configuration
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -84,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------- |
 | `server.image.registry`                                  | Parse image registry                                                                                                     | `docker.io`          |
 | `server.image.repository`                                | Parse image repository                                                                                                   | `bitnami/parse`      |
-| `server.image.tag`                                       | Parse image tag (immutable tags are recommended)                                                                         | `5.4.1-debian-11-r0` |
+| `server.image.tag`                                       | Parse image tag (immutable tags are recommended)                                                                         | `6.0.0-debian-11-r0` |
 | `server.image.digest`                                    | Parse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                    | `""`                 |
 | `server.image.pullPolicy`                                | Image pull policy                                                                                                        | `IfNotPresent`       |
 | `server.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                         | `[]`                 |
@@ -170,7 +170,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dashboard.enabled`                                         | Enable parse dashboard                                                                                                   | `true`                    |
 | `dashboard.image.registry`                                  | Dashboard image registry                                                                                                 | `docker.io`               |
 | `dashboard.image.repository`                                | Dashboard image repository                                                                                               | `bitnami/parse-dashboard` |
-| `dashboard.image.tag`                                       | Dashboard image tag (immutable tags are recommended)                                                                     | `5.0.0-debian-11-r29`     |
+| `dashboard.image.tag`                                       | Dashboard image tag (immutable tags are recommended)                                                                     | `5.0.0-debian-11-r34`     |
 | `dashboard.image.digest`                                    | Dashboard image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                      |
 | `dashboard.image.pullPolicy`                                | image pull policy                                                                                                        | `IfNotPresent`            |
 | `dashboard.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                         | `[]`                      |
@@ -293,7 +293,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r78`      |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r85`      |
 | `volumePermissions.image.digest`              | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                    |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Init container volume-permissions image pull secrets                                                                                                      | `[]`                    |
@@ -320,7 +320,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mongodb.persistence.size`         | PVC Storage Request for MongoDB&reg; volume | `8Gi`           |
 
 
-The above parameters map to the env variables defined in [bitnami/parse](https://github.com/bitnami/containers/tree/main/bitnami/parse). For more information please refer to the [bitnami/parse](https://github.com/bitnami/containers/tree/main/bitnami/parse) image documentation.
 
 > **Note**:
 >
@@ -351,7 +350,7 @@ The above command sets the Parse administrator account username and password to 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/parse
+helm install my-release -f values.yaml my-repo/parse
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -458,13 +457,13 @@ Affected values:
 
 Also MongoDB&reg; subchart container images were updated to 5.0.x and it can affect compatibility with older versions of MongoDB&reg;.
 
-- https://github.com/bitnami/charts/tree/main/bitnami/mongodb#to-1200
+- <https://github.com/bitnami/charts/tree/main/bitnami/mongodb#to-1200>
 
 ### To 16.0.0
 
 In this version, the mongodb-exporter bundled as part of the bitnami/mongodb dependency was updated to a new version which, even it is not a major change, can contain breaking changes (from `0.11.X` to `0.30.X`).
 
-Please visit the release notes from the upstream project at https://github.com/percona/mongodb_exporter/releases
+Please visit the release notes from the upstream project at <https://github.com/percona/mongodb_exporter/releases>
 
 ### To 15.0.0
 
@@ -480,37 +479,36 @@ This version standardizes the way of defining Ingress rules. When configuring a 
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
+#### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - Move dependency information from the *requirements.yaml* to the *Chart.yaml*
 - After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
-**Considerations when upgrading to this version**
+#### Considerations when upgrading to this version
 
 - If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
 - If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
 
-**Useful links**
+#### Useful links
 
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
-
+- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://helm.sh/docs/topics/v2_v3_migration/>
+- <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
 ### To 12.0.0
 
 MongoDB&reg; subchart container images were updated to 4.4.x and it can affect compatibility with older versions of MongoDB&reg;.
 
-- https://github.com/bitnami/charts/tree/main/bitnami/mongodb#to-900
+- <https://github.com/bitnami/charts/tree/main/bitnami/mongodb#to-900>
 
 ### To 11.0.0
 
 Backwards compatibility is not guaranteed since breaking changes were included in MongoDB&reg; subchart. More information in the link below:
 
-- https://github.com/bitnami/charts/tree/main/bitnami/mongodb#to-800
+- <https://github.com/bitnami/charts/tree/main/bitnami/mongodb#to-800>
 
 ### To 10.0.0
 
@@ -523,14 +521,14 @@ Backwards compatibility is not guaranteed. The following notables changes were i
 
 Parse & Parse Dashboard containers were moved to a non-root approach. There shouldn't be any issue when upgrading since the corresponding `securityContext` is enabled by default. Both container images and chart can be upgraded by running the command below:
 
-```
-$ helm upgrade my-release my-repo/parse
+```console
+helm upgrade my-release my-repo/parse
 ```
 
 If you use a previous container image (previous to **3.1.2-r14** for Parse or **1.2.0-r69** for Parse Dashboard), disable the `securityContext` by running the command below:
 
-```
-$ helm upgrade my-release my-repo/parse --set server.securityContext.enabled=false,dashboard.securityContext.enabled=false,server.image.tag=XXX,dashboard.image.tag=YYY
+```console
+helm upgrade my-release my-repo/parse --set server.securityContext.enabled=false,dashboard.securityContext.enabled=false,server.image.tag=XXX,dashboard.image.tag=YYY
 ```
 
 ### To 3.0.0
@@ -539,9 +537,9 @@ Backwards compatibility is not guaranteed unless you modify the labels used on t
 Use the workaround below to upgrade from versions previous to 3.0.0. The following example assumes that the release name is parse:
 
 ```console
-$ kubectl patch deployment parse-parse-dashboard --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
-$ kubectl patch deployment parse-parse-server --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
-$ kubectl patch deployment parse-mongodb --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+kubectl patch deployment parse-parse-dashboard --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+kubectl patch deployment parse-parse-server --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+kubectl patch deployment parse-mongodb --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
 ```
 
 ## License
@@ -552,7 +550,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

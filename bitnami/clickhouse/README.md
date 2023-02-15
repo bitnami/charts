@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/clickhouse
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/clickhouse
 ```
 
 ## Introduction
@@ -34,15 +34,15 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 > If you are using Kubernetes 1.18, the following code needs to be commented out.
 > seccompProfile:
->    type: "RuntimeDefault"
+> type: "RuntimeDefault"
 
 ## Installing the Chart
 
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/clickhouse
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/clickhouse
 ```
 
 The command deploys ClickHouse on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -54,7 +54,7 @@ The command deploys ClickHouse on the Kubernetes cluster in the default configur
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -347,7 +347,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `zookeeper.service.ports.client` | Zookeeper client port         | `2181` |
 
 
-See https://github.com/bitnami-labs/readme-generator-for-helm to create the table
 
 The above parameters map to the env variables defined in [bitnami/clickhouse](https://github.com/bitnami/containers/tree/main/bitnami/clickhouse). For more information please refer to the [bitnami/clickhouse](https://github.com/bitnami/containers/tree/main/bitnami/clickhouse) image documentation.
 
@@ -367,7 +366,7 @@ The above command sets the ClickHouse administrator account username and passwor
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/clickhouse
+helm install my-release -f values.yaml my-repo/clickhouse
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -379,7 +378,6 @@ $ helm install my-release -f values.yaml my-repo/clickhouse
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
 
 ### ClickHouse keeper support
 
@@ -512,7 +510,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

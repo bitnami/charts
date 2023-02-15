@@ -6,16 +6,15 @@ Wavefront HPA Adapter for Kubernetes is a Kubernetes Horizontal Pod Autoscaler a
 
 [Overview of Wavefront HPA Adapter for Kubernetes](https://github.com/wavefrontHQ/wavefront-kubernetes-adapter)
 
-
-
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/wavefront-hpa-adapter
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/wavefront-hpa-adapter
 ```
 
 ## Introduction
+
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
 [Wavefront HPA Adapter for Kubernetes](https://github.com/wavefrontHQ/wavefront-kubernetes-adapter) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
@@ -34,8 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/wavefront-hpa-adapter
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/wavefront-hpa-adapter
 ```
 
 These commands deploy wavefront-hpa-adapter on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -47,7 +46,7 @@ These commands deploy wavefront-hpa-adapter on the Kubernetes cluster in the def
 To uninstall/delete the `my-release` helm release:
 
 ```console
-$ helm uninstall my-release
+helm uninstall my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -68,7 +67,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `commonAnnotations`       | Annotations to add to all deployed objects         | `{}`            |
 | `clusterDomain`           | Kubernetes cluster domain name                     | `cluster.local` |
 | `extraDeploy`             | Array of extra objects to deploy with the release  | `[]`            |
-
 
 ### Wavefront HPA Adapter for Kubernetes deployment parameters
 
@@ -146,7 +144,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `wavefront.url`                                   | External Wavefront URL                                                                                  | `https://YOUR_CLUSTER.wavefront.com` |
 | `wavefront.token`                                 | External Wavefront Token                                                                                | `YOUR_API_TOKEN`                     |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                          | Value       |
@@ -163,7 +160,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP" | `None`      |
 | `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                          | `{}`        |
 
-
 ### RBAC parameters
 
 | Name                                          | Description                                                 | Value  |
@@ -174,7 +170,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.automountServiceAccountToken` | Automount API credentials for a service account.            | `true` |
 | `serviceAccount.annotations`                  | Add annotations to the service account                      | `{}`   |
 | `apiService.create`                           | Create the APIService objects in Kubernetes API             | `true` |
-
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -189,7 +184,7 @@ The above command sets the `livenessProbe.successThreshold` to `5`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/wavefront-hpa-adapter
+helm install my-release -f values.yaml my-repo/wavefront-hpa-adapter
 ```
 
 ## Configuration and installation details
@@ -211,7 +206,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 ## Upgrading
 
 ```console
-$ helm upgrade my-release my-repo/wavefront-hpa-adapter
+helm upgrade my-release my-repo/wavefront-hpa-adapter
 ```
 
 ## To 1.0.0
@@ -231,7 +226,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

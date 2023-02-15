@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/grafana-loki
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/grafana-loki
 ```
 
 ## Introduction
@@ -36,8 +36,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/grafana-loki
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/grafana-loki
 ```
 
 The command deploys grafana-loki on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -49,7 +49,7 @@ The command deploys grafana-loki on the Kubernetes cluster in the default config
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -786,7 +786,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryScheduler.initContainers`                        | Add additional init containers to the queryScheduler pod(s)                                              | `[]`            |
 
 
-### Query Frontend Traffic Exposure Parameters
+### Query Scheduler Traffic Exposure Parameters
 
 | Name                                              | Description                                                      | Value       |
 | ------------------------------------------------- | ---------------------------------------------------------------- | ----------- |
@@ -1205,7 +1205,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedindexwrites.service.ports.memcached` | Memcached service port                                                                                    | `11211`               |
 
 
-See https://github.com/bitnami-labs/readme-generator-for-helm to create the table
 
 The above parameters map to the env variables defined in [bitnami/grafana-loki](https://github.com/bitnami/containers/tree/main/bitnami/grafana-loki). For more information please refer to the [bitnami/grafana-loki](https://github.com/bitnami/containers/tree/main/bitnami/grafana-loki) image documentation.
 
@@ -1222,7 +1221,7 @@ The above command enables the Jaeger GRPC traces.
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/grafana-loki
+helm install my-release -f values.yaml my-repo/grafana-loki
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -1234,6 +1233,7 @@ $ helm install my-release -f values.yaml my-repo/grafana-loki
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
 ### Loki configuration
 
 The loki configuration file `loki.yaml` is shared across the different components: `distributor`, `compactor`, `ingester`, `querier` and `queryFrontend`. This is set in the `loki.configuration` value. Check the official [Loki Grafana documentation](https://grafana.com/docs/loki/latest/configuration/) for the list of possible configurations.
@@ -1331,7 +1331,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
