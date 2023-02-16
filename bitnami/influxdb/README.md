@@ -324,7 +324,7 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set auth.admin.username=admin-user my-repo/influxdb
 ```
 
@@ -350,7 +350,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 This chart installs a deployment with the following configuration:
 
-```
+```text
                 ------------------
                |     Ingress      |
                |    Controller    |
@@ -439,7 +439,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 It's necessary to specify the existing passwords while performing an upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `auth.admin.password`, `user.pwd`, `auth.readUser.password` and `auth.writeUser.password` parameters when upgrading the chart:
 
 ```console
-$ helm upgrade my-release my-repo/influxdb \
+helm upgrade my-release my-repo/influxdb \
     --set auth.admin.password=[ADMIN_USER_PASSWORD] \
     --set auth.user.password=[USER_PASSWORD] \
     --set auth.readUser.password=[READ_USER_PASSWORD] \
@@ -456,7 +456,7 @@ This major release completely removes support for InfluxDB Relay&trade; because 
 
 To update from the previous major, please follow this steps:
 
-```
+```console
 kubectl delete deployments.apps influxdb
 helm upgrade influxdb my-repo/influxdb
 ```
@@ -488,7 +488,7 @@ However, you can use images for versions ~1.x.x taking into account the chart ma
 
 #### Installing InfluxDB&trade; v1 in chart v2
 
-```
+```console
 helm install my-repo/influxdb --set image.tag=1.8.3-debian-10-r88
 ```
 
@@ -529,7 +529,7 @@ export INFLUXDB_ADMIN_PASSWORD=$(kubectl get secret --namespace default influxdb
 > NOTE: Please remember to migrate all the values to its new path following the above notes, e.g: `adminUser.pwd` -> `auth.admin.password`.
 
 ```console
-$ helm upgrade influxdb my-repo/influxdb --set image.tag=1.8.3-debian-10-r99 \
+helm upgrade influxdb my-repo/influxdb --set image.tag=1.8.3-debian-10-r99 \
   --set auth.admin.password=${INFLUXDB_ADMIN_PASSWORD}
 ```
 

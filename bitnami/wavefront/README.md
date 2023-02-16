@@ -9,8 +9,8 @@ Wavefront is a high-performance streaming analytics platform for monitoring and 
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/wavefront --namespace wavefront --create-namespace \
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/wavefront --namespace wavefront --create-namespace \
     --set clusterName=<K8s-CLUSTER-NAME> \
     --set wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
     --set wavefront.token=<YOUR_API_TOKEN>
@@ -35,8 +35,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/wavefront --namespace wavefront --create-namespace\
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/wavefront --namespace wavefront --create-namespace\
     --set clusterName=<K8s-CLUSTER-NAME> \
     --set wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
     --set wavefront.token=<YOUR_API_TOKEN>
@@ -269,7 +269,7 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set proxy.replicaCount=3 \
     my-repo/wavefront
 ```

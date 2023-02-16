@@ -361,7 +361,7 @@ The above parameters map to the env variables defined in [bitnami/mysql](https:/
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set auth.rootPassword=secretpassword,auth.database=app_database \
     my-repo/mysql
 ```
@@ -434,7 +434,7 @@ The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/stora
 
 If you encounter errors when working with persistent volumes, refer to our [troubleshooting guide for persistent volumes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/troubleshooting-persistence-volumes/).
 
-## Network Policy
+## Network Policy config
 
 To enable network policy for MySQL, install [a networking plugin that implements the Kubernetes NetworkPolicy spec](https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy#before-you-begin), and set `networkPolicy.enabled` to `true`.
 

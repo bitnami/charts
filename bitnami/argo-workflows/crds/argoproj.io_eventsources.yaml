@@ -5,36 +5,36 @@ metadata:
   name: eventsources.argoproj.io
 spec:
   group: argoproj.io
-  scope: Namespaced
   names:
     kind: EventSource
-    plural: eventsources
-    singular: eventsource
     listKind: EventSourceList
+    plural: eventsources
     shortNames:
-      - es
+    - es
+    singular: eventsource
+  scope: Namespaced
   versions:
-    - name: v1alpha1
-      served: true
-      storage: true
-      schema:
-        openAPIV3Schema:
-          properties:
-            apiVersion:
-              type: string
-            kind:
-              type: string
-            metadata:
-              type: object
-            spec:
-              type: object
-              x-kubernetes-preserve-unknown-fields: true
-            status:
-              type: object
-              x-kubernetes-preserve-unknown-fields: true
-          required:
-          - metadata
-          - spec
-          type: object
-      subresources:
-        status: {}
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        properties:
+          apiVersion:
+            type: string
+          kind:
+            type: string
+          metadata:
+            type: object
+          spec:
+            type: object
+            x-kubernetes-preserve-unknown-fields: true
+          status:
+            type: object
+            x-kubernetes-preserve-unknown-fields: true
+        required:
+        - metadata
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

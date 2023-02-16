@@ -552,7 +552,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `redis.replica.persistence.enabled` | Enable Redis&reg; replica data persistence using PVC             | `false`                                                  |
 
 ```console
-$ helm install kubeapps --namespace kubeapps \
+helm install kubeapps --namespace kubeapps \
   --set ingress.enabled=true \
     my-repo/kubeapps
 ```
@@ -667,7 +667,7 @@ This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](h
 To uninstall/delete the `kubeapps` deployment:
 
 ```console
-$ helm uninstall -n kubeapps kubeapps
+helm uninstall -n kubeapps kubeapps
 
 # Optional: Only if there are no more instances of Kubeapps
 $ kubectl delete crd apprepositories.kubeapps.com
@@ -717,7 +717,7 @@ Have a look at the [dashboard documentation](https://github.com/vmware-tanzu/kub
 The example below will match the URL `http://example.com` to the Kubeapps dashboard. For further configuration, please refer to your specific Ingress configuration docs (e.g., [NGINX](https://github.com/kubernetes/ingress-nginx) or [HAProxy](https://github.com/haproxytech/kubernetes-ingress)).
 
 ```console
-$ helm install kubeapps my-repo/kubeapps \
+helm install kubeapps my-repo/kubeapps \
   --namespace kubeapps \
   --set ingress.enabled=true \
   --set ingress.hostname=example.com \
@@ -727,7 +727,7 @@ $ helm install kubeapps my-repo/kubeapps \
 If you are using LDAP via Dex with OIDC or you are getting an error message like `upstream sent too big header while reading response header from upstream` it means the cookie size is too big and can't be processed by the Ingress Controller.
 You can work around this problem by setting the following Nginx ingress annotations (look for similar annotations in your preferred Ingress Controller):
 
-```
+```text
   # rest of the helm install ... command
   --set ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-read-timeout"=600
   --set ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-buffer-size"=8k
@@ -739,7 +739,7 @@ You can work around this problem by setting the following Nginx ingress annotati
 You may want to serve Kubeapps with a subpath, for instance `http://example.com/subpath`, you have to set the proper Ingress configuration. If you are using the ingress configuration provided by the Kubeapps chart, you will have to set the `ingress.hostname` and `path` parameters:
 
 ```console
-$ helm install kubeapps my-repo/kubeapps \
+helm install kubeapps my-repo/kubeapps \
   --namespace kubeapps \
   --set ingress.enabled=true \
   --set ingress.hostname=example.com \
@@ -750,7 +750,7 @@ $ helm install kubeapps my-repo/kubeapps \
 Besides, if you are using the OAuth2/OIDC login (more information at the [using an OIDC provider documentation](https://github.com/vmware-tanzu/kubeapps/blob/main/site/content/docs/latest/tutorials/using-an-OIDC-provider.md)), you will need, also, to configure the different URLs:
 
 ```console
-$ helm install kubeapps my-repo/kubeapps \
+helm install kubeapps my-repo/kubeapps \
   --namespace kubeapps \
   # ... other OIDC and ingress flags
   --set authProxy.oauthLoginURI="/subpath/oauth2/login" \
@@ -881,44 +881,44 @@ It is possible that when upgrading Kubeapps an error appears. That can be caused
 
 1. (Optional) Backup your personal repositories (if you have any):
 
-```console
-kubectl get apprepository -A -o yaml > <repo name>.yaml
-```
+    ```console
+    kubectl get apprepository -A -o yaml > <repo name>.yaml
+    ```
 
 2. Delete Kubeapps:
 
-```console
-helm del --purge kubeapps
-```
+    ```console
+    helm del --purge kubeapps
+    ```
 
 3. (Optional) Delete the App Repositories CRD:
 
-> **Warning**: Do not run this step if you have more than one Kubeapps installation in your cluster.
+    > **Warning**: Do not run this step if you have more than one Kubeapps installation in your cluster.
 
-```console
-kubectl delete crd apprepositories.kubeapps.com
-```
+    ```console
+    kubectl delete crd apprepositories.kubeapps.com
+    ```
 
 4. (Optional) Clean the Kubeapps namespace:
 
-> **Warning**: Do not run this step if you have workloads other than Kubeapps in the `kubeapps` namespace.
+    > **Warning**: Do not run this step if you have workloads other than Kubeapps in the `kubeapps` namespace.
 
-```console
-kubectl delete namespace kubeapps
-```
+    ```console
+    kubectl delete namespace kubeapps
+    ```
 
 5. Install the latest version of Kubeapps (using any custom modifications you need):
 
-```console
-helm repo update
-helm install --name kubeapps --namespace kubeapps my-repo/kubeapps
-```
+    ```console
+    helm repo update
+    helm install --name kubeapps --namespace kubeapps my-repo/kubeapps
+    ```
 
 6. (Optional) Restore any repositories you backed up in the first step:
 
-```console
-kubectl apply -f <repo name>.yaml
-```
+    ```console
+    kubectl apply -f <repo name>.yaml
+    ```
 
 After that you should be able to access the new version of Kubeapps. If the above doesn't work for you or you run into any other issues please open an [issue](https://github.com/vmware-tanzu/kubeapps/issues/new).
 
@@ -937,21 +937,21 @@ Kubeapps 2.3.1 (Chart version 6.0.0) introduces some breaking changes. Helm-spec
 
 1. Kubeapps will no longer create a database secret for you automatically but rather will rely on the default behavior of the PostgreSQL chart. If you try to upgrade Kubeapps and you installed it without setting a password, you will get the following error:
 
-```console
-Error: UPGRADE FAILED: template: kubeapps/templates/NOTES.txt:73:4: executing "kubeapps/templates/NOTES.txt" at <include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $)>: error calling include: template: kubeapps/charts/common/templates/_errors.tpl:18:48: executing "common.errors.upgrade.passwords.empty" at <fail>: error calling fail:
-PASSWORDS ERROR: you must provide your current passwords when upgrade the release
-    'postgresql.postgresqlPassword' must not be empty, please add '--set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD' to the command. To get the current value:
-```
+    ```console
+    Error: UPGRADE FAILED: template: kubeapps/templates/NOTES.txt:73:4: executing "kubeapps/templates/NOTES.txt" at <include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $)>: error calling include: template: kubeapps/charts/common/templates/_errors.tpl:18:48: executing "common.errors.upgrade.passwords.empty" at <fail>: error calling fail:
+    PASSWORDS ERROR: you must provide your current passwords when upgrade the release
+        'postgresql.postgresqlPassword' must not be empty, please add '--set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD' to the command. To get the current value:
+    ```
 
-The error gives you generic instructions for retrieving the PostgreSQL password, but if you have installed a Kubeapps version prior to 2.3.1, the name of the secret will differ. Run the following command:
+    The error gives you generic instructions for retrieving the PostgreSQL password, but if you have installed a Kubeapps version prior to 2.3.1, the name of the secret will differ. Run the following command:
 
-```console
-export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace "kubeapps" kubeapps-db -o jsonpath="{.data.postgresql-password}" | base64 -d)
-```
+    ```console
+    export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace "kubeapps" kubeapps-db -o jsonpath="{.data.postgresql-password}" | base64 -d)
+    ```
 
-> NOTE: Replace the namespace in the command with the namespace in which you have deployed Kubeapps.
+    > NOTE: Replace the namespace in the command with the namespace in which you have deployed Kubeapps.
 
-Make sure that you have stored the password in the variable `$POSTGRESQL_PASSWORD` before continuing with the next issue.
+    Make sure that you have stored the password in the variable `$POSTGRESQL_PASSWORD` before continuing with the next issue.
 
 2. The chart `initialRepos` are no longer installed using [Helm hooks](https://helm.sh/docs/topics/charts_hooks/), which caused these repos not to be handled by Helm after the first installation. Now they will be tracked for every update. However, if you do not delete the existing ones, it will fail to update with:
 

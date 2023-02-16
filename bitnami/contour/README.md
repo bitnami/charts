@@ -66,7 +66,6 @@ helm uninstall my-release
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                             | Value   |
@@ -81,7 +80,6 @@ helm uninstall my-release
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false` |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `[]`    |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `[]`    |
-
 
 ### Contour parameters
 
@@ -188,7 +186,6 @@ helm uninstall my-release
 | `contour.debug`                                               | Enable Contour debug log level                                                                                                     | `false`               |
 | `contour.kubernetesDebug`                                     | Contour kubernetes debug log level, Default 0, minimum 0, maximum 9.                                                               | `0`                   |
 | `contour.rootNamespaces`                                      | Restrict Contour to searching these namespaces for root ingress routes.                                                            | `""`                  |
-
 
 ### Envoy parameters
 
@@ -305,7 +302,6 @@ helm uninstall my-release
 | `envoy.extraEnvVarsCM`                              | ConfigMap containing extra env vars to be added to all Envoy containers                                               | `""`                  |
 | `envoy.extraEnvVarsSecret`                          | Secret containing extra env vars to be added to all Envoy containers                                                  | `""`                  |
 
-
 ### Default backend parameters
 
 | Name                                                   | Description                                                                                                     | Value                    |
@@ -399,7 +395,6 @@ helm uninstall my-release
 | `ingress.secrets`                                      | If you're providing your own certificates, please use this to add the certificates as secrets                   | `[]`                     |
 | `ingress.extraRules`                                   | Additional rules to be covered with this ingress record                                                         | `[]`                     |
 
-
 ### Metrics parameters
 
 | Name                                       | Description                                                                                                                          | Value                    |
@@ -415,7 +410,6 @@ helm uninstall my-release
 | `metrics.serviceMonitor.selector`          | Specify honorLabels parameter to add the scrape endpoint                                                                             | `{}`                     |
 | `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                                                                  | `{}`                     |
 
-
 ### Other parameters
 
 | Name                | Description                                                                                                          | Value  |
@@ -424,10 +418,8 @@ helm uninstall my-release
 | `rbac.rules`        | Custom RBAC rules to set                                                                                             | `[]`   |
 | `tlsExistingSecret` | Name of the existingSecret to be use in both contour and envoy. If it is not nil `contour.certgen` will be disabled. | `""`   |
 
-
-
 ```console
-$ helm install my-release \
+helm install my-release \
   --set envoy.readinessProbe.successThreshold=5 \
     my-repo/contour
 ```
@@ -584,7 +576,7 @@ This version bumps the Envoy container from 1.17.X to 1.19.X; this Envoy version
 
 In this version it was synchronized CRD with the official [Contour repository](https://github.com/projectcontour/contour/blob/main/examples/render/contour.yaml)
 
-#### Considerations when upgrading to this version
+#### Considerations when upgrading to 5.0.0
 
 If you are installing a fresh chart, you can ignore this section.
 
@@ -594,12 +586,12 @@ If you are upgrading from 4.x of this Helm chart, this is a breaking change as t
 
 The 4.0 version of this chart introduces changes to handle Contour CRD upgrades. While Helm 3.x introduced the `crd` folder to place CRDs, Helm explicitly does not handle the [CRD upgrade scenario](https://helm.sh/docs/chart_best_practices/custom_resource_definitions/#some-caveats-and-explanations).
 
-#### What changes were introduced in this major version?
+#### What changes were introduced in 4.0.0?
 
 - The `resources` directory was added that contains all the Contour CRDs, which are imported by the `templates/00-crds.yaml` manifest on installation and upgrade.
 - If you do not wish for this chart to manage Contour CRDs, set the flag `contour.manageCRDs` to `false` when running Helm.
 
-#### Considerations when upgrading to this version
+#### Considerations when upgrading to 4.0.0
 
 If you are installing a fresh chart, or if you are upgrading from a 4.x version of this chart, you can ignore this section.
 
@@ -635,14 +627,14 @@ kubectl apply -f backup.yaml
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-#### What changes were introduced in this major version?
+#### What changes were introduced in 3.0.0?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - Move dependency information from the *requirements.yaml* to the *Chart.yaml*
 - After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
-#### Considerations when upgrading to this version
+#### Considerations when upgrading to 3.0.0
 
 - If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore

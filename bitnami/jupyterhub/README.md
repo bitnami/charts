@@ -485,7 +485,7 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set proxy.livenessProbe.successThreshold=5 \
     my-repo/jupyterhub
 ```
