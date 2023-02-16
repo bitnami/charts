@@ -6,8 +6,6 @@ WordPress is the world's most popular blogging and content management platform. 
 
 [Overview of WordPress](http://www.wordpress.org)
 
-
-
 ## TL;DR
 
 ```console
@@ -63,7 +61,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                                  | Value           |
@@ -79,7 +76,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]`  |
 
-
 ### WordPress Image parameters
 
 | Name                | Description                                                                                               | Value                 |
@@ -91,7 +87,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullPolicy`  | WordPress image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets` | WordPress image pull secrets                                                                              | `[]`                  |
 | `image.debug`       | Specify if debug values should be set                                                                     | `false`               |
-
 
 ### WordPress Configuration parameters
 
@@ -132,7 +127,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVarsCM`                       | Name of existing ConfigMap containing extra env vars                                  | `""`               |
 | `extraEnvVarsSecret`                   | Name of existing Secret containing extra env vars                                     | `""`               |
 
-
 ### WordPress Multisite Configuration parameters
 
 | Name                            | Description                                                                                                                        | Value       |
@@ -141,7 +135,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `multisite.host`                | WordPress Multisite hostname/address. This value is mandatory when enabling Multisite mode.                                        | `""`        |
 | `multisite.networkType`         | WordPress Multisite network type to enable. Allowed values: `subfolder`, `subdirectory` or `subdomain`.                            | `subdomain` |
 | `multisite.enableNipIoRedirect` | Whether to enable IP address redirection to nip.io wildcard DNS. Useful when running on an IP address with subdomain network type. | `false`     |
-
 
 ### WordPress deployment parameters
 
@@ -205,7 +198,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                       | `{}`             |
 | `lifecycleHooks`                                    | for the WordPress container(s) to automate configuration before or after startup                                         | `{}`             |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -240,7 +232,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Persistence Parameters
 
 | Name                                                   | Description                                                                                                   | Value                   |
@@ -265,7 +256,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.requests`                 | The requested resources for the init container                                                                | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                | `0`                     |
 
-
 ### Other Parameters
 
 | Name                                          | Description                                                            | Value   |
@@ -282,7 +272,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.maxReplicas`                     | Maximum number of WordPress replicas                                   | `11`    |
 | `autoscaling.targetCPU`                       | Target CPU utilization percentage                                      | `50`    |
 | `autoscaling.targetMemory`                    | Target Memory utilization percentage                                   | `50`    |
-
 
 ### Metrics Parameters
 
@@ -332,7 +321,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.honorLabels`         | Specify honorLabels parameter to add the scrape endpoint                                                        | `false`                   |
 | `metrics.serviceMonitor.jobLabel`            | The name of the label on the target service to use as the job name in prometheus.                               | `""`                      |
 
-
 ### NetworkPolicy parameters
 
 | Name                                                          | Description                                                                                                                  | Value   |
@@ -352,7 +340,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                           | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                               | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                   | `{}`    |
-
 
 ### Database Parameters
 
@@ -382,12 +369,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalCache.host`                       | External cache server host                                                        | `localhost`         |
 | `externalCache.port`                       | External cache server port                                                        | `11211`             |
 
-
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set wordpressUsername=admin \
   --set wordpressPassword=password \
   --set mariadb.auth.rootPassword=secretpassword \

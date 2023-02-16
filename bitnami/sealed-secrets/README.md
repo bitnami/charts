@@ -218,7 +218,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set livenessProbe.successThreshold=5 \
     my-repo/sealed-secrets
 ```

@@ -317,7 +317,7 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set auth.clientUser=newUser \
     my-repo/zookeeper
 ```
@@ -352,7 +352,7 @@ First, ensure that you are not getting metrics via the deprecated pattern of pol
 
 Second, to avoid the connection/disconnection messages from the probes, you can set custom values for these checks which direct them to the ZooKeeper Admin Server instead of the client port. By default, an Admin Server will be started that listens on `localhost` at port `8080`. The following is an example of this use of the Admin Server for probes:
 
-```
+```yaml
 livenessProbe:
   enabled: false
 readinessProbe:

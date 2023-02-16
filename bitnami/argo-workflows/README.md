@@ -61,7 +61,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                   | Description                                                                                                                                                                                                           | Value           |
@@ -75,7 +74,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraDeploy`          | Array of extra objects to deploy with the release                                                                                                                                                                     | `[]`            |
 | `rbac.singleNamespace` | Restrict Argo to only deploy into a single namespace by apply Roles and RoleBindings instead of the Cluster equivalents, and start argo-cli with the --namespaced flag. Use it in clusters with strict access policy. | `false`         |
 | `createAggregateRoles` | Create Aggregated cluster roles                                                                                                                                                                                       | `true`          |
-
 
 ### Argo Workflows Server configuration parameters
 
@@ -179,7 +177,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.service.externalTrafficPolicy`                   | server service external traffic policy                                                                              | `Cluster`                   |
 | `server.service.annotations`                             | Additional custom annotations for server service                                                                    | `{}`                        |
 | `server.service.extraPorts`                              | Extra port to expose on the server service                                                                          | `[]`                        |
-
 
 ### Argo Workflows Controller configuration parameters
 
@@ -287,7 +284,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.service.annotations`                             | Additional custom annotations for controller service                                                                          | `{}`                               |
 | `controller.service.extraPorts`                              | Extra port to expose on the controller service                                                                                | `[]`                               |
 
-
 ### Executor configuration section
 
 | Name                                                       | Description                                                                                              | Value                        |
@@ -304,7 +300,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `executor.containerSecurityContext.enabled`                | Enabled executor pods' Security Context                                                                  | `true`                       |
 | `executor.containerSecurityContext.fsGroup`                | Set executor pod's Security Context fsGroup                                                              | `1001`                       |
 | `executor.containerSecurityContext.readOnlyRootFilesystem` | Set read only root file system pod's Security Context                                                    | `true`                       |
-
 
 ### Traffic Exposure Parameters
 
@@ -325,7 +320,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`          | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.extraRules`       | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Workflows configuration
 
 | Name                                                    | Description                                                                                | Value   |
@@ -335,7 +329,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `workflows.serviceAccount.automountServiceAccountToken` | Automount service account token for the workflows service account                          | `true`  |
 | `workflows.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`. | `{}`    |
 | `workflows.rbac.create`                                 | Whether to create RBAC resource to run workflows                                           | `true`  |
-
 
 ### PostgreSQL subchart
 
@@ -347,7 +340,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `postgresql.auth.database`            | PortgreSQL database name                                               | `bn_argo_workflows` |
 | `postgresql.auth.password`            | PortgreSQL database password                                           | `""`                |
 
-
 ### MySQL subchart
 
 | Name                        | Description                                                  | Value               |
@@ -357,7 +349,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mysql.auth.username`       | MySQL username                                               | `mysql`             |
 | `mysql.auth.database`       | MySQL database name                                          | `bn_argo_workflows` |
 | `mysql.auth.password`       | MySQL database password                                      | `""`                |
-
 
 ### External Database configuration
 
@@ -372,14 +363,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.existingSecret` | The name of an existing secret with database credentials                    | `""`                |
 | `externalDatabase.type`           | Either postgresql or mysql                                                  | `""`                |
 
-
-
 The above parameters map to the env variables defined in [bitnami/argo-workflow-cli](https://github.com/bitnami/containers/tree/main/bitnami/argo-workflow-cli). For more information please refer to the [bitnami/argo-workflow-cli](https://github.com/bitnami/containers/tree/main/bitnami/argo-workflow-cli) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set argo-workflowsUsername=admin \
   --set argo-workflowsPassword=password \
   --set mysql.auth.rootPassword=secretpassword \

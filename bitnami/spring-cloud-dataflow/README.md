@@ -703,22 +703,22 @@ To upgrade to *6.0.0* from *5.x* using Kafka as messaging solution, it should be
 
 1. Obtain the credentials on your current release:
 
-```console
-export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default scdf-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
-export MARIADB_PASSWORD=$(kubectl get secret --namespace default scdf-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
-```
+    ```console
+    export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default scdf-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
+    export MARIADB_PASSWORD=$(kubectl get secret --namespace default scdf-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
+    ```
 
-1. Upgrade your release using the same Kafka version:
+2. Upgrade your release using the same Kafka version:
 
-```console
-$ export CURRENT_KAFKA_VERSION=$(kubectl exec scdf-kafka-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
-$ helm upgrade scdf my-repo/spring-cloud-dataflow \
-  --set rabbitmq.enabled=false \
-  --set kafka.enabled=true \
-  --set kafka.image.tag=$CURRENT_KAFKA_VERSION \
-  --set mariadb.auth.password=$MARIADB_PASSWORD \
-  --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD
-```
+    ```console
+    $ export CURRENT_KAFKA_VERSION=$(kubectl exec scdf-kafka-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
+    helm upgrade scdf my-repo/spring-cloud-dataflow \
+      --set rabbitmq.enabled=false \
+      --set kafka.enabled=true \
+      --set kafka.image.tag=$CURRENT_KAFKA_VERSION \
+      --set mariadb.auth.password=$MARIADB_PASSWORD \
+      --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD
+    ```
 
 ### To 5.0.0
 
@@ -796,7 +796,7 @@ export RABBITMQ_ERLANG_COOKIE=$(kubectl get secret --namespace default dataflow-
 Upgrade your release (maintaining the version) disabling MariaDB and scaling Data Flow replicas to 0:
 
 ```console
-$ helm upgrade dataflow my-repo/spring-cloud-dataflow --version 0.7.4 \
+helm upgrade dataflow my-repo/spring-cloud-dataflow --version 0.7.4 \
   --set server.replicaCount=0 \
   --set skipper.replicaCount=0 \
   --set mariadb.enabled=false \
@@ -807,7 +807,7 @@ $ helm upgrade dataflow my-repo/spring-cloud-dataflow --version 0.7.4 \
 Finally, upgrade you release to 1.0.0 reusing the existing PVC, and enabling back MariaDB:
 
 ```console
-$ helm upgrade dataflow my-repo/spring-cloud-dataflow \
+helm upgrade dataflow my-repo/spring-cloud-dataflow \
   --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC \
   --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD \
   --set mariadb.auth.password=$MARIADB_PASSWORD \

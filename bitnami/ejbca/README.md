@@ -62,7 +62,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                             | Value          |
@@ -77,7 +76,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`        |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`    |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]` |
-
 
 ### EJBCA parameters
 
@@ -159,7 +157,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customReadinessProbe`                  | Custom readiness probe to execute (when the main one is disabled)                                           | `{}`                  |
 | `containerPorts`                        | EJBCA Container ports to open                                                                               | `{}`                  |
 
-
 ### Service parameters
 
 | Name                               | Description                                                                   | Value          |
@@ -179,7 +176,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"          | `None`         |
 | `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                   | `{}`           |
 
-
 ### Ingress parameters
 
 | Name                       | Description                                                                                                                      | Value                    |
@@ -197,7 +193,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`          | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.ingressClassName` | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `ingress.extraRules`       | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
-
 
 ### Database parameters
 
@@ -222,7 +217,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.database`                 | Name of the existing database                                                              | `bitnami_ejbca` |
 | `externalDatabase.port`                     | Database port number                                                                       | `3306`          |
 
-
 ### NetworkPolicy parameters
 
 | Name                                                          | Description                                                                                                               | Value   |
@@ -240,12 +234,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                            | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                | `{}`    |
 
-
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set ejbcaAdminUsername=admin,ejbcaAdminPassword=password,mariadb.auth.password=secretpassword \
     my-repo/discourse
 ```

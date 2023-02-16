@@ -468,7 +468,7 @@ kubectl delete pvc -l release=my-release
 
 
 ```console
-$ helm install my-release \
+helm install my-release \
     --set auth.postgresPassword=secretpassword
     my-repo/postgresql
 ```
