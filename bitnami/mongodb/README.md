@@ -72,22 +72,25 @@ Refer to the [chart documentation for more information on each of these architec
 | `global.storageClass`      | Global StorageClass for Persistent Volume(s)                                                                           | `""`  |
 | `global.namespaceOverride` | Override the namespace for resource deployed by the chart, but can itself be overridden by the local namespaceOverride | `""`  |
 
+
 ### Common parameters
 
-| Name                     | Description                                                                                               | Value           |
-| ------------------------ | --------------------------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`           | String to partially override mongodb.fullname template (will maintain the release name)                   | `""`            |
-| `fullnameOverride`       | String to fully override mongodb.fullname template                                                        | `""`            |
-| `namespaceOverride`      | String to fully override common.names.namespace                                                           | `""`            |
-| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                                      | `""`            |
-| `clusterDomain`          | Default Kubernetes cluster domain                                                                         | `cluster.local` |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                                         | `[]`            |
-| `commonLabels`           | Add labels to all the deployed resources (sub-charts are not considered). Evaluated as a template         | `{}`            |
-| `commonAnnotations`      | Common annotations to add to all Mongo resources (sub-charts are not considered). Evaluated as a template | `{}`            |
-| `topologyKey`            | Override common lib default topology key. If empty - "kubernetes.io/hostname" is used                     | `""`            |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                                      | `["sleep"]`     |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                                         | `["infinity"]`  |
+| Name                      | Description                                                                                               | Value           |
+| ------------------------- | --------------------------------------------------------------------------------------------------------- | --------------- |
+| `nameOverride`            | String to partially override mongodb.fullname template (will maintain the release name)                   | `""`            |
+| `fullnameOverride`        | String to fully override mongodb.fullname template                                                        | `""`            |
+| `namespaceOverride`       | String to fully override common.names.namespace                                                           | `""`            |
+| `kubeVersion`             | Force target Kubernetes version (using Helm capabilities if not set)                                      | `""`            |
+| `clusterDomain`           | Default Kubernetes cluster domain                                                                         | `cluster.local` |
+| `extraDeploy`             | Array of extra objects to deploy with the release                                                         | `[]`            |
+| `commonLabels`            | Add labels to all the deployed resources (sub-charts are not considered). Evaluated as a template         | `{}`            |
+| `commonAnnotations`       | Common annotations to add to all Mongo resources (sub-charts are not considered). Evaluated as a template | `{}`            |
+| `topologyKey`             | Override common lib default topology key. If empty - "kubernetes.io/hostname" is used                     | `""`            |
+| `serviceBindings.enabled` | Create secret for service binding (Experimental)                                                          | `false`         |
+| `diagnosticMode.enabled`  | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
+| `diagnosticMode.command`  | Command to override all containers in the deployment                                                      | `["sleep"]`     |
+| `diagnosticMode.args`     | Args to override all containers in the deployment                                                         | `["infinity"]`  |
+
 
 ### MongoDB(&reg;) parameters
 
@@ -113,7 +116,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `auth.password`                  | DEPRECATED: use `auth.passwords` instead                                                                                                                     | `""`                   |
 | `auth.database`                  | DEPRECATED: use `auth.databases` instead                                                                                                                     | `""`                   |
 | `auth.replicaSetKey`             | Key used for authentication in the replicaset (only when `architecture=replicaset`)                                                                          | `""`                   |
-| `auth.existingSecret`            | Existing secret with MongoDB(&reg;) credentials (keys: `mongodb-passwords`, `mongodb-root-password`, `mongodb-metrics-password`, `mongodb-replica-set-key`) | `""`                   |
+| `auth.existingSecret`            | Existing secret with MongoDB(&reg;) credentials (keys: `mongodb-passwords`, `mongodb-root-password`, `mongodb-metrics-password`, ` mongodb-replica-set-key`) | `""`                   |
 | `tls.enabled`                    | Enable MongoDB(&reg;) TLS support between nodes in the cluster as well as between mongo clients and nodes                                                    | `false`                |
 | `tls.autoGenerated`              | Generate a custom CA and self-signed certificates                                                                                                            | `true`                 |
 | `tls.existingSecret`             | Existing secret with TLS certificates (keys: `mongodb-ca-cert`, `mongodb-ca-key`)                                                                            | `""`                   |
@@ -144,6 +147,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `enableJournal`                  | Switch to enable/disable MongoDB(&reg;) Journaling                                                                                                           | `true`                 |
 | `configuration`                  | MongoDB(&reg;) configuration file to be used for Primary and Secondary nodes                                                                                 | `""`                   |
 
+
 ### replicaSetConfigurationSettings settings applied during runtime (not via configuration file)
 
 | Name                                            | Description                                                                                         | Value   |
@@ -159,6 +163,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `extraEnvVars`                                  | Extra environment variables to add to MongoDB(&reg;) pods                                           | `[]`    |
 | `extraEnvVarsCM`                                | Name of existing ConfigMap containing extra env vars                                                | `""`    |
 | `extraEnvVarsSecret`                            | Name of existing Secret containing extra env vars (in case of sensitive data)                       | `""`    |
+
 
 ### MongoDB(&reg;) statefulset parameters
 
@@ -222,6 +227,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `pdb.minAvailable`                      | Minimum number/percentage of MongoDB(&reg;) pods that must still be available after the eviction                | `1`             |
 | `pdb.maxUnavailable`                    | Maximum number/percentage of MongoDB(&reg;) pods that may be made unavailable after the eviction                | `""`            |
 
+
 ### Traffic exposure parameters
 
 | Name                                                     | Description                                                                                                                                     | Value                  |
@@ -279,6 +285,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `externalAccess.hidden.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                                | `None`                 |
 | `externalAccess.hidden.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                                     | `{}`                   |
 
+
 ### Persistence parameters
 
 | Name                                          | Description                                                                                                                           | Value               |
@@ -297,6 +304,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `persistence.volumeClaimTemplates.requests`   | Custom PVC requests attributes                                                                                                        | `{}`                |
 | `persistence.volumeClaimTemplates.dataSource` | Add dataSource to the VolumeClaimTemplate                                                                                             | `{}`                |
 
+
 ### RBAC parameters
 
 | Name                                          | Description                                                                                                                                 | Value   |
@@ -312,6 +320,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `podSecurityPolicy.privileged`                | Allow privileged                                                                                                                            | `false` |
 | `podSecurityPolicy.spec`                      | Specify the full spec to use for Pod Security Policy                                                                                        | `{}`    |
 
+
 ### Volume Permissions parameters
 
 | Name                                          | Description                                                                                                                       | Value                   |
@@ -326,6 +335,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `volumePermissions.resources.limits`          | Init container volume-permissions resource limits                                                                                 | `{}`                    |
 | `volumePermissions.resources.requests`        | Init container volume-permissions resource requests                                                                               | `{}`                    |
 | `volumePermissions.securityContext.runAsUser` | User ID for the volumePermissions container                                                                                       | `0`                     |
+
 
 ### Arbiter parameters
 
@@ -402,6 +412,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `arbiter.service.ports.mongodb`                 | MongoDB(&reg;) service port                                                                       | `27017`         |
 | `arbiter.service.extraPorts`                    | Extra ports to expose (normally used with the `sidecar` value)                                    | `[]`            |
 | `arbiter.service.annotations`                   | Provide any additional annotations that may be required                                           | `{}`            |
+
 
 ### Hidden Node parameters
 
@@ -491,6 +502,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `hidden.service.extraPorts`                          | Extra ports to expose (normally used with the `sidecar` value)                                       | `[]`                |
 | `hidden.service.annotations`                         | Provide any additional annotations that may be required                                              | `{}`                |
 
+
 ### Metrics parameters
 
 | Name                                         | Description                                                                                                           | Value                      |
@@ -549,6 +561,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `metrics.prometheusRule.additionalLabels`    | Additional labels that can be used so prometheusRules will be discovered by Prometheus                                | `{}`                       |
 | `metrics.prometheusRule.namespace`           | Namespace where prometheusRules resource should be created                                                            | `""`                       |
 | `metrics.prometheusRule.rules`               | Rules to be created, check values for an example                                                                      | `[]`                       |
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

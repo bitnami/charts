@@ -80,6 +80,12 @@ commonAnnotations: {}
 ##
 topologyKey: ""
 
+## @param serviceBindings.enabled Create secret for service binding (Experimental)
+## Ref: https://servicebinding.io/service-provider/
+##
+serviceBindings:
+  enabled: false
+
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -165,6 +171,7 @@ auth:
   ## @param auth.username DEPRECATED: use `auth.usernames` instead
   ## @param auth.password DEPRECATED: use `auth.passwords` instead
   ## @param auth.database DEPRECATED: use `auth.databases` instead
+  ##
   username: ""
   password: ""
   database: ""
@@ -553,6 +560,7 @@ resources:
   ##
   requests: {}
 ## @param containerPorts.mongodb MongoDB(&reg;) container port
+##
 containerPorts:
   mongodb: 27017
 ## MongoDB(&reg;) pods' liveness probe. Evaluated as a template.
@@ -967,6 +975,7 @@ persistence:
   ##
   existingClaim: ""
   ## @param persistence.resourcePolicy Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted
+  ##
   resourcePolicy: ""
   ## @param persistence.storageClass PVC Storage Class for MongoDB(&reg;) data volume
   ## If defined, storageClassName: <storageClass>
@@ -1678,6 +1687,7 @@ hidden:
     ##
     requests: {}
   ## @param hidden.containerPorts.mongodb MongoDB(&reg;) hidden container port
+  ##
   containerPorts:
     mongodb: 27017
   ## MongoDB(&reg;) Hidden pods' liveness probe. Evaluated as a template.
@@ -1888,9 +1898,11 @@ metrics:
 
   ## @param metrics.username String with username for the metrics exporter
   ## If undefined the root user will be used for the metrics exporter
+  ##
   username: ""
   ## @param metrics.password String with password for the metrics exporter
   ## If undefined but metrics.username is defined, a random password will be generated
+  ##
   password: ""
   ## @param metrics.extraFlags String with extra flags to the metrics exporter
   ## ref: https://github.com/percona/mongodb_exporter/blob/master/mongodb_exporter.go
