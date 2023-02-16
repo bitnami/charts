@@ -50,6 +50,16 @@ spec:
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{ if .Values.selfMonitor.enabled }}
+    - name: metrics
+      port: {{ .Values.selfMonitor.telemetryPort | default 8081 }}
+      targetPort: metrics
+      {{- if .Values.selfMonitor.telemetryNodePort }}
+      nodePort: {{ .Values.selfMonitor.telemetryNodePort }}
+      {{- else if eq .Values.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{ end }}
     {{- if .Values.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
