@@ -81,6 +81,13 @@ servicenameOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
+
+## @param serviceBindings.enabled Create secret for service binding (Experimental)
+## Ref: https://servicebinding.io/service-provider/
+##
+serviceBindings:
+  enabled: false
+
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -181,8 +188,6 @@ auth:
     existingSecret: ""
     existingSecretFullChain: false
     overrideCaCertificate: ""
-    
-
 
 ## @param logs Path of the RabbitMQ server's Erlang log file. Value for the `RABBITMQ_LOGS` environment variable
 ## ref: https://www.rabbitmq.com/logging.html#log-file-location
@@ -363,8 +368,8 @@ tcpListenOptions:
     ##
     timeout: 0
   ## @param tcpListenOptions.keepalive When set to true, enables TCP keepalives
-  ##  
-  keepalive: false  
+  ##
+  keepalive: false
 
 configuration: |-
   ## Username and password
@@ -518,6 +523,7 @@ advancedConfigurationExistingSecret: ""
 ## Feature flags are a mechanism that controls what features are considered to be enabled or available on all cluster nodes. If a feature flag is enabled, so is its associated feature (or behavior). If not then all nodes in the cluster will disable the feature (behavior).
 ## e.g, drop_unroutable_metric,empty_basic_get_metric,implicit_default_bindings,maintenance_mode_status,quorum_queue,virtual_host_metadata
 ## @param featureFlags that controls what features are considered to be enabled or available on all cluster nodes.
+##
 featureFlags: ""
 
 ## LDAP configuration
@@ -555,6 +561,7 @@ ldap:
   ##��ref: https://www.rabbitmq.com/ldap.html#usernames-and-dns
   ##
   ## @param ldap.uidField Field used to match with the user name (uid, samAccountName, cn, etc). It matches with 'dn_lookup_attribute' in RabbitMQ configuration
+  ##
   uidField: ""
   ## @param ldap.authorisationEnabled Enable LDAP authorisation. Please set 'advancedConfiguration' with tag, topic, resources and vhost mappings
   ## ref: https://www.rabbitmq.com/ldap.html#authorisation
@@ -1153,6 +1160,7 @@ ingress:
   ##
   ingressClassName: ""
   ## @param ingress.existingSecret It is you own the certificate as secret.
+  ##
   existingSecret: ""
 
 ## Network Policy configuration
