@@ -1167,6 +1167,7 @@ volumePermissions:
 ##
 
 ## @param serviceBindings.enabled Create secret for service binding (Experimental)
+## Ref: https://servicebinding.io/service-provider/
 ##
 serviceBindings:
   enabled: false
