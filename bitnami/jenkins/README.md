@@ -165,7 +165,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `agent.enabled`                                                           | Set to true to enable the configuration of Jenkins kubernetes agents                                    | `false`                 |
 | `agent.image.registry`                                                    | Jenkins image registry                                                                                  | `docker.io`             |
 | `agent.image.repository`                                                  | Jenkins image repository                                                                                | `bitnami/jenkins-agent` |
-| `agent.image.tag`                                                         | Jenkins image tag (immutable tags are recommended)                                                      | `""`                    |
+| `agent.image.tag`                                                         | Jenkins image tag (immutable tags are recommended)                                                      | `0.3107.0-debian-11-r0` |
 | `agent.image.digest`                                                      | Jenkins image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `agent.image.pullPolicy`                                                  | Jenkins image pull policy                                                                               | `IfNotPresent`          |
 | `agent.image.pullSecrets`                                                 | Jenkins image pull secrets                                                                              | `[]`                    |
