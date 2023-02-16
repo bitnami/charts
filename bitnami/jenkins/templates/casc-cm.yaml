@@ -64,8 +64,6 @@ data:
                     {{- end }}
                     {{- if .Values.agent.args }}
                     args: {{- include "common.tplvalues.render" (dict "value" .Values.agent.args "context" $) | nindent 20 }}
-                    {{- else }}
-                    args: "^${computer.jnlpmac} ^${computer.name}"
                     {{- end }}
                     {{- if .Values.agent.containerExtraEnvVars }}
                     envVars: {{- include "common.tplvalues.render" (dict "value" .Values.agent.containerExtraEnvVars "context" $) | nindent 22 }}
