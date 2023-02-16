@@ -544,8 +544,8 @@ The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/stora
 ### Use existing PersistentVolumeClaims
 
 1. Create the PersistentVolume
-1. Create the PersistentVolumeClaim
-1. Install the chart
+2. Create the PersistentVolumeClaim
+3. Install the chart
 
 ```console
 helm install my-release --set persistence.existingClaim=PVC_NAME my-repo/rabbitmq

@@ -63,7 +63,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                        | Value           |
@@ -76,7 +75,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`     | Kubernetes cluster domain name                     | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`            |
 
-
 ### Ghost Image parameters
 
 | Name                | Description                                                                                           | Value                 |
@@ -88,7 +86,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullPolicy`  | Ghost image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets` | Ghost image pull secrets                                                                              | `[]`                  |
 | `image.debug`       | Enable image debug mode                                                                               | `false`               |
-
 
 ### Ghost Configuration parameters
 
@@ -116,7 +113,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVars`       | Array with extra environment variables to add to the Ghost container | `[]`               |
 | `extraEnvVarsCM`     | Name of existing ConfigMap containing extra env vars                 | `""`               |
 | `extraEnvVarsSecret` | Name of existing Secret containing extra env vars                    | `""`               |
-
 
 ### Ghost deployment parameters
 
@@ -173,7 +169,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                       | `{}`            |
 | `customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                      | `{}`            |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -206,7 +201,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Persistence Parameters
 
 | Name                                          | Description                                                                                                   | Value                   |
@@ -228,7 +222,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                                   | `{}`                    |
 | `volumePermissions.resources.requests`        | The requested resources for the init container                                                                | `{}`                    |
 | `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                               | `0`                     |
-
 
 ### Database Parameters
 
@@ -254,7 +247,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.ssl`                   | External Database ssl                                                   | `false`         |
 | `externalDatabase.sslCaFile`             | External Database ssl CA filepath                                       | `""`            |
 
-
 ### NetworkPolicy parameters
 
 | Name                                                          | Description                                                                                                               | Value   |
@@ -275,8 +267,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.       | `""`    |
 | `serviceAccount.automountServiceAccountToken`                 | Automount service account token for the server service account                                                            | `true`  |
 | `serviceAccount.annotations`                                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                | `{}`    |
-
-
 
 > **Note**:
 >
@@ -422,7 +412,7 @@ This version standardizes the way of defining Ingress rules. When configuring a 
 In this major there were two main changes introduced:
 
 1. Adaptation to Helm v2 EOL
-1. Updated MariaDB dependency version
+2. Updated MariaDB dependency version
 
 Please read the update notes carefully.
 

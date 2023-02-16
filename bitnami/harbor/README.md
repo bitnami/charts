@@ -1211,7 +1211,7 @@ You can expose Harbor core using two methods:
 The external URL for Harbor core service is used to:
 
 1. populate the docker/helm commands showed on portal
-1. populate the token service URL returned to docker/notary client
+2. populate the token service URL returned to docker/notary client
 
 Format: `protocol://domain[:port]`. Usually:
 

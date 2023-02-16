@@ -881,44 +881,44 @@ It is possible that when upgrading Kubeapps an error appears. That can be caused
 
 1. (Optional) Backup your personal repositories (if you have any):
 
-```console
-kubectl get apprepository -A -o yaml > <repo name>.yaml
-```
+    ```console
+    kubectl get apprepository -A -o yaml > <repo name>.yaml
+    ```
 
-1. Delete Kubeapps:
+2. Delete Kubeapps:
 
-```console
-helm del --purge kubeapps
-```
+    ```console
+    helm del --purge kubeapps
+    ```
 
-1. (Optional) Delete the App Repositories CRD:
+3. (Optional) Delete the App Repositories CRD:
 
-> **Warning**: Do not run this step if you have more than one Kubeapps installation in your cluster.
+    > **Warning**: Do not run this step if you have more than one Kubeapps installation in your cluster.
 
-```console
-kubectl delete crd apprepositories.kubeapps.com
-```
+    ```console
+    kubectl delete crd apprepositories.kubeapps.com
+    ```
 
-1. (Optional) Clean the Kubeapps namespace:
+4. (Optional) Clean the Kubeapps namespace:
 
-> **Warning**: Do not run this step if you have workloads other than Kubeapps in the `kubeapps` namespace.
+    > **Warning**: Do not run this step if you have workloads other than Kubeapps in the `kubeapps` namespace.
 
-```console
-kubectl delete namespace kubeapps
-```
+    ```console
+    kubectl delete namespace kubeapps
+    ```
 
-1. Install the latest version of Kubeapps (using any custom modifications you need):
+5. Install the latest version of Kubeapps (using any custom modifications you need):
 
-```console
-helm repo update
-helm install --name kubeapps --namespace kubeapps my-repo/kubeapps
-```
+    ```console
+    helm repo update
+    helm install --name kubeapps --namespace kubeapps my-repo/kubeapps
+    ```
 
-1. (Optional) Restore any repositories you backed up in the first step:
+6. (Optional) Restore any repositories you backed up in the first step:
 
-```console
-kubectl apply -f <repo name>.yaml
-```
+    ```console
+    kubectl apply -f <repo name>.yaml
+    ```
 
 After that you should be able to access the new version of Kubeapps. If the above doesn't work for you or you run into any other issues please open an [issue](https://github.com/vmware-tanzu/kubeapps/issues/new).
 
@@ -937,23 +937,23 @@ Kubeapps 2.3.1 (Chart version 6.0.0) introduces some breaking changes. Helm-spec
 
 1. Kubeapps will no longer create a database secret for you automatically but rather will rely on the default behavior of the PostgreSQL chart. If you try to upgrade Kubeapps and you installed it without setting a password, you will get the following error:
 
-```console
-Error: UPGRADE FAILED: template: kubeapps/templates/NOTES.txt:73:4: executing "kubeapps/templates/NOTES.txt" at <include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $)>: error calling include: template: kubeapps/charts/common/templates/_errors.tpl:18:48: executing "common.errors.upgrade.passwords.empty" at <fail>: error calling fail:
-PASSWORDS ERROR: you must provide your current passwords when upgrade the release
-    'postgresql.postgresqlPassword' must not be empty, please add '--set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD' to the command. To get the current value:
-```
+    ```console
+    Error: UPGRADE FAILED: template: kubeapps/templates/NOTES.txt:73:4: executing "kubeapps/templates/NOTES.txt" at <include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $)>: error calling include: template: kubeapps/charts/common/templates/_errors.tpl:18:48: executing "common.errors.upgrade.passwords.empty" at <fail>: error calling fail:
+    PASSWORDS ERROR: you must provide your current passwords when upgrade the release
+        'postgresql.postgresqlPassword' must not be empty, please add '--set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD' to the command. To get the current value:
+    ```
 
-The error gives you generic instructions for retrieving the PostgreSQL password, but if you have installed a Kubeapps version prior to 2.3.1, the name of the secret will differ. Run the following command:
+    The error gives you generic instructions for retrieving the PostgreSQL password, but if you have installed a Kubeapps version prior to 2.3.1, the name of the secret will differ. Run the following command:
 
-```console
-export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace "kubeapps" kubeapps-db -o jsonpath="{.data.postgresql-password}" | base64 -d)
-```
+    ```console
+    export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace "kubeapps" kubeapps-db -o jsonpath="{.data.postgresql-password}" | base64 -d)
+    ```
 
-> NOTE: Replace the namespace in the command with the namespace in which you have deployed Kubeapps.
+    > NOTE: Replace the namespace in the command with the namespace in which you have deployed Kubeapps.
 
-Make sure that you have stored the password in the variable `$POSTGRESQL_PASSWORD` before continuing with the next issue.
+    Make sure that you have stored the password in the variable `$POSTGRESQL_PASSWORD` before continuing with the next issue.
 
-1. The chart `initialRepos` are no longer installed using [Helm hooks](https://helm.sh/docs/topics/charts_hooks/), which caused these repos not to be handled by Helm after the first installation. Now they will be tracked for every update. However, if you do not delete the existing ones, it will fail to update with:
+2. The chart `initialRepos` are no longer installed using [Helm hooks](https://helm.sh/docs/topics/charts_hooks/), which caused these repos not to be handled by Helm after the first installation. Now they will be tracked for every update. However, if you do not delete the existing ones, it will fail to update with:
 
 ```console
 Error: UPGRADE FAILED: rendered manifests contain a resource that already exists. Unable to continue with update: AppRepository "bitnami" in namespace "kubeapps" exists and cannot be imported into the current release: invalid ownership metadata; annotation validation error: missing key "meta.helm.sh/release-name": must be set to "kubeapps"; annotation validation error: missing key "meta.helm.sh/release-namespace": must be set to "kubeapps"

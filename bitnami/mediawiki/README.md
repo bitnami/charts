@@ -405,7 +405,7 @@ helm upgrade mediawiki my-repo/mediawiki --set mediawikiHost=$APP_HOST,mediawiki
 In this major there were two main changes introduced:
 
 1. Adaptation to Helm v2 EOL
-1. Updated MariaDB dependency version
+2. Updated MariaDB dependency version
 
 Please read the update notes carefully.
 

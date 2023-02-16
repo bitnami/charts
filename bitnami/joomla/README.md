@@ -375,7 +375,7 @@ This version standardizes the way of defining Ingress rules. When configuring a 
 In this major there were two main changes introduced:
 
 1. Adaptation to Helm v2 EOL
-1. Updated MariaDB dependency version
+2. Updated MariaDB dependency version
 
 Please read the update notes carefully.
 

@@ -61,7 +61,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
@@ -76,7 +75,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment(s)/statefulset(s)                  | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment(s)/statefulset(s)                     | `["infinity"]`  |
-
 
 ### Common Concourse Parameters
 
@@ -102,7 +100,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secrets.workerKey`             | Concourse Worker Keys.                                                                                                                 | `""`                  |
 | `secrets.workerKeyPub`          | Concourse Worker Keys.                                                                                                                 | `""`                  |
 | `secrets.workerAdditionalCerts` | Additional certificates to add to the worker nodes                                                                                     | `""`                  |
-
 
 ### Concourse Web parameters
 
@@ -204,7 +201,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.serviceAccount.name`                         | Override Web service account name                                                                                                           | `""`                                            |
 | `web.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `true`                                          |
 | `web.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                                        | `{}`                                            |
-
 
 ### Concourse Worker parameters
 
@@ -310,7 +306,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `true`              |
 | `worker.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                                        | `{}`                |
 
-
 ### Traffic exposure parameters
 
 | Name                                             | Description                                                                                                                      | Value                    |
@@ -354,7 +349,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                                | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.extraRules`                             | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Init Container Parameters
 
 | Name                                                   | Description                                                                                                                       | Value                   |
@@ -371,7 +365,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.containerSecurityContext.enabled`   | Enabled init container Security Context                                                                                           | `true`                  |
 | `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                                    | `0`                     |
 
-
 ### Concourse database parameters
 
 | Name                                 | Description                                                                                            | Value               |
@@ -384,7 +377,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `postgresql.auth.existingSecret`     | Name of existing secret to use for PostgreSQL credentials                                              | `""`                |
 | `postgresql.architecture`            | PostgreSQL architecture (`standalone` or `replication`)                                                | `standalone`        |
 
-
 ### External PostgreSQL configuration
 
 | Name                                         | Description                                                             | Value               |
@@ -396,8 +388,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.database`                  | Concourse database name                                                 | `bitnami_concourse` |
 | `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials | `""`                |
 | `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials      | `""`                |
-
-
 
 The above parameters map to the env variables defined in [bitnami/concourse](https://github.com/bitnami/containers/tree/main/bitnami/concourse). For more information please refer to the [bitnami/concourse](https://github.com/bitnami/containers/tree/main/bitnami/concourse) image documentation.
 

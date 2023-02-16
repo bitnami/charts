@@ -416,7 +416,7 @@ As is said in step 4 of [kong official docker installation](https://docs.konghq.
 #### How to enable it
 
 1. Set `database` value with any value other than "postgresql" or "cassandra". For example `database: "off"`
-1. Use `kong.extraEnvVars` value to set the `KONG_DATABASE` environment variable:
+2. Use `kong.extraEnvVars` value to set the `KONG_DATABASE` environment variable:
 
 ```yaml
 kong.extraEnvVars:

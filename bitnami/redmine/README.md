@@ -488,9 +488,9 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 The following example includes two PVCs, one for Redmine and another for MariaDB.
 
 1. Create the PersistentVolume
-1. Create the PersistentVolumeClaim
-1. Create the directory, on a worker
-1. Install the chart
+2. Create the PersistentVolumeClaim
+3. Create the directory, on a worker
+4. Install the chart
 
 ```console
 helm install test --set persistence.existingClaim=PVC_REDMINE,mariadb.persistence.existingClaim=PVC_MARIADB my-repo/redmine

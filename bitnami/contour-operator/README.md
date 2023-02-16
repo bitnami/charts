@@ -137,7 +137,6 @@ This solution allows to easily deploy multiple Contour instances compared to the
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                        | Value |
@@ -148,7 +147,6 @@ This solution allows to easily deploy multiple Contour instances compared to the
 | `commonLabels`      | Labels to add to all deployed objects              | `{}`  |
 | `commonAnnotations` | Annotations to add to all deployed objects         | `{}`  |
 | `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`  |
-
 
 ### Contour Operator Parameters
 
@@ -229,7 +227,6 @@ This solution allows to easily deploy multiple Contour instances compared to the
 | `sidecars`                                        | Add additional sidecar containers to the Contour Operator pod(s)                                                         | `[]`                       |
 | `initContainers`                                  | Add additional init containers to the Contour Operator pod(s)                                                            | `[]`                       |
 
-
 ### Other Parameters
 
 | Name                                          | Description                                                                                                         | Value  |
@@ -239,7 +236,6 @@ This solution allows to easily deploy multiple Contour instances compared to the
 | `serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`   |
 | `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `true` |
 | `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`   |
-
 
 ### Metrics parameters
 
@@ -264,8 +260,6 @@ This solution allows to easily deploy multiple Contour instances compared to the
 | `metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                         | `[]`        |
 | `metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                       | `[]`        |
 | `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                              | `[]`        |
-
-
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
