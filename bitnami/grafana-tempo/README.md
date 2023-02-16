@@ -269,7 +269,6 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                                     | Description                                                                                                | Value           |
 | -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | --------------- |
-| `metricsGenerator.enabled`                               | enable metricsGenerator                                                                                    | `false`         |
 | `metricsGenerator.remoteWrite`                           | remoteWrite configuration for metricsGenerator                                                             | `[]`            |
 | `metricsGenerator.extraEnvVars`                          | Array with extra environment variables to add to metricsGenerator nodes                                    | `[]`            |
 | `metricsGenerator.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for metricsGenerator nodes                            | `""`            |
@@ -874,6 +873,10 @@ externalMemcached.port=11211
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 2.0.0
+
+This major release, some configuration parameters (`search_enabled` and `metrics_generator_enabled`) have been removed and both are by default true.
 
 ### To 1.0.0
 

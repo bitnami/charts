@@ -122,18 +122,10 @@ tempo:
     ## @param tempo.traces.zipkin Enable Tempo to ingest Zipkin traces
     ##
     zipkin: false
-  ## Tempo search parameters
-  ##
-  search:
-    ## @param tempo.search.enabled Enable Tempo search
-    ##
-    enabled: false
   ## @param tempo.configuration [string] Tempo components configuration
   ##
   configuration: |
     multitenancy_enabled: false
-    search_enabled: {{ .Values.tempo.search.enabled }}
-    metrics_generator_enabled: {{ .Values.metricsGenerator.enabled }}
     compactor:
       compaction:
         block_retention: 48h
@@ -195,7 +187,6 @@ tempo:
           kvstore:
             store: memberlist
         tokens_file_path: {{ .Values.tempo.dataDir }}/tokens.json
-    {{- if .Values.metricsGenerator.enabled }}
     metrics_generator:
       ring:
         kvstore:
@@ -203,7 +194,6 @@ tempo:
       storage:
         path: {{ .Values.tempo.dataDir }}/wal
         remote_write: {{ include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.remoteWrite "context" $) | nindent 6 }}
-    {{- end }}
     memberlist:
       abort_if_cluster_join_fails: false
       join_members:
@@ -786,9 +776,7 @@ distributor:
 ## @section Metrics Generator Deployment Parameters
 ##
 metricsGenerator:
-  ## @param metricsGenerator.enabled enable metricsGenerator
   ## @param metricsGenerator.remoteWrite remoteWrite configuration for metricsGenerator
-  enabled: false
   remoteWrite: []
   ## @param metricsGenerator.extraEnvVars Array with extra environment variables to add to metricsGenerator nodes
   ## e.g:
