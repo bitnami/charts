@@ -64,6 +64,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
@@ -78,6 +79,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployments/statefulsets                      | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployments/statefulsets                         | `["infinity"]`  |
+
 
 ### Common Grafana Tempo Parameters
 
@@ -99,7 +101,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tempo.traces.otlp.grpc`               | Enable Tempo to ingest Open Telemetry GRPC traces                                                             | `false`                       |
 | `tempo.traces.opencensus`              | Enable Tempo to ingest Open Census traces                                                                     | `false`                       |
 | `tempo.traces.zipkin`                  | Enable Tempo to ingest Zipkin traces                                                                          | `false`                       |
-| `tempo.search.enabled`                 | Enable Tempo search                                                                                           | `false`                       |
 | `tempo.configuration`                  | Tempo components configuration                                                                                | `""`                          |
 | `tempo.existingConfigmap`              | Name of a ConfigMap with the Tempo configuration                                                              | `""`                          |
 | `tempo.overridesConfiguration`         | Tempo components overrides configuration settings                                                             | `""`                          |
@@ -109,6 +110,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tempo.containerPorts.gossipRing`      | Tempo components Gossip Ring container port                                                                   | `7946`                        |
 | `tempo.gossipRing.service.ports.http`  | Gossip Ring HTTP headless service port                                                                        | `7946`                        |
 | `tempo.gossipRing.service.annotations` | Additional custom annotations for Gossip Ring headless service                                                | `{}`                          |
+
 
 ### Compactor Deployment Parameters
 
@@ -171,6 +173,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.sidecars`                              | Add additional sidecar containers to the Compactor pod(s)                                           | `[]`            |
 | `compactor.initContainers`                        | Add additional init containers to the Compactor pod(s)                                              | `[]`            |
 
+
 ### Compactor Traffic Exposure Parameters
 
 | Name                                         | Description                                                      | Value       |
@@ -186,6 +189,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.service.externalTrafficPolicy`    | Compactor service external traffic policy                        | `Cluster`   |
 | `compactor.service.annotations`              | Additional custom annotations for Compactor service              | `{}`        |
 | `compactor.service.extraPorts`               | Extra ports to expose in the Compactor service                   | `[]`        |
+
 
 ### Distributor Deployment Parameters
 
@@ -247,6 +251,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.sidecars`                              | Add additional sidecar containers to the Distributor pod(s)                                           | `[]`            |
 | `distributor.initContainers`                        | Add additional init containers to the Distributor pod(s)                                              | `[]`            |
 
+
 ### Distributor Traffic Exposure Parameters
 
 | Name                                           | Description                                                      | Value       |
@@ -264,6 +269,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.service.externalTrafficPolicy`    | Distributor service external traffic policy                      | `Cluster`   |
 | `distributor.service.annotations`              | Additional custom annotations for Distributor service            | `{}`        |
 | `distributor.service.extraPorts`               | Extra ports to expose in the Distributor service                 | `[]`        |
+
 
 ### Metrics Generator Deployment Parameters
 
@@ -326,6 +332,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metricsGenerator.sidecars`                              | Add additional sidecar containers to the metricsGenerator pod(s)                                           | `[]`            |
 | `metricsGenerator.initContainers`                        | Add additional init containers to the metricsGenerator pod(s)                                              | `[]`            |
 
+
 ### Metrics Generator Traffic Exposure Parameters
 
 | Name                                                | Description                                                      | Value       |
@@ -342,6 +349,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metricsGenerator.service.externalTrafficPolicy`    | metricsGenerator service external traffic policy                 | `Cluster`   |
 | `metricsGenerator.service.annotations`              | Additional custom annotations for metricsGenerator service       | `{}`        |
 | `metricsGenerator.service.extraPorts`               | Extra ports to expose in the metricsGenerator service            | `[]`        |
+
 
 ### Ingester Deployment Parameters
 
@@ -403,6 +411,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.sidecars`                              | Add additional sidecar containers to the Ingester pod(s)                                           | `[]`            |
 | `ingester.initContainers`                        | Add additional init containers to the Ingester pod(s)                                              | `[]`            |
 
+
 ### Ingester Persistence Parameters
 
 | Name                                 | Description                                                             | Value               |
@@ -415,6 +424,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.persistence.size`          | PVC Storage Request for Memcached data volume                           | `8Gi`               |
 | `ingester.persistence.annotations`   | Additional PVC annotations                                              | `{}`                |
 | `ingester.persistence.selector`      | Selector to match an existing Persistent Volume for Ingester's data PVC | `{}`                |
+
 
 ### Ingester Traffic Exposure Parameters
 
@@ -433,6 +443,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.service.externalTrafficPolicy`    | Ingester service external traffic policy                         | `Cluster`   |
 | `ingester.service.annotations`              | Additional custom annotations for Ingester service               | `{}`        |
 | `ingester.service.extraPorts`               | Extra ports to expose in the Ingester service                    | `[]`        |
+
 
 ### Querier Deployment Parameters
 
@@ -494,6 +505,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.sidecars`                              | Add additional sidecar containers to the Querier pod(s)                                           | `[]`            |
 | `querier.initContainers`                        | Add additional init containers to the Querier pod(s)                                              | `[]`            |
 
+
 ### Querier Traffic Exposure Parameters
 
 | Name                                       | Description                                                      | Value       |
@@ -511,6 +523,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.service.externalTrafficPolicy`    | Querier service external traffic policy                          | `Cluster`   |
 | `querier.service.annotations`              | Additional custom annotations for Querier service                | `{}`        |
 | `querier.service.extraPorts`               | Extra ports to expose in the Querier service                     | `[]`        |
+
 
 ### Query Frontend Deployment Parameters
 
@@ -615,6 +628,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.query.resources.requests`                    | The requested resources for the query sidecar containers                                                            | `{}`                          |
 | `queryFrontend.query.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the queryFrontend container(s)                         | `[]`                          |
 
+
 ### Query Frontend Traffic Exposure Parameters
 
 | Name                                             | Description                                                      | Value       |
@@ -632,6 +646,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.service.externalTrafficPolicy`    | queryFrontend service external traffic policy                    | `Cluster`   |
 | `queryFrontend.service.annotations`              | Additional custom annotations for queryFrontend service          | `{}`        |
 | `queryFrontend.service.extraPorts`               | Extra ports to expose in the queryFrontend service               | `[]`        |
+
 
 ### Vulture Deployment Parameters
 
@@ -701,6 +716,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `vulture.sidecars`                              | Add additional sidecar containers to the Vulture pod(s)                                                         | `[]`                            |
 | `vulture.initContainers`                        | Add additional init containers to the Vulture pod(s)                                                            | `[]`                            |
 
+
 ### Vulture Traffic Exposure Parameters
 
 | Name                                       | Description                                                      | Value       |
@@ -717,6 +733,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `vulture.service.annotations`              | Additional custom annotations for Vulture service                | `{}`        |
 | `vulture.service.extraPorts`               | Extra ports to expose in the Vulture service                     | `[]`        |
 
+
 ### Init Container Parameters
 
 | Name                                                   | Description                                                                                                   | Value                   |
@@ -732,6 +749,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.requests`                 | The requested resources for the init container                                                                | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                               | `0`                     |
 
+
 ### Other Parameters
 
 | Name                                          | Description                                                            | Value   |
@@ -740,6 +758,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | The name of the ServiceAccount to use                                  | `""`    |
 | `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true`  |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
+
 
 ### Metrics Parameters
 
@@ -757,12 +776,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                              | `false` |
 | `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.     | `""`    |
 
+
 ### External Memcached Parameters
 
 | Name                     | Description                                   | Value   |
 | ------------------------ | --------------------------------------------- | ------- |
 | `externalMemcached.host` | Host of a running external memcached instance | `""`    |
 | `externalMemcached.port` | Port of a running external memcached instance | `11211` |
+
 
 ### Memcached Sub-chart Parameters
 
@@ -774,7 +795,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcached.auth.password`           | Memcached admin password        | `""`    |
 | `memcached.service.ports.memcached` | Memcached service port          | `11211` |
 
-The above parameters map to the env variables defined in [bitnami/grafana-tempo](https://github.com/bitnami/containers/tree/main/bitnami/grafana-tempo). For more information please refer to the [bitnami/grafana-tempo](https://github.com/bitnami/containers/tree/main/bitnami/grafana-tempo) image documentation.
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
