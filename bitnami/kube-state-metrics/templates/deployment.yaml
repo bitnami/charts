@@ -206,6 +206,11 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
+            {{- if .Values.selfMonitor.enabled }}
+            - name: metrics
+              containerPort: {{ .Values.selfMonitor.telemetryPort | default 8081 }}
+              protocol: TCP
+            {{- end }}   
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
