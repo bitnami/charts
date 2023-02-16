@@ -104,7 +104,7 @@ spec:
             {{- end }}
           ports:
             - containerPort: {{ .Values.tempo.containerPorts.web }}
-              name: web
+              name: http
             - containerPort: {{ .Values.tempo.containerPorts.gossipRing }}
               name: http-memberlist
             - containerPort: {{ .Values.tempo.containerPorts.grpc }}
