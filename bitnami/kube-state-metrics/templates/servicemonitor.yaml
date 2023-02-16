@@ -38,6 +38,24 @@ spec:
       {{- if .Values.serviceMonitor.metricRelabelings }}
       metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
       {{- end }}
+    {{- if .Values.selfMonitor.enabled }}
+    - port: metrics
+      {{- if .Values.serviceMonitor.interval }}
+      interval: {{ .Values.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.serviceMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.serviceMonitor.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.serviceMonitor.relabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
+    {{- end }}
   namespaceSelector:
     matchNames:
     - {{ include "common.names.namespace" . | quote }}
