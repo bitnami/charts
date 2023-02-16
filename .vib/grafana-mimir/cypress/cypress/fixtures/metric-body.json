@@ -1,0 +1,23 @@
+{
+  "resource_metrics": [
+    {
+      "scope_metrics": [
+        {
+          "metrics": [
+            {
+              "name": "test",
+              "gauge": {
+                "data_points": [
+                  {
+                    "time_unix_nano": "timestamp_placeholder",
+                    "as_int": "integer_placeholder"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

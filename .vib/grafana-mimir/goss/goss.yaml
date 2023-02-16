@@ -39,7 +39,7 @@ addr:
 command:
   check-mimirtool:
     timeout: 30000
-    exec: cd /tmp && mimirtool bucket-validation
+    exec: cd /tmp && mimirtool bucket-validation --object-count 1000
     exit-status: 0
   {{- $uid := .Vars.storeGateway.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.storeGateway.podSecurityContext.fsGroup }}
