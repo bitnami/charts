@@ -418,6 +418,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                          | Description                                                                                                                                 | Value   |
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `serviceBindings.enabled`                     | Create secret for service binding (Experimental)                                                                                            | `false` |
 | `networkPolicy.enabled`                       | Enable creation of NetworkPolicy resources                                                                                                  | `false` |
 | `networkPolicy.allowExternal`                 | Don't require client label for connections                                                                                                  | `true`  |
 | `networkPolicy.extraIngress`                  | Add extra ingress rules to the NetworkPolicy                                                                                                | `[]`    |
@@ -547,7 +548,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `useExternalDNS.additionalAnnotations` | Extra annotations to be utilized when `external-dns` is enabled.                                                                         | `{}`                                |
 | `useExternalDNS.annotationKey`         | The annotation key utilized when `external-dns` is enabled. Setting this to `false` will disable annotations.                            | `external-dns.alpha.kubernetes.io/` |
 | `useExternalDNS.suffix`                | The DNS suffix utilized when `external-dns` is enabled.  Note that we prepend the suffix with the full name of the release.              | `""`                                |
-
 
 
 ```console
