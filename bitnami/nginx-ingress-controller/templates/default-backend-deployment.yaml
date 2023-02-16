@@ -138,7 +138,8 @@ spec:
           volumeMounts:
             {{- if .Values.defaultBackend.serverBlockConfig }}
             - name: nginx-config-volume
-              mountPath: /opt/bitnami/nginx/conf/bitnami/
+              mountPath: /opt/bitnami/nginx/conf/bitnami/defaultBackend.conf
+              subPath: defaultBackend.conf
               readOnly: true
             {{- end }}
             {{- if .Values.defaultBackend.extraVolumeMounts }}
