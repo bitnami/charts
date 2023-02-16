@@ -103,8 +103,8 @@ spec:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.extraEnvVarsSecret "context" $) }}
             {{- end }}
           ports:
-            - containerPort: {{ .Values.tempo.containerPorts.http }}
-              name: http
+            - containerPort: {{ .Values.tempo.containerPorts.web }}
+              name: web
             - containerPort: {{ .Values.tempo.containerPorts.gossipRing }}
               name: http-memberlist
             - containerPort: {{ .Values.tempo.containerPorts.grpc }}
@@ -119,7 +119,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metricsGenerator.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /ready
-              port: {{ .Values.tempo.containerPorts.http }}
+              port: {{ .Values.tempo.containerPorts.web }}
           {{- end }}
           {{- if .Values.metricsGenerator.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.customReadinessProbe "context" $) | nindent 12 }}
@@ -127,7 +127,7 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metricsGenerator.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /ready
-              port: {{ .Values.tempo.containerPorts.http }}
+              port: {{ .Values.tempo.containerPorts.web }}
           {{- end }}
           {{- if .Values.metricsGenerator.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.customStartupProbe "context" $) | nindent 12 }}
