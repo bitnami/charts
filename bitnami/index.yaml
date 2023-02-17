@@ -37584,6 +37584,38 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 2.6.1
+    created: "2023-02-17T17:17:11.515036823Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: InfluxDB(TM) is an open source time-series database. It is a core
+      component of the TICK (Telegraf, InfluxDB(TM), Chronograf, Kapacitor) stack.
+    digest: 9b70c05aa17c2f381ce4d5eb859ed2e9173e5e50f3c02af3af15d78eb94c7793
+    home: https://github.com/bitnami/charts/tree/main/bitnami/influxdb
+    icon: https://bitnami.com/assets/stacks/influxdb/img/influxdb-stack-220x234.png
+    keywords:
+    - influxdb
+    - tick
+    - database
+    - timeseries
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: influxdb
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/influxdb
+    - https://www.influxdata.com/products/influxdb-overview/
+    urls:
+    - https://charts.bitnami.com/bitnami/influxdb-5.4.16.tgz
+    version: 5.4.16
+  - annotations:
+      category: Database
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 2.6.1
     created: "2023-01-28T19:56:37.538348678Z"
     dependencies:
     - name: common
@@ -118647,4 +118679,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-02-17T17:11:44.755676235Z"
+generated: "2023-02-17T17:17:11.510293543Z"
