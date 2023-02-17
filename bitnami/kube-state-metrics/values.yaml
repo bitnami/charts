@@ -507,3 +507,15 @@ serviceMonitor:
   ## @param serviceMonitor.labels Extra labels for the ServiceMonitor
   ##
   labels: {}
+## selfMonitor configuration
+##
+selfMonitor:
+  ## @param selfMonitor.enabled Creates a selfMonitor to monitor kube-state-metrics itself
+  ##
+  enabled: false
+  ## @param selfMonitor.telemetryPort Kube-state-metrics telemetry Port
+  ##
+  telemetryPort: 8081
+  ## @param selfMonitor.telemetryNodePort Kube-state-metrics Node Port
+  ##
+  telemetryNodePort: ""

@@ -3,7 +3,7 @@
 At Bitnami, we are committed to ensure the quality of the assets we deliver, and as such, tests play a fundamental role in the `bitnami/charts` repository. Bear in mind that every contribution to our charts is ultimately published to our Helm index, where it is made available for the rest of the community to benefit from. Before this happens, different checks are required to succeed. More precisely, tests are run when:
 
 1. A new contribution (regardless of its author) is made through a GitHub Pull Request.
-1. Accepted changes are merged to the `main` branch, prior to their release.
+2. Accepted changes are merged to the `main` branch, prior to their release.
 
 This strategy ensures that a set of changes must have succeeded twice before a new version is sent out to the public.
 
@@ -139,8 +139,8 @@ Before writing any test scenario, understand the primary purpose of the chart an
 As Charts are usually composed of a number of different components, it is also essential to test their integrations and the Chart as a whole. As a general guideline, testing a `bitnami/chart` can be reduced to:
 
 1. Identifying the components of the Chart and verifying their integration. _e.g. WordPress + MariaDB + PHP + Data Volume_
-1. Summarizing the main area features the asset offers and asserting the Chart delivers them. _e.g. Creating a post in a blog_
-1. Focusing on the unique features the Chart offers. _e.g. ConfigMaps, PVCs, Services, secrets, etc._
+2. Summarizing the main area features the asset offers and asserting the Chart delivers them. _e.g. Creating a post in a blog_
+3. Focusing on the unique features the Chart offers. _e.g. ConfigMaps, PVCs, Services, secrets, etc._
 
 It is easily noticeable though that Charts are usually highly configurable artifacts. Through parameters exposed in `values.yaml`, it is fairly common to perform customizations that range from enabling simple features (e.g. exporting metrics to Prometheus) to complete changes in the architecture of the application that will be deployed (e.g. standalone vs. main-secondary replication in DBs). In order to cope with this high variability, we should:
 
@@ -190,11 +190,11 @@ containerPorts:
 
     The default vale for `moodleUsername` is `user` (you can check in [values.yaml](https://github.com/bitnami/charts/blob/main/bitnami/moodle/values.yaml)). Following the strategy, the default value was changed to see if the Chart is able to correctly pick it up. This is later checked [in one the tests](https://github.com/bitnami/charts/blob/30f2069e0b8ce5331987d06dc744b6d1bc1f04ec/.vib/moodle/cypress/cypress/support/commands.js#L19).
 
-1. Why were other properties, like `moodleEmail`, NOT included?
+2. Why were other properties, like `moodleEmail`, NOT included?
 
     Although the same reasoning would apply, there are no implicit checks in any of the tests that actively assert the email was changed.
 
-1. Does that mean that every property in `runtime_parameters` should have an associated test?
+3. Does that mean that every property in `runtime_parameters` should have an associated test?
 
     No, there is no need to have an specific test for each property, but the property **should have influence over the tests** to include it in the installation parameters. For instance, the property `service.type=LoadBalancer` does not have an associated test, but it is crucial for [Cypress](#cypress) to succeed.
 
@@ -270,8 +270,8 @@ Sometimes it is of interest to run the tests locally, for example during develop
     $ helm install nginx bitnami/nginx -f <(echo "Y29udGFpbmVyUG9ydHM6CiAgaHR0cDogODA4MQogIGh0dHBzOiA4NDQ0CnBvZFNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgZnNHcm91cDogMTAwMgpjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIHJ1bkFzVXNlcjogMTAwMgpzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgaHR0cDogODAKICAgIGh0dHBzOiA0NDQK" | base64 -d)
     ```
 
-1. Download and install [Cypress](https://www.cypress.io/). The version currently used is `9.5.4`
-1. Obtain the IP and port of the Service exposing the UI of the application and adapt `cypress.json` to these values
+2. Download and install [Cypress](https://www.cypress.io/). The version currently used is `9.5.4`
+3. Obtain the IP and port of the Service exposing the UI of the application and adapt `cypress.json` to these values
 
     ```bash
     $ kubectl get svc
@@ -316,7 +316,7 @@ Sometimes it is of interest to run the tests locally, for example during develop
     }
     ```
 
-1. Launch Cypress indicating the folder where tests are located
+4. Launch Cypress indicating the folder where tests are located
 
     ```bash
     $ cypress run .
@@ -403,8 +403,8 @@ Sometimes it is of interest to run the tests locally, for example during develop
     $ helm install metallb bitnami/metallb -f <(echo "Y29udHJvbGxlcjoKICBwb2RTZWN1cml0eUNvbnRleHQ6CiAgICBlbmFibGVkOiB0cnVlCiAgICBmc0dyb3VwOiAxMDAyCiAgY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogICAgZW5hYmxlZDogdHJ1ZQogICAgcnVuQXNVc2VyOiAxMDAyCiAgICByZWFkT25seVJvb3RGaWxlc3lzdGVtOiBmYWxzZQogICAgY2FwYWJpbGl0aWVzOgogICAgICBkcm9wOgogICAgICAgIC0gQUxMCiAgc2VydmljZUFjY291bnQ6CiAgICBjcmVhdGU6IHRydWUKICAgIGF1dG9tb3VudFNlcnZpY2VBY2NvdW50VG9rZW46IHRydWU=" | base64 -d)
     ```
 
-1. Download and [install Ginkgo](https://onsi.github.io/ginkgo/#installing-ginkgo) in your system
-1. Execute the tests. Provide the necessary params (usually, the path to the kubeconfig file and namespace name, but check `vib-verify.yaml`).
+2. Download and [install Ginkgo](https://onsi.github.io/ginkgo/#installing-ginkgo) in your system
+3. Execute the tests. Provide the necessary params (usually, the path to the kubeconfig file and namespace name, but check `vib-verify.yaml`).
 
     ```bash
     $ cd .vib/metallb/ginkgo
@@ -471,8 +471,8 @@ Sometimes it is of interest to run the tests locally, for example during develop
     $ helm install nginx bitnami/nginx -f <(echo "Y29udGFpbmVyUG9ydHM6CiAgaHR0cDogODA4MQogIGh0dHBzOiA4NDQ0CnBvZFNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgZnNHcm91cDogMTAwMgpjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIHJ1bkFzVXNlcjogMTAwMgpzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgaHR0cDogODAKICAgIGh0dHBzOiA0NDQK" | base64 -d)
     ```
 
-1. Download the [GOSS binary for Linux AMD64](https://github.com/goss-org/goss/releases/)
-1. Copy the binary and test files to the target pod where it should be executed
+2. Download the [GOSS binary for Linux AMD64](https://github.com/goss-org/goss/releases/)
+3. Copy the binary and test files to the target pod where it should be executed
 
     ```bash
     $ kubectl get pods
@@ -484,7 +484,7 @@ Sometimes it is of interest to run the tests locally, for example during develop
     $ kubectl cp .vib/nginx/goss/vars.yaml nginx-5fbc8786f-95rpl:/tmp/
     ```
 
-1. Grant execution permissions to the binary and launch the tests
+4. Grant execution permissions to the binary and launch the tests
 
     ```bash
     $ kubectl exec -it nginx-5fbc8786f-95rpl -- chmod +x /tmp/goss-linux-amd64

@@ -25,7 +25,7 @@ In the default configuration the chart deploys the following components on the K
 - [Prometheus](https://github.com/prometheus/prometheus/)
 - [Alertmanager](https://github.com/prometheus/alertmanager)
 
-**IMPORTANT**
+> **:warning: IMPORTANT**
 
 Only one instance of the Prometheus Operator component should be running in the cluster. If you wish to deploy this chart to **manage multiple instances** of Prometheus in your Kubernetes cluster, you **have to disable** the installation of the Prometheus Operator component using the `operator.enabled=false` chart installation argument.
 
@@ -692,7 +692,7 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set operator.logLevel=debug \
   --set prometheus.replicaCount=5 \
     my-repo/kube-prometheus

@@ -453,7 +453,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set admin.user=admin-user my-repo/grafana
 ```
 

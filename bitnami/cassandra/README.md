@@ -60,7 +60,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
@@ -75,7 +74,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
-
 
 ### Cassandra parameters
 
@@ -113,7 +111,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVars`                | Extra environment variables to be set on cassandra container                                                           | `[]`                  |
 | `extraEnvVarsCM`              | Name of existing ConfigMap containing extra env vars                                                                   | `""`                  |
 | `extraEnvVarsSecret`          | Name of existing Secret containing extra env vars                                                                      | `""`                  |
-
 
 ### Statefulset parameters
 
@@ -183,7 +180,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hostPorts.jmx`                         | JMX Port on the Host                                                                      | `""`            |
 | `hostPorts.cql`                         | CQL Port on the Host                                                                      | `""`            |
 
-
 ### RBAC parameters
 
 | Name                                          | Description                                                | Value  |
@@ -192,7 +188,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                     | `""`   |
 | `serviceAccount.annotations`                  | Annotations for Cassandra Service Account                  | `{}`   |
 | `serviceAccount.automountServiceAccountToken` | Automount API credentials for a service account.           | `true` |
-
 
 ### Traffic Exposure Parameters
 
@@ -214,7 +209,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.enabled`            | Specifies whether a NetworkPolicy should be created                           | `false`     |
 | `networkPolicy.allowExternal`      | Don't require client label for connections                                    | `true`      |
 
-
 ### Persistence parameters
 
 | Name                             | Description                                                                                                                                          | Value                |
@@ -228,7 +222,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.commitLogsize`      | PVC Storage Request for Cassandra commit log volume. Unset by default                                                                                | `2Gi`                |
 | `persistence.mountPath`          | The path the data volume will be mounted at                                                                                                          | `/bitnami/cassandra` |
 | `persistence.commitLogMountPath` | The path the commit log volume will be mounted at. Unset by default. Set it to '/bitnami/cassandra/commitlog' to enable a separate commit log volume | `""`                 |
-
 
 ### Volume Permissions parameters
 
@@ -244,7 +237,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.limits`          | The resources limits for the container                                                                                | `{}`                    |
 | `volumePermissions.resources.requests`        | The requested resources for the container                                                                             | `{}`                    |
 | `volumePermissions.securityContext.runAsUser` | User ID for the init container                                                                                        | `0`                     |
-
 
 ### Metrics parameters
 
@@ -282,7 +274,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.hostPorts.jmx`                      | JMX Port on the Host                                                                                               | `""`                         |
 | `metrics.configuration`                      | Configure Cassandra-exporter with a custom config.yml file                                                         | `""`                         |
 
-
 ### TLS/SSL parameters
 
 | Name                          | Description                                                                                   | Value   |
@@ -299,12 +290,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tls.certificatesSecret`      | Secret with the TLS certificates.                                                             | `""`    |
 | `tls.tlsEncryptionSecretName` | Secret with the encryption of the TLS certificates                                            | `""`    |
 
-
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
     --set dbUser.user=admin,dbUser.password=password \
     my-repo/cassandra
 ```

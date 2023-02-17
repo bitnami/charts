@@ -63,7 +63,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                               | Value           |
@@ -78,7 +77,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)   | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the the deployment(s)/statefulset(s)                | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the the deployment(s)/statefulset(s)                   | `["infinity"]`  |
-
 
 ### Discourse Common parameters
 
@@ -130,7 +128,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraVolumeMounts`             | Optionally specify extra list of additional volumeMounts for the Discourse pods                                          | `[]`                 |
 | `extraVolumes`                  | Optionally specify extra list of additional volumes for the Discourse pods                                               | `[]`                 |
 
-
 ### Discourse container parameters
 
 | Name                                              | Description                                                                                  | Value           |
@@ -179,7 +176,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.selector`                            | Selector to match an existing Persistent Volume for Discourse data PVC                       | `{}`            |
 | `persistence.annotations`                         | Persistent Volume Claim annotations                                                          | `{}`            |
 
-
 ### Sidekiq container parameters
 
 | Name                                            | Description                                                                                | Value                                               |
@@ -218,7 +214,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidekiq.lifecycleHooks`                        | for the Sidekiq container(s) to automate configuration before or after startup             | `{}`                                                |
 | `sidekiq.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Sidekiq pods              | `[]`                                                |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -249,7 +244,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Volume Permissions parameters
 
 | Name                                                   | Description                                                                                                                       | Value                   |
@@ -265,7 +259,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                                                                               | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                                    | `0`                     |
 
-
 ### Other Parameters
 
 | Name                                          | Description                                                            | Value   |
@@ -274,7 +267,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`    |
 | `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true`  |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
-
 
 ### NetworkPolicy parameters
 
@@ -292,7 +284,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                            | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                                | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                    | `{}`    |
-
 
 ### Discourse database parameters
 
@@ -318,7 +309,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.existingSecretPasswordKey`         | Name of an existing secret key containing the database credentials                                     | `password`            |
 | `externalDatabase.existingSecretPostgresPasswordKey` | Name of an existing secret key containing the database admin user credentials                          | `postgres-password`   |
 
-
 ### Redis&reg; parameters
 
 | Name                                      | Description                                                                | Value            |
@@ -334,12 +324,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalRedis.existingSecret`            | Name of an existing secret resource containing the Redis&trade credentials | `""`             |
 | `externalRedis.existingSecretPasswordKey` | Name of an existing secret key containing the Redis&trade credentials      | `redis-password` |
 
-
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set auth.username=admin,auth.password=password \
     my-repo/discourse
 ```
@@ -372,35 +360,35 @@ By default, this Chart only deploys a single pod running Discourse. Should you w
 
 1. Create a conventional release, that will be scaled later:
 
-```console
-$ helm install my-release my-repo/discourse
-...
-```
+    ```console
+    helm install my-release my-repo/discourse
+    ...
+    ```
 
-1. Wait for the release to complete and Discourse to be running successfully.
+2. Wait for the release to complete and Discourse to be running successfully.
 
-```console
-$ kubectl get pods
-NAME                               READY   STATUS    RESTARTS   AGE
-my-release-discourse-744c48dd97-wx5h9   2/2     Running   0          5m11s
-my-release-postgresql-0                 1/1     Running   0          5m10s
-my-release-redis-master-0               1/1     Running   0          5m11s
-```
+    ```console
+    $ kubectl get pods
+    NAME                               READY   STATUS    RESTARTS   AGE
+    my-release-discourse-744c48dd97-wx5h9   2/2     Running   0          5m11s
+    my-release-postgresql-0                 1/1     Running   0          5m10s
+    my-release-redis-master-0               1/1     Running   0          5m11s
+    ```
 
-1. Perform an upgrade specifying the number of replicas and the credentials used.
+3. Perform an upgrade specifying the number of replicas and the credentials used.
 
-```console
-helm upgrade my-release --set replicaCount=2,discourse.skipInstall=true my-repo/discourse
-```
+    ```console
+    helm upgrade my-release --set replicaCount=2,discourse.skipInstall=true my-repo/discourse
+    ```
 
-Note that for this to work properly, you need to provide ReadWriteMany PVCs. If you don't have a provisioner for this type of storage, we recommend that you install the NFS provisioner chart (with the correct parameters, such as `persistence.enabled=true` and `persistence.size=10Gi`) and map it to a RWO volume.
+    Note that for this to work properly, you need to provide ReadWriteMany PVCs. If you don't have a provisioner for this type of storage, we recommend that you install the NFS provisioner chart (with the correct parameters, such as `persistence.enabled=true` and `persistence.size=10Gi`) and map it to a RWO volume.
 
-Then you can deploy Discourse chart using the proper parameters:
+    Then you can deploy Discourse chart using the proper parameters:
 
-```console
-persistence.storageClass=nfs
-postgresql.primary.persistence.storageClass=nfs
-```
+    ```console
+    persistence.storageClass=nfs
+    postgresql.primary.persistence.storageClass=nfs
+    ```
 
 ### Sidecars
 

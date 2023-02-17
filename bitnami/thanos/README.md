@@ -1369,11 +1369,11 @@ For Helm 3:
 
 ```console
 $ kubectl create namespace monitoring
-$ helm install kube-prometheus \
+helm install kube-prometheus \
     --set prometheus.thanos.create=true \
     --namespace monitoring \
     bitnami/kube-prometheus
-$ helm install thanos \
+helm install thanos \
     --values values.yaml \
     --namespace monitoring \
     my-repo/thanos

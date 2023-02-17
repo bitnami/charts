@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.image.repository`                                | server image repository                                                                                             | `bitnami/argo-workflow-cli` |
 | `server.image.tag`                                       | server image tag (immutable tags are recommended)                                                                   | `3.4.5-scratch-r1`          |
 | `server.image.digest`                                    | server image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                        |
-| `server.image.pullPolicy`                                | server image pull policy                                                                                            | `Always`                    |
+| `server.image.pullPolicy`                                | server image pull policy                                                                                            | `IfNotPresent`              |
 | `server.image.pullSecrets`                               | server image pull secrets                                                                                           | `[]`                        |
 | `server.enabled`                                         | Enable server deployment                                                                                            | `true`                      |
 | `server.replicaCount`                                    | Number of server replicas to deploy                                                                                 | `1`                         |
@@ -296,7 +296,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `executor.image.repository`                                | executor image repository                                                                                | `bitnami/argo-workflow-exec` |
 | `executor.image.tag`                                       | executor image tag (immutable tags are recommended)                                                      | `3.4.5-debian-11-r0`         |
 | `executor.image.digest`                                    | executor image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
-| `executor.image.pullPolicy`                                | executor image pull policy                                                                               | `Always`                     |
+| `executor.image.pullPolicy`                                | executor image pull policy                                                                               | `IfNotPresent`               |
 | `executor.image.pullSecrets`                               | executor image pull secrets                                                                              | `[]`                         |
 | `executor.resources.limits`                                | The resources limits for the init container                                                              | `{}`                         |
 | `executor.resources.requests`                              | The requested resources for the init container                                                           | `{}`                         |
@@ -374,12 +374,10 @@ The command removes all the Kubernetes components associated with the chart and 
 
 
 
-The above parameters map to the env variables defined in [bitnami/argo-workflow-cli](https://github.com/bitnami/containers/tree/main/bitnami/argo-workflow-cli). For more information please refer to the [bitnami/argo-workflow-cli](https://github.com/bitnami/containers/tree/main/bitnami/argo-workflow-cli) image documentation.
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set argo-workflowsUsername=admin \
   --set argo-workflowsPassword=password \
   --set mysql.auth.rootPassword=secretpassword \

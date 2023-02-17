@@ -65,7 +65,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                                                                                         | Value                |
@@ -89,11 +88,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullSecrets`      | Appsmith image pull secrets                                                                                                                         | `[]`                 |
 | `image.debug`            | Enable Appsmith image debug mode                                                                                                                    | `false`              |
 
-
 ### Appsmith common paramters
-
-
-
 
 ### Appsmith Client Parameters
 
@@ -157,7 +152,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.sidecars`                                        | Add additional sidecar containers to the Appsmith client pod(s)                                                          | `[]`            |
 | `client.initContainers`                                  | Add additional init containers to the Appsmith client pod(s)                                                             | `[]`            |
 
-
 ### Appsmith Client Traffic Exposure Parameters
 
 | Name                                      | Description                                                                                                                      | Value                    |
@@ -187,7 +181,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `client.ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `client.ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
-
 
 ### Appsmith Backend Parameters
 
@@ -260,7 +253,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backend.sidecars`                                        | Add additional sidecar containers to the Appsmith backend pod(s)                                                         | `[]`                  |
 | `backend.initContainers`                                  | Add additional init containers to the Appsmith backend pod(s)                                                            | `[]`                  |
 
-
 ### Appsmith Backend Traffic Exposure Parameters
 
 | Name                                       | Description                                                                                 | Value       |
@@ -277,7 +269,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backend.service.sessionAffinity`          | Control where backend requests go, to the same pod or round-robin                           | `None`      |
 | `backend.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                 | `{}`        |
 
-
 ### Backend Persistence Parameters
 
 | Name                                | Description                                                                                             | Value               |
@@ -292,7 +283,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backend.persistence.existingClaim` | The name of an existing PVC to use for persistence                                                      | `""`                |
 | `backend.persistence.selector`      | Selector to match an existing Persistent Volume for WordPress data PVC                                  | `{}`                |
 | `backend.persistence.dataSource`    | Custom PVC data source                                                                                  | `{}`                |
-
 
 ### Appsmith RTS Parameters
 
@@ -356,7 +346,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rts.sidecars`                                        | Add additional sidecar containers to the Appsmith rts pod(s)                                                             | `[]`            |
 | `rts.initContainers`                                  | Add additional init containers to the Appsmith rts pod(s)                                                                | `[]`            |
 
-
 ### Appsmith RTS Traffic Exposure Parameters
 
 | Name                                   | Description                                                                             | Value       |
@@ -373,7 +362,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rts.service.sessionAffinity`          | Control where rts requests go, to the same pod or round-robin                           | `None`      |
 | `rts.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                             | `{}`        |
 
-
 ### Init Container Parameters
 
 | Name                                                   | Description                                                                                     | Value                   |
@@ -388,7 +376,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
 
-
 ### Other Parameters
 
 | Name                                          | Description                                                      | Value  |
@@ -397,7 +384,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`   |
 | `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`   |
 | `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true` |
-
 
 ### External MongoDB parameters
 
@@ -411,7 +397,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials | `""`       |
 | `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials      | `""`       |
 
-
 ### External Redis parameters
 
 | Name                                      | Description                                                          | Value  |
@@ -421,7 +406,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalRedis.password`                  | Password for the Redis                                               | `""`   |
 | `externalRedis.existingSecret`            | Name of an existing secret resource containing the Redis credentials | `""`   |
 | `externalRedis.existingSecretPasswordKey` | Name of an existing secret key containing the Redis credentials      | `""`   |
-
 
 ### Redis sub-chart parameters
 
@@ -435,7 +419,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `redis.auth.password`              | Redis password                                 | `""`         |
 | `redis.auth.existingSecret`        | Name of a secret containing the Redis password | `""`         |
 
-
 ### MongoDB sub-chart parameters
 
 | Name                             | Description                                            | Value        |
@@ -448,12 +431,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mongodb.containerPorts.mongodb` | MongoDB container port (used by the headless service)  | `27017`      |
 | `mongodb.arbiter.enabled`        | Enable Arbiter nodes in the ReplicaSet                 | `false`      |
 
-
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set appsmithUsername=admin \
   --set appsmithPassword=password \
   --set mariadb.auth.rootPassword=secretpassword \

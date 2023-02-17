@@ -61,7 +61,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common Parameters
 
 | Name                     | Description                                                                                  | Value          |
@@ -76,7 +75,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`        |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`    |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]` |
-
 
 ### Parse server parameters
 
@@ -162,7 +160,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.service.sessionAffinity`                         | Control where client requests go, to the same pod or round-robin                                                         | `None`               |
 | `server.service.sessionAffinityConfig`                   | Additional settings for the sessionAffinity                                                                              | `{}`                 |
 
-
 ### Dashboard Parameters
 
 | Name                                                        | Description                                                                                                              | Value                     |
@@ -247,7 +244,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dashboard.service.sessionAffinity`                         | Control where client requests go, to the same pod or round-robin                                                         | `None`                    |
 | `dashboard.service.sessionAffinityConfig`                   | Additional settings for the sessionAffinity                                                                              | `{}`                      |
 
-
 ### Traffic Exposure Parameters
 
 | Name                           | Description                                                                                                                      | Value                    |
@@ -271,7 +267,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`              | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.extraRules`           | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Persistence Parameters
 
 | Name                        | Description                                                            | Value               |
@@ -284,7 +279,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.selector`      | Selector to match an existing Persistent Volume for WordPress data PVC | `{}`                |
 | `persistence.dataSource`    | Custom PVC data source                                                 | `{}`                |
 | `persistence.annotations`   | Persistent Volume Claim annotations                                    | `{}`                |
-
 
 ### Volume Permissions parameters
 
@@ -303,7 +297,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template)                                                                                          | `{}`                    |
 | `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                                            | `true`                  |
 
-
 ### MongoDB&reg; Parameters
 
 | Name                               | Description                                 | Value           |
@@ -318,8 +311,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mongodb.persistence.storageClass` | PVC Storage Class for MongoDB&reg; volume   | `""`            |
 | `mongodb.persistence.accessMode`   | PVC Access Mode for MongoDB&reg; volume     | `ReadWriteOnce` |
 | `mongodb.persistence.size`         | PVC Storage Request for MongoDB&reg; volume | `8Gi`           |
-
-
 
 > **Note**:
 >
@@ -338,7 +329,7 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set dashboard.username=admin,dashboard.password=password \
     my-repo/parse
 ```

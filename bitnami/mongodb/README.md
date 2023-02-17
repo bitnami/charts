@@ -553,7 +553,7 @@ Refer to the [chart documentation for more information on each of these architec
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
     --set auth.rootPassword=secretpassword,auth.username=my-user,auth.password=my-password,auth.database=my-database \
     my-repo/mongodb
 ```

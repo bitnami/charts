@@ -182,7 +182,7 @@ keyMapping:
 If we force those values to be empty we will see some alerts
 
 ```console
-$ helm install test mychart --set path.to.value00="",path.to.value01=""
+helm install test mychart --set path.to.value00="",path.to.value01=""
     'path.to.value00' must not be empty, please add '--set path.to.value00=$PASSWORD_00' to the command. To get the current value:
 
         export PASSWORD_00=$(kubectl get secret --namespace default secretName -o jsonpath="{.data.password-00}" | base64 -d)

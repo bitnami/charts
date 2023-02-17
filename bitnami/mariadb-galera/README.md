@@ -260,7 +260,7 @@ The above parameters map to the env variables defined in [bitnami/mariadb-galera
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set rootUser.password=secretpassword,
   --set db.user=app_database \
     my-repo/mariadb-galera
@@ -285,7 +285,7 @@ While the chart allows you to specify the server configuration using the `.maria
 For example, if you want to enable the PAM cleartext plugin, specify the command line parameter while deploying the chart like so:
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set extraFlags="--pam-use-cleartext-plugin=ON" \
   my-repo/mariadb-galera
 ```
@@ -496,7 +496,7 @@ $ kubectl run -i --rm --tty volpod --overrides='
 
 The output should be similar to this:
 
-```
+```text
 # GALERA saved state
 version: 2.1
 uuid:    6f2cbfcd-951b-11ea-a116-5f407049e57d
@@ -511,7 +511,7 @@ There are two possible scenarios:
 In this case you will need the node number `N` and run:
 
 ```console
-$ helm install my-release my-repo/mariadb-galera \
+helm install my-release my-repo/mariadb-galera \
 --set rootUser.password=XXXX \
 --set galera.mariabackup.password=YYYY \
 --set galera.bootstrap.forceBootstrap=true \
@@ -524,7 +524,7 @@ $ helm install my-release my-repo/mariadb-galera \
 In this case the cluster was not stopped cleanly and you need to pick one to force the bootstrap from. The one to be chosen in the one with the highest `seqno` in `/bitnami/mariadb/data/grastate.dat`. The following example shows how to force bootstrap from node 3.
 
 ```console
-$ helm install my-release my-repo/mariadb-galera \
+helm install my-release my-repo/mariadb-galera \
 --set rootUser.password=XXXX \
 --set galera.mariabackup.password=YYYY \
 --set galera.bootstrap.forceBootstrap=true \
@@ -537,8 +537,8 @@ $ helm install my-release my-repo/mariadb-galera \
 
 After you have started the cluster by forcing the bootstraping on one of the nodes, you will need to remove the forcing so the node can restart with normality.
 
-```
-$ helm upgrade my-release my-repo/mariadb-galera \
+```console
+helm upgrade my-release my-repo/mariadb-galera \
 --set rootUser.password=XXXX \
 --set galera.mariabackup.password=YYYY \
 --set podManagementPolicy=Parallel
@@ -565,7 +565,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 It's necessary to specify the existing passwords while performing a upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `rootUser.password`, `db.password` and `galera.mariabackup.password` parameters when upgrading the chart:
 
 ```console
-$ helm upgrade my-release my-repo/mariadb-galera \
+helm upgrade my-release my-repo/mariadb-galera \
     --set rootUser.password=[ROOT_PASSWORD] \
     --set db.password=[MARIADB_PASSWORD] \
     --set galera.mariabackup.password=[GALERA_MARIABACKUP_PASSWORD]

@@ -60,7 +60,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                                  | Value           |
@@ -75,7 +74,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]`  |
-
 
 ### etcd parameters
 
@@ -126,7 +124,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVarsSecret`                   | Name of existing Secret containing extra env vars                                                           | `""`                 |
 | `command`                              | Default container command (useful when using custom images)                                                 | `[]`                 |
 | `args`                                 | Default container args (useful when using custom images)                                                    | `[]`                 |
-
 
 ### etcd statefulset parameters
 
@@ -192,7 +189,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistentVolumeClaimRetentionPolicy.whenScaled`   | Volume retention behavior when the replica count of the StatefulSet is reduced            | `Retain`        |
 | `persistentVolumeClaimRetentionPolicy.whenDeleted`  | Volume retention behavior that applies when the StatefulSet is deleted                    | `Retain`        |
 
-
 ### Traffic exposure parameters
 
 | Name                               | Description                                                                        | Value       |
@@ -215,7 +211,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"               | `None`      |
 | `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                        | `{}`        |
 
-
 ### Persistence parameters
 
 | Name                       | Description                                                     | Value               |
@@ -226,7 +221,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.accessModes`  | Persistent Volume Access Modes                                  | `["ReadWriteOnce"]` |
 | `persistence.size`         | PVC Storage Request for etcd data volume                        | `8Gi`               |
 | `persistence.selector`     | Selector to match an existing Persistent Volume                 | `{}`                |
-
 
 ### Volume Permissions parameters
 
@@ -242,7 +236,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.limits`   | Init container volume-permissions resource  limits                                                                                | `{}`                    |
 | `volumePermissions.resources.requests` | Init container volume-permissions resource  requests                                                                              | `{}`                    |
 
-
 ### Network Policy parameters
 
 | Name                                    | Description                                                | Value   |
@@ -253,7 +246,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy               | `[]`    |
 | `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces     | `{}`    |
 | `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces | `{}`    |
-
 
 ### Metrics parameters
 
@@ -273,7 +265,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.namespace`        | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                 | `""`         |
 | `metrics.prometheusRule.additionalLabels` | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                         | `{}`         |
 | `metrics.prometheusRule.rules`            | Prometheus Rule definitions                                                                                                   | `[]`         |
-
 
 ### Snapshotting parameters
 
@@ -295,7 +286,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `disasterRecovery.pvc.size`                     | PVC Storage Request                                                     | `2Gi`          |
 | `disasterRecovery.pvc.storageClassName`         | Storage Class for snapshots volume                                      | `nfs`          |
 
-
 ### Service account parameters
 
 | Name                                          | Description                                                  | Value   |
@@ -306,7 +296,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.annotations`                  | Additional annotations to be included on the service account | `{}`    |
 | `serviceAccount.labels`                       | Additional labels to be included on the service account      | `{}`    |
 
-
 ### Other parameters
 
 | Name                 | Description                                                    | Value  |
@@ -315,10 +304,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `pdb.minAvailable`   | Minimum number/percentage of pods that should remain scheduled | `51%`  |
 | `pdb.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable | `""`   |
 
-
-
 ```console
-$ helm install my-release \
+helm install my-release \
   --set auth.rbac.rootPassword=secretpassword my-repo/etcd
 ```
 
@@ -511,7 +498,7 @@ To upgrade from previous charts versions, create a snapshot of the keyspace and 
 You can use the command below to upgrade your chart by starting a new cluster using an existing snapshot, available in an existing PVC, to initialize the members:
 
 ```console
-$ helm install new-release my-repo/etcd \
+helm install new-release my-repo/etcd \
   --set statefulset.replicaCount=3 \
   --set persistence.enabled=true \
   --set persistence.size=8Gi \

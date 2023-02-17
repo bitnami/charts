@@ -265,7 +265,7 @@ For more information please refer to the [bitnami/phpmyadmin](https://github.com
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set db.host=mymariadb,db.port=3306 my-repo/phpmyadmin
 ```
 

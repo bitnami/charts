@@ -67,7 +67,6 @@ helm delete --purge my-release
 | `global.elasticsearch.service.ports.restAPI` | Elasticsearch service restAPI port to be used in the Kibana subchart (ignored if kibanaEnabled=false) | `9200`          |
 | `global.kibanaEnabled`                       | Whether or not to enable Kibana                                                                       | `false`         |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
@@ -83,7 +82,6 @@ helm delete --purge my-release
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
-
 
 ### Elasticsearch cluster Parameters
 
@@ -137,7 +135,6 @@ helm delete --purge my-release
 | `security.tls.secretTruststoreKey`         | Name of the secret key containing the Truststore password                                                                                           | `""`                           |
 | `security.tls.secretKey`                   | Name of the secret key containing the PEM key password                                                                                              | `""`                           |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -169,7 +166,6 @@ helm delete --purge my-release
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
-
 
 ### Master-elegible nodes parameters
 
@@ -255,7 +251,6 @@ helm delete --purge my-release
 | `master.autoscaling.targetCPU`                       | Define the CPU target to trigger the scaling actions (utilization percentage)                                                                      | `""`                |
 | `master.autoscaling.targetMemory`                    | Define the memory target to trigger the scaling actions (utilization percentage)                                                                   | `""`                |
 
-
 ### Data-only nodes parameters
 
 | Name                                               | Description                                                                                                                                      | Value               |
@@ -339,7 +334,6 @@ helm delete --purge my-release
 | `data.autoscaling.targetCPU`                       | Define the CPU target to trigger the scaling actions (utilization percentage)                                                                    | `""`                |
 | `data.autoscaling.targetMemory`                    | Define the memory target to trigger the scaling actions (utilization percentage)                                                                 | `""`                |
 
-
 ### Coordinating-only nodes parameters
 
 | Name                                                       | Description                                                                                                               | Value           |
@@ -414,7 +408,6 @@ helm delete --purge my-release
 | `coordinating.autoscaling.maxReplicas`                     | Configure a maximum amount of pods                                                                                        | `11`            |
 | `coordinating.autoscaling.targetCPU`                       | Define the CPU target to trigger the scaling actions (utilization percentage)                                             | `""`            |
 | `coordinating.autoscaling.targetMemory`                    | Define the memory target to trigger the scaling actions (utilization percentage)                                          | `""`            |
-
 
 ### Ingest-only nodes parameters
 
@@ -522,7 +515,6 @@ helm delete --purge my-release
 | `ingest.ingress.secrets`                             | Custom TLS certificates as secrets                                                                                               | `[]`                         |
 | `ingest.ingress.extraRules`                          | Additional rules to be covered with this ingress record                                                                          | `[]`                         |
 
-
 ### Metrics parameters
 
 | Name                                            | Description                                                                                                                    | Value                            |
@@ -607,7 +599,6 @@ helm delete --purge my-release
 | `metrics.prometheusRule.additionalLabels`       | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                          | `{}`                             |
 | `metrics.prometheusRule.rules`                  | Prometheus Rule definitions                                                                                                    | `[]`                             |
 
-
 ### Init Container Parameters
 
 | Name                                   | Description                                                                                                                                               | Value                   |
@@ -631,7 +622,6 @@ helm delete --purge my-release
 | `sysctlImage.resources.limits`         | The resources limits for the container                                                                                                                    | `{}`                    |
 | `sysctlImage.resources.requests`       | The requested resources for the container                                                                                                                 | `{}`                    |
 
-
 ### Kibana Parameters
 
 | Name                         | Description                                                               | Value                                                   |
@@ -639,10 +629,8 @@ helm delete --purge my-release
 | `kibana.elasticsearch.hosts` | Array containing hostnames for the ES instances. Used to generate the URL | `[]`                                                    |
 | `kibana.elasticsearch.port`  | Port to connect Kibana and ES instance. Used to generate the URL          | `{{ include "elasticsearch.service.ports.restAPI" . }}` |
 
-
-
 ```console
-$ helm install my-release \
+helm install my-release \
   --set name=my-elastic,client.service.port=8080 \
   my-repo/elasticsearch
 ```

@@ -37,6 +37,7 @@ rules:
       - monitoring.coreos.com
     resources:
       - alertmanagers
+      - alertmanagers/status
       - alertmanagers/finalizers
       - alertmanagerconfigs
       - prometheuses
