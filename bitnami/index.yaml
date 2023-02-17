@@ -61549,6 +61549,47 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 1.39.1
+    created: "2023-02-17T17:57:16.003111132Z"
+    dependencies:
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - mediawiki-database
+      version: 11.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: MediaWiki is the free and open source wiki software that powers Wikipedia.
+      Used by thousands of organizations, it is extremely powerful, scalable software
+      and a feature-rich wiki implementation.
+    digest: 048e4bbfd3d3499d7831363a29826e86241713d83ab5c1689c9fcd96ee9318a8
+    home: https://github.com/bitnami/charts/tree/main/bitnami/mediawiki
+    icon: https://bitnami.com/assets/stacks/mediawiki/img/mediawiki-stack-220x234.png
+    keywords:
+    - mediawiki
+    - wiki
+    - http
+    - web
+    - application
+    - php
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: mediawiki
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/mediawiki
+    - https://www.mediawiki.org/
+    urls:
+    - https://charts.bitnami.com/bitnami/mediawiki-14.3.14.tgz
+    version: 14.3.14
+  - annotations:
+      category: Wiki
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 1.39.1
     created: "2023-01-31T10:33:56.42047059Z"
     dependencies:
     - condition: mariadb.enabled
@@ -118783,4 +118824,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-02-17T17:46:50.728456696Z"
+generated: "2023-02-17T17:57:15.991057822Z"
