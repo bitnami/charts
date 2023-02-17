@@ -19,6 +19,7 @@ it('allows to create a new project', () => {
     cy.get('[class*="fork-button"]').click();
   })
   cy.contains('FORK TEMPLATE').click();
+  cy.contains('Deploy');
   // Check if the application exists in the applications page
   cy.visit('/applications');
   cy.contains('Customer Communications portal');
