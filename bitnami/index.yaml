@@ -41071,6 +41071,41 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 3.1.1
+    created: "2023-02-17T15:44:36.197174344Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: JupyterHub brings the power of notebooks to groups of users. It gives
+      users access to computational environments and resources without burdening the
+      users with installation and maintenance tasks.
+    digest: d493d2d53d4b18ef6f85f75bbc0e5d411906ee13cb177fe96e249cd64ddac282
+    home: https://jupyter.org/hub
+    icon: https://bitnami.com/assets/stacks/jupyterhub/img/jupyterhub-stack-220x234.png
+    keywords:
+    - python
+    - scientific
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: jupyterhub
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/jupyterhub
+    - https://github.com/jupyterhub/jupyterhub
+    urls:
+    - https://charts.bitnami.com/bitnami/jupyterhub-3.0.10.tgz
+    version: 3.0.10
+  - annotations:
+      category: MachineLearning
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 3.1.1
     created: "2023-02-01T17:34:02.347041766Z"
     dependencies:
     - condition: postgresql.enabled
@@ -117910,4 +117945,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-02-17T15:43:17.555080543Z"
+generated: "2023-02-17T15:44:36.184399383Z"
