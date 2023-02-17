@@ -197,6 +197,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceMonitor.relabelings`                    | ServiceMonitor relabelings                                                                                                                                         | `[]`                         |
 | `serviceMonitor.metricRelabelings`              | ServiceMonitor metricRelabelings                                                                                                                                   | `[]`                         |
 | `serviceMonitor.labels`                         | Extra labels for the ServiceMonitor                                                                                                                                | `{}`                         |
+| `selfMonitor.enabled`                           | Creates a selfMonitor to monitor kube-state-metrics itself                                                                                                         | `false`                      |
+| `selfMonitor.telemetryPort`                     | Kube-state-metrics telemetry Port                                                                                                                                  | `8081`                       |
+| `selfMonitor.telemetryNodePort`                 | Kube-state-metrics Node Port                                                                                                                                       | `""`                         |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example the following command sets the `replicas` of the kube-state-metrics Pods to `2`.
 
