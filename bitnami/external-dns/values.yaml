@@ -202,6 +202,21 @@ aws:
     ## This ignores aws.credentials.secretKey, and aws.credentials.accessKey
     ##
     secretName: ""
+    ## AWS access key id stored in key-value secret. 
+    ## If aws.credentials.accessKeyIDSecretRef and aws.credentials.secretAccessKeySecretRef defined aws.credentials.secretKey, aws.credentials.accessKey and aws.credentials.secretName are ignored
+    ## @param aws.credentials.accessKeyIDSecretRef.name Define the name of the secret that stores aws_access_key_id.
+    ## @param aws.credentials.accessKeyIDSecretRef.key Define the key of the secret that stores aws_access_key_id.
+    ##
+    accessKeyIDSecretRef:
+      name: ""
+      key: ""
+    ## AWS secret access key stored in key-value secret
+    ## @param aws.credentials.secretAccessKeySecretRef.name Define the name of the secret that stores aws_secret_access_key
+    ## @param aws.credentials.secretAccessKeySecretRef.key Define the key of the secret that stores aws_secret_access_key
+    ##
+    secretAccessKeySecretRef:
+      name: ""
+      key: ""
   ## @param aws.region When using the AWS provider, `AWS_DEFAULT_REGION` to set in the environment (optional)
   ##
   region: "us-east-1"

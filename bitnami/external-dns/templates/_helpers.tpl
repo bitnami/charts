@@ -118,7 +118,7 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "alibabacloud") .Values.alibabacloud.accessKeyId .Values.alibabacloud.accessKeySecret (not .Values.alibabacloud.secretName) }}
     {{- true -}}
-{{- else if and (eq .Values.provider "aws") .Values.aws.credentials.secretKey .Values.aws.credentials.accessKey (not .Values.aws.credentials.secretName) }}
+{{- else if and (eq .Values.provider "aws") .Values.aws.credentials.secretKey .Values.aws.credentials.accessKey (not .Values.aws.credentials.secretName) (not (include "external-dns.aws-credentials-secret-ref-defined" . )) }}
     {{- true -}}
 {{- else if and (or (eq .Values.provider "azure") (eq .Values.provider "azure-private-dns")) (or (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId .Values.azure.aadClientId .Values.azure.aadClientSecret (not .Values.azure.useManagedIdentityExtension)) (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId .Values.azure.useManagedIdentityExtension)) (not .Values.azure.secretName) -}}
     {{- true -}}
@@ -236,6 +236,13 @@ aws_secret_access_key = {{ .Values.aws.credentials.secretKey }}
 [profile default]
 region = {{ .Values.aws.region }}
 {{ end }}
+
+{{- define "external-dns.aws-credentials-secret-ref-defined" -}}
+{{- if and .Values.aws.credentials.accessKeyIDSecretRef.name .Values.aws.credentials.accessKeyIDSecretRef.key .Values.aws.credentials.secretAccessKeySecretRef.name .Values.aws.credentials.secretAccessKeySecretRef.key -}}
+    {{- true -}}
+{{- else -}}
+{{- end -}}
+{{- end -}}
 
 {{- define "external-dns.azure-credentials" -}}
 {
