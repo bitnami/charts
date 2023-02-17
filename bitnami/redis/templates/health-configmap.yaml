@@ -12,35 +12,49 @@ metadata:
   {{- end }}
 data:
   ping_readiness_local.sh: |-
-    #!/bin/bash
+    #!/usr/bin/env bash
+    REDIS_HOST="localhost"
+    REDIS_PORT="6379"
+    redis_cli=(timeout -s 3 1 redis-cli -h "$REDIS_HOST" -p "$REDIS_PORT")
 
     [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
     [[ -n "$REDIS_PASSWORD" ]] && export REDISCLI_AUTH="$REDIS_PASSWORD"
-    response=$(
-      timeout -s 3 $1 \
-      redis-cli \
-        -h localhost \
-{{- if .Values.tls.enabled }}
-        -p $REDIS_TLS_PORT \
-        --tls \
-        --cacert {{ template "redis.tlsCACert" . }} \
-        {{- if .Values.tls.authClients }}
-          --cert {{ template "redis.tlsCert" . }} \
-          --key {{ template "redis.tlsCertKey" . }} \
-        {{- end }}
-{{- else }}
-        -p $REDIS_PORT \
-{{- end }}
-        ping
-    )
-    if [ "$?" -eq "124" ]; then
-      echo "Timed out"
-      exit 1
-    fi
-    if [ "$response" != "PONG" ]; then
-      echo "$response"
-      exit 1
-    fi
+
+    function getRedisRole() {
+        "${redis_cli[@]}" info replication 2>/dev/null | grep "role" | tr -d "\r" | tr -d "\n"
+    }
+
+    function checkSlave() {
+        IN_SYNC="$("${redis_cli[@]}" info replication 2>/dev/null | grep "master_sync_in_progress:1" | tr -d "\r" | tr -d "\n")"
+        NO_MASTER="$("${redis_cli[@]}" info replication 2>/dev/null | grep "master_host:127.0.0.1" | tr -d "\r" | tr -d "\n")"
+        if [ -z "$IN_SYNC" ] && [ -z "$NO_MASTER" ]; then
+            exit 0
+        fi
+        exit 1
+    }
+
+    function checkMaster() {
+        exit 0
+    }
+
+    function main() {
+        ROLE=$(getRedisRole)
+        case $ROLE in
+            "role:slave")
+                checkSlave
+                ;;
+            "role:master")
+                checkMaster
+                ;;
+            *)
+                echo "Unknown role"
+                exit 1
+                ;;
+        esac
+    }
+    main "$@"
+    exit 0
+
   ping_liveness_local.sh: |-
     #!/bin/bash
 
