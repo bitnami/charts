@@ -51989,6 +51989,37 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 2.8.0
+    created: "2023-02-17T12:28:47.373855057Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: kube-state-metrics is a simple service that listens to the Kubernetes
+      API server and generates metrics about the state of the objects.
+    digest: 744c43aed1d91c5351fc1efd6a74b0ec730fa26aedb184c5dfdc8201d38dd00a
+    home: https://github.com/bitnami/charts/tree/main/bitnami/kube-state-metrics
+    icon: https://bitnami.com/assets/stacks/kube-state-metrics/img/kube-state-metrics-stack-220x234.png
+    keywords:
+    - prometheus
+    - kube-state-metrics
+    - monitoring
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: kube-state-metrics
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/kube-state-metrics
+    - https://github.com/kubernetes/kube-state-metrics
+    urls:
+    - https://charts.bitnami.com/bitnami/kube-state-metrics-3.3.0.tgz
+    version: 3.3.0
+  - annotations:
+      category: Analytics
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 2.8.0
     created: "2023-02-13T20:27:08.275362806Z"
     dependencies:
     - name: common
@@ -117263,4 +117294,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-02-17T10:46:16.697222279Z"
+generated: "2023-02-17T12:28:47.370828638Z"
