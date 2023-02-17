@@ -60554,6 +60554,44 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 4.13.3
+    created: "2023-02-17T18:28:42.290312309Z"
+    dependencies:
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Matomo, formerly known as Piwik, is a real time web analytics program.
+      It provides detailed reports on website visitors.
+    digest: 7423a26db918fdfbe2441392f085dba86534be3457c4a80cec31c6a2fecf54a7
+    home: https://github.com/bitnami/charts/tree/main/bitnami/matomo
+    icon: https://bitnami.com/assets/stacks/matomo/img/matomo-stack-220x234.png
+    keywords:
+    - matomo
+    - analytics
+    - http
+    - web
+    - application
+    - php
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: matomo
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/matomo
+    - https://www.matomo.org/
+    urls:
+    - https://charts.bitnami.com/bitnami/matomo-0.2.25.tgz
+    version: 0.2.25
+  - annotations:
+      category: Analytics
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 4.13.3
     created: "2023-02-15T08:10:01.032681138Z"
     dependencies:
     - condition: mariadb.enabled
@@ -118942,4 +118980,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-02-17T18:24:37.847530957Z"
+generated: "2023-02-17T18:28:42.281449827Z"
