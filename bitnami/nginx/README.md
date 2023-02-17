@@ -60,7 +60,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
@@ -77,14 +76,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the the deployment(s)/statefulset(s)              | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the the deployment(s)/statefulset(s)                 | `["infinity"]`  |
 
-
 ### NGINX parameters
 
 | Name                 | Description                                                                                           | Value                  |
 | -------------------- | ----------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`     | NGINX image registry                                                                                  | `docker.io`            |
 | `image.repository`   | NGINX image repository                                                                                | `bitnami/nginx`        |
-| `image.tag`          | NGINX image tag (immutable tags are recommended)                                                      | `1.23.3-debian-11-r25` |
+| `image.tag`          | NGINX image tag (immutable tags are recommended)                                                      | `1.23.3-debian-11-r26` |
 | `image.digest`       | NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `image.pullPolicy`   | NGINX image pull policy                                                                               | `IfNotPresent`         |
 | `image.pullSecrets`  | Specify docker-registry secret names as an array                                                      | `[]`                   |
@@ -95,7 +93,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVars`       | Extra environment variables to be set on NGINX containers                                             | `[]`                   |
 | `extraEnvVarsCM`     | ConfigMap with extra environment variables                                                            | `""`                   |
 | `extraEnvVarsSecret` | Secret with extra environment variables                                                               | `""`                   |
-
 
 ### NGINX deployment parameters
 
@@ -171,7 +168,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `pdb.minAvailable`                            | Min number of pods that must still be available after the eviction                        | `1`             |
 | `pdb.maxUnavailable`                          | Max number of pods that can be unavailable after the eviction                             | `0`             |
 
-
 ### Custom NGINX application parameters
 
 | Name                                       | Description                                                                                         | Value                 |
@@ -179,7 +175,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cloneStaticSiteFromGit.enabled`           | Get the server static content from a Git repository                                                 | `false`               |
 | `cloneStaticSiteFromGit.image.registry`    | Git image registry                                                                                  | `docker.io`           |
 | `cloneStaticSiteFromGit.image.repository`  | Git image repository                                                                                | `bitnami/git`         |
-| `cloneStaticSiteFromGit.image.tag`         | Git image tag (immutable tags are recommended)                                                      | `2.39.2-debian-11-r0` |
+| `cloneStaticSiteFromGit.image.tag`         | Git image tag (immutable tags are recommended)                                                      | `2.39.2-debian-11-r1` |
 | `cloneStaticSiteFromGit.image.digest`      | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `cloneStaticSiteFromGit.image.pullPolicy`  | Git image pull policy                                                                               | `IfNotPresent`        |
 | `cloneStaticSiteFromGit.image.pullSecrets` | Specify docker-registry secret names as an array                                                    | `[]`                  |
@@ -196,7 +192,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `existingServerBlockConfigmap`             | ConfigMap with custom server block to be added to NGINX configuration                               | `""`                  |
 | `staticSiteConfigmap`                      | Name of existing ConfigMap with the server static site content                                      | `""`                  |
 | `staticSitePVC`                            | Name of existing PVC with the server static site content                                            | `""`                  |
-
 
 ### Traffic Exposure parameters
 
@@ -242,7 +237,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `healthIngress.secrets`            | TLS Secret configuration                                                                                                         | `[]`                     |
 | `healthIngress.ingressClassName`   | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `healthIngress.extraRules`         | The list of additional rules to be added to this ingress record. Evaluated as a template                                         | `[]`                     |
-
 
 ### Metrics parameters
 
