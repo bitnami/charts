@@ -42548,6 +42548,44 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 3.4.0
+    created: "2023-02-17T17:10:39.275101101Z"
+    dependencies:
+    - condition: zookeeper.enabled
+      name: zookeeper
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Apache Kafka is a distributed streaming platform designed to build
+      real-time pipelines and can be used as a message broker or as a replacement
+      for a log aggregation solution for big data applications.
+    digest: 1d31365df2c6f2eab781c198c2e43f4dd5f435f846bb821fe788dded4a989767
+    home: https://github.com/bitnami/charts/tree/main/bitnami/kafka
+    icon: https://bitnami.com/assets/stacks/kafka/img/kafka-stack-220x234.png
+    keywords:
+    - kafka
+    - zookeeper
+    - streaming
+    - producer
+    - consumer
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: kafka
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/kafka
+    - https://kafka.apache.org/
+    urls:
+    - https://charts.bitnami.com/bitnami/kafka-21.0.1.tgz
+    version: 21.0.1
+  - annotations:
+      category: Infrastructure
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 3.4.0
     created: "2023-02-17T14:30:23.340964403Z"
     dependencies:
     - condition: zookeeper.enabled
@@ -118569,4 +118607,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-02-17T17:06:03.81145851Z"
+generated: "2023-02-17T17:10:39.265162293Z"
