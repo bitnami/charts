@@ -164,8 +164,8 @@ Refer to the [chart documentation for more information on each of these architec
 
 | Name                                    | Description                                                                                                     | Value           |
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------- | --------------- |
-| `annotations`                           | Additional labels to be added to the MongoDB(&reg;) statefulset. Evaluated as a template                        | `{}`            |
-| `labels`                                | Annotations to be added to the MongoDB(&reg;) statefulset. Evaluated as a template                              | `{}`            |
+| `annotations`                           | Annotations to be added to the MongoDB(&reg;) statefulset. Evaluated as a template                        | `{}`            |
+| `labels`                                | Additional labels to be added to the MongoDB(&reg;) statefulset. Evaluated as a template                              | `{}`            |
 | `replicaCount`                          | Number of MongoDB(&reg;) nodes (only when `architecture=replicaset`)                                            | `2`             |
 | `updateStrategy.type`                   | Strategy to use to replace existing MongoDB(&reg;) pods. When architecture=standalone and useStatefulSet=false, | `RollingUpdate` |
 | `podManagementPolicy`                   | Pod management policy for MongoDB(&reg;)                                                                        | `OrderedReady`  |
