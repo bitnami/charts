@@ -338,7 +338,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `logging.output` | Alternates between the default log output format or json format                | `default` |
 | `logging.level`  | Allowed values as documented: FATAL, ERROR, WARN, INFO, DEBUG, TRACE, ALL, OFF | `INFO`    |
 
-
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
 helm install my-release --set auth.adminPassword=secretpassword my-repo/keycloak
