@@ -1699,7 +1699,7 @@ compactor:
     successfulJobsHistoryLimit: ""
     failedJobsHistoryLimit: ""
     backoffLimit: ""
-  ## @param compactor.restartPolicy Compactor container restart policy. This must be set when compactor.cronJob.enabled is true
+  ## @param compactor.restartPolicy Compactor container restart policy.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy
   ##
   restartPolicy: ""

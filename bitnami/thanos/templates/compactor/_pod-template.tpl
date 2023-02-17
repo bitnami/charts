@@ -53,6 +53,8 @@ spec:
   {{- end }}
   {{- if .Values.compactor.restartPolicy }}
   restartPolicy: {{ .Values.compactor.restartPolicy }}
+  {{- else if .Values.compactor.cronJob.enabled }}
+  restartPolicy: Never
   {{- end }}
   {{- if or .Values.compactor.initContainers (and .Values.volumePermissions.enabled .Values.compactor.persistence.enabled) }}
   initContainers:
