@@ -203,7 +203,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `selfMonitor.telemetryPort`                     | Kube-state-metrics telemetry Port                                                                                                                                  | `8081`                       |
 | `selfMonitor.telemetryNodePort`                 | Kube-state-metrics Node Port                                                                                                                                       | `""`                         |
 
-
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example the following command sets the `replicas` of the kube-state-metrics Pods to `2`.
 
 ```console
 helm install my-release --set replicas=2 my-repo/kube-state-metrics
