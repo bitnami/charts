@@ -49,7 +49,7 @@ To get the password for "{{ $customUser }}" run:
 
 To get the password for "{{ default "postgres" $customUser }}" run:
 
-    export POSTGRES_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "postgresql.secretName" . }} -o jsonpath="{.data.{{ ternary "password" "postgres-password" (and (not (empty $customUser)) (ne $customUser "postgres")) }}}" | base64 -d)
+    export POSTGRES_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "postgresql.secretName" . }} -o jsonpath="{.data.{{ ternary "password" (include "postgresql.adminPasswordKey" .)  (and (not (empty $customUser)) (ne $customUser "postgres")) }}}" | base64 -d)
 
 {{- end }}
 
