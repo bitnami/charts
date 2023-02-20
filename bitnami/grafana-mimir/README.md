@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/grafana-mimir
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/grafana-mimir
 ```
 
 ## Introduction
@@ -92,8 +92,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mimir.image.debug`                    | Enable Grafana Mimir image debug mode                                                                                                                    | `false`                  |
 | `mimir.dataDir`                        | path to the Mimir data directory                                                                                                                         | `/bitnami/grafana-mimir` |
 | `mimir.configuration`                  | Mimir components configuration                                                                                                                           | `""`                     |
-| `mimir.overrideConfiguration`          | Loki components configuration override. Values defined here takes precedence over mimir.configuration                                                    | `{}`                     |
-| `mimir.existingConfigmap`              | Name of a ConfigMap with the Loki configuration                                                                                                          | `""`                     |
+| `mimir.overrideConfiguration`          | Mimir components configuration override. Values defined here takes precedence over mimir.configuration                                                   | `{}`                     |
+| `mimir.existingConfigmap`              | Name of a ConfigMap with the Mimir configuration                                                                                                         | `""`                     |
 | `mimir.containerPorts.http`            | Grafana Mimir HTTP metrics container port                                                                                                                | `8080`                   |
 | `mimir.containerPorts.grpc`            | Grafana Mimir GRPC container port                                                                                                                        | `9095`                   |
 | `mimir.containerPorts.gossipRing`      | Grafana Mimir memberlist container port                                                                                                                  | `7946`                   |
@@ -452,7 +452,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.service.externalTrafficPolicy`    | Gateway service external traffic policy                                                                                          | `Cluster`                |
 | `gateway.service.annotations`              | Additional custom annotations for Gateway service                                                                                | `{}`                     |
 | `gateway.service.extraPorts`               | Extra ports to expose in the Gateway service                                                                                     | `[]`                     |
-| `gateway.ingress.enabled`                  | Enable ingress record generation for Loki Gateway                                                                                | `false`                  |
+| `gateway.ingress.enabled`                  | Enable ingress record generation for Mimir Gateway                                                                               | `false`                  |
 | `gateway.ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `gateway.ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
 | `gateway.ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
@@ -1218,10 +1218,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedmetadata.nameOverride`            | override the subchart name                                                                                | `""`                   |
 | `memcachedmetadata.service.ports.memcached` | Memcached service port                                                                                    | `11211`                |
 
-
-See https://github.com/bitnami-labs/readme-generator-for-helm to create the table
-
-The above parameters map to the env variables defined in [bitnami/grafana-mimir](https://github.com/bitnami/containers/tree/main/bitnami/grafana-mimir). For more information please refer to the [bitnami/grafana-mimir](https://github.com/bitnami/containers/tree/main/bitnami/grafana-mimir) image documentation.
+See <https://github.com/bitnami-labs/readme-generator-for-helm> to create the table
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -1231,7 +1228,7 @@ helm install my-release \
   my-repo/grafana-mimir
 ```
 
-The above command enables the Jaeger GRPC traces.
+The above command enables the debug mode in the image.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
@@ -1239,7 +1236,16 @@ Alternatively, a YAML file that specifies the values for the above parameters ca
 helm install my-release -f values.yaml my-repo/grafana-mimir
 ```
 
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](values.yaml) as starting point.
+
+Once the chart is installed the remote write endpoints for Prometheus or Grafana Agent and the read address to be used as datasource in Grafana will be printed. Example:
+
+```console
+    Remote write endpoints for Prometheus or Grafana Agent:
+      http://grafana-mimir-gateway.default.svc.cluster.local/api/v1/push
+    Read address, Grafana data source (Prometheus) URL:
+      http://grafana-mimir-gateway.default.svc.cluster.local/prometheus
+```
 
 ## Configuration and installation details
 
@@ -1248,54 +1254,41 @@ helm install my-release -f values.yaml my-repo/grafana-mimir
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
 ### Mimir configuration
 
-The mimir configuration file `mimir.yaml` is shared across the different components: `distributor`, `compactor`, `ingester`, `querier`, `query-frontend` and `store-gateway`. This is set in the `mimir.configuration` value. Check the official [Mimir Mimir documentation](https://grafana.com/docs/mimir/latest/operators-guide/configure/reference-configuration-parameters) for the list of possible configurations.
-
-## Persistence
-
-### Limitation
-
-This chart does not function fully when using local filesystem as a persistence store. When using a local filesystem as a persistence store, querying will not be possible (or limited to the ingesters' in-memory caches). For a fully functional deployment of this helm chart, an object storage backend is required.
+The mimir configuration file `mimir.yaml` is shared across the different components: `distributor`, `compactor`, `ingester`, `querier`, `query-frontend` and `store-gateway`. This is set in the `mimir.configuration` value. That value is templated, so you can use other chart values or templates in your configuration. Check the official [Mimir Mimir documentation](https://grafana.com/docs/mimir/latest/operators-guide/configure/reference-configuration-parameters) for the list of possible configurations.
 
 ### Data
 
-The [Bitnami grafana-mimir](https://github.com/bitnami/containers/tree/main/bitnami/grafana-mimir) image stores the grafana-mimir `ingester` data at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
+The [Bitnami grafana-mimir](https://github.com/bitnami/containers/tree/main/bitnami/grafana-mimir) image stores the data at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
 
 ### Additional environment variables
 
-In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property inside each of the subsections: `distributor`, `compactor`, `ingester`, `querier`, `queryFrontend` and `vulture`.
+In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property inside each of the subsections: `distributor`, `compactor`, `ingester`, `querier`, `queryFrontend` and `storeGateway`. This is very useful if you need to [use enviroment variables in your config file](https://grafana.com/docs/mimir/v2.6.x/reference-configuration-parameters/#use-environment-variables-in-the-configuration) for example to set
 
 ```yaml
-compactor:
+mimir:
+  blockStorage:
+    backend: s3
+    config: |
+      access_key_id: ${S3_ACCESS_KEY_ID}
+      secret_access_key: ${S3_SECRET_ACCESS_KEY}
+      bucket_name: mimir
+      endpoint: s3.us-east-1.amazonaws.com
+      insecure: false
+storeGateway:
   extraEnvVars:
-    - name: LOG_LEVEL
-      value: error
-
-distributor:
-  extraEnvVars:
-    - name: LOG_LEVEL
-      value: error
-
-ingester:
-  extraEnvVars:
-    - name: LOG_LEVEL
-      value: error
-
-querier:
-  extraEnvVars:
-    - name: LOG_LEVEL
-      value: error
-
-queryFrontend:
-  extraEnvVars:
-    - name: LOG_LEVEL
-      value: error
-
-vulture:
-  extraEnvVars:
-    - name: LOG_LEVEL
-      value: error
+    - name: S3_ACCESS_KEY_ID
+      valueFrom:
+        secretKeyRef:
+          name: s3-credentials-secret
+          key: access-key-id
+    - name: S3_SECRET_ACCESS_KEY
+      valueFrom:
+        secretKeyRef:
+          name: s3-credentials-secret
+          key: secret-access-key
 ```
 
 Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
@@ -1304,16 +1297,16 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters inside each of the subsections: `distributor`, `compactor`, `ingester`, `querier`, `queryFrontend` and `vulture`.
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters inside each of the subsections: `distributor`, `compactor`, `ingester`, `querier`, `queryFrontend` and `storeGateway`.
 
 ### External cache support
 
-You may want to have Grafana Mimir connect to an external Memcached rather than installing one inside your cluster. Typical reasons for this are to use a managed cache service, or to share a common cache server for all your applications. To achieve this, the chart allows you to specify credentials for an external database with the [`externalMemcached` parameter](#parameters). You should also disable the Memcached installation with the `memcached.enabled` option. Here is an example:
+You may want to have Grafana Mimir connect to an external Memcached rather than installing one inside your cluster. Typical reasons for this are to use a managed cache service, or to share a common cache server for all your applications. To achieve this, the chart allows you to specify credentials for an external database with the [`externalMemcached*` parameters](#parameters). You should also disable the Memcached installation with the `enabled` option. Here is an example:
 
 ```console
-memcached.enabled=false
-externalMemcached.host=myexternalhost
-externalMemcached.port=11211
+memcachedchunks.enabled=false
+externalMemcachedChunks.host=myexternalhost
+externalMemcachedChunks.port=11211
 ```
 
 ## Troubleshooting
@@ -1324,13 +1317,13 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

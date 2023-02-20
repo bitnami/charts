@@ -272,13 +272,13 @@ mimir:
     {{- end }}
     {{- end }}
 
-  ## @param mimir.overrideConfiguration [object] Loki components configuration override. Values defined here takes precedence over mimir.configuration
+  ## @param mimir.overrideConfiguration [object] Mimir components configuration override. Values defined here takes precedence over mimir.configuration
   ## e.g:
   ## overrideConfiguration:
   ##   auth_enabled: true
   ##
   overrideConfiguration: {}
-  ## @param mimir.existingConfigmap Name of a ConfigMap with the Loki configuration
+  ## @param mimir.existingConfigmap Name of a ConfigMap with the Mimir configuration
   ##
   existingConfigmap: ""
 
@@ -1548,11 +1548,11 @@ gateway:
     ##
     extraPorts: []
 
-  ## Configure the ingress resource that allows you to access the Loki Gateway installation
+  ## Configure the ingress resource that allows you to access the Mimir Gateway installation
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
-    ## @param gateway.ingress.enabled Enable ingress record generation for Loki Gateway
+    ## @param gateway.ingress.enabled Enable ingress record generation for Mimir Gateway
     ##
     enabled: false
     ## @param gateway.ingress.pathType Ingress path type
@@ -1599,7 +1599,7 @@ gateway:
     ## @param gateway.ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
     ## e.g:
     ## extraHosts:
-    ##   - name: Loki Gateway.local
+    ##   - name: mimir-gateway.local
     ##     path: /
     ##
     extraHosts: []
@@ -1617,8 +1617,8 @@ gateway:
     ## e.g:
     ## extraTls:
     ## - hosts:
-    ##     - Loki Gateway.local
-    ##   secretName: Loki Gateway.local-tls
+    ##     - mimir-gateway.local
+    ##   secretName: mimir-gateway.local-tls
     ##
     extraTls: []
     ## @param gateway.ingress.secrets Custom TLS certificates as secrets
@@ -1630,7 +1630,7 @@ gateway:
     ## Please see README.md for more information
     ## e.g:
     ## secrets:
-    ##   - name: Loki Gateway.local-tls
+    ##   - name: mimir-gateway.local-tls
     ##     key: |-
     ##       -----BEGIN RSA PRIVATE KEY-----
     ##       ...
