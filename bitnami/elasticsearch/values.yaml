@@ -482,14 +482,24 @@ master:
     type: RollingUpdate
   ## Elasticsearch resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param master.resources.limits The resources limits for the master-elegible containers
-  ## @param master.resources.requests [object] The requested resources for the master-elegible containers
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param master.resources.limits The resources limits for elasticsearch containers
+  ## @param master.resources.requests The requested resources for elasticsearch containers
   ##
   resources:
+    ## Example:
+    ## limits:
+    ##    cpu: 500m
+    ##    memory: 1Gi
     limits: {}
-    requests:
-      cpu: 25m
-      memory: 256Mi
+    ## Examples:
+    ## requests:
+    ##    cpu: 250m
+    ##    memory: 256Mi
+    requests: {}
   ## @param master.heapSize Elasticsearch master-eligible node heap size.
   ## Note: The recommended heapSize is half of the container's memory.
   ## If omitted, it will be automatically set.
