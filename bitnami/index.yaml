@@ -67709,6 +67709,41 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 6.0.4
+    created: "2023-02-20T12:38:51.368396527Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: MongoDB(R) is a relational open source NoSQL database. Easy to use,
+      it stores data in JSON-like documents. Automated scalability and high-performance.
+      Ideal for developing cloud native applications.
+    digest: cc40fe61bfecb68ec9baf7b3a91b57f8b3b63a6a6d4c972b36b77f10b8927503
+    home: https://github.com/bitnami/charts/tree/main/bitnami/mongodb
+    icon: https://bitnami.com/assets/stacks/mongodb/img/mongodb-stack-220x234.png
+    keywords:
+    - mongodb
+    - database
+    - nosql
+    - cluster
+    - replicaset
+    - replication
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: mongodb
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/mongodb
+    - https://mongodb.org
+    urls:
+    - https://charts.bitnami.com/bitnami/mongodb-13.6.8.tgz
+    version: 13.6.8
+  - annotations:
+      category: Database
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 6.0.4
     created: "2023-01-31T15:34:31.544178477Z"
     dependencies:
     - name: common
@@ -120496,4 +120531,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-02-20T09:32:12.140327686Z"
+generated: "2023-02-20T12:38:51.35676686Z"
