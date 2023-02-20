@@ -273,7 +273,6 @@ replicaCount: 1
 ##
 updateStrategy:
   type: RollingUpdate
-  rollingUpdate: {}
 ## @param schedulerName Alternate scheduler
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
