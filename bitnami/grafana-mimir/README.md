@@ -63,7 +63,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
@@ -79,7 +78,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
-
 
 ### Common Grafana Mimir Parameters
 
@@ -103,7 +101,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mimir.gossipRing.service.annotations` | Additional custom annotations for Gossip Ring headless service                                                                                           | `{}`                     |
 | `mimir.blockStorage.backend`           | Backend storage to use                                                                                                                                   | `s3`                     |
 | `mimir.blockStorage.config`            | Configures connection to the backend store                                                                                                               | `{}`                     |
-
 
 ### Alertmanager Deployment Parameters
 
@@ -168,7 +165,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `alertmanager.sidecars`                              | Add additional sidecar containers to the Alertmanager pod(s)                                           | `[]`            |
 | `alertmanager.initContainers`                        | Add additional init containers to the Alertmanager pod(s)                                              | `[]`            |
 
-
 ### Alertmanager Traffic Exposure Parameters
 
 | Name                                            | Description                                                      | Value       |
@@ -191,7 +187,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `alertmanager.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable   | `""`        |
 | `alertmanager.blockStorage.backend`             | Backend storage to use                                           | `s3`        |
 | `alertmanager.blockStorage.config`              | Configures connection to the backend store                       | `{}`        |
-
 
 ### Compactor Deployment Parameters
 
@@ -264,7 +259,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.persistence.selector`                  | Selector to match an existing Persistent Volume for Compactor's data PVC                            | `{}`                |
 | `compactor.persistence.dataSource`                | PVC data source                                                                                     | `{}`                |
 
-
 ### Compactor Traffic Exposure Parameters
 
 | Name                                         | Description                                                      | Value       |
@@ -285,7 +279,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                  | `false`     |
 | `compactor.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled   | `1`         |
 | `compactor.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable   | `""`        |
-
 
 ### Distributor Deployment Parameters
 
@@ -349,7 +342,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.sidecars`                              | Add additional sidecar containers to the Distributor pod(s)                                           | `[]`            |
 | `distributor.initContainers`                        | Add additional init containers to the Distributor pod(s)                                              | `[]`            |
 
-
 ### Distributor Traffic Exposure Parameters
 
 | Name                                           | Description                                                      | Value       |
@@ -370,7 +362,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                  | `false`     |
 | `distributor.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled   | `1`         |
 | `distributor.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable   | `""`        |
-
 
 ### Gateway Deployment Parameters
 
@@ -446,7 +437,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.sidecars`                              | Add additional sidecar containers to the Gateway pod(s)                                               | `[]`                  |
 | `gateway.initContainers`                        | Add additional init containers to the Gateway pod(s)                                                  | `[]`                  |
 
-
 ### Gateway Traffic Exposure Parameters
 
 | Name                                       | Description                                                                                                                      | Value                    |
@@ -478,7 +468,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                                                                                  | `false`                  |
 | `gateway.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled                                                                   | `1`                      |
 | `gateway.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable                                                                   | `""`                     |
-
 
 ### Ingester Deployment Parameters
 
@@ -550,7 +539,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.persistence.annotations`               | Additional PVC annotations                                                                         | `{}`                |
 | `ingester.persistence.selector`                  | Selector to match an existing Persistent Volume for Ingester's data PVC                            | `{}`                |
 | `ingester.persistence.dataSource`                | PVC data source                                                                                    | `{}`                |
-
 
 ### Ingester Traffic Exposure Parameters
 
@@ -631,7 +619,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `overridesExporter.sidecars`                              | Add additional sidecar containers to the Overrides Exporter pod(s)                                          | `[]`            |
 | `overridesExporter.initContainers`                        | Add additional init containers to the Overrides Exporter pod(s)                                             | `[]`            |
 
-
 ### Overrides Exporter Traffic Exposure Parameters
 
 | Name                                                 | Description                                                      | Value       |
@@ -652,7 +639,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `overridesExporter.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                  | `false`     |
 | `overridesExporter.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled   | `1`         |
 | `overridesExporter.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable   | `""`        |
-
 
 ### Querier Deployment Parameters
 
@@ -716,7 +702,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.sidecars`                              | Add additional sidecar containers to the Querier pod(s)                                           | `[]`            |
 | `querier.initContainers`                        | Add additional init containers to the Querier pod(s)                                              | `[]`            |
 
-
 ### Querier Traffic Exposure Parameters
 
 | Name                                       | Description                                                      | Value       |
@@ -737,7 +722,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                  | `false`     |
 | `querier.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled   | `1`         |
 | `querier.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable   | `""`        |
-
 
 ### Query Frontend Deployment Parameters
 
@@ -800,7 +784,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Query Frontend container(s)            | `[]`            |
 | `queryFrontend.sidecars`                              | Add additional sidecar containers to the Query Frontend pod(s)                                          | `[]`            |
 | `queryFrontend.initContainers`                        | Add additional init containers to the Query Frontend pod(s)                                             | `[]`            |
-
 
 ### Query Frontend Traffic Exposure Parameters
 
@@ -881,7 +864,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryScheduler.sidecars`                              | Add additional sidecar containers to the Query Scheduler pod(s)                                          | `[]`            |
 | `queryScheduler.initContainers`                        | Add additional init containers to the Query Scheduler pod(s)                                             | `[]`            |
 
-
 ### Query Scheduler Traffic Exposure Parameters
 
 | Name                                              | Description                                                      | Value       |
@@ -902,7 +884,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryScheduler.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                  | `false`     |
 | `queryScheduler.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled   | `1`         |
 | `queryScheduler.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable   | `""`        |
-
 
 ### Store Gateway Deployment Parameters
 
@@ -975,7 +956,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `storeGateway.persistence.selector`                  | Selector to match an existing Persistent Volume for Store Gateway's data PVC                           | `{}`                |
 | `storeGateway.persistence.dataSource`                | PVC data source                                                                                        | `{}`                |
 
-
 ### Store Gateway Traffic Exposure Parameters
 
 | Name                                            | Description                                                      | Value       |
@@ -996,7 +976,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `storeGateway.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                  | `false`     |
 | `storeGateway.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled   | `1`         |
 | `storeGateway.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable   | `""`        |
-
 
 ### Ruler Deployment Parameters
 
@@ -1060,7 +1039,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ruler.sidecars`                              | Add additional sidecar containers to the Ruler pod(s)                                           | `[]`            |
 | `ruler.initContainers`                        | Add additional init containers to the Ruler pod(s)                                              | `[]`            |
 
-
 ### Ruler Persistence Parameters
 
 | Name                             | Description                                                          | Value               |
@@ -1072,7 +1050,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ruler.persistence.size`         | PVC Storage Request for Ruler data volume                            | `8Gi`               |
 | `ruler.persistence.annotations`  | Additional PVC annotations                                           | `{}`                |
 | `ruler.persistence.selector`     | Selector to match an existing Persistent Volume for Ruler's data PVC | `{}`                |
-
 
 ### Ruler Traffic Exposure Parameters
 
@@ -1097,7 +1074,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ruler.blockStorage.backend`             | Backend storage to use                                           | `s3`        |
 | `ruler.blockStorage.config`              | Configures connection to the backend store                       | `{}`        |
 
-
 ### Persistence Parameters
 
 | Name                        | Description                                                                                             | Value                 |
@@ -1113,7 +1089,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.selector`      | Selector to match an existing Persistent Volume for WordPress data PVC                                  | `{}`                  |
 | `persistence.dataSource`    | Custom PVC data source                                                                                  | `{}`                  |
 
-
 ### Init Container Parameters
 
 | Name                                                   | Description                                                                                     | Value                   |
@@ -1127,7 +1102,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
 | `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
-
 
 ### Other Parameters
 
@@ -1164,14 +1138,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `minio.service.loadBalancerIP`                | MinIO&reg; service LoadBalancer IP                                                                                                | `""`                                                                                                                                                    |
 | `minio.service.ports.api`                     | MinIO&reg; service port                                                                                                           | `80`                                                                                                                                                    |
 
-
 ### External Memcached (Chunks) Parameters
 
 | Name                           | Description                                   | Value   |
 | ------------------------------ | --------------------------------------------- | ------- |
 | `externalMemcachedChunks.host` | Host of a running external memcached instance | `""`    |
 | `externalMemcachedChunks.port` | Port of a running external memcached instance | `11211` |
-
 
 ### Memcached Sub-chart Parameters (Chunks)
 
@@ -1186,14 +1158,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedchunks.architecture`            | Memcached architecture                                                                                    | `high-availability`    |
 | `memcachedchunks.service.ports.memcached` | Memcached service port                                                                                    | `11211`                |
 
-
 ### External Memcached (Frontend) Parameters
 
 | Name                             | Description                                   | Value   |
 | -------------------------------- | --------------------------------------------- | ------- |
 | `externalMemcachedFrontend.host` | Host of a running external memcached instance | `""`    |
 | `externalMemcachedFrontend.port` | Port of a running external memcached instance | `11211` |
-
 
 ### Memcached Sub-chart Parameters (Frontend)
 
@@ -1208,14 +1178,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedfrontend.nameOverride`            | override the subchart name                                                                                | `""`                   |
 | `memcachedfrontend.service.ports.memcached` | Memcached service port                                                                                    | `11211`                |
 
-
 ### External Memcached (Index) Parameters
 
 | Name                          | Description                                   | Value   |
 | ----------------------------- | --------------------------------------------- | ------- |
 | `externalMemcachedIndex.host` | Host of a running external memcached instance | `""`    |
 | `externalMemcachedIndex.port` | Port of a running external memcached instance | `11211` |
-
 
 ### Memcached Sub-chart Parameters (Index)
 
@@ -1230,14 +1198,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedindex.nameOverride`            | override the subchart name                                                                                | `""`                   |
 | `memcachedindex.service.ports.memcached` | Memcached service port                                                                                    | `11211`                |
 
-
 ### External Memcached (Metadata) Parameters
 
 | Name                             | Description                                   | Value   |
 | -------------------------------- | --------------------------------------------- | ------- |
 | `externalMemcachedMetadata.host` | Host of a running external memcached instance | `""`    |
 | `externalMemcachedMetadata.port` | Port of a running external memcached instance | `11211` |
-
 
 ### Memcached Sub-chart Parameters (Metadata)
 
