@@ -38,7 +38,7 @@ spec:
   loadBalancerIP: {{ .Values.sentinel.service.loadBalancerIP }}
   {{- end }}
   {{- if and (eq .Values.sentinel.service.type "LoadBalancer") (not (empty .Values.sentinel.service.loadBalancerSourceRanges)) }}
-  loadBalancerSourceRanges: {{ .Values.sentinel.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{ toYaml .Values.sentinel.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   {{- if and .Values.sentinel.service.clusterIP (eq .Values.sentinel.service.type "ClusterIP") }}
   clusterIP: {{ .Values.sentinel.service.clusterIP }}

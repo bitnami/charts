@@ -61,7 +61,6 @@
               "apikey": "ComplicatedPassword123!4",
               "ingressHost": "www.example.com",
               "ingressPath": "/nginx",
-              "externalIp": "{{ TARGET_IP }}",
               "adminHttpPort": "443"
             }
           }

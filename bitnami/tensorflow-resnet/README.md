@@ -7,12 +7,12 @@ TensorFlow ResNet is a client utility for use with TensorFlow Serving and ResNet
 [Overview of TensorFlow ResNet](https://github.com/tensorflow/models)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/tensorflow-resnet
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/tensorflow-resnet
 ```
 
 ## Introduction
@@ -31,8 +31,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/tensorflow-resnet
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/tensorflow-resnet
 ```
 
 These commands deploy Tensorflow Serving ResNet model on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -44,12 +44,13 @@ These commands deploy Tensorflow Serving ResNet model on the Kubernetes cluster 
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
+
 You can check your releases with:
 
 ```console
-$ helm list
+helm list
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -62,7 +63,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------- | ----------------------------------------------- | ----- |
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-
 
 ### Common parameters
 
@@ -78,20 +78,19 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`    |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]` |
 
-
 ### TensorFlow parameters
 
 | Name                                    | Description                                                                                                        | Value                        |
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ---------------------------- |
 | `server.image.registry`                 | TensorFlow Serving image registry                                                                                  | `docker.io`                  |
 | `server.image.repository`               | TensorFlow Serving image repository                                                                                | `bitnami/tensorflow-serving` |
-| `server.image.tag`                      | TensorFlow Serving Image tag (immutable tags are recommended)                                                      | `2.11.0-debian-11-r18`       |
+| `server.image.tag`                      | TensorFlow Serving Image tag (immutable tags are recommended)                                                      | `2.11.0-debian-11-r29`       |
 | `server.image.digest`                   | TensorFlow Serving image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
 | `server.image.pullPolicy`               | TensorFlow Serving image pull policy                                                                               | `IfNotPresent`               |
 | `server.image.pullSecrets`              | Specify docker-registry secret names as an array                                                                   | `[]`                         |
 | `client.image.registry`                 | TensorFlow ResNet image registry                                                                                   | `docker.io`                  |
 | `client.image.repository`               | TensorFlow ResNet image repository                                                                                 | `bitnami/tensorflow-resnet`  |
-| `client.image.tag`                      | TensorFlow ResNet image tag (immutable tags are recommended)                                                       | `2.11.0-debian-11-r22`       |
+| `client.image.tag`                      | TensorFlow ResNet image tag (immutable tags are recommended)                                                       | `2.11.0-debian-11-r31`       |
 | `client.image.digest`                   | TensorFlow ResNet image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag  | `""`                         |
 | `client.image.pullPolicy`               | TensorFlow ResNet image pull policy                                                                                | `IfNotPresent`               |
 | `client.image.pullSecrets`              | Specify docker-registry secret names as an array                                                                   | `[]`                         |
@@ -167,17 +166,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                       | Enable Prometheus exporter to expose Tensorflow server metrics                                                     | `false`                      |
 | `metrics.podAnnotations`                | Prometheus exporter pod annotations                                                                                | `{}`                         |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release my-repo/tensorflow-resnet --set imagePullPolicy=Always
+helm install my-release my-repo/tensorflow-resnet --set imagePullPolicy=Always
 ```
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/tensorflow-resnet
+helm install my-release -f values.yaml my-repo/tensorflow-resnet
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -218,27 +216,26 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 
 [Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/infrastructure/tensorflow-resnet/administration/upgrade-helm3/).
 
-
 ### To 2.0.0
 
 Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
 Use the workaround below to upgrade from versions previous to 2.0.0. The following example assumes that the release name is tensorflow-resnet:
 
 ```console
-$ kubectl delete deployment  tensorflow-resnet --cascade=false
-$ helm upgrade tensorflow-resnet my-repo/tensorflow-resnet
-$ kubectl delete rs "$(kubectl get rs -l app=tensorflow-resnet -o jsonpath='{.items[0].metadata.name}')"
+kubectl delete deployment  tensorflow-resnet --cascade=false
+helm upgrade tensorflow-resnet my-repo/tensorflow-resnet
+kubectl delete rs "$(kubectl get rs -l app=tensorflow-resnet -o jsonpath='{.items[0].metadata.name}')"
 ```
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

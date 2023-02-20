@@ -7,12 +7,12 @@ Apache Kafka is a distributed streaming platform designed to build real-time pip
 [Overview of Apache Kafka](http://kafka.apache.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/kafka
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/kafka
 ```
 
 ## Introduction
@@ -32,8 +32,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/kafka
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/kafka
 ```
 
 These commands deploy Kafka on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -45,7 +45,7 @@ These commands deploy Kafka on the Kubernetes cluster in the default configurati
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -59,7 +59,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -76,14 +75,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the statefulset                                   | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the statefulset                                      | `["infinity"]`  |
 
-
 ### Kafka parameters
 
 | Name                                              | Description                                                                                                                                                                         | Value                               |
 | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
 | `image.registry`                                  | Kafka image registry                                                                                                                                                                | `docker.io`                         |
 | `image.repository`                                | Kafka image repository                                                                                                                                                              | `bitnami/kafka`                     |
-| `image.tag`                                       | Kafka image tag (immutable tags are recommended)                                                                                                                                    | `3.3.2-debian-11-r0`                |
+| `image.tag`                                       | Kafka image tag (immutable tags are recommended)                                                                                                                                    | `3.4.0-debian-11-r2`                |
 | `image.digest`                                    | Kafka image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                               | `""`                                |
 | `image.pullPolicy`                                | Kafka image pull policy                                                                                                                                                             | `IfNotPresent`                      |
 | `image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                                                                                    | `[]`                                |
@@ -161,7 +159,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVarsCM`                                  | ConfigMap with extra environment variables                                                                                                                                          | `""`                                |
 | `extraEnvVarsSecret`                              | Secret with extra environment variables                                                                                                                                             | `""`                                |
 
-
 ### Statefulset parameters
 
 | Name                                                | Description                                                                                                                                                                                   | Value           |
@@ -230,58 +227,56 @@ The command removes all the Kubernetes components associated with the chart and 
 | `pdb.minAvailable`                                  | Maximum number/percentage of unavailable Kafka replicas                                                                                                                                       | `""`            |
 | `pdb.maxUnavailable`                                | Maximum number/percentage of unavailable Kafka replicas                                                                                                                                       | `1`             |
 
-
 ### Traffic Exposure parameters
 
-| Name                                              | Description                                                                                                              | Value                 |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------- |
-| `service.type`                                    | Kubernetes Service type                                                                                                  | `ClusterIP`           |
-| `service.ports.client`                            | Kafka svc port for client connections                                                                                    | `9092`                |
-| `service.ports.internal`                          | Kafka svc port for inter-broker connections                                                                              | `9093`                |
-| `service.ports.external`                          | Kafka svc port for external connections                                                                                  | `9094`                |
-| `service.nodePorts.client`                        | Node port for the Kafka client connections                                                                               | `""`                  |
-| `service.nodePorts.external`                      | Node port for the Kafka external connections                                                                             | `""`                  |
-| `service.sessionAffinity`                         | Control where client requests go, to the same pod or round-robin                                                         | `None`                |
-| `service.sessionAffinityConfig`                   | Additional settings for the sessionAffinity                                                                              | `{}`                  |
-| `service.clusterIP`                               | Kafka service Cluster IP                                                                                                 | `""`                  |
-| `service.loadBalancerIP`                          | Kafka service Load Balancer IP                                                                                           | `""`                  |
-| `service.loadBalancerSourceRanges`                | Kafka service Load Balancer sources                                                                                      | `[]`                  |
-| `service.externalTrafficPolicy`                   | Kafka service external traffic policy                                                                                    | `Cluster`             |
-| `service.annotations`                             | Additional custom annotations for Kafka service                                                                          | `{}`                  |
-| `service.headless.publishNotReadyAddresses`       | Indicates that any agent which deals with endpoints for this Service should disregard any indications of ready/not-ready | `false`               |
-| `service.headless.annotations`                    | Annotations for the headless service.                                                                                    | `{}`                  |
-| `service.headless.labels`                         | Labels for the headless service.                                                                                         | `{}`                  |
-| `service.extraPorts`                              | Extra ports to expose in the Kafka service (normally used with the `sidecar` value)                                      | `[]`                  |
-| `externalAccess.enabled`                          | Enable Kubernetes external cluster access to Kafka brokers                                                               | `false`               |
-| `externalAccess.autoDiscovery.enabled`            | Enable using an init container to auto-detect external IPs/ports by querying the K8s API                                 | `false`               |
-| `externalAccess.autoDiscovery.image.registry`     | Init container auto-discovery image registry                                                                             | `docker.io`           |
-| `externalAccess.autoDiscovery.image.repository`   | Init container auto-discovery image repository                                                                           | `bitnami/kubectl`     |
-| `externalAccess.autoDiscovery.image.tag`          | Init container auto-discovery image tag (immutable tags are recommended)                                                 | `1.25.6-debian-11-r1` |
-| `externalAccess.autoDiscovery.image.digest`       | Petete image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                   | `""`                  |
-| `externalAccess.autoDiscovery.image.pullPolicy`   | Init container auto-discovery image pull policy                                                                          | `IfNotPresent`        |
-| `externalAccess.autoDiscovery.image.pullSecrets`  | Init container auto-discovery image pull secrets                                                                         | `[]`                  |
-| `externalAccess.autoDiscovery.resources.limits`   | The resources limits for the auto-discovery init container                                                               | `{}`                  |
-| `externalAccess.autoDiscovery.resources.requests` | The requested resources for the auto-discovery init container                                                            | `{}`                  |
-| `externalAccess.service.type`                     | Kubernetes Service type for external access. It can be NodePort, LoadBalancer or ClusterIP                               | `LoadBalancer`        |
-| `externalAccess.service.ports.external`           | Kafka port used for external access when service type is LoadBalancer                                                    | `9094`                |
-| `externalAccess.service.loadBalancerIPs`          | Array of load balancer IPs for each Kafka broker. Length must be the same as replicaCount                                | `[]`                  |
-| `externalAccess.service.loadBalancerNames`        | Array of load balancer Names for each Kafka broker. Length must be the same as replicaCount                              | `[]`                  |
-| `externalAccess.service.loadBalancerAnnotations`  | Array of load balancer annotations for each Kafka broker. Length must be the same as replicaCount                        | `[]`                  |
-| `externalAccess.service.loadBalancerSourceRanges` | Address(es) that are allowed when service is LoadBalancer                                                                | `[]`                  |
-| `externalAccess.service.nodePorts`                | Array of node ports used for each Kafka broker. Length must be the same as replicaCount                                  | `[]`                  |
-| `externalAccess.service.useHostIPs`               | Use service host IPs to configure Kafka external listener when service type is NodePort                                  | `false`               |
-| `externalAccess.service.usePodIPs`                | using the MY_POD_IP address for external access.                                                                         | `false`               |
-| `externalAccess.service.domain`                   | Domain or external ip used to configure Kafka external listener when service type is NodePort or ClusterIP               | `""`                  |
-| `externalAccess.service.publishNotReadyAddresses` | Indicates that any agent which deals with endpoints for this Service should disregard any indications of ready/not-ready | `false`               |
-| `externalAccess.service.labels`                   | Service labels for external access                                                                                       | `{}`                  |
-| `externalAccess.service.annotations`              | Service annotations for external access                                                                                  | `{}`                  |
-| `externalAccess.service.extraPorts`               | Extra ports to expose in the Kafka external service                                                                      | `[]`                  |
-| `networkPolicy.enabled`                           | Specifies whether a NetworkPolicy should be created                                                                      | `false`               |
-| `networkPolicy.allowExternal`                     | Don't require client label for connections                                                                               | `true`                |
-| `networkPolicy.explicitNamespacesSelector`        | A Kubernetes LabelSelector to explicitly select namespaces from which traffic could be allowed                           | `{}`                  |
-| `networkPolicy.externalAccess.from`               | customize the from section for External Access on tcp-external port                                                      | `[]`                  |
-| `networkPolicy.egressRules.customRules`           | Custom network policy rule                                                                                               | `{}`                  |
-
+| Name                                              | Description                                                                                                              | Value                  |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------- |
+| `service.type`                                    | Kubernetes Service type                                                                                                  | `ClusterIP`            |
+| `service.ports.client`                            | Kafka svc port for client connections                                                                                    | `9092`                 |
+| `service.ports.internal`                          | Kafka svc port for inter-broker connections                                                                              | `9093`                 |
+| `service.ports.external`                          | Kafka svc port for external connections                                                                                  | `9094`                 |
+| `service.nodePorts.client`                        | Node port for the Kafka client connections                                                                               | `""`                   |
+| `service.nodePorts.external`                      | Node port for the Kafka external connections                                                                             | `""`                   |
+| `service.sessionAffinity`                         | Control where client requests go, to the same pod or round-robin                                                         | `None`                 |
+| `service.sessionAffinityConfig`                   | Additional settings for the sessionAffinity                                                                              | `{}`                   |
+| `service.clusterIP`                               | Kafka service Cluster IP                                                                                                 | `""`                   |
+| `service.loadBalancerIP`                          | Kafka service Load Balancer IP                                                                                           | `""`                   |
+| `service.loadBalancerSourceRanges`                | Kafka service Load Balancer sources                                                                                      | `[]`                   |
+| `service.externalTrafficPolicy`                   | Kafka service external traffic policy                                                                                    | `Cluster`              |
+| `service.annotations`                             | Additional custom annotations for Kafka service                                                                          | `{}`                   |
+| `service.headless.publishNotReadyAddresses`       | Indicates that any agent which deals with endpoints for this Service should disregard any indications of ready/not-ready | `false`                |
+| `service.headless.annotations`                    | Annotations for the headless service.                                                                                    | `{}`                   |
+| `service.headless.labels`                         | Labels for the headless service.                                                                                         | `{}`                   |
+| `service.extraPorts`                              | Extra ports to expose in the Kafka service (normally used with the `sidecar` value)                                      | `[]`                   |
+| `externalAccess.enabled`                          | Enable Kubernetes external cluster access to Kafka brokers                                                               | `false`                |
+| `externalAccess.autoDiscovery.enabled`            | Enable using an init container to auto-detect external IPs/ports by querying the K8s API                                 | `false`                |
+| `externalAccess.autoDiscovery.image.registry`     | Init container auto-discovery image registry                                                                             | `docker.io`            |
+| `externalAccess.autoDiscovery.image.repository`   | Init container auto-discovery image repository                                                                           | `bitnami/kubectl`      |
+| `externalAccess.autoDiscovery.image.tag`          | Init container auto-discovery image tag (immutable tags are recommended)                                                 | `1.25.6-debian-11-r10` |
+| `externalAccess.autoDiscovery.image.digest`       | Kubectl image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                  | `""`                   |
+| `externalAccess.autoDiscovery.image.pullPolicy`   | Init container auto-discovery image pull policy                                                                          | `IfNotPresent`         |
+| `externalAccess.autoDiscovery.image.pullSecrets`  | Init container auto-discovery image pull secrets                                                                         | `[]`                   |
+| `externalAccess.autoDiscovery.resources.limits`   | The resources limits for the auto-discovery init container                                                               | `{}`                   |
+| `externalAccess.autoDiscovery.resources.requests` | The requested resources for the auto-discovery init container                                                            | `{}`                   |
+| `externalAccess.service.type`                     | Kubernetes Service type for external access. It can be NodePort, LoadBalancer or ClusterIP                               | `LoadBalancer`         |
+| `externalAccess.service.ports.external`           | Kafka port used for external access when service type is LoadBalancer                                                    | `9094`                 |
+| `externalAccess.service.loadBalancerIPs`          | Array of load balancer IPs for each Kafka broker. Length must be the same as replicaCount                                | `[]`                   |
+| `externalAccess.service.loadBalancerNames`        | Array of load balancer Names for each Kafka broker. Length must be the same as replicaCount                              | `[]`                   |
+| `externalAccess.service.loadBalancerAnnotations`  | Array of load balancer annotations for each Kafka broker. Length must be the same as replicaCount                        | `[]`                   |
+| `externalAccess.service.loadBalancerSourceRanges` | Address(es) that are allowed when service is LoadBalancer                                                                | `[]`                   |
+| `externalAccess.service.nodePorts`                | Array of node ports used for each Kafka broker. Length must be the same as replicaCount                                  | `[]`                   |
+| `externalAccess.service.useHostIPs`               | Use service host IPs to configure Kafka external listener when service type is NodePort                                  | `false`                |
+| `externalAccess.service.usePodIPs`                | using the MY_POD_IP address for external access.                                                                         | `false`                |
+| `externalAccess.service.domain`                   | Domain or external ip used to configure Kafka external listener when service type is NodePort or ClusterIP               | `""`                   |
+| `externalAccess.service.publishNotReadyAddresses` | Indicates that any agent which deals with endpoints for this Service should disregard any indications of ready/not-ready | `false`                |
+| `externalAccess.service.labels`                   | Service labels for external access                                                                                       | `{}`                   |
+| `externalAccess.service.annotations`              | Service annotations for external access                                                                                  | `{}`                   |
+| `externalAccess.service.extraPorts`               | Extra ports to expose in the Kafka external service                                                                      | `[]`                   |
+| `networkPolicy.enabled`                           | Specifies whether a NetworkPolicy should be created                                                                      | `false`                |
+| `networkPolicy.allowExternal`                     | Don't require client label for connections                                                                               | `true`                 |
+| `networkPolicy.explicitNamespacesSelector`        | A Kubernetes LabelSelector to explicitly select namespaces from which traffic could be allowed                           | `{}`                   |
+| `networkPolicy.externalAccess.from`               | customize the from section for External Access on tcp-external port                                                      | `[]`                   |
+| `networkPolicy.egressRules.customRules`           | Custom network policy rule                                                                                               | `{}`                   |
 
 ### Persistence parameters
 
@@ -305,7 +300,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `logPersistence.selector`      | Selector to match an existing Persistent Volume for Kafka log data PVC. If set, the PVC can't have a PV dynamically provisioned for it | `{}`                      |
 | `logPersistence.mountPath`     | Mount path of the Kafka logs volume                                                                                                    | `/opt/bitnami/kafka/logs` |
 
-
 ### Volume Permissions parameters
 
 | Name                                                   | Description                                                                                                                       | Value                   |
@@ -313,14 +307,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r75`      |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r86`      |
 | `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`                    |
 | `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                                                                                 | `{}`                    |
 | `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                                                                               | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                                    | `0`                     |
-
 
 ### Other Parameters
 
@@ -332,7 +325,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                           | `{}`    |
 | `rbac.create`                                 | Whether to create & use RBAC resources or not                                                  | `false` |
 
-
 ### Metrics parameters
 
 | Name                                                        | Description                                                                                                                      | Value                                                                                   |
@@ -340,7 +332,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.kafka.enabled`                                     | Whether or not to create a standalone Kafka exporter to expose Kafka metrics                                                     | `false`                                                                                 |
 | `metrics.kafka.image.registry`                              | Kafka exporter image registry                                                                                                    | `docker.io`                                                                             |
 | `metrics.kafka.image.repository`                            | Kafka exporter image repository                                                                                                  | `bitnami/kafka-exporter`                                                                |
-| `metrics.kafka.image.tag`                                   | Kafka exporter image tag (immutable tags are recommended)                                                                        | `1.6.0-debian-11-r52`                                                                   |
+| `metrics.kafka.image.tag`                                   | Kafka exporter image tag (immutable tags are recommended)                                                                        | `1.6.0-debian-11-r61`                                                                   |
 | `metrics.kafka.image.digest`                                | Kafka exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                   | `""`                                                                                    |
 | `metrics.kafka.image.pullPolicy`                            | Kafka exporter image pull policy                                                                                                 | `IfNotPresent`                                                                          |
 | `metrics.kafka.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                 | `[]`                                                                                    |
@@ -388,7 +380,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.jmx.enabled`                                       | Whether or not to expose JMX metrics to Prometheus                                                                               | `false`                                                                                 |
 | `metrics.jmx.image.registry`                                | JMX exporter image registry                                                                                                      | `docker.io`                                                                             |
 | `metrics.jmx.image.repository`                              | JMX exporter image repository                                                                                                    | `bitnami/jmx-exporter`                                                                  |
-| `metrics.jmx.image.tag`                                     | JMX exporter image tag (immutable tags are recommended)                                                                          | `0.17.2-debian-11-r41`                                                                  |
+| `metrics.jmx.image.tag`                                     | JMX exporter image tag (immutable tags are recommended)                                                                          | `0.17.2-debian-11-r49`                                                                  |
 | `metrics.jmx.image.digest`                                  | JMX exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                     | `""`                                                                                    |
 | `metrics.jmx.image.pullPolicy`                              | JMX exporter image pull policy                                                                                                   | `IfNotPresent`                                                                          |
 | `metrics.jmx.image.pullSecrets`                             | Specify docker-registry secret names as an array                                                                                 | `[]`                                                                                    |
@@ -420,7 +412,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.namespace`                          | Namespace in which Prometheus is running                                                                                         | `""`                                                                                    |
 | `metrics.prometheusRule.labels`                             | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                            | `{}`                                                                                    |
 | `metrics.prometheusRule.groups`                             | Prometheus Rule Groups for Kafka                                                                                                 | `[]`                                                                                    |
-
 
 ### Kafka provisioning parameters
 
@@ -474,7 +465,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `provisioning.initContainers`                              | Add additional Add init containers to the Kafka provisioning pod(s)                                                           | `[]`                  |
 | `provisioning.waitForKafka`                                | If true use an init container to wait until kafka is ready before starting provisioning                                       | `true`                |
 
-
 ### ZooKeeper chart parameters
 
 | Name                                    | Description                                                                                                                                                             | Value               |
@@ -492,11 +482,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `zookeeper.persistence.size`            | Persistent Volume size                                                                                                                                                  | `8Gi`               |
 | `externalZookeeper.servers`             | List of external zookeeper servers to use. Typically used in combination with 'zookeeperChrootPath'.                                                                    | `[]`                |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set replicaCount=3 \
   my-repo/kafka
 ```
@@ -506,7 +495,7 @@ The above command deploys Kafka with 3 brokers (replicas).
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/kafka
+helm install my-release -f values.yaml my-repo/kafka
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -563,8 +552,8 @@ In order to configure TLS authentication/encryption, you **can** create a secret
 For instance, to configure TLS authentication on a Kafka cluster with 2 Kafka brokers use the commands below to create the secrets:
 
 ```console
-$ kubectl create secret generic kafka-jks-0 --from-file=kafka.truststore.jks=./kafka.truststore.jks --from-file=kafka.keystore.jks=./kafka-0.keystore.jks
-$ kubectl create secret generic kafka-jks-1 --from-file=kafka.truststore.jks=./kafka.truststore.jks --from-file=kafka.keystore.jks=./kafka-1.keystore.jks
+kubectl create secret generic kafka-jks-0 --from-file=kafka.truststore.jks=./kafka.truststore.jks --from-file=kafka.keystore.jks=./kafka-0.keystore.jks
+kubectl create secret generic kafka-jks-1 --from-file=kafka.truststore.jks=./kafka.truststore.jks --from-file=kafka.keystore.jks=./kafka-1.keystore.jks
 ```
 
 > **Note**: the command above assumes you already created the truststore and keystores files. This [script](https://raw.githubusercontent.com/confluentinc/confluent-platform-security-tools/master/kafka-generate-ssl.sh) can help you with the JKS files generation.
@@ -574,8 +563,8 @@ If, for some reason (like using Cert-Manager) you can not use the default JKS se
 - `auth.tls.jksTruststoreSecret` to define additional secret, where the `kafka.truststore.jks` is being kept. The truststore password **must** be the same as in `auth.tls.password`
 - `auth.tls.jksTruststore` to overwrite the default value of the truststore key (`kafka.truststore.jks`).
 - `auth.tls.jksKeystoreSAN` if you want to use a SAN certificate for your brokers. Setting this parameter would mean that the chart expects a existing key in the `auth.tls.jksTruststoreSecret` with the `auth.tls.jksKeystoreSAN` value and use this as a keystore for **all** brokers
-> **Note**: If you are using cert-manager, particularly when an ACME issuer is used, the `ca.crt` field is not put in the `Secret` that cert-manager creates. To handle this, the `auth.tls.pemChainIncluded` property can be set to `true` and the initContainer created by this Chart will attempt to extract the intermediate certs from the `tls.crt` field of the secret (which is a PEM chain)
 
+> **Note**: If you are using cert-manager, particularly when an ACME issuer is used, the `ca.crt` field is not put in the `Secret` that cert-manager creates. To handle this, the `auth.tls.pemChainIncluded` property can be set to `true` and the initContainer created by this Chart will attempt to extract the intermediate certs from the `tls.crt` field of the secret (which is a PEM chain)
 > **Note**: The truststore/keystore from above **must** be protected with the same password as in `auth.tls.password`
 
 You can deploy the chart with authentication using the following parameters:
@@ -920,24 +909,24 @@ This version also introduces `bitnami/common`, a [library chart](https://helm.sh
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
+#### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - Move dependency information from the *requirements.yaml* to the *Chart.yaml*
 - After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
-**Considerations when upgrading to this version**
+#### Considerations when upgrading to this version
 
 - If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
 - If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
 
-**Useful links**
+#### Useful links
 
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://helm.sh/docs/topics/v2_v3_migration/>
+- <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
 ### To 11.8.0
 
@@ -997,7 +986,7 @@ Backwards compatibility is not guaranteed you adapt your values.yaml to the new 
 + metrics.jmx.existingConfigmap
 ```
 
-Ports names were prefixed with the protocol to comply with Istio (see https://istio.io/docs/ops/deployment/requirements/).
+Ports names were prefixed with the protocol to comply with Istio (see <https://istio.io/docs/ops/deployment/requirements/>).
 
 ### To 8.0.0
 
@@ -1009,8 +998,8 @@ Backwards compatibility is not guaranteed when Kafka metrics are enabled, unless
 Use the workaround below to upgrade from versions previous to 7.0.0. The following example assumes that the release name is kafka:
 
 ```console
-$ helm upgrade kafka my-repo/kafka --version 6.1.8 --set metrics.kafka.enabled=false
-$ helm upgrade kafka my-repo/kafka --version 7.0.0 --set metrics.kafka.enabled=true
+helm upgrade kafka my-repo/kafka --version 6.1.8 --set metrics.kafka.enabled=false
+helm upgrade kafka my-repo/kafka --version 7.0.0 --set metrics.kafka.enabled=true
 ```
 
 ### To 2.0.0
@@ -1019,8 +1008,8 @@ Backwards compatibility is not guaranteed unless you modify the labels used on t
 Use the workaround below to upgrade from versions previous to 2.0.0. The following example assumes that the release name is kafka:
 
 ```console
-$ kubectl delete statefulset kafka-kafka --cascade=false
-$ kubectl delete statefulset kafka-zookeeper --cascade=false
+kubectl delete statefulset kafka-kafka --cascade=false
+kubectl delete statefulset kafka-zookeeper --cascade=false
 ```
 
 ### To 1.0.0
@@ -1029,19 +1018,19 @@ Backwards compatibility is not guaranteed unless you modify the labels used on t
 Use the workaround below to upgrade from versions previous to 1.0.0. The following example assumes that the release name is kafka:
 
 ```console
-$ kubectl delete statefulset kafka-kafka --cascade=false
-$ kubectl delete statefulset kafka-zookeeper --cascade=false
+kubectl delete statefulset kafka-kafka --cascade=false
+kubectl delete statefulset kafka-zookeeper --cascade=false
 ```
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

@@ -11,8 +11,8 @@ Harbor is an open source trusted cloud-native registry to store, sign, and scan 
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/harbor
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/harbor
 ```
 
 ## Introduction
@@ -45,8 +45,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/harbor
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/harbor
 ```
 
 ## Uninstalling the Chart
@@ -54,7 +54,7 @@ $ helm install my-release my-repo/harbor
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete --purge my-release
+helm delete --purge my-release
 ```
 
 Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manually delete the PVCs.
@@ -281,7 +281,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r71`      |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r85`      |
 | `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`                    |
@@ -297,7 +297,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------- |
 | `nginx.image.registry`                        | NGINX image registry                                                                                                     | `docker.io`            |
 | `nginx.image.repository`                      | NGINX image repository                                                                                                   | `bitnami/nginx`        |
-| `nginx.image.tag`                             | NGINX image tag (immutable tags are recommended)                                                                         | `1.23.3-debian-11-r11` |
+| `nginx.image.tag`                             | NGINX image tag (immutable tags are recommended)                                                                         | `1.23.3-debian-11-r24` |
 | `nginx.image.digest`                          | NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                    | `""`                   |
 | `nginx.image.pullPolicy`                      | NGINX image pull policy                                                                                                  | `IfNotPresent`         |
 | `nginx.image.pullSecrets`                     | NGINX image pull secrets                                                                                                 | `[]`                   |
@@ -371,7 +371,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
 | `portal.image.registry`                        | Harbor Portal image registry                                                                                             | `docker.io`             |
 | `portal.image.repository`                      | Harbor Portal image repository                                                                                           | `bitnami/harbor-portal` |
-| `portal.image.tag`                             | Harbor Portal image tag (immutable tags are recommended)                                                                 | `2.7.0-debian-11-r9`    |
+| `portal.image.tag`                             | Harbor Portal image tag (immutable tags are recommended)                                                                 | `2.7.0-debian-11-r23`   |
 | `portal.image.digest`                          | Harbor Portal image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag            | `""`                    |
 | `portal.image.pullPolicy`                      | Harbor Portal image pull policy                                                                                          | `IfNotPresent`          |
 | `portal.image.pullSecrets`                     | Harbor Portal image pull secrets                                                                                         | `[]`                    |
@@ -444,7 +444,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `core.image.registry`                        | Harbor Core image registry                                                                                                                                                                                                                                                               | `docker.io`           |
 | `core.image.repository`                      | Harbor Core image repository                                                                                                                                                                                                                                                             | `bitnami/harbor-core` |
-| `core.image.tag`                             | Harbor Core image tag (immutable tags are recommended)                                                                                                                                                                                                                                   | `2.7.0-debian-11-r8`  |
+| `core.image.tag`                             | Harbor Core image tag (immutable tags are recommended)                                                                                                                                                                                                                                   | `2.7.0-debian-11-r22` |
 | `core.image.digest`                          | Harbor Core image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                                                              | `""`                  |
 | `core.image.pullPolicy`                      | Harbor Core image pull policy                                                                                                                                                                                                                                                            | `IfNotPresent`        |
 | `core.image.pullSecrets`                     | Harbor Core image pull secrets                                                                                                                                                                                                                                                           | `[]`                  |
@@ -529,7 +529,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------ |
 | `jobservice.image.registry`                        | Harbor Jobservice image registry                                                                                                                             | `docker.io`                    |
 | `jobservice.image.repository`                      | Harbor Jobservice image repository                                                                                                                           | `bitnami/harbor-jobservice`    |
-| `jobservice.image.tag`                             | Harbor Jobservice image tag (immutable tags are recommended)                                                                                                 | `2.7.0-debian-11-r8`           |
+| `jobservice.image.tag`                             | Harbor Jobservice image tag (immutable tags are recommended)                                                                                                 | `2.7.0-debian-11-r22`          |
 | `jobservice.image.digest`                          | Harbor Jobservice image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                            | `""`                           |
 | `jobservice.image.pullPolicy`                      | Harbor Jobservice image pull policy                                                                                                                          | `IfNotPresent`                 |
 | `jobservice.image.pullSecrets`                     | Harbor Jobservice image pull secrets                                                                                                                         | `[]`                           |
@@ -645,7 +645,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `registry.automountServiceAccountToken`                     | Automount service account token                                                                                                                                                                                                                                           | `false`                                                                             |
 | `registry.server.image.registry`                            | Harbor Registry image registry                                                                                                                                                                                                                                            | `docker.io`                                                                         |
 | `registry.server.image.repository`                          | Harbor Registry image repository                                                                                                                                                                                                                                          | `bitnami/harbor-registry`                                                           |
-| `registry.server.image.tag`                                 | Harbor Registry image tag (immutable tags are recommended)                                                                                                                                                                                                                | `2.7.0-debian-11-r8`                                                                |
+| `registry.server.image.tag`                                 | Harbor Registry image tag (immutable tags are recommended)                                                                                                                                                                                                                | `2.7.0-debian-11-r21`                                                               |
 | `registry.server.image.digest`                              | Harbor Registry image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                                           | `""`                                                                                |
 | `registry.server.image.pullPolicy`                          | Harbor Registry image pull policy                                                                                                                                                                                                                                         | `IfNotPresent`                                                                      |
 | `registry.server.image.pullSecrets`                         | Harbor Registry image pull secrets                                                                                                                                                                                                                                        | `[]`                                                                                |
@@ -692,7 +692,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `registry.server.service.ports.metrics`                     | Harbor Registry metrics service port                                                                                                                                                                                                                                      | `8001`                                                                              |
 | `registry.controller.image.registry`                        | Harbor Registryctl image registry                                                                                                                                                                                                                                         | `docker.io`                                                                         |
 | `registry.controller.image.repository`                      | Harbor Registryctl image repository                                                                                                                                                                                                                                       | `bitnami/harbor-registryctl`                                                        |
-| `registry.controller.image.tag`                             | Harbor Registryctl image tag (immutable tags are recommended)                                                                                                                                                                                                             | `2.7.0-debian-11-r8`                                                                |
+| `registry.controller.image.tag`                             | Harbor Registryctl image tag (immutable tags are recommended)                                                                                                                                                                                                             | `2.7.0-debian-11-r22`                                                               |
 | `registry.controller.image.digest`                          | Harbor Registryctl image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                                        | `""`                                                                                |
 | `registry.controller.image.pullPolicy`                      | Harbor Registryctl image pull policy                                                                                                                                                                                                                                      | `IfNotPresent`                                                                      |
 | `registry.controller.image.pullSecrets`                     | Harbor Registryctl image pull secrets                                                                                                                                                                                                                                     | `[]`                                                                                |
@@ -742,7 +742,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------- |
 | `chartmuseum.image.registry`                        | ChartMuseum image registry                                                                                               | `docker.io`            |
 | `chartmuseum.image.repository`                      | ChartMuseum image repository                                                                                             | `bitnami/chartmuseum`  |
-| `chartmuseum.image.tag`                             | ChartMuseum image tag (immutable tags are recommended)                                                                   | `0.15.0-debian-11-r59` |
+| `chartmuseum.image.tag`                             | ChartMuseum image tag (immutable tags are recommended)                                                                   | `0.15.0-debian-11-r71` |
 | `chartmuseum.image.digest`                          | ChartMuseum image image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag        | `""`                   |
 | `chartmuseum.image.pullPolicy`                      | ChartMuseum image pull policy                                                                                            | `IfNotPresent`         |
 | `chartmuseum.image.pullSecrets`                     | ChartMuseum image pull secrets                                                                                           | `[]`                   |
@@ -835,7 +835,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `notary.secretName`                                   | Fill the name of a kubernetes secret if you want to use your own TLS certificate authority, certificate and private key for notary communications. The secret must contain keys named `notary-signer-ca.crt`, `notary-signer.key` and `notary-signer.crt` that contain the CA, certificate and private key. They will be generated if not set. | `""`                           |
 | `notary.server.image.registry`                        | Harbor Notary Server image registry                                                                                                                                                                                                                                                                                                            | `docker.io`                    |
 | `notary.server.image.repository`                      | Harbor Notary Server image repository                                                                                                                                                                                                                                                                                                          | `bitnami/harbor-notary-server` |
-| `notary.server.image.tag`                             | Harbor Notary Server image tag (immutable tags are recommended)                                                                                                                                                                                                                                                                                | `2.7.0-debian-11-r8`           |
+| `notary.server.image.tag`                             | Harbor Notary Server image tag (immutable tags are recommended)                                                                                                                                                                                                                                                                                | `2.7.0-debian-11-r21`          |
 | `notary.server.image.digest`                          | Notary Server image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                                                                                                                  | `""`                           |
 | `notary.server.image.pullPolicy`                      | Harbor Notary Server image pull policy                                                                                                                                                                                                                                                                                                         | `IfNotPresent`                 |
 | `notary.server.image.pullSecrets`                     | Harbor Notary Server image pull secrets                                                                                                                                                                                                                                                                                                        | `[]`                           |
@@ -898,7 +898,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `notary.server.automountServiceAccountToken`          | Automount service account token                                                                                                                                                                                                                                                                                                                | `false`                        |
 | `notary.signer.image.registry`                        | Harbor Notary Signer image registry                                                                                                                                                                                                                                                                                                            | `docker.io`                    |
 | `notary.signer.image.repository`                      | Harbor Notary Signer image repository                                                                                                                                                                                                                                                                                                          | `bitnami/harbor-notary-signer` |
-| `notary.signer.image.tag`                             | Harbor Notary Signer image tag (immutable tags are recommended)                                                                                                                                                                                                                                                                                | `2.7.0-debian-11-r8`           |
+| `notary.signer.image.tag`                             | Harbor Notary Signer image tag (immutable tags are recommended)                                                                                                                                                                                                                                                                                | `2.7.0-debian-11-r21`          |
 | `notary.signer.image.digest`                          | Harbor Notary Signer image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                                                                                                           | `""`                           |
 | `notary.signer.image.pullPolicy`                      | Harbor Notary Signer image pull policy                                                                                                                                                                                                                                                                                                         | `IfNotPresent`                 |
 | `notary.signer.image.pullSecrets`                     | Harbor Notary Signer image pull secrets                                                                                                                                                                                                                                                                                                        | `[]`                           |
@@ -969,7 +969,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------------------- |
 | `trivy.image.registry`                        | Harbor Adapter Trivy image registry                                                                                      | `docker.io`                            |
 | `trivy.image.repository`                      | Harbor Adapter Trivy image repository                                                                                    | `bitnami/harbor-adapter-trivy`         |
-| `trivy.image.tag`                             | Harbor Adapter Trivy image tag (immutable tags are recommended)                                                          | `2.7.0-debian-11-r7`                   |
+| `trivy.image.tag`                             | Harbor Adapter Trivy image tag (immutable tags are recommended)                                                          | `2.7.0-debian-11-r20`                  |
 | `trivy.image.digest`                          | Harbor Adapter Trivy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag     | `""`                                   |
 | `trivy.image.pullPolicy`                      | Harbor Adapter Trivy image pull policy                                                                                   | `IfNotPresent`                         |
 | `trivy.image.pullSecrets`                     | Harbor Adapter Trivy image pull secrets                                                                                  | `[]`                                   |
@@ -1051,7 +1051,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `exporter.image.registry`                        | Harbor Exporter image registry                                                                                                                  | `docker.io`               |
 | `exporter.image.repository`                      | Harbor Exporter image repository                                                                                                                | `bitnami/harbor-exporter` |
-| `exporter.image.tag`                             | Harbor Exporter image tag                                                                                                                       | `2.7.0-debian-11-r8`      |
+| `exporter.image.tag`                             | Harbor Exporter image tag                                                                                                                       | `2.7.0-debian-11-r22`     |
 | `exporter.image.digest`                          | Harbor Exporter image image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                           | `""`                      |
 | `exporter.image.pullPolicy`                      | Harbor exporter image pull policy                                                                                                               | `IfNotPresent`            |
 | `exporter.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                                                | `[]`                      |
@@ -1130,7 +1130,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `postgresql.primary.initdb.scripts`        | Initdb scripts to create Harbor databases                                                                  | `{}`                           |
 | `postgresql.image.registry`                | PostgreSQL image registry                                                                                  | `docker.io`                    |
 | `postgresql.image.repository`              | PostgreSQL image repository                                                                                | `bitnami/postgresql`           |
-| `postgresql.image.tag`                     | PostgreSQL image tag (immutable tags are recommended)                                                      | `13.9.0-debian-11-r21`         |
+| `postgresql.image.tag`                     | PostgreSQL image tag (immutable tags are recommended)                                                      | `13.10.0-debian-11-r1`         |
 | `postgresql.image.digest`                  | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                           |
 | `externalDatabase.host`                    | Database host                                                                                              | `localhost`                    |
 | `externalDatabase.port`                    | Database port number                                                                                       | `5432`                         |
@@ -1189,10 +1189,9 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.                 | `""`       |
 
 
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set adminPassword=password \
     my-repo/harbor
 ```
@@ -1204,7 +1203,7 @@ The above command sets the Harbor administrator account password to `password`.
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/harbor
+helm install my-release -f values.yaml my-repo/harbor
 ```
 
 ## Configuration and installation details
@@ -1333,13 +1332,13 @@ Refer to the [chart documentation for more information about how to upgrade from
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

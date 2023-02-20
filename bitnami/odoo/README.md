@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/odoo
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/odoo
 ```
 
 ## Introduction
@@ -35,8 +35,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/odoo
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/odoo
 ```
 
 The command deploys Odoo on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -48,13 +48,11 @@ The command deploys Odoo on the Kubernetes cluster in the default configuration.
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
 > If persistence.resourcePolicy is set to keep, you should manually delete the PVCs.
-
-
 
 ## Parameters
 
@@ -65,7 +63,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -83,12 +80,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`    | Args to override all containers in the the statefulset                                               | `["infinity"]`                |
 | `image.registry`         | Odoo image registry                                                                                  | `docker.io`                   |
 | `image.repository`       | Odoo image repository                                                                                | `bitnami/odoo`                |
-| `image.tag`              | Odoo image tag (immutable tags are recommended)                                                      | `16.0.20221115-debian-11-r13` |
+| `image.tag`              | Odoo image tag (immutable tags are recommended)                                                      | `16.0.20221115-debian-11-r24` |
 | `image.digest`           | Odoo image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                          |
 | `image.pullPolicy`       | Odoo image pull policy                                                                               | `IfNotPresent`                |
 | `image.pullSecrets`      | Odoo image pull secrets                                                                              | `[]`                          |
 | `image.debug`            | Enable image debug mode                                                                              | `false`                       |
-
 
 ### Odoo Configuration parameters
 
@@ -113,7 +109,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVarsCM`        | Name of existing ConfigMap containing extra env vars                 | `""`               |
 | `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                    | `""`               |
 
-
 ### Odoo deployment parameters
 
 | Name                                 | Description                                                                                                              | Value           |
@@ -127,21 +122,21 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.enabled`   | Enabled Odoo containers' Security Context                                                                                | `false`         |
 | `containerSecurityContext.runAsUser` | Set Odoo container's Security Context runAsUser                                                                          | `1001`          |
 | `livenessProbe.enabled`              | Enable livenessProbe                                                                                                     | `true`          |
-| `livenessProbe.path`                 | Path for to check for livenessProbe                                                                                      | `/`             |
+| `livenessProbe.path`                 | Path for to check for livenessProbe                                                                                      | `/web/health`   |
 | `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                  | `600`           |
 | `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                         | `30`            |
 | `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                        | `5`             |
 | `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                      | `6`             |
 | `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                      | `1`             |
 | `readinessProbe.enabled`             | Enable readinessProbe                                                                                                    | `true`          |
-| `readinessProbe.path`                | Path to check for readinessProbe                                                                                         | `/`             |
+| `readinessProbe.path`                | Path to check for readinessProbe                                                                                         | `/web/health`   |
 | `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                                 | `30`            |
 | `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                        | `10`            |
 | `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                       | `5`             |
 | `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                     | `6`             |
 | `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                     | `1`             |
 | `startupProbe.enabled`               | Enable startupProbe                                                                                                      | `false`         |
-| `startupProbe.path`                  | Path to check for startupProbe                                                                                           | `/`             |
+| `startupProbe.path`                  | Path to check for startupProbe                                                                                           | `/web/health`   |
 | `startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                                   | `300`           |
 | `startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                          | `10`            |
 | `startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                         | `5`             |
@@ -174,7 +169,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidecars`                           | Add additional sidecar containers to the Odoo pod                                                                        | `[]`            |
 | `initContainers`                     | Add additional init containers to the Odoo pods                                                                          | `[]`            |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -205,7 +199,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Persistence Parameters
 
 | Name                                                   | Description                                                                                                                           | Value           |
@@ -226,7 +219,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.containerSecurityContext.enabled`   | Enable init container's Security Context                                                                                              | `true`          |
 | `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                                                       | `0`             |
 
-
 ### RBAC Parameters
 
 | Name                                          | Description                                                                                              | Value   |
@@ -235,7 +227,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | The name of the ServiceAccount to create (name generated using common.names.fullname template otherwise) | `""`    |
 | `serviceAccount.automountServiceAccountToken` | Auto-mount the service account token in the pod                                                          | `false` |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                     | `{}`    |
-
 
 ### Other Parameters
 
@@ -249,7 +240,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.maxReplicas`  | Maximum number of Odoo replicas                                | `11`    |
 | `autoscaling.targetCPU`    | Target CPU utilization percentage                              | `50`    |
 | `autoscaling.targetMemory` | Target Memory utilization percentage                           | `50`    |
-
 
 ### Database Parameters
 
@@ -273,7 +263,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.existingSecretPasswordKey`         | Name of an existing secret key containing the non-root credentials       | `""`           |
 | `externalDatabase.existingSecretPostgresPasswordKey` | Name of an existing secret key containing the admin credentials          | `""`           |
 
-
 ### NetworkPolicy parameters
 
 | Name                                                          | Description                                                                                                              | Value   |
@@ -291,13 +280,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                           | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                               | `{}`    |
 
-
 The above parameters map to the env variables defined in [bitnami/odoo](https://github.com/bitnami/containers/tree/main/bitnami/odoo). For more information please refer to the [bitnami/odoo](https://github.com/bitnami/containers/tree/main/bitnami/odoo) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set odooPassword=password,postgresql.postgresPassword=secretpassword \
     my-repo/odoo
 ```
@@ -309,7 +297,7 @@ The above command sets the Odoo administrator account password to `password` and
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/odoo
+helm install my-release -f values.yaml my-repo/odoo
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -393,13 +381,13 @@ New versions are not going to be affected. Once a new version is released in the
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

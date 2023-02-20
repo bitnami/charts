@@ -1,11 +1,10 @@
 addr:
-  tcp://tensorflow-resnet:{{ .Vars.service.ports.server }}:
+  127.0.0.1:{{ .Vars.containerPorts.server }}:
     reachable: true
-port:
-  tcp:{{ .Vars.containerPorts.server }}:
-    listening: true
-  tcp:{{ .Vars.containerPorts.restApi }}:
-    listening: true
+  127.0.0.1:{{ .Vars.containerPorts.restApi }}:
+    reachable: true
+  tensorflow-resnet:{{ .Vars.service.ports.server }}:
+    reachable: true
 file:
   /bitnami/model-data:
     exists: true

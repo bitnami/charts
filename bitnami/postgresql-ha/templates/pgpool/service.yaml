@@ -11,8 +11,11 @@ metadata:
     {{- if .Values.pgpool.serviceLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.pgpool.serviceLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if or .Values.service.annotations .Values.commonAnnotations }}
+  {{- if or .Values.pgpool.serviceAnnotations .Values.service.annotations .Values.commonAnnotations }}
   annotations:
+    {{- if .Values.pgpool.serviceAnnotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.serviceAnnotations "context" $) | nindent 4 }}
+    {{- end }}
     {{- if .Values.service.annotations }}
     {{- include "common.tplvalues.render" (dict "value" .Values.service.annotations "context" $) | nindent 4 }}
     {{- end }}

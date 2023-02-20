@@ -14,6 +14,7 @@ Any type of contribution is welcome; from new features, bug fixes, [tests](#test
 ### Technical Requirements
 
 When submitting a PR make sure that it:
+
 - Must pass CI jobs for linting and test the changes on top of different k8s platforms. (Automatically done by the Bitnami CI/CD pipeline).
 - Must follow [Helm best practices](https://helm.sh/docs/chart_best_practices/).
 - Any change to a chart requires a version bump following [semver](https://semver.org/) principles. This is the version that is going to be merged in the GitHub repository, then our CI/CD system is going to publish in the Helm registry a new patch version including your changes and the latest images and dependencies.
@@ -24,7 +25,9 @@ The sign-off is a simple line at the end of the explanation for a commit. All co
 
 Then you just add a line to every git commit message:
 
-    Signed-off-by: Joe Smith <joe.smith@example.com>
+```text
+Signed-off-by: Joe Smith <joe.smith@example.com>
+```
 
 Use your real name (sorry, no pseudonyms or anonymous contributions.)
 
@@ -32,7 +35,7 @@ If you set your `user.name` and `user.email` git configs, you can sign your comm
 
 Note: If your git config information is set properly then viewing the `git log` information for your commit will look something like this:
 
-```
+```text
 Author: Joe Smith <joe.smith@example.com>
 Date:   Thu Feb 2 11:41:15 2018 -0800
 
@@ -52,9 +55,9 @@ Notice the `Author` and `Signed-off-by` lines match. If they don't your PR will 
 ### PR Approval and Release Process
 
 1. Changes are manually reviewed by Bitnami team members.
-1. Once the changes are accepted, the PR is verified with a [Static analysis](https://github.com/bitnami/charts/blob/main/TESTING.md#Static-analysis) that includes the lint and the vulnerability checks. If that passes, the Bitnami team will review the changes and trigger the verification and functional tests.
-1. When the PR passes all tests, the PR is merged by the reviewer(s) in the GitHub `main` branch.
-1. Then our CI/CD system is going to push the chart to the Helm registry including the recently merged changes and also the latest images and dependencies used by the chart. The changes in the images will be also committed by the CI/CD to the GitHub repository, bumping the chart version again.
+2. Once the changes are accepted, the PR is verified with a [Static analysis](https://github.com/bitnami/charts/blob/main/TESTING.md#Static-analysis) that includes the lint and the vulnerability checks. If that passes, the Bitnami team will review the changes and trigger the verification and functional tests.
+3. When the PR passes all tests, the PR is merged by the reviewer(s) in the GitHub `main` branch.
+4. Then our CI/CD system is going to push the chart to the Helm registry including the recently merged changes and also the latest images and dependencies used by the chart. The changes in the images will be also committed by the CI/CD to the GitHub repository, bumping the chart version again.
 
 ***NOTE***: Please note that, in terms of time, may be a slight difference between the appearance of the code in GitHub and the chart in the registry.
 
@@ -68,6 +71,7 @@ Notice the `Author` and `Signed-off-by` lines match. If they don't your PR will 
 ### Adding a new chart to the repository
 
 There are three major technical requirements to add a new Helm chart to our catalog:
+
 - The chart should use Bitnami based container images. If they don't exist, you can [open a GitHub issue](https://github.com/bitnami/charts/issues/new/choose) and we will work together to create them.
 - Follow the same structure/patterns that the rest of the Bitnami charts (you can find a basic scaffolding in the [`template` directory](https://github.com/bitnami/charts/tree/main/template)) and the [Best Practices for Creating Production-Ready Helm charts](https://docs.bitnami.com/tutorials/production-ready-charts/) guide.
 - Use an [OSI approved license](https://opensource.org/licenses) for all the software.
