@@ -18684,6 +18684,44 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 7.11.0
+    created: "2023-02-20T09:32:12.149557832Z"
+    dependencies:
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - ejbca-database
+      version: 11.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: EJBCA is an enterprise class PKI Certificate Authority software,
+      built using Java (JEE) technology.
+    digest: ad4ced15b4375802c8e9d2993d42a8fe30c721eea16e03298cb48b000441f01f
+    home: https://github.com/bitnami/charts/tree/main/bitnami/ejbca
+    icon: https://bitnami.com/assets/stacks/ejbca/img/ejbca-stack-220x234.png
+    keywords:
+    - ejbca
+    - ca
+    - pki
+    - certificate
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: ejbca
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/ejbca
+    - https://www.ejbca.org/
+    urls:
+    - https://charts.bitnami.com/bitnami/ejbca-6.3.14.tgz
+    version: 6.3.14
+  - annotations:
+      category: CertificateAuthority
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 7.11.0
     created: "2023-02-03T13:22:59.641904375Z"
     dependencies:
     - condition: mariadb.enabled
@@ -120458,4 +120496,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-02-20T08:56:00.92429316Z"
+generated: "2023-02-20T09:32:12.140327686Z"
