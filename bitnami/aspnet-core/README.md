@@ -7,12 +7,12 @@ ASP.NET Core is an open-source framework for web application development created
 [Overview of ASP.NET](https://github.com/dotnet/aspnetcore)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/aspnet-core
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/aspnet-core
 ```
 
 ## Introduction
@@ -33,8 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/aspnet-core
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/aspnet-core
 ```
 
 These commands deploy a ASP.NET Core application on the Kubernetes cluster in the default configuration.
@@ -46,7 +46,7 @@ These commands deploy a ASP.NET Core application on the Kubernetes cluster in th
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -61,7 +61,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                       | Value           |
@@ -75,14 +74,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`     | Kubernetes cluster domain name                    | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release | `[]`            |
 
-
 ### ASP.NET Core parameters
 
 | Name                 | Description                                                                                                  | Value                 |
 | -------------------- | ------------------------------------------------------------------------------------------------------------ | --------------------- |
 | `image.registry`     | ASP.NET Core image registry                                                                                  | `docker.io`           |
 | `image.repository`   | ASP.NET Core image repository                                                                                | `bitnami/aspnet-core` |
-| `image.tag`          | ASP.NET Core image tag (immutable tags are recommended)                                                      | `7.0.2-debian-11-r11` |
+| `image.tag`          | ASP.NET Core image tag (immutable tags are recommended)                                                      | `7.0.3-debian-11-r1`  |
 | `image.digest`       | ASP.NET Core image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`   | ASP.NET Core image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets`  | ASP.NET Core image pull secrets                                                                              | `[]`                  |
@@ -93,7 +91,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVars`       | Extra environment variables to be set on ASP.NET Core container                                              | `[]`                  |
 | `extraEnvVarsCM`     | ConfigMap with extra environment variables                                                                   | `""`                  |
 | `extraEnvVarsSecret` | Secret with extra environment variables                                                                      | `""`                  |
-
 
 ### ASP.NET Core deployment parameters
 
@@ -159,7 +156,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.targetCPU`                 | Target CPU utilization percentage                                                         | `""`            |
 | `autoscaling.targetMemory`              | Target Memory utilization percentage                                                      | `""`            |
 
-
 ### Custom ASP.NET Core application parameters
 
 | Name                                            | Description                                                                                              | Value                                                |
@@ -167,7 +163,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `appFromExternalRepo.enabled`                   | Enable to download/build ASP.NET Core app from external git repository                                   | `true`                                               |
 | `appFromExternalRepo.clone.image.registry`      | Git image registry                                                                                       | `docker.io`                                          |
 | `appFromExternalRepo.clone.image.repository`    | Git image repository                                                                                     | `bitnami/git`                                        |
-| `appFromExternalRepo.clone.image.tag`           | Git image tag (immutable tags are recommended)                                                           | `2.39.1-debian-11-r8`                                |
+| `appFromExternalRepo.clone.image.tag`           | Git image tag (immutable tags are recommended)                                                           | `2.39.2-debian-11-r0`                                |
 | `appFromExternalRepo.clone.image.digest`        | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag      | `""`                                                 |
 | `appFromExternalRepo.clone.image.pullPolicy`    | Git image pull policy                                                                                    | `IfNotPresent`                                       |
 | `appFromExternalRepo.clone.image.pullSecrets`   | Git image pull secrets                                                                                   | `[]`                                                 |
@@ -176,7 +172,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `appFromExternalRepo.clone.extraVolumeMounts`   | Add extra volume mounts for the GIT container                                                            | `[]`                                                 |
 | `appFromExternalRepo.publish.image.registry`    | .NET SDK image registry                                                                                  | `docker.io`                                          |
 | `appFromExternalRepo.publish.image.repository`  | .NET SDK image repository                                                                                | `bitnami/dotnet-sdk`                                 |
-| `appFromExternalRepo.publish.image.tag`         | .NET SDK image tag (immutable tags are recommended)                                                      | `7.0.102-debian-11-r10`                              |
+| `appFromExternalRepo.publish.image.tag`         | .NET SDK image tag (immutable tags are recommended)                                                      | `7.0.200-debian-11-r0`                               |
 | `appFromExternalRepo.publish.image.digest`      | .NET SDK image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                                 |
 | `appFromExternalRepo.publish.image.pullPolicy`  | .NET SDK image pull policy                                                                               | `IfNotPresent`                                       |
 | `appFromExternalRepo.publish.image.pullSecrets` | .NET SDK image pull secrets                                                                              | `[]`                                                 |
@@ -185,7 +181,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `appFromExternalRepo.startCommand`              | Command used to start ASP.NET Core app                                                                   | `["dotnet","OCMinimal.dll"]`                         |
 | `appFromExistingPVC.enabled`                    | Enable mounting your ASP.NET Core app from an existing PVC                                               | `false`                                              |
 | `appFromExistingPVC.existingClaim`              | A existing Persistent Volume Claim containing your ASP.NET Core app                                      | `""`                                                 |
-
 
 ### Traffic Exposure Parameters
 
@@ -228,7 +223,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `healthIngress.secrets`            | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `healthIngress.extraRules`         | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### RBAC parameters
 
 | Name                                          | Description                                          | Value  |
@@ -238,11 +232,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount | `{}`   |
 | `serviceAccount.automountServiceAccountToken` | Automount service account token                      | `true` |
 
-
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
-
 ```console
-$ helm install my-release --set replicaCount=2 my-repo/aspnet-core
+helm install my-release --set replicaCount=2 my-repo/aspnet-core
 ```
 
 The above command install ASP.NET Core chart with 2 replicas.
@@ -250,7 +241,7 @@ The above command install ASP.NET Core chart with 2 replicas.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/aspnet-core
+helm install my-release -f values.yaml my-repo/aspnet-core
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -436,24 +427,24 @@ No issues should be expected when upgrading.
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
+#### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - Move dependency information from the *requirements.yaml* to the *Chart.yaml*
 - After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
-**Considerations when upgrading to this version**
+#### Considerations when upgrading to this version
 
 - If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
 - If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
 
-**Useful links**
+#### Useful links
 
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://helm.sh/docs/topics/v2_v3_migration/>
+- <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
 ## License
 
@@ -463,7 +454,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
