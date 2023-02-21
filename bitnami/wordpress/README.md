@@ -6,6 +6,8 @@ WordPress is the world's most popular blogging and content management platform. 
 
 [Overview of WordPress](http://www.wordpress.org)
 
+
+
 ## TL;DR
 
 ```console
@@ -82,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | --------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`    | WordPress image registry                                                                                  | `docker.io`           |
 | `image.repository`  | WordPress image repository                                                                                | `bitnami/wordpress`   |
-| `image.tag`         | WordPress image tag (immutable tags are recommended)                                                      | `6.1.1-debian-11-r46` |
+| `image.tag`         | WordPress image tag (immutable tags are recommended)                                                      | `6.1.1-debian-11-r49` |
 | `image.digest`      | WordPress image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`  | WordPress image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets` | WordPress image pull secrets                                                                              | `[]`                  |
@@ -142,7 +144,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------- |
 | `replicaCount`                                      | Number of WordPress replicas to deploy                                                                                   | `1`              |
 | `updateStrategy.type`                               | WordPress deployment strategy type                                                                                       | `RollingUpdate`  |
-| `updateStrategy.rollingUpdate`                      | WordPress deployment rolling update configuration parameters                                                             | `{}`             |
 | `schedulerName`                                     | Alternate scheduler                                                                                                      | `""`             |
 | `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`             |
 | `priorityClassName`                                 | Name of the existing priority class to be used by WordPress pods, priority class needs to be created beforehand          | `""`             |
@@ -248,7 +249,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r85`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r86`      |
 | `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -369,7 +370,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalCache.host`                       | External cache server host                                                        | `localhost`         |
 | `externalCache.port`                       | External cache server port                                                        | `11211`             |
 
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
+
 
 ```console
 helm install my-release \
