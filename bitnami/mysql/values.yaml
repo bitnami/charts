@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -17,6 +18,7 @@ global:
   storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
@@ -43,6 +45,12 @@ commonLabels: {}
 ##
 extraDeploy: []
 
+## @param serviceBindings.enabled Create secret for service binding (Experimental)
+## Ref: https://servicebinding.io/service-provider/
+##
+serviceBindings:
+  enabled: false
+
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -59,6 +67,7 @@ diagnosticMode:
     - infinity
 
 ## @section MySQL common parameters
+##
 
 ## Bitnami MySQL image
 ## ref: https://hub.docker.com/r/bitnami/mysql/tags/
@@ -152,6 +161,7 @@ initdbScripts: {}
 initdbScriptsConfigMap: ""
 
 ## @section MySQL Primary parameters
+##
 
 primary:
   ## @param primary.name Name of the primary database (eg primary, master, leader, ...)
@@ -312,11 +322,13 @@ primary:
     ## limits:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     requests: {}
   ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
@@ -522,6 +534,7 @@ primary:
   podLabels: {}
 
 ## @section MySQL Secondary parameters
+##
 
 secondary:
   ## @param secondary.name Name of the secondary database (eg secondary, slave, ...)
@@ -686,11 +699,13 @@ secondary:
     ## limits:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     requests: {}
   ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
@@ -896,6 +911,7 @@ secondary:
   podLabels: {}
 
 ## @section RBAC parameters
+##
 
 ## MySQL pods ServiceAccount
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -936,6 +952,7 @@ rbac:
   rules: []
 
 ## @section Network Policy
+##
 
 ## MySQL Nework Policy configuration
 ##
@@ -966,6 +983,7 @@ networkPolicy:
   explicitNamespacesSelector: {}
 
 ## @section Volume Permissions parameters
+##
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -1000,6 +1018,7 @@ volumePermissions:
   resources: {}
 
 ## @section Metrics parameters
+##
 
 ## Mysqld Prometheus exporter parameters
 ##
@@ -1097,11 +1116,13 @@ metrics:
     ## limits:
     ##    cpu: 100m
     ##    memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 100m
     ##    memory: 256Mi
+    ##
     requests: {}
   ## Mysqld Prometheus exporter liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
