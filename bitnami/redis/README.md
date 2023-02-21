@@ -76,7 +76,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)           | `""`  |
 | `global.redis.password`   | Global Redis&reg; password (overrides `auth.password`) | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
@@ -94,19 +93,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
-
 ### Redis&reg; Image parameters
 
 | Name                | Description                                                                                                | Value                 |
 | ------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`    | Redis&reg; image registry                                                                                  | `docker.io`           |
 | `image.repository`  | Redis&reg; image repository                                                                                | `bitnami/redis`       |
-| `image.tag`         | Redis&reg; image tag (immutable tags are recommended)                                                      | `7.0.8-debian-11-r11` |
+| `image.tag`         | Redis&reg; image tag (immutable tags are recommended)                                                      | `7.0.8-debian-11-r13` |
 | `image.digest`      | Redis&reg; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`  | Redis&reg; image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets` | Redis&reg; image pull secrets                                                                              | `[]`                  |
 | `image.debug`       | Enable image debug mode                                                                                    | `false`               |
-
 
 ### Redis&reg; common configuration parameters
 
@@ -121,7 +118,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.usePasswordFiles`          | Mount credentials as files instead of using an environment variable                   | `false`       |
 | `commonConfiguration`            | Common configuration to be added into the ConfigMap                                   | `""`          |
 | `existingConfigmap`              | The name of an existing ConfigMap with your custom configuration for Redis&reg; nodes | `""`          |
-
 
 ### Redis&reg; master configuration parameters
 
@@ -221,7 +217,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                | `""`                     |
 | `master.serviceAccount.automountServiceAccountToken` | Whether to auto mount the service account token                                                       | `true`                   |
 | `master.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                  | `{}`                     |
-
 
 ### Redis&reg; replicas configuration parameters
 
@@ -329,7 +324,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.serviceAccount.automountServiceAccountToken` | Whether to auto mount the service account token                                                         | `true`                   |
 | `replica.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                    | `{}`                     |
 
-
 ### Redis&reg; Sentinel configuration parameters
 
 | Name                                          | Description                                                                                                                                 | Value                    |
@@ -337,7 +331,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.enabled`                            | Use Redis&reg; Sentinel on Redis&reg; pods.                                                                                                 | `false`                  |
 | `sentinel.image.registry`                     | Redis&reg; Sentinel image registry                                                                                                          | `docker.io`              |
 | `sentinel.image.repository`                   | Redis&reg; Sentinel image repository                                                                                                        | `bitnami/redis-sentinel` |
-| `sentinel.image.tag`                          | Redis&reg; Sentinel image tag (immutable tags are recommended)                                                                              | `7.0.8-debian-11-r10`    |
+| `sentinel.image.tag`                          | Redis&reg; Sentinel image tag (immutable tags are recommended)                                                                              | `7.0.8-debian-11-r12`    |
 | `sentinel.image.digest`                       | Redis&reg; Sentinel image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                     |
 | `sentinel.image.pullPolicy`                   | Redis&reg; Sentinel image pull policy                                                                                                       | `IfNotPresent`           |
 | `sentinel.image.pullSecrets`                  | Redis&reg; Sentinel image pull secrets                                                                                                      | `[]`                     |
@@ -413,7 +407,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.service.sessionAffinityConfig`      | Additional settings for the sessionAffinity                                                                                                 | `{}`                     |
 | `sentinel.terminationGracePeriodSeconds`      | Integer setting the termination grace period for the redis-node pods                                                                        | `30`                     |
 
-
 ### Other Parameters
 
 | Name                                          | Description                                                                                                                                 | Value   |
@@ -445,7 +438,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tls.certCAFilename`                          | CA Certificate filename                                                                                                                     | `""`    |
 | `tls.dhParamsFilename`                        | File containing DH params (in order to support DH based ciphers)                                                                            | `""`    |
 
-
 ### Metrics Parameters
 
 | Name                                         | Description                                                                                                         | Value                    |
@@ -453,7 +445,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a sidecar prometheus exporter to expose Redis&reg; metrics                                                    | `false`                  |
 | `metrics.image.registry`                     | Redis&reg; Exporter image registry                                                                                  | `docker.io`              |
 | `metrics.image.repository`                   | Redis&reg; Exporter image repository                                                                                | `bitnami/redis-exporter` |
-| `metrics.image.tag`                          | Redis&reg; Exporter image tag (immutable tags are recommended)                                                      | `1.46.0-debian-11-r5`    |
+| `metrics.image.tag`                          | Redis&reg; Exporter image tag (immutable tags are recommended)                                                      | `1.46.0-debian-11-r6`    |
 | `metrics.image.digest`                       | Redis&reg; Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
 | `metrics.image.pullPolicy`                   | Redis&reg; Exporter image pull policy                                                                               | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                  | Redis&reg; Exporter image pull secrets                                                                              | `[]`                     |
@@ -511,7 +503,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.additionalLabels`    | Additional labels for the prometheusRule                                                                            | `{}`                     |
 | `metrics.prometheusRule.rules`               | Custom Prometheus rules                                                                                             | `[]`                     |
 
-
 ### Init Container Parameters
 
 | Name                                                   | Description                                                                                                   | Value                   |
@@ -519,7 +510,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r85`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r87`      |
 | `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -529,7 +520,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctl.enabled`                                       | Enable init container to modify Kernel settings                                                               | `false`                 |
 | `sysctl.image.registry`                                | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `sysctl.image.repository`                              | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `sysctl.image.tag`                                     | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r85`      |
+| `sysctl.image.tag`                                     | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r87`      |
 | `sysctl.image.digest`                                  | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `sysctl.image.pullPolicy`                              | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `sysctl.image.pullSecrets`                             | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -537,7 +528,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctl.mountHostSys`                                  | Mount the host `/sys` folder to `/host-sys`                                                                   | `false`                 |
 | `sysctl.resources.limits`                              | The resources limits for the init container                                                                   | `{}`                    |
 | `sysctl.resources.requests`                            | The requested resources for the init container                                                                | `{}`                    |
-
 
 ### useExternalDNS Parameters
 

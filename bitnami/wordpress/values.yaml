@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/wordpress
-  tag: 6.1.1-debian-11-r46
+  tag: 6.1.1-debian-11-r49
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -261,7 +261,6 @@ multisite:
 ##
 replicaCount: 1
 ## @param updateStrategy.type WordPress deployment strategy type
-## @param updateStrategy.rollingUpdate WordPress deployment rolling update configuration parameters
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
 ## NOTE: Set it to `Recreate` if you use a PV that cannot be mounted on multiple pods
 ## e.g:
@@ -273,7 +272,6 @@ replicaCount: 1
 ##
 updateStrategy:
   type: RollingUpdate
-  rollingUpdate: {}
 ## @param schedulerName Alternate scheduler
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
@@ -759,7 +757,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r85
+    tag: 11-debian-11-r86
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
