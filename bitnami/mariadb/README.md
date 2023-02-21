@@ -62,7 +62,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global storage class for dynamic provisioning   | `""`  |
 
-
 ### Common parameters
 
 | Name                      | Description                                                                             | Value           |
@@ -80,7 +79,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command`  | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`     | Args to override all containers in the deployment                                       | `["infinity"]`  |
 | `serviceBindings.enabled` | Create secret for service binding (Experimental)                                        | `false`         |
-
 
 ### MariaDB common parameters
 
@@ -106,7 +104,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.customPasswordFiles` | Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication`                                                                                           | `{}`                   |
 | `initdbScripts`            | Dictionary of initdb scripts                                                                                                                                                                                                                                                  | `{}`                   |
 | `initdbScriptsConfigMap`   | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                                                                                                                                           | `""`                   |
-
 
 ### MariaDB Primary parameters
 
@@ -200,7 +197,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.pdb.maxUnavailable`                                | Maximum number/percentage of MariaDB primary pods that can be unavailable after the eviction                      | `""`                |
 | `primary.revisionHistoryLimit`                              | Maximum number of revisions that will be maintained in the StatefulSet                                            | `10`                |
 
-
 ### MariaDB Secondary parameters
 
 | Name                                                          | Description                                                                                                           | Value               |
@@ -293,7 +289,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.pdb.maxUnavailable`                                | Maximum number/percentage of MariaDB secondary pods that may be made unavailable                                      | `""`                |
 | `secondary.revisionHistoryLimit`                              | Maximum number of revisions that will be maintained in the StatefulSet                                                | `10`                |
 
-
 ### RBAC parameters
 
 | Name                                          | Description                                                    | Value   |
@@ -303,7 +298,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.annotations`                  | Annotations for MariaDB Service Account                        | `{}`    |
 | `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account | `false` |
 | `rbac.create`                                 | Whether to create and use RBAC resources or not                | `false` |
-
 
 ### Volume Permissions parameters
 
@@ -318,7 +312,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
 | `volumePermissions.resources.limits`   | Init container volume-permissions resource limits                                                                                 | `{}`                    |
 | `volumePermissions.resources.requests` | Init container volume-permissions resource requests                                                                               | `{}`                    |
-
 
 ### Metrics parameters
 
@@ -365,7 +358,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.namespace`                          | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                             | `""`                      |
 | `metrics.prometheusRule.additionalLabels`                   | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                                     | `{}`                      |
 | `metrics.prometheusRule.rules`                              | Prometheus Rule definitions                                                                                                               | `[]`                      |
-
 
 ### NetworkPolicy parameters
 
