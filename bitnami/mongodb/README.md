@@ -74,75 +74,76 @@ Refer to the [chart documentation for more information on each of these architec
 
 ### Common parameters
 
-| Name                     | Description                                                                                               | Value           |
-| ------------------------ | --------------------------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`           | String to partially override mongodb.fullname template (will maintain the release name)                   | `""`            |
-| `fullnameOverride`       | String to fully override mongodb.fullname template                                                        | `""`            |
-| `namespaceOverride`      | String to fully override common.names.namespace                                                           | `""`            |
-| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                                      | `""`            |
-| `clusterDomain`          | Default Kubernetes cluster domain                                                                         | `cluster.local` |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                                         | `[]`            |
-| `commonLabels`           | Add labels to all the deployed resources (sub-charts are not considered). Evaluated as a template         | `{}`            |
-| `commonAnnotations`      | Common annotations to add to all Mongo resources (sub-charts are not considered). Evaluated as a template | `{}`            |
-| `topologyKey`            | Override common lib default topology key. If empty - "kubernetes.io/hostname" is used                     | `""`            |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                                      | `["sleep"]`     |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                                         | `["infinity"]`  |
+| Name                      | Description                                                                                               | Value           |
+| ------------------------- | --------------------------------------------------------------------------------------------------------- | --------------- |
+| `nameOverride`            | String to partially override mongodb.fullname template (will maintain the release name)                   | `""`            |
+| `fullnameOverride`        | String to fully override mongodb.fullname template                                                        | `""`            |
+| `namespaceOverride`       | String to fully override common.names.namespace                                                           | `""`            |
+| `kubeVersion`             | Force target Kubernetes version (using Helm capabilities if not set)                                      | `""`            |
+| `clusterDomain`           | Default Kubernetes cluster domain                                                                         | `cluster.local` |
+| `extraDeploy`             | Array of extra objects to deploy with the release                                                         | `[]`            |
+| `commonLabels`            | Add labels to all the deployed resources (sub-charts are not considered). Evaluated as a template         | `{}`            |
+| `commonAnnotations`       | Common annotations to add to all Mongo resources (sub-charts are not considered). Evaluated as a template | `{}`            |
+| `topologyKey`             | Override common lib default topology key. If empty - "kubernetes.io/hostname" is used                     | `""`            |
+| `serviceBindings.enabled` | Create secret for service binding (Experimental)                                                          | `false`         |
+| `diagnosticMode.enabled`  | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
+| `diagnosticMode.command`  | Command to override all containers in the deployment                                                      | `["sleep"]`     |
+| `diagnosticMode.args`     | Args to override all containers in the deployment                                                         | `["infinity"]`  |
 
 ### MongoDB(&reg;) parameters
 
-| Name                             | Description                                                                                                                                                  | Value                  |
-| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------- |
-| `image.registry`                 | MongoDB(&reg;) image registry                                                                                                                                | `docker.io`            |
-| `image.repository`               | MongoDB(&reg;) image registry                                                                                                                                | `bitnami/mongodb`      |
-| `image.tag`                      | MongoDB(&reg;) image tag (immutable tags are recommended)                                                                                                    | `6.0.4-debian-11-r10`  |
-| `image.digest`                   | MongoDB(&reg;) image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                               | `""`                   |
-| `image.pullPolicy`               | MongoDB(&reg;) image pull policy                                                                                                                             | `IfNotPresent`         |
-| `image.pullSecrets`              | Specify docker-registry secret names as an array                                                                                                             | `[]`                   |
-| `image.debug`                    | Set to true if you would like to see extra information on logs                                                                                               | `false`                |
-| `schedulerName`                  | Name of the scheduler (other than default) to dispatch pods                                                                                                  | `""`                   |
-| `architecture`                   | MongoDB(&reg;) architecture (`standalone` or `replicaset`)                                                                                                   | `standalone`           |
-| `useStatefulSet`                 | Set to true to use a StatefulSet instead of a Deployment (only when `architecture=standalone`)                                                               | `false`                |
-| `auth.enabled`                   | Enable authentication                                                                                                                                        | `true`                 |
-| `auth.rootUser`                  | MongoDB(&reg;) root user                                                                                                                                     | `root`                 |
-| `auth.rootPassword`              | MongoDB(&reg;) root password                                                                                                                                 | `""`                   |
-| `auth.usernames`                 | List of custom users to be created during the initialization                                                                                                 | `[]`                   |
-| `auth.passwords`                 | List of passwords for the custom users set at `auth.usernames`                                                                                               | `[]`                   |
-| `auth.databases`                 | List of custom databases to be created during the initialization                                                                                             | `[]`                   |
-| `auth.username`                  | DEPRECATED: use `auth.usernames` instead                                                                                                                     | `""`                   |
-| `auth.password`                  | DEPRECATED: use `auth.passwords` instead                                                                                                                     | `""`                   |
-| `auth.database`                  | DEPRECATED: use `auth.databases` instead                                                                                                                     | `""`                   |
-| `auth.replicaSetKey`             | Key used for authentication in the replicaset (only when `architecture=replicaset`)                                                                          | `""`                   |
-| `auth.existingSecret`            | Existing secret with MongoDB(&reg;) credentials (keys: `mongodb-passwords`, `mongodb-root-password`, `mongodb-metrics-password`, ` mongodb-replica-set-key`) | `""`                   |
-| `tls.enabled`                    | Enable MongoDB(&reg;) TLS support between nodes in the cluster as well as between mongo clients and nodes                                                    | `false`                |
-| `tls.autoGenerated`              | Generate a custom CA and self-signed certificates                                                                                                            | `true`                 |
-| `tls.existingSecret`             | Existing secret with TLS certificates (keys: `mongodb-ca-cert`, `mongodb-ca-key`)                                                                            | `""`                   |
-| `tls.caCert`                     | Custom CA certificated (base64 encoded)                                                                                                                      | `""`                   |
-| `tls.caKey`                      | CA certificate private key (base64 encoded)                                                                                                                  | `""`                   |
-| `tls.standalone.existingSecret`  | Existing secret with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).                                                                                      | `""`                   |
-| `tls.replicaset.existingSecrets` | Array of existing secrets with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).                                                                            | `[]`                   |
-| `tls.hidden.existingSecrets`     | Array of existing secrets with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).                                                                            | `[]`                   |
-| `tls.arbiter.existingSecret`     | Existing secret with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).                                                                                      | `""`                   |
-| `tls.image.registry`             | Init container TLS certs setup image registry                                                                                                                | `docker.io`            |
-| `tls.image.repository`           | Init container TLS certs setup image repository                                                                                                              | `bitnami/nginx`        |
-| `tls.image.tag`                  | Init container TLS certs setup image tag (immutable tags are recommended)                                                                                    | `1.23.3-debian-11-r26` |
-| `tls.image.digest`               | Init container TLS certs setup image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                               | `""`                   |
-| `tls.image.pullPolicy`           | Init container TLS certs setup image pull policy                                                                                                             | `IfNotPresent`         |
-| `tls.image.pullSecrets`          | Init container TLS certs specify docker-registry secret names as an array                                                                                    | `[]`                   |
-| `tls.extraDnsNames`              | Add extra dns names to the CA, can solve x509 auth issue for pod clients                                                                                     | `[]`                   |
-| `tls.mode`                       | Allows to set the tls mode which should be used when tls is enabled (options: `allowTLS`, `preferTLS`, `requireTLS`)                                         | `requireTLS`           |
-| `tls.resources.limits`           | Init container generate-tls-certs resource limits                                                                                                            | `{}`                   |
-| `tls.resources.requests`         | Init container generate-tls-certs resource requests                                                                                                          | `{}`                   |
-| `hostAliases`                    | Add deployment host aliases                                                                                                                                  | `[]`                   |
-| `replicaSetName`                 | Name of the replica set (only when `architecture=replicaset`)                                                                                                | `rs0`                  |
-| `replicaSetHostnames`            | Enable DNS hostnames in the replicaset config (only when `architecture=replicaset`)                                                                          | `true`                 |
-| `enableIPv6`                     | Switch to enable/disable IPv6 on MongoDB(&reg;)                                                                                                              | `false`                |
-| `directoryPerDB`                 | Switch to enable/disable DirectoryPerDB on MongoDB(&reg;)                                                                                                    | `false`                |
-| `systemLogVerbosity`             | MongoDB(&reg;) system log verbosity level                                                                                                                    | `0`                    |
-| `disableSystemLog`               | Switch to enable/disable MongoDB(&reg;) system log                                                                                                           | `false`                |
-| `disableJavascript`              | Switch to enable/disable MongoDB(&reg;) server-side JavaScript execution                                                                                     | `false`                |
-| `enableJournal`                  | Switch to enable/disable MongoDB(&reg;) Journaling                                                                                                           | `true`                 |
-| `configuration`                  | MongoDB(&reg;) configuration file to be used for Primary and Secondary nodes                                                                                 | `""`                   |
+| Name                             | Description                                                                                                                                                 | Value                  |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `image.registry`                 | MongoDB(&reg;) image registry                                                                                                                               | `docker.io`            |
+| `image.repository`               | MongoDB(&reg;) image registry                                                                                                                               | `bitnami/mongodb`      |
+| `image.tag`                      | MongoDB(&reg;) image tag (immutable tags are recommended)                                                                                                   | `6.0.4-debian-11-r10`  |
+| `image.digest`                   | MongoDB(&reg;) image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                              | `""`                   |
+| `image.pullPolicy`               | MongoDB(&reg;) image pull policy                                                                                                                            | `IfNotPresent`         |
+| `image.pullSecrets`              | Specify docker-registry secret names as an array                                                                                                            | `[]`                   |
+| `image.debug`                    | Set to true if you would like to see extra information on logs                                                                                              | `false`                |
+| `schedulerName`                  | Name of the scheduler (other than default) to dispatch pods                                                                                                 | `""`                   |
+| `architecture`                   | MongoDB(&reg;) architecture (`standalone` or `replicaset`)                                                                                                  | `standalone`           |
+| `useStatefulSet`                 | Set to true to use a StatefulSet instead of a Deployment (only when `architecture=standalone`)                                                              | `false`                |
+| `auth.enabled`                   | Enable authentication                                                                                                                                       | `true`                 |
+| `auth.rootUser`                  | MongoDB(&reg;) root user                                                                                                                                    | `root`                 |
+| `auth.rootPassword`              | MongoDB(&reg;) root password                                                                                                                                | `""`                   |
+| `auth.usernames`                 | List of custom users to be created during the initialization                                                                                                | `[]`                   |
+| `auth.passwords`                 | List of passwords for the custom users set at `auth.usernames`                                                                                              | `[]`                   |
+| `auth.databases`                 | List of custom databases to be created during the initialization                                                                                            | `[]`                   |
+| `auth.username`                  | DEPRECATED: use `auth.usernames` instead                                                                                                                    | `""`                   |
+| `auth.password`                  | DEPRECATED: use `auth.passwords` instead                                                                                                                    | `""`                   |
+| `auth.database`                  | DEPRECATED: use `auth.databases` instead                                                                                                                    | `""`                   |
+| `auth.replicaSetKey`             | Key used for authentication in the replicaset (only when `architecture=replicaset`)                                                                         | `""`                   |
+| `auth.existingSecret`            | Existing secret with MongoDB(&reg;) credentials (keys: `mongodb-passwords`, `mongodb-root-password`, `mongodb-metrics-password`, `mongodb-replica-set-key`) | `""`                   |
+| `tls.enabled`                    | Enable MongoDB(&reg;) TLS support between nodes in the cluster as well as between mongo clients and nodes                                                   | `false`                |
+| `tls.autoGenerated`              | Generate a custom CA and self-signed certificates                                                                                                           | `true`                 |
+| `tls.existingSecret`             | Existing secret with TLS certificates (keys: `mongodb-ca-cert`, `mongodb-ca-key`)                                                                           | `""`                   |
+| `tls.caCert`                     | Custom CA certificated (base64 encoded)                                                                                                                     | `""`                   |
+| `tls.caKey`                      | CA certificate private key (base64 encoded)                                                                                                                 | `""`                   |
+| `tls.standalone.existingSecret`  | Existing secret with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).                                                                                     | `""`                   |
+| `tls.replicaset.existingSecrets` | Array of existing secrets with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).                                                                           | `[]`                   |
+| `tls.hidden.existingSecrets`     | Array of existing secrets with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).                                                                           | `[]`                   |
+| `tls.arbiter.existingSecret`     | Existing secret with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).                                                                                     | `""`                   |
+| `tls.image.registry`             | Init container TLS certs setup image registry                                                                                                               | `docker.io`            |
+| `tls.image.repository`           | Init container TLS certs setup image repository                                                                                                             | `bitnami/nginx`        |
+| `tls.image.tag`                  | Init container TLS certs setup image tag (immutable tags are recommended)                                                                                   | `1.23.3-debian-11-r26` |
+| `tls.image.digest`               | Init container TLS certs setup image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                              | `""`                   |
+| `tls.image.pullPolicy`           | Init container TLS certs setup image pull policy                                                                                                            | `IfNotPresent`         |
+| `tls.image.pullSecrets`          | Init container TLS certs specify docker-registry secret names as an array                                                                                   | `[]`                   |
+| `tls.extraDnsNames`              | Add extra dns names to the CA, can solve x509 auth issue for pod clients                                                                                    | `[]`                   |
+| `tls.mode`                       | Allows to set the tls mode which should be used when tls is enabled (options: `allowTLS`, `preferTLS`, `requireTLS`)                                        | `requireTLS`           |
+| `tls.resources.limits`           | Init container generate-tls-certs resource limits                                                                                                           | `{}`                   |
+| `tls.resources.requests`         | Init container generate-tls-certs resource requests                                                                                                         | `{}`                   |
+| `hostAliases`                    | Add deployment host aliases                                                                                                                                 | `[]`                   |
+| `replicaSetName`                 | Name of the replica set (only when `architecture=replicaset`)                                                                                               | `rs0`                  |
+| `replicaSetHostnames`            | Enable DNS hostnames in the replicaset config (only when `architecture=replicaset`)                                                                         | `true`                 |
+| `enableIPv6`                     | Switch to enable/disable IPv6 on MongoDB(&reg;)                                                                                                             | `false`                |
+| `directoryPerDB`                 | Switch to enable/disable DirectoryPerDB on MongoDB(&reg;)                                                                                                   | `false`                |
+| `systemLogVerbosity`             | MongoDB(&reg;) system log verbosity level                                                                                                                   | `0`                    |
+| `disableSystemLog`               | Switch to enable/disable MongoDB(&reg;) system log                                                                                                          | `false`                |
+| `disableJavascript`              | Switch to enable/disable MongoDB(&reg;) server-side JavaScript execution                                                                                    | `false`                |
+| `enableJournal`                  | Switch to enable/disable MongoDB(&reg;) Journaling                                                                                                          | `true`                 |
+| `configuration`                  | MongoDB(&reg;) configuration file to be used for Primary and Secondary nodes                                                                                | `""`                   |
 
 ### replicaSetConfigurationSettings settings applied during runtime (not via configuration file)
 
@@ -549,6 +550,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `metrics.prometheusRule.additionalLabels`    | Additional labels that can be used so prometheusRules will be discovered by Prometheus                                | `{}`                       |
 | `metrics.prometheusRule.namespace`           | Namespace where prometheusRules resource should be created                                                            | `""`                       |
 | `metrics.prometheusRule.rules`               | Rules to be created, check values for an example                                                                      | `[]`                       |
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
