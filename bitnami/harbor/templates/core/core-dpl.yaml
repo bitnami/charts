@@ -201,6 +201,9 @@ spec:
             - name: config
               mountPath: /etc/core/app.conf
               subPath: app.conf
+            - name: token-service-private-key
+              mountPath: /etc/core/private_key.pem
+              subPath: tls.key
             - name: secret-key
               mountPath: /etc/core/key
               subPath: key
@@ -238,6 +241,13 @@ spec:
             items:
               - key: app.conf
                 path: app.conf
+        - name: token-service-private-key
+          secret:
+            {{- if .Values.core.secretName }}
+            secretName: {{ .Values.core.secretName }}
+            {{- else }}
+            secretName: {{ template "harbor.core" . }}
+            {{- end }}
         - name: secret-key
           secret:
             {{- if .Values.core.existingSecret }}
