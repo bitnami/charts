@@ -23,7 +23,7 @@ This chart bootstraps a [Pinniped](https://pinniped.dev/) Deployment in a [Kuber
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
-[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/grafana-loki/get-started/).
+[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/pinniped/get-started/).
 
 ## Prerequisites
 
@@ -341,7 +341,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ## Persistence
 
-The [Bitnami pinniped](https://github.com/bitnami/containers/tree/main/bitnami/pinniped) image stores the pinniped data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments. [Learn more about persistence in the chart documentation](https://docs.bitnami.com/kubernetes/apps/pinniped/configuration/chart-persistence/).
+The [Bitnami pinniped](https://github.com/bitnami/containers/tree/main/bitnami/pinniped) image stores the pinniped data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 
 ### Additional environment variables
 
@@ -358,7 +358,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as pinniped (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/apps/pinniped/administration/configure-use-sidecars/).
+If additional containers are needed in the same pod as pinniped (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrasctructure/pinniped/administration/configure-use-sidecars/).
 
 ### Pod affinity
 

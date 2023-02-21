@@ -449,7 +449,7 @@ This version changes the default `etcd` branch to `3.4` as suggested by [etcd de
 This version introduces several features and performance improvements:
 
 - The statefulset can now be scaled using `kubectl scale` command. Using `helm upgrade` to recalculate available endpoints is no longer needed.
-- The scripts used for bootstrapping, runtime reconfiguration, and disaster recovery have been refactored and moved to the etcd container (see [this PR](https://github.com/bitnami/bitnami-docker-etcd/pull/13)) with two purposes: removing technical debt & improving the stability.
+- The scripts used for bootstrapping, runtime reconfiguration, and disaster recovery have been refactored and moved to the etcd container with two purposes: removing technical debt & improving the stability.
 - Several parameters were reorganized to simplify the structure and follow the same standard used on other Bitnami charts:
   - `etcd.initialClusterState` is renamed to `initialClusterState`.
   - `statefulset.replicaCount` is renamed to `replicaCount`.
