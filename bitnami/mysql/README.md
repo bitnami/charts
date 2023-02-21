@@ -60,7 +60,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                      | Description                                                                                               | Value           |
@@ -77,7 +76,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled`  | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
 | `diagnosticMode.command`  | Command to override all containers in the deployment                                                      | `["sleep"]`     |
 | `diagnosticMode.args`     | Args to override all containers in the deployment                                                         | `["infinity"]`  |
-
 
 ### MySQL common parameters
 
@@ -103,7 +101,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.customPasswordFiles` | Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication` | `{}`                  |
 | `initdbScripts`            | Dictionary of initdb scripts                                                                                                                                                        | `{}`                  |
 | `initdbScriptsConfigMap`   | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                                                 | `""`                  |
-
 
 ### MySQL Primary parameters
 
@@ -192,7 +189,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.pdb.minAvailable`                      | Minimum number/percentage of MySQL primary pods that should remain scheduled                                    | `1`                 |
 | `primary.pdb.maxUnavailable`                    | Maximum number/percentage of MySQL primary pods that may be made unavailable                                    | `""`                |
 | `primary.podLabels`                             | MySQL Primary pod label. If labels are same as commonLabels , this will take precedence                         | `{}`                |
-
 
 ### MySQL Secondary parameters
 
@@ -283,7 +279,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.pdb.maxUnavailable`                    | Maximum number/percentage of MySQL secondary pods that may be made unavailable                                      | `""`                |
 | `secondary.podLabels`                             | Additional pod labels for MySQL secondary pods                                                                      | `{}`                |
 
-
 ### RBAC parameters
 
 | Name                                          | Description                                                    | Value   |
@@ -295,7 +290,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rbac.create`                                 | Whether to create & use RBAC resources or not                  | `false` |
 | `rbac.rules`                                  | Custom RBAC rules to set                                       | `[]`    |
 
-
 ### Network Policy
 
 | Name                                       | Description                                                                                                     | Value   |
@@ -303,7 +297,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.enabled`                    | Enable creation of NetworkPolicy resources                                                                      | `false` |
 | `networkPolicy.allowExternal`              | The Policy model to apply.                                                                                      | `true`  |
 | `networkPolicy.explicitNamespacesSelector` | A Kubernetes LabelSelector to explicitly select namespaces from which ingress traffic could be allowed to MySQL | `{}`    |
-
 
 ### Volume Permissions parameters
 
@@ -317,7 +310,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
 | `volumePermissions.resources`         | Init container volume-permissions resources                                                                                       | `{}`                    |
-
 
 ### Metrics parameters
 
