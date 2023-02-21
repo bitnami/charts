@@ -166,11 +166,11 @@ mimir:
       max_closing_blocks_concurrency: 2
       max_opening_blocks_concurrency: 4
       symbols_flushers_concurrency: 4
-      data_dir: {{ .Values.mimir.dataDir }}
+      data_dir: {{ .Values.mimir.dataDir }}/ingester
       sharding_ring:
         wait_stability_min_duration: 1m
     compactor:
-      data_dir: {{ .Values.mimir.dataDir }}/data-compactor
+      data_dir: {{ .Values.mimir.dataDir }}/compactor
     frontend:
       parallelize_shardable_queries: true
       {{- if .Values.memcachedfrontend.enabled }}
@@ -355,6 +355,10 @@ alertmanager:
   ## @param alertmanager.replicaCount Number of Alertmanager replicas to deploy
   ##
   replicaCount: 1
+  ## @param alertmanager.podManagementPolicy Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: OrderedReady
   ## Configure extra options for Alertmanager containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
   ## @param alertmanager.livenessProbe.enabled Enable livenessProbe on Alertmanager nodes
@@ -536,6 +540,43 @@ alertmanager:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    ## @param alertmanager.persistence.enabled Enable persistence in alertmanager instances
+    ##
+    enabled: true
+    ## @param alertmanager.persistence.storageClass PVC Storage Class for alertmanager data volume
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param alertmanager.persistence.accessModes PVC Access modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param alertmanager.persistence.size PVC Storage Request for alertmanager data volume
+    ##
+    size: 8Gi
+    ## @param alertmanager.persistence.annotations Additional PVC annotations
+    ##
+    annotations: {}
+    ## @param alertmanager.persistence.selector Selector to match an existing Persistent Volume for alertmanager's data PVC
+    ## If set, the PVC can't have a PV dynamically provisioned for it
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param alertmanager.persistence.dataSource PVC data source
+    ##
+    dataSource: {}
 
   ## @section Alertmanager Traffic Exposure Parameters
   ##
@@ -848,9 +889,6 @@ compactor:
     ## @param compactor.persistence.enabled Enable persistence in Compactor instances
     ##
     enabled: true
-    ## @param compactor.persistence.existingClaim Name of an existing PVC to use
-    ##
-    existingClaim: ""
     ## @param compactor.persistence.storageClass PVC Storage Class for Compactor data volume
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -1875,9 +1913,6 @@ ingester:
     ## @param ingester.persistence.enabled Enable persistence in Ingester instances
     ##
     enabled: true
-    ## @param ingester.persistence.existingClaim Name of an existing PVC to use
-    ##
-    existingClaim: ""
     ## @param ingester.persistence.storageClass PVC Storage Class for Ingester data volume
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -3678,9 +3713,6 @@ ruler:
     ##   GKE, AWS & OpenStack)
     ##
     storageClass: ""
-    ## @param ruler.persistence.subPath The subdirectory of the volume to mount to
-    ##
-    subPath: ""
     ## @param ruler.persistence.accessModes PVC Access modes
     ##
     accessModes:
@@ -3788,54 +3820,6 @@ ruler:
     config: {}
 
 
-## @section Persistence Parameters
-##
-
-## Enable persistence using Persistent Volume Claims
-## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
-##
-persistence:
-  ## @param persistence.enabled Enable persistence using Persistent Volume Claims
-  ##
-  enabled: true
-  ## @param persistence.mountPath Path to mount the volume at.
-  ##
-  mountPath: /bitnami/mimir/data
-  ## @param persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
-  ##
-  subPath: ""
-  ## @param persistence.storageClass Storage class of backing PVC
-  ## If defined, storageClassName: <storageClass>
-  ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClassName spec is
-  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-  ##   GKE, AWS & OpenStack)
-  ##
-  storageClass: ""
-  ## @param persistence.annotations Persistent Volume Claim annotations
-  ##
-  annotations: {}
-  ## @param persistence.accessModes Persistent Volume Access Modes
-  ##
-  accessModes:
-    - ReadWriteOnce
-  ## @param persistence.size Size of data volume
-  ##
-  size: 8Gi
-  ## @param persistence.existingClaim The name of an existing PVC to use for persistence
-  ##
-  existingClaim: ""
-  ## @param persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
-  ## If set, the PVC can't have a PV dynamically provisioned for it
-  ## E.g.
-  ## selector:
-  ##   matchLabels:
-  ##     app: my-app
-  ##
-  selector: {}
-  ## @param persistence.dataSource Custom PVC data source
-  ##
-  dataSource: {}
 ## @section Init Container Parameters
 ##
 

@@ -104,66 +104,74 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Alertmanager Deployment Parameters
 
-| Name                                                 | Description                                                                                            | Value           |
-| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | --------------- |
-| `alertmanager.enabled`                               | Enable alertmanager deployment                                                                         | `false`         |
-| `alertmanager.extraEnvVars`                          | Array with extra environment variables to add to alertmanager nodes                                    | `[]`            |
-| `alertmanager.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for alertmanager nodes                            | `""`            |
-| `alertmanager.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for alertmanager nodes                               | `""`            |
-| `alertmanager.command`                               | Override default container command (useful when using custom images)                                   | `[]`            |
-| `alertmanager.args`                                  | Override default container args (useful when using custom images)                                      | `[]`            |
-| `alertmanager.extraArgs`                             | Add additional argsto the default container args (useful to override configuration)                    | `[]`            |
-| `alertmanager.replicaCount`                          | Number of Alertmanager replicas to deploy                                                              | `1`             |
-| `alertmanager.livenessProbe.enabled`                 | Enable livenessProbe on Alertmanager nodes                                                             | `true`          |
-| `alertmanager.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                | `60`            |
-| `alertmanager.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                       | `10`            |
-| `alertmanager.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                      | `1`             |
-| `alertmanager.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                    | `3`             |
-| `alertmanager.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                    | `1`             |
-| `alertmanager.readinessProbe.enabled`                | Enable readinessProbe on Alertmanager nodes                                                            | `true`          |
-| `alertmanager.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                               | `60`            |
-| `alertmanager.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                      | `10`            |
-| `alertmanager.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                     | `1`             |
-| `alertmanager.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                   | `3`             |
-| `alertmanager.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                   | `1`             |
-| `alertmanager.startupProbe.enabled`                  | Enable startupProbe on Alertmanager containers                                                         | `false`         |
-| `alertmanager.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                 | `30`            |
-| `alertmanager.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                        | `10`            |
-| `alertmanager.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                       | `1`             |
-| `alertmanager.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                     | `15`            |
-| `alertmanager.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                     | `1`             |
-| `alertmanager.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                    | `{}`            |
-| `alertmanager.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                   | `{}`            |
-| `alertmanager.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                     | `{}`            |
-| `alertmanager.resources.limits`                      | The resources limits for the alertmanager containers                                                   | `{}`            |
-| `alertmanager.resources.requests`                    | The requested resources for the alertmanager containers                                                | `{}`            |
-| `alertmanager.podSecurityContext.enabled`            | Enabled Alertmanager pods' Security Context                                                            | `true`          |
-| `alertmanager.podSecurityContext.fsGroup`            | Set Alertmanager pod's Security Context fsGroup                                                        | `1001`          |
-| `alertmanager.containerSecurityContext.enabled`      | Enabled Alertmanager containers' Security Context                                                      | `true`          |
-| `alertmanager.containerSecurityContext.runAsUser`    | Set Alertmanager containers' Security Context runAsUser                                                | `1001`          |
-| `alertmanager.containerSecurityContext.runAsNonRoot` | Set Alertmanager containers' Security Context runAsNonRoot                                             | `true`          |
-| `alertmanager.lifecycleHooks`                        | for the ingester container(s) to automate configuration before or after startup                        | `{}`            |
-| `alertmanager.hostAliases`                           | ingester pods host aliases                                                                             | `[]`            |
-| `alertmanager.podLabels`                             | Extra labels for ingester pods                                                                         | `{}`            |
-| `alertmanager.podAnnotations`                        | Annotations for ingester pods                                                                          | `{}`            |
-| `alertmanager.podAffinityPreset`                     | Pod affinity preset. Ignored if `alertmanager.affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
-| `alertmanager.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `alertmanager.affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
-| `alertmanager.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `alertmanager.affinity` is set. Allowed values: `soft` or `hard` | `""`            |
-| `alertmanager.nodeAffinityPreset.key`                | Node label key to match. Ignored if `alertmanager.affinity` is set                                     | `""`            |
-| `alertmanager.nodeAffinityPreset.values`             | Node label values to match. Ignored if `alertmanager.affinity` is set                                  | `[]`            |
-| `alertmanager.affinity`                              | Affinity for Alertmanager pods assignment                                                              | `{}`            |
-| `alertmanager.nodeSelector`                          | Node labels for Alertmanager pods assignment                                                           | `{}`            |
-| `alertmanager.tolerations`                           | Tolerations for Alertmanager pods assignment                                                           | `[]`            |
-| `alertmanager.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains        | `[]`            |
-| `alertmanager.priorityClassName`                     | Alertmanager pods' priorityClassName                                                                   | `""`            |
-| `alertmanager.schedulerName`                         | Kubernetes pod scheduler registry                                                                      | `""`            |
-| `alertmanager.terminationGracePeriodSeconds`         | Seconds pod needs to terminate gracefully                                                              | `""`            |
-| `alertmanager.updateStrategy.type`                   | Alertmanager statefulset strategy type                                                                 | `RollingUpdate` |
-| `alertmanager.updateStrategy.rollingUpdate`          | Alertmanager statefulset rolling update configuration parameters                                       | `{}`            |
-| `alertmanager.extraVolumes`                          | Optionally specify extra list of additional volumes for the Alertmanager pod(s)                        | `[]`            |
-| `alertmanager.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Alertmanager container(s)             | `[]`            |
-| `alertmanager.sidecars`                              | Add additional sidecar containers to the Alertmanager pod(s)                                           | `[]`            |
-| `alertmanager.initContainers`                        | Add additional init containers to the Alertmanager pod(s)                                              | `[]`            |
+| Name                                                 | Description                                                                                            | Value               |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------- |
+| `alertmanager.enabled`                               | Enable alertmanager deployment                                                                         | `false`             |
+| `alertmanager.extraEnvVars`                          | Array with extra environment variables to add to alertmanager nodes                                    | `[]`                |
+| `alertmanager.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for alertmanager nodes                            | `""`                |
+| `alertmanager.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for alertmanager nodes                               | `""`                |
+| `alertmanager.command`                               | Override default container command (useful when using custom images)                                   | `[]`                |
+| `alertmanager.args`                                  | Override default container args (useful when using custom images)                                      | `[]`                |
+| `alertmanager.extraArgs`                             | Add additional argsto the default container args (useful to override configuration)                    | `[]`                |
+| `alertmanager.replicaCount`                          | Number of Alertmanager replicas to deploy                                                              | `1`                 |
+| `alertmanager.podManagementPolicy`                   | Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join     | `OrderedReady`      |
+| `alertmanager.livenessProbe.enabled`                 | Enable livenessProbe on Alertmanager nodes                                                             | `true`              |
+| `alertmanager.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                | `60`                |
+| `alertmanager.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                       | `10`                |
+| `alertmanager.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                      | `1`                 |
+| `alertmanager.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                    | `3`                 |
+| `alertmanager.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                    | `1`                 |
+| `alertmanager.readinessProbe.enabled`                | Enable readinessProbe on Alertmanager nodes                                                            | `true`              |
+| `alertmanager.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                               | `60`                |
+| `alertmanager.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                      | `10`                |
+| `alertmanager.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                     | `1`                 |
+| `alertmanager.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                   | `3`                 |
+| `alertmanager.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                   | `1`                 |
+| `alertmanager.startupProbe.enabled`                  | Enable startupProbe on Alertmanager containers                                                         | `false`             |
+| `alertmanager.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                 | `30`                |
+| `alertmanager.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                        | `10`                |
+| `alertmanager.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                       | `1`                 |
+| `alertmanager.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                     | `15`                |
+| `alertmanager.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                     | `1`                 |
+| `alertmanager.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                    | `{}`                |
+| `alertmanager.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                   | `{}`                |
+| `alertmanager.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                     | `{}`                |
+| `alertmanager.resources.limits`                      | The resources limits for the alertmanager containers                                                   | `{}`                |
+| `alertmanager.resources.requests`                    | The requested resources for the alertmanager containers                                                | `{}`                |
+| `alertmanager.podSecurityContext.enabled`            | Enabled Alertmanager pods' Security Context                                                            | `true`              |
+| `alertmanager.podSecurityContext.fsGroup`            | Set Alertmanager pod's Security Context fsGroup                                                        | `1001`              |
+| `alertmanager.containerSecurityContext.enabled`      | Enabled Alertmanager containers' Security Context                                                      | `true`              |
+| `alertmanager.containerSecurityContext.runAsUser`    | Set Alertmanager containers' Security Context runAsUser                                                | `1001`              |
+| `alertmanager.containerSecurityContext.runAsNonRoot` | Set Alertmanager containers' Security Context runAsNonRoot                                             | `true`              |
+| `alertmanager.lifecycleHooks`                        | for the ingester container(s) to automate configuration before or after startup                        | `{}`                |
+| `alertmanager.hostAliases`                           | ingester pods host aliases                                                                             | `[]`                |
+| `alertmanager.podLabels`                             | Extra labels for ingester pods                                                                         | `{}`                |
+| `alertmanager.podAnnotations`                        | Annotations for ingester pods                                                                          | `{}`                |
+| `alertmanager.podAffinityPreset`                     | Pod affinity preset. Ignored if `alertmanager.affinity` is set. Allowed values: `soft` or `hard`       | `""`                |
+| `alertmanager.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `alertmanager.affinity` is set. Allowed values: `soft` or `hard`  | `soft`              |
+| `alertmanager.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `alertmanager.affinity` is set. Allowed values: `soft` or `hard` | `""`                |
+| `alertmanager.nodeAffinityPreset.key`                | Node label key to match. Ignored if `alertmanager.affinity` is set                                     | `""`                |
+| `alertmanager.nodeAffinityPreset.values`             | Node label values to match. Ignored if `alertmanager.affinity` is set                                  | `[]`                |
+| `alertmanager.affinity`                              | Affinity for Alertmanager pods assignment                                                              | `{}`                |
+| `alertmanager.nodeSelector`                          | Node labels for Alertmanager pods assignment                                                           | `{}`                |
+| `alertmanager.tolerations`                           | Tolerations for Alertmanager pods assignment                                                           | `[]`                |
+| `alertmanager.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains        | `[]`                |
+| `alertmanager.priorityClassName`                     | Alertmanager pods' priorityClassName                                                                   | `""`                |
+| `alertmanager.schedulerName`                         | Kubernetes pod scheduler registry                                                                      | `""`                |
+| `alertmanager.terminationGracePeriodSeconds`         | Seconds pod needs to terminate gracefully                                                              | `""`                |
+| `alertmanager.updateStrategy.type`                   | Alertmanager statefulset strategy type                                                                 | `RollingUpdate`     |
+| `alertmanager.updateStrategy.rollingUpdate`          | Alertmanager statefulset rolling update configuration parameters                                       | `{}`                |
+| `alertmanager.extraVolumes`                          | Optionally specify extra list of additional volumes for the Alertmanager pod(s)                        | `[]`                |
+| `alertmanager.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Alertmanager container(s)             | `[]`                |
+| `alertmanager.sidecars`                              | Add additional sidecar containers to the Alertmanager pod(s)                                           | `[]`                |
+| `alertmanager.initContainers`                        | Add additional init containers to the Alertmanager pod(s)                                              | `[]`                |
+| `alertmanager.persistence.enabled`                   | Enable persistence in alertmanager instances                                                           | `true`              |
+| `alertmanager.persistence.storageClass`              | PVC Storage Class for alertmanager data volume                                                         | `""`                |
+| `alertmanager.persistence.accessModes`               | PVC Access modes                                                                                       | `["ReadWriteOnce"]` |
+| `alertmanager.persistence.size`                      | PVC Storage Request for alertmanager data volume                                                       | `8Gi`               |
+| `alertmanager.persistence.annotations`               | Additional PVC annotations                                                                             | `{}`                |
+| `alertmanager.persistence.selector`                  | Selector to match an existing Persistent Volume for alertmanager's data PVC                            | `{}`                |
+| `alertmanager.persistence.dataSource`                | PVC data source                                                                                        | `{}`                |
 
 ### Alertmanager Traffic Exposure Parameters
 
@@ -251,7 +259,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.sidecars`                              | Add additional sidecar containers to the Compactor pod(s)                                           | `[]`                |
 | `compactor.initContainers`                        | Add additional init containers to the Compactor pod(s)                                              | `[]`                |
 | `compactor.persistence.enabled`                   | Enable persistence in Compactor instances                                                           | `true`              |
-| `compactor.persistence.existingClaim`             | Name of an existing PVC to use                                                                      | `""`                |
 | `compactor.persistence.storageClass`              | PVC Storage Class for Compactor data volume                                                         | `""`                |
 | `compactor.persistence.accessModes`               | PVC Access modes                                                                                    | `["ReadWriteOnce"]` |
 | `compactor.persistence.size`                      | PVC Storage Request for Compactor data volume                                                       | `8Gi`               |
@@ -532,7 +539,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.sidecars`                              | Add additional sidecar containers to the Ingester pod(s)                                           | `[]`                |
 | `ingester.initContainers`                        | Add additional init containers to the Ingester pod(s)                                              | `[]`                |
 | `ingester.persistence.enabled`                   | Enable persistence in Ingester instances                                                           | `true`              |
-| `ingester.persistence.existingClaim`             | Name of an existing PVC to use                                                                     | `""`                |
 | `ingester.persistence.storageClass`              | PVC Storage Class for Ingester data volume                                                         | `""`                |
 | `ingester.persistence.accessModes`               | PVC Access modes                                                                                   | `["ReadWriteOnce"]` |
 | `ingester.persistence.size`                      | PVC Storage Request for Ingester data volume                                                       | `8Gi`               |
@@ -1045,7 +1051,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------- | -------------------------------------------------------------------- | ------------------- |
 | `ruler.persistence.enabled`      | Enable persistence in Ruler instances                                | `true`              |
 | `ruler.persistence.storageClass` | PVC Storage Class for Ruler data volume                              | `""`                |
-| `ruler.persistence.subPath`      | The subdirectory of the volume to mount to                           | `""`                |
 | `ruler.persistence.accessModes`  | PVC Access modes                                                     | `["ReadWriteOnce"]` |
 | `ruler.persistence.size`         | PVC Storage Request for Ruler data volume                            | `8Gi`               |
 | `ruler.persistence.annotations`  | Additional PVC annotations                                           | `{}`                |
@@ -1073,21 +1078,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ruler.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable   | `""`        |
 | `ruler.blockStorage.backend`             | Backend storage to use                                           | `s3`        |
 | `ruler.blockStorage.config`              | Configures connection to the backend store                       | `{}`        |
-
-### Persistence Parameters
-
-| Name                        | Description                                                                                             | Value                 |
-| --------------------------- | ------------------------------------------------------------------------------------------------------- | --------------------- |
-| `persistence.enabled`       | Enable persistence using Persistent Volume Claims                                                       | `true`                |
-| `persistence.mountPath`     | Path to mount the volume at.                                                                            | `/bitnami/mimir/data` |
-| `persistence.subPath`       | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services | `""`                  |
-| `persistence.storageClass`  | Storage class of backing PVC                                                                            | `""`                  |
-| `persistence.annotations`   | Persistent Volume Claim annotations                                                                     | `{}`                  |
-| `persistence.accessModes`   | Persistent Volume Access Modes                                                                          | `["ReadWriteOnce"]`   |
-| `persistence.size`          | Size of data volume                                                                                     | `8Gi`                 |
-| `persistence.existingClaim` | The name of an existing PVC to use for persistence                                                      | `""`                  |
-| `persistence.selector`      | Selector to match an existing Persistent Volume for WordPress data PVC                                  | `{}`                  |
-| `persistence.dataSource`    | Custom PVC data source                                                                                  | `{}`                  |
 
 ### Init Container Parameters
 

@@ -147,7 +147,7 @@ spec:
               mountPath: {{ .Values.mimir.dataDir }}/conf/mimir.yaml
               subPath: mimir.yaml
             - name: data
-              mountPath: {{ .Values.mimir.dataDir }}/mimir/queryScheduler
+              mountPath: {{ .Values.mimir.dataDir }}
           {{- if .Values.queryScheduler.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}

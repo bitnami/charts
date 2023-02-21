@@ -162,7 +162,7 @@ spec:
               mountPath: {{ .Values.mimir.dataDir }}/conf/mimir.yaml
               subPath: mimir.yaml
             - name: data
-              mountPath: {{ .Values.mimir.dataDir }}/mimir/distributor
+              mountPath: {{ .Values.mimir.dataDir }}
           {{- if .Values.distributor.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.distributor.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}

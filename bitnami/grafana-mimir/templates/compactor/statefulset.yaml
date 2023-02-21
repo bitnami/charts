@@ -83,9 +83,9 @@ spec:
           args:
             - -ec
             - |
-              mkdir -p {{ .Values.mimir.dataDir }}{{- if .Values.compactor.persistence.subPath }}/{{ .Values.compactor.persistence.subPath }}{{- end }}
+              mkdir -p {{ .Values.mimir.dataDir }}
               {{- if and .Values.compactor.podSecurityContext.enabled .Values.compactor.containerSecurityContext.enabled }}
-              find {{ .Values.mimir.dataDir }}{{- if .Values.compactor.persistence.subPath }}/{{ .Values.compactor.persistence.subPath }}{{- end }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.compactor.containerSecurityContext.runAsUser }}:{{ .Values.compactor.podSecurityContext.fsGroup }}
+              find {{ .Values.mimir.dataDir }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.compactor.containerSecurityContext.runAsUser }}:{{ .Values.compactor.podSecurityContext.fsGroup }}
               {{- end }}
           {{- if eq ( toString ( .Values.volumePermissions.containerSecurityContext.runAsUser )) "auto" }}
           securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "runAsUser" | toYaml | nindent 12 }}
@@ -98,9 +98,6 @@ spec:
           volumeMounts:
             - name: data
               mountPath: {{ .Values.mimir.dataDir }}
-              {{- if .Values.compactor.persistence.subPath }}
-              subPath: {{ .Values.compactor.persistence.subPath }}
-              {{- end }}
         {{- end }}
       containers:
         - name: compactor
@@ -126,7 +123,7 @@ spec:
             {{- if .Values.compactor.extraArgs }}
             {{- include "common.tplvalues.render" (dict "value" .Values.compactor.extraArgs "context" $) | nindent 12 }}
             {{- end }}
-          {{- end}}
+          {{- end }}
           env:
             {{- if .Values.minio.enabled }}
             - name: MIMIR_MINIO_ACCESS_KEY_ID
@@ -195,7 +192,7 @@ spec:
               mountPath: {{ .Values.mimir.dataDir }}/conf/mimir.yaml
               subPath: mimir.yaml
             - name: data
-              mountPath: {{ .Values.mimir.dataDir }}/compactor
+              mountPath: {{ .Values.mimir.dataDir }}
           {{- if .Values.compactor.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.compactor.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
