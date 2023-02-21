@@ -364,6 +364,7 @@ master:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
   ## E.g.
   ## dnsPolicy: ClusterFirst
+  ##
   dnsPolicy: ""
   ## @param master.dnsConfig DNS Configuration for Redis&reg; master pod
   ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
@@ -373,6 +374,7 @@ master:
   ##   - name: ndots
   ##     value: "4"
   ##   - name: single-request-reopen
+  ##
   dnsConfig: {}
   ## @param master.lifecycleHooks for the Redis&reg; master container(s) to automate configuration before or after startup
   ##
@@ -776,6 +778,7 @@ replica:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
   ## E.g.
   ## dnsPolicy: ClusterFirst
+  ##
   dnsPolicy: ""
   ## @param replica.dnsConfig DNS Configuration for Redis&reg; replica pods
   ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
@@ -785,6 +788,7 @@ replica:
   ##   - name: ndots
   ##     value: "4"
   ##   - name: single-request-reopen
+  ##
   dnsConfig: {}
   ## @param replica.lifecycleHooks for the Redis&reg; replica container(s) to automate configuration before or after startup
   ##
@@ -1011,6 +1015,7 @@ sentinel:
   quorum: 2
   ## @param sentinel.getMasterTimeout Amount of time to allow before get_sentinel_master_info() times out.
   ## NOTE: This is directly related to the startupProbes which are configured to run every 10 seconds for a total of 22 failures. If adjusting this value, also adjust the startupProbes.
+  ##
   getMasterTimeout: 220
   ## @param sentinel.automateClusterRecovery Automate cluster recovery in cases where the last replica is not considered a good replica and Sentinel won't automatically failover to it.
   ## This also prevents any new replica from starting until the last remaining replica is elected as master to guarantee that it is the one to be elected by Sentinel, and not a newly started replica with no data.
@@ -1018,6 +1023,7 @@ sentinel:
   ##
   automateClusterRecovery: false
   ## @param sentinel.redisShutdownWaitFailover Whether the Redis&reg; master container waits for the failover at shutdown (in addition to the Redis&reg; Sentinel container).
+  ##
   redisShutdownWaitFailover: true
   ## Sentinel timing restrictions
   ## @param sentinel.downAfterMilliseconds Timeout for detecting a Redis&reg; node is down
@@ -1246,6 +1252,12 @@ sentinel:
 
 ## @section Other Parameters
 ##
+
+## @param serviceBindings.enabled Create secret for service binding (Experimental)
+## Ref: https://servicebinding.io/service-provider/
+##
+serviceBindings:
+  enabled: false
 
 ## Network Policy configuration
 ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
