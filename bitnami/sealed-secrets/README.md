@@ -61,7 +61,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                        | Value           |
@@ -75,14 +74,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`     | Kubernetes cluster domain name                     | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`            |
 
-
 ### Sealed Secrets Parameters
 
 | Name                                                | Description                                                                                                              | Value                    |
 | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
 | `image.registry`                                    | Sealed Secrets image registry                                                                                            | `docker.io`              |
 | `image.repository`                                  | Sealed Secrets image repository                                                                                          | `bitnami/sealed-secrets` |
-| `image.tag`                                         | Sealed Secrets image tag (immutable tags are recommended)                                                                | `0.19.4-scratch-r3`      |
+| `image.tag`                                         | Sealed Secrets image tag (immutable tags are recommended)                                                                | `0.19.5-scratch-r0`      |
 | `image.digest`                                      | Sealed Secrets image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag           | `""`                     |
 | `image.pullPolicy`                                  | Sealed Secrets image pull policy                                                                                         | `IfNotPresent`           |
 | `image.pullSecrets`                                 | Sealed Secrets image pull secrets                                                                                        | `[]`                     |
@@ -149,7 +147,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidecars`                                          | Add additional sidecar containers to the Sealed Secret pod(s)                                                            | `{}`                     |
 | `initContainers`                                    | Add additional init containers to the Sealed Secret pod(s)                                                               | `{}`                     |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                           | Value                    |
@@ -181,7 +178,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                    | `[]`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                               | `[]`                     |
 
-
 ### Other Parameters
 
 | Name                                          | Description                                                      | Value   |
@@ -197,7 +193,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true`  |
 | `networkPolicy.enabled`                       | Specifies whether a NetworkPolicy should be created              | `false` |
 | `networkPolicy.allowExternal`                 | Don't require client label for connections                       | `true`  |
-
 
 ### Metrics parameters
 
@@ -218,7 +213,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set livenessProbe.successThreshold=5 \
     my-repo/sealed-secrets
 ```

@@ -115,7 +115,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------------------------------------------------------------ | ---------------------- |
 | `image.registry`    | OAuth2 Proxy image registry                                                                                  | `docker.io`            |
 | `image.repository`  | OAuth2 Proxy image repository                                                                                | `bitnami/oauth2-proxy` |
-| `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended)                                                      | `7.4.0-debian-11-r32`  |
+| `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended)                                                      | `7.4.0-debian-11-r39`  |
 | `image.digest`      | OAuth2 Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `image.pullPolicy`  | OAuth2 Proxy image pull policy                                                                               | `IfNotPresent`         |
 | `image.pullSecrets` | OAuth2 Proxy image pull secrets                                                                              | `[]`                   |
@@ -248,7 +248,7 @@ The above parameters map to the env variables defined in [bitnami/oauth2-proxy](
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set replicaCount=2 \
     my-repo/oauth2-proxy
 ```

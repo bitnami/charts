@@ -94,7 +94,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `postgresql.image.registry`                                  | PostgreSQL with Repmgr image registry                                                                                                                                                                         | `docker.io`                 |
 | `postgresql.image.repository`                                | PostgreSQL with Repmgr image repository                                                                                                                                                                       | `bitnami/postgresql-repmgr` |
-| `postgresql.image.tag`                                       | PostgreSQL with Repmgr image tag                                                                                                                                                                              | `15.2.0-debian-11-r0`       |
+| `postgresql.image.tag`                                       | PostgreSQL with Repmgr image tag                                                                                                                                                                              | `15.2.0-debian-11-r2`       |
 | `postgresql.image.digest`                                    | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                    | `""`                        |
 | `postgresql.image.pullPolicy`                                | PostgreSQL with Repmgr image pull policy                                                                                                                                                                      | `IfNotPresent`              |
 | `postgresql.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                                                                                                              | `[]`                        |
@@ -321,7 +321,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
 | `pgpool.image.registry`                                  | Pgpool image registry                                                                                                                    | `docker.io`          |
 | `pgpool.image.repository`                                | Pgpool image repository                                                                                                                  | `bitnami/pgpool`     |
-| `pgpool.image.tag`                                       | Pgpool image tag                                                                                                                         | `4.4.2-debian-11-r5` |
+| `pgpool.image.tag`                                       | Pgpool image tag                                                                                                                         | `4.4.2-debian-11-r8` |
 | `pgpool.image.digest`                                    | Pgpool image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                   | `""`                 |
 | `pgpool.image.pullPolicy`                                | Pgpool image pull policy                                                                                                                 | `IfNotPresent`       |
 | `pgpool.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                                         | `[]`                 |
@@ -461,7 +461,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `metrics.enabled`                            | Enable PostgreSQL Prometheus exporter                                                                                                                   | `false`                     |
 | `metrics.image.registry`                     | PostgreSQL Prometheus exporter image registry                                                                                                           | `docker.io`                 |
 | `metrics.image.repository`                   | PostgreSQL Prometheus exporter image repository                                                                                                         | `bitnami/postgres-exporter` |
-| `metrics.image.tag`                          | PostgreSQL Prometheus exporter image tag                                                                                                                | `0.11.1-debian-11-r58`      |
+| `metrics.image.tag`                          | PostgreSQL Prometheus exporter image tag                                                                                                                | `0.11.1-debian-11-r61`      |
 | `metrics.image.digest`                       | PostgreSQL Prometheus exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                          | `""`                        |
 | `metrics.image.pullPolicy`                   | PostgreSQL Prometheus exporter image pull policy                                                                                                        | `IfNotPresent`              |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                                        | `[]`                        |
@@ -510,7 +510,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `metrics.serviceMonitor.scrapeTimeout`       | Service monitor scrape timeout                                                                                                                          | `""`                        |
 | `metrics.serviceMonitor.annotations`         | Additional annotations for the ServiceMonitor                                                                                                           | `{}`                        |
 | `metrics.serviceMonitor.labels`              | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                                                                   | `{}`                        |
-| `metrics.serviceMonitor.selector`            | Defaults to what's used if you follow CoreOS Prometheus Install Instructions (<https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus#tldr>) | `{}`                        |
+| `metrics.serviceMonitor.selector`            | Defaults to what's used if you follow CoreOS Prometheus Install Instructions (https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus#tldr) | `{}`                        |
 | `metrics.serviceMonitor.relabelings`         | ServiceMonitor relabelings. Value is evaluated as a template                                                                                            | `[]`                        |
 | `metrics.serviceMonitor.metricRelabelings`   | ServiceMonitor metricRelabelings. Value is evaluated as a template                                                                                      | `[]`                        |
 | `metrics.serviceMonitor.honorLabels`         | Specify honorLabels parameter to add the scrape endpoint                                                                                                | `false`                     |
@@ -523,7 +523,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `volumePermissions.enabled`                      | Enable init container to adapt volume permissions                                                                                 | `false`                 |
 | `volumePermissions.image.registry`               | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`             | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                    | Init container volume-permissions image tag                                                                                       | `11-debian-11-r81`      |
+| `volumePermissions.image.tag`                    | Init container volume-permissions image tag                                                                                       | `11-debian-11-r86`      |
 | `volumePermissions.image.digest`                 | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`             | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`            | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
@@ -570,7 +570,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
     --set postgresql.password=password \
     my-repo/postgresql-ha
 ```
@@ -582,7 +582,7 @@ The above command sets the password for user `postgres` to `password`.
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
     -f values.yaml \
     bitnami/postgresql-ha
 ```
@@ -754,7 +754,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 It's necessary to specify the existing passwords while performing a upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `postgresql.password` and `postgresql.repmgrPassword` parameters when upgrading the chart:
 
 ```console
-$ helm upgrade my-release my-repo/postgresql-ha \
+helm upgrade my-release my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRES_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD]
 ```
@@ -795,7 +795,7 @@ A new major version of repmgr (5.3) was included. To upgrade to this major versi
 - Reduce your PostgreSQL setup to one replica (primary node) and upgrade to `8.0.0`, enabling the repmgr extension upgrade:
 
 ```console
-$ helm upgrade my-release --version 8.0.0 my-repo/postgresql-ha \
+helm upgrade my-release --version 8.0.0 my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     --set postgresql.replicaCount=1 \
@@ -805,7 +805,7 @@ $ helm upgrade my-release --version 8.0.0 my-repo/postgresql-ha \
 - Scale your PostgreSQL setup to the original number of replicas:
 
 ```console
-$ helm upgrade my-release --version 8.0.0 my-repo/postgresql-ha \
+helm upgrade my-release --version 8.0.0 my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     --set postgresql.replicaCount=[NUMBER_OF_REPLICAS]
@@ -848,7 +848,7 @@ A new  version of repmgr (5.2.0) was included. To upgrade to this version, it's 
 - Reduce your PostgreSQL setup to one replica (primary node) and upgrade to `5.2.0`, enabling the repmgr extension upgrade:
 
 ```console
-$ helm upgrade my-release --version 5.2.0 my-repo/postgresql-ha \
+helm upgrade my-release --version 5.2.0 my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     --set postgresql.replicaCount=1 \
@@ -858,7 +858,7 @@ $ helm upgrade my-release --version 5.2.0 my-repo/postgresql-ha \
 - Scale your PostgreSQL setup to the original number of replicas:
 
 ```console
-$ helm upgrade my-release --version 5.2.0 my-repo/postgresql-ha \
+helm upgrade my-release --version 5.2.0 my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     --set postgresql.replicaCount=[NUMBER_OF_REPLICAS]
@@ -875,17 +875,17 @@ This version is next major version to v3.x.y
 
 ```console
 $ # e.g. Previous deployment v3.9.1
-$ helm install my-release \
+helm install my-release \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     my-repo/postgresql-ha --version 3.9.1
 
 $ # Update repository information
-$ helm repo update
+helm repo update
 
 $ # upgrade to v5.0.0
-$ helm delete my-release
-$ helm install my-release \
+helm delete my-release
+helm install my-release \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     my-repo/postgresql-ha --version 5.0.0
@@ -902,7 +902,7 @@ A new major version of repmgr (5.1.0) was included. To upgrade to this major ver
 - Reduce your PostgreSQL setup to one replica (primary node) and upgrade to `3.0.0`, enabling the repmgr extension upgrade:
 
 ```console
-$ helm upgrade my-release --version 3.0.0 my-repo/postgresql-ha \
+helm upgrade my-release --version 3.0.0 my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     --set postgresql.replicaCount=1 \
@@ -912,7 +912,7 @@ $ helm upgrade my-release --version 3.0.0 my-repo/postgresql-ha \
 - Scale your PostgreSQL setup to the original number of replicas:
 
 ```console
-$ helm upgrade my-release --version 3.0.0 my-repo/postgresql-ha \
+helm upgrade my-release --version 3.0.0 my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     --set postgresql.replicaCount=[NUMBER_OF_REPLICAS]
@@ -936,7 +936,7 @@ A new major version of repmgr (5.0.0) was included. To upgrade to this major ver
 - Reduce your PostgreSQL setup to one replica (primary node) and upgrade to `1.0.0`, enabling the repmgr extension upgrade:
 
 ```console
-$ helm upgrade my-release --version 1.0.0 my-repo/postgresql-ha \
+helm upgrade my-release --version 1.0.0 my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     --set postgresql.replicaCount=1 \
@@ -946,7 +946,7 @@ $ helm upgrade my-release --version 1.0.0 my-repo/postgresql-ha \
 - Scale your PostgreSQL setup to the original number of replicas:
 
 ```console
-$ helm upgrade my-release --version 1.0.0 my-repo/postgresql-ha \
+helm upgrade my-release --version 1.0.0 my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     --set postgresql.replicaCount=[NUMBER_OF_REPLICAS]

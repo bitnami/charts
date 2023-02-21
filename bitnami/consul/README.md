@@ -64,7 +64,6 @@ helm delete --purge my-release
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
@@ -80,14 +79,13 @@ helm delete --purge my-release
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
-
 ### HashiCorp Consul parameters
 
 | Name                            | Description                                                                                                      | Value                 |
 | ------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                | HashiCorp Consul image registry                                                                                  | `docker.io`           |
 | `image.repository`              | HashiCorp Consul image repository                                                                                | `bitnami/consul`      |
-| `image.tag`                     | HashiCorp Consul image tag (immutable tags are recommended)                                                      | `1.14.4-debian-11-r0` |
+| `image.tag`                     | HashiCorp Consul image tag (immutable tags are recommended)                                                      | `1.14.4-debian-11-r7` |
 | `image.digest`                  | HashiCorp Consul image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`              | HashiCorp Consul image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets`             | HashiCorp Consul image pull secrets                                                                              | `[]`                  |
@@ -118,7 +116,6 @@ helm delete --purge my-release
 | `containerPorts.rpcServer`      | Port to open for RPC Server in Consul                                                                            | `8300`                |
 | `containerPorts.serfLAN`        | Port to open for Serf LAN in Consul                                                                              | `8301`                |
 | `lifecycleHooks`                | Add lifecycle hooks to the deployment                                                                            | `{}`                  |
-
 
 ### Statefulset parameters
 
@@ -173,7 +170,6 @@ helm delete --purge my-release
 | `pdb.minAvailable`                                  | Minimum number of pods that must still be available after the eviction                    | `1`             |
 | `pdb.maxUnavailable`                                | Max number of pods that can be unavailable after the eviction                             | `""`            |
 
-
 ### Exposure parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -206,7 +202,6 @@ helm delete --purge my-release
 | `ingress.existingSecret`           | It is you own the certificate as secret.                                                                                         | `""`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Persistence parameters
 
 | Name                       | Description                                                                                               | Value               |
@@ -217,7 +212,6 @@ helm delete --purge my-release
 | `persistence.accessModes`  | Persistent Volume Access Mode                                                                             | `["ReadWriteOnce"]` |
 | `persistence.size`         | PVC Storage Request for HashiCorp Consul data volume                                                      | `8Gi`               |
 
-
 ### Volume Permissions parameters
 
 | Name                                   | Description                                                                                                   | Value                   |
@@ -225,13 +219,12 @@ helm delete --purge my-release
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume                               | `false`                 |
 | `volumePermissions.image.registry`     | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r76`      |
+| `volumePermissions.image.tag`          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r85`      |
 | `volumePermissions.image.digest`       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                        | `{}`                    |
 | `volumePermissions.resources.requests` | The requested resources for the container                                                                     | `{}`                    |
-
 
 ### Metrics parameters
 
@@ -240,7 +233,7 @@ helm delete --purge my-release
 | `metrics.enabled`                               | Start a side-car prometheus exporter                                                                                                 | `false`                   |
 | `metrics.image.registry`                        | HashiCorp Consul Prometheus Exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`                      | HashiCorp Consul Prometheus Exporter image repository                                                                                | `bitnami/consul-exporter` |
-| `metrics.image.tag`                             | HashiCorp Consul Prometheus Exporter image tag (immutable tags are recommended)                                                      | `0.9.0-debian-11-r19`     |
+| `metrics.image.tag`                             | HashiCorp Consul Prometheus Exporter image tag (immutable tags are recommended)                                                      | `0.9.0-debian-11-r26`     |
 | `metrics.image.digest`                          | HashiCorp Consul Prometheus Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`                      | HashiCorp Consul Prometheus Exporter image pull policy                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                     | HashiCorp Consul Prometheus Exporter image pull secrets                                                                              | `[]`                      |
@@ -263,8 +256,6 @@ helm delete --purge my-release
 | `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in prometheus.                                                    | `""`                      |
 | `metrics.serviceMonitor.selector`               | ServiceMonitor selector labels                                                                                                       | `{}`                      |
 | `metrics.serviceMonitor.labels`                 | Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with                | `{}`                      |
-
-
 
 ```console
 helm install my-release --set domain=consul-domain,gossipKey=secretkey my-repo/consul

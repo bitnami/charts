@@ -81,7 +81,7 @@ helm delete my-release
 | ------------------- | ---------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`    | kong image registry                                                                                  | `docker.io`           |
 | `image.repository`  | kong image repository                                                                                | `bitnami/kong`        |
-| `image.tag`         | kong image tag (immutable tags are recommended)                                                      | `3.1.1-debian-11-r29` |
+| `image.tag`         | kong image tag (immutable tags are recommended)                                                      | `3.1.1-debian-11-r31` |
 | `image.digest`      | kong image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`  | kong image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                                                     | `[]`                  |
@@ -215,7 +215,7 @@ helm delete my-release
 | `ingressController.enabled`                                     | Enable/disable the Kong Ingress Controller                                                                                                    | `true`                            |
 | `ingressController.image.registry`                              | Kong Ingress Controller image registry                                                                                                        | `docker.io`                       |
 | `ingressController.image.repository`                            | Kong Ingress Controller image name                                                                                                            | `bitnami/kong-ingress-controller` |
-| `ingressController.image.tag`                                   | Kong Ingress Controller image tag                                                                                                             | `2.8.1-debian-11-r12`             |
+| `ingressController.image.tag`                                   | Kong Ingress Controller image tag                                                                                                             | `2.8.1-debian-11-r14`             |
 | `ingressController.image.digest`                                | Kong Ingress Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                       | `""`                              |
 | `ingressController.image.pullPolicy`                            | Kong Ingress Controller image pull policy                                                                                                     | `IfNotPresent`                    |
 | `ingressController.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                              | `[]`                              |
@@ -290,7 +290,7 @@ helm delete my-release
 | `postgresql.architecture`                       | PostgreSQL architecture (`standalone` or `replication`)                                                    | `standalone`          |
 | `postgresql.image.registry`                     | PostgreSQL image registry                                                                                  | `docker.io`           |
 | `postgresql.image.repository`                   | PostgreSQL image repository                                                                                | `bitnami/postgresql`  |
-| `postgresql.image.tag`                          | PostgreSQL image tag (immutable tags are recommended)                                                      | `14.7.0-debian-11-r0` |
+| `postgresql.image.tag`                          | PostgreSQL image tag (immutable tags are recommended)                                                      | `14.7.0-debian-11-r1` |
 | `postgresql.image.digest`                       | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `postgresql.external.host`                      | Database host                                                                                              | `""`                  |
 | `postgresql.external.port`                      | Database port number                                                                                       | `5432`                |
@@ -343,7 +343,7 @@ helm delete my-release
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set service.exposeAdmin=true my-repo/kong
 ```
 
@@ -378,7 +378,7 @@ helm install my-release my-repo/kong
 - Use an external PostgreSQL database
 
 ```console
-$ helm install my-release my-repo/kong \
+helm install my-release my-repo/kong \
     --set postgresql.enabled=false \
     --set postgresql.external.host=_HOST_OF_YOUR_POSTGRESQL_INSTALLATION_ \
     --set postgresql.external.password=_PASSWORD_OF_YOUR_POSTGRESQL_INSTALLATION_ \
@@ -388,7 +388,7 @@ $ helm install my-release my-repo/kong \
 - Deploy the Cassandra sub-chart
 
 ```console
-$ helm install my-release my-repo/kong \
+helm install my-release my-repo/kong \
     --set database=cassandra \
     --set postgresql.enabled=false \
     --set cassandra.enabled=true
@@ -397,7 +397,7 @@ $ helm install my-release my-repo/kong \
 - Use an existing Cassandra installation
 
 ```console
-$ helm install my-release my-repo/kong \
+helm install my-release my-repo/kong \
     --set database=cassandra \
     --set postgresql.enabled=false \
     --set cassandra.enabled=false \
@@ -410,8 +410,8 @@ $ helm install my-release my-repo/kong \
 
 ### DB-less
 
-Kong 1.1 added the capability to run Kong without a database, using only in-memory storage for entities: we call this DB-less mode. When running Kong DB-less, the configuration of entities is done in a second configuration file, in YAML or JSON, using declarative configuration (ref. [Link](https://docs.konghq.com/gateway-oss/1.1.x/db-less-and-declarative-config/)).
-As is said in step 4 of [kong official docker installation](https://docs.konghq.com/install/docker#db-less-mode), just add the env variable "KONG_DATABASE=off".
+Kong 1.1 added the capability to run Kong without a database, using only in-memory storage for entities: we call this DB-less mode. When running Kong DB-less, the configuration of entities is done in a second configuration file, in YAML or JSON, using declarative configuration (ref. [Link](https://legacy-gateway--kongdocs.netlify.app/gateway-oss/1.1.x/db-less-and-declarative-config/)).
+As is said in step 4 of [kong official docker installation](https://docs.konghq.com/gateway/latest/production/deployment-topologies/db-less-and-declarative-config/#declarative-configuration), just add the env variable "KONG_DATABASE=off".
 
 #### How to enable it
 
@@ -511,7 +511,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 It's necessary to specify the existing passwords while performing a upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `postgresql.postgresqlPassword` or `cassandra.password` parameters when upgrading the chart:
 
 ```console
-$ helm upgrade my-release my-repo/kong \
+helm upgrade my-release my-repo/kong \
     --set database=postgresql
     --set postgresql.enabled=true
     --set
@@ -575,14 +575,14 @@ export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=kong,app.k
 
 Delete PostgreSQL statefulset. Notice the option `--cascade=false`:
 
-```
+```console
 kubectl delete statefulsets.apps kong-postgresql --cascade=false
 ```
 
 ##### Upgrade the chart release
 
 ```console
-$ helm upgrade kong my-repo/kong \
+helm upgrade kong my-repo/kong \
     --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
     --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
 ```

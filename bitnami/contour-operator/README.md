@@ -137,7 +137,6 @@ This solution allows to easily deploy multiple Contour instances compared to the
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                        | Value |
@@ -149,25 +148,24 @@ This solution allows to easily deploy multiple Contour instances compared to the
 | `commonAnnotations` | Annotations to add to all deployed objects         | `{}`  |
 | `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`  |
 
-
 ### Contour Operator Parameters
 
 | Name                                              | Description                                                                                                              | Value                      |
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------- |
 | `image.registry`                                  | Contour Operator image registry                                                                                          | `docker.io`                |
 | `image.repository`                                | Contour Operator image repository                                                                                        | `bitnami/contour-operator` |
-| `image.tag`                                       | Contour Operator image tag (immutable tags are recommended)                                                              | `1.23.0-scratch-r5`        |
+| `image.tag`                                       | Contour Operator image tag (immutable tags are recommended)                                                              | `1.24.0-scratch-r0`        |
 | `image.digest`                                    | Contour Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag         | `""`                       |
 | `image.pullPolicy`                                | Contour Operator image pull policy                                                                                       | `IfNotPresent`             |
 | `image.pullSecrets`                               | Contour Operator image pull secrets                                                                                      | `[]`                       |
 | `contourImage.registry`                           | Contour Image registry                                                                                                   | `docker.io`                |
 | `contourImage.repository`                         | Contour Image repository                                                                                                 | `bitnami/contour`          |
-| `contourImage.tag`                                | Contour Image tag (immutable tags are recommended)                                                                       | `1.23.2-debian-11-r13`     |
+| `contourImage.tag`                                | Contour Image tag (immutable tags are recommended)                                                                       | `1.24.1-debian-11-r0`      |
 | `contourImage.digest`                             | Contour image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                  | `""`                       |
 | `contourImage.pullSecrets`                        | Contour Image pull secrets                                                                                               | `[]`                       |
 | `envoyImage.registry`                             | Envoy Image registry                                                                                                     | `docker.io`                |
 | `envoyImage.repository`                           | Envoy Image repository                                                                                                   | `bitnami/envoy`            |
-| `envoyImage.tag`                                  | Envoy Image tag (immutable tags are recommended)                                                                         | `1.24.1-debian-11-r14`     |
+| `envoyImage.tag`                                  | Envoy Image tag (immutable tags are recommended)                                                                         | `1.24.2-debian-11-r2`      |
 | `envoyImage.digest`                               | Envoy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                    | `""`                       |
 | `envoyImage.pullSecrets`                          | Envoy Image pull secrets                                                                                                 | `[]`                       |
 | `replicaCount`                                    | Number of Contour Operator replicas to deploy                                                                            | `1`                        |
@@ -229,7 +227,6 @@ This solution allows to easily deploy multiple Contour instances compared to the
 | `sidecars`                                        | Add additional sidecar containers to the Contour Operator pod(s)                                                         | `[]`                       |
 | `initContainers`                                  | Add additional init containers to the Contour Operator pod(s)                                                            | `[]`                       |
 
-
 ### Other Parameters
 
 | Name                                          | Description                                                                                                         | Value  |
@@ -239,7 +236,6 @@ This solution allows to easily deploy multiple Contour instances compared to the
 | `serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`   |
 | `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `true` |
 | `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`   |
-
 
 ### Metrics parameters
 
@@ -265,12 +261,10 @@ This solution allows to easily deploy multiple Contour instances compared to the
 | `metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                       | `[]`        |
 | `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                              | `[]`        |
 
-
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set livenessProbe.enabled=false \
     my-repo/contour-operator
 ```

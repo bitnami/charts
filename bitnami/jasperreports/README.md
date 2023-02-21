@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`        | JasperReports image registry                                                                                  | `docker.io`             |
 | `image.repository`      | JasperReports image repository                                                                                | `bitnami/jasperreports` |
-| `image.tag`             | JasperReports image tag (immutable tags are recommended)                                                      | `8.1.0-debian-11-r50`   |
+| `image.tag`             | JasperReports image tag (immutable tags are recommended)                                                      | `8.1.0-debian-11-r55`   |
 | `image.digest`          | JasperReports image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `image.pullPolicy`      | JasperReports image pull policy                                                                               | `IfNotPresent`          |
 | `image.pullSecrets`     | Specify docker-registry secret names as an array                                                              | `[]`                    |
@@ -239,7 +239,7 @@ The above parameters map to the env variables defined in [bitnami/jasperreports]
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set jasperreportsUsername=admin,jasperreportsPassword=password,mariadb.auth.rootPassword=secretpassword \
     my-repo/jasperreports
 ```

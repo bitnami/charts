@@ -1191,7 +1191,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set adminPassword=password \
     my-repo/harbor
 ```

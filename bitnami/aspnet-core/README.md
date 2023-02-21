@@ -61,7 +61,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                       | Value           |
@@ -75,14 +74,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`     | Kubernetes cluster domain name                    | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release | `[]`            |
 
-
 ### ASP.NET Core parameters
 
 | Name                 | Description                                                                                                  | Value                 |
 | -------------------- | ------------------------------------------------------------------------------------------------------------ | --------------------- |
 | `image.registry`     | ASP.NET Core image registry                                                                                  | `docker.io`           |
 | `image.repository`   | ASP.NET Core image repository                                                                                | `bitnami/aspnet-core` |
-| `image.tag`          | ASP.NET Core image tag (immutable tags are recommended)                                                      | `7.0.3-debian-11-r0`  |
+| `image.tag`          | ASP.NET Core image tag (immutable tags are recommended)                                                      | `7.0.3-debian-11-r1`  |
 | `image.digest`       | ASP.NET Core image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`   | ASP.NET Core image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets`  | ASP.NET Core image pull secrets                                                                              | `[]`                  |
@@ -93,7 +91,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVars`       | Extra environment variables to be set on ASP.NET Core container                                              | `[]`                  |
 | `extraEnvVarsCM`     | ConfigMap with extra environment variables                                                                   | `""`                  |
 | `extraEnvVarsSecret` | Secret with extra environment variables                                                                      | `""`                  |
-
 
 ### ASP.NET Core deployment parameters
 
@@ -159,7 +156,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.targetCPU`                 | Target CPU utilization percentage                                                         | `""`            |
 | `autoscaling.targetMemory`              | Target Memory utilization percentage                                                      | `""`            |
 
-
 ### Custom ASP.NET Core application parameters
 
 | Name                                            | Description                                                                                              | Value                                                |
@@ -176,7 +172,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `appFromExternalRepo.clone.extraVolumeMounts`   | Add extra volume mounts for the GIT container                                                            | `[]`                                                 |
 | `appFromExternalRepo.publish.image.registry`    | .NET SDK image registry                                                                                  | `docker.io`                                          |
 | `appFromExternalRepo.publish.image.repository`  | .NET SDK image repository                                                                                | `bitnami/dotnet-sdk`                                 |
-| `appFromExternalRepo.publish.image.tag`         | .NET SDK image tag (immutable tags are recommended)                                                      | `7.0.102-debian-11-r13`                              |
+| `appFromExternalRepo.publish.image.tag`         | .NET SDK image tag (immutable tags are recommended)                                                      | `7.0.200-debian-11-r0`                               |
 | `appFromExternalRepo.publish.image.digest`      | .NET SDK image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                                 |
 | `appFromExternalRepo.publish.image.pullPolicy`  | .NET SDK image pull policy                                                                               | `IfNotPresent`                                       |
 | `appFromExternalRepo.publish.image.pullSecrets` | .NET SDK image pull secrets                                                                              | `[]`                                                 |
@@ -185,7 +181,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `appFromExternalRepo.startCommand`              | Command used to start ASP.NET Core app                                                                   | `["dotnet","OCMinimal.dll"]`                         |
 | `appFromExistingPVC.enabled`                    | Enable mounting your ASP.NET Core app from an existing PVC                                               | `false`                                              |
 | `appFromExistingPVC.existingClaim`              | A existing Persistent Volume Claim containing your ASP.NET Core app                                      | `""`                                                 |
-
 
 ### Traffic Exposure Parameters
 
@@ -228,7 +223,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `healthIngress.secrets`            | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `healthIngress.extraRules`         | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### RBAC parameters
 
 | Name                                          | Description                                          | Value  |
@@ -237,8 +231,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.               | `""`   |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount | `{}`   |
 | `serviceAccount.automountServiceAccountToken` | Automount service account token                      | `true` |
-
-
 
 ```console
 helm install my-release --set replicaCount=2 my-repo/aspnet-core

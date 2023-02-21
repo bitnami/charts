@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`    | Osclass image registry                                                                                  | `docker.io`          |
 | `image.repository`  | Osclass image repository                                                                                | `bitnami/osclass`    |
-| `image.tag`         | Osclass image tag (immutable tags are recommended)                                                      | `8.1.1-debian-11-r0` |
+| `image.tag`         | Osclass image tag (immutable tags are recommended)                                                      | `8.1.1-debian-11-r1` |
 | `image.digest`      | Osclass image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
 | `image.pullPolicy`  | Osclass image pull policy                                                                               | `IfNotPresent`       |
 | `image.pullSecrets` | Osclass image pull secrets                                                                              | `[]`                 |
@@ -151,7 +151,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret with extra environment variables                                                                         | `""`                                     |
 | `certificates.image.registry`                        | Apache Exporter image registry                                                                                  | `docker.io`                              |
 | `certificates.image.repository`                      | Apache Exporter image repository                                                                                | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Apache Exporter image tag (immutable tags are recommended)                                                      | `11-debian-11-r85`                       |
+| `certificates.image.tag`                             | Apache Exporter image tag (immutable tags are recommended)                                                      | `11-debian-11-r86`                       |
 | `certificates.image.digest`                          | Apache Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `certificates.image.pullPolicy`                      | Apache Exporter image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Apache Exporter image pull secrets                                                                              | `[]`                                     |
@@ -247,7 +247,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
 | `volumePermissions.image.registry`         | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`       | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`              | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r85`      |
+| `volumePermissions.image.tag`              | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r86`      |
 | `volumePermissions.image.digest`           | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`       | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`      | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -320,7 +320,7 @@ The above parameters map to the env variables defined in [bitnami/osclass](https
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set osclassUsername=admin,osclassPassword=password,mariadb.auth.rootPassword=secretpassword \
     my-repo/osclass
 ```

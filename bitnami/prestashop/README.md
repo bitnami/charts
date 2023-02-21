@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                        | PrestaShop image registry                                                                                  | `docker.io`           |
 | `image.repository`                      | PrestaShop image repository                                                                                | `bitnami/prestashop`  |
-| `image.tag`                             | PrestaShop image tag (immutable tags are recommended)                                                      | `8.0.1-debian-11-r10` |
+| `image.tag`                             | PrestaShop image tag (immutable tags are recommended)                                                      | `8.0.1-debian-11-r14` |
 | `image.digest`                          | PrestaShop image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`                      | PrestaShop image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                           | `[]`                  |
@@ -232,7 +232,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                                        | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `11-debian-11-r79`      |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `11-debian-11-r86`      |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                    |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
@@ -246,7 +246,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`            | Start a side-car prometheus exporter                                                                            | `false`                   |
 | `metrics.image.registry`     | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`   | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`          | Apache exporter image tag (immutable tags are recommended)                                                      | `0.11.0-debian-11-r89`    |
+| `metrics.image.tag`          | Apache exporter image tag (immutable tags are recommended)                                                      | `0.11.0-debian-11-r93`    |
 | `metrics.image.digest`       | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`   | Apache exporter image pull policy                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                | `[]`                      |
@@ -272,7 +272,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret with extra environment variables                                                                           | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                                                                        | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image repository                                                                                | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)                                                      | `11-debian-11-r79`                       |
+| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)                                                      | `11-debian-11-r86`                       |
 | `certificates.image.digest`                          | Container sidecar image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                              | `[]`                                     |
@@ -316,7 +316,7 @@ The above parameters map to the env variables defined in [bitnami/prestashop](ht
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set prestashopUsername=admin,prestashopPassword=password,mariadb.auth.rootPassword=secretpassword \
     my-repo/prestashop
 ```
@@ -350,14 +350,14 @@ The `image` parameter allows specifying which image will be pulled for the chart
 If you configure the `image` value to one in a private registry, you will need to [specify an image pull secret](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod).
 
 1. Manually create image pull secret(s) in the namespace. See [this YAML example reference](https://kubernetes.io/docs/concepts/containers/images/#creating-a-secret-with-a-docker-config). Consult your image registry's documentation about getting the appropriate secret.
-1. Note that the `imagePullSecrets` configuration value cannot currently be passed to helm using the `--set` parameter, so you must supply these using a `values.yaml` file, such as:
+2. Note that the `imagePullSecrets` configuration value cannot currently be passed to helm using the `--set` parameter, so you must supply these using a `values.yaml` file, such as:
 
-```yaml
-imagePullSecrets:
-  - name: SECRET_NAME
-```
+    ```yaml
+    imagePullSecrets:
+      - name: SECRET_NAME
+    ```
 
-1. Install the chart
+3. Install the chart
 
 ### Setting Pod's affinity
 
@@ -375,8 +375,8 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 ### Existing PersistentVolumeClaim
 
 1. Create the PersistentVolume
-1. Create the PersistentVolumeClaim
-1. Install the chart
+2. Create the PersistentVolumeClaim
+3. Install the chart
 
 ```console
 helm install my-release --set persistence.existingClaim=PVC_NAME my-repo/prestashop
@@ -392,7 +392,7 @@ helm install my-release --set persistence.existingClaim=PVC_NAME my-repo/prestas
 #### Mounting steps
 
 1. The specified `hostPath` directory must already exist (create one if it does not).
-1. Install the chart
+2. Install the chart
 
    ```console
    helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT my-repo/prestashop
@@ -400,7 +400,7 @@ helm install my-release --set persistence.existingClaim=PVC_NAME my-repo/prestas
 
    This will mount the `prestashop-data` volume into the `hostPath` directory. The site data will be persisted if the mount path contains valid data, else the site data will be initialized at first launch.
 
-1. Because the container cannot control the host machine's directory permissions, you must set the PrestaShop file directory permissions yourself and disable or clear PrestaShop cache.
+3. Because the container cannot control the host machine's directory permissions, you must set the PrestaShop file directory permissions yourself and disable or clear PrestaShop cache.
 
 ### SSL
 

@@ -60,7 +60,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
@@ -76,14 +75,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
-
 ### Cassandra parameters
 
 | Name                          | Description                                                                                                            | Value                 |
 | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`              | Cassandra image registry                                                                                               | `docker.io`           |
 | `image.repository`            | Cassandra image repository                                                                                             | `bitnami/cassandra`   |
-| `image.tag`                   | Cassandra image tag (immutable tags are recommended)                                                                   | `4.1.0-debian-11-r11` |
+| `image.tag`                   | Cassandra image tag (immutable tags are recommended)                                                                   | `4.1.0-debian-11-r21` |
 | `image.digest`                | Cassandra image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                  |
 | `image.pullPolicy`            | image pull policy                                                                                                      | `IfNotPresent`        |
 | `image.pullSecrets`           | Cassandra image pull secrets                                                                                           | `[]`                  |
@@ -113,7 +111,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVars`                | Extra environment variables to be set on cassandra container                                                           | `[]`                  |
 | `extraEnvVarsCM`              | Name of existing ConfigMap containing extra env vars                                                                   | `""`                  |
 | `extraEnvVarsSecret`          | Name of existing Secret containing extra env vars                                                                      | `""`                  |
-
 
 ### Statefulset parameters
 
@@ -183,7 +180,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hostPorts.jmx`                         | JMX Port on the Host                                                                      | `""`            |
 | `hostPorts.cql`                         | CQL Port on the Host                                                                      | `""`            |
 
-
 ### RBAC parameters
 
 | Name                                          | Description                                                | Value  |
@@ -192,7 +188,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                     | `""`   |
 | `serviceAccount.annotations`                  | Annotations for Cassandra Service Account                  | `{}`   |
 | `serviceAccount.automountServiceAccountToken` | Automount API credentials for a service account.           | `true` |
-
 
 ### Traffic Exposure Parameters
 
@@ -214,7 +209,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.enabled`            | Specifies whether a NetworkPolicy should be created                           | `false`     |
 | `networkPolicy.allowExternal`      | Don't require client label for connections                                    | `true`      |
 
-
 ### Persistence parameters
 
 | Name                             | Description                                                                                                                                          | Value                |
@@ -229,7 +223,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.mountPath`          | The path the data volume will be mounted at                                                                                                          | `/bitnami/cassandra` |
 | `persistence.commitLogMountPath` | The path the commit log volume will be mounted at. Unset by default. Set it to '/bitnami/cassandra/commitlog' to enable a separate commit log volume | `""`                 |
 
-
 ### Volume Permissions parameters
 
 | Name                                          | Description                                                                                                           | Value                   |
@@ -237,14 +230,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume                                       | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume image tag (immutable tags are recommended)                                                      | `11-debian-11-r74`      |
+| `volumePermissions.image.tag`                 | Init container volume image tag (immutable tags are recommended)                                                      | `11-debian-11-r85`      |
 | `volumePermissions.image.digest`              | Init container volume image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`          | Init container volume pull policy                                                                                     | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                      | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the container                                                                                | `{}`                    |
 | `volumePermissions.resources.requests`        | The requested resources for the container                                                                             | `{}`                    |
 | `volumePermissions.securityContext.runAsUser` | User ID for the init container                                                                                        | `0`                     |
-
 
 ### Metrics parameters
 
@@ -253,7 +245,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a side-car prometheus exporter                                                                               | `false`                      |
 | `metrics.image.registry`                     | Cassandra exporter image registry                                                                                  | `docker.io`                  |
 | `metrics.image.repository`                   | Cassandra exporter image name                                                                                      | `bitnami/cassandra-exporter` |
-| `metrics.image.tag`                          | Cassandra exporter image tag                                                                                       | `2.3.8-debian-11-r81`        |
+| `metrics.image.tag`                          | Cassandra exporter image tag                                                                                       | `2.3.8-debian-11-r90`        |
 | `metrics.image.digest`                       | Cassandra exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
 | `metrics.image.pullPolicy`                   | image pull policy                                                                                                  | `IfNotPresent`               |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                   | `[]`                         |
@@ -282,7 +274,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.hostPorts.jmx`                      | JMX Port on the Host                                                                                               | `""`                         |
 | `metrics.configuration`                      | Configure Cassandra-exporter with a custom config.yml file                                                         | `""`                         |
 
-
 ### TLS/SSL parameters
 
 | Name                          | Description                                                                                   | Value   |
@@ -299,12 +290,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tls.certificatesSecret`      | Secret with the TLS certificates.                                                             | `""`    |
 | `tls.tlsEncryptionSecretName` | Secret with the encryption of the TLS certificates                                            | `""`    |
 
-
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
     --set dbUser.user=admin,dbUser.password=password \
     my-repo/cassandra
 ```

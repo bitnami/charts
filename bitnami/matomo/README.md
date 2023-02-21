@@ -63,7 +63,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                                                                                | Value |
@@ -76,14 +75,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `commonLabels`      | Common labels to add to all Matomo resources (sub-charts are not considered). Evaluated as a template      | `{}`  |
 | `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template).                               | `[]`  |
 
-
 ### Matomo parameters
 
 | Name                                    | Description                                                                                                           | Value                 |
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                        | Matomo image registry                                                                                                 | `docker.io`           |
 | `image.repository`                      | Matomo Image name                                                                                                     | `bitnami/matomo`      |
-| `image.tag`                             | Matomo Image tag                                                                                                      | `4.13.3-debian-11-r5` |
+| `image.tag`                             | Matomo Image tag                                                                                                      | `4.13.3-debian-11-r6` |
 | `image.digest`                          | Matomo image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                  |
 | `image.pullPolicy`                      | Matomo image pull policy                                                                                              | `IfNotPresent`        |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                      | `[]`                  |
@@ -172,7 +170,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podAnnotations`                        | Pod annotations                                                                                                       | `{}`                  |
 | `podLabels`                             | Add additional labels to the pod (evaluated as a template)                                                            | `{}`                  |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -204,7 +201,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Database parameters
 
 | Name                                        | Description                                                                              | Value               |
@@ -228,7 +224,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_matomo`    |
 | `externalDatabase.existingSecret`           | Name of a secret containing the database credentials                                     | `""`                |
 
-
 ### Volume Permissions parameters
 
 | Name                                   | Description                                                                                                                                               | Value                   |
@@ -236,13 +231,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r85`      |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r86`      |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                    |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
 | `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`                    |
-
 
 ### Metrics parameters
 
@@ -257,7 +251,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array                                                                | `[]`                      |
 | `metrics.resources`         | Metrics exporter resource requests and limits                                                                   | `{}`                      |
 | `metrics.podAnnotations`    | Additional annotations for Metrics exporter pod                                                                 | `{}`                      |
-
 
 ### Certificate injection parameters
 
@@ -277,11 +270,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                      | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                                                                        | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image                                                                                           | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag                                                                                       | `11-debian-11-r85`                       |
+| `certificates.image.tag`                             | Container sidecar image tag                                                                                       | `11-debian-11-r86`                       |
 | `certificates.image.digest`                          | Container sidecar image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                              | `[]`                                     |
-
 
 ### NetworkPolicy parameters
 
@@ -303,12 +295,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                             | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                 | `{}`    |
 
-
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set matomoUsername=user,matomoPassword=password,mariadb.auth.rootPassword=secretpassword \
     my-repo/matomo
 ```
@@ -342,14 +332,14 @@ The `image` parameter allows specifying which image will be pulled for the chart
 If you configure the `image` value to one in a private registry, you will need to [specify an image pull secret](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod).
 
 1. Manually create image pull secret(s) in the namespace. See [this YAML example reference](https://kubernetes.io/docs/concepts/containers/images/#creating-a-secret-with-a-docker-config). Consult your image registry's documentation about getting the appropriate secret.
-1. Note that the `imagePullSecrets` configuration value cannot currently be passed to helm using the `--set` parameter, so you must supply these using a `values.yaml` file, such as:
+2. Note that the `imagePullSecrets` configuration value cannot currently be passed to helm using the `--set` parameter, so you must supply these using a `values.yaml` file, such as:
 
-```yaml
-imagePullSecrets:
-  - name: SECRET_NAME
-```
+    ```yaml
+    imagePullSecrets:
+      - name: SECRET_NAME
+    ```
 
-1. Install the chart
+3. Install the chart
 
 ### Setting Pod's affinity
 
@@ -367,8 +357,8 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 ### Existing PersistentVolumeClaim
 
 1. Create the PersistentVolume
-1. Create the PersistentVolumeClaim
-1. Install the chart
+2. Create the PersistentVolumeClaim
+3. Install the chart
 
 ```console
 helm install my-release --set persistence.existingClaim=PVC_NAME my-repo/matomo
@@ -384,14 +374,14 @@ helm install my-release --set persistence.existingClaim=PVC_NAME my-repo/matomo
 #### Mounting steps
 
 1. The specified `hostPath` directory must already exist (create one if it does not).
-1. Install the chart
+2. Install the chart
 
     ```console
     helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT my-repo/matomo
     ```
 
     This will mount the `matomo-data` volume into the `hostPath` directory. The site data will be persisted if the mount path contains valid data, else the site data will be initialized at first launch.
-1. Because the container cannot control the host machine's directory permissions, you must set the Matomo file directory permissions yourself
+3. Because the container cannot control the host machine's directory permissions, you must set the Matomo file directory permissions yourself
 
 ## Troubleshooting
 

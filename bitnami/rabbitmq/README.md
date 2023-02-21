@@ -66,7 +66,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | -------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`    | RabbitMQ image registry                                                                                  | `docker.io`           |
 | `image.repository`  | RabbitMQ image repository                                                                                | `bitnami/rabbitmq`    |
-| `image.tag`         | RabbitMQ image tag (immutable tags are recommended)                                                      | `3.11.9-debian-11-r0` |
+| `image.tag`         | RabbitMQ image tag (immutable tags are recommended)                                                      | `3.11.9-debian-11-r1` |
 | `image.digest`      | RabbitMQ image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`  | RabbitMQ image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                                                         | `[]`                  |
@@ -150,7 +150,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `configuration`                              | RabbitMQ Configuration file content: required cluster configuration                                                                                                     | `""`                                              |
 | `tcpListenOptions.backlog`                   | Maximum size of the unaccepted TCP connections queue                                                                                                                    | `128`                                             |
 | `tcpListenOptions.nodelay`                   | When set to true, deactivates Nagle's algorithm. Default is true. Highly recommended for most users.                                                                    | `true`                                            |
-| `tcpListenOptions.linger.on`                 | Enable Server socket lingering                                                                                                                                          | `true`                                            |
+| `tcpListenOptions.linger.lingerOn`           | Enable Server socket lingering                                                                                                                                          | `true`                                            |
 | `tcpListenOptions.linger.timeout`            | Server Socket lingering timeout                                                                                                                                         | `0`                                               |
 | `tcpListenOptions.keepalive`                 | When set to true, enables TCP keepalives                                                                                                                                | `false`                                           |
 | `configurationExistingSecret`                | Existing secret with the configuration to use as rabbitmq.conf.                                                                                                         | `""`                                              |
@@ -352,7 +352,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag                                                                                       | `11-debian-11-r82`      |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag                                                                                       | `11-debian-11-r86`      |
 | `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
@@ -365,7 +365,7 @@ The above parameters map to the env variables defined in [bitnami/rabbitmq](http
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set auth.username=admin,auth.password=secretpassword,auth.erlangCookie=secretcookie \
     my-repo/rabbitmq
 ```
@@ -509,7 +509,7 @@ This happens if the pod management policy of the statefulset is not `Parallel` a
 
 ```console
 $ kubectl delete statefulset STATEFULSET_NAME --cascade=false
-$ helm upgrade RELEASE_NAME my-repo/rabbitmq \
+helm upgrade RELEASE_NAME my-repo/rabbitmq \
     --set podManagementPolicy=Parallel \
     --set replicaCount=NUMBER_OF_REPLICAS \
     --set auth.password=PASSWORD \
@@ -521,7 +521,7 @@ For a faster resyncronization of the nodes, you can temporarily disable the read
 If the steps above don't bring the cluster to a healthy state, it could be possible that none of the RabbitMQ nodes think they were the last node to be up during the shutdown. In those cases, you can force the boot of the nodes by specifying the `clustering.forceBoot=true` parameter (which will execute [`rabbitmqctl force_boot`](https://www.rabbitmq.com/rabbitmqctl.8.html#force_boot) in each pod):
 
 ```console
-$ helm upgrade RELEASE_NAME my-repo/rabbitmq \
+helm upgrade RELEASE_NAME my-repo/rabbitmq \
     --set podManagementPolicy=Parallel \
     --set clustering.forceBoot=true \
     --set replicaCount=NUMBER_OF_REPLICAS \
@@ -544,8 +544,8 @@ The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/stora
 ### Use existing PersistentVolumeClaims
 
 1. Create the PersistentVolume
-1. Create the PersistentVolumeClaim
-1. Install the chart
+2. Create the PersistentVolumeClaim
+3. Install the chart
 
 ```console
 helm install my-release --set persistence.existingClaim=PVC_NAME my-repo/rabbitmq

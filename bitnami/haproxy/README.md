@@ -63,7 +63,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
@@ -78,7 +77,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
-
 
 ### Traffic Exposure Parameters
 
@@ -109,14 +107,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### HAProxy Parameters
 
 | Name                                    | Description                                                                                             | Value                |
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                        | HAProxy image registry                                                                                  | `docker.io`          |
 | `image.repository`                      | HAProxy image repository                                                                                | `bitnami/haproxy`    |
-| `image.tag`                             | HAProxy image tag (immutable tags are recommended)                                                      | `2.7.3-debian-11-r0` |
+| `image.tag`                             | HAProxy image tag (immutable tags are recommended)                                                      | `2.7.3-debian-11-r1` |
 | `image.digest`                          | HAProxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
 | `image.pullPolicy`                      | HAProxy image pull policy                                                                               | `IfNotPresent`       |
 | `image.pullSecrets`                     | HAProxy image pull secrets                                                                              | `[]`                 |
@@ -186,7 +183,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidecars`                              | Add additional sidecar containers to the haproxy pod(s)                                                 | `[]`                 |
 | `initContainers`                        | Add additional init containers to the haproxy pod(s)                                                    | `[]`                 |
 
-
 ### Other Parameters
 
 | Name                                          | Description                                                                                                         | Value  |
@@ -198,12 +194,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `true` |
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                              | `""`   |
 
-
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set service.type=LoadBalancer \
     my-repo/haproxy
 ```

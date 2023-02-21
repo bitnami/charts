@@ -33,8 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/kibana \
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/kibana \
   --set elasticsearch.hosts[0]=<Hostname of your ES instance> \
   --set elasticsearch.port=<port of your ES instance> \
 ```
@@ -247,7 +247,7 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set admin.user=admin-user my-repo/kibana
 ```
 

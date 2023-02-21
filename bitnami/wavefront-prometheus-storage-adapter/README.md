@@ -6,6 +6,8 @@ Wavefront Storage Adapter is a Prometheus integration to transfer metrics from P
 
 [Overview of Wavefront Prometheus Adapter](https://github.com/wavefrontHQ/prometheus-storage-adapter)
 
+
+
 ## TL;DR
 
 ```console
@@ -82,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------- |
 | `image.registry`                        | Adapter image registry                                                                                                   | `docker.io`                                    |
 | `image.repository`                      | Adapter image repository                                                                                                 | `bitnami/wavefront-prometheus-storage-adapter` |
-| `image.tag`                             | Adapter image tag (immutable tags are recommended)                                                                       | `1.0.5-debian-11-r91`                          |
+| `image.tag`                             | Adapter image tag (immutable tags are recommended)                                                                       | `1.0.5-debian-11-r93`                          |
 | `image.digest`                          | Adapter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                  | `""`                                           |
 | `image.pullPolicy`                      | Adapter image pull policy                                                                                                | `IfNotPresent`                                 |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                         | `[]`                                           |
@@ -180,7 +182,7 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set livenessProbe.successThreshold=5 \
     my-repo/wavefront-prometheus-storage-adapter
 ```

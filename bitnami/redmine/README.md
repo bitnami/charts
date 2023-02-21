@@ -92,7 +92,7 @@ helm install my-release my-repo/redmine --set databaseType=postgresql
 | ----------------------- | ------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`        | Redmine image registry                                                                                  | `docker.io`           |
 | `image.repository`      | Redmine image repository                                                                                | `bitnami/redmine`     |
-| `image.tag`             | Redmine image tag (immutable tags are recommended)                                                      | `5.0.4-debian-11-r21` |
+| `image.tag`             | Redmine image tag (immutable tags are recommended)                                                      | `5.0.4-debian-11-r27` |
 | `image.digest`          | Redmine image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`      | Redmine image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets`     | Redmine image pull secrets                                                                              | `[]`                  |
@@ -338,7 +338,7 @@ helm install my-release my-repo/redmine --set databaseType=postgresql
 | `certificates.customCA`                              | Defines a list of secrets to import into the container trust store                                      | `[]`                                     |
 | `certificates.image.registry`                        | Redmine image registry                                                                                  | `docker.io`                              |
 | `certificates.image.repository`                      | Redmine image repository                                                                                | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Redmine image tag (immutable tags are recommended)                                                      | `11-debian-11-r78`                       |
+| `certificates.image.tag`                             | Redmine image tag (immutable tags are recommended)                                                      | `11-debian-11-r86`                       |
 | `certificates.image.digest`                          | Redmine image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `certificates.image.pullPolicy`                      | Redmine image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Redmine image pull secrets                                                                              | `[]`                                     |
@@ -366,7 +366,7 @@ The above parameters map to the env variables defined in [bitnami/redmine](https
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set redmineUsername=admin,redminePassword=password,mariadb.mariadb.auth.rootPassword=secretpassword \
     my-repo/redmine
 ```
@@ -488,9 +488,9 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 The following example includes two PVCs, one for Redmine and another for MariaDB.
 
 1. Create the PersistentVolume
-1. Create the PersistentVolumeClaim
-1. Create the directory, on a worker
-1. Install the chart
+2. Create the PersistentVolumeClaim
+3. Create the directory, on a worker
+4. Install the chart
 
 ```console
 helm install test --set persistence.existingClaim=PVC_REDMINE,mariadb.persistence.existingClaim=PVC_MARIADB my-repo/redmine

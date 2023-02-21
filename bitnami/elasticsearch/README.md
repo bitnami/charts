@@ -67,7 +67,6 @@ helm delete --purge my-release
 | `global.elasticsearch.service.ports.restAPI` | Elasticsearch service restAPI port to be used in the Kibana subchart (ignored if kibanaEnabled=false) | `9200`          |
 | `global.kibanaEnabled`                       | Whether or not to enable Kibana                                                                       | `false`         |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
@@ -83,7 +82,6 @@ helm delete --purge my-release
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
-
 
 ### Elasticsearch cluster Parameters
 
@@ -110,7 +108,7 @@ helm delete --purge my-release
 | `useIstioLabels`                           | Use this variable to add Istio labels to all pods                                                                                                   | `true`                         |
 | `image.registry`                           | Elasticsearch image registry                                                                                                                        | `docker.io`                    |
 | `image.repository`                         | Elasticsearch image repository                                                                                                                      | `bitnami/elasticsearch`        |
-| `image.tag`                                | Elasticsearch image tag (immutable tags are recommended)                                                                                            | `8.6.1-debian-11-r0`           |
+| `image.tag`                                | Elasticsearch image tag (immutable tags are recommended)                                                                                            | `8.6.2-debian-11-r0`           |
 | `image.digest`                             | Elasticsearch image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                       | `""`                           |
 | `image.pullPolicy`                         | Elasticsearch image pull policy                                                                                                                     | `IfNotPresent`                 |
 | `image.pullSecrets`                        | Elasticsearch image pull secrets                                                                                                                    | `[]`                           |
@@ -136,7 +134,6 @@ helm delete --purge my-release
 | `security.tls.secretKeystoreKey`           | Name of the secret key containing the Keystore password                                                                                             | `""`                           |
 | `security.tls.secretTruststoreKey`         | Name of the secret key containing the Truststore password                                                                                           | `""`                           |
 | `security.tls.secretKey`                   | Name of the secret key containing the PEM key password                                                                                              | `""`                           |
-
 
 ### Traffic Exposure Parameters
 
@@ -169,7 +166,6 @@ helm delete --purge my-release
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
-
 
 ### Master-elegible nodes parameters
 
@@ -255,7 +251,6 @@ helm delete --purge my-release
 | `master.autoscaling.targetCPU`                       | Define the CPU target to trigger the scaling actions (utilization percentage)                                                                      | `""`                |
 | `master.autoscaling.targetMemory`                    | Define the memory target to trigger the scaling actions (utilization percentage)                                                                   | `""`                |
 
-
 ### Data-only nodes parameters
 
 | Name                                               | Description                                                                                                                                      | Value               |
@@ -339,7 +334,6 @@ helm delete --purge my-release
 | `data.autoscaling.targetCPU`                       | Define the CPU target to trigger the scaling actions (utilization percentage)                                                                    | `""`                |
 | `data.autoscaling.targetMemory`                    | Define the memory target to trigger the scaling actions (utilization percentage)                                                                 | `""`                |
 
-
 ### Coordinating-only nodes parameters
 
 | Name                                                       | Description                                                                                                               | Value           |
@@ -414,7 +408,6 @@ helm delete --purge my-release
 | `coordinating.autoscaling.maxReplicas`                     | Configure a maximum amount of pods                                                                                        | `11`            |
 | `coordinating.autoscaling.targetCPU`                       | Define the CPU target to trigger the scaling actions (utilization percentage)                                             | `""`            |
 | `coordinating.autoscaling.targetMemory`                    | Define the memory target to trigger the scaling actions (utilization percentage)                                          | `""`            |
-
 
 ### Ingest-only nodes parameters
 
@@ -522,7 +515,6 @@ helm delete --purge my-release
 | `ingest.ingress.secrets`                             | Custom TLS certificates as secrets                                                                                               | `[]`                         |
 | `ingest.ingress.extraRules`                          | Additional rules to be covered with this ingress record                                                                          | `[]`                         |
 
-
 ### Metrics parameters
 
 | Name                                            | Description                                                                                                                    | Value                            |
@@ -532,7 +524,7 @@ helm delete --purge my-release
 | `metrics.fullnameOverride`                      | String to fully override common.names.fullname                                                                                 | `""`                             |
 | `metrics.image.registry`                        | Metrics exporter image registry                                                                                                | `docker.io`                      |
 | `metrics.image.repository`                      | Metrics exporter image repository                                                                                              | `bitnami/elasticsearch-exporter` |
-| `metrics.image.tag`                             | Metrics exporter image tag                                                                                                     | `1.5.0-debian-11-r63`            |
+| `metrics.image.tag`                             | Metrics exporter image tag                                                                                                     | `1.5.0-debian-11-r70`            |
 | `metrics.image.digest`                          | Metrics exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag               | `""`                             |
 | `metrics.image.pullPolicy`                      | Metrics exporter image pull policy                                                                                             | `IfNotPresent`                   |
 | `metrics.image.pullSecrets`                     | Metrics exporter image pull secrets                                                                                            | `[]`                             |
@@ -607,7 +599,6 @@ helm delete --purge my-release
 | `metrics.prometheusRule.additionalLabels`       | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                          | `{}`                             |
 | `metrics.prometheusRule.rules`                  | Prometheus Rule definitions                                                                                                    | `[]`                             |
 
-
 ### Init Container Parameters
 
 | Name                                   | Description                                                                                                                                               | Value                   |
@@ -615,7 +606,7 @@ helm delete --purge my-release
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r76`      |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r86`      |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                    |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Init container volume-permissions image pull secrets                                                                                                      | `[]`                    |
@@ -624,13 +615,12 @@ helm delete --purge my-release
 | `sysctlImage.enabled`                  | Enable kernel settings modifier image                                                                                                                     | `true`                  |
 | `sysctlImage.registry`                 | Kernel settings modifier image registry                                                                                                                   | `docker.io`             |
 | `sysctlImage.repository`               | Kernel settings modifier image repository                                                                                                                 | `bitnami/bitnami-shell` |
-| `sysctlImage.tag`                      | Kernel settings modifier image tag                                                                                                                        | `11-debian-11-r76`      |
+| `sysctlImage.tag`                      | Kernel settings modifier image tag                                                                                                                        | `11-debian-11-r86`      |
 | `sysctlImage.digest`                   | Kernel settings modifier image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                  | `""`                    |
 | `sysctlImage.pullPolicy`               | Kernel settings modifier image pull policy                                                                                                                | `IfNotPresent`          |
 | `sysctlImage.pullSecrets`              | Kernel settings modifier image pull secrets                                                                                                               | `[]`                    |
 | `sysctlImage.resources.limits`         | The resources limits for the container                                                                                                                    | `{}`                    |
 | `sysctlImage.resources.requests`       | The requested resources for the container                                                                                                                 | `{}`                    |
-
 
 ### Kibana Parameters
 
@@ -639,10 +629,8 @@ helm delete --purge my-release
 | `kibana.elasticsearch.hosts` | Array containing hostnames for the ES instances. Used to generate the URL | `[]`                                                    |
 | `kibana.elasticsearch.port`  | Port to connect Kibana and ES instance. Used to generate the URL          | `{{ include "elasticsearch.service.ports.restAPI" . }}` |
 
-
-
 ```console
-$ helm install my-release \
+helm install my-release \
   --set name=my-elastic,client.service.port=8080 \
   my-repo/elasticsearch
 ```

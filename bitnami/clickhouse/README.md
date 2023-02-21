@@ -69,7 +69,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
@@ -86,14 +85,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
-
 ### ClickHouse Parameters
 
 | Name                                                | Description                                                                                                | Value                 |
 | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                                    | ClickHouse image registry                                                                                  | `docker.io`           |
 | `image.repository`                                  | ClickHouse image repository                                                                                | `bitnami/clickhouse`  |
-| `image.tag`                                         | ClickHouse image tag (immutable tags are recommended)                                                      | `23.1.3-debian-11-r0` |
+| `image.tag`                                         | ClickHouse image tag (immutable tags are recommended)                                                      | `23.1.3-debian-11-r3` |
 | `image.digest`                                      | ClickHouse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`                                  | ClickHouse image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets`                                 | ClickHouse image pull secrets                                                                              | `[]`                  |
@@ -148,7 +146,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.existingSecretKey`                            | Name of the key inside the existing secret                                                                 | `""`                  |
 | `logLevel`                                          | Logging level                                                                                              | `information`         |
 
-
 ### ClickHouse keeper configuration parameters
 
 | Name                            | Description                                                                                                              | Value                   |
@@ -196,7 +193,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tls.certFilename`              | Certificate filename                                                                                                     | `""`                    |
 | `tls.certKeyFilename`           | Certificate key filename                                                                                                 | `""`                    |
 | `tls.certCAFilename`            | CA Certificate filename                                                                                                  | `""`                    |
-
 
 ### Traffic Exposure Parameters
 
@@ -278,7 +274,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                                 | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.extraRules`                              | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Persistence Parameters
 
 | Name                       | Description                                                            | Value               |
@@ -291,7 +286,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.selector`     | Selector to match an existing Persistent Volume for WordPress data PVC | `{}`                |
 | `persistence.dataSource`   | Custom PVC data source                                                 | `{}`                |
 
-
 ### Init Container Parameters
 
 | Name                                                   | Description                                                                                     | Value                   |
@@ -299,13 +293,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r81`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r86`      |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
 | `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
-
 
 ### Other Parameters
 
@@ -329,14 +322,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.relabelings`          | Specify general relabeling                                                                             | `[]`    |
 | `metrics.serviceMonitor.selector`             | Prometheus instance selector labels                                                                    | `{}`    |
 
-
 ### External Zookeeper paramaters
 
 | Name                        | Description                               | Value  |
 | --------------------------- | ----------------------------------------- | ------ |
 | `externalZookeeper.servers` | List of external zookeeper servers to use | `[]`   |
 | `externalZookeeper.port`    | Port of the Zookeeper servers             | `2888` |
-
 
 ### Zookeeper subchart parameters
 
@@ -346,14 +337,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `zookeeper.replicaCount`         | Number of Zookeeper instances | `3`    |
 | `zookeeper.service.ports.client` | Zookeeper client port         | `2181` |
 
-
-
 The above parameters map to the env variables defined in [bitnami/clickhouse](https://github.com/bitnami/containers/tree/main/bitnami/clickhouse). For more information please refer to the [bitnami/clickhouse](https://github.com/bitnami/containers/tree/main/bitnami/clickhouse) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set auth.username=admin \
   --set auth.password=password \
     my-repo/clickhouse
@@ -398,11 +387,11 @@ externalZookeeper.port=3306
 
 ### TLS secrets
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/clickhouse/administration/enable-tls/).
+The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/clickhouse/administration/enable-tls-ingress/)).
 
 ## Persistence
 
-The [Bitnami ClickHouse](https://github.com/bitnami/containers/tree/main/bitnami/clickhouse) image stores the ClickHouse data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments. [Learn more about persistence in the chart documentation](https://docs.bitnami.com/kubernetes/apps/clickhouse/configuration/chart-persistence/).
+The [Bitnami ClickHouse](https://github.com/bitnami/containers/tree/main/bitnami/clickhouse) image stores the ClickHouse data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 
 ### Additional environment variables
 
@@ -419,7 +408,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as ClickHouse (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/apps/clickhouse/administration/configure-use-sidecars/).
+If additional containers are needed in the same pod as ClickHouse (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/clickhouse/configuration/configure-sidecar-init-containers/).
 
 ### Ingress without TLS
 

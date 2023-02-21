@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`              | ZooKeeper image registry                                                                                                   | `docker.io`             |
 | `image.repository`            | ZooKeeper image repository                                                                                                 | `bitnami/zookeeper`     |
-| `image.tag`                   | ZooKeeper image tag (immutable tags are recommended)                                                                       | `3.8.1-debian-11-r0`    |
+| `image.tag`                   | ZooKeeper image tag (immutable tags are recommended)                                                                       | `3.8.1-debian-11-r6`    |
 | `image.digest`                | ZooKeeper image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                  | `""`                    |
 | `image.pullPolicy`            | ZooKeeper image pull policy                                                                                                | `IfNotPresent`          |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                                                                           | `[]`                    |
@@ -248,7 +248,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r77`      |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r86`      |
 | `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`                    |
@@ -317,7 +317,7 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set auth.clientUser=newUser \
     my-repo/zookeeper
 ```
@@ -352,7 +352,7 @@ First, ensure that you are not getting metrics via the deprecated pattern of pol
 
 Second, to avoid the connection/disconnection messages from the probes, you can set custom values for these checks which direct them to the ZooKeeper Admin Server instead of the client port. By default, an Admin Server will be started that listens on `localhost` at port `8080`. The following is an example of this use of the Admin Server for probes:
 
-```
+```yaml
 livenessProbe:
   enabled: false
 readinessProbe:

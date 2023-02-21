@@ -1,9 +1,9 @@
 dependencies:
 - name: zookeeper
   repository: https://charts.bitnami.com/bitnami
-  version: 11.1.0
+  version: 11.1.2
 - name: common
   repository: https://charts.bitnami.com/bitnami
-  version: 2.2.2
-digest: sha256:da099b68bc1deabb4998fd87b4141440f26dba1a14801a507c402247830e75ee
-generated: "2023-01-24T02:09:12.655952782Z"
+  version: 2.2.3
+digest: sha256:36f9ab281db4f7a9d978f445eb7fcf9d7553ad4f8c491bf01fce432c9f698509
+generated: "2023-02-15T09:46:39.298351777Z"

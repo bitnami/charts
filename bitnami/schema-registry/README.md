@@ -17,7 +17,7 @@ helm install my-release my-repo/schema-registry
 
 ## Introduction
 
-This chart bootstraps a [Schema Registry](https://github.com/bitnami/bitnami-docker-schema-registry) statefulset on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Schema Registry](https://github.com/bitnami/containers/tree/main/bitnami/schema-registry) statefulset on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 
@@ -83,7 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                                | Schema Registry image registry                                                                                  | `docker.io`               |
 | `image.repository`                              | Schema Registry image repository                                                                                | `bitnami/schema-registry` |
-| `image.tag`                                     | Schema Registry image tag (immutable tags are recommended)                                                      | `7.3.1-debian-11-r10`     |
+| `image.tag`                                     | Schema Registry image tag (immutable tags are recommended)                                                      | `7.3.1-debian-11-r22`     |
 | `image.digest`                                  | Schema Registry image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `image.pullPolicy`                              | Schema Registry image pull policy                                                                               | `IfNotPresent`            |
 | `image.pullSecrets`                             | Schema Registry image pull secrets                                                                              | `[]`                      |
@@ -246,10 +246,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalKafka.auth.jaas.user`                   | User for SASL authentication                                                                                        | `user`                           |
 | `externalKafka.auth.jaas.password`               | Password for SASL authentication                                                                                    | `""`                             |
 
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
+
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set replicaCount=2 \
     my-repo/schema-registry
 ```

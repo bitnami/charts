@@ -62,7 +62,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                                  | Value           |
@@ -78,14 +77,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]`  |
 
-
 ### Fluentd parameters
 
 | Name                                                           | Description                                                                                                                                                        | Value                                                      |
 | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------- |
 | `image.registry`                                               | Fluentd image registry                                                                                                                                             | `docker.io`                                                |
 | `image.repository`                                             | Fluentd image repository                                                                                                                                           | `bitnami/fluentd`                                          |
-| `image.tag`                                                    | Fluentd image tag (immutable tags are recommended)                                                                                                                 | `1.15.3-debian-11-r31`                                     |
+| `image.tag`                                                    | Fluentd image tag (immutable tags are recommended)                                                                                                                 | `1.15.3-debian-11-r36`                                     |
 | `image.pullPolicy`                                             | Fluentd image pull policy                                                                                                                                          | `IfNotPresent`                                             |
 | `image.pullSecrets`                                            | Fluentd image pull secrets                                                                                                                                         | `[]`                                                       |
 | `image.debug`                                                  | Enable image debug mode                                                                                                                                            | `false`                                                    |
@@ -330,10 +328,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tls.forwarder.existingSecret`                                 | Name of the existing secret containing the TLS certificates for the Fluentd forwarder                                                                              | `""`                                                       |
 | `tls.aggregator.existingSecret`                                | Name of the existing secret containing the TLS certificates for the Fluentd aggregator                                                                             | `""`                                                       |
 
-
-
 ```console
-$ helm install my-release \
+helm install my-release \
   --set aggregator.port=24444 my-repo/fluentd
 ```
 

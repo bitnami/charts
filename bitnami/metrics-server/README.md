@@ -79,7 +79,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
 | `image.registry`                                  | Metrics Server image registry                                                                                                                                            | `docker.io`              |
 | `image.repository`                                | Metrics Server image repository                                                                                                                                          | `bitnami/metrics-server` |
-| `image.tag`                                       | Metrics Server image tag (immutable tags are recommended)                                                                                                                | `0.6.2-debian-11-r20`    |
+| `image.tag`                                       | Metrics Server image tag (immutable tags are recommended)                                                                                                                | `0.6.2-debian-11-r29`    |
 | `image.digest`                                    | Metrics Server image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                           | `""`                     |
 | `image.pullPolicy`                                | Metrics Server image pull policy                                                                                                                                         | `IfNotPresent`           |
 | `image.pullSecrets`                               | Metrics Server image pull secrets                                                                                                                                        | `[]`                     |
@@ -170,7 +170,7 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set rbac.create=true my-repo/metrics-server
 ```
 
