@@ -60,7 +60,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 
-
 ### Common parameters
 
 | Name                | Description                                                          | Value           |
@@ -74,14 +73,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraDeploy`       | Array of extra objects to deploy with the release                    | `[]`            |
 | `clusterDomain`     | Kubernetes cluster domain name                                       | `cluster.local` |
 
-
 ### Nginx Ingress Controller parameters
 
 | Name                                   | Description                                                                                                                                        | Value                              |
 | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `image.registry`                       | Nginx Ingress Controller image registry                                                                                                            | `docker.io`                        |
 | `image.repository`                     | Nginx Ingress Controller image repository                                                                                                          | `bitnami/nginx-ingress-controller` |
-| `image.tag`                            | Nginx Ingress Controller image tag (immutable tags are recommended)                                                                                | `1.6.4-debian-11-r0`               |
+| `image.tag`                            | Nginx Ingress Controller image tag (immutable tags are recommended)                                                                                | `1.6.4-debian-11-r1`               |
 | `image.digest`                         | Nginx Ingress Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                           | `""`                               |
 | `image.pullPolicy`                     | Nginx Ingress Controller image pull policy                                                                                                         | `IfNotPresent`                     |
 | `image.pullSecrets`                    | Specify docker-registry secret names as an array                                                                                                   | `[]`                               |
@@ -117,7 +115,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVars`                         | Extra environment variables to be set on Nginx Ingress container                                                                                   | `[]`                               |
 | `extraEnvVarsCM`                       | Name of a existing ConfigMap containing extra environment variables                                                                                | `""`                               |
 | `extraEnvVarsSecret`                   | Name of a existing Secret containing extra environment variables                                                                                   | `""`                               |
-
 
 ### Nginx Ingress deployment / daemonset parameters
 
@@ -184,7 +181,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customTemplate`                                    | Override NGINX template                                                                                                                     | `{}`           |
 | `topologySpreadConstraints`                         | Topology spread constraints rely on node labels to identify the topology domain(s) that each Node is in                                     | `[]`           |
 | `podSecurityPolicy.enabled`                         | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false`        |
-
 
 ### Default backend parameters
 
@@ -261,7 +257,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `defaultBackend.pdb.minAvailable`                      | Minimum number/percentage of Default backend pods that should remain scheduled                                  | `1`                    |
 | `defaultBackend.pdb.maxUnavailable`                    | Maximum number/percentage of Default backend pods that may be made unavailable                                  | `""`                   |
 
-
 ### Traffic exposure parameters
 
 | Name                               | Description                                                                                                                            | Value          |
@@ -282,7 +277,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                   | `None`         |
 | `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                            | `{}`           |
 
-
 ### RBAC parameters
 
 | Name                                          | Description                                                    | Value  |
@@ -293,7 +287,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account | `true` |
 | `rbac.create`                                 | Specifies whether RBAC rules should be created                 | `true` |
 | `rbac.rules`                                  | Custom RBAC rules                                              | `[]`   |
-
 
 ### Other parameters
 
@@ -307,7 +300,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.maxReplicas`  | Maximum number of Controller replicas                                     | `11`    |
 | `autoscaling.targetCPU`    | Target CPU utilization percentage                                         | `""`    |
 | `autoscaling.targetMemory` | Target Memory utilization percentage                                      | `""`    |
-
 
 ### Metrics parameters
 

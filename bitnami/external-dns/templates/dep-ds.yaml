@@ -331,9 +331,21 @@ spec:
             - name: AWS_CONFIG_FILE
               value: {{ .Values.aws.credentials.mountPath }}/config
             {{- end }}
-            {{- if and .Values.aws.credentials.secretKey .Values.aws.credentials.accessKey }}
+            {{- if and .Values.aws.credentials.secretKey .Values.aws.credentials.accessKey  (not (include "external-dns.aws-credentials-secret-ref-defined" . ))}}
             - name: AWS_SHARED_CREDENTIALS_FILE
               value: {{ .Values.aws.credentials.mountPath }}/credentials
+            {{- end }}
+            {{- if (include "external-dns.aws-credentials-secret-ref-defined" . ) }}
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.aws.credentials.accessKeyIDSecretRef.name}}
+                  key: {{ .Values.aws.credentials.accessKeyIDSecretRef.key }}
+            - name: AWS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.aws.credentials.secretAccessKeySecretRef.name}}
+                  key: {{ .Values.aws.credentials.secretAccessKeySecretRef.key }}  
             {{- end }}
             {{- end }}
             {{- if eq .Values.provider "cloudflare" }}
@@ -659,7 +671,7 @@ spec:
               mountPath: /etc/kubernetes/
               readOnly: true
             {{- end }}
-            {{- if and (eq .Values.provider "aws") (or (and .Values.aws.credentials.secretKey .Values.aws.credentials.accessKey) .Values.aws.credentials.secretName) }}
+            {{- if and (eq .Values.provider "aws") (or (and .Values.aws.credentials.secretKey .Values.aws.credentials.accessKey) .Values.aws.credentials.secretName)  (not (include "external-dns.aws-credentials-secret-ref-defined" . )) }}
             # AWS mountPath(s)
             - name: aws-credentials
               mountPath: {{ .Values.aws.credentials.mountPath }}
@@ -729,7 +741,7 @@ spec:
           secret:
             secretName: {{ template "external-dns.secretName" . }}
         {{- end }}
-        {{- if and (eq .Values.provider "aws") (or (and .Values.aws.credentials.secretKey .Values.aws.credentials.accessKey) .Values.aws.credentials.secretName) }}
+        {{- if and (eq .Values.provider "aws") (or (and .Values.aws.credentials.secretKey .Values.aws.credentials.accessKey) .Values.aws.credentials.secretName) (not (include "external-dns.aws-credentials-secret-ref-defined" . )) }}
         # AWS volume(s)
         - name: aws-credentials
           secret:
