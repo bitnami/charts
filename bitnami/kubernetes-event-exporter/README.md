@@ -58,7 +58,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                                              | Value          |
@@ -73,7 +72,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                                        | `["infinity"]` |
 | `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template)                              | `[]`           |
 
-
 ### Kubernetes Event Exporter parameters
 
 | Name                                              | Description                                                                                                               | Value                               |
@@ -83,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraContainerPorts`                             | Optionally specify extra list of additional port-mappings for the container                                               | `[]`                                |
 | `image.registry`                                  | Container image registry                                                                                                  | `docker.io`                         |
 | `image.repository`                                | Container image name                                                                                                      | `bitnami/kubernetes-event-exporter` |
-| `image.tag`                                       | Container image tag                                                                                                       | `1.1.0-debian-11-r21`               |
+| `image.tag`                                       | Container image tag                                                                                                       | `1.1.0-debian-11-r22`               |
 | `image.digest`                                    | Container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                 | `""`                                |
 | `image.pullPolicy`                                | Container image pull policy                                                                                               | `IfNotPresent`                      |
 | `image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                          | `[]`                                |

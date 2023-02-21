@@ -2,7 +2,7 @@ annotations:
   category: Infrastructure
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 3.3.2
+appVersion: 3.4.0
 dependencies:
   - condition: zookeeper.enabled
     name: zookeeper

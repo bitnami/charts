@@ -62,7 +62,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 | `kubeVersion`             | Override Kubernetes version                     | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                                          | Value           |
@@ -78,14 +77,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the deployment                                                 | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                                    | `["infinity"]`  |
 
-
 ### Schema Registry parameters
 
 | Name                                            | Description                                                                                                     | Value                     |
 | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                                | Schema Registry image registry                                                                                  | `docker.io`               |
 | `image.repository`                              | Schema Registry image repository                                                                                | `bitnami/schema-registry` |
-| `image.tag`                                     | Schema Registry image tag (immutable tags are recommended)                                                      | `7.3.1-debian-11-r21`     |
+| `image.tag`                                     | Schema Registry image tag (immutable tags are recommended)                                                      | `7.3.1-debian-11-r22`     |
 | `image.digest`                                  | Schema Registry image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `image.pullPolicy`                              | Schema Registry image pull policy                                                                               | `IfNotPresent`            |
 | `image.pullSecrets`                             | Schema Registry image pull secrets                                                                              | `[]`                      |
@@ -113,7 +111,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVars`                                  | Extra environment variables to be set on Schema Registry container                                              | `[]`                      |
 | `extraEnvVarsCM`                                | Name of existing ConfigMap containing extra env vars                                                            | `""`                      |
 | `extraEnvVarsSecret`                            | Name of existing Secret containing extra env vars                                                               | `""`                      |
-
 
 ### Schema Registry statefulset parameters
 
@@ -177,7 +174,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.targetCPU`              | Target CPU utilization percentage                                                                                        | `""`            |
 | `autoscaling.targetMemory`           | Target Memory utilization percentage                                                                                     | `""`            |
 
-
 ### Exposure Parameters
 
 | Name                               | Description                                                                                           | Value                    |
@@ -214,7 +210,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                    | `[]`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                               | `[]`                     |
 
-
 ### RBAC parameters
 
 | Name                                          | Description                                                      | Value  |
@@ -223,7 +218,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | Name of the created ServiceAccount to use                        | `""`   |
 | `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`   |
 | `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true` |
-
 
 ### Kafka chart parameters
 
