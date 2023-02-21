@@ -144,7 +144,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------- |
 | `replicaCount`                                      | Number of WordPress replicas to deploy                                                                                   | `1`              |
 | `updateStrategy.type`                               | WordPress deployment strategy type                                                                                       | `RollingUpdate`  |
-| `updateStrategy.rollingUpdate`                      | WordPress deployment rolling update configuration parameters                                                             | `{}`             |
 | `schedulerName`                                     | Alternate scheduler                                                                                                      | `""`             |
 | `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`             |
 | `priorityClassName`                                 | Name of the existing priority class to be used by WordPress pods, priority class needs to be created beforehand          | `""`             |
