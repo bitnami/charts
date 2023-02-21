@@ -62,18 +62,19 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                     | Description                                                                             | Value           |
-| ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`            | Override Kubernetes version                                                             | `""`            |
-| `nameOverride`           | String to partially override common.names.fullname                                      | `""`            |
-| `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
-| `clusterDomain`          | Default Kubernetes cluster domain                                                       | `cluster.local` |
-| `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`            |
-| `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`            |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the statefulset                                   | `["sleep"]`     |
-| `diagnosticMode.args`    | Args to override all containers in the statefulset                                      | `["infinity"]`  |
+| Name                      | Description                                                                             | Value           |
+| ------------------------- | --------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`             | Override Kubernetes version                                                             | `""`            |
+| `nameOverride`            | String to partially override common.names.fullname                                      | `""`            |
+| `fullnameOverride`        | String to fully override common.names.fullname                                          | `""`            |
+| `clusterDomain`           | Default Kubernetes cluster domain                                                       | `cluster.local` |
+| `commonLabels`            | Labels to add to all deployed objects                                                   | `{}`            |
+| `commonAnnotations`       | Annotations to add to all deployed objects                                              | `{}`            |
+| `extraDeploy`             | Array of extra objects to deploy with the release                                       | `[]`            |
+| `serviceBindings.enabled` | Create secret for service binding (Experimental)                                        | `false`         |
+| `diagnosticMode.enabled`  | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
+| `diagnosticMode.command`  | Command to override all containers in the statefulset                                   | `["sleep"]`     |
+| `diagnosticMode.args`     | Args to override all containers in the statefulset                                      | `["infinity"]`  |
 
 ### Kafka parameters
 
@@ -481,6 +482,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `zookeeper.persistence.accessModes`     | Persistent Volume access modes                                                                                                                                          | `["ReadWriteOnce"]` |
 | `zookeeper.persistence.size`            | Persistent Volume size                                                                                                                                                  | `8Gi`               |
 | `externalZookeeper.servers`             | List of external zookeeper servers to use. Typically used in combination with 'zookeeperChrootPath'.                                                                    | `[]`                |
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
