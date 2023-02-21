@@ -207,9 +207,6 @@ spec:
             - name: secret-key
               mountPath: /etc/core/key
               subPath: key
-            - name: token-service-private-key
-              mountPath: /etc/core/private_key.pem
-              subPath: tls.key
             {{- if .Values.internalTLS.enabled }}
             - name: internal-tls-certs
               mountPath: /etc/harbor/ssl/core
@@ -264,13 +261,6 @@ spec:
         {{- if .Values.internalTLS.caBundleSecret }}
         {{- include "harbor.caBundleVolume" . | nindent 8 }}
         {{- end }}
-        - name: token-service-private-key
-          secret:
-            {{- if .Values.core.secretName }}
-            secretName: {{ .Values.core.secretName }}
-            {{- else }}
-            secretName: {{ include "harbor.core" . }}
-            {{- end }}
         {{- if .Values.internalTLS.enabled }}
         - name: internal-tls-certs
           secret:
