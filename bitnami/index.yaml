@@ -58731,6 +58731,41 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 10.6.12
+    created: "2023-02-21T14:32:37.556250052Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: MariaDB is an open source, community-developed SQL database server
+      that is widely in use around the world due to its enterprise features, flexibility,
+      and collaboration with leading tech firms.
+    digest: eaa5876ed8c5081f8f826139d502ed4c12c73d8c4ee2d8eccbaa2694ffc78cf9
+    home: https://github.com/bitnami/charts/tree/main/bitnami/mariadb
+    icon: https://bitnami.com/assets/stacks/mariadb/img/mariadb-stack-220x234.png
+    keywords:
+    - mariadb
+    - mysql
+    - database
+    - sql
+    - prometheus
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: mariadb
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/mariadb
+    - https://github.com/prometheus/mysqld_exporter
+    - https://mariadb.org
+    urls:
+    - https://charts.bitnami.com/bitnami/mariadb-11.5.0.tgz
+    version: 11.5.0
+  - annotations:
+      category: Database
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 10.6.12
     created: "2023-02-17T19:29:01.630735346Z"
     dependencies:
     - name: common
@@ -120779,4 +120814,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-02-21T13:57:24.978049079Z"
+generated: "2023-02-21T14:32:37.550753905Z"
