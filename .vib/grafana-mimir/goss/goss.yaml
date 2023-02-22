@@ -1,9 +1,7 @@
 file:
   {{ .Vars.mimir.dataDir }}/conf/mimir.yaml:
-    mode: "0644"
     filetype: file
     exists: true
-    owner: root
     contains:
     - "memcachedchunks:{{ .Vars.memcachedchunks.service.ports.memcached }}"
     - "memcachedfrontend:{{ .Vars.memcachedfrontend.service.ports.memcached }}"
