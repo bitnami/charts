@@ -734,6 +734,10 @@ service:
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ##
   loadBalancerSourceRanges: []
+  ## @param service.allocateLoadBalancerNodePorts Wheter to allocate node ports when service type is LoadBalancer
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-nodeport-allocation
+  ##
+  allocateLoadBalancerNodePorts: true 
   ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
   ##
   extraPorts: []
@@ -848,6 +852,10 @@ externalAccess:
     ## - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
+    ## @param externalAccess.service.allocateLoadBalancerNodePorts Wheter to allocate node ports when service type is LoadBalancer
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-nodeport-allocation
+    ##
+    allocateLoadBalancerNodePorts: true 
     ## @param externalAccess.service.externalTrafficPolicy MongoDB(&reg;) service external traffic policy
     ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
@@ -919,6 +927,10 @@ externalAccess:
       ## - 10.10.10.0/24
       ##
       loadBalancerSourceRanges: []
+      ## @param externalAccess.hidden.service.allocateLoadBalancerNodePorts Wheter to allocate node ports when service type is LoadBalancer
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-nodeport-allocation
+      ##
+      allocateLoadBalancerNodePorts: true 
       ## @param externalAccess.hidden.service.externalTrafficPolicy MongoDB(&reg;) service external traffic policy
       ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
       ##
