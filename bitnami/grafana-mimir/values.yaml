@@ -115,7 +115,7 @@ mimir:
         endpoint: "{{- include "grafana-mimir.minio.fullname" . -}}:{{ .Values.minio.service.ports.api }}"
         insecure: {{ not .Values.minio.tls.enabled }}
       {{- else }}
-      backend: {{.Values.alertmanager.blockStorage.backend }}
+      backend: {{ .Values.alertmanager.blockStorage.backend }}
       {{ .Values.alertmanager.blockStorage.backend }}:
         {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.blockStorage.config "context" $) | nindent 4 }}
       {{- end }}
@@ -347,7 +347,7 @@ alertmanager:
   ## @param alertmanager.args Override default container args (useful when using custom images)
   ##
   args: []
-  ## @param alertmanager.extraArgs Add additional argsto the default container args (useful to override configuration)
+  ## @param alertmanager.extraArgs Add additional args to the default container args (useful to override configuration)
   ## e.g:
   ## extraArgs:
   ##   - "-log.level=debug"
@@ -688,7 +688,7 @@ compactor:
   ## @param compactor.args Override default container args (useful when using custom images)
   ##
   args: []
-  ## @param compactor.extraArgs Add additional argsto the default container args (useful to override configuration)
+  ## @param compactor.extraArgs Add additional args to the default container args (useful to override configuration)
   ## e.g:
   ## extraArgs:
   ##   - "-log.level=debug"
@@ -1013,7 +1013,7 @@ distributor:
   ## @param distributor.args Override default container args (useful when using custom images)
   ##
   args: []
-  ## @param distributor.extraArgs Add additional argsto the default container args (useful to override configuration)
+  ## @param distributor.extraArgs Add additional args to the default container args (useful to override configuration)
   ## e.g:
   ## extraArgs:
   ##   - "-log.level=debug"
@@ -1712,7 +1712,7 @@ ingester:
   ## @param ingester.args Override default container args (useful when using custom images)
   ##
   args: []
-  ## @param ingester.extraArgs Add additional argsto the default container args (useful to override configuration)
+  ## @param ingester.extraArgs Add additional args to the default container args (useful to override configuration)
   ## e.g:
   ## extraArgs:
   ##   - "-log.level=debug"
@@ -2040,7 +2040,7 @@ overridesExporter:
   ## @param overridesExporter.args Override default container args (useful when using custom images)
   ##
   args: []
-  ## @param overridesExporter.extraArgs Add additional argsto the default container args (useful to override configuration)
+  ## @param overridesExporter.extraArgs Add additional args to the default container args (useful to override configuration)
   ## e.g:
   ## extraArgs:
   ##   - "-log.level=debug"
@@ -2324,7 +2324,7 @@ querier:
   ## @param querier.args Override default container args (useful when using custom images)
   ##
   args: []
-  ## @param querier.extraArgs Add additional argsto the default container args (useful to override configuration)
+  ## @param querier.extraArgs Add additional args to the default container args (useful to override configuration)
   ## e.g:
   ## extraArgs:
   ##   - "-log.level=debug"
@@ -2608,7 +2608,7 @@ queryFrontend:
   ## @param queryFrontend.args Override default container args (useful when using custom images)
   ##
   args: []
-  ## @param queryFrontend.extraArgs Add additional argsto the default container args (useful to override configuration)
+  ## @param queryFrontend.extraArgs Add additional args to the default container args (useful to override configuration)
   ## e.g:
   ## extraArgs:
   ##   - "-log.level=debug"
@@ -2895,7 +2895,7 @@ queryScheduler:
   ## @param queryScheduler.args Override default container args (useful when using custom images)
   ##
   args: []
-  ## @param queryScheduler.extraArgs Add additional argsto the default container args (useful to override configuration)
+  ## @param queryScheduler.extraArgs Add additional args to the default container args (useful to override configuration)
   ## e.g:
   ## extraArgs:
   ##   - "-log.level=debug"
@@ -3179,7 +3179,7 @@ storeGateway:
   ## @param storeGateway.args Override default container args (useful when using custom images)
   ##
   args: []
-  ## @param storeGateway.extraArgs Add additional argsto the default container args (useful to override configuration)
+  ## @param storeGateway.extraArgs Add additional args to the default container args (useful to override configuration)
   ## e.g:
   ## extraArgs:
   ##   - "-log.level=debug"
@@ -3510,6 +3510,11 @@ ruler:
   ## @param ruler.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param ruler.extraArgs Add additional args to the default container args (useful to override configuration)
+  ## e.g:
+  ## extraArgs:
+  ##   - "-log.level=debug"
+  extraArgs: []
   ## @param ruler.podManagementPolicy podManagementPolicy to manage scaling operation
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
@@ -3660,6 +3665,10 @@ ruler:
   ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
+  ## @param ruler.terminationGracePeriodSeconds Seconds pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
   ## @param ruler.updateStrategy.type Ruler statefulset strategy type
   ## @param ruler.updateStrategy.rollingUpdate Ruler statefulset rolling update configuration parameters
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies

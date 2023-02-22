@@ -35,7 +35,7 @@ Installed components:
 {{- if .Values.alertmanager.enabled }}
   * alertmanager
 {{- end }}
-{{- if .Values.alertmanager.ruler }}
+{{- if .Values.ruler.enabled }}
   * ruler
 {{- end }}
 {{- if .Values.queryScheduler.enabled }}
