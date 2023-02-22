@@ -122,6 +122,9 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.querier.extraEnvVarsSecret "context" $) }}
             {{- end }}
+          {{- if .Values.querier.resources }}
+          resources: {{- toYaml .Values.querier.resources | nindent 12 }}
+          {{- end }}
           ports:
             - containerPort: {{ .Values.mimir.containerPorts.http }}
               name: http

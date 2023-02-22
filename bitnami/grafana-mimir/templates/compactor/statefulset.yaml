@@ -234,5 +234,8 @@ spec:
         {{- if .Values.compactor.persistence.selector }}
         selector: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.persistence.selector "context" $) | nindent 10 }}
         {{- end }}
+        {{- if .Values.compactor.persistence.dataSource }}
+        dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.persistence.dataSource "context" $) | nindent 10 }}
+        {{- end }}
         {{- include "common.storage.class" (dict "persistence" .Values.compactor.persistence "global" .Values.global) | nindent 8 }}
   {{- end }}

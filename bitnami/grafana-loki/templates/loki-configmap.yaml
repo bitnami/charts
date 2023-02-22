@@ -1,3 +1,4 @@
+{{- if not .Values.mimir.existingConfigmap }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -15,3 +16,4 @@ metadata:
 data:
   loki.yaml: |-
     {{- mergeOverwrite (include "common.tplvalues.render" (dict "value" .Values.loki.configuration "context" $) | fromYaml) .Values.loki.overrideConfiguration | toYaml | nindent 4  }}
+{{- end }}

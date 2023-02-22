@@ -72,7 +72,6 @@ mimir:
   ## @param mimir.image.digest Grafana Mimir image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param mimir.image.pullPolicy Grafana Mimir image pull policy
   ## @param mimir.image.pullSecrets Grafana Mimir image pull secrets
-  ## @param mimir.image.debug Enable Grafana Mimir image debug mode
   ##
   image:
     registry: docker.io
@@ -92,9 +91,6 @@ mimir:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-    ## Enable debug mode
-    ##
-    debug: false
   ## @param mimir.dataDir path to the Mimir data directory
   ##
   dataDir: "/bitnami/grafana-mimir"
@@ -112,7 +108,7 @@ mimir:
         access_key_id: ${MIMIR_MINIO_ACCESS_KEY_ID}
         secret_access_key: ${MIMIR_MINIO_SECRET_ACCESS_KEY}
         bucket_name: alertmanager
-        endpoint: "{{- include "grafana-mimir.minio.fullname" . -}}:{{ .Values.minio.service.ports.api }}"
+        endpoint: "{{ include "grafana-mimir.minio.fullname" . }}:{{ .Values.minio.service.ports.api }}"
         insecure: {{ not .Values.minio.tls.enabled }}
       {{- else }}
       backend: {{ .Values.alertmanager.blockStorage.backend }}
@@ -151,10 +147,10 @@ mimir:
         access_key_id: ${MIMIR_MINIO_ACCESS_KEY_ID}
         secret_access_key: ${MIMIR_MINIO_SECRET_ACCESS_KEY}
         bucket_name: mimir
-        endpoint: "{{- include "grafana-mimir.minio.fullname" . -}}:{{ .Values.minio.service.ports.api }}"
+        endpoint: "{{ include "grafana-mimir.minio.fullname" . }}:{{ .Values.minio.service.ports.api }}"
         insecure: {{ not .Values.minio.tls.enabled }}
       {{- else }}
-      backend: {{.Values.mimir.blockStorage.backend }}
+      backend: {{ .Values.mimir.blockStorage.backend }}
       {{ .Values.mimir.blockStorage.backend }}:
         {{- include "common.tplvalues.render" (dict "value" .Values.mimir.blockStorage.config "context" $) | nindent 4 }}
       {{- end }}
@@ -214,6 +210,8 @@ mimir:
     memberlist:
       abort_if_cluster_join_fails: false
       compression_enabled: false
+      advertise_port: {{ .Values.mimir.containerPorts.gossipRing }}
+      bind_port: {{ .Values.mimir.containerPorts.gossipRing }}
       join_members:
       - dns+{{ include "grafana-mimir.gossip-ring.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.mimir.gossipRing.service.ports.http }}
     querier:
@@ -247,10 +245,10 @@ mimir:
         access_key_id: ${MIMIR_MINIO_ACCESS_KEY_ID}
         secret_access_key: ${MIMIR_MINIO_SECRET_ACCESS_KEY}
         bucket_name: ruler
-        endpoint: "{{- include "grafana-mimir.minio.fullname" . -}}:{{ .Values.minio.service.ports.api }}"
+        endpoint: "{{ include "grafana-mimir.minio.fullname" . }}:{{ .Values.minio.service.ports.api }}"
         insecure: {{ not .Values.minio.tls.enabled }}
       {{- else }}
-      backend: {{.Values.ruler.blockStorage.backend }}
+      backend: {{ .Values.ruler.blockStorage.backend }}
       {{ .Values.ruler.blockStorage.backend }}:
         {{- include "common.tplvalues.render" (dict "value" .Values.ruler.blockStorage.config "context" $) | nindent 4 }}
       {{- end }}
@@ -267,7 +265,7 @@ mimir:
         access_key_id: ${MIMIR_MINIO_ACCESS_KEY_ID}
         secret_access_key: ${MIMIR_MINIO_SECRET_ACCESS_KEY}
         bucket_name: ruler
-        endpoint: "{{- include "grafana-mimir.minio.fullname" . -}}:{{ .Values.minio.service.ports.api }}"
+        endpoint: "{{ include "grafana-mimir.minio.fullname" . }}:{{ .Values.minio.service.ports.api }}"
         insecure: {{ not .Values.minio.tls.enabled }}
     {{- end }}
     {{- end }}
@@ -282,9 +280,9 @@ mimir:
   ##
   existingConfigmap: ""
 
-  ## @param mimir.containerPorts.http Grafana Mimir HTTP metrics container port
-  ## @param mimir.containerPorts.grpc Grafana Mimir GRPC container port
-  ## @param mimir.containerPorts.gossipRing Grafana Mimir memberlist container port
+  ## @param mimir.containerPorts.http Grafana Mimir HTTP container port. This configuration is set mimir.yaml config file and is common for all Grafana Mimir components.
+  ## @param mimir.containerPorts.grpc Grafana Mimir GRPC container port. This configuration is set mimir.yaml config file and is common for all Grafana Mimircomponents.
+  ## @param mimir.containerPorts.gossipRing Grafana Mimir memberlist container port. This configuration is set mimir.yaml config file and is common for all Grafana Mimir components.
   ##
   containerPorts:
     http: 8080
@@ -306,8 +304,8 @@ mimir:
       annotations: {}
   ## BlockStorage config for mimir pods
   ## ref: https://grafana.com/docs/mimir/latest/operators-guide/configure/reference-configuration-parameters/#alertmanager_storage
-  ## @param mimir.blockStorage.backend Backend storage to use
-  ## @param mimir.blockStorage.config Configures connection to the backend store
+  ## @param mimir.blockStorage.backend Backend storage to use. NOTE: if minio.enable == true, this configuration will be ignored.
+  ## @param mimir.blockStorage.config Configures connection to the backend store. NOTE: if minio.enable == true, this configuration will be ignored.
   ## e.g.:
   ## config:
   ##   access_key_id: AKIAMYACCESSKEY123456789
@@ -371,7 +369,7 @@ alertmanager:
   livenessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 60
+    initialDelaySeconds: 20
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -385,7 +383,7 @@ alertmanager:
   readinessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 60
+    initialDelaySeconds: 20
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -651,8 +649,8 @@ alertmanager:
     maxUnavailable: ""
   ## BlockStorage config for alertmanager pods
   ## ref: https://grafana.com/docs/mimir/latest/operators-guide/configure/reference-configuration-parameters/#alertmanager_storage
-  ## @param alertmanager.blockStorage.backend Backend storage to use
-  ## @param alertmanager.blockStorage.config Configures connection to the backend store
+  ## @param alertmanager.blockStorage.backend Backend storage to use. NOTE: if minio.enable == true, this configuration will be ignored.
+  ## @param alertmanager.blockStorage.config Configures connection to the backend store. NOTE: if minio.enable == true, this configuration will be ignored.
   ## e.g.:
   ## config:
   ##   access_key_id: AKIAMYACCESSKEY123456789
@@ -712,7 +710,7 @@ compactor:
   livenessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 60
+    initialDelaySeconds: 20
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -726,7 +724,7 @@ compactor:
   readinessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 60
+    initialDelaySeconds: 20
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -1033,7 +1031,7 @@ distributor:
   livenessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 60
+    initialDelaySeconds: 20
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -1047,7 +1045,7 @@ distributor:
   readinessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 60
+    initialDelaySeconds: 20
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -1736,7 +1734,7 @@ ingester:
   livenessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 60
+    initialDelaySeconds: 20
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -1750,7 +1748,7 @@ ingester:
   readinessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 60
+    initialDelaySeconds: 20
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -2060,7 +2058,7 @@ overridesExporter:
   livenessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 60
+    initialDelaySeconds: 20
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -2074,7 +2072,7 @@ overridesExporter:
   readinessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 60
+    initialDelaySeconds: 20
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -2344,7 +2342,7 @@ querier:
   livenessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 60
+    initialDelaySeconds: 20
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -2358,7 +2356,7 @@ querier:
   readinessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 60
+    initialDelaySeconds: 20
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -2628,7 +2626,7 @@ queryFrontend:
   livenessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 60
+    initialDelaySeconds: 20
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -2642,7 +2640,7 @@ queryFrontend:
   readinessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 60
+    initialDelaySeconds: 20
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -2915,7 +2913,7 @@ queryScheduler:
   livenessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 60
+    initialDelaySeconds: 20
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -2929,7 +2927,7 @@ queryScheduler:
   readinessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 60
+    initialDelaySeconds: 20
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -3203,7 +3201,7 @@ storeGateway:
   livenessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 60
+    initialDelaySeconds: 20
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -3217,7 +3215,7 @@ storeGateway:
   readinessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 60
+    initialDelaySeconds: 20
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -3813,8 +3811,8 @@ ruler:
     maxUnavailable: ""
   ## BlockStorage config for ruler pods
   ## ref: https://grafana.com/docs/mimir/latest/operators-guide/configure/reference-configuration-parameters/#alertmanager_storage
-  ## @param ruler.blockStorage.backend Backend storage to use
-  ## @param ruler.blockStorage.config Configures connection to the backend store
+  ## @param ruler.blockStorage.backend Backend storage to use. NOTE: if minio.enable == true, this configuration will be ignored.
+  ## @param ruler.blockStorage.config Configures connection to the backend store. NOTE: if minio.enable == true, this configuration will be ignored.
   ## e.g.:
   ## config:
   ##   access_key_id: AKIAMYACCESSKEY123456789

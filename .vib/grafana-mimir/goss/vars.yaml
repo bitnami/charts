@@ -1,12 +1,12 @@
 mimir:
   dataDir: "/bitnami/grafana-mimir"
   containerPorts:
-    http: 8080
-    gossipRing: 7946
+    http: 8082
+    gossipRing: 8946
   gossipRing:
     service:
       ports:
-        http: 7946
+        http: 8946
 gateway:
   enabled: true
   service:
@@ -16,15 +16,15 @@ gateway:
 compactor:
   service:
     ports:
-      http: 8080
+      http: 8082
 distributor:
   service:
     ports:
-      http: 8080
+      http: 8082
 queryFrontend:
   service:
     ports:
-      http: 8080
+      http: 8082
 storeGateway:
   podSecurityContext:
     fsGroup: 1002
@@ -32,7 +32,7 @@ storeGateway:
     runAsUser: 1002
   service:
     ports:
-      http: 8080
+      http: 8082
 memcachedchunks:
   service:
     ports:

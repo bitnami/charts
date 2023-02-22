@@ -13,6 +13,17 @@ Return the proper Grafana Mimir gateway image name
 {{- end -}}
 
 {{/*
+Return the proper the name of the secret with the auth credentials for the gateway.
+*/}}
+{{- define "grafana-mimir.gateway.secretName" -}}
+{{- if not .Values.gateway.auth.existingSecret }}
+  {{- include "grafana-mimir.gateway.fullname" . }}
+{{- else }}
+  {{- tpl .Values.gateway.auth.existingSecret }}
+{{- end }}
+{{- end -}}
+
+{{/*
 Return the proper Grafana Mimir compactor fullname
 */}}
 {{- define "grafana-mimir.compactor.fullname" -}}
@@ -117,7 +128,7 @@ Get the Grafana Mimir configuration configmap.
 */}}
 {{- define "grafana-mimir.mimir.configmapName" -}}
 {{- if .Values.mimir.existingConfigmap -}}
-    {{- .Values.mimir.existingConfigmap -}}
+    {{- tpl .Values.mimir.existingConfigmap -}}
 {{- else }}
     {{- printf "%s" (include "common.names.fullname" . ) -}}
 {{- end -}}
@@ -148,15 +159,6 @@ Create the name of the service account to use
 {{- end -}}
 {{- end -}}
 
-{{/*
-Return true if cert-manager required annotations for TLS signed certificates are set in the Ingress annotations
-Ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
-*/}}
-{{- define "grafana-mimir.ingress.certManagerRequest" -}}
-{{ if or (hasKey . "cert-manager.io/cluster-issuer") (hasKey . "cert-manager.io/issuer") }}
-    {{- true -}}
-{{- end -}}
-{{- end -}}
 
 {{/*
 Create a default fully qualified memcached (chunks) name.
@@ -275,7 +277,7 @@ Return the S3 credentials secret name
 */}}
 {{- define "grafana-mimir.minio.secretName" -}}
     {{- if .Values.minio.auth.existingSecret -}}
-    {{- print .Values.minio.auth.existingSecret -}}
+    {{- tpl .Values.minio.auth.existingSecret -}}
     {{- else -}}
     {{- print (include "grafana-mimir.minio.fullname" .) -}}
     {{- end -}}
