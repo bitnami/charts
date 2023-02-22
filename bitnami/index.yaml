@@ -114482,6 +114482,50 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 6.1.1
+    created: "2023-02-22T08:46:33.557993832Z"
+    dependencies:
+    - condition: memcached.enabled
+      name: memcached
+      repository: https://charts.bitnami.com/bitnami
+      version: 6.x.x
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: WordPress is the world's most popular blogging and content management
+      platform. Powerful yet simple, everyone from students to global corporations
+      use it to build beautiful, functional websites.
+    digest: 027cd6bd182db4126658253cead0a8391c1ec4f687ccce71234e7104b75c02c3
+    home: https://github.com/bitnami/charts/tree/main/bitnami/wordpress
+    icon: https://bitnami.com/assets/stacks/wordpress/img/wordpress-stack-220x234.png
+    keywords:
+    - application
+    - blog
+    - cms
+    - http
+    - php
+    - web
+    - wordpress
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: wordpress
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/wordpress
+    - https://wordpress.org/
+    urls:
+    - https://charts.bitnami.com/bitnami/wordpress-15.2.45.tgz
+    version: 15.2.45
+  - annotations:
+      category: CMS
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 6.1.1
     created: "2023-02-17T20:59:24.056511348Z"
     dependencies:
     - condition: memcached.enabled
@@ -120998,4 +121042,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-02-21T17:52:09.871568999Z"
+generated: "2023-02-22T08:46:33.541131607Z"
