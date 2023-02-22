@@ -129,6 +129,10 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+            - name: CONTAINER_REPLICATION_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
             - name: REDIS_REPLICATION_MODE
               value: replica
             - name: REDIS_MASTER_HOST

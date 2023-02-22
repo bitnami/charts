@@ -19,6 +19,11 @@ global:
   storageClass: ""
   redis:
     password: ""
+  ## @param global.announceContainerIP uses the status.podIP field to announce the masters & sentinal replication IP instead of hostname resolution
+  ## this setting deactivates the announcement and resolving of hostnames to honor this recommandation: 
+  ## https://redis.io/docs/management/sentinel/#ip-addresses-and-dns-names
+  ##
+  announceContainerIP: false
 
 ## @section Common parameters
 ##

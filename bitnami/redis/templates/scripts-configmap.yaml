@@ -188,7 +188,11 @@ data:
 
     echo "" >> /opt/bitnami/redis/etc/replica.conf
     echo "replica-announce-port $REDISPORT" >> /opt/bitnami/redis/etc/replica.conf
+    {{- if .Values.global.announceContainerIP }}
+    echo "replica-announce-ip ${CONTAINER_REPLICATION_IP}" >> /opt/bitnami/redis/etc/replica.conf
+    {{- else }}
     echo "replica-announce-ip $(get_full_hostname "$HOSTNAME")" >> /opt/bitnami/redis/etc/replica.conf
+    {{- end }}
 
     {{- if .Values.tls.enabled }}
     ARGS=("--port" "0")
@@ -395,17 +399,23 @@ data:
     done
 
     echo "" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
-    {{- if not (contains "sentinel announce-hostnames" .Values.sentinel.configuration) }}
+    {{- if not .Values.global.announceContainerIP }}
+        {{- if not (contains "sentinel announce-hostnames" .Values.sentinel.configuration) }}
     echo "sentinel announce-hostnames yes" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
-    {{- end }}
-    {{- if not (contains "sentinel resolve-hostnames" .Values.sentinel.configuration) }}
+        {{- end }}
+        {{- if not (contains "sentinel resolve-hostnames" .Values.sentinel.configuration) }}
     echo "sentinel resolve-hostnames yes" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
-    {{- end }}
+        {{- end }}
+    {{- end}}
     {{- if not (contains "sentinel announce-port" .Values.sentinel.configuration) }}
     echo "sentinel announce-port $SERVPORT" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
     {{- end }}
     {{- if not (contains "sentinel announce-ip" .Values.sentinel.configuration) }}
+        {{- if .Values.global.announceContainerIP }}
+    echo "sentinel announce-ip ${CONTAINER_REPLICATION_IP}" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
+        {{- else }}
     echo "sentinel announce-ip $(get_full_hostname "$HOSTNAME")" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
+        {{- end }}
     {{- end }}
 
     {{- if .Values.tls.enabled }}
@@ -671,7 +681,11 @@ data:
 
     echo "" >> /opt/bitnami/redis/etc/replica.conf
     echo "replica-announce-port $REDISPORT" >> /opt/bitnami/redis/etc/replica.conf
+    {{- if .Values.global.announceContainerIP }}
+    echo "replica-announce-ip $CONTAINER_REPLICATION_IP" >> /opt/bitnami/redis/etc/replica.conf
+    {{- else }}
     echo "replica-announce-ip $(get_full_hostname "$HOSTNAME")" >> /opt/bitnami/redis/etc/replica.conf
+    {{- end }}
 
     {{- if .Values.tls.enabled }}
     ARGS=("--port" "0")

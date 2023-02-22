@@ -69,12 +69,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Global parameters
 
-| Name                      | Description                                            | Value |
-| ------------------------- | ------------------------------------------------------ | ----- |
-| `global.imageRegistry`    | Global Docker image registry                           | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array        | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)           | `""`  |
-| `global.redis.password`   | Global Redis&reg; password (overrides `auth.password`) | `""`  |
+| Name                         | Description                                                                                                  | Value   |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------ | ------- |
+| `global.imageRegistry`       | Global Docker image registry                                                                                 | `""`    |
+| `global.imagePullSecrets`    | Global Docker registry secret names as an array                                                              | `[]`    |
+| `global.storageClass`        | Global StorageClass for Persistent Volume(s)                                                                 | `""`    |
+| `global.redis.password`      | Global Redis&reg; password (overrides `auth.password`)                                                       | `""`    |
+| `global.announceContainerIP` | uses the status.podIP field to announce the masters & sentinal replication IP instead of hostname resolution | `false` |
 
 ### Common parameters
 
