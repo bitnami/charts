@@ -875,7 +875,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 2.0.0
 
-This major release, some configuration parameters (`search_enabled` and `metrics_generator_enabled`) have been removed and both are by default true.
+This major release removes `search_enabled` and `metrics_generator_enabled` configuration parameters, assuming they are always enabled.
 
 ### To 1.0.0
 
