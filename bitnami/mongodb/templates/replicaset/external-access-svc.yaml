@@ -38,6 +38,7 @@ spec:
   {{- if $root.Values.externalAccess.service.loadBalancerSourceRanges }}
   loadBalancerSourceRanges: {{- toYaml $root.Values.externalAccess.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
+  allocateLoadBalancerNodePorts: {{ $root.Values.externalAccess.service.allocateLoadBalancerNodePorts }}
   {{- end }}
   {{- if (or (eq $root.Values.externalAccess.service.type "LoadBalancer") (eq $root.Values.externalAccess.service.type "NodePort")) }}
   externalTrafficPolicy: {{ $root.Values.externalAccess.service.externalTrafficPolicy | quote }}
