@@ -67,7 +67,7 @@ psp:
 ##
 networkPolicy:
   ## @param networkPolicy.enabled Enable NetworkPolicy
-  ## Prometheus scraping of the controller
+  ## Prometheus scraping of the controller and webhook traffic
   ##
   enabled: false
   ## @param networkPolicy.ingressNSMatchLabels Allow connections from other namespaces
