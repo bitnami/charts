@@ -8,12 +8,6 @@ it('allows to create a new project', () => {
   // Go to the templates page
   cy.get('[class*="templates-tab"]').click();
 
-  cy.get('body').then(($body) => {
-    // Close the pop-up if appears
-    if ($body.find('[class*="toast-action"]').is(':visible')) {
-      cy.get('[class*="toast-action"]').click();
-    }
-  });
   // Create an application from the Marketing Portal template
   cy.contains('[data-cy="template-card"]', 'Marketing Portal').within(() => {
     cy.get('[class*="fork-button"]').click();
