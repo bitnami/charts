@@ -112,7 +112,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `alertmanager.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for alertmanager nodes                               | `""`                |
 | `alertmanager.command`                               | Override default container command (useful when using custom images)                                   | `[]`                |
 | `alertmanager.args`                                  | Override default container args (useful when using custom images)                                      | `[]`                |
-| `alertmanager.extraArgs`                             | Add additional argsto the default container args (useful to override configuration)                    | `[]`                |
+| `alertmanager.extraArgs`                             | Add additional args to the default container args (useful to override configuration)                   | `[]`                |
 | `alertmanager.replicaCount`                          | Number of Alertmanager replicas to deploy                                                              | `1`                 |
 | `alertmanager.podManagementPolicy`                   | Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join     | `OrderedReady`      |
 | `alertmanager.livenessProbe.enabled`                 | Enable livenessProbe on Alertmanager nodes                                                             | `true`              |
@@ -205,7 +205,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for compactor nodes                               | `""`                |
 | `compactor.command`                               | Override default container command (useful when using custom images)                                | `[]`                |
 | `compactor.args`                                  | Override default container args (useful when using custom images)                                   | `[]`                |
-| `compactor.extraArgs`                             | Add additional argsto the default container args (useful to override configuration)                 | `[]`                |
+| `compactor.extraArgs`                             | Add additional args to the default container args (useful to override configuration)                | `[]`                |
 | `compactor.replicaCount`                          | Number of Compactor replicas to deploy                                                              | `1`                 |
 | `compactor.podManagementPolicy`                   | Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join  | `OrderedReady`      |
 | `compactor.livenessProbe.enabled`                 | Enable livenessProbe on Compactor nodes                                                             | `true`              |
@@ -296,7 +296,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for distributor nodes                               | `""`            |
 | `distributor.command`                               | Override default container command (useful when using custom images)                                  | `[]`            |
 | `distributor.args`                                  | Override default container args (useful when using custom images)                                     | `[]`            |
-| `distributor.extraArgs`                             | Add additional argsto the default container args (useful to override configuration)                   | `[]`            |
+| `distributor.extraArgs`                             | Add additional args to the default container args (useful to override configuration)                  | `[]`            |
 | `distributor.replicaCount`                          | Number of Distributor replicas to deploy                                                              | `1`             |
 | `distributor.livenessProbe.enabled`                 | Enable livenessProbe on Distributor nodes                                                             | `true`          |
 | `distributor.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                               | `60`            |
@@ -485,7 +485,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for ingester nodes                               | `""`                |
 | `ingester.command`                               | Override default container command (useful when using custom images)                               | `[]`                |
 | `ingester.args`                                  | Override default container args (useful when using custom images)                                  | `[]`                |
-| `ingester.extraArgs`                             | Add additional argsto the default container args (useful to override configuration)                | `[]`                |
+| `ingester.extraArgs`                             | Add additional args to the default container args (useful to override configuration)               | `[]`                |
 | `ingester.replicaCount`                          | Number of Ingester replicas to deploy                                                              | `2`                 |
 | `ingester.podManagementPolicy`                   | Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join | `OrderedReady`      |
 | `ingester.livenessProbe.enabled`                 | Enable livenessProbe on Ingester nodes                                                             | `true`              |
@@ -572,7 +572,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `overridesExporter.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for overrides-exporter nodes                              | `""`            |
 | `overridesExporter.command`                               | Override default container command (useful when using custom images)                                        | `[]`            |
 | `overridesExporter.args`                                  | Override default container args (useful when using custom images)                                           | `[]`            |
-| `overridesExporter.extraArgs`                             | Add additional argsto the default container args (useful to override configuration)                         | `[]`            |
+| `overridesExporter.extraArgs`                             | Add additional args to the default container args (useful to override configuration)                        | `[]`            |
 | `overridesExporter.replicaCount`                          | Number of Overrides Exporter replicas to deploy                                                             | `1`             |
 | `overridesExporter.livenessProbe.enabled`                 | Enable livenessProbe on Overrides Exporter nodes                                                            | `true`          |
 | `overridesExporter.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                     | `60`            |
@@ -655,7 +655,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for querier nodes                               | `""`            |
 | `querier.command`                               | Override default container command (useful when using custom images)                              | `[]`            |
 | `querier.args`                                  | Override default container args (useful when using custom images)                                 | `[]`            |
-| `querier.extraArgs`                             | Add additional argsto the default container args (useful to override configuration)               | `[]`            |
+| `querier.extraArgs`                             | Add additional args to the default container args (useful to override configuration)              | `[]`            |
 | `querier.replicaCount`                          | Number of Querier replicas to deploy                                                              | `1`             |
 | `querier.livenessProbe.enabled`                 | Enable livenessProbe on Querier nodes                                                             | `true`          |
 | `querier.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                           | `60`            |
@@ -738,7 +738,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for ingester nodes                                    | `""`            |
 | `queryFrontend.command`                               | Override default container command (useful when using custom images)                                    | `[]`            |
 | `queryFrontend.args`                                  | Override default container args (useful when using custom images)                                       | `[]`            |
-| `queryFrontend.extraArgs`                             | Add additional argsto the default container args (useful to override configuration)                     | `[]`            |
+| `queryFrontend.extraArgs`                             | Add additional args to the default container args (useful to override configuration)                    | `[]`            |
 | `queryFrontend.replicaCount`                          | Number of Query Frontend replicas to deploy                                                             | `1`             |
 | `queryFrontend.livenessProbe.enabled`                 | Enable livenessProbe on Query Frontend nodes                                                            | `true`          |
 | `queryFrontend.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                 | `60`            |
@@ -817,7 +817,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryScheduler.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for query-scheduler nodes                              | `""`            |
 | `queryScheduler.command`                               | Override default container command (useful when using custom images)                                     | `[]`            |
 | `queryScheduler.args`                                  | Override default container args (useful when using custom images)                                        | `[]`            |
-| `queryScheduler.extraArgs`                             | Add additional argsto the default container args (useful to override configuration)                      | `[]`            |
+| `queryScheduler.extraArgs`                             | Add additional args to the default container args (useful to override configuration)                     | `[]`            |
 | `queryScheduler.replicaCount`                          | Number of Query Scheduler replicas to deploy                                                             | `1`             |
 | `queryScheduler.livenessProbe.enabled`                 | Enable livenessProbe on Query Scheduler nodes                                                            | `true`          |
 | `queryScheduler.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                  | `60`            |
@@ -900,7 +900,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `storeGateway.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for ingester nodes                                   | `""`                |
 | `storeGateway.command`                               | Override default container command (useful when using custom images)                                   | `[]`                |
 | `storeGateway.args`                                  | Override default container args (useful when using custom images)                                      | `[]`                |
-| `storeGateway.extraArgs`                             | Add additional argsto the default container args (useful to override configuration)                    | `[]`                |
+| `storeGateway.extraArgs`                             | Add additional args to the default container args (useful to override configuration)                   | `[]`                |
 | `storeGateway.replicaCount`                          | Number of Store Gateway replicas to deploy                                                             | `1`                 |
 | `storeGateway.podManagementPolicy`                   | Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join     | `OrderedReady`      |
 | `storeGateway.livenessProbe.enabled`                 | Enable livenessProbe on Store Gateway nodes                                                            | `true`              |
@@ -993,6 +993,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ruler.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for ruler nodes                               | `""`            |
 | `ruler.command`                               | Override default container command (useful when using custom images)                            | `[]`            |
 | `ruler.args`                                  | Override default container args (useful when using custom images)                               | `[]`            |
+| `ruler.extraArgs`                             | Add additional args to the default container args (useful to override configuration)            | `[]`            |
 | `ruler.podManagementPolicy`                   | podManagementPolicy to manage scaling operation                                                 | `""`            |
 | `ruler.replicaCount`                          | Number of Ruler replicas to deploy                                                              | `1`             |
 | `ruler.livenessProbe.enabled`                 | Enable livenessProbe on Ruler nodes                                                             | `true`          |
@@ -1038,6 +1039,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ruler.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains | `[]`            |
 | `ruler.priorityClassName`                     | Ruler pods' priorityClassName                                                                   | `""`            |
 | `ruler.schedulerName`                         | Kubernetes pod scheduler registry                                                               | `""`            |
+| `ruler.terminationGracePeriodSeconds`         | Seconds pod needs to terminate gracefully                                                       | `""`            |
 | `ruler.updateStrategy.type`                   | Ruler statefulset strategy type                                                                 | `RollingUpdate` |
 | `ruler.updateStrategy.rollingUpdate`          | Ruler statefulset rolling update configuration parameters                                       | `{}`            |
 | `ruler.extraVolumes`                          | Optionally specify extra list of additional volumes for the Ruler pod(s)                        | `[]`            |
