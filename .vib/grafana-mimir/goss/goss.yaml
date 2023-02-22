@@ -1,6 +1,5 @@
 file:
   {{ .Vars.mimir.dataDir }}/conf/mimir.yaml:
-    filetype: file
     exists: true
     contains:
     - "memcachedchunks:{{ .Vars.memcachedchunks.service.ports.memcached }}"
