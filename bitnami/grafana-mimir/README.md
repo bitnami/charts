@@ -93,6 +93,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mimir.configuration`                  | Mimir components configuration                                                                                                                           | `""`                     |
 | `mimir.overrideConfiguration`          | Mimir components configuration override. Values defined here takes precedence over mimir.configuration                                                   | `{}`                     |
 | `mimir.existingConfigmap`              | Name of a ConfigMap with the Mimir configuration                                                                                                         | `""`                     |
+| `mimir.httpPrefix.prometheus`          | HTTP URL path under which the Prometheus api will be served.                                                                                             | `/prometheus`            |
+| `mimir.httpPrefix.alertmanager`        | HTTP URL path under which the Alertmanager ui and api will be served.                                                                                    | `/alertmanager`          |
 | `mimir.containerPorts.http`            | Grafana Mimir HTTP container port. This configuration is set mimir.yaml config file and is common for all Grafana Mimir components.                      | `8080`                   |
 | `mimir.containerPorts.grpc`            | Grafana Mimir GRPC container port. This configuration is set mimir.yaml config file and is common for all Grafana Mimircomponents.                       | `9095`                   |
 | `mimir.containerPorts.gossipRing`      | Grafana Mimir memberlist container port. This configuration is set mimir.yaml config file and is common for all Grafana Mimir components.                | `7946`                   |
@@ -115,13 +117,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `alertmanager.replicaCount`                          | Number of Alertmanager replicas to deploy                                                              | `1`                 |
 | `alertmanager.podManagementPolicy`                   | Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join     | `OrderedReady`      |
 | `alertmanager.livenessProbe.enabled`                 | Enable livenessProbe on Alertmanager nodes                                                             | `true`              |
-| `alertmanager.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                | `20`                |
+| `alertmanager.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                | `30`                |
 | `alertmanager.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                       | `10`                |
 | `alertmanager.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                      | `1`                 |
 | `alertmanager.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                    | `3`                 |
 | `alertmanager.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                    | `1`                 |
 | `alertmanager.readinessProbe.enabled`                | Enable readinessProbe on Alertmanager nodes                                                            | `true`              |
-| `alertmanager.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                               | `20`                |
+| `alertmanager.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                               | `30`                |
 | `alertmanager.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                      | `10`                |
 | `alertmanager.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                     | `1`                 |
 | `alertmanager.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                   | `3`                 |
@@ -208,13 +210,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.replicaCount`                          | Number of Compactor replicas to deploy                                                              | `1`                 |
 | `compactor.podManagementPolicy`                   | Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join  | `OrderedReady`      |
 | `compactor.livenessProbe.enabled`                 | Enable livenessProbe on Compactor nodes                                                             | `true`              |
-| `compactor.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                             | `20`                |
+| `compactor.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                             | `30`                |
 | `compactor.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                    | `10`                |
 | `compactor.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                   | `1`                 |
 | `compactor.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                 | `3`                 |
 | `compactor.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                 | `1`                 |
 | `compactor.readinessProbe.enabled`                | Enable readinessProbe on Compactor nodes                                                            | `true`              |
-| `compactor.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                            | `20`                |
+| `compactor.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                            | `30`                |
 | `compactor.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                   | `10`                |
 | `compactor.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                  | `1`                 |
 | `compactor.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                | `3`                 |
@@ -298,13 +300,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.extraArgs`                             | Add additional args to the default container args (useful to override configuration)                  | `[]`            |
 | `distributor.replicaCount`                          | Number of Distributor replicas to deploy                                                              | `1`             |
 | `distributor.livenessProbe.enabled`                 | Enable livenessProbe on Distributor nodes                                                             | `true`          |
-| `distributor.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                               | `20`            |
+| `distributor.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                               | `30`            |
 | `distributor.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                      | `10`            |
 | `distributor.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                     | `1`             |
 | `distributor.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                   | `3`             |
 | `distributor.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                   | `1`             |
 | `distributor.readinessProbe.enabled`                | Enable readinessProbe on Distributor nodes                                                            | `true`          |
-| `distributor.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                              | `20`            |
+| `distributor.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                              | `30`            |
 | `distributor.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                     | `10`            |
 | `distributor.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                    | `1`             |
 | `distributor.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                  | `3`             |
@@ -488,13 +490,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.replicaCount`                          | Number of Ingester replicas to deploy                                                              | `2`                 |
 | `ingester.podManagementPolicy`                   | Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join | `OrderedReady`      |
 | `ingester.livenessProbe.enabled`                 | Enable livenessProbe on Ingester nodes                                                             | `true`              |
-| `ingester.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                            | `20`                |
+| `ingester.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                            | `30`                |
 | `ingester.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                   | `10`                |
 | `ingester.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                  | `1`                 |
 | `ingester.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                | `3`                 |
 | `ingester.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                | `1`                 |
 | `ingester.readinessProbe.enabled`                | Enable readinessProbe on Ingester nodes                                                            | `true`              |
-| `ingester.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                           | `20`                |
+| `ingester.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                           | `30`                |
 | `ingester.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                  | `10`                |
 | `ingester.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                 | `1`                 |
 | `ingester.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                               | `3`                 |
@@ -574,13 +576,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `overridesExporter.extraArgs`                             | Add additional args to the default container args (useful to override configuration)                        | `[]`            |
 | `overridesExporter.replicaCount`                          | Number of Overrides Exporter replicas to deploy                                                             | `1`             |
 | `overridesExporter.livenessProbe.enabled`                 | Enable livenessProbe on Overrides Exporter nodes                                                            | `true`          |
-| `overridesExporter.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                     | `20`            |
+| `overridesExporter.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                     | `30`            |
 | `overridesExporter.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                            | `10`            |
 | `overridesExporter.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                           | `1`             |
 | `overridesExporter.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                         | `3`             |
 | `overridesExporter.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                         | `1`             |
 | `overridesExporter.readinessProbe.enabled`                | Enable readinessProbe on Overrides Exporter nodes                                                           | `true`          |
-| `overridesExporter.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                    | `20`            |
+| `overridesExporter.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                    | `30`            |
 | `overridesExporter.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                           | `10`            |
 | `overridesExporter.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                          | `1`             |
 | `overridesExporter.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                        | `3`             |
@@ -657,13 +659,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.extraArgs`                             | Add additional args to the default container args (useful to override configuration)              | `[]`            |
 | `querier.replicaCount`                          | Number of Querier replicas to deploy                                                              | `1`             |
 | `querier.livenessProbe.enabled`                 | Enable livenessProbe on Querier nodes                                                             | `true`          |
-| `querier.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                           | `20`            |
+| `querier.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                           | `30`            |
 | `querier.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                  | `10`            |
 | `querier.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                 | `1`             |
 | `querier.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                               | `3`             |
 | `querier.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                               | `1`             |
 | `querier.readinessProbe.enabled`                | Enable readinessProbe on Querier nodes                                                            | `true`          |
-| `querier.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                          | `20`            |
+| `querier.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                          | `30`            |
 | `querier.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                 | `10`            |
 | `querier.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                | `1`             |
 | `querier.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                              | `3`             |
@@ -740,13 +742,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.extraArgs`                             | Add additional args to the default container args (useful to override configuration)                    | `[]`            |
 | `queryFrontend.replicaCount`                          | Number of Query Frontend replicas to deploy                                                             | `1`             |
 | `queryFrontend.livenessProbe.enabled`                 | Enable livenessProbe on Query Frontend nodes                                                            | `true`          |
-| `queryFrontend.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                 | `20`            |
+| `queryFrontend.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                 | `30`            |
 | `queryFrontend.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                        | `10`            |
 | `queryFrontend.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                       | `1`             |
 | `queryFrontend.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                     | `3`             |
 | `queryFrontend.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                     | `1`             |
 | `queryFrontend.readinessProbe.enabled`                | Enable readinessProbe on Query Frontend nodes                                                           | `true`          |
-| `queryFrontend.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                | `20`            |
+| `queryFrontend.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                | `30`            |
 | `queryFrontend.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                       | `10`            |
 | `queryFrontend.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                      | `1`             |
 | `queryFrontend.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                    | `3`             |
@@ -819,13 +821,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryScheduler.extraArgs`                             | Add additional args to the default container args (useful to override configuration)                     | `[]`            |
 | `queryScheduler.replicaCount`                          | Number of Query Scheduler replicas to deploy                                                             | `1`             |
 | `queryScheduler.livenessProbe.enabled`                 | Enable livenessProbe on Query Scheduler nodes                                                            | `true`          |
-| `queryScheduler.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                  | `20`            |
+| `queryScheduler.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                  | `30`            |
 | `queryScheduler.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                         | `10`            |
 | `queryScheduler.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                        | `1`             |
 | `queryScheduler.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                      | `3`             |
 | `queryScheduler.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                      | `1`             |
 | `queryScheduler.readinessProbe.enabled`                | Enable readinessProbe on Query Scheduler nodes                                                           | `true`          |
-| `queryScheduler.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                 | `20`            |
+| `queryScheduler.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                 | `30`            |
 | `queryScheduler.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                        | `10`            |
 | `queryScheduler.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                       | `1`             |
 | `queryScheduler.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                     | `3`             |
@@ -903,13 +905,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `storeGateway.replicaCount`                          | Number of Store Gateway replicas to deploy                                                             | `1`                 |
 | `storeGateway.podManagementPolicy`                   | Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join     | `OrderedReady`      |
 | `storeGateway.livenessProbe.enabled`                 | Enable livenessProbe on Store Gateway nodes                                                            | `true`              |
-| `storeGateway.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                | `20`                |
+| `storeGateway.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                | `60`                |
 | `storeGateway.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                       | `10`                |
 | `storeGateway.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                      | `1`                 |
 | `storeGateway.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                    | `3`                 |
 | `storeGateway.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                    | `1`                 |
 | `storeGateway.readinessProbe.enabled`                | Enable readinessProbe on Store Gateway nodes                                                           | `true`              |
-| `storeGateway.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                               | `20`                |
+| `storeGateway.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                               | `60`                |
 | `storeGateway.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                      | `10`                |
 | `storeGateway.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                     | `1`                 |
 | `storeGateway.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                   | `3`                 |

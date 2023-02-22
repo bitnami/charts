@@ -59,7 +59,7 @@ From outside the cluster via ingress:
     Remote write endpoints for Prometheus or Grafana Agent:
       echo "URL: http{{ if .Values.gateway.ingress.tls }}s{{ end }}://{{ .Values.gateway.ingress.hostname }}/api/v1/push"
     Read address, Grafana data source (Prometheus) URL:
-      echo "URL: http{{ if .Values.gateway.ingress.tls }}s{{ end }}://{{ .Values.gateway.ingress.hostname }}{{ template "grafana-mimir.prometheus.httpPrefix" . }}"
+      echo "URL: http{{ if .Values.gateway.ingress.tls }}s{{ end }}://{{ .Values.gateway.ingress.hostname }}{{ .Values.mimir.httpPrefix.prometheus }}"
 {{- else }}
 
 From outside the cluster:
@@ -70,7 +70,7 @@ From outside the cluster:
     Remote write endpoints for Prometheus or Grafana Agent:
       echo "http://$NODE_IP:$NODE_PORT/api/v1/push"
     Read address, Grafana data source (Prometheus) URL:
-      echo "http://$NODE_IP:$NODE_PORT{{ template "grafana-mimir.prometheus.httpPrefix" . }}"
+      echo "http://$NODE_IP:$NODE_PORT{{ .Values.mimir.httpPrefix.prometheus }}"
 {{- else if contains "LoadBalancer" .Values.gateway.service.type }}
     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
           You can watch the status of by running 'kubectl get --namespace {{ include "common.names.namespace" . }} svc -w {{ template "grafana-mimir.gateway.fullname" . }}
@@ -78,13 +78,13 @@ From outside the cluster:
     Remote write endpoints for Prometheus or Grafana Agent:
       echo http://$SERVICE_IP:{{ .Values.gateway.service.ports.http }}/api/v1/push
     Read address, Grafana data source (Prometheus) URL:
-      echo http://$SERVICE_IP:{{ .Values.gateway.service.ports.http }}{{ template "grafana-mimir.prometheus.httpPrefix" . }}
+      echo http://$SERVICE_IP:{{ .Values.gateway.service.ports.http }}{{ .Values.mimir.httpPrefix.prometheus }}
 {{- else if contains "ClusterIP" .Values.gateway.service.type }}
     kubectl port-forward svc/{{ template "grafana-mimir.gateway.fullname" . }} {{ .Values.gateway.service.ports.http }}:{{ .Values.gateway.service.ports.http }} &
     Remote write endpoints for Prometheus or Grafana Agent:
       echo http://127.0.0.1:{{ .Values.gateway.service.ports.http }}/api/v1/push
     Read address, Grafana data source (Prometheus) URL:
-      echo http://127.0.0.1:{{ .Values.gateway.service.ports.http }}{{ template "grafana-mimir.prometheus.httpPrefix" . }}
+      echo http://127.0.0.1:{{ .Values.gateway.service.ports.http }}{{ .Values.mimir.httpPrefix.prometheus }}
 
 {{- end }}
 {{- end }}
@@ -93,7 +93,7 @@ From inside the cluster:
     Remote write endpoints for Prometheus or Grafana Agent:
       http://{{ template "grafana-mimir.gateway.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.gateway.service.ports.http }}/api/v1/push
     Read address, Grafana data source (Prometheus) URL:
-      http://{{ template "grafana-mimir.gateway.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.gateway.service.ports.http }}{{ template "grafana-mimir.prometheus.httpPrefix" . }}
+      http://{{ template "grafana-mimir.gateway.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.gateway.service.ports.http }}{{ .Values.mimir.httpPrefix.prometheus }}
 
 {{- if .Values.gateway.auth.enabled }}
 Credentials:
@@ -126,17 +126,17 @@ From outside the cluster:
     export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "grafana-mimir.query-frontend.fullname" . }}-headless)
     export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
     Read address, Grafana data source (Prometheus) URL:
-      echo "http://$NODE_IP:$NODE_PORT{{ template "grafana-mimir.prometheus.httpPrefix" . }}"
+      echo "http://$NODE_IP:$NODE_PORT{{ .Values.mimir.httpPrefix.prometheus }}"
 {{- else if contains "LoadBalancer" .Values.queryFrontend.service.type }}
     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
           You can watch the status of by running 'kubectl get --namespace {{ include "common.names.namespace" . }} svc -w {{ template "grafana-mimir.query-frontend.fullname"  . }}
     export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ template "grafana-mimir.query-frontend.fullname"  . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
     Read address, Grafana data source (Prometheus) URL:
-      echo "http://$SERVICE_IP:{{ .Values.queryFrontend.service.ports.http }}{{ template "grafana-mimir.prometheus.httpPrefix" . }}"
+      echo "http://$SERVICE_IP:{{ .Values.queryFrontend.service.ports.http }}{{ .Values.mimir.httpPrefix.prometheus }}"
 {{- else if contains "ClusterIP" .Values.queryFrontend.service.type }}
     kubectl port-forward svc/{{ template "grafana-mimir.query-frontend.fullname" . }} {{ .Values.queryFrontend.service.ports.http }}:{{ .Values.queryFrontend.service.ports.http }} &
     Read address, Grafana data source (Prometheus) URL:
-      echo "http://127.0.0.1:{{ .Values.queryFrontend.service.ports.http }}{{ template "grafana-mimir.prometheus.httpPrefix" . }}"
+      echo "http://127.0.0.1:{{ .Values.queryFrontend.service.ports.http }}{{ .Values.mimir.httpPrefix.prometheus }}"
 {{- end }}
 
 From inside the cluster:
@@ -144,7 +144,7 @@ From inside the cluster:
     Remote write endpoints for Prometheus or Grafana Agent:
       http://{{ template "grafana-mimir.distributor.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.distributor.service.ports.http }}/api/v1/push
     Read address, Grafana data source (Prometheus) URL:
-      http://{{ template "grafana-mimir.query-frontend.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.queryFrontend.service.ports.http }}{{ template "grafana-mimir.prometheus.httpPrefix" . }}
+      http://{{ template "grafana-mimir.query-frontend.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.queryFrontend.service.ports.http }}{{ .Values.mimir.httpPrefix.prometheus }}
 
 {{- end }}
 {{- end }}

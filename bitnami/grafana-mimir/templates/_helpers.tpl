@@ -108,22 +108,6 @@ Return the proper Grafana Mimir query-scheduler fullname
 {{- end -}}
 
 {{/*
-Alertmanager http prefix
-*/}}
-{{- define "grafana-mimir.alertmanager.httpPrefix" -}}
-{{- print "/alertmanager" -}}
-{{- end -}}
-
-
-{{/*
-Prometheus http prefix
-*/}}
-{{- define "grafana-mimir.prometheus.httpPrefix" -}}
-{{- print "/prometheus" -}}
-{{- end -}}
-
-
-{{/*
 Get the Grafana Mimir configuration configmap.
 */}}
 {{- define "grafana-mimir.mimir.configmapName" -}}

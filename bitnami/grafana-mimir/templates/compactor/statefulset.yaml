@@ -189,8 +189,7 @@ spec:
           {{- end }}
           volumeMounts:
             - name: mimir-config
-              mountPath: {{ .Values.mimir.dataDir }}/conf/mimir.yaml
-              subPath: mimir.yaml
+              mountPath: {{ .Values.mimir.dataDir }}/conf
             - name: data
               mountPath: {{ .Values.mimir.dataDir }}
           {{- if .Values.compactor.extraVolumeMounts }}

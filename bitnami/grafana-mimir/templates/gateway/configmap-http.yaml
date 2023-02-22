@@ -83,7 +83,7 @@ data:
           }
           {{- if .Values.alertmanager.enabled }}
           # Alertmanager endpoints
-          location {{ template "grafana-mimir.alertmanager.httpPrefix" . }} {
+          location {{ .Values.mimir.httpPrefix.prometheus }} {
             proxy_pass      http://{{ template "grafana-mimir.alertmanager.fullname" . }}-headless.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.alertmanager.service.ports.http }}$request_uri;
           }
           location = /multitenant_alertmanager/status {
@@ -95,21 +95,21 @@ data:
           {{- end }}
           {{- if .Values.ruler.enabled }}
           # Ruler endpoints
-          location {{ template "grafana-mimir.prometheus.httpPrefix" . }}/config/v1/rules {
+          location {{ .Values.mimir.httpPrefix.prometheus }}/config/v1/rules {
             proxy_pass      http://{{ template "grafana-mimir.ruler.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.ruler.service.ports.http }}$request_uri;
           }
-          location {{ template "grafana-mimir.prometheus.httpPrefix" . }}/api/v1/rules {
+          location {{ .Values.mimir.httpPrefix.prometheus }}/api/v1/rules {
             proxy_pass      http://{{ template "grafana-mimir.ruler.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.ruler.service.ports.http }}$request_uri;
           }
-          location {{ template "grafana-mimir.prometheus.httpPrefix" . }}/api/v1/alerts {
+          location {{ .Values.mimir.httpPrefix.prometheus }}/api/v1/alerts {
             proxy_pass      http://{{ template "grafana-mimir.ruler.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.ruler.service.ports.http }}$request_uri;
           }
           location = /ruler/ring {
             proxy_pass      http://{{ template "grafana-mimir.ruler.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.ruler.service.ports.http }}$request_uri;
           }
           {{- end }}
-          # Rest of {{ template "grafana-mimir.prometheus.httpPrefix" . }} goes to the query frontend
-          location {{ template "grafana-mimir.prometheus.httpPrefix" . }} {
+          # Rest of {{ .Values.mimir.httpPrefix.prometheus }} goes to the query frontend
+          location {{ .Values.mimir.httpPrefix.prometheus }} {
             proxy_pass      http://{{ template "grafana-mimir.query-frontend.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.queryFrontend.service.ports.http }}$request_uri;
           }
           # Buildinfo endpoint can go to any component

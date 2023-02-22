@@ -257,7 +257,7 @@ mimir:
     alertmanager:
       data_dir: {{ .Values.mimir.dataDir }}/alert-manager
       enable_api: true
-      external_url: {{ template "grafana-mimir.alertmanager.httpPrefix" . }}
+      external_url: {{ .Values.mimir.httpPrefix.prometheus }}
     {{- if .Values.minio.enabled }}
     alertmanager_storage:
       backend: s3
@@ -279,7 +279,12 @@ mimir:
   ## @param mimir.existingConfigmap Name of a ConfigMap with the Mimir configuration
   ##
   existingConfigmap: ""
-
+  ## @param mimir.httpPrefix.prometheus HTTP URL path under which the Prometheus api will be served.
+  ## @param mimir.httpPrefix.alertmanager HTTP URL path under which the Alertmanager ui and api will be served.
+  ##
+  httpPrefix:
+    prometheus: /prometheus
+    alertmanager: /alertmanager
   ## @param mimir.containerPorts.http Grafana Mimir HTTP container port. This configuration is set mimir.yaml config file and is common for all Grafana Mimir components.
   ## @param mimir.containerPorts.grpc Grafana Mimir GRPC container port. This configuration is set mimir.yaml config file and is common for all Grafana Mimircomponents.
   ## @param mimir.containerPorts.gossipRing Grafana Mimir memberlist container port. This configuration is set mimir.yaml config file and is common for all Grafana Mimir components.
@@ -369,7 +374,7 @@ alertmanager:
   livenessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 20
+    initialDelaySeconds: 30
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -383,7 +388,7 @@ alertmanager:
   readinessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 20
+    initialDelaySeconds: 30
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -710,7 +715,7 @@ compactor:
   livenessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 20
+    initialDelaySeconds: 30
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -724,7 +729,7 @@ compactor:
   readinessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 20
+    initialDelaySeconds: 30
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -1031,7 +1036,7 @@ distributor:
   livenessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 20
+    initialDelaySeconds: 30
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -1045,7 +1050,7 @@ distributor:
   readinessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 20
+    initialDelaySeconds: 30
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -1734,7 +1739,7 @@ ingester:
   livenessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 20
+    initialDelaySeconds: 30
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -1748,7 +1753,7 @@ ingester:
   readinessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 20
+    initialDelaySeconds: 30
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -2058,7 +2063,7 @@ overridesExporter:
   livenessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 20
+    initialDelaySeconds: 30
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -2072,7 +2077,7 @@ overridesExporter:
   readinessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 20
+    initialDelaySeconds: 30
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -2342,7 +2347,7 @@ querier:
   livenessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 20
+    initialDelaySeconds: 30
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -2356,7 +2361,7 @@ querier:
   readinessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 20
+    initialDelaySeconds: 30
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -2626,7 +2631,7 @@ queryFrontend:
   livenessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 20
+    initialDelaySeconds: 30
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -2640,7 +2645,7 @@ queryFrontend:
   readinessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 20
+    initialDelaySeconds: 30
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -2913,7 +2918,7 @@ queryScheduler:
   livenessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 20
+    initialDelaySeconds: 30
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -2927,7 +2932,7 @@ queryScheduler:
   readinessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 20
+    initialDelaySeconds: 30
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -3201,7 +3206,7 @@ storeGateway:
   livenessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 20
+    initialDelaySeconds: 60
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -3215,7 +3220,7 @@ storeGateway:
   readinessProbe:
     enabled: true
     failureThreshold: 3
-    initialDelaySeconds: 20
+    initialDelaySeconds: 60
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
