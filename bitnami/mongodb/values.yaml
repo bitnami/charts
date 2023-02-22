@@ -1917,7 +1917,7 @@ metrics:
   ##
   password: ""
   ## @param metrics.extraFlags String with extra flags to the metrics exporter
-  ## ref: https://github.com/percona/mongodb_exporter/blob/master/mongodb_exporter.go
+  ## ref: https://github.com/percona/mongodb_exporter/blob/main/main.go
   ##
   extraFlags: ""
   ## Command and args for running the container (set to default if not set). Use array form
