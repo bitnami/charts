@@ -36146,6 +36146,51 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 2.7.1
+    created: "2023-02-22T09:31:20.280359684Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 17.x.x
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Harbor is an open source trusted cloud-native registry to store,
+      sign, and scan content. It adds functionalities like security, identity, and
+      management to the open source Docker distribution.
+    digest: 219c894430f5487f9f1a47a6f770a00a939d55a4635d9091451f38fa831377b1
+    home: https://github.com/bitnami/charts/tree/main/bitnami/harbor
+    icon: https://bitnami.com/assets/stacks/harbor-core/img/harbor-core-stack-220x234.png
+    keywords:
+    - docker
+    - registry
+    - vulnerability
+    - scan
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: harbor
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/harbor-core
+    - https://github.com/bitnami/containers/tree/main/bitnami/harbor-portal
+    - https://github.com/bitnami/containers/tree/main/bitnami/harbor-jobservice
+    - https://github.com/bitnami/containers/tree/main/bitnami/harbor-registry
+    - https://github.com/bitnami/containers/tree/main/bitnami/harbor-registryctl
+    - https://goharbor.io/
+    urls:
+    - https://charts.bitnami.com/bitnami/harbor-16.4.1.tgz
+    version: 16.4.1
+  - annotations:
+      category: Infrastructure
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 2.7.1
     created: "2023-02-21T15:41:31.21338846Z"
     dependencies:
     - condition: redis.enabled
@@ -121112,4 +121157,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-02-22T09:06:40.199547729Z"
+generated: "2023-02-22T09:31:20.255693188Z"
