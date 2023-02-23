@@ -14552,6 +14552,50 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 3.0.1
+    created: "2023-02-23T13:04:42.924384333Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 17.X.X
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.X.X
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Discourse is an open source discussion platform with built-in moderation
+      and governance systems that let discussion communities protect themselves from
+      bad actors even without official moderators.
+    digest: f8bd742712e98528634d0aa4eee09aa97928e7df3a9a1f4c7fcbb4cc687b0d16
+    home: https://github.com/bitnami/charts/tree/main/bitnami/discourse
+    icon: https://bitnami.com/assets/stacks/discourse/img/discourse-stack-220x234.png
+    keywords:
+    - community
+    - forum
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    - email: username.taken@gmail.com
+      name: paulczar
+    - email: preteluca@gmail.com
+      name: lucaprete
+    name: discourse
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/discourse
+    - https://github.com/spinnaker
+    - https://www.discourse.org/
+    urls:
+    - https://charts.bitnami.com/bitnami/discourse-10.0.2.tgz
+    version: 10.0.2
+  - annotations:
+      category: Forum
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 3.0.1
     created: "2023-02-08T12:06:27.314247032Z"
     dependencies:
     - condition: redis.enabled
@@ -122247,4 +122291,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-02-23T12:55:27.244535789Z"
+generated: "2023-02-23T13:04:42.90990915Z"
