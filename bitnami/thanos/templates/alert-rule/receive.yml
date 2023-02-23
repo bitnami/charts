@@ -40,7 +40,7 @@ spec:
       labels:
         severity: critical
         {{- if .Values.metrics.prometheusRule.additionalLabels }}
-        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
         {{- end }}
     {{- end }}
     {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosReceiveHttpRequestLatencyHigh | default false) }}
@@ -62,7 +62,7 @@ spec:
       labels:
         severity: critical
         {{- if .Values.metrics.prometheusRule.additionalLabels }}
-        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
         {{- end }}
     {{- end }}
     {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosReceiveHighReplicationFailures | default false) }}
@@ -94,7 +94,7 @@ spec:
       labels:
         severity: warning
         {{- if .Values.metrics.prometheusRule.additionalLabels }}
-        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
         {{- end }}
     {{- end }}
     {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosReceiveHighForwardRequestFailures | default false) }}
@@ -116,7 +116,7 @@ spec:
       labels:
         severity: info
         {{- if .Values.metrics.prometheusRule.additionalLabels }}
-        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
         {{- end }}
     {{- end }}
     {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosReceiveHighHashringFileRefreshFailures | default false) }}
@@ -139,7 +139,7 @@ spec:
       labels:
         severity: warning
         {{- if .Values.metrics.prometheusRule.additionalLabels }}
-        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
         {{- end }}
     {{- end }}
     {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosReceiveConfigReloadFailure | default false) }}
@@ -156,7 +156,7 @@ spec:
       labels:
         severity: warning
         {{- if .Values.metrics.prometheusRule.additionalLabels }}
-        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
         {{- end }}
     {{- end }}
     {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosReceiveNoUpload | default false) }}
@@ -176,7 +176,7 @@ spec:
       labels:
         severity: critical
         {{- if .Values.metrics.prometheusRule.additionalLabels }}
-        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
         {{- end }}
     {{- end }}
     {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosReceiveTrafficBelowThreshold | default false) }}
@@ -198,7 +198,7 @@ spec:
       labels:
         severity: warning
         {{- if .Values.metrics.prometheusRule.additionalLabels }}
-        {{ toYaml .Values.metrics.prometheusRule.additionalLabels | indent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
         {{- end }}
     {{- end }}
 {{- end }}

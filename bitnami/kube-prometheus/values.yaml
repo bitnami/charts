@@ -64,7 +64,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.61.1-debian-11-r9
+    tag: 0.63.0-debian-11-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -504,7 +504,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.41.0-debian-11-r0
+    tag: 2.42.0-debian-11-r4
     digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -645,7 +645,7 @@ prometheus:
     relabelings: []
 
   ## Configure the ingress resource that allows you to access the
-  ## Alertmanager installation. Set up the URL
+  ## Prometheus installation. Set up the URL
   ## ref: https://kubernetes.io/docs/user-guide/ingress/
   ##
   ingress:
@@ -981,6 +981,9 @@ prometheus:
   ## - url: http://remote1/push
   ##
   remoteWrite: []
+  ## @param prometheus.enableRemoteWriteReceiver Enable Prometheus to be used as a receiver for the Prometheus remote write protocol.
+  ##
+  enableRemoteWriteReceiver: false
   ## @param prometheus.storageSpec Prometheus StorageSpec for persistent data
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/storage.md
   ##
@@ -1130,7 +1133,7 @@ prometheus:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.29.0-scratch-r0
+      tag: 0.30.2-scratch-r1
       digest: ""
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1422,7 +1425,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.24.0-debian-11-r70
+    tag: 0.25.0-debian-11-r20
     digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -2001,7 +2004,7 @@ blackboxExporter:
   image:
     registry: docker.io
     repository: bitnami/blackbox-exporter
-    tag: 0.23.0-debian-11-r6
+    tag: 0.23.0-debian-11-r26
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

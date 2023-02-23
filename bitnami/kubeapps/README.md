@@ -10,10 +10,9 @@ Kubeapps is a web-based UI for launching and managing applications on Kubernetes
 
 ## TL;DR
 
-```bash
+```console
 helm repo add my-repo https://charts.bitnami.com/bitnami
-kubectl create namespace kubeapps
-helm install kubeapps --namespace kubeapps my-repo/kubeapps
+helm install my-release my-repo/kubeapps --namespace kubeapps --create-namespace
 ```
 
 > Check out the [getting started](https://github.com/vmware-tanzu/kubeapps/blob/main/site/content/docs/latest/tutorials/getting-started.md) to start deploying apps with Kubeapps.
@@ -44,12 +43,11 @@ It also packages the [Bitnami PostgreSQL chart](https://github.com/bitnami/chart
 
 ## Installing the Chart
 
-To install the chart with the release name `kubeapps`:
+To install the chart with the release name `my-release`:
 
-```bash
+```console
 helm repo add my-repo https://charts.bitnami.com/bitnami
-kubectl create namespace kubeapps
-helm install kubeapps --namespace kubeapps my-repo/kubeapps
+helm install my-release my-repo/kubeapps --namespace kubeapps --create-namespace
 ```
 
 The command deploys Kubeapps on the Kubernetes cluster in the `kubeapps` namespace. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -68,7 +66,6 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                             | Value          |
@@ -83,7 +80,6 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`        |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`    |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]` |
-
 
 ### Traffic Exposure Parameters
 
@@ -104,7 +100,6 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `ingress.ingressClassName` | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `ingress.extraRules`       | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Kubeapps packaging options
 
 | Name                       | Description                                                | Value   |
@@ -113,14 +108,13 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `packaging.carvel.enabled` | Enable support for the Carvel (kapp-controller) packaging. | `false` |
 | `packaging.flux.enabled`   | Enable support for Flux (v2) packaging.                    | `false` |
 
-
 ### Frontend parameters
 
 | Name                                             | Description                                                                                           | Value                  |
 | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------- | ---------------------- |
 | `frontend.image.registry`                        | NGINX image registry                                                                                  | `docker.io`            |
 | `frontend.image.repository`                      | NGINX image repository                                                                                | `bitnami/nginx`        |
-| `frontend.image.tag`                             | NGINX image tag (immutable tags are recommended)                                                      | `1.23.2-debian-11-r16` |
+| `frontend.image.tag`                             | NGINX image tag (immutable tags are recommended)                                                      | `1.23.3-debian-11-r25` |
 | `frontend.image.digest`                          | NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `frontend.image.pullPolicy`                      | NGINX image pull policy                                                                               | `IfNotPresent`         |
 | `frontend.image.pullSecrets`                     | NGINX image pull secrets                                                                              | `[]`                   |
@@ -197,7 +191,6 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `frontend.service.sessionAffinity`               | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                  | `None`                 |
 | `frontend.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                           | `{}`                   |
 
-
 ### Dashboard parameters
 
 | Name                                              | Description                                                                                               | Value                        |
@@ -205,7 +198,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `dashboard.enabled`                               | Specifies whether Kubeapps Dashboard should be deployed or not                                            | `true`                       |
 | `dashboard.image.registry`                        | Dashboard image registry                                                                                  | `docker.io`                  |
 | `dashboard.image.repository`                      | Dashboard image repository                                                                                | `bitnami/kubeapps-dashboard` |
-| `dashboard.image.tag`                             | Dashboard image tag (immutable tags are recommended)                                                      | `2.6.2-debian-11-r0`         |
+| `dashboard.image.tag`                             | Dashboard image tag (immutable tags are recommended)                                                      | `2.6.3-debian-11-r4`         |
 | `dashboard.image.digest`                          | Dashboard image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
 | `dashboard.image.pullPolicy`                      | Dashboard image pull policy                                                                               | `IfNotPresent`               |
 | `dashboard.image.pullSecrets`                     | Dashboard image pull secrets                                                                              | `[]`                         |
@@ -278,20 +271,19 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `dashboard.service.ports.http`                    | Dashboard service HTTP port                                                                               | `8080`                       |
 | `dashboard.service.annotations`                   | Additional custom annotations for Dashboard service                                                       | `{}`                         |
 
-
 ### AppRepository Controller parameters
 
 | Name                                                        | Description                                                                                                                                                                                              | Value                                       |
 | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
 | `apprepository.image.registry`                              | Kubeapps AppRepository Controller image registry                                                                                                                                                         | `docker.io`                                 |
 | `apprepository.image.repository`                            | Kubeapps AppRepository Controller image repository                                                                                                                                                       | `bitnami/kubeapps-apprepository-controller` |
-| `apprepository.image.tag`                                   | Kubeapps AppRepository Controller image tag (immutable tags are recommended)                                                                                                                             | `2.6.2-scratch-r0`                          |
+| `apprepository.image.tag`                                   | Kubeapps AppRepository Controller image tag (immutable tags are recommended)                                                                                                                             | `2.6.3-scratch-r1`                          |
 | `apprepository.image.digest`                                | Kubeapps AppRepository Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                        | `""`                                        |
 | `apprepository.image.pullPolicy`                            | Kubeapps AppRepository Controller image pull policy                                                                                                                                                      | `IfNotPresent`                              |
 | `apprepository.image.pullSecrets`                           | Kubeapps AppRepository Controller image pull secrets                                                                                                                                                     | `[]`                                        |
 | `apprepository.syncImage.registry`                          | Kubeapps Asset Syncer image registry                                                                                                                                                                     | `docker.io`                                 |
 | `apprepository.syncImage.repository`                        | Kubeapps Asset Syncer image repository                                                                                                                                                                   | `bitnami/kubeapps-asset-syncer`             |
-| `apprepository.syncImage.tag`                               | Kubeapps Asset Syncer image tag (immutable tags are recommended)                                                                                                                                         | `2.6.2-scratch-r0`                          |
+| `apprepository.syncImage.tag`                               | Kubeapps Asset Syncer image tag (immutable tags are recommended)                                                                                                                                         | `2.6.3-scratch-r0`                          |
 | `apprepository.syncImage.digest`                            | Kubeapps Asset Syncer image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                    | `""`                                        |
 | `apprepository.syncImage.pullPolicy`                        | Kubeapps Asset Syncer image pull policy                                                                                                                                                                  | `IfNotPresent`                              |
 | `apprepository.syncImage.pullSecrets`                       | Kubeapps Asset Syncer image pull secrets                                                                                                                                                                 | `[]`                                        |
@@ -346,46 +338,45 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `apprepository.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                                                                                           | `true`                                      |
 | `apprepository.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                                                                               | `{}`                                        |
 
-
 ### Auth Proxy parameters
 
-| Name                                              | Description                                                                                                  | Value                  |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ---------------------- |
-| `authProxy.enabled`                               | Specifies whether Kubeapps should configure OAuth login/logout                                               | `false`                |
-| `authProxy.image.registry`                        | OAuth2 Proxy image registry                                                                                  | `docker.io`            |
-| `authProxy.image.repository`                      | OAuth2 Proxy image repository                                                                                | `bitnami/oauth2-proxy` |
-| `authProxy.image.tag`                             | OAuth2 Proxy image tag (immutable tags are recommended)                                                      | `7.4.0-debian-11-r13`  |
-| `authProxy.image.digest`                          | OAuth2 Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
-| `authProxy.image.pullPolicy`                      | OAuth2 Proxy image pull policy                                                                               | `IfNotPresent`         |
-| `authProxy.image.pullSecrets`                     | OAuth2 Proxy image pull secrets                                                                              | `[]`                   |
-| `authProxy.external`                              | Use an external Auth Proxy instead of deploying its own one                                                  | `false`                |
-| `authProxy.oauthLoginURI`                         | OAuth Login URI to which the Kubeapps frontend redirects for authn                                           | `/oauth2/start`        |
-| `authProxy.oauthLogoutURI`                        | OAuth Logout URI to which the Kubeapps frontend redirects for authn                                          | `/oauth2/sign_out`     |
-| `authProxy.skipKubeappsLoginPage`                 | Skip the Kubeapps login page when using OIDC and directly redirect to the IdP                                | `false`                |
-| `authProxy.provider`                              | OAuth provider                                                                                               | `""`                   |
-| `authProxy.clientID`                              | OAuth Client ID                                                                                              | `""`                   |
-| `authProxy.clientSecret`                          | OAuth Client secret                                                                                          | `""`                   |
-| `authProxy.cookieSecret`                          | Secret used by oauth2-proxy to encrypt any credentials                                                       | `""`                   |
-| `authProxy.cookieRefresh`                         | Duration after which to refresh the cookie                                                                   | `2m`                   |
-| `authProxy.scope`                                 | OAuth scope specification                                                                                    | `openid email groups`  |
-| `authProxy.emailDomain`                           | Allowed email domains                                                                                        | `*`                    |
-| `authProxy.extraFlags`                            | Additional command line flags for oauth2-proxy                                                               | `[]`                   |
-| `authProxy.lifecycleHooks`                        | for the Auth Proxy container(s) to automate configuration before or after startup                            | `{}`                   |
-| `authProxy.command`                               | Override default container command (useful when using custom images)                                         | `[]`                   |
-| `authProxy.args`                                  | Override default container args (useful when using custom images)                                            | `[]`                   |
-| `authProxy.extraEnvVars`                          | Array with extra environment variables to add to the Auth Proxy container                                    | `[]`                   |
-| `authProxy.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for Auth Proxy containers(s)                            | `""`                   |
-| `authProxy.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for Auth Proxy containers(s)                               | `""`                   |
-| `authProxy.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Auth Proxy container(s)                     | `[]`                   |
-| `authProxy.containerPorts.proxy`                  | Auth Proxy HTTP container port                                                                               | `3000`                 |
-| `authProxy.containerSecurityContext.enabled`      | Enabled Auth Proxy containers' Security Context                                                              | `true`                 |
-| `authProxy.containerSecurityContext.runAsUser`    | Set Auth Proxy container's Security Context runAsUser                                                        | `1001`                 |
-| `authProxy.containerSecurityContext.runAsNonRoot` | Set Auth Proxy container's Security Context runAsNonRoot                                                     | `true`                 |
-| `authProxy.resources.limits.cpu`                  | The CPU limits for the OAuth2 Proxy container                                                                | `250m`                 |
-| `authProxy.resources.limits.memory`               | The memory limits for the OAuth2 Proxy container                                                             | `128Mi`                |
-| `authProxy.resources.requests.cpu`                | The requested CPU for the OAuth2 Proxy container                                                             | `25m`                  |
-| `authProxy.resources.requests.memory`             | The requested memory for the OAuth2 Proxy container                                                          | `32Mi`                 |
-
+| Name                                              | Description                                                                                                                         | Value                  |
+| ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `authProxy.enabled`                               | Specifies whether Kubeapps should configure OAuth login/logout                                                                      | `false`                |
+| `authProxy.image.registry`                        | OAuth2 Proxy image registry                                                                                                         | `docker.io`            |
+| `authProxy.image.repository`                      | OAuth2 Proxy image repository                                                                                                       | `bitnami/oauth2-proxy` |
+| `authProxy.image.tag`                             | OAuth2 Proxy image tag (immutable tags are recommended)                                                                             | `7.4.0-debian-11-r38`  |
+| `authProxy.image.digest`                          | OAuth2 Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                        | `""`                   |
+| `authProxy.image.pullPolicy`                      | OAuth2 Proxy image pull policy                                                                                                      | `IfNotPresent`         |
+| `authProxy.image.pullSecrets`                     | OAuth2 Proxy image pull secrets                                                                                                     | `[]`                   |
+| `authProxy.external`                              | Use an external Auth Proxy instead of deploying its own one                                                                         | `false`                |
+| `authProxy.oauthLoginURI`                         | OAuth Login URI to which the Kubeapps frontend redirects for authn                                                                  | `/oauth2/start`        |
+| `authProxy.oauthLogoutURI`                        | OAuth Logout URI to which the Kubeapps frontend redirects for authn                                                                 | `/oauth2/sign_out`     |
+| `authProxy.skipKubeappsLoginPage`                 | Skip the Kubeapps login page when using OIDC and directly redirect to the IdP                                                       | `false`                |
+| `authProxy.provider`                              | OAuth provider                                                                                                                      | `""`                   |
+| `authProxy.clientID`                              | OAuth Client ID                                                                                                                     | `""`                   |
+| `authProxy.clientSecret`                          | OAuth Client secret                                                                                                                 | `""`                   |
+| `authProxy.cookieSecret`                          | Secret used by oauth2-proxy to encrypt any credentials                                                                              | `""`                   |
+| `authProxy.existingOauth2Secret`                  | Name of an existing secret containing the OAuth client secrets, it should contain the keys clientID, clientSecret, and cookieSecret | `""`                   |
+| `authProxy.cookieRefresh`                         | Duration after which to refresh the cookie                                                                                          | `2m`                   |
+| `authProxy.scope`                                 | OAuth scope specification                                                                                                           | `openid email groups`  |
+| `authProxy.emailDomain`                           | Allowed email domains                                                                                                               | `*`                    |
+| `authProxy.extraFlags`                            | Additional command line flags for oauth2-proxy                                                                                      | `[]`                   |
+| `authProxy.lifecycleHooks`                        | for the Auth Proxy container(s) to automate configuration before or after startup                                                   | `{}`                   |
+| `authProxy.command`                               | Override default container command (useful when using custom images)                                                                | `[]`                   |
+| `authProxy.args`                                  | Override default container args (useful when using custom images)                                                                   | `[]`                   |
+| `authProxy.extraEnvVars`                          | Array with extra environment variables to add to the Auth Proxy container                                                           | `[]`                   |
+| `authProxy.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for Auth Proxy containers(s)                                                   | `""`                   |
+| `authProxy.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for Auth Proxy containers(s)                                                      | `""`                   |
+| `authProxy.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Auth Proxy container(s)                                            | `[]`                   |
+| `authProxy.containerPorts.proxy`                  | Auth Proxy HTTP container port                                                                                                      | `3000`                 |
+| `authProxy.containerSecurityContext.enabled`      | Enabled Auth Proxy containers' Security Context                                                                                     | `true`                 |
+| `authProxy.containerSecurityContext.runAsUser`    | Set Auth Proxy container's Security Context runAsUser                                                                               | `1001`                 |
+| `authProxy.containerSecurityContext.runAsNonRoot` | Set Auth Proxy container's Security Context runAsNonRoot                                                                            | `true`                 |
+| `authProxy.resources.limits.cpu`                  | The CPU limits for the OAuth2 Proxy container                                                                                       | `250m`                 |
+| `authProxy.resources.limits.memory`               | The memory limits for the OAuth2 Proxy container                                                                                    | `128Mi`                |
+| `authProxy.resources.requests.cpu`                | The requested CPU for the OAuth2 Proxy container                                                                                    | `25m`                  |
+| `authProxy.resources.requests.memory`             | The requested memory for the OAuth2 Proxy container                                                                                 | `32Mi`                 |
 
 ### Pinniped Proxy parameters
 
@@ -394,7 +385,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `pinnipedProxy.enabled`                               | Specifies whether Kubeapps should configure Pinniped Proxy                                                     | `false`                           |
 | `pinnipedProxy.image.registry`                        | Pinniped Proxy image registry                                                                                  | `docker.io`                       |
 | `pinnipedProxy.image.repository`                      | Pinniped Proxy image repository                                                                                | `bitnami/kubeapps-pinniped-proxy` |
-| `pinnipedProxy.image.tag`                             | Pinniped Proxy image tag (immutable tags are recommended)                                                      | `2.6.2-debian-11-r0`              |
+| `pinnipedProxy.image.tag`                             | Pinniped Proxy image tag (immutable tags are recommended)                                                      | `2.6.3-debian-11-r3`              |
 | `pinnipedProxy.image.digest`                          | Pinniped Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                              |
 | `pinnipedProxy.image.pullPolicy`                      | Pinniped Proxy image pull policy                                                                               | `IfNotPresent`                    |
 | `pinnipedProxy.image.pullSecrets`                     | Pinniped Proxy image pull secrets                                                                              | `[]`                              |
@@ -422,14 +413,12 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `pinnipedProxy.service.ports.pinnipedProxy`           | Pinniped Proxy service port                                                                                    | `3333`                            |
 | `pinnipedProxy.service.annotations`                   | Additional custom annotations for Pinniped Proxy service                                                       | `{}`                              |
 
-
 ### Other Parameters
 
 | Name          | Description                                               | Value  |
 | ------------- | --------------------------------------------------------- | ------ |
 | `clusters`    | List of clusters that Kubeapps can target for deployments | `[]`   |
 | `rbac.create` | Specifies whether RBAC resources should be created        | `true` |
-
 
 ### Feature flags
 
@@ -440,12 +429,12 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `featureFlags.operators`                | Enable support for Operators in Kubeapps                                                                   | `false` |
 | `featureFlags.schemaEditor.enabled`     | Enable a visual editor for customizing the package schemas                                                 | `false` |
 
-
 ### Database Parameters
 
 | Name                                     | Description                                                                  | Value        |
 | ---------------------------------------- | ---------------------------------------------------------------------------- | ------------ |
 | `postgresql.enabled`                     | Deploy a PostgreSQL server to satisfy the applications database requirements | `true`       |
+| `postgresql.auth.username`               | Username for PostgreSQL server                                               | `postgres`   |
 | `postgresql.auth.postgresPassword`       | Password for 'postgres' user                                                 | `""`         |
 | `postgresql.auth.database`               | Name for a custom database to create                                         | `assets`     |
 | `postgresql.auth.existingSecret`         | Name of existing secret to use for PostgreSQL credentials                    | `""`         |
@@ -455,7 +444,6 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `postgresql.resources.limits`            | The resources limits for the PostgreSQL container                            | `{}`         |
 | `postgresql.resources.requests.cpu`      | The requested CPU for the PostgreSQL container                               | `250m`       |
 | `postgresql.resources.requests.memory`   | The requested memory for the PostgreSQL container                            | `256Mi`      |
-
 
 ### kubeappsapis parameters
 
@@ -477,7 +465,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `kubeappsapis.pluginConfig.resources.packages.v1alpha1.trustedNamespaces.headerPattern`         | Optional header pattern for trusted namespaces                                                                                                                             | `""`                               |
 | `kubeappsapis.image.registry`                                                                   | Kubeapps-APIs image registry                                                                                                                                               | `docker.io`                        |
 | `kubeappsapis.image.repository`                                                                 | Kubeapps-APIs image repository                                                                                                                                             | `bitnami/kubeapps-apis`            |
-| `kubeappsapis.image.tag`                                                                        | Kubeapps-APIs image tag (immutable tags are recommended)                                                                                                                   | `2.6.2-debian-11-r0`               |
+| `kubeappsapis.image.tag`                                                                        | Kubeapps-APIs image tag (immutable tags are recommended)                                                                                                                   | `2.6.3-debian-11-r3`               |
 | `kubeappsapis.image.digest`                                                                     | Kubeapps-APIs image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                              | `""`                               |
 | `kubeappsapis.image.pullPolicy`                                                                 | Kubeapps-APIs image pull policy                                                                                                                                            | `IfNotPresent`                     |
 | `kubeappsapis.image.pullSecrets`                                                                | Kubeapps-APIs image pull secrets                                                                                                                                           | `[]`                               |
@@ -549,7 +537,6 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `kubeappsapis.serviceAccount.automountServiceAccountToken`                                      | Automount service account token for the server service account                                                                                                             | `true`                             |
 | `kubeappsapis.serviceAccount.annotations`                                                       | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                                                 | `{}`                               |
 
-
 ### Redis&reg; chart configuration
 
 | Name                                | Description                                                      | Value                                                    |
@@ -566,9 +553,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `redis.replica.disableCommands`     | Array with commands to deactivate on Redis&reg;                  | `[]`                                                     |
 | `redis.replica.persistence.enabled` | Enable Redis&reg; replica data persistence using PVC             | `false`                                                  |
 
-
-
-```bash
+```console
 helm install kubeapps --namespace kubeapps \
   --set ingress.enabled=true \
     my-repo/kubeapps
@@ -578,7 +563,7 @@ The above command enables an Ingress Rule to expose Kubeapps.
 
 Alternatively, a YAML file that specifies the values for parameters can be provided while installing the chart. For example,
 
-```bash
+```console
 helm install kubeapps --namespace kubeapps -f custom-values.yaml my-repo/kubeapps
 ```
 
@@ -602,7 +587,7 @@ The simplest way to expose the Kubeapps Dashboard is to assign a LoadBalancer ty
 
 Wait for your cluster to assign a LoadBalancer IP or Hostname to the `kubeapps` Service and access it on that address:
 
-```bash
+```console
 kubectl get services --namespace kubeapps --watch
 ```
 
@@ -662,13 +647,13 @@ You can upgrade Kubeapps from the Kubeapps web interface. Select the namespace i
 
 You can also use the Helm CLI to upgrade Kubeapps, first ensure you have updated your local chart repository cache:
 
-```bash
+```console
 helm repo update
 ```
 
 Now upgrade Kubeapps:
 
-```bash
+```console
 export RELEASE_NAME=kubeapps
 helm upgrade $RELEASE_NAME my-repo/kubeapps
 ```
@@ -683,11 +668,11 @@ This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](h
 
 To uninstall/delete the `kubeapps` deployment:
 
-```bash
+```console
 helm uninstall -n kubeapps kubeapps
 
 # Optional: Only if there are no more instances of Kubeapps
-kubectl delete crd apprepositories.kubeapps.com
+$ kubectl delete crd apprepositories.kubeapps.com
 ```
 
 The first command removes most of the Kubernetes components associated with the chart and deletes the release. After that, if there are no more instances of Kubeapps in the cluster you can manually delete the `apprepositories.kubeapps.com` CRD used by Kubeapps that is shared for the entire cluster.
@@ -696,7 +681,7 @@ The first command removes most of the Kubernetes components associated with the 
 
 If you have dedicated a namespace only for Kubeapps you can completely clean the remaining completed/failed jobs or any stale resources by deleting the namespace
 
-```bash
+```console
 kubectl delete namespace kubeapps
 ```
 
@@ -733,7 +718,7 @@ Have a look at the [dashboard documentation](https://github.com/vmware-tanzu/kub
 
 The example below will match the URL `http://example.com` to the Kubeapps dashboard. For further configuration, please refer to your specific Ingress configuration docs (e.g., [NGINX](https://github.com/kubernetes/ingress-nginx) or [HAProxy](https://github.com/haproxytech/kubernetes-ingress)).
 
-```bash
+```console
 helm install kubeapps my-repo/kubeapps \
   --namespace kubeapps \
   --set ingress.enabled=true \
@@ -744,7 +729,7 @@ helm install kubeapps my-repo/kubeapps \
 If you are using LDAP via Dex with OIDC or you are getting an error message like `upstream sent too big header while reading response header from upstream` it means the cookie size is too big and can't be processed by the Ingress Controller.
 You can work around this problem by setting the following Nginx ingress annotations (look for similar annotations in your preferred Ingress Controller):
 
-```bash
+```text
   # rest of the helm install ... command
   --set ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-read-timeout"=600
   --set ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-buffer-size"=8k
@@ -755,7 +740,7 @@ You can work around this problem by setting the following Nginx ingress annotati
 
 You may want to serve Kubeapps with a subpath, for instance `http://example.com/subpath`, you have to set the proper Ingress configuration. If you are using the ingress configuration provided by the Kubeapps chart, you will have to set the `ingress.hostname` and `path` parameters:
 
-```bash
+```console
 helm install kubeapps my-repo/kubeapps \
   --namespace kubeapps \
   --set ingress.enabled=true \
@@ -766,7 +751,7 @@ helm install kubeapps my-repo/kubeapps \
 
 Besides, if you are using the OAuth2/OIDC login (more information at the [using an OIDC provider documentation](https://github.com/vmware-tanzu/kubeapps/blob/main/site/content/docs/latest/tutorials/using-an-OIDC-provider.md)), you will need, also, to configure the different URLs:
 
-```bash
+```console
 helm install kubeapps my-repo/kubeapps \
   --namespace kubeapps \
   # ... other OIDC and ingress flags
@@ -877,13 +862,13 @@ Error: namespaces "kubeapps" is forbidden: User "system:serviceaccount:kube-syst
 
 It is possible, though uncommon, that your cluster does not have Role-Based Access Control (RBAC) enabled. To check if your cluster has RBAC you can run the following command:
 
-```bash
+```console
 kubectl api-versions
 ```
 
 If the above command does not include entries for `rbac.authorization.k8s.io` you should perform the chart installation by setting `rbac.create=false`:
 
-```bash
+```console
 helm install --name kubeapps --namespace kubeapps my-repo/kubeapps --set rbac.create=false
 ```
 
@@ -892,50 +877,49 @@ helm install --name kubeapps --namespace kubeapps my-repo/kubeapps --set rbac.cr
 It is possible that when upgrading Kubeapps an error appears. That can be caused by a breaking change in the new chart or because the current chart installation is in an inconsistent state. If you find issues upgrading Kubeapps you can follow these steps:
 
 > Note: These steps assume that you have installed Kubeapps in the namespace `kubeapps` using the name `kubeapps`. If that is not the case replace the command with your namespace and/or name.
-> Note: If you are upgrading from 2.3.1 see the [following section](#upgrading-to-2-3-1).
-> Note: If you are upgrading from 2.3.1 see the [following section](#upgrading-to-2-3-1).
-> Note: If you are upgrading from 1.X to 2.X see the [following section](#upgrading-to-2-0).
+> Note: If you are upgrading from 2.3.1 see the [following section](#user-content-upgrading-to-231).
+> Note: If you are upgrading from 1.X to 2.X see the [following section](#user-content-upgrading-to-20).
 
 1. (Optional) Backup your personal repositories (if you have any):
 
-```bash
-kubectl get apprepository -A -o yaml > <repo name>.yaml
-```
+    ```console
+    kubectl get apprepository -A -o yaml > <repo name>.yaml
+    ```
 
 2. Delete Kubeapps:
 
-```bash
-helm del --purge kubeapps
-```
+    ```console
+    helm del --purge kubeapps
+    ```
 
 3. (Optional) Delete the App Repositories CRD:
 
-> **Warning**: Do not run this step if you have more than one Kubeapps installation in your cluster.
+    > **Warning**: Do not run this step if you have more than one Kubeapps installation in your cluster.
 
-```bash
-kubectl delete crd apprepositories.kubeapps.com
-```
+    ```console
+    kubectl delete crd apprepositories.kubeapps.com
+    ```
 
 4. (Optional) Clean the Kubeapps namespace:
 
-> **Warning**: Do not run this step if you have workloads other than Kubeapps in the `kubeapps` namespace.
+    > **Warning**: Do not run this step if you have workloads other than Kubeapps in the `kubeapps` namespace.
 
-```bash
-kubectl delete namespace kubeapps
-```
+    ```console
+    kubectl delete namespace kubeapps
+    ```
 
 5. Install the latest version of Kubeapps (using any custom modifications you need):
 
-```bash
-helm repo update
-helm install --name kubeapps --namespace kubeapps my-repo/kubeapps
-```
+    ```console
+    helm repo update
+    helm install --name kubeapps --namespace kubeapps my-repo/kubeapps
+    ```
 
 6. (Optional) Restore any repositories you backed up in the first step:
 
-```bash
-kubectl apply -f <repo name>.yaml
-```
+    ```console
+    kubectl apply -f <repo name>.yaml
+    ```
 
 After that you should be able to access the new version of Kubeapps. If the above doesn't work for you or you run into any other issues please open an [issue](https://github.com/vmware-tanzu/kubeapps/issues/new).
 
@@ -954,21 +938,21 @@ Kubeapps 2.3.1 (Chart version 6.0.0) introduces some breaking changes. Helm-spec
 
 1. Kubeapps will no longer create a database secret for you automatically but rather will rely on the default behavior of the PostgreSQL chart. If you try to upgrade Kubeapps and you installed it without setting a password, you will get the following error:
 
-```console
-Error: UPGRADE FAILED: template: kubeapps/templates/NOTES.txt:73:4: executing "kubeapps/templates/NOTES.txt" at <include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $)>: error calling include: template: kubeapps/charts/common/templates/_errors.tpl:18:48: executing "common.errors.upgrade.passwords.empty" at <fail>: error calling fail:
-PASSWORDS ERROR: you must provide your current passwords when upgrade the release
-    'postgresql.postgresqlPassword' must not be empty, please add '--set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD' to the command. To get the current value:
-```
+    ```console
+    Error: UPGRADE FAILED: template: kubeapps/templates/NOTES.txt:73:4: executing "kubeapps/templates/NOTES.txt" at <include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $)>: error calling include: template: kubeapps/charts/common/templates/_errors.tpl:18:48: executing "common.errors.upgrade.passwords.empty" at <fail>: error calling fail:
+    PASSWORDS ERROR: you must provide your current passwords when upgrade the release
+        'postgresql.postgresqlPassword' must not be empty, please add '--set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD' to the command. To get the current value:
+    ```
 
-The error gives you generic instructions for retrieving the PostgreSQL password, but if you have installed a Kubeapps version prior to 2.3.1, the name of the secret will differ. Run the following command:
+    The error gives you generic instructions for retrieving the PostgreSQL password, but if you have installed a Kubeapps version prior to 2.3.1, the name of the secret will differ. Run the following command:
 
-```console
-export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace "kubeapps" kubeapps-db -o jsonpath="{.data.postgresql-password}" | base64 -d)
-```
+    ```console
+    export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace "kubeapps" kubeapps-db -o jsonpath="{.data.postgresql-password}" | base64 -d)
+    ```
 
-> NOTE: Replace the namespace in the command with the namespace in which you have deployed Kubeapps.
+    > NOTE: Replace the namespace in the command with the namespace in which you have deployed Kubeapps.
 
-Make sure that you have stored the password in the variable `$POSTGRESQL_PASSWORD` before continuing with the next issue.
+    Make sure that you have stored the password in the variable `$POSTGRESQL_PASSWORD` before continuing with the next issue.
 
 2. The chart `initialRepos` are no longer installed using [Helm hooks](https://helm.sh/docs/topics/charts_hooks/), which caused these repos not to be handled by Helm after the first installation. Now they will be tracked for every update. However, if you do not delete the existing ones, it will fail to update with:
 
@@ -996,7 +980,7 @@ helm upgrade kubeapps my-repo/kubeapps -n kubeapps --set postgresql.postgresqlPa
 
 [On November 13, 2020, Helm 2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm 3 and to be consistent with the Helm project itself regarding the Helm 2 EOL.
 
-**What changes were introduced in this major version?**
+#### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - Move dependency information from the _requirements.yaml_ to the _Chart.yaml_
@@ -1004,7 +988,7 @@ helm upgrade kubeapps my-repo/kubeapps -n kubeapps --set postgresql.postgresqlPa
 - The different fields present in the _Chart.yaml_ file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 - In the case of PostgreSQL subchart, apart from the same changes that are described in this section, there are also other major changes due to the _master/slave_ nomenclature was replaced by _primary/readReplica_. [Here](https://github.com/bitnami/charts/pull/4385) you can find more information about the changes introduced.
 
-**Considerations when upgrading to this version**
+#### Considerations when upgrading to this version
 
 - If you want to upgrade to this version using Helm 2, this scenario is not supported as this version does not support Helm 2 anymore
 - If you installed the previous version with Helm 2 and wants to upgrade to this version with Helm 3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm 2 to 3
@@ -1016,7 +1000,7 @@ helm upgrade kubeapps my-repo/kubeapps -n kubeapps --set postgresql.postgresqlPa
 kubectl delete statefulset -n kubeapps kubeapps-postgresql-master kubeapps-postgresql-slave
 ```
 
-**Useful links**
+#### Useful links
 
 - <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
 - <https://helm.sh/docs/topics/v2_v3_migration/>
@@ -1034,7 +1018,7 @@ Due to the last point, it is necessary to run a command before upgrading to Kube
 
 > Note: The command below assumes that Kubeapps has been deployed in the kubeapps namespace using "kubeapps" as release name, if that is not the case, adapt the command accordingly.
 
-```bash
+```console
 kubectl delete statefulset -n kubeapps kubeapps-postgresql-master kubeapps-postgresql-slave
 ```
 
@@ -1042,13 +1026,13 @@ After that, you should be able to upgrade Kubeapps as always and the database wi
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

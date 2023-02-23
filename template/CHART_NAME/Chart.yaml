@@ -1,5 +1,6 @@
 annotations:
   category: %%CHOOSE_ONE_FROM_CHART_CATEGORIES_FILE%%
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: %%UPSTREAM_PROJECT_VERSION%%
 dependencies:
@@ -13,7 +14,6 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: %%DESCRIPTION%%
-engine: gotpl
 home: %%UPSTREAM_PROJECT_URL%%
 icon: https://bitnami.com/assets/stacks/%%IMAGE_NAME%%/img/%%IMAGE_NAME%%-stack-220x234.png
 keywords:

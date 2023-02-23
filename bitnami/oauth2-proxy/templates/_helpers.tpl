@@ -63,7 +63,7 @@ Create the name of the service account to use
 {{- if .Values.configuration.google.existingSecret -}}
 {{- .Values.configuration.google.existingSecret -}}
 {{- else -}}
-{{- include "common.names.fullname" . -}}
+{{- printf "%s-google" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 

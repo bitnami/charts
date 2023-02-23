@@ -16,14 +16,15 @@ it('allows to enrol and verify certificate', () => {
       // Clicking on the button will download the certificate, but Cypress
       // expects the page to be reloaded and fails with a timeout. We manually
       // force the reload to avoid it and then verify that the file was indeed
-      // downloaded.
+      // downloaded. The timeout is high to ensure the file is completely downloaded
+      // before the reload (and avoid flakiness in slow clusters)
       cy.window()
         .document()
         .then(function (doc) {
           doc.addEventListener('click', () => {
             setTimeout(function () {
               doc.location.reload();
-            }, 2000);
+            }, 12000);
           });
 
           cy.contains('input', 'Enroll').click();

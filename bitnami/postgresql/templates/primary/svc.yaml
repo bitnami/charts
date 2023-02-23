@@ -8,6 +8,7 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
     app.kubernetes.io/component: primary
+  {{- if or .Values.commonAnnotations .Values.primary.service.annotations }}
   annotations:
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -15,6 +16,7 @@ metadata:
     {{- if .Values.primary.service.annotations }}
     {{- include "common.tplvalues.render" (dict "value" .Values.primary.service.annotations "context" $) | nindent 4 }}
     {{- end }}
+  {{- end }}
 spec:
   type: {{ .Values.primary.service.type }}
   {{- if or (eq .Values.primary.service.type "LoadBalancer") (eq .Values.primary.service.type "NodePort") }}

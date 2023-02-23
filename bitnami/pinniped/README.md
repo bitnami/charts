@@ -7,23 +7,23 @@ Pinniped is an identity service provider for Kubernetes. It supplies a consisten
 [Overview of Pinniped](https://pinniped.dev/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/pinniped
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/pinniped
 ```
 
 ## Introduction
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps a [Grafana Loki](https://github.com/grafana/loki) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Pinniped](https://pinniped.dev/) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
-[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/grafana-loki/get-started/).
+[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/pinniped/get-started/).
 
 ## Prerequisites
 
@@ -35,6 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
+helm repo add my-repo https://charts.bitnami.com/bitnami
 helm install my-release my-repo/pinniped
 ```
 
@@ -62,7 +63,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                                                                              | Value               |
@@ -77,11 +77,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraDeploy`       | Array of extra objects to deploy with the release                                                        | `[]`                |
 | `image.registry`    | Pinniped image registry                                                                                  | `docker.io`         |
 | `image.repository`  | Pinniped image repository                                                                                | `bitnami/pinniped`  |
-| `image.tag`         | Pinniped image tag (immutable tags are recommended)                                                      | `0.21.0-scratch-r0` |
+| `image.tag`         | Pinniped image tag (immutable tags are recommended)                                                      | `0.22.0-scratch-r1` |
 | `image.digest`      | Pinniped image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                |
 | `image.pullPolicy`  | Pinniped image pull policy                                                                               | `IfNotPresent`      |
 | `image.pullSecrets` | Pinniped image pull secrets                                                                              | `[]`                |
-
 
 ### Concierge Parameters
 
@@ -90,9 +89,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `concierge.enabled`                                         | Deploy Concierge                                                                                                         | `true`          |
 | `concierge.replicaCount`                                    | Number of Concierge replicas to deploy                                                                                   | `1`             |
 | `concierge.containerPorts.api`                              | Concierge API container port                                                                                             | `10250`         |
-| `concierge.containerPorts.proxy`                            | Concierge Proxy container port                                                                                           | `8443`          |
-| `concierge.configurationPorts.aggregatedAPIServerPort`      | Concierge API configuration port                                                                                         | `""`            |
-| `concierge.configurationPorts.impersonationProxyServerPort` | Concierge Proxy configuration port                                                                                       | `""`            |
+| `concierge.containerPorts.proxy`                            | Concierge Proxy container port                                                                                           | `8444`          |
+| `concierge.configurationPorts.aggregatedAPIServerPort`      | Concierge API configuration port                                                                                         | `10250`         |
+| `concierge.configurationPorts.impersonationProxyServerPort` | Concierge Proxy configuration port                                                                                       | `8444`          |
 | `concierge.hostNetwork`                                     | Concierge API and Proxy container hostNetwork                                                                            | `false`         |
 | `concierge.dnsPolicy`                                       | Concierge API and Proxy container dnsPolicy                                                                              | `""`            |
 | `concierge.configuration`                                   | Concierge pinniped.yaml configuration file                                                                               | `""`            |
@@ -155,7 +154,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `concierge.sidecars`                                        | Add additional sidecar containers to the Concierge pod(s)                                                                | `[]`            |
 | `concierge.initContainers`                                  | Add additional init containers to the Concierge pod(s)                                                                   | `[]`            |
 
-
 ### Concierge RBAC settings
 
 | Name                                                                         | Description                                                                   | Value  |
@@ -174,7 +172,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `concierge.serviceAccount.kubeCertAgentService.automountServiceAccountToken` | Auto mount token for the Concierge kube-cert-agent-service Service Account    | `true` |
 | `concierge.serviceAccount.kubeCertAgentService.annotations`                  | Annotations for the Concierge Service Account                                 | `{}`   |
 
-
 ### Concierge Traffic Exposure Parameters
 
 | Name                                         | Description                                                                          | Value       |
@@ -191,7 +188,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `concierge.service.extraPorts`               | Extra ports to expose in Concierge service (normally used with the `sidecars` value) | `[]`        |
 | `concierge.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                     | `None`      |
 | `concierge.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                          | `{}`        |
-
 
 ### Supervisor Parameters
 
@@ -259,7 +255,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `supervisor.sidecars`                                        | Add additional sidecar containers to the Supervisor pod(s)                                                               | `[]`            |
 | `supervisor.initContainers`                                  | Add additional init containers to the Supervisor pod(s)                                                                  | `[]`            |
 
-
 ### Supervisor RBAC settings
 
 | Name                                                     | Description                                                       | Value  |
@@ -270,41 +265,51 @@ The command removes all the Kubernetes components associated with the chart and 
 | `supervisor.serviceAccount.automountServiceAccountToken` | Auto mount token for the Supervisor Deployment Service Account    | `true` |
 | `supervisor.serviceAccount.annotations`                  | Annotations for the Supervisor Service Account                    | `{}`   |
 
-
 ### Supervisor Traffic Exposure Parameters
 
-| Name                                           | Description                                                                                                                      | Value                       |
-| ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| `supervisor.service.type`                      | Supervisor service type                                                                                                          | `LoadBalancer`              |
-| `supervisor.service.ports.https`               | Supervisor service HTTPS port                                                                                                    | `443`                       |
-| `supervisor.service.ports.aggregatedAPIServer` | Supervisor aggregated API server port                                                                                            | `10250`                     |
-| `supervisor.service.nodePorts.https`           | Node port for HTTPS                                                                                                              | `""`                        |
-| `supervisor.service.clusterIP`                 | Supervisor service Cluster IP                                                                                                    | `""`                        |
-| `supervisor.service.labels`                    | Add labels to the service                                                                                                        | `{}`                        |
-| `supervisor.service.loadBalancerIP`            | Supervisor service Load Balancer IP                                                                                              | `""`                        |
-| `supervisor.service.loadBalancerSourceRanges`  | Supervisor service Load Balancer sources                                                                                         | `[]`                        |
-| `supervisor.service.externalTrafficPolicy`     | Supervisor service external traffic policy                                                                                       | `Cluster`                   |
-| `supervisor.service.annotations`               | Additional custom annotations for Supervisor service                                                                             | `{}`                        |
-| `supervisor.service.extraPorts`                | Extra ports to expose in Supervisor service (normally used with the `sidecars` value)                                            | `[]`                        |
-| `supervisor.service.sessionAffinity`           | Control where client requests go, to the same pod or round-robin                                                                 | `None`                      |
-| `supervisor.service.sessionAffinityConfig`     | Additional settings for the sessionAffinity                                                                                      | `{}`                        |
-| `supervisor.ingress.enabled`                   | Enable ingress record generation for Pinniped Supervisor                                                                         | `false`                     |
-| `supervisor.ingress.pathType`                  | Ingress path type                                                                                                                | `ImplementationSpecific`    |
-| `supervisor.ingress.apiVersion`                | Force Ingress API version (automatically detected if not set)                                                                    | `""`                        |
-| `supervisor.ingress.ingressClassName`          | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                        |
-| `supervisor.ingress.hostname`                  | Default host for the ingress record                                                                                              | `pinniped-supervisor.local` |
-| `supervisor.ingress.path`                      | Default path for the ingress record                                                                                              | `/`                         |
-| `supervisor.ingress.annotations`               | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                        |
-| `supervisor.ingress.tls`                       | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                     |
-| `supervisor.ingress.selfSigned`                | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                     |
-| `supervisor.ingress.extraHosts`                | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                        |
-| `supervisor.ingress.extraPaths`                | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                        |
-| `supervisor.ingress.extraTls`                  | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                        |
-| `supervisor.ingress.secrets`                   | Custom TLS certificates as secrets                                                                                               | `[]`                        |
-| `supervisor.ingress.extraRules`                | Additional rules to be covered with this ingress record                                                                          | `[]`                        |
+| Name                                                 | Description                                                                                                                      | Value                       |
+| ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| `supervisor.service.api.type`                        | Supervisor API service type                                                                                                      | `ClusterIP`                 |
+| `supervisor.service.api.ports.https`                 | Supervisor API service HTTPS port                                                                                                | `443`                       |
+| `supervisor.service.api.ports.aggregatedAPIServer`   | Supervisor aggregated API server port                                                                                            | `10250`                     |
+| `supervisor.service.api.nodePorts.https`             | Node port for HTTPS                                                                                                              | `""`                        |
+| `supervisor.service.api.clusterIP`                   | Supervisor service Cluster IP                                                                                                    | `""`                        |
+| `supervisor.service.api.labels`                      | Add labels to the service                                                                                                        | `{}`                        |
+| `supervisor.service.api.loadBalancerIP`              | Supervisor service Load Balancer IP                                                                                              | `""`                        |
+| `supervisor.service.api.loadBalancerSourceRanges`    | Supervisor service Load Balancer sources                                                                                         | `[]`                        |
+| `supervisor.service.api.externalTrafficPolicy`       | Supervisor service external traffic policy                                                                                       | `Cluster`                   |
+| `supervisor.service.api.annotations`                 | Additional custom annotations for Supervisor service                                                                             | `{}`                        |
+| `supervisor.service.api.extraPorts`                  | Extra ports to expose in Supervisor service (normally used with the `sidecars` value)                                            | `[]`                        |
+| `supervisor.service.api.sessionAffinity`             | Control where client requests go, to the same pod or round-robin                                                                 | `None`                      |
+| `supervisor.service.api.sessionAffinityConfig`       | Additional settings for the sessionAffinity                                                                                      | `{}`                        |
+| `supervisor.service.public.type`                     | Supervisor user-facing service type                                                                                              | `LoadBalancer`              |
+| `supervisor.service.public.ports.https`              | Supervisor user-facing service HTTPS port                                                                                        | `443`                       |
+| `supervisor.service.public.nodePorts.https`          | Node port for HTTPS                                                                                                              | `""`                        |
+| `supervisor.service.public.clusterIP`                | Supervisor service Cluster IP                                                                                                    | `""`                        |
+| `supervisor.service.public.labels`                   | Add labels to the service                                                                                                        | `{}`                        |
+| `supervisor.service.public.loadBalancerIP`           | Supervisor service Load Balancer IP                                                                                              | `""`                        |
+| `supervisor.service.public.loadBalancerSourceRanges` | Supervisor service Load Balancer sources                                                                                         | `[]`                        |
+| `supervisor.service.public.externalTrafficPolicy`    | Supervisor service external traffic policy                                                                                       | `Cluster`                   |
+| `supervisor.service.public.annotations`              | Additional custom annotations for Supervisor service                                                                             | `{}`                        |
+| `supervisor.service.public.extraPorts`               | Extra ports to expose in Supervisor service (normally used with the `sidecars` value)                                            | `[]`                        |
+| `supervisor.service.public.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                      |
+| `supervisor.service.public.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                        |
+| `supervisor.ingress.enabled`                         | Enable ingress record generation for Pinniped Supervisor                                                                         | `false`                     |
+| `supervisor.ingress.pathType`                        | Ingress path type                                                                                                                | `ImplementationSpecific`    |
+| `supervisor.ingress.apiVersion`                      | Force Ingress API version (automatically detected if not set)                                                                    | `""`                        |
+| `supervisor.ingress.ingressClassName`                | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                        |
+| `supervisor.ingress.hostname`                        | Default host for the ingress record                                                                                              | `pinniped-supervisor.local` |
+| `supervisor.ingress.path`                            | Default path for the ingress record                                                                                              | `/`                         |
+| `supervisor.ingress.annotations`                     | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                        |
+| `supervisor.ingress.tls`                             | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                     |
+| `supervisor.ingress.selfSigned`                      | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                     |
+| `supervisor.ingress.extraHosts`                      | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                        |
+| `supervisor.ingress.extraPaths`                      | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                        |
+| `supervisor.ingress.extraTls`                        | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                        |
+| `supervisor.ingress.secrets`                         | Custom TLS certificates as secrets                                                                                               | `[]`                        |
+| `supervisor.ingress.extraRules`                      | Additional rules to be covered with this ingress record                                                                          | `[]`                        |
 
-
-See https://github.com/bitnami-labs/readme-generator-for-helm to create the table
+See <https://github.com/bitnami-labs/readme-generator-for-helm> to create the table
 
 The above parameters map to the env variables defined in [bitnami/pinniped](https://github.com/bitnami/containers/tree/main/bitnami/pinniped). For more information please refer to the [bitnami/pinniped](https://github.com/bitnami/containers/tree/main/bitnami/pinniped) image documentation.
 
@@ -336,7 +341,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ## Persistence
 
-The [Bitnami pinniped](https://github.com/bitnami/containers/tree/main/bitnami/pinniped) image stores the pinniped data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments. [Learn more about persistence in the chart documentation](https://docs.bitnami.com/kubernetes/apps/pinniped/configuration/chart-persistence/).
+The [Bitnami pinniped](https://github.com/bitnami/containers/tree/main/bitnami/pinniped) image stores the pinniped data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 
 ### Additional environment variables
 
@@ -353,7 +358,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as pinniped (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/apps/pinniped/administration/configure-use-sidecars/).
+If additional containers are needed in the same pod as pinniped (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrasctructure/pinniped/administration/configure-use-sidecars/).
 
 ### Pod affinity
 
@@ -367,19 +372,25 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 1.0.0
+
+This version brings a breaking change into the configuration, eliminating abused reuse of Pinniped service parameters.
+The `supervisor.service` object is now separated into `supervisor.service.api` which configures the service used by Pinniped internally, and `supervisor.service.public` which configures the service the users interact with.
+In case configuration was specified in the `supervisor.service` object, now it needs to be redistributed into the two new objects. Keep in mind that the API service default service type was also changed to `ClusterIP` to reflect more on how the API service is used by default. Also the formerly `supervisor.service.ports.aggregatedAPIService` parameter is now only available under the API service configuration, because it is not a relevant parameter for the user-facing service.
+
 ### To 0.4.0
 
 This version updates Pinniped to its newest version, 0.20.x. For more information, please refer to [the release notes](https://github.com/vmware-tanzu/pinniped/releases/tag/v0.20.0).
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

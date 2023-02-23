@@ -34,6 +34,7 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.webhook.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
+      hostNetwork: {{ .Values.webhook.hostNetwork }}
       {{- include "certmanager.webhook.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.webhook.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.webhook.podSecurityContext "enabled" | toYaml | nindent 8 }}

@@ -22,3 +22,13 @@ Cypress.Commands.add(
     cy.contains('WORKSPACES').should('be.visible');
   }
 );
+
+Cypress.on('uncaught:exception', (err) => {
+  // We expect an error "Failed to execute 'observe' on 'IntersectionObserver'"
+  // during the installation of a template so we add an exception
+  if (err.message.includes("Failed to execute 'observe' on 'IntersectionObserver'")) {
+    return false;
+  }
+  // we still want to ensure there are no other unexpected
+  // errors, so we let them fail the test
+})

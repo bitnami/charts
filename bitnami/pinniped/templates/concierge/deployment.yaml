@@ -28,6 +28,7 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.concierge.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app: pinniped-concierge
         app.kubernetes.io/component: concierge
         {{- if .Values.concierge.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.concierge.podLabels "context" $) | nindent 8 }}

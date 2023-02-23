@@ -34,9 +34,10 @@ command:
     - {{ $testValue }}
     timeout: 9000
   {{- end }}
+  {{- $uid := .Vars.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.podSecurityContext.fsGroup }}
   check-user-info:
-    exec: id
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
     exit-status: 0
-    stdout:
-      - uid={{ .Vars.containerSecurityContext.runAsUser }}
-      - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/

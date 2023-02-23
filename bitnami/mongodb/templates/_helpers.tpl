@@ -22,9 +22,13 @@ Create a default mongo service name which can be overridden.
     {{- if and .Values.service .Values.service.nameOverride -}}
         {{- print .Values.service.nameOverride -}}
     {{- else -}}
-        {{- printf "%s-headless" (include "mongodb.fullname" .) -}}
-    {{- end }}
-{{- end }}
+        {{- if eq .Values.architecture "replicaset" -}}
+            {{- printf "%s-headless" (include "mongodb.fullname" .) -}}
+        {{- else -}}
+            {{- printf "%s" (include "mongodb.fullname" .) -}}
+        {{- end -}}
+    {{- end -}}
+{{- end -}}
 
 {{/*
 Create a default mongo arbiter service name which can be overridden.

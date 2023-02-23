@@ -5,6 +5,7 @@ metadata:
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: postgresql
+    role: data
     {{- if .Values.postgresql.labels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.labels "context" $) | nindent 4 }}
     {{- end }}
@@ -22,10 +23,12 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: postgresql
+      role: data
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: postgresql
+        role: data
         {{- if .Values.postgresql.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.podLabels "context" $) | nindent 8 }}
         {{- end }}
@@ -304,6 +307,8 @@ spec:
               value: "$(MY_POD_NAME)"
             - name: REPMGR_NODE_NETWORK_NAME
               value: "$(MY_POD_NAME).{{ $postgresqlHeadlessServiceName }}.$(REPMGR_NAMESPACE).svc.{{ $clusterDomain }}"
+            - name: REPMGR_NODE_TYPE
+              value: "data"
             - name: REPMGR_LOG_LEVEL
               value: {{ .Values.postgresql.repmgrLogLevel | quote }}
             - name: REPMGR_CONNECT_TIMEOUT

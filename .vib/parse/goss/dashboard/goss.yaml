@@ -12,14 +12,18 @@ file:
       - /masterKey.*{{ .Vars.server.masterKey }}/
       - /user.*{{ .Vars.dashboard.username }}/
       - /pass.*{{ .Vars.dashboard.password }}/
-  /var/run/secrets/kubernetes.io/serviceaccount:
-    exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
-    filetype: directory
-    mode: "3777"
 command:
+  {{- $uid := .Vars.dashboard.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.dashboard.podSecurityContext.fsGroup }}
   check-user-info:
-    exec: id
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
+    exit-status: 0
+  {{ if .Vars.serviceAccount.automountServiceAccountToken }}
+  check-sa:
+    exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
     exit-status: 0
     stdout:
-    - uid={{ .Vars.dashboard.containerSecurityContext.runAsUser }}
-    - /groups=.*{{ .Vars.dashboard.podSecurityContext.fsGroup }}/
+    - /serviceaccount.*name.*parse-server/
+  {{ end }}

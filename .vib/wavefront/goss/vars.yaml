@@ -1,5 +1,3 @@
-serviceAccount:
-  automountServiceAccountToken: true
 proxy:
   containerSecurityContext:
     runAsUser: 1002

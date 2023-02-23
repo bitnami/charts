@@ -7,12 +7,12 @@ A reverse proxy and static file server that provides authentication using Provid
 [Overview of OAuth2 Proxy](https://github.com/oauth2-proxy/oauth2-proxy)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/oauth2-proxy
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/oauth2-proxy
 ```
 
 ## Introduction
@@ -35,6 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
+helm repo add my-repo https://charts.bitnami.com/bitnami
 helm install my-release my-repo/oauth2-proxy
 ```
 
@@ -62,7 +63,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
@@ -77,7 +77,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
-
 
 ### Traffic Exposure Parameters
 
@@ -110,18 +109,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### OAuth2 Proxy Image parameters
 
 | Name                | Description                                                                                                  | Value                  |
 | ------------------- | ------------------------------------------------------------------------------------------------------------ | ---------------------- |
 | `image.registry`    | OAuth2 Proxy image registry                                                                                  | `docker.io`            |
 | `image.repository`  | OAuth2 Proxy image repository                                                                                | `bitnami/oauth2-proxy` |
-| `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended)                                                      | `7.4.0-debian-11-r1`   |
+| `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended)                                                      | `7.4.0-debian-11-r41`  |
 | `image.digest`      | OAuth2 Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `image.pullPolicy`  | OAuth2 Proxy image pull policy                                                                               | `IfNotPresent`         |
 | `image.pullSecrets` | OAuth2 Proxy image pull secrets                                                                              | `[]`                   |
-
 
 ### OAuth2 Proxy configuration parameters
 
@@ -147,7 +144,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `configuration.oidcIssuerUrl`                          | OpenID Connect issuer URL                                                                                | `""`               |
 | `configuration.redirectUrl`                            | OAuth Redirect URL                                                                                       | `""`               |
 | `configuration.whiteList`                              | Allowed domains for redirection after authentication. Prefix domain with a . or a *. to allow subdomains | `""`               |
-
 
 ### OAuth2 Proxy deployment parameters
 
@@ -219,7 +215,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                   | `true`          |
 | `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.       | `{}`            |
 
-
 ### External Redis&reg; parameters
 
 | Name                           | Description                                                | Value  |
@@ -228,7 +223,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalRedis.password`       | External Redis&reg; user password                          | `""`   |
 | `externalRedis.port`           | External Redis&reg; server port                            | `6379` |
 | `externalRedis.existingSecret` | The name of an existing secret with Redis&reg; credentials | `""`   |
-
 
 ### Redis&reg; sub-chart parameters
 
@@ -247,8 +241,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `redis.sentinel.service.port`          | Redis&reg; (with Sentinel) service port                    | `6379`       |
 | `redis.sentinel.service.sentinelPort`  | Redis&reg; (with Sentinel) sentinel service port           | `26379`      |
 
-
-See https://github.com/bitnami-labs/readmenator to create the table
+See <https://github.com/bitnami-labs/readmenator> to create the table
 
 The above parameters map to the env variables defined in [bitnami/oauth2-proxy](https://github.com/bitnami/containers/tree/main/bitnami/oauth2-proxy). For more information please refer to the [bitnami/oauth2-proxy](https://github.com/bitnami/containers/tree/main/bitnami/oauth2-proxy) image documentation.
 
@@ -326,13 +319,13 @@ Refer to the [chart documentation for more information about how to upgrade from
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

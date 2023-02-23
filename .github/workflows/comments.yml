@@ -1,4 +1,4 @@
-name: '[Support] Organizing cards based on comments'
+name: '[Support] Comments based card movements'
 on:
   issue_comment:
     types:
@@ -7,6 +7,9 @@ permissions:
   repository-projects: write
   issues: write
   pull-requests: write
+# Avoid concurrency over the same issue
+concurrency:
+  group: card-movement-${{ github.event.issue.number }}
 jobs:
   comments_handler:
     runs-on: ubuntu-latest

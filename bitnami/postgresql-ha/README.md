@@ -7,12 +7,12 @@ This PostgreSQL cluster solution includes the PostgreSQL replication manager, an
 [Overview of PostgreSQL HA](https://www.postgresql.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/postgresql-ha
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/postgresql-ha
 ```
 
 ## Introduction
@@ -33,11 +33,11 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 ## Installing the Chart
 
-Install the PostgreSQL HA helm chart with a release name `my-release`:
+To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/postgresql-ha
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/postgresql-ha
 ```
 
 ## Uninstalling the Chart
@@ -45,7 +45,7 @@ $ helm install my-release my-repo/postgresql-ha
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete --purge my-release
+helm delete --purge my-release
 ```
 
 Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manually delete the PVCs.
@@ -72,7 +72,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `global.pgpool.adminPassword`      | Pgpool Admin password (overrides `pgpool.adminPassword`)                                        | `""`  |
 | `global.pgpool.existingSecret`     | Pgpool existing secret                                                                          | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                                         | Value           |
@@ -89,20 +88,20 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `diagnosticMode.command` | Command to override all containers in the deployment                                                | `[]`            |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                                   | `[]`            |
 
-
 ### PostgreSQL with Repmgr parameters
 
 | Name                                                         | Description                                                                                                                                                                                                   | Value                       |
 | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `postgresql.image.registry`                                  | PostgreSQL with Repmgr image registry                                                                                                                                                                         | `docker.io`                 |
 | `postgresql.image.repository`                                | PostgreSQL with Repmgr image repository                                                                                                                                                                       | `bitnami/postgresql-repmgr` |
-| `postgresql.image.tag`                                       | PostgreSQL with Repmgr image tag                                                                                                                                                                              | `15.1.0-debian-11-r0`       |
+| `postgresql.image.tag`                                       | PostgreSQL with Repmgr image tag                                                                                                                                                                              | `15.2.0-debian-11-r2`       |
 | `postgresql.image.digest`                                    | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                    | `""`                        |
 | `postgresql.image.pullPolicy`                                | PostgreSQL with Repmgr image pull policy                                                                                                                                                                      | `IfNotPresent`              |
 | `postgresql.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                                                                                                              | `[]`                        |
 | `postgresql.image.debug`                                     | Specify if debug logs should be enabled                                                                                                                                                                       | `false`                     |
 | `postgresql.labels`                                          | Labels to add to the StatefulSet. Evaluated as template                                                                                                                                                       | `{}`                        |
 | `postgresql.podLabels`                                       | Labels to add to the StatefulSet pods. Evaluated as template                                                                                                                                                  | `{}`                        |
+| `postgresql.serviceAnnotations`                              | Provide any additional annotations for PostgreSQL service                                                                                                                                                     | `{}`                        |
 | `postgresql.replicaCount`                                    | Number of replicas to deploy. Use an odd number. Having 3 replicas is the minimum to get quorum when promoting a new primary.                                                                                 | `3`                         |
 | `postgresql.updateStrategy.type`                             | Postgresql statefulset strategy type                                                                                                                                                                          | `RollingUpdate`             |
 | `postgresql.containerPorts.postgresql`                       | PostgreSQL port                                                                                                                                                                                               | `5432`                      |
@@ -219,119 +218,214 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `postgresql.tls.certificatesSecret`                          | Name of an existing secret that contains the certificates                                                                                                                                                     | `""`                        |
 | `postgresql.tls.certFilename`                                | Certificate filename                                                                                                                                                                                          | `""`                        |
 | `postgresql.tls.certKeyFilename`                             | Certificate key filename                                                                                                                                                                                      | `""`                        |
-
+| `witness.create`                                             | Create PostgreSQL witness nodes                                                                                                                                                                               | `false`                     |
+| `witness.labels`                                             | Labels to add to the StatefulSet. Evaluated as template                                                                                                                                                       | `{}`                        |
+| `witness.podLabels`                                          | Labels to add to the StatefulSet pods. Evaluated as template                                                                                                                                                  | `{}`                        |
+| `witness.replicaCount`                                       | Number of replicas to deploy.                                                                                                                                                                                 | `1`                         |
+| `witness.updateStrategy.type`                                | Postgresql statefulset strategy type                                                                                                                                                                          | `RollingUpdate`             |
+| `witness.containerPorts.postgresql`                          | PostgreSQL witness port                                                                                                                                                                                       | `5432`                      |
+| `witness.hostAliases`                                        | Deployment pod host aliases                                                                                                                                                                                   | `[]`                        |
+| `witness.hostNetwork`                                        | Specify if host network should be enabled for PostgreSQL witness pod                                                                                                                                          | `false`                     |
+| `witness.hostIPC`                                            | Specify if host IPC should be enabled for PostgreSQL witness pod                                                                                                                                              | `false`                     |
+| `witness.podAnnotations`                                     | Additional pod annotations                                                                                                                                                                                    | `{}`                        |
+| `witness.podAffinityPreset`                                  | PostgreSQL witness pod affinity preset. Ignored if `witness.affinity` is set. Allowed values: `soft` or `hard`                                                                                                | `""`                        |
+| `witness.podAntiAffinityPreset`                              | PostgreSQL witness pod anti-affinity preset. Ignored if `witness.affinity` is set. Allowed values: `soft` or `hard`                                                                                           | `soft`                      |
+| `witness.nodeAffinityPreset.type`                            | PostgreSQL witness node affinity preset type. Ignored if `witness.affinity` is set. Allowed values: `soft` or `hard`                                                                                          | `""`                        |
+| `witness.nodeAffinityPreset.key`                             | PostgreSQL witness node label key to match Ignored if `witness.affinity` is set.                                                                                                                              | `""`                        |
+| `witness.nodeAffinityPreset.values`                          | PostgreSQL witness node label values to match. Ignored if `witness.affinity` is set.                                                                                                                          | `[]`                        |
+| `witness.affinity`                                           | Affinity for PostgreSQL witness pods assignment                                                                                                                                                               | `{}`                        |
+| `witness.nodeSelector`                                       | Node labels for PostgreSQL witness pods assignment                                                                                                                                                            | `{}`                        |
+| `witness.tolerations`                                        | Tolerations for PostgreSQL witness pods assignment                                                                                                                                                            | `[]`                        |
+| `witness.topologySpreadConstraints`                          | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                                                                      | `[]`                        |
+| `witness.priorityClassName`                                  | Pod priority class                                                                                                                                                                                            | `""`                        |
+| `witness.schedulerName`                                      | Use an alternate scheduler, e.g. "stork".                                                                                                                                                                     | `""`                        |
+| `witness.terminationGracePeriodSeconds`                      | Seconds PostgreSQL witness pod needs to terminate gracefully                                                                                                                                                  | `""`                        |
+| `witness.podSecurityContext.enabled`                         | Enable security context for PostgreSQL witness with Repmgr                                                                                                                                                    | `true`                      |
+| `witness.podSecurityContext.fsGroup`                         | Group ID for the PostgreSQL witness with Repmgr filesystem                                                                                                                                                    | `1001`                      |
+| `witness.containerSecurityContext.enabled`                   | Enable container security context                                                                                                                                                                             | `true`                      |
+| `witness.containerSecurityContext.runAsUser`                 | User ID for the PostgreSQL witness with Repmgr container                                                                                                                                                      | `1001`                      |
+| `witness.containerSecurityContext.runAsNonRoot`              | Set PostgreSQL witness with Repmgr containers' Security Context runAsNonRoot                                                                                                                                  | `true`                      |
+| `witness.containerSecurityContext.readOnlyRootFilesystem`    | Set PostgreSQL witness with Repmgr containers' Security Context runAsNonRoot                                                                                                                                  | `false`                     |
+| `witness.command`                                            | Override default container command (useful when using custom images)                                                                                                                                          | `[]`                        |
+| `witness.args`                                               | Override default container args (useful when using custom images)                                                                                                                                             | `[]`                        |
+| `witness.lifecycleHooks`                                     | LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template                                                                                            | `{}`                        |
+| `witness.extraEnvVars`                                       | Array containing extra environment variables                                                                                                                                                                  | `[]`                        |
+| `witness.extraEnvVarsCM`                                     | ConfigMap with extra environment variables                                                                                                                                                                    | `""`                        |
+| `witness.extraEnvVarsSecret`                                 | Secret with extra environment variables                                                                                                                                                                       | `""`                        |
+| `witness.extraVolumes`                                       | Extra volumes to add to the deployment                                                                                                                                                                        | `[]`                        |
+| `witness.extraVolumeMounts`                                  | Extra volume mounts to add to the container. Normally used with `extraVolumes`.                                                                                                                               | `[]`                        |
+| `witness.initContainers`                                     | Extra init containers to add to the deployment                                                                                                                                                                | `[]`                        |
+| `witness.sidecars`                                           | Extra sidecar containers to add to the deployment                                                                                                                                                             | `[]`                        |
+| `witness.resources.limits`                                   | The resources limits for the container                                                                                                                                                                        | `{}`                        |
+| `witness.resources.requests`                                 | The requested resources for the container                                                                                                                                                                     | `{}`                        |
+| `witness.livenessProbe.enabled`                              | Enable livenessProbe                                                                                                                                                                                          | `true`                      |
+| `witness.livenessProbe.initialDelaySeconds`                  | Initial delay seconds for livenessProbe                                                                                                                                                                       | `30`                        |
+| `witness.livenessProbe.periodSeconds`                        | Period seconds for livenessProbe                                                                                                                                                                              | `10`                        |
+| `witness.livenessProbe.timeoutSeconds`                       | Timeout seconds for livenessProbe                                                                                                                                                                             | `5`                         |
+| `witness.livenessProbe.failureThreshold`                     | Failure threshold for livenessProbe                                                                                                                                                                           | `6`                         |
+| `witness.livenessProbe.successThreshold`                     | Success threshold for livenessProbe                                                                                                                                                                           | `1`                         |
+| `witness.readinessProbe.enabled`                             | Enable readinessProbe                                                                                                                                                                                         | `true`                      |
+| `witness.readinessProbe.initialDelaySeconds`                 | Initial delay seconds for readinessProbe                                                                                                                                                                      | `5`                         |
+| `witness.readinessProbe.periodSeconds`                       | Period seconds for readinessProbe                                                                                                                                                                             | `10`                        |
+| `witness.readinessProbe.timeoutSeconds`                      | Timeout seconds for readinessProbe                                                                                                                                                                            | `5`                         |
+| `witness.readinessProbe.failureThreshold`                    | Failure threshold for readinessProbe                                                                                                                                                                          | `6`                         |
+| `witness.readinessProbe.successThreshold`                    | Success threshold for readinessProbe                                                                                                                                                                          | `1`                         |
+| `witness.startupProbe.enabled`                               | Enable startupProbe                                                                                                                                                                                           | `false`                     |
+| `witness.startupProbe.initialDelaySeconds`                   | Initial delay seconds for startupProbe                                                                                                                                                                        | `5`                         |
+| `witness.startupProbe.periodSeconds`                         | Period seconds for startupProbe                                                                                                                                                                               | `10`                        |
+| `witness.startupProbe.timeoutSeconds`                        | Timeout seconds for startupProbe                                                                                                                                                                              | `5`                         |
+| `witness.startupProbe.failureThreshold`                      | Failure threshold for startupProbe                                                                                                                                                                            | `10`                        |
+| `witness.startupProbe.successThreshold`                      | Success threshold for startupProbe                                                                                                                                                                            | `1`                         |
+| `witness.customLivenessProbe`                                | Override default liveness probe                                                                                                                                                                               | `{}`                        |
+| `witness.customReadinessProbe`                               | Override default readiness probe                                                                                                                                                                              | `{}`                        |
+| `witness.customStartupProbe`                                 | Override default startup probe                                                                                                                                                                                | `{}`                        |
+| `witness.pdb.create`                                         | Specifies whether to create a Pod disruption budget for PostgreSQL witness with Repmgr                                                                                                                        | `false`                     |
+| `witness.pdb.minAvailable`                                   | Minimum number / percentage of pods that should remain scheduled                                                                                                                                              | `1`                         |
+| `witness.pdb.maxUnavailable`                                 | Maximum number / percentage of pods that may be made unavailable                                                                                                                                              | `""`                        |
+| `witness.upgradeRepmgrExtension`                             | Upgrade repmgr extension in the database                                                                                                                                                                      | `false`                     |
+| `witness.pgHbaTrustAll`                                      | Configures PostgreSQL HBA to trust every user                                                                                                                                                                 | `false`                     |
+| `witness.repmgrLogLevel`                                     | Repmgr log level (DEBUG, INFO, NOTICE, WARNING, ERROR, ALERT, CRIT or EMERG)                                                                                                                                  | `NOTICE`                    |
+| `witness.repmgrConnectTimeout`                               | Repmgr backend connection timeout (in seconds)                                                                                                                                                                | `5`                         |
+| `witness.repmgrReconnectAttempts`                            | Repmgr backend reconnection attempts                                                                                                                                                                          | `2`                         |
+| `witness.repmgrReconnectInterval`                            | Repmgr backend reconnection interval (in seconds)                                                                                                                                                             | `3`                         |
+| `witness.audit.logHostname`                                  | Add client hostnames to the log file                                                                                                                                                                          | `true`                      |
+| `witness.audit.logConnections`                               | Add client log-in operations to the log file                                                                                                                                                                  | `false`                     |
+| `witness.audit.logDisconnections`                            | Add client log-outs operations to the log file                                                                                                                                                                | `false`                     |
+| `witness.audit.pgAuditLog`                                   | Add operations to log using the pgAudit extension                                                                                                                                                             | `""`                        |
+| `witness.audit.pgAuditLogCatalog`                            | Log catalog using pgAudit                                                                                                                                                                                     | `off`                       |
+| `witness.audit.clientMinMessages`                            | Message log level to share with the user                                                                                                                                                                      | `error`                     |
+| `witness.audit.logLinePrefix`                                | Template string for the log line prefix                                                                                                                                                                       | `""`                        |
+| `witness.audit.logTimezone`                                  | Timezone for the log timestamps                                                                                                                                                                               | `""`                        |
+| `witness.maxConnections`                                     | Maximum total connections                                                                                                                                                                                     | `""`                        |
+| `witness.postgresConnectionLimit`                            | Maximum connections for the postgres user                                                                                                                                                                     | `""`                        |
+| `witness.dbUserConnectionLimit`                              | Maximum connections for the created user                                                                                                                                                                      | `""`                        |
+| `witness.tcpKeepalivesInterval`                              | TCP keepalives interval                                                                                                                                                                                       | `""`                        |
+| `witness.tcpKeepalivesIdle`                                  | TCP keepalives idle                                                                                                                                                                                           | `""`                        |
+| `witness.tcpKeepalivesCount`                                 | TCP keepalives count                                                                                                                                                                                          | `""`                        |
+| `witness.statementTimeout`                                   | Statement timeout                                                                                                                                                                                             | `""`                        |
+| `witness.pghbaRemoveFilters`                                 | Comma-separated list of patterns to remove from the pg_hba.conf file                                                                                                                                          | `""`                        |
+| `witness.extraInitContainers`                                | Extra init containers                                                                                                                                                                                         | `[]`                        |
+| `witness.repmgrConfiguration`                                | Repmgr configuration                                                                                                                                                                                          | `""`                        |
+| `witness.configuration`                                      | PostgreSQL configuration                                                                                                                                                                                      | `""`                        |
+| `witness.pgHbaConfiguration`                                 | PostgreSQL client authentication configuration                                                                                                                                                                | `""`                        |
+| `witness.configurationCM`                                    | Name of existing ConfigMap with configuration files                                                                                                                                                           | `""`                        |
+| `witness.extendedConf`                                       | Extended PostgreSQL configuration (appended to main or default configuration). Implies `volumePermissions.enabled`.                                                                                           | `""`                        |
+| `witness.extendedConfCM`                                     | ConfigMap with PostgreSQL extended configuration                                                                                                                                                              | `""`                        |
+| `witness.initdbScripts`                                      | Dictionary of initdb scripts                                                                                                                                                                                  | `{}`                        |
+| `witness.initdbScriptsCM`                                    | ConfigMap with scripts to be run at first boot                                                                                                                                                                | `""`                        |
+| `witness.initdbScriptsSecret`                                | Secret with scripts to be run at first boot                                                                                                                                                                   | `""`                        |
 
 ### Pgpool parameters
 
-| Name                                                     | Description                                                                                                                              | Value                 |
-| -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `pgpool.image.registry`                                  | Pgpool image registry                                                                                                                    | `docker.io`           |
-| `pgpool.image.repository`                                | Pgpool image repository                                                                                                                  | `bitnami/pgpool`      |
-| `pgpool.image.tag`                                       | Pgpool image tag                                                                                                                         | `4.3.3-debian-11-r28` |
-| `pgpool.image.digest`                                    | Pgpool image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                   | `""`                  |
-| `pgpool.image.pullPolicy`                                | Pgpool image pull policy                                                                                                                 | `IfNotPresent`        |
-| `pgpool.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                                         | `[]`                  |
-| `pgpool.image.debug`                                     | Specify if debug logs should be enabled                                                                                                  | `false`               |
-| `pgpool.customUsers`                                     | Additional users that will be performing connections to the database using                                                               | `{}`                  |
-| `pgpool.usernames`                                       | Comma or semicolon separated list of postgres usernames                                                                                  | `""`                  |
-| `pgpool.passwords`                                       | Comma or semicolon separated list of the associated passwords for the users above                                                        | `""`                  |
-| `pgpool.hostAliases`                                     | Deployment pod host aliases                                                                                                              | `[]`                  |
-| `pgpool.customUsersSecret`                               | Name of a secret containing the usernames and passwords of accounts that will be added to pgpool_passwd                                  | `""`                  |
-| `pgpool.existingSecret`                                  | Pgpool admin password using existing secret                                                                                              | `""`                  |
-| `pgpool.srCheckDatabase`                                 | Name of the database to perform streaming replication checks                                                                             | `postgres`            |
-| `pgpool.labels`                                          | Labels to add to the Deployment. Evaluated as template                                                                                   | `{}`                  |
-| `pgpool.podLabels`                                       | Labels to add to the pods. Evaluated as template                                                                                         | `{}`                  |
-| `pgpool.serviceLabels`                                   | Labels to add to the service. Evaluated as template                                                                                      | `{}`                  |
-| `pgpool.customLivenessProbe`                             | Override default liveness probe                                                                                                          | `{}`                  |
-| `pgpool.customReadinessProbe`                            | Override default readiness probe                                                                                                         | `{}`                  |
-| `pgpool.customStartupProbe`                              | Override default startup probe                                                                                                           | `{}`                  |
-| `pgpool.command`                                         | Override default container command (useful when using custom images)                                                                     | `[]`                  |
-| `pgpool.args`                                            | Override default container args (useful when using custom images)                                                                        | `[]`                  |
-| `pgpool.lifecycleHooks`                                  | LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template                       | `{}`                  |
-| `pgpool.extraEnvVars`                                    | Array containing extra environment variables                                                                                             | `[]`                  |
-| `pgpool.extraEnvVarsCM`                                  | ConfigMap with extra environment variables                                                                                               | `""`                  |
-| `pgpool.extraEnvVarsSecret`                              | Secret with extra environment variables                                                                                                  | `""`                  |
-| `pgpool.extraVolumes`                                    | Extra volumes to add to the deployment                                                                                                   | `[]`                  |
-| `pgpool.extraVolumeMounts`                               | Extra volume mounts to add to the container. Normally used with `extraVolumes`                                                           | `[]`                  |
-| `pgpool.initContainers`                                  | Extra init containers to add to the deployment                                                                                           | `[]`                  |
-| `pgpool.sidecars`                                        | Extra sidecar containers to add to the deployment                                                                                        | `[]`                  |
-| `pgpool.replicaCount`                                    | The number of replicas to deploy                                                                                                         | `1`                   |
-| `pgpool.podAnnotations`                                  | Additional pod annotations                                                                                                               | `{}`                  |
-| `pgpool.priorityClassName`                               | Pod priority class                                                                                                                       | `""`                  |
-| `pgpool.schedulerName`                                   | Use an alternate scheduler, e.g. "stork".                                                                                                | `""`                  |
-| `pgpool.terminationGracePeriodSeconds`                   | Seconds pgpool pod needs to terminate gracefully                                                                                         | `""`                  |
-| `pgpool.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                 | `[]`                  |
-| `pgpool.podAffinityPreset`                               | Pgpool pod affinity preset. Ignored if `pgpool.affinity` is set. Allowed values: `soft` or `hard`                                        | `""`                  |
-| `pgpool.podAntiAffinityPreset`                           | Pgpool pod anti-affinity preset. Ignored if `pgpool.affinity` is set. Allowed values: `soft` or `hard`                                   | `soft`                |
-| `pgpool.nodeAffinityPreset.type`                         | Pgpool node affinity preset type. Ignored if `pgpool.affinity` is set. Allowed values: `soft` or `hard`                                  | `""`                  |
-| `pgpool.nodeAffinityPreset.key`                          | Pgpool node label key to match Ignored if `pgpool.affinity` is set.                                                                      | `""`                  |
-| `pgpool.nodeAffinityPreset.values`                       | Pgpool node label values to match. Ignored if `pgpool.affinity` is set.                                                                  | `[]`                  |
-| `pgpool.affinity`                                        | Affinity for Pgpool pods assignment                                                                                                      | `{}`                  |
-| `pgpool.nodeSelector`                                    | Node labels for Pgpool pods assignment                                                                                                   | `{}`                  |
-| `pgpool.tolerations`                                     | Tolerations for Pgpool pods assignment                                                                                                   | `[]`                  |
-| `pgpool.podSecurityContext.enabled`                      | Enable security context for Pgpool                                                                                                       | `true`                |
-| `pgpool.podSecurityContext.fsGroup`                      | Group ID for the Pgpool filesystem                                                                                                       | `1001`                |
-| `pgpool.containerSecurityContext.enabled`                | Enable container security context                                                                                                        | `true`                |
-| `pgpool.containerSecurityContext.runAsUser`              | User ID for the Pgpool container                                                                                                         | `1001`                |
-| `pgpool.containerSecurityContext.runAsNonRoot`           | Set Pgpool containers' Security Context runAsNonRoot                                                                                     | `true`                |
-| `pgpool.containerSecurityContext.readOnlyRootFilesystem` | Set Pgpool containers' Security Context runAsNonRoot                                                                                     | `false`               |
-| `pgpool.resources.limits`                                | The resources limits for the container                                                                                                   | `{}`                  |
-| `pgpool.resources.requests`                              | The requested resources for the container                                                                                                | `{}`                  |
-| `pgpool.livenessProbe.enabled`                           | Enable livenessProbe                                                                                                                     | `true`                |
-| `pgpool.livenessProbe.initialDelaySeconds`               | Initial delay seconds for livenessProbe                                                                                                  | `30`                  |
-| `pgpool.livenessProbe.periodSeconds`                     | Period seconds for livenessProbe                                                                                                         | `10`                  |
-| `pgpool.livenessProbe.timeoutSeconds`                    | Timeout seconds for livenessProbe                                                                                                        | `5`                   |
-| `pgpool.livenessProbe.failureThreshold`                  | Failure threshold for livenessProbe                                                                                                      | `5`                   |
-| `pgpool.livenessProbe.successThreshold`                  | Success threshold for livenessProbe                                                                                                      | `1`                   |
-| `pgpool.readinessProbe.enabled`                          | Enable readinessProbe                                                                                                                    | `true`                |
-| `pgpool.readinessProbe.initialDelaySeconds`              | Initial delay seconds for readinessProbe                                                                                                 | `5`                   |
-| `pgpool.readinessProbe.periodSeconds`                    | Period seconds for readinessProbe                                                                                                        | `5`                   |
-| `pgpool.readinessProbe.timeoutSeconds`                   | Timeout seconds for readinessProbe                                                                                                       | `5`                   |
-| `pgpool.readinessProbe.failureThreshold`                 | Failure threshold for readinessProbe                                                                                                     | `5`                   |
-| `pgpool.readinessProbe.successThreshold`                 | Success threshold for readinessProbe                                                                                                     | `1`                   |
-| `pgpool.startupProbe.enabled`                            | Enable startupProbe                                                                                                                      | `false`               |
-| `pgpool.startupProbe.initialDelaySeconds`                | Initial delay seconds for startupProbe                                                                                                   | `5`                   |
-| `pgpool.startupProbe.periodSeconds`                      | Period seconds for startupProbe                                                                                                          | `10`                  |
-| `pgpool.startupProbe.timeoutSeconds`                     | Timeout seconds for startupProbe                                                                                                         | `5`                   |
-| `pgpool.startupProbe.failureThreshold`                   | Failure threshold for startupProbe                                                                                                       | `10`                  |
-| `pgpool.startupProbe.successThreshold`                   | Success threshold for startupProbe                                                                                                       | `1`                   |
-| `pgpool.pdb.create`                                      | Specifies whether a Pod disruption budget should be created for Pgpool pods                                                              | `false`               |
-| `pgpool.pdb.minAvailable`                                | Minimum number / percentage of pods that should remain scheduled                                                                         | `1`                   |
-| `pgpool.pdb.maxUnavailable`                              | Maximum number / percentage of pods that may be made unavailable                                                                         | `""`                  |
-| `pgpool.updateStrategy`                                  | Strategy used to replace old Pods by new ones                                                                                            | `{}`                  |
-| `pgpool.containerPorts.postgresql`                       | Pgpool port                                                                                                                              | `5432`                |
-| `pgpool.minReadySeconds`                                 | How many seconds a pod needs to be ready before killing the next, during update                                                          | `""`                  |
-| `pgpool.adminUsername`                                   | Pgpool Admin username                                                                                                                    | `admin`               |
-| `pgpool.adminPassword`                                   | Pgpool Admin password                                                                                                                    | `""`                  |
-| `pgpool.usePasswordFile`                                 | Set to `true` to mount pgpool secret as a file instead of passing environment variable                                                   | `""`                  |
-| `pgpool.authenticationMethod`                            | Pgpool authentication method. Use 'md5' for PSQL < 14.                                                                                   | `scram-sha-256`       |
-| `pgpool.logConnections`                                  | Log all client connections (PGPOOL_ENABLE_LOG_CONNECTIONS)                                                                               | `false`               |
-| `pgpool.logHostname`                                     | Log the client hostname instead of IP address (PGPOOL_ENABLE_LOG_HOSTNAME)                                                               | `true`                |
-| `pgpool.logPerNodeStatement`                             | Log every SQL statement for each DB node separately (PGPOOL_ENABLE_LOG_PER_NODE_STATEMENT)                                               | `false`               |
-| `pgpool.logLinePrefix`                                   | Format of the log entry lines (PGPOOL_LOG_LINE_PREFIX)                                                                                   | `""`                  |
-| `pgpool.clientMinMessages`                               | Log level for clients                                                                                                                    | `error`               |
-| `pgpool.numInitChildren`                                 | The number of preforked Pgpool-II server processes. It is also the concurrent                                                            | `""`                  |
-| `pgpool.reservedConnections`                             | Number of reserved connections. When zero, excess connection block. When non-zero, excess connections are refused with an error message. | `1`                   |
-| `pgpool.maxPool`                                         | The maximum number of cached connections in each child process (PGPOOL_MAX_POOL)                                                         | `""`                  |
-| `pgpool.childMaxConnections`                             | The maximum number of client connections in each child process (PGPOOL_CHILD_MAX_CONNECTIONS)                                            | `""`                  |
-| `pgpool.childLifeTime`                                   | The time in seconds to terminate a Pgpool-II child process if it remains idle (PGPOOL_CHILD_LIFE_TIME)                                   | `""`                  |
-| `pgpool.clientIdleLimit`                                 | The time in seconds to disconnect a client if it remains idle since the last query (PGPOOL_CLIENT_IDLE_LIMIT)                            | `""`                  |
-| `pgpool.connectionLifeTime`                              | The time in seconds to terminate the cached connections to the PostgreSQL backend (PGPOOL_CONNECTION_LIFE_TIME)                          | `""`                  |
-| `pgpool.useLoadBalancing`                                | Use Pgpool Load-Balancing                                                                                                                | `true`                |
-| `pgpool.loadBalancingOnWrite`                            | LoadBalancer on write actions behavior                                                                                                   | `transaction`         |
-| `pgpool.configuration`                                   | Pgpool configuration                                                                                                                     | `""`                  |
-| `pgpool.configurationCM`                                 | ConfigMap with Pgpool configuration                                                                                                      | `""`                  |
-| `pgpool.initdbScripts`                                   | Dictionary of initdb scripts                                                                                                             | `{}`                  |
-| `pgpool.initdbScriptsCM`                                 | ConfigMap with scripts to be run every time Pgpool container is initialized                                                              | `""`                  |
-| `pgpool.initdbScriptsSecret`                             | Secret with scripts to be run every time Pgpool container is initialized                                                                 | `""`                  |
-| `pgpool.tls.enabled`                                     | Enable TLS traffic support for end-client connections                                                                                    | `false`               |
-| `pgpool.tls.autoGenerated`                               | Create self-signed TLS certificates. Currently only supports PEM certificates                                                            | `false`               |
-| `pgpool.tls.preferServerCiphers`                         | Whether to use the server's TLS cipher preferences rather than the client's                                                              | `true`                |
-| `pgpool.tls.certificatesSecret`                          | Name of an existing secret that contains the certificates                                                                                | `""`                  |
-| `pgpool.tls.certFilename`                                | Certificate filename                                                                                                                     | `""`                  |
-| `pgpool.tls.certKeyFilename`                             | Certificate key filename                                                                                                                 | `""`                  |
-| `pgpool.tls.certCAFilename`                              | CA Certificate filename                                                                                                                  | `""`                  |
-
+| Name                                                     | Description                                                                                                                              | Value                |
+| -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
+| `pgpool.image.registry`                                  | Pgpool image registry                                                                                                                    | `docker.io`          |
+| `pgpool.image.repository`                                | Pgpool image repository                                                                                                                  | `bitnami/pgpool`     |
+| `pgpool.image.tag`                                       | Pgpool image tag                                                                                                                         | `4.4.2-debian-11-r8` |
+| `pgpool.image.digest`                                    | Pgpool image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                   | `""`                 |
+| `pgpool.image.pullPolicy`                                | Pgpool image pull policy                                                                                                                 | `IfNotPresent`       |
+| `pgpool.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                                         | `[]`                 |
+| `pgpool.image.debug`                                     | Specify if debug logs should be enabled                                                                                                  | `false`              |
+| `pgpool.customUsers`                                     | Additional users that will be performing connections to the database using                                                               | `{}`                 |
+| `pgpool.usernames`                                       | Comma or semicolon separated list of postgres usernames                                                                                  | `""`                 |
+| `pgpool.passwords`                                       | Comma or semicolon separated list of the associated passwords for the users above                                                        | `""`                 |
+| `pgpool.hostAliases`                                     | Deployment pod host aliases                                                                                                              | `[]`                 |
+| `pgpool.customUsersSecret`                               | Name of a secret containing the usernames and passwords of accounts that will be added to pgpool_passwd                                  | `""`                 |
+| `pgpool.existingSecret`                                  | Pgpool admin password using existing secret                                                                                              | `""`                 |
+| `pgpool.srCheckDatabase`                                 | Name of the database to perform streaming replication checks                                                                             | `postgres`           |
+| `pgpool.labels`                                          | Labels to add to the Deployment. Evaluated as template                                                                                   | `{}`                 |
+| `pgpool.podLabels`                                       | Labels to add to the pods. Evaluated as template                                                                                         | `{}`                 |
+| `pgpool.serviceLabels`                                   | Labels to add to the service. Evaluated as template                                                                                      | `{}`                 |
+| `pgpool.serviceAnnotations`                              | Provide any additional annotations for Pgpool service                                                                                    | `{}`                 |
+| `pgpool.customLivenessProbe`                             | Override default liveness probe                                                                                                          | `{}`                 |
+| `pgpool.customReadinessProbe`                            | Override default readiness probe                                                                                                         | `{}`                 |
+| `pgpool.customStartupProbe`                              | Override default startup probe                                                                                                           | `{}`                 |
+| `pgpool.command`                                         | Override default container command (useful when using custom images)                                                                     | `[]`                 |
+| `pgpool.args`                                            | Override default container args (useful when using custom images)                                                                        | `[]`                 |
+| `pgpool.lifecycleHooks`                                  | LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template                       | `{}`                 |
+| `pgpool.extraEnvVars`                                    | Array containing extra environment variables                                                                                             | `[]`                 |
+| `pgpool.extraEnvVarsCM`                                  | ConfigMap with extra environment variables                                                                                               | `""`                 |
+| `pgpool.extraEnvVarsSecret`                              | Secret with extra environment variables                                                                                                  | `""`                 |
+| `pgpool.extraVolumes`                                    | Extra volumes to add to the deployment                                                                                                   | `[]`                 |
+| `pgpool.extraVolumeMounts`                               | Extra volume mounts to add to the container. Normally used with `extraVolumes`                                                           | `[]`                 |
+| `pgpool.initContainers`                                  | Extra init containers to add to the deployment                                                                                           | `[]`                 |
+| `pgpool.sidecars`                                        | Extra sidecar containers to add to the deployment                                                                                        | `[]`                 |
+| `pgpool.replicaCount`                                    | The number of replicas to deploy                                                                                                         | `1`                  |
+| `pgpool.podAnnotations`                                  | Additional pod annotations                                                                                                               | `{}`                 |
+| `pgpool.priorityClassName`                               | Pod priority class                                                                                                                       | `""`                 |
+| `pgpool.schedulerName`                                   | Use an alternate scheduler, e.g. "stork".                                                                                                | `""`                 |
+| `pgpool.terminationGracePeriodSeconds`                   | Seconds pgpool pod needs to terminate gracefully                                                                                         | `""`                 |
+| `pgpool.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                 | `[]`                 |
+| `pgpool.podAffinityPreset`                               | Pgpool pod affinity preset. Ignored if `pgpool.affinity` is set. Allowed values: `soft` or `hard`                                        | `""`                 |
+| `pgpool.podAntiAffinityPreset`                           | Pgpool pod anti-affinity preset. Ignored if `pgpool.affinity` is set. Allowed values: `soft` or `hard`                                   | `soft`               |
+| `pgpool.nodeAffinityPreset.type`                         | Pgpool node affinity preset type. Ignored if `pgpool.affinity` is set. Allowed values: `soft` or `hard`                                  | `""`                 |
+| `pgpool.nodeAffinityPreset.key`                          | Pgpool node label key to match Ignored if `pgpool.affinity` is set.                                                                      | `""`                 |
+| `pgpool.nodeAffinityPreset.values`                       | Pgpool node label values to match. Ignored if `pgpool.affinity` is set.                                                                  | `[]`                 |
+| `pgpool.affinity`                                        | Affinity for Pgpool pods assignment                                                                                                      | `{}`                 |
+| `pgpool.nodeSelector`                                    | Node labels for Pgpool pods assignment                                                                                                   | `{}`                 |
+| `pgpool.tolerations`                                     | Tolerations for Pgpool pods assignment                                                                                                   | `[]`                 |
+| `pgpool.podSecurityContext.enabled`                      | Enable security context for Pgpool                                                                                                       | `true`               |
+| `pgpool.podSecurityContext.fsGroup`                      | Group ID for the Pgpool filesystem                                                                                                       | `1001`               |
+| `pgpool.containerSecurityContext.enabled`                | Enable container security context                                                                                                        | `true`               |
+| `pgpool.containerSecurityContext.runAsUser`              | User ID for the Pgpool container                                                                                                         | `1001`               |
+| `pgpool.containerSecurityContext.runAsNonRoot`           | Set Pgpool containers' Security Context runAsNonRoot                                                                                     | `true`               |
+| `pgpool.containerSecurityContext.readOnlyRootFilesystem` | Set Pgpool containers' Security Context runAsNonRoot                                                                                     | `false`              |
+| `pgpool.resources.limits`                                | The resources limits for the container                                                                                                   | `{}`                 |
+| `pgpool.resources.requests`                              | The requested resources for the container                                                                                                | `{}`                 |
+| `pgpool.livenessProbe.enabled`                           | Enable livenessProbe                                                                                                                     | `true`               |
+| `pgpool.livenessProbe.initialDelaySeconds`               | Initial delay seconds for livenessProbe                                                                                                  | `30`                 |
+| `pgpool.livenessProbe.periodSeconds`                     | Period seconds for livenessProbe                                                                                                         | `10`                 |
+| `pgpool.livenessProbe.timeoutSeconds`                    | Timeout seconds for livenessProbe                                                                                                        | `5`                  |
+| `pgpool.livenessProbe.failureThreshold`                  | Failure threshold for livenessProbe                                                                                                      | `5`                  |
+| `pgpool.livenessProbe.successThreshold`                  | Success threshold for livenessProbe                                                                                                      | `1`                  |
+| `pgpool.readinessProbe.enabled`                          | Enable readinessProbe                                                                                                                    | `true`               |
+| `pgpool.readinessProbe.initialDelaySeconds`              | Initial delay seconds for readinessProbe                                                                                                 | `5`                  |
+| `pgpool.readinessProbe.periodSeconds`                    | Period seconds for readinessProbe                                                                                                        | `5`                  |
+| `pgpool.readinessProbe.timeoutSeconds`                   | Timeout seconds for readinessProbe                                                                                                       | `5`                  |
+| `pgpool.readinessProbe.failureThreshold`                 | Failure threshold for readinessProbe                                                                                                     | `5`                  |
+| `pgpool.readinessProbe.successThreshold`                 | Success threshold for readinessProbe                                                                                                     | `1`                  |
+| `pgpool.startupProbe.enabled`                            | Enable startupProbe                                                                                                                      | `false`              |
+| `pgpool.startupProbe.initialDelaySeconds`                | Initial delay seconds for startupProbe                                                                                                   | `5`                  |
+| `pgpool.startupProbe.periodSeconds`                      | Period seconds for startupProbe                                                                                                          | `10`                 |
+| `pgpool.startupProbe.timeoutSeconds`                     | Timeout seconds for startupProbe                                                                                                         | `5`                  |
+| `pgpool.startupProbe.failureThreshold`                   | Failure threshold for startupProbe                                                                                                       | `10`                 |
+| `pgpool.startupProbe.successThreshold`                   | Success threshold for startupProbe                                                                                                       | `1`                  |
+| `pgpool.pdb.create`                                      | Specifies whether a Pod disruption budget should be created for Pgpool pods                                                              | `false`              |
+| `pgpool.pdb.minAvailable`                                | Minimum number / percentage of pods that should remain scheduled                                                                         | `1`                  |
+| `pgpool.pdb.maxUnavailable`                              | Maximum number / percentage of pods that may be made unavailable                                                                         | `""`                 |
+| `pgpool.updateStrategy`                                  | Strategy used to replace old Pods by new ones                                                                                            | `{}`                 |
+| `pgpool.containerPorts.postgresql`                       | Pgpool port                                                                                                                              | `5432`               |
+| `pgpool.minReadySeconds`                                 | How many seconds a pod needs to be ready before killing the next, during update                                                          | `""`                 |
+| `pgpool.adminUsername`                                   | Pgpool Admin username                                                                                                                    | `admin`              |
+| `pgpool.adminPassword`                                   | Pgpool Admin password                                                                                                                    | `""`                 |
+| `pgpool.usePasswordFile`                                 | Set to `true` to mount pgpool secret as a file instead of passing environment variable                                                   | `""`                 |
+| `pgpool.authenticationMethod`                            | Pgpool authentication method. Use 'md5' for PSQL < 14.                                                                                   | `scram-sha-256`      |
+| `pgpool.logConnections`                                  | Log all client connections (PGPOOL_ENABLE_LOG_CONNECTIONS)                                                                               | `false`              |
+| `pgpool.logHostname`                                     | Log the client hostname instead of IP address (PGPOOL_ENABLE_LOG_HOSTNAME)                                                               | `true`               |
+| `pgpool.logPerNodeStatement`                             | Log every SQL statement for each DB node separately (PGPOOL_ENABLE_LOG_PER_NODE_STATEMENT)                                               | `false`              |
+| `pgpool.logLinePrefix`                                   | Format of the log entry lines (PGPOOL_LOG_LINE_PREFIX)                                                                                   | `""`                 |
+| `pgpool.clientMinMessages`                               | Log level for clients                                                                                                                    | `error`              |
+| `pgpool.numInitChildren`                                 | The number of preforked Pgpool-II server processes. It is also the concurrent                                                            | `""`                 |
+| `pgpool.reservedConnections`                             | Number of reserved connections. When zero, excess connection block. When non-zero, excess connections are refused with an error message. | `1`                  |
+| `pgpool.maxPool`                                         | The maximum number of cached connections in each child process (PGPOOL_MAX_POOL)                                                         | `""`                 |
+| `pgpool.childMaxConnections`                             | The maximum number of client connections in each child process (PGPOOL_CHILD_MAX_CONNECTIONS)                                            | `""`                 |
+| `pgpool.childLifeTime`                                   | The time in seconds to terminate a Pgpool-II child process if it remains idle (PGPOOL_CHILD_LIFE_TIME)                                   | `""`                 |
+| `pgpool.clientIdleLimit`                                 | The time in seconds to disconnect a client if it remains idle since the last query (PGPOOL_CLIENT_IDLE_LIMIT)                            | `""`                 |
+| `pgpool.connectionLifeTime`                              | The time in seconds to terminate the cached connections to the PostgreSQL backend (PGPOOL_CONNECTION_LIFE_TIME)                          | `""`                 |
+| `pgpool.useLoadBalancing`                                | Use Pgpool Load-Balancing                                                                                                                | `true`               |
+| `pgpool.loadBalancingOnWrite`                            | LoadBalancer on write actions behavior                                                                                                   | `transaction`        |
+| `pgpool.configuration`                                   | Pgpool configuration                                                                                                                     | `""`                 |
+| `pgpool.configurationCM`                                 | ConfigMap with Pgpool configuration                                                                                                      | `""`                 |
+| `pgpool.initdbScripts`                                   | Dictionary of initdb scripts                                                                                                             | `{}`                 |
+| `pgpool.initdbScriptsCM`                                 | ConfigMap with scripts to be run every time Pgpool container is initialized                                                              | `""`                 |
+| `pgpool.initdbScriptsSecret`                             | Secret with scripts to be run every time Pgpool container is initialized                                                                 | `""`                 |
+| `pgpool.tls.enabled`                                     | Enable TLS traffic support for end-client connections                                                                                    | `false`              |
+| `pgpool.tls.autoGenerated`                               | Create self-signed TLS certificates. Currently only supports PEM certificates                                                            | `false`              |
+| `pgpool.tls.preferServerCiphers`                         | Whether to use the server's TLS cipher preferences rather than the client's                                                              | `true`               |
+| `pgpool.tls.certificatesSecret`                          | Name of an existing secret that contains the certificates                                                                                | `""`                 |
+| `pgpool.tls.certFilename`                                | Certificate filename                                                                                                                     | `""`                 |
+| `pgpool.tls.certKeyFilename`                             | Certificate key filename                                                                                                                 | `""`                 |
+| `pgpool.tls.certCAFilename`                              | CA Certificate filename                                                                                                                  | `""`                 |
 
 ### LDAP parameters
 
@@ -348,7 +442,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `ldap.tlsReqcert`               | LDAP TLS check on server certificates                        | `""`         |
 | `ldap.nssInitgroupsIgnoreusers` | LDAP ignored users                                           | `root,nslcd` |
 
-
 ### Other Parameters
 
 | Name                                          | Description                                                                                                                                 | Value   |
@@ -361,7 +454,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `true`  |
 | `psp.create`                                  | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false` |
 
-
 ### Metrics parameters
 
 | Name                                         | Description                                                                                                                                             | Value                       |
@@ -369,7 +461,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `metrics.enabled`                            | Enable PostgreSQL Prometheus exporter                                                                                                                   | `false`                     |
 | `metrics.image.registry`                     | PostgreSQL Prometheus exporter image registry                                                                                                           | `docker.io`                 |
 | `metrics.image.repository`                   | PostgreSQL Prometheus exporter image repository                                                                                                         | `bitnami/postgres-exporter` |
-| `metrics.image.tag`                          | PostgreSQL Prometheus exporter image tag                                                                                                                | `0.11.1-debian-11-r27`      |
+| `metrics.image.tag`                          | PostgreSQL Prometheus exporter image tag                                                                                                                | `0.11.1-debian-11-r61`      |
 | `metrics.image.digest`                       | PostgreSQL Prometheus exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                          | `""`                        |
 | `metrics.image.pullPolicy`                   | PostgreSQL Prometheus exporter image pull policy                                                                                                        | `IfNotPresent`              |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                                        | `[]`                        |
@@ -424,7 +516,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `metrics.serviceMonitor.honorLabels`         | Specify honorLabels parameter to add the scrape endpoint                                                                                                | `false`                     |
 | `metrics.serviceMonitor.jobLabel`            | The name of the label on the target service to use as the job name in prometheus.                                                                       | `""`                        |
 
-
 ### Volume permissions parameters
 
 | Name                                             | Description                                                                                                                       | Value                   |
@@ -432,14 +523,13 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `volumePermissions.enabled`                      | Enable init container to adapt volume permissions                                                                                 | `false`                 |
 | `volumePermissions.image.registry`               | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`             | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                    | Init container volume-permissions image tag                                                                                       | `11-debian-11-r50`      |
+| `volumePermissions.image.tag`                    | Init container volume-permissions image tag                                                                                       | `11-debian-11-r86`      |
 | `volumePermissions.image.digest`                 | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`             | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`            | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
 | `volumePermissions.podSecurityContext.runAsUser` | Init container volume-permissions User ID                                                                                         | `0`                     |
 | `volumePermissions.resources.limits`             | The resources limits for the container                                                                                            | `{}`                    |
 | `volumePermissions.resources.requests`           | The requested resources for the container                                                                                         | `{}`                    |
-
 
 ### Persistence parameters
 
@@ -454,7 +544,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `persistence.annotations`   | Persistent Volume Claim annotations                                                     | `{}`                  |
 | `persistence.labels`        | Persistent Volume Claim labels                                                          | `{}`                  |
 | `persistence.selector`      | Selector to match an existing Persistent Volume (this value is evaluated as a template) | `{}`                  |
-
 
 ### Traffic Exposure parameters
 
@@ -471,18 +560,17 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `service.extraPorts`                                  | Extra ports to expose (normally used with the `sidecar` value)                                | `[]`         |
 | `service.sessionAffinity`                             | Control where client requests go, to the same pod or round-robin                              | `None`       |
 | `service.sessionAffinityConfig`                       | Additional settings for the sessionAffinity                                                   | `{}`         |
-| `service.annotations`                                 | Provide any additional annotations for PostgreSQL service                                     | `{}`         |
+| `service.annotations`                                 | Provide any additional annotations both for PostgreSQL and Pgpool services                    | `{}`         |
 | `service.serviceLabels`                               | Labels for PostgreSQL service                                                                 | `{}`         |
 | `networkPolicy.enabled`                               | Enable NetworkPolicy                                                                          | `false`      |
 | `networkPolicy.allowExternal`                         | Don't require client label for connections                                                    | `true`       |
 | `networkPolicy.egressRules.denyConnectionsToExternal` | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53) | `false`      |
 | `networkPolicy.egressRules.customRules`               | Custom network policy rule                                                                    | `{}`         |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
     --set postgresql.password=password \
     my-repo/postgresql-ha
 ```
@@ -494,7 +582,7 @@ The above command sets the password for user `postgres` to `password`.
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
     -f values.yaml \
     bitnami/postgresql-ha
 ```
@@ -562,7 +650,7 @@ LDAP support can be enabled in the chart by specifying the `ldap.` parameters wh
 
 For example:
 
-```bash
+```text
 ldap.enabled="true"
 ldap.uri="ldap://my_ldap_server"
 ldap.base="dc=example\,dc=org"
@@ -602,13 +690,13 @@ The above parameters (`initdbScripts`, `initdbScriptsCM`, and `initdbScriptsSecr
 
 The allowed extensions are `.sh`, `.sql` and `.sql.gz` in the **postgresql** container while only `.sh` in the case of the **pgpool** one.
 
-+info: https://github.com/bitnami/containers/tree/main/bitnami/postgresql#initializing-a-new-instance and https://github.com/bitnami/containers/tree/main/bitnami/pgpool#initializing-with-custom-scripts
++info: <https://github.com/bitnami/containers/tree/main/bitnami/postgresql#initializing-a-new-instance> and <https://github.com/bitnami/containers/tree/main/bitnami/pgpool#initializing-with-custom-scripts>
 
 ### Use of global variables
 
 In more complex scenarios, we may have the following tree of dependencies
 
-```bash
+```text
                      +--------------+
                      |              |
         +------------+   Chart 1    +-----------+
@@ -628,7 +716,7 @@ In more complex scenarios, we may have the following tree of dependencies
 
 The three charts below depend on the parent chart Chart 1. However, subcharts 1 and 2 may need to connect to PostgreSQL HA as well. In order to do so, subcharts 1 and 2 need to know the PostgreSQL HA credentials, so one option for deploying could be deploy Chart 1 with the following parameters:
 
-```bash
+```text
 postgresql.postgresqlPassword=testtest
 subchart1.postgresql.postgresqlPassword=testtest
 subchart2.postgresql.postgresqlPassword=testtest
@@ -639,7 +727,7 @@ subchart2.postgresql.postgresqlDatabase=db1
 
 If the number of dependent sub-charts increases, installing the chart with parameters can become increasingly difficult. An alternative would be to set the credentials using global variables as follows:
 
-```bash
+```text
 global.postgresql.postgresqlPassword=testtest
 global.postgresql.postgresqlDatabase=db1
 ```
@@ -665,14 +753,13 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 It's necessary to specify the existing passwords while performing a upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `postgresql.password` and `postgresql.repmgrPassword` parameters when upgrading the chart:
 
-```bash
-$ helm upgrade my-release my-repo/postgresql-ha \
+```console
+helm upgrade my-release my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRES_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD]
 ```
 
-> Note: you need to substitute the placeholders _[POSTGRES_PASSWORD]_, and _[REPMGR_PASSWORD]_ with the values obtained from instructions in the installation notes.
-
+> Note: you need to substitute the placeholders *[POSTGRES_PASSWORD]*, and *[REPMGR_PASSWORD]* with the values obtained from instructions in the installation notes.
 > Note: As general rule, it is always wise to do a backup before the upgrading procedures.
 
 ### To 10.0.0
@@ -693,7 +780,7 @@ This chart major version updates the PostgreSQL image's version to the latest ma
 
 > Note: Keep in mind you will find an error such as the one below when upgrading since the new chart major version also bumps the application version. To workaround this issue you need to upgrade the database, please refer to the [official PostgreSQL documentation](https://www.postgresql.org/docs/current/upgrading.html) for more information about this.
 
-```
+```log
 postgresql-repmgr 14:41:21.00 INFO  ==> Setting up streaming replication slave...
 postgresql-repmgr 14:41:21.04 INFO  ==> Starting PostgreSQL in background...
 waiting for server to start....2022-04-12 14:41:21.069 GMT [220] FATAL:  database files are incompatible with server
@@ -707,8 +794,8 @@ A new major version of repmgr (5.3) was included. To upgrade to this major versi
 
 - Reduce your PostgreSQL setup to one replica (primary node) and upgrade to `8.0.0`, enabling the repmgr extension upgrade:
 
-```bash
-$ helm upgrade my-release --version 8.0.0 my-repo/postgresql-ha \
+```console
+helm upgrade my-release --version 8.0.0 my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     --set postgresql.replicaCount=1 \
@@ -717,14 +804,14 @@ $ helm upgrade my-release --version 8.0.0 my-repo/postgresql-ha \
 
 - Scale your PostgreSQL setup to the original number of replicas:
 
-```bash
-$ helm upgrade my-release --version 8.0.0 my-repo/postgresql-ha \
+```console
+helm upgrade my-release --version 8.0.0 my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     --set postgresql.replicaCount=[NUMBER_OF_REPLICAS]
 ```
 
-> Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_, and _[REPMGR_PASSWORD]_ with the values obtained from instructions in the installation notes.
+> Note: you need to substitute the placeholders *[POSTGRESQL_PASSWORD]*, and *[REPMGR_PASSWORD]* with the values obtained from instructions in the installation notes.
 
 ### To 6.4.0
 
@@ -735,24 +822,24 @@ As an alternative to this feature, users can still use the equivalent parameters
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
+#### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - Move dependency information from the *requirements.yaml* to the *Chart.yaml*
 - After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
-**Considerations when upgrading to this version**
+#### Considerations when upgrading to this version
 
 - If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
 - If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
 
-**Useful links**
+#### Useful links
 
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://helm.sh/docs/topics/v2_v3_migration/>
+- <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
 ### To 5.2.0
 
@@ -760,8 +847,8 @@ A new  version of repmgr (5.2.0) was included. To upgrade to this version, it's 
 
 - Reduce your PostgreSQL setup to one replica (primary node) and upgrade to `5.2.0`, enabling the repmgr extension upgrade:
 
-```bash
-$ helm upgrade my-release --version 5.2.0 my-repo/postgresql-ha \
+```console
+helm upgrade my-release --version 5.2.0 my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     --set postgresql.replicaCount=1 \
@@ -770,14 +857,14 @@ $ helm upgrade my-release --version 5.2.0 my-repo/postgresql-ha \
 
 - Scale your PostgreSQL setup to the original number of replicas:
 
-```bash
-$ helm upgrade my-release --version 5.2.0 my-repo/postgresql-ha \
+```console
+helm upgrade my-release --version 5.2.0 my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     --set postgresql.replicaCount=[NUMBER_OF_REPLICAS]
 ```
 
-> Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_, and _[REPMGR_PASSWORD]_ with the values obtained from instructions in the installation notes (`helm get notes RELEASE_NAME`).
+> Note: you need to substitute the placeholders *[POSTGRESQL_PASSWORD]*, and *[REPMGR_PASSWORD]* with the values obtained from instructions in the installation notes (`helm get notes RELEASE_NAME`).
 
 ### To 5.0.0
 
@@ -786,19 +873,19 @@ This version is next major version to v3.x.y
 
 - To upgrade to this version you will need to delete the deployment, keep the PVCs and launch a new deployment keeping the deployment name.
 
-```bash
+```console
 $ # e.g. Previous deployment v3.9.1
-$ helm install my-release \
+helm install my-release \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     my-repo/postgresql-ha --version 3.9.1
 
 $ # Update repository information
-$ helm repo update
+helm repo update
 
 $ # upgrade to v5.0.0
-$ helm delete my-release
-$ helm install my-release \
+helm delete my-release
+helm install my-release \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     my-repo/postgresql-ha --version 5.0.0
@@ -814,8 +901,8 @@ A new major version of repmgr (5.1.0) was included. To upgrade to this major ver
 
 - Reduce your PostgreSQL setup to one replica (primary node) and upgrade to `3.0.0`, enabling the repmgr extension upgrade:
 
-```bash
-$ helm upgrade my-release --version 3.0.0 my-repo/postgresql-ha \
+```console
+helm upgrade my-release --version 3.0.0 my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     --set postgresql.replicaCount=1 \
@@ -824,14 +911,14 @@ $ helm upgrade my-release --version 3.0.0 my-repo/postgresql-ha \
 
 - Scale your PostgreSQL setup to the original number of replicas:
 
-```bash
-$ helm upgrade my-release --version 3.0.0 my-repo/postgresql-ha \
+```console
+helm upgrade my-release --version 3.0.0 my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     --set postgresql.replicaCount=[NUMBER_OF_REPLICAS]
 ```
 
-> Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_, and _[REPMGR_PASSWORD]_ with the values obtained from instructions in the installation notes.
+> Note: you need to substitute the placeholders *[POSTGRESQL_PASSWORD]*, and *[REPMGR_PASSWORD]* with the values obtained from instructions in the installation notes.
 
 ### To 2.0.0
 
@@ -848,8 +935,8 @@ A new major version of repmgr (5.0.0) was included. To upgrade to this major ver
 
 - Reduce your PostgreSQL setup to one replica (primary node) and upgrade to `1.0.0`, enabling the repmgr extension upgrade:
 
-```bash
-$ helm upgrade my-release --version 1.0.0 my-repo/postgresql-ha \
+```console
+helm upgrade my-release --version 1.0.0 my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     --set postgresql.replicaCount=1 \
@@ -858,14 +945,14 @@ $ helm upgrade my-release --version 1.0.0 my-repo/postgresql-ha \
 
 - Scale your PostgreSQL setup to the original number of replicas:
 
-```bash
-$ helm upgrade my-release --version 1.0.0 my-repo/postgresql-ha \
+```console
+helm upgrade my-release --version 1.0.0 my-repo/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     --set postgresql.replicaCount=[NUMBER_OF_REPLICAS]
 ```
 
-> Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_, and _[REPMGR_PASSWORD]_ with the values obtained from instructions in the installation notes.
+> Note: you need to substitute the placeholders *[POSTGRESQL_PASSWORD]*, and *[REPMGR_PASSWORD]* with the values obtained from instructions in the installation notes.
 
 ### To 0.4.0
 
@@ -890,13 +977,13 @@ Bitnami Kubernetes documentation is available at [https://docs.bitnami.com/](htt
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

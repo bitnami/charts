@@ -1,0 +1,25 @@
+{{- if .Values.witness.create }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ printf "%s-witness" (include "postgresql-ha.postgresql" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - name: {{ .Values.service.portName | quote }}
+      port: {{ .Values.postgresql.containerPorts.postgresql }}
+      targetPort: postgresql
+      protocol: TCP
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: postgresql
+    role: witness
+{{- end }}

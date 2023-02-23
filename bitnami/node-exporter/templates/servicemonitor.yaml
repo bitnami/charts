@@ -32,6 +32,9 @@ spec:
       {{- if .Values.serviceMonitor.scrapeTimeout }}
       scrapeTimeout: {{ .Values.serviceMonitor.scrapeTimeout }}
       {{- end }}
+      {{- if .Values.serviceMonitor.basicAuth }}
+      basicAuth: {{- include "common.tplvalues.render" ( dict "value" .Values.serviceMonitor.basicAuth "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.serviceMonitor.honorLabels }}
       honorLabels: {{ .Values.serviceMonitor.honorLabels }}
       {{- end }}

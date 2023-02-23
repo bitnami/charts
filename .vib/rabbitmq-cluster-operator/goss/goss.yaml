@@ -6,11 +6,6 @@ http:
     status: 400
   http://ve-testing:{{ .Vars.rabbitmq.service.ports.manager }}:
     status: 200
-file:
-  /var/run/secrets/kubernetes.io/serviceaccount:
-    exists: true
-    filetype: directory
-    mode: "3777"
 command:
   rabbitmqctl-cluster-status:
     exec: rabbitmqctl cluster_status
@@ -19,3 +14,8 @@ command:
     {{ range $e, $i := until .Vars.rabbitmq.replicaCount }}
       - /ve-testing-server-{{ $i }}.ve-testing-nodes/
     {{ end }}
+  check-sa:
+    exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
+    exit-status: 0
+    stdout:
+    - /serviceaccount.*name.*ve-testing-server/

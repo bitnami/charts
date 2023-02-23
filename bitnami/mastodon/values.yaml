@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mastodon
-  tag: 4.0.2-debian-11-r7
+  tag: 4.1.0-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -95,12 +95,16 @@ image:
 ## @section Mastodon common parameters
 ##
 
+## @param environment Mastodon Rails and Node environment. Should be one of 'production',
+## 'development', or 'test'. Sets both the RAILS_ENV and NODE_ENV environment variables.
+##
+environment: production
 ## @param adminUser Mastodon admin username
 ##
-adminUser: "user"
+adminUser: user
 ## @param adminEmail Mastodon admin email
 ##
-adminEmail: "user@example.com"
+adminEmail: user@changeme.com
 ## @param adminPassword Mastodon admin password
 ##
 adminPassword: ""
@@ -118,9 +122,25 @@ defaultConfig: |
   ES_HOST: {{ include "mastodon.elasticsearch.host" . | quote }}
   ES_PORT: {{ include "mastodon.elasticsearch.port" . | quote }}
   WEB_DOMAIN: {{ include "mastodon.web.domain" . | quote }}
+  LOCAL_DOMAIN: {{ .Values.localDomain | quote }}
+  LOCAL_HTTPS: {{ .Values.local_https | quote }}
+  DEFAULT_LOCALE: {{ .Values.defaultLocale | quote }}
   STREAMING_API_BASE_URL: {{ include "mastodon.streaming.url" . | quote }}
   REDIS_HOST: {{ include "mastodon.redis.host" . | quote }}
   REDIS_PORT: {{ include "mastodon.redis.port" . | quote }}
+  SMTP_SERVER: {{ .Values.smtp.server | quote }}
+  SMTP_PORT: {{ .Values.smtp.port | quote }}
+  SMTP_FROM_ADDRESS: {{ .Values.smtp.from_address | quote }}
+  SMTP_DOMAIN: {{ .Values.smtp.domain | quote }}
+  SMTP_REPLY_TO: {{ .Values.smtp.reply_to | quote }}
+  SMTP_DELIVERY_METHOD: {{ .Values.smtp.delivery_method | quote }}
+  SMTP_CA_FILE: {{ .Values.smtp.ca_file | quote }}
+  SMTP_OPENSSL_VERIFY_MODE: {{ .Values.smtp.openssl_verify_mode | quote }}
+  SMTP_ENABLE_STARTTLS_AUTO: {{ .Values.smtp.enable_starttls_auto | quote }}
+  SMTP_TLS: {{ .Values.smtp.tls | quote }}
+  SMTP_AUTH_METHOD: {{ .Values.smtp.auth_method | quote }}
+  RAILS_ENV: {{ .Values.environment | quote }}
+  NODE_ENV: {{ .Values.environment | quote }}
   {{- if .Values.enableS3 }}
   S3_ENABLED: "true"
   S3_BUCKET: {{ include "mastodon.s3.bucket" . | quote }}
@@ -170,13 +190,79 @@ enableSearches: true
 ##
 enableS3: true
 
-## @param webDomain Web domain for Mastodon
+## @param local_https Set this instance to advertise itself to the fediverse using HTTPS rather than HTTP URLs. This should almost always be true.
+##
+local_https: true
+
+## @param localDomain The domain name used by accounts on this instance. Unless you're using
+## webDomain, this value should be set to the URL at which your instance is hosted.
+##
+localDomain: ""
+
+## @param webDomain Optional alternate domain used when you want to host Mastodon at a
+## different URL than localDomain. This value should only be set if you need it, and
+## cannot be changed later. Consult the Mastodon documentation before using webDomain:
+## https://docs.joinmastodon.org/admin/config/#federation
 ##
 webDomain: ""
+
+## @param defaultLocale Set the default locale for this instance
+##
+defaultLocale: en
 
 ## @param s3AliasHost S3 alias host for Mastodon (will use http://webDomain/bucket if not set)
 ##
 s3AliasHost: ""
+
+smtp:
+  ## @param smtp.server SMTP server
+  ##
+  server: ""
+  ## @param smtp.port SMTP port
+  ##
+  port: 587
+  ## @param smtp.from_address From address for sent emails
+  ##
+  from_address: ""
+  ## @param smtp.domain SMTP domain
+  ##
+  domain: ""
+  ## @param smtp.reply_to Reply-To value for sent emails
+  ##
+  reply_to: ""
+  ## @param smtp.delivery_method SMTP delivery method
+  ##
+  delivery_method: smtp
+  ## @param smtp.ca_file SMTP CA file location
+  ##
+  ca_file: /etc/ssl/certs/ca-certificates.crt
+  ## @param smtp.openssl_verify_mode OpenSSL verify mode
+  ##
+  openssl_verify_mode: none
+  ## @param smtp.enable_starttls_auto Automatically enable StartTLS
+  ##
+  enable_starttls_auto: true
+  ## @param smtp.tls SMTP TLS
+  ##
+  tls: false
+  ## @param smtp.auth_method SMTP auth method (set to "none" to disable SMTP auth)
+  ##
+  auth_method: plain
+  ## @param smtp.login SMTP auth username
+  ##
+  login: ""
+  ## @param smtp.password SMTP auth password
+  ##
+  password: ""
+  ## @param smtp.existingSecret Name of an existing secret resource containing the SMTP
+  ## login and password credentials
+  existingSecret: ""
+  ## @param smtp.existingSecretLoginKey Name of the key for the SMTP login credential
+  ## stored in the existingSecret resource
+  existingSecretLoginKey: ""
+  ## @param smtp.existingSecretPasswordKey Name of the key for the SMTP password credential
+  ## stored in the existingSecret resource
+  existingSecretPasswordKey: ""
 
 ## @section Mastodon Web Parameters
 ##
@@ -1122,7 +1208,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r62
+    tag: 11-debian-11-r86
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

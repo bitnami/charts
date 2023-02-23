@@ -173,6 +173,8 @@ spec:
               value: {{ printf "%s-%s" (include "common.names.fullname" .) (default "headless" .Values.servicenameOverride) }}
             - name: K8S_ADDRESS_TYPE
               value: {{ .Values.clustering.addressType }}
+            - name: RABBITMQ_FEATURE_FLAGS
+              value: {{ .Values.featureFlags }}
             - name: RABBITMQ_FORCE_BOOT
               value: {{ ternary "yes" "no" .Values.clustering.forceBoot | quote }}
             {{- if (eq "hostname" .Values.clustering.addressType) }}
@@ -344,15 +346,26 @@ spec:
       volumes:
         {{- if .Values.auth.tls.enabled }}
         - name: certs
-          secret:
-            secretName: {{ template "rabbitmq.tlsSecretName" . }}
-            items:
-              - key: {{ ternary "tls.crt" "ca.crt" .Values.auth.tls.existingSecretFullChain }}
-                path: ca_certificate.pem
-              - key: tls.crt
-                path: server_certificate.pem
-              - key: tls.key
-                path: server_key.pem
+          projected:
+            sources:
+              - secret:
+                  name: {{ template "rabbitmq.tlsSecretName" . }}
+                  items:
+                    {{- if not .Values.auth.tls.overrideCaCertificate }}                  
+                    - key: {{ ternary "tls.crt" "ca.crt" .Values.auth.tls.existingSecretFullChain }}
+                      path: ca_certificate.pem
+                    {{- end }}                      
+                    - key: tls.crt
+                      path: server_certificate.pem
+                    - key: tls.key
+                      path: server_key.pem
+              {{- if .Values.auth.tls.overrideCaCertificate }}
+              - secret:
+                  name: {{ .Values.auth.tls.overrideCaCertificate }}
+                  items:
+                    - key: ca.crt
+                      path: ca_certificate.pem
+              {{- end }}
         {{- end }}
         {{- if and .Values.ldap.tls.enabled .Values.ldap.tls.certificatesSecret }}
         - name: ldap-certs
@@ -362,11 +375,17 @@ spec:
         - name: configuration
           projected:
             sources:
+              {{- if or (and (empty .Values.configurationExistingSecret) .Values.configuration) (and (not .Values.advancedConfigurationExistingSecret) .Values.advancedConfiguration) }}
               - secret:
                   name: {{ printf "%s-config" (include "common.names.fullname" .) }}
+              {{- end }}    
               {{- if and .Values.advancedConfigurationExistingSecret (not .Values.advancedConfiguration) }}
               - secret:
                   name: {{ tpl .Values.advancedConfigurationExistingSecret . | quote }}
+              {{- end }}
+              {{- if not (empty .Values.configurationExistingSecret) }}
+              - secret:
+                  name: {{ tpl .Values.configurationExistingSecret . | quote }}
               {{- end }}
         {{- if .Values.loadDefinition.enabled }}
         - name: load-definition-volume

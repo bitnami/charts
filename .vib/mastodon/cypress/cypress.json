@@ -1,6 +1,6 @@
 {
   "env": {
-    "username": "vib-user@example.com",
+    "username": "vib-user@changeme.com",
     "password": "bitnami!1234"
   },
   "hosts": {

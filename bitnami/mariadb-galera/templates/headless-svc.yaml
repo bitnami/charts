@@ -20,14 +20,24 @@ spec:
   type: ClusterIP
   clusterIP: None
   ports:
+    {{- $appProtocolAvailable := (semverCompare ">=1.20-0" (include "common.capabilities.kubeVersion" .)) }}
     - name: galera
       port: 4567
       targetPort: galera
+      {{- if $appProtocolAvailable }}
+      appProtocol: mysql
+      {{- end }}
     - name: ist
       port: 4568
       targetPort: ist
+      {{- if $appProtocolAvailable }}
+      appProtocol: mysql
+      {{- end }}
     - name: sst
       port: 4444
       targetPort: sst
+      {{- if $appProtocolAvailable }}
+      appProtocol: mysql
+      {{- end }}
   publishNotReadyAddresses: {{ .Values.service.headless.publishNotReadyAddresses }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}

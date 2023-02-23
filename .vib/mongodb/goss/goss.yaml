@@ -10,10 +10,6 @@ file:
     mode: "0660"
     contains:
       - /port:.*{{ .Vars.containerPorts.mongodb }}/
-  /var/run/secrets/kubernetes.io/serviceaccount:
-    exists: {{ .Vars.serviceAccount.automountServiceAccountToken }}
-    filetype: directory
-    mode: "3777"
 command:
   {{- $conn_opts := printf "--quiet --username %s --password '%s' --host mongodb --port %d" .Vars.auth.rootUser .Vars.auth.rootPassword .Vars.service.ports.mongodb }}
   admin-command:
@@ -26,9 +22,17 @@ command:
     exit-status: 0
     stdout:
       - {{ $testCollection }}
+  {{- $uid := .Vars.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.podSecurityContext.fsGroup }}
   check-user-info:
-    exec: id
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
+    exit-status: 0
+  {{ if .Vars.serviceAccount.automountServiceAccountToken }}
+  check-sa:
+    exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
     exit-status: 0
     stdout:
-      - uid={{ .Vars.containerSecurityContext.runAsUser }}
-      - /groups=.*{{ .Vars.podSecurityContext.fsGroup }}/
+    - /serviceaccount.*name.*{{.Env.BITNAMI_APP_NAME }}/
+  {{ end }}

@@ -38,6 +38,7 @@ spec:
   {{- end }}
   ports:
     - port: {{ .Values.service.ports.http }}
+      name: {{ .Values.service.ports.name }}
       targetPort: {{ .Values.service.ports.name }}
       {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.http)) }}
       nodePort: {{ .Values.service.nodePorts.http }}

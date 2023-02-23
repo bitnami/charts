@@ -164,13 +164,17 @@ To create a pod that you can use as a Kafka client run the following commands:
 
     PRODUCER:
         kafka-console-producer.sh \
-            {{ if or (include "kafka.client.saslAuthentication" .) (include "kafka.client.tlsEncryption" .) }}--producer.config /tmp/client.properties \{{ end }}
+            {{- if or (include "kafka.client.saslAuthentication" .) (include "kafka.client.tlsEncryption" .) }}
+            --producer.config /tmp/client.properties \
+            {{- end }}
             --broker-list {{ join "," $brokerList }} \
             --topic test
 
     CONSUMER:
         kafka-console-consumer.sh \
-            {{ if or (include "kafka.client.saslAuthentication" .) (include "kafka.client.tlsEncryption" .) }}--consumer.config /tmp/client.properties \{{ end }}
+            {{- if or (include "kafka.client.saslAuthentication" .) (include "kafka.client.tlsEncryption" .) }}
+            --consumer.config /tmp/client.properties \
+            {{- end }}
             --bootstrap-server {{ $fullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ .Values.service.ports.client }} \
             --topic test \
             --from-beginning

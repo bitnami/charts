@@ -43,6 +43,10 @@ spec:
     - name: mysql
       port: {{ .Values.service.ports.mysql }}
       targetPort: mysql
+      {{- $appProtocolAvailable := (semverCompare ">=1.20-0" (include "common.capabilities.kubeVersion" .)) }}
+      {{- if $appProtocolAvailable }}
+      appProtocol: mysql
+      {{- end }}
       {{- if and .Values.service.nodePorts.mysql (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) }}
       nodePort: {{ .Values.service.nodePorts.mysql }}
       {{- else if eq .Values.service.type "ClusterIP" }}

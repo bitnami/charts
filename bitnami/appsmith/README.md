@@ -7,12 +7,12 @@ Appsmith is an open source platform for building and maintaining internal tools,
 [Overview of Appsmith](https://www.appsmith.com/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/appsmith
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/appsmith
 ```
 
 ## Introduction
@@ -23,7 +23,7 @@ This chart bootstraps an [Appsmith](https://www.appsmith.com/) Deployment in a [
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 
-[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/appsmith/get-started/).
+[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/apps/appsmith/get-started/).
 
 ## Prerequisites
 
@@ -37,6 +37,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
+helm repo add my-repo https://charts.bitnami.com/bitnami
 helm install my-release my-repo/appsmith
 ```
 
@@ -64,34 +65,30 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
-| Name                     | Description                                                                                                                                         | Value                 |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `kubeVersion`            | Override Kubernetes version                                                                                                                         | `""`                  |
-| `nameOverride`           | String to partially override common.names.name                                                                                                      | `""`                  |
-| `fullnameOverride`       | String to fully override common.names.fullname                                                                                                      | `""`                  |
-| `namespaceOverride`      | String to fully override common.names.namespace                                                                                                     | `""`                  |
-| `commonLabels`           | Labels to add to all deployed objects                                                                                                               | `{}`                  |
-| `commonAnnotations`      | Annotations to add to all deployed objects                                                                                                          | `{}`                  |
-| `clusterDomain`          | Kubernetes cluster domain name                                                                                                                      | `cluster.local`       |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                                                                                   | `[]`                  |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                             | `false`               |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                                                                                | `["sleep"]`           |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                   | `["infinity"]`        |
-| `image.registry`         | Appsmith image registry                                                                                                                             | `docker.io`           |
-| `image.repository`       | Appsmith image repository                                                                                                                           | `bitnami/appsmith`    |
-| `image.tag`              | Appsmith image tag (immutable tags are recommended)                                                                                                 | `1.8.14-debian-11-r0` |
-| `image.digest`           | Appsmith image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                  |
-| `image.pullPolicy`       | Appsmith image pull policy                                                                                                                          | `IfNotPresent`        |
-| `image.pullSecrets`      | Appsmith image pull secrets                                                                                                                         | `[]`                  |
-| `image.debug`            | Enable Appsmith image debug mode                                                                                                                    | `false`               |
-
+| Name                     | Description                                                                                                                                         | Value                |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
+| `kubeVersion`            | Override Kubernetes version                                                                                                                         | `""`                 |
+| `nameOverride`           | String to partially override common.names.name                                                                                                      | `""`                 |
+| `fullnameOverride`       | String to fully override common.names.fullname                                                                                                      | `""`                 |
+| `namespaceOverride`      | String to fully override common.names.namespace                                                                                                     | `""`                 |
+| `commonLabels`           | Labels to add to all deployed objects                                                                                                               | `{}`                 |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                                                                                          | `{}`                 |
+| `clusterDomain`          | Kubernetes cluster domain name                                                                                                                      | `cluster.local`      |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                                                                                   | `[]`                 |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                             | `false`              |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                                                                                | `["sleep"]`          |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                   | `["infinity"]`       |
+| `image.registry`         | Appsmith image registry                                                                                                                             | `docker.io`          |
+| `image.repository`       | Appsmith image repository                                                                                                                           | `bitnami/appsmith`   |
+| `image.tag`              | Appsmith image tag (immutable tags are recommended)                                                                                                 | `1.9.8-debian-11-r1` |
+| `image.digest`           | Appsmith image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                 |
+| `image.pullPolicy`       | Appsmith image pull policy                                                                                                                          | `IfNotPresent`       |
+| `image.pullSecrets`      | Appsmith image pull secrets                                                                                                                         | `[]`                 |
+| `image.debug`            | Enable Appsmith image debug mode                                                                                                                    | `false`              |
 
 ### Appsmith common paramters
-
-
 
 
 ### Appsmith Client Parameters
@@ -156,7 +153,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.sidecars`                                        | Add additional sidecar containers to the Appsmith client pod(s)                                                          | `[]`            |
 | `client.initContainers`                                  | Add additional init containers to the Appsmith client pod(s)                                                             | `[]`            |
 
-
 ### Appsmith Client Traffic Exposure Parameters
 
 | Name                                      | Description                                                                                                                      | Value                    |
@@ -186,7 +182,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `client.ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `client.ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
-
 
 ### Appsmith Backend Parameters
 
@@ -259,7 +254,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backend.sidecars`                                        | Add additional sidecar containers to the Appsmith backend pod(s)                                                         | `[]`                  |
 | `backend.initContainers`                                  | Add additional init containers to the Appsmith backend pod(s)                                                            | `[]`                  |
 
-
 ### Appsmith Backend Traffic Exposure Parameters
 
 | Name                                       | Description                                                                                 | Value       |
@@ -276,7 +270,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backend.service.sessionAffinity`          | Control where backend requests go, to the same pod or round-robin                           | `None`      |
 | `backend.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                 | `{}`        |
 
-
 ### Backend Persistence Parameters
 
 | Name                                | Description                                                                                             | Value               |
@@ -291,7 +284,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backend.persistence.existingClaim` | The name of an existing PVC to use for persistence                                                      | `""`                |
 | `backend.persistence.selector`      | Selector to match an existing Persistent Volume for WordPress data PVC                                  | `{}`                |
 | `backend.persistence.dataSource`    | Custom PVC data source                                                                                  | `{}`                |
-
 
 ### Appsmith RTS Parameters
 
@@ -355,7 +347,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rts.sidecars`                                        | Add additional sidecar containers to the Appsmith rts pod(s)                                                             | `[]`            |
 | `rts.initContainers`                                  | Add additional init containers to the Appsmith rts pod(s)                                                                | `[]`            |
 
-
 ### Appsmith RTS Traffic Exposure Parameters
 
 | Name                                   | Description                                                                             | Value       |
@@ -372,7 +363,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rts.service.sessionAffinity`          | Control where rts requests go, to the same pod or round-robin                           | `None`      |
 | `rts.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                             | `{}`        |
 
-
 ### Init Container Parameters
 
 | Name                                                   | Description                                                                                     | Value                   |
@@ -380,13 +370,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r64`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r87`      |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
 | `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
-
 
 ### Other Parameters
 
@@ -396,7 +385,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`   |
 | `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`   |
 | `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true` |
-
 
 ### External MongoDB parameters
 
@@ -410,7 +398,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials | `""`       |
 | `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials      | `""`       |
 
-
 ### External Redis parameters
 
 | Name                                      | Description                                                          | Value  |
@@ -420,7 +407,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalRedis.password`                  | Password for the Redis                                               | `""`   |
 | `externalRedis.existingSecret`            | Name of an existing secret resource containing the Redis credentials | `""`   |
 | `externalRedis.existingSecretPasswordKey` | Name of an existing secret key containing the Redis credentials      | `""`   |
-
 
 ### Redis sub-chart parameters
 
@@ -434,7 +420,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `redis.auth.password`              | Redis password                                 | `""`         |
 | `redis.auth.existingSecret`        | Name of a secret containing the Redis password | `""`         |
 
-
 ### MongoDB sub-chart parameters
 
 | Name                             | Description                                            | Value        |
@@ -446,10 +431,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mongodb.auth.databases`         | MongoDB database creation                              | `[]`         |
 | `mongodb.containerPorts.mongodb` | MongoDB container port (used by the headless service)  | `27017`      |
 | `mongodb.arbiter.enabled`        | Enable Arbiter nodes in the ReplicaSet                 | `false`      |
-
-
-
-The above parameters map to the env variables defined in [bitnami/appsmith](https://github.com/bitnami/containers/tree/main/bitnami/appsmith). For more information please refer to the [bitnami/appsmith](https://github.com/bitnami/containers/tree/main/bitnami/appsmith) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -515,11 +496,11 @@ To enable Ingress integration, set `client.ingress.enabled` to `true`. The `clie
 
 ### TLS secrets
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/appsmith/administration/enable-tls/).
+The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/appsmith/administration/enable-tls-ingress/).
 
 ## Persistence
 
-The [Bitnami appsmith](https://github.com/bitnami/containers/tree/main/bitnami/appsmith) image stores the appsmith data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments. [Learn more about persistence in the chart documentation](https://docs.bitnami.com/kubernetes/apps/appsmith/configuration/chart-persistence/).
+The [Bitnami appsmith](https://github.com/bitnami/containers/tree/main/bitnami/appsmith) image stores the appsmith data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 
 ### Additional environment variables
 
@@ -551,13 +532,13 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

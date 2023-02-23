@@ -118,7 +118,7 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "alibabacloud") .Values.alibabacloud.accessKeyId .Values.alibabacloud.accessKeySecret (not .Values.alibabacloud.secretName) }}
     {{- true -}}
-{{- else if and (eq .Values.provider "aws") .Values.aws.credentials.secretKey .Values.aws.credentials.accessKey (not .Values.aws.credentials.secretName) }}
+{{- else if and (eq .Values.provider "aws") .Values.aws.credentials.secretKey .Values.aws.credentials.accessKey (not .Values.aws.credentials.secretName) (not (include "external-dns.aws-credentials-secret-ref-defined" . )) }}
     {{- true -}}
 {{- else if and (or (eq .Values.provider "azure") (eq .Values.provider "azure-private-dns")) (or (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId .Values.azure.aadClientId .Values.azure.aadClientSecret (not .Values.azure.useManagedIdentityExtension)) (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId .Values.azure.useManagedIdentityExtension)) (not .Values.azure.secretName) -}}
     {{- true -}}
@@ -237,6 +237,13 @@ aws_secret_access_key = {{ .Values.aws.credentials.secretKey }}
 region = {{ .Values.aws.region }}
 {{ end }}
 
+{{- define "external-dns.aws-credentials-secret-ref-defined" -}}
+{{- if and .Values.aws.credentials.accessKeyIDSecretRef.name .Values.aws.credentials.accessKeyIDSecretRef.key .Values.aws.credentials.secretAccessKeySecretRef.name .Values.aws.credentials.secretAccessKeySecretRef.key -}}
+    {{- true -}}
+{{- else -}}
+{{- end -}}
+{{- end -}}
+
 {{- define "external-dns.azure-credentials" -}}
 {
   {{- if .Values.azure.cloud }}
@@ -319,7 +326,6 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "external-dns.validateValues.rfc2136.kerberosConfig" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.scaleway.scwAccessKey" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.scaleway.scwSecretKey" .) -}}
-{{- $messages := append $messages (include "external-dns.validateValues.scaleway.scwDefaultOrganizationId" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -820,18 +826,6 @@ Validate values of External DNS:
 external-dns: scaleway.scwSecretKey
     You must provide the scaleway secret key when provider="scaleway".
     Please set the scwSecretKey parameter (--set scaleway.scwSecretKey="xxxx")
-{{- end -}}
-{{- end -}}
-
-{{/*
-Validate values of External DNS:
-- must provide the scaleway organization id when provider is "scaleway"
-*/}}
-{{- define "external-dns.validateValues.scaleway.scwDefaultOrganizationId" -}}
-{{- if and (eq .Values.provider "scaleway") (not .Values.scaleway.scwDefaultOrganizationId) -}}
-external-dns: scaleway.scwDefaultOrganizationId
-    You must provide the scaleway organization id key when provider="scaleway".
-    Please set the scwDefaultOrganizationId parameter (--set scaleway.scwDefaultOrganizationId="xxxx")
 {{- end -}}
 {{- end -}}
 

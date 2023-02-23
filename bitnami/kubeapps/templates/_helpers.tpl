@@ -173,7 +173,11 @@ Create proxy_pass for the kubeappsapis
 Create name for the secrets related to oauth2_proxy
 */}}
 {{- define "kubeapps.oauth2_proxy-secret.name" -}}
+{{- if .Values.authProxy.existingOauth2Secret -}}
+{{- printf "%s" (tpl .Values.authProxy.existingOauth2Secret $) -}}
+{{- else -}}
 {{- printf "%s-oauth2" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
 {{- end -}}
 
 {{/*

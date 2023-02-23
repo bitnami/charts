@@ -121,14 +121,26 @@ spec:
               value: {{ ternary "true" "false" .Values.jobservice.image.debug | quote }}
             - name: CORE_SECRET
               valueFrom:
+                {{- if .Values.core.existingSecret }}
+                secretKeyRef:
+                  name: {{ .Values.core.existingSecret }}
+                  key: secret
+                {{- else }}
                 secretKeyRef:
                   name: {{ include "harbor.core" . }}
                   key: secret
+                {{- end }}
             - name: JOBSERVICE_SECRET
               valueFrom:
+                {{- if .Values.jobservice.existingSecret }}
+                secretKeyRef:
+                  name: {{ .Values.jobservice.existingSecret }}
+                  key: secret
+                {{- else }}
                 secretKeyRef:
                   name: {{ include "harbor.jobservice" . }}
                   key: secret
+                {{- end }}
             {{- if .Values.internalTLS.enabled }}
             - name: INTERNAL_TLS_ENABLED
               value: "true"
@@ -202,6 +214,9 @@ spec:
             - name: job-logs
               mountPath: /var/log/jobs
               subPath: {{ .Values.persistence.persistentVolumeClaim.jobservice.subPath }}
+            - name: jobservice-scandata
+              mountPath: /var/scandata_exports
+              subPath: {{ .Values.persistence.persistentVolumeClaim.jobservice.scanData.subPath }}
             {{- if .Values.internalTLS.enabled }}
             - name: internal-tls-certs
               mountPath: /etc/harbor/ssl/jobservice
@@ -223,6 +238,13 @@ spec:
           {{- if and .Values.persistence.enabled (eq .Values.jobservice.jobLogger "file") }}
           persistentVolumeClaim:
             claimName: {{ .Values.persistence.persistentVolumeClaim.jobservice.existingClaim | default (include "harbor.jobservice" .) }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        - name: jobservice-scandata
+          {{- if and .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.persistentVolumeClaim.jobservice.scanData.existingClaim | default (include "harbor.jobserviceScanData" .) }}
           {{- else }}
           emptyDir: {}
           {{- end }}

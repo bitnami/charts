@@ -7,12 +7,12 @@ Sealed Secrets are "one-way" encrypted K8s Secrets that can be created by anyone
 [Overview of Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets)
 
 
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/sealed-secrets
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/sealed-secrets
 ```
 
 ## Introduction
@@ -33,6 +33,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
+helm repo add my-repo https://charts.bitnami.com/bitnami
 helm install my-release my-repo/sealed-secrets
 ```
 
@@ -60,7 +61,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                        | Value           |
@@ -74,14 +74,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`     | Kubernetes cluster domain name                     | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`            |
 
-
 ### Sealed Secrets Parameters
 
 | Name                                                | Description                                                                                                              | Value                    |
 | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
 | `image.registry`                                    | Sealed Secrets image registry                                                                                            | `docker.io`              |
 | `image.repository`                                  | Sealed Secrets image repository                                                                                          | `bitnami/sealed-secrets` |
-| `image.tag`                                         | Sealed Secrets image tag (immutable tags are recommended)                                                                | `0.19.3-scratch-r0`      |
+| `image.tag`                                         | Sealed Secrets image tag (immutable tags are recommended)                                                                | `0.19.5-scratch-r0`      |
 | `image.digest`                                      | Sealed Secrets image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag           | `""`                     |
 | `image.pullPolicy`                                  | Sealed Secrets image pull policy                                                                                         | `IfNotPresent`           |
 | `image.pullSecrets`                                 | Sealed Secrets image pull secrets                                                                                        | `[]`                     |
@@ -148,7 +147,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidecars`                                          | Add additional sidecar containers to the Sealed Secret pod(s)                                                            | `{}`                     |
 | `initContainers`                                    | Add additional init containers to the Sealed Secret pod(s)                                                               | `{}`                     |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                           | Value                    |
@@ -180,7 +178,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                    | `[]`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                               | `[]`                     |
 
-
 ### Other Parameters
 
 | Name                                          | Description                                                      | Value   |
@@ -196,7 +193,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true`  |
 | `networkPolicy.enabled`                       | Specifies whether a NetworkPolicy should be created              | `false` |
 | `networkPolicy.allowExternal`                 | Don't require client label for connections                       | `true`  |
-
 
 ### Metrics parameters
 
@@ -215,10 +211,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                              | `{}`    |
 
 
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set livenessProbe.successThreshold=5 \
     my-repo/sealed-secrets
 ```
@@ -241,8 +236,8 @@ The easiest way to interact with the Sealed Secrets controller is using the **ku
 
 Once installed, you can start using it to encrypt your secrets or fetching the controller public certificate as shown in the example below:
 
-```bash
-kubeseal --fetch-cert \
+```console
+$ kubeseal --fetch-cert \
 --controller-name=my-release \
 --controller-namespace=my-release-namespace \
 > pub-cert.pem
@@ -293,13 +288,13 @@ This major release renames several values in this chart and adds missing feature
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

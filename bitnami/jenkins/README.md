@@ -7,7 +7,7 @@ Jenkins is an open source Continuous Integration and Continuous Delivery (CI/CD)
 [Overview of Jenkins](http://jenkins-ci.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -61,7 +61,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
@@ -77,19 +76,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
-
 ### Jenkins Image parameters
 
 | Name                | Description                                                                                             | Value                  |
 | ------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`    | Jenkins image registry                                                                                  | `docker.io`            |
 | `image.repository`  | Jenkins image repository                                                                                | `bitnami/jenkins`      |
-| `image.tag`         | Jenkins image tag (immutable tags are recommended)                                                      | `2.375.1-debian-11-r0` |
+| `image.tag`         | Jenkins image tag (immutable tags are recommended)                                                      | `2.375.3-debian-11-r2` |
 | `image.digest`      | Jenkins image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `image.pullPolicy`  | Jenkins image pull policy                                                                               | `IfNotPresent`         |
 | `image.pullSecrets` | Jenkins image pull secrets                                                                              | `[]`                   |
 | `image.debug`       | Enable image debug mode                                                                                 | `false`                |
-
 
 ### Jenkins Configuration parameters
 
@@ -106,7 +103,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVars`          | Array with extra environment variables to add to the Jenkins container | `[]`                    |
 | `extraEnvVarsCM`        | Name of existing ConfigMap containing extra env vars                   | `""`                    |
 | `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                      | `""`                    |
-
 
 ### Jenkins deployment parameters
 
@@ -164,7 +160,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                       | `{}`            |
 | `customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                      | `{}`            |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -197,7 +192,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Persistence Parameters
 
 | Name                                          | Description                                                                                                   | Value                   |
@@ -212,7 +206,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r58`      |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r86`      |
 | `volumePermissions.image.digest`              | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -220,13 +214,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.requests`        | The requested resources for the init container                                                                | `{}`                    |
 | `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                               | `0`                     |
 
-
 The above parameters map to the env variables defined in [bitnami/jenkins](https://github.com/bitnami/containers/tree/main/bitnami/jenkins). For more information please refer to the [bitnami/jenkins](https://github.com/bitnami/containers/tree/main/bitnami/jenkins) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set jenkinsUser=admin \
   --set jenkinsPassword=password \
   my-repo/jenkins
@@ -315,6 +308,7 @@ This major release is no longer contains the metrics section because the contain
 This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
 
 Affected values:
+
 - `service.port` renamed as `service.ports.http`.
 - `service.httpsPort` renamed as `service.ports.https`.
 - `serviceMonitor.additionalLabels` renamed as `serviceMonitor.labels`.
@@ -329,15 +323,15 @@ Upgrading from version `7.x.x` should be possible following the workaround below
 - Remove Jenkins deployment:
 
 ```console
-$ export JENKINS_PASSWORD=$(kubectl get secret --namespace default jenkins -o jsonpath="{.data.jenkins-password}" | base64 -d)
-$ kubectl delete deployments.apps jenkins
+export JENKINS_PASSWORD=$(kubectl get secret --namespace default jenkins -o jsonpath="{.data.jenkins-password}" | base64 -d)
+kubectl delete deployments.apps jenkins
 ```
 
 - Upgrade your release and delete data that should not be persisted anymore:
 
 ```console
-$ helm upgrade jenkins my-repo/jenkins --set jenkinsPassword=$JENKINS_PASSWORD --set jenkinsHome=/bitnami/jenkins/jenkins_home
-$ kubectl exec -it $(kubectl get pod -l app.kubernetes.io/instance=jenkins,app.kubernetes.io/name=jenkins -o jsonpath="{.items[0].metadata.name}") -- find /bitnami/jenkins -mindepth 1 -maxdepth 1 -not -name jenkins_home -exec rm -rf {} \;
+helm upgrade jenkins my-repo/jenkins --set jenkinsPassword=$JENKINS_PASSWORD --set jenkinsHome=/bitnami/jenkins/jenkins_home
+kubectl exec -it $(kubectl get pod -l app.kubernetes.io/instance=jenkins,app.kubernetes.io/name=jenkins -o jsonpath="{.items[0].metadata.name}") -- find /bitnami/jenkins -mindepth 1 -maxdepth 1 -not -name jenkins_home -exec rm -rf {} \;
 ```
 
 ### To 7.0.0
@@ -349,9 +343,9 @@ Consequences:
 - Backwards compatibility is not guaranteed. However, you can easily workaround this issue by removing Jenkins deployment before upgrading (the following example assumes that the release name is `jenkins`):
 
 ```console
-$ export JENKINS_PASSWORD=$(kubectl get secret --namespace default jenkins -o jsonpath="{.data.jenkins-password}" | base64 -d)
-$ kubectl delete deployments.apps jenkins
-$ helm upgrade jenkins my-repo/jenkins --set jenkinsPassword=$JENKINS_PASSWORD
+export JENKINS_PASSWORD=$(kubectl get secret --namespace default jenkins -o jsonpath="{.data.jenkins-password}" | base64 -d)
+kubectl delete deployments.apps jenkins
+helm upgrade jenkins my-repo/jenkins --set jenkinsPassword=$JENKINS_PASSWORD
 ```
 
 ### To 6.1.0
@@ -395,13 +389,13 @@ kubectl patch deployment jenkins --type=json -p='[{"op": "remove", "path": "/spe
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

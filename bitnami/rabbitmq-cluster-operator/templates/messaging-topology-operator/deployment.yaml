@@ -66,6 +66,12 @@ spec:
       {{- if .Values.msgTopologyOperator.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.msgTopologyOperator.terminationGracePeriodSeconds }}
       {{- end }}
+      {{- if .Values.msgTopologyOperator.hostNetwork }}
+      hostNetwork: {{ .Values.msgTopologyOperator.hostNetwork }}
+      {{- end }}
+      {{- if .Values.msgTopologyOperator.dnsPolicy }}
+      dnsPolicy: {{ .Values.msgTopologyOperator.dnsPolicy }}
+      {{- end }}
       initContainers:
         {{- if .Values.msgTopologyOperator.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.initContainers "context" $) | nindent 8 }}

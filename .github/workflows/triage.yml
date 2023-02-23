@@ -9,6 +9,9 @@ on:
     types:
       - reopened
       - opened
+# Avoid concurrency over the same issue
+concurrency:
+  group: card-movement-${{ github.event_name != 'issues' && github.event.number || github.event.issue.number }}
 jobs:
   # For any opened or reopened issue, should be sent into Triage
   send_to_board:

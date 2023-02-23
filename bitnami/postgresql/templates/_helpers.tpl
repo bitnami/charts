@@ -80,9 +80,9 @@ Return the name for a custom database to create
 */}}
 {{- define "postgresql.database" -}}
 {{- if .Values.global.postgresql.auth.database }}
-    {{- .Values.global.postgresql.auth.database -}}
+    {{- printf "%s" (tpl .Values.global.postgresql.auth.database $) -}}
 {{- else if .Values.auth.database -}}
-    {{- .Values.auth.database -}}
+    {{- printf "%s" (tpl .Values.auth.database $) -}}
 {{- end -}}
 {{- end -}}
 
