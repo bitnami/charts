@@ -107620,6 +107620,43 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 7.13.1
+    created: "2023-02-23T13:36:18.745836482Z"
+    dependencies:
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: SuiteCRM is a completely open source, enterprise-grade Customer Relationship
+      Management (CRM) application. SuiteCRM is a fork of the popular SugarCRM application.
+    digest: d355d37b0b4e501db67a23473543502fc6db0932b57aad1ac93bb43bebb3ada0
+    home: https://github.com/bitnami/charts/tree/main/bitnami/suitecrm
+    icon: https://bitnami.com/assets/stacks/suitecrm/img/suitecrm-stack-220x234.png
+    keywords:
+    - suitecrm
+    - crm
+    - http
+    - web
+    - php
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: suitecrm
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/suitecrm
+    - https://www.suitecrm.com/
+    urls:
+    - https://charts.bitnami.com/bitnami/suitecrm-11.2.9.tgz
+    version: 11.2.9
+  - annotations:
+      category: CRM
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 7.13.1
     created: "2023-02-02T08:29:00.11545539Z"
     dependencies:
     - condition: mariadb.enabled
@@ -122291,4 +122328,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-02-23T13:04:42.90990915Z"
+generated: "2023-02-23T13:36:18.736039824Z"
