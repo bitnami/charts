@@ -156,6 +156,18 @@ spec:
                   name: {{ include "mastodon.elasticsearch.secretName" . }}
                   key: {{ include "mastodon.elasticsearch.passwordKey" . | quote }}
             {{- end }}
+            {{- if ne .Values.smtp.auth_method "none" }}
+            - name: SMTP_LOGIN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mastodon.smtp.secretName" . }}
+                  key: {{ include "mastodon.smtp.loginKey" . | quote }}
+            - name: SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mastodon.smtp.secretName" . }}
+                  key: {{ include "mastodon.smtp.passwordKey" . | quote }}
+            {{- end }}
             {{- if .Values.web.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.web.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
