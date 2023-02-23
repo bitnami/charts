@@ -102,11 +102,13 @@ spec:
                 secretKeyRef:
                   name: {{ include "harbor.core" . }}-envvars
                   key: POSTGRESQL_PASSWORD
+            {{- if not .Values.core.existingEnvVarsSecret }}
             - name: HARBOR_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "harbor.core" . }}-envvars
                   key: HARBOR_ADMIN_PASSWORD
+            {{- end }}
             {{- if .Values.exporter.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.exporter.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -114,7 +116,11 @@ spec:
             - configMapRef:
                 name: "{{ include "harbor.exporter" . }}-envvars"
             - secretRef:
-                name: "{{ include "harbor.exporter" . }}-envvars"
+                {{- if .Values.core.existingEnvVarsSecret }}
+                name: {{ .Values.core.existingEnvVarsSecret }}
+                {{- else }}
+                name: {{ printf "%s-envvars" (include "harbor.exporter" .) }}
+                {{- end }}
             {{- if .Values.exporter.extraEnvVarsSecret }}
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.exporter.extraEnvVarsSecret "context" $) }}
