@@ -57855,6 +57855,50 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 2.4.5-p1
+    created: "2023-02-23T09:05:18.632773402Z"
+    dependencies:
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - magento-database
+      version: 11.x.x
+    - condition: elasticsearch.enabled
+      name: elasticsearch
+      repository: https://charts.bitnami.com/bitnami
+      version: 19.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Magento is a powerful open source e-commerce platform. With easy
+      customizations and rich features, it allows retailers to grow their online businesses
+      in a cost-effective way.
+    digest: fdc63fecec0787c9c85074ab25e1eb43e5a3f3c9b6c46ecfc16249360a1b48af
+    home: https://github.com/bitnami/charts/tree/main/bitnami/magento
+    icon: https://bitnami.com/assets/stacks/magento/img/magento-stack-220x234.png
+    keywords:
+    - magento
+    - e-commerce
+    - http
+    - web
+    - php
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: magento
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/magento
+    - https://magento.com/
+    urls:
+    - https://charts.bitnami.com/bitnami/magento-21.1.14.tgz
+    version: 21.1.14
+  - annotations:
+      category: E-Commerce
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 2.4.5-p1
     created: "2023-01-31T10:41:53.048887902Z"
     dependencies:
     - condition: mariadb.enabled
@@ -121967,4 +122011,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-02-23T08:59:17.572207745Z"
+generated: "2023-02-23T09:05:18.613858583Z"
