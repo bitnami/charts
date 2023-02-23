@@ -10,11 +10,9 @@ mimir:
   httpPrefix:
     prometheus: /prometheus-test
 gateway:
-  enabled: true
   service:
     ports:
       http: 80
-    type: LoadBalancer
 compactor:
   service:
     ports:
